@@ -2,7 +2,7 @@
 	<div class="left big w35pr">
 		<div id="cont">{{view App.SearchField context="accidents"}} </div>
 	</div>
-	<div class="right big"><button class="btn large"><i class="img32-plus"></i>Registruoti naują įvykį</button></div>
+	<div class="right big"><button class="btn large" {{action addNewAccident target="App.accidentsController"}}><i class="img32-plus"></i>Registruoti naują įvykį</button></div>
 </div>
 <div class="table zebra-striped selectable tall" id="accidentsTable">
 
