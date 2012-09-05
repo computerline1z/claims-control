@@ -1,4 +1,4 @@
-﻿oGLOBAL.LoadAccident_Card = function(AccidentNo) {
+﻿oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 	"use strict"; var UpdateServer, DefaultTime, fnChangeCheck, fnChange, LoadScript;
 	SERVER.send("{'AccidentNo':" + AccidentNo + "}", oGLOBAL.Start.fnSetNewData, { Ctrl: "divAccidentEdit", RenderNew: 1, fnCallBack: function () { LoadScript(); } }, "/Accident/GetAccident", "json");
 
@@ -15,7 +15,7 @@
 
 		//??
 		$("#btnSave").button().click(function () {
-			var DataToSave = oGLOBAL.ValidateForm($("#AccidentForm")), Action, Msg;
+			var DataToSave = oCONTROLS.ValidateForm($("#AccidentForm")), Action, Msg;
 			if (DataToSave) {
 				if (oGLOBAL.AccidentForm.NewRec) {
 					if (!(oGLOBAL.AccidentForm.Lat) ? 1 : 0) {
@@ -48,9 +48,14 @@
 		});
 
 		$("#btnCancel").click(function () { LoadAccident_Card(AccidentNo); return false; });
-		$("#btnReturnToAccidents").click(function () {
-			oGLOBAL.Start.fnSetNewData("", { Ctrl: "divAccidentEdit", RenderNew: 1, padding: 20 });
-			return false;
+		$("#btnReturnToAccidents").click(function (e) {
+			e.preventDefault();
+
+			//oGLOBAL.Start.fnSetNewData("", { Ctrl: "divAccidentEdit", RenderNew: 1, padding: 20 });
+			$('#tabAccidents').addClass("colmask");
+			$('#divAccidentsList').show();
+			var ctrlEdit = $('#divAccidentEdit').empty().hide();
+			//return false;
 		});
 
 		//$('#Date').datetimepicker({ numberOfMonths: 2 });
@@ -63,7 +68,7 @@
 		$('#divAccidentEdit').height(tabHeight);
 		var Dif = $('#divAccidentEdit').height() - $('h2').outerHeight(true) - $('#ulWhiteMenu').outerHeight(true) - $('#AccidentForm').outerHeight(true);
 		if (Dif > 0) { $('div.HalfDivleft1').height($('div.HalfDivleft1').height() + Dif); }
-		var MapHeight = $('div.HalfDivleft1').outerHeight(false) - $('#divMapHead').outerHeight(false);
+		var MapHeight = $('#AccidentForm').outerHeight(false) - $('#divMapHead').outerHeight(false);
 		$('#divMap').height(MapHeight).width('100%');
 		oGLOBAL.AccidentForm = $("#AccidentForm").data("ctrl"); //NewRec id Lat Lng
 		oGLOBAL.mapFn.loadGoogleMapScript(oGLOBAL.mapFn.loadGMap);
