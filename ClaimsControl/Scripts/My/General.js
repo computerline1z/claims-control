@@ -43,6 +43,111 @@ var MY = {
 		}
 	}
 }
+//-----Date functions---------------------------------------------------------------------------------------
+function fnGetTodayDateString() {
+	var d = new Date();
+	return d.getFullYear() + '-' +
+    ((d.getMonth() < 9) ? '0' + (d.getMonth() + 1) : (d.getMonth() + 1)) + '-' +
+    ((d.getDate() < 9) ? '0' + d.getDate() : d.getDate());
+}
+function fnGetDateString(Desc) {//Pradžios data
+	var d = new Date(), Y = d.getFullYear(), m = d.getMonth() + 1, M = fn2No(d.getMonth() + 1), D = fn2No(d.getDate()), retD;
+	if (Desc === "ThisYear") { retD = Y + ".01.01" }
+	else if (Desc === "Last6M") { retD = ((m < 6) ? Y - 1 : Y) + "." + ((m < 6) ? fn2No(m + 6) : fn2No(m - 6)) + "." + D; }
+	else if (Desc === "Last12M") { retD = Y - 1 + "." + M + "." + D; }
+	else { retD = Y + '.' + M + '.' + D; }
+	return retD;
+}
+function fnGetDateString_noDay(Desc) {//Pradžios data
+	var d = new Date(), Y = d.getFullYear(), m = d.getMonth() + 1, M = fn2No(d.getMonth() + 1), retD;
+	if (Desc === "ThisYear") { retD = Y + ".01" }
+	else if (Desc === "Last6M") { retD = ((m < 6) ? Y - 1 : Y) + "." + ((m < 6) ? fn2No(m + 6) : fn2No(m - 6)); }
+	else if (Desc === "Last12M") { retD = Y - 1 + "." + M; }
+	else { retD = Y + "." + M; }
+	return retD;
+}
+function fn2No(No) { return No < 10 ? '0' + No : No; }
+function fnGetStringFromjDate(jDate) {
+	var d = new Date(parseInt(jsonDate.substr(6)));
+	return [d.format("yy/mm/dd"), d.format("HH:MM")];
+}
+function fnGetDateTime(expr) {
+	var re = /^(\d{4})[\-|\/|\.]?(\d{1,2})[\-|\/|\.]?(\d{1,2})[\s\S]*(\d{2}:\d{2})$/; //2011-02-31 / 06:47
+	if (expr != '') {
+		if (regs = expr.match(re)) {
+			if (regs[3] < 1 || regs[3] > 31) {
+				alert("Invalid value for day: " + regs[1]);
+				return false;
+			}
+			if (regs[2] < 1 || regs[2] > 12) {
+				alert("Invalid value for month: " + regs[2]);
+				return false;
+			}
+			if (regs[1] < 1902 || regs[1] > (new Date()).getFullYear()) {
+				alert("Invalid value for year: " + regs[3] + " - must be between 1902 and " + (new Date()).getFullYear());
+				return false;
+			}
+		} else {
+			alert("Invalid date format: " + expr);
+			return false;
+		}
+		return regs[1] + "-" + regs[2] + "-" + regs[3] + " " + regs[4] + ":00";
+	}
+}
+
+//-----Date functions---------------------------------------------------------------------------------------
+function fnGetTodayDateString() {
+	var d = new Date();
+	return d.getFullYear() + '-' +
+    ((d.getMonth() < 9) ? '0' + (d.getMonth() + 1) : (d.getMonth() + 1)) + '-' +
+    ((d.getDate() < 9) ? '0' + d.getDate() : d.getDate());
+}
+function fnGetDateString(Desc) {//Pradžios data
+	var d = new Date(), Y = d.getFullYear(), m = d.getMonth() + 1, M = fn2No(d.getMonth() + 1), D = fn2No(d.getDate()), retD;
+	if (Desc === "ThisYear") { retD = Y + ".01.01" }
+	else if (Desc === "Last6M") { retD = ((m < 6) ? Y - 1 : Y) + "." + ((m < 6) ? fn2No(m + 6) : fn2No(m - 6)) + "." + D; }
+	else if (Desc === "Last12M") { retD = Y - 1 + "." + M + "." + D; }
+	else { retD = Y + '.' + M + '.' + D; }
+	return retD;
+}
+function fnGetDateString_noDay(Desc) {//Pradžios data
+	var d = new Date(), Y = d.getFullYear(), m = d.getMonth() + 1, M = fn2No(d.getMonth() + 1), retD;
+	if (Desc === "ThisYear") { retD = Y + ".01" }
+	else if (Desc === "Last6M") { retD = ((m < 6) ? Y - 1 : Y) + "." + ((m < 6) ? fn2No(m + 6) : fn2No(m - 6)); }
+	else if (Desc === "Last12M") { retD = Y - 1 + "." + M; }
+	else { retD = Y + "." + M; }
+	return retD;
+}
+function fn2No(No) { return No < 10 ? '0' + No : No; }
+function fnGetStringFromjDate(jDate) {
+	var d = new Date(parseInt(jsonDate.substr(6)));
+	return [d.format("yy/mm/dd"), d.format("HH:MM")];
+}
+function fnGetDateTime(expr) {
+	var re = /^(\d{4})[\-|\/|\.]?(\d{1,2})[\-|\/|\.]?(\d{1,2})[\s\S]*(\d{2}:\d{2})$/; //2011-02-31 / 06:47
+	if (expr != '') {
+		if (regs = expr.match(re)) {
+			if (regs[3] < 1 || regs[3] > 31) {
+				alert("Invalid value for day: " + regs[1]);
+				return false;
+			}
+			if (regs[2] < 1 || regs[2] > 12) {
+				alert("Invalid value for month: " + regs[2]);
+				return false;
+			}
+			if (regs[1] < 1902 || regs[1] > (new Date()).getFullYear()) {
+				alert("Invalid value for year: " + regs[3] + " - must be between 1902 and " + (new Date()).getFullYear());
+				return false;
+			}
+		} else {
+			alert("Invalid date format: " + expr);
+			return false;
+		}
+		return regs[1] + "-" + regs[2] + "-" + regs[3] + " " + regs[4] + ":00";
+	}
+}
+
+
 Array.prototype.FNameIndex = function (FNameVal) {
 	var ctr = "";
 	for (var i = 0; i < this.length; i++) {
@@ -342,5 +447,6 @@ oGLOBAL.Start = {
 		//Wait.Hide();
 		//$.unblockUI();
 		//$('#divMainPage').fadeIn();
+		$("img.spinner").remove();
 	}
 }

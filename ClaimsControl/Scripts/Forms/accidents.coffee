@@ -197,18 +197,19 @@ App.accidentsController = Em.ResourceController.create(
 			# )
 	# ).property('filter', 'content.@each').cacheable(),
 	editAccident: (e) ->
-		$('#tabAccidents').removeClass("colmask")
-		$('#divAccidentsList').hide()
-		ctrlEdit=$('#divAccidentEdit').show()
-		#oGLOBAL.notify.msg("", "Siunčiami įvykio duomenys..");
-		ctrlEdit.spinner({ position: 'center', img: 'spinnerBig.gif' })
-		oGLOBAL.LoadAccident_Card(e.context.no)
-		#ctrlEdit.spinner('remove');
-		#alert "editAccident, iD"+ e.context.iD
-		false
+		this.openAccident(e.context.no)		
 	#	filteredRecords: -> ##valueBinding=\"App.accidentsController.filter\"
 	#		alert(@get("filter") + "__")
 	#	} .observes("filter")
+	addNewAccident: ->
+		this.openAccident(null)
+	openAccident: (AccNo) ->
+		$('#tabAccidents').removeClass("colmask")
+		$('#divAccidentsList').hide()
+		ctrlEdit=$('#divAccidentEdit').show()
+		ctrlEdit.spinner({ position: 'center', img: 'spinnerBig.gif' })
+		oGLOBAL.LoadAccident_Card(AccNo)
+		false
 )
 App.thisAccidentController = Em.ResourceController.create(
 	content: [],

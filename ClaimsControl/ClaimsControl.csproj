@@ -16,6 +16,10 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <JSLintSkip>\Scripts\Plugins scripts\TimePicker.js|\Scripts\Plugins scripts\jsonUpdate.js|\Scripts\Plugins scripts\MegaSelectList.js|\Scripts\Plugins scripts\JScript1.js|\Scripts\JSMain\jquery.validate-vsdoc.js|\Scripts\JSMain\jquery.validate.js|\Scripts\JSMain\jquery.validate.min.js|\Scripts\JSMain\jquery.validate.unobtrusive.js|\Scripts\JSMain\jquery.validate.unobtrusive.min.js|\Scripts\JSMain\MicrosoftAjax.js|\Scripts\JSPlugins\jquery.validity.min.js|\Scripts\JSPlugins\jquery.validity.js|\Scripts\JSPlugins\jquery.rich-array.js|\Scripts\JSPlugins\jquery.rich-array-min.js|\Scripts\JSPlugins\jquery.jEditable.min.js|\Scripts\JSPlugins\jquery.jEditable.js|\Scripts\JSPlugins\jquery.dataTables.min.js|\Scripts\JSPlugins\jquery.dataTables.min.1.7.4.js|\Scripts\JSPlugins\jquery.dataTables.js|\Scripts\JSPlugins\jquery-ui-1.8.6.custom.min.js|\Scripts\JSPlugins\TimePicker.js|\Scripts\JSPlugins\jquery-ui-1.8.10.custom.min.js</JSLintSkip>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

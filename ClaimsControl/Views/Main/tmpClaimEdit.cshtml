@@ -4,22 +4,22 @@
 {{#unless c.newClaim}}
 	<div id='divClaimCard' class="cont centerBlock" style="width:750px;" data-ctrl='{"id":"{{unbound c.ID}}","NewRec":"0","Source":"tblClaims","TypeID":"{{unbound c.TypeID}}"}'>
 {{else}}
-	<div id='divClaimCardDetails'>
+	<div id='divClaimCardDetails' >
 {{/unless}}
 {{#compare "this.TypeID" "==" "6"}} 
-	<div class='left'>
+	<div class='left w45pr'>
 	{{updatableField c Field="Days" id="inputDays" labelType="Top" event="keyUp_shallChangeLossAmount"}}
 	{{updatableField c Field="PerDay" id="inputPerDay" labelType="Top" event="keyUp_shallChangeLossAmount"}}
 	{{updatableField c Field="LossAmount" id="inputSum" attr="DISABLED" labelType="Top"}}@*(Math.round((Claim.Days*Claim.PerDay*100))/100)*@
-	</div><div class='right'>
+	</div><div class='right w45pr'>
 	{{updatableField c Field="VehicleID" id="lstVehicles" labelType="Top"}}
 	</div>
 {{else}}
-	<div class='left'>
+	<div class='left w45pr'>
 	{{updatableField c Field="VehicleID" id="lstVehicles" labelType="Top"}}
 	{{updatableField c Field="InsPolicyID" id="lstInsPolicies" labelType="Top"}}
 	{{updatableField c Field="InsurerClaimID" labelType="Top"}}
-	</div><div class='right'>
+	</div><div class='right w45pr'>
 	{{updatableField c Field="LossAmount" id="LossAmount" labelType="Top"}} @*"classes\":\"LossAmount*@
 	{{updatableField c Field="InsuranceClaimAmount" id="InsuranceClaimAmount" labelType="Top"}} @*"classes\":\"InsuranceClaimAmount*@
 	

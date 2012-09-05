@@ -284,6 +284,12 @@
       return false;
     },
     editAccident: function(e) {
+      return this.openAccident(e.context.no);
+    },
+    addNewAccident: function() {
+      return this.openAccident(null);
+    },
+    openAccident: function(AccNo) {
       var ctrlEdit;
       $('#tabAccidents').removeClass("colmask");
       $('#divAccidentsList').hide();
@@ -292,7 +298,7 @@
         position: 'center',
         img: 'spinnerBig.gif'
       });
-      oGLOBAL.LoadAccident_Card(e.context.no);
+      oGLOBAL.LoadAccident_Card(AccNo);
       return false;
     }
   });

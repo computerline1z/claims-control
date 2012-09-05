@@ -176,8 +176,8 @@
 			}
 		},
 		addButton: function (p, input) {
-			//title,icon,fn,NoCorners
-			this.button = $("<button style='margin:0 0 0 -3px;height:" + input.outerHeight() + "px;'>&nbsp;</button>").attr("tabIndex", -1).attr("title", p.title).insertAfter(input)
+			//this.button = $("<button style='margin:0 0 0 -3px;height:" + input.outerHeight(true) + "px;'>&nbsp;</button>").attr("tabIndex", -1).attr("title", p.title).insertAfter(input)
+			this.button = $("<button style='margin:0 0 0 -2.2em;height:" + input.outerHeight() + "px;'>&nbsp;</button>").attr("tabIndex", -1).attr("title", p.title).insertAfter(input)
                       .button({ icons: { primary: p.icon }, text: false })//.width(22)  //.css("vertical-align", "bottom")
                       .click(function () { p.fn(); return false; })
                       .removeClass("ui-corner-all").addClass("ui-button-icon" + ((p.NoCorners) ? "" : " ui-corner-right"))
@@ -187,10 +187,9 @@
 			//if (!$.browser.chrome) { this.button.css("margin", "0"); }
 			if ($.browser.mozilla) { this.button.css("margin", "0"); }
 
-			var btnWidth = this.button.parent().outerWidth(); //31
-			var w = input.outerWidth() - btnWidth + 2; //223
-                        input.css("width",w);
-			//input.log("width after:" + input.width()); //236
+			//var btnWidth = this.button.parent().outerWidth(); //31
+			//var w = input.outerWidth() - btnWidth + 2; //223
+         //input.css("width",w);
 
 		},
 		destroy: function () {

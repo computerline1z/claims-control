@@ -92,11 +92,11 @@ div.dividers {background-color: @grayLighter; height:12px; display:none;}
 div.tr.newClaim {background-color: @systemYellow4; .ClaimsRow();.clearfix();}
 div.newClaimContent {background-color: @systemYellow3; .clearfix();}
 /*-------------------------------Updatable Form----------------------------*/
-div.inputform div.ExtendIt { margin: 10px 3px 10px 0px; display: inline-block; vertical-align: top; }
+div.inputForm div.ExtendIt { margin: 10px 3px 10px 0px; display: inline-block; vertical-align: top; }
 div.ExtendIt, span.Extend { width: 100%; margin:15px auto 15px auto;text-align:left;}
 //.ExtendIt div, .ExtendIt span {text-align: left;}
 .ExtendIt button.ui-button-icon-only {height: @baseline;}/*comboboxo buttonas*/
-.ExtendIt input[text],.ExtendIt textarea {vertical-align:top;margin-top:0; width: 100%;}
+.ExtendIt input[text], .ExtendIt textarea {vertical-align:top;margin-top:0; width: 100%;}
 .ExtendIt button {vertical-align:top;margin-top:0;}/*comboboxo išlyginimui*/
 
 span.dialog-form-label { margin: 10px; font-size: @basefont; color: #666666; display: inline-block; }
@@ -106,18 +106,16 @@ div.dialog-form-label { font-size: @basefont; color: #666666; top: 2px; margin-b
  .ExtendIt label  { padding-left: 0px; margin-left: 0px; cursor: pointer; }
 
 label.toplabel > span { display: block; font-size: @basefont; color: #666666; cursor: pointer; margin-bottom: 5px;}
-label.toplabel input[type=text], label.top textarea { width: 100%; font-size: @basefont; }
+label.toplabel input[type=text], label.top textarea { width: 100%; font-size: @basefont; vertical-align:top;}
 
 label.leftlabel > span { width: 30%; font-size: x-small; margin: 0; padding: 0; color: #666666; cursor: pointer; display: inline-block; }
 label.leftlabel input[type=text], label.left textarea { width: 70%; font-size: @basefont; margin: 0; padding: 0; }
 
-div.border { border: 1px ridge #C0C0C0; }
-
-div.inputform textarea { width: 100%; font-size: @basefont; }
+/*div.inputform textarea { width: 100%; font-size: @basefont; }
 div.inputform input { font-size:  @basefont; }
 div.inputform { padding: 0 !important; }
 div.inputform input.date { width: 100px !important; }
-div.inputform input.time { width: 50px !important; }
+div.inputform input.time { width: 50px !important; }*/
 /*-------------------------------megaSelectList----------------------------*/
 /*div.leftContainer { border-style: dotted; width: 100%; display: inline-block; }
 .RightSpanInTab { float: right; vertical-align: bottom; margin-right: 20px; padding: 0.5em; }*/
@@ -162,11 +160,11 @@ ul.ulWhiteMenu li { margin-right: 5px; padding-right: 5px; border-bottom: 1px; }
 #tabAccidents, #tabClaims, #tabMap, #tabReports, #tabLists, #tabAdmin { overflow: hidden;width: 100%; }
 
 ----------------------------------------------------Editable Form-------------------------------------------------------------------------*/
-div.inputform textarea { width: 100%; font-size: small; }
+/*div.inputform textarea { width: 100%; font-size: small; }
 div.inputform input { font-size: small; }
 div.inputform { padding: 0 !important; }
 div.inputform input.date { width: 100px !important; }
-div.inputform input.time { width: 50px !important; }
+div.inputform input.time { width: 50px !important; }*/
 
 div.DocsRow { background-color: White; margin: 0; padding: 1.5em 5em; }
 
@@ -181,13 +179,20 @@ span.dialog-form-label { margin: 10px; font-size: small; color: #666666; display
 div.dialog-form-label { font-size: small; color: #666666; top: 2px; margin-bottom: 2px; }
 
 /*label { font-size: small; color: #666666; cursor: pointer; }*/
-label input[type=checkbox] { padding-left: 0px; margin-left: 0px; cursor: pointer; }
+label input[type="checkbox"] { padding-left: 0px; margin-left: 0px; cursor: pointer; }
 
 label.toplabel > span { display: block; font-size: small; color: #666666; cursor: pointer; }
-label.toplabel input[type=text], label.top textarea { width: 100%; font-size: small; margin: 0; padding: 0; }
-
+label.toplabel input[type=text], label.top textarea {
+	 width: 100%; font-size: small; margin: 0; 
+}
+input[type=text].date {width:7em !important;}
+input[type=text].time {width:4em !important;}
 label.leftlabel > span { width: 30%; font-size: x-small; margin: 0; padding: 0; color: #666666; cursor: pointer; display: inline-block; }
-label.leftlabel input[type=text], label.left textarea { width: 70%; font-size: small; margin: 0; padding: 0; }
+label.leftlabel input[type=text], label.left textarea { 
+	width: 70%; font-size: small; margin: 0; 
+}
+input [type="text"] {width:7em;}
+input.time [type="text"] {width:4em;}
 /*-----------------------------------------------------------------------------------------------*/
 /*butonai apacioj*/
 div.frmbottom { width: 100%; display: inline-block; overflow: hidden; }

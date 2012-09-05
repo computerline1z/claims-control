@@ -29,7 +29,7 @@ namespace CC.Controllers {
 				Render = new { divAccidentEdit = View }, //tabAccidents
 				//tblAccidentsTypes = AccRep.GetJSON_tblAccidentTypes(),
 				//proc_Drivers = AccRep.GetJSON_proc_Drivers(false),
-				ExecFn = new { divAccidentEdit = "tabs" } //tabAccidents // accidentTab = "tabs" 
+				ExecFn = new { accidentTab = "tabs" } //tabAccidents // accidentTab = "tabs" 
          });
       }
 
