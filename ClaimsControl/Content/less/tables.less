@@ -1,0 +1,58 @@
+﻿/*---------experimenting--------*/
+#MyTable { border-style: dotted; }
+#MyTable tr:nth-child(odd) { background:blue; }
+//div.table {display:table;border-collapse:collapse;width:100%;}
+//div.fixed { table-layout:fixed; }
+//div.tr {display:table-row;}
+//div.td {display:table-cell;}
+div.table {width:100%;
+	.tall div.tr {height:40px;}
+}
+div.tr {.clearfix();}
+div.td {float:left;}
+
+//div.row:hover{ background-color: #ccc; } 
+//div.table div.tr{}
+
+//bordered table
+div.bordered-table {
+  //border: 1px solid #ddd;
+  border-collapse: separate; // Done so we can round those corners!
+  *border-collapse: collapse; /* IE7, collapse table to remove spacing */
+  .border-radius(4px);
+  //div.td + div.td {
+   // border-left: 1px solid #ddd;
+	//border-bottom: 1px solid #ddd;}
+  div.tr:first-child div.td:first-child {
+    .border-radius(4px 0 0 0);
+  }
+  div.tr:first-child div.td:last-child {
+    .border-radius(0 4px 0 0);
+  }
+  div.tr:last-child div.td:first-child {
+    .border-radius(0 0 0 4px);
+  }
+  div.tr:last-child div.td:last-child {
+    .border-radius(0 0 4px 0);
+  }
+}
+
+// Default zebra-stripe styles (alternating gray and transparent backgrounds)
+
+div.zebra-striped
+{
+	> div.tr {border-bottom: 4px solid @grayLighter; padding: 8px 8px 7px;}// div.td
+    > div.tr:nth-child(odd) {background-color: @grayUltraLight;}
+    > div.tr:hover { background-color: @grayLight; color:@white; }
+	> div.tr:hover { cursor: pointer; }// div.td 
+    //div.tr:hover div.td { background-color: @grayLighter !important; } su langeliais
+    //div.tr:hover { background-color: @grayLight !important;}vaiksto tik ne ant spalvotu
+	//div.tr div.td:hover { background-color: @grayLight !important;} tik po viena td vaiksto
+	//div.tr:nth-child(odd) div.td {background-color: #f9f9f9;}
+}
+
+div.selectable > div.tr { cursor: pointer; }
+div.notSelectable > div { cursor: default; }
+div.table {
+    > div.tr:hover { background-color: @grayLight; color:@white; }
+}

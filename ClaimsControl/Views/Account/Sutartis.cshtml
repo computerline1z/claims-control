@@ -1,0 +1,30 @@
+﻿@model CC.Models.RegisterOKModel
+
+@{
+    ViewBag.Title = "Sutartis";
+    Layout = "Register_Layout.cshtml";
+}
+<p>
+    @{ Html.RenderAction("Header", "Account"); }
+</p>
+
+
+@using (Html.BeginForm())
+{
+    <div class="shadow" style="border: 2px solid #e8e8e4; background-color: #FFFFFF; text-align: justify;">
+        <div class="content">
+
+            <p>
+                Sutarties sąlygos šiame puslapyje gali keistis, tačiau Jums galios tokia, kokia ji yra paskyros sukūrimo metu. 
+                Todėl rekomenduojame parsisiųsti ir išsisaugoti 
+                <a href="../../Content/Paslaugų teikimo sutartis.pdf" target="_blank" style = "color: #2b7bcb;">sutarties PDF versiją</a>.            
+            </p><br />
+            
+            <h2>Paslaugų teikimo sutartis</h2>
+            <p>
+                "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."                
+            </p><br />
+ 
+        </div>
+    </div>            
+}

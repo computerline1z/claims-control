@@ -1,0 +1,214 @@
+﻿/*---------Main-------------------*/
+//body { font-family: "Arial" Arial, Helvetica, sans-serif; font-size: 80%; background-color: #d7d7d3; }
+.input {width: 250px; background: #ffc; border: 1px inset; font-size: 10pt; height: 1.5em; padding-left: 5px; }
+div.hidden {display:none;}
+/*---------Login-------------------*/
+#divlogindisplay span { color: #C8CCD9; font-size: 10pt; }
+#spanLogAction { cursor: pointer; }
+/*---------Menu-------------------backkgroundas 7A90A5 RGB 122/144/165
+* { margin: 0; padding: 0; }
+*/
+#ulMainMenu { padding: 0 3% 0 3%; list-style-type: none; background-image: url(images/navi_bg.png); height: 37px; margin: -15px auto auto auto; .box-shadow(0 3px 8px #888); }
+#ulMainMenu li { float: left; }
+#ulMainMenu a { padding-right: 20px; padding-left: 20px; display: block; line-height: 37px; text-decoration: none; font-family: Georgia, "Times New Roman" , Times, serif; font-size: 22px; color: White; text-shadow: #fff 0px 1px 0, #000 0 -1px 0; }
+#ulMainMenu a.selected { position: relative; top: 5px; padding-top: 6px; background-color: white; color: #7A90A5; text-shadow: #fff 0px 1px 0, #000 0 -1px 0; box-shadow: 0 0 8px 2px #888; .border-radius(6px 6px 0 0 )}
+#ulMainMenu a.notactive:hover { cursor: pointer; background-color: #9EAEBD;  .border-radius(6px 6px 0 0 );}
+#ulMainMenu li:hover a.notactive { cursor: pointer; background-color: #9EAEBD; .border-radius(6px 6px 0 0 );}
+/*---------Content------------------- box-shadow: 0 0 8px 2px #888; margin: 5px 10px 5px 10px; */
+.content { margin: 0.5%; padding: 0.6%; position: relative; background: #fff;//.box-shadow(0 5px 3px #ccc); 
+	-moz-box-shadow: 5px 5px 3px #ccc; -webkit-box-shadow: 5px 5px 3px #ccc; box-shadow: 5px 5px 3px #ccc; overflow: hidden; 
+ }
+/*---------two column layout--------*/
+.col1, .col2, col3 { float: left; position: relative; overflow: hidden; margin-top: 0.3%; padding:0;}
+/*.col1 {padding: 0 !important;}Accidents lentele per visa turi but*/
+.colmask { position: relative; clear: both; float: left; width: 100%; overflow: hidden; margin-top:-2px;}
+.colright, .colmid, .colleft { float: left; width: 100%; position: relative; }
+.colmask .col1 { width: 79%; left: 28.5%; }
+.colmask .col2 { width: 16%; left: 28%; }
+.colmask .colleft { right: 27%; }
+/*-------------------------------------Search container---------------*/
+/* div container containing the form  */
+/* Style the search input field. */
+//					<form>
+//			@Html.Raw("{{view App.SearchField_accidents placeholder=\"Ieškoti..\" id=\"srcField\" name=\"field\"}}")
+//			<div id="srcDelete">
+//				<span id="x">x</span></div>
+//			</form>
+
+//			<input id="srcSubmit" name="submit" type="submit" value="Search" @Html.Raw("{{action aSearch}}")/>
+//	<input type="text" class="searchField"/><div class="divSearch"><span class="spanToClearText">x</span></div>
+
+
+form input.searchField {
+    float:left;width:75%; height:32px; line-height:23px;font-family:arial, sans-serif;font-size:1em;color:#333;background: @yellowlight; 
+    border:solid 1px #d9d9d9; border-top:solid 1px #c0c0c0;border-right:none;margin-right:-2px; vertical-align:top; 
+}
+/* Style the "X" text button next to the search input field */
+form div.divSearch {
+    float:left; width:26px;height:32px;line-height:22px;padding:3px 6px;font-size:22px;   
+    background: @yellowlight;border:solid 1px #d9d9d9;border-top:solid 1px #c0c0c0;border-left:none;   
+}
+form span.spanToClearText {color:#A1B9ED;cursor:pointer;padding:0px 3px;}/* Set default state of "X" and hide it */
+form span.spanToClearText:hover {color:#36c;}/* Set the hover state of "X" */
+/*
+
+
+span.spanToClearText 
+div.divSearch 
+form input.searchField
+ Syle the search button. Settings of line-height, font-size, text-indent used to hide submit value in IE */
+/*#srcSubmit {
+    cursor:pointer;  width:40px;height: 27px; line-height:0;font-size:0;text-indent:-999px;color: transparent;   
+    background: url(images/ico-search.png) no-repeat #4d90fe center;border: 1px solid #3079ED;-moz-border-radius: 2px;-webkit-border-radius: 2px; 
+}
+#srcSubmit:hover { Style the search button hover state 
+    background: url(images/ico-search.png) no-repeat center #357AE8; 
+    border: 1px solid #2F5BB7;
+}*/
+/*------------------------------Selected accident----------------------*/
+div.selectedAccident {background-color: @systemBlue !important; color: White !important; border-bottom: none!important;}
+div.selectedAccident i.img32-mono_edit {background-image: url('images/Sprite32-white.png') !important;}
+#AccDetailsWraper {border: 4px solid @systemBlue; padding: 0 10% 0 10%; }
+#AccDetailsContent { width:100; display:none;}
+div.dividers {background-color: @grayLighter; height:12px; display:none;}
+/*------------------------------Selected claim in accident----------------------*/
+.whiteBorders(){border-color:white;border-style:solid none solid none; border-width: 5px;}
+.ClaimsRow(){.whiteBorders(); line-height:32px;cursor:pointer;}
+
+#tblClaims{
+	width:100%;
+	tr>td {background-color: @systemYellow2; .ClaimsRow();}
+	tr:hover td { background-color: @grayLight; color:@white;}
+
+	tr.claimOK>td {background-color: white; color:@gray;}
+	tr.claimOK:hover td { background-color: @grayLight; color:@white;}
+
+	tr.selectedClaim>td {background-color: @systemYellow !important; color:inherit !important; cursor:default !important;}
+	tr.selectedClaim.title>td {border-bottom:none;font-weight:bold;}
+	tr.selectedClaim.title>td:last-child {box-shadow: 5px 5px 3px #ccc;}
+	#ClaimWraper {background-color: @systemYellow !important; color:inherit !important; cursor:default !important; border-top:none;}//Content
+	//#ClaimsDetailsContent {background-color: @systemYellow !important; color:inherit !important; cursor:default !important;}
+}
+div.tr.newClaim {background-color: @systemYellow4; .ClaimsRow();.clearfix();}
+div.newClaimContent {background-color: @systemYellow3; .clearfix();}
+/*-------------------------------Updatable Form----------------------------*/
+div.inputform div.ExtendIt { margin: 10px 3px 10px 0px; display: inline-block; vertical-align: top; }
+div.ExtendIt, span.Extend { width: 100%; margin:15px auto 15px auto;text-align:left;}
+//.ExtendIt div, .ExtendIt span {text-align: left;}
+.ExtendIt button.ui-button-icon-only {height: @baseline;}/*comboboxo buttonas*/
+.ExtendIt input[text],.ExtendIt textarea {vertical-align:top;margin-top:0; width: 100%;}
+.ExtendIt button {vertical-align:top;margin-top:0;}/*comboboxo išlyginimui*/
+
+span.dialog-form-label { margin: 10px; font-size: @basefont; color: #666666; display: inline-block; }
+div.dialog-form-label { font-size: @basefont; color: #666666; top: 2px; margin-bottom: 2px; }
+
+/*label { font-size: @basefont; color: #666666; cursor: pointer; }*/
+ .ExtendIt label  { padding-left: 0px; margin-left: 0px; cursor: pointer; }
+
+label.toplabel > span { display: block; font-size: @basefont; color: #666666; cursor: pointer; margin-bottom: 5px;}
+label.toplabel input[type=text], label.top textarea { width: 100%; font-size: @basefont; }
+
+label.leftlabel > span { width: 30%; font-size: x-small; margin: 0; padding: 0; color: #666666; cursor: pointer; display: inline-block; }
+label.leftlabel input[type=text], label.left textarea { width: 70%; font-size: @basefont; margin: 0; padding: 0; }
+
+div.border { border: 1px ridge #C0C0C0; }
+
+div.inputform textarea { width: 100%; font-size: @basefont; }
+div.inputform input { font-size:  @basefont; }
+div.inputform { padding: 0 !important; }
+div.inputform input.date { width: 100px !important; }
+div.inputform input.time { width: 50px !important; }
+/*-------------------------------megaSelectList----------------------------*/
+/*div.leftContainer { border-style: dotted; width: 100%; display: inline-block; }
+.RightSpanInTab { float: right; vertical-align: bottom; margin-right: 20px; padding: 0.5em; }*/
+
+.megaselectlistcolumn { width: 31%; margin: 0 1%; float: left; }
+.megaselectlist .currentitem { padding: 0; border: 0.1em dotted Green; color: Black; }
+/* Optional styles */
+.megaselectlist { background-color: #F5F5F5; border: 1px solid Silver; }
+.megaselectlistcolumn {width: 48%; padding:0 5%;}
+.megaselectlistcolumn > h2 { font-size: 1em; background-color: #ECECEC; text-align: center; padding: 2px 0; margin: 0; }
+.megaselectlist > p { margin: 0.2em; }
+.megaselectlistcolumn > ul { padding-left: 1em; margin: 0; color: Gray; }
+.megaselectlistcolumn > ul > li { cursor: pointer; padding: 0.1em; font-size: small; }
+.megaselectlistcolumn > ul > li:hover { background-color: #ECECEC; color: Black; }
+
+div.megaselectlistoptions { overflow: hidden; margin: 10px auto; width:80%; }
+div.megaselectlistoptions li { color: #3366cc; text-decoration: underline; }
+/*-----------------------------------------*/
+tr.hide { display: none; }
+input.activeField, textarea.activeField { border-color: #008000; background-color: #FFCC99 !important; background: none; }
+.clearfix { clear: both; width: 100%; }
+.small { font-size: 0.7em; }
+.smallOK { font-size: 0.7em; color: #008000; }
+.smallErr { font-size: 0.7em; color: #CC0000; }
+.clear { clear: both; }
+.yellow { background-color: #FFFFB7; }
+.InputInWraper { border-style: none; height: 100%; margin: 0; padding: 0; }
+input.alink { color: #000080; text-decoration: underline; cursor: pointer; }
+
+button.BtnFontBlue { color: #5d7c9b; font-weight: bold; }
+button.BtnBackGreen { background-color: #6bcf14; color: #FFFFFF; font-weight: bold; }
+/*naudojamas inputui idet i div'a*/
+img.floatLeft { margin: 6px 0px 6px 6px; vertical-align: text-bottom; }
+img.floatRight { margin: 6px 0px 6px 6px; vertical-align: text-bottom; float: right; }
+.rowHeight { height: 2.4em; line-height: 2.4em; vertical-align: middle; padding-right: 10px; padding-left: 10px; }
+
+/*-----------------------------------------------------------------------------------------------*/
+ul.ulWhiteMenu { margin: 10px 0px 10px 0px; border-style: none none solid none; background-image: none; padding: 0px; background-color: #FFFFFF; border-radius: 0 !important; }
+ul.ulWhiteMenu li.ui-tabs-selected { font-weight: bold; border-bottom: 0 !important; padding-bottom: 1px; margin-bottom: -1px; }
+ul.ulWhiteMenu li { margin-right: 5px; padding-right: 5px; border-bottom: 1px; }
+/*div.whiteTab { -moz-border-radius: 0 0 0 0 !important; border-width: 1px !important; border-color: #C0C0C0 #FFFFFF #C0C0C0 #FFFFFF !important; border-style: ridge !important; }
+#tabAccidents, #tabClaims, #tabMap, #tabReports, #tabLists, #tabAdmin { overflow: hidden;width: 100%; }
+
+----------------------------------------------------Editable Form-------------------------------------------------------------------------*/
+div.inputform textarea { width: 100%; font-size: small; }
+div.inputform input { font-size: small; }
+div.inputform { padding: 0 !important; }
+div.inputform input.date { width: 100px !important; }
+div.inputform input.time { width: 50px !important; }
+
+div.DocsRow { background-color: White; margin: 0; padding: 1.5em 5em; }
+
+div.WasBefore { background-color: #FF5E5E; background-image: none !important; line-height: 2.5em; text-align: center; color: White; }
+div.WasBefore a { margin-left: 1em; }
+div.IsNow { line-height: 2.5em; text-align: center; }
+div.IsNow a { text-decoration: underline !important; margin-left: 1em; }
+/*-----------------------------------------------------------------------------------------------*/
+div.inputform div.ExtendIt { margin: 10px 3px 10px 0px; display: inline-block; vertical-align: top; }
+
+span.dialog-form-label { margin: 10px; font-size: small; color: #666666; display: inline-block; }
+div.dialog-form-label { font-size: small; color: #666666; top: 2px; margin-bottom: 2px; }
+
+/*label { font-size: small; color: #666666; cursor: pointer; }*/
+label input[type=checkbox] { padding-left: 0px; margin-left: 0px; cursor: pointer; }
+
+label.toplabel > span { display: block; font-size: small; color: #666666; cursor: pointer; }
+label.toplabel input[type=text], label.top textarea { width: 100%; font-size: small; margin: 0; padding: 0; }
+
+label.leftlabel > span { width: 30%; font-size: x-small; margin: 0; padding: 0; color: #666666; cursor: pointer; display: inline-block; }
+label.leftlabel input[type=text], label.left textarea { width: 70%; font-size: small; margin: 0; padding: 0; }
+/*-----------------------------------------------------------------------------------------------*/
+/*butonai apacioj*/
+div.frmbottom { width: 100%; display: inline-block; overflow: hidden; }
+/*veikia kaip floatu nuresetintojas*/
+div.frmbottom button, div.frmbottom a { margin-left: 20px; margin-right: 20px; }
+/*veikia kaip floatu nuresetintojas*/
+.floatright { vertical-align: middle; float: right; }
+.floatleft { vertical-align: middle; float: left; }
+--------------------------------------------------------------------------------------------------------------------
+#divMap { margin: auto; }
+div.growlUI { background: url(images/check48.png) no-repeat 10px 10px; }
+div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-align: left; }
+#Form-Accident-Card .text { width: 400px; }
+#Form-Accident-Card .ui-autocomplete-input { width: 200px; }
+/*-------------------swfupload--------------------*/
+#swfupload-control p { margin: 10px 5px; font-size: 0.9em; }
+#log { margin: 0; padding: 0; width: 500px; }
+#log li { list-style-position: inside; margin: 2px; border: 1px solid #ccc; padding: 10px; font-size: 12px; font-family: Arial, Helvetica, sans-serif; color: #333; background: #fff; position: relative; }
+#log li .progressbar { border: 1px solid #333; height: 5px; background: #fff; }
+#log li .progress { background: #999; width: 0%; height: 5px; }
+#log li p { margin: 0; line-height: 18px; }
+#log li.success { border: 1px solid #339933; background: #ccf9b9; }
+#log li span.cancel { position: absolute; top: 5px; right: 5px; width: 20px; height: 20px; background: url('/Content/Images/cancel.png') no-repeat; cursor: pointer; }
+/*---------------------------------------------------*/

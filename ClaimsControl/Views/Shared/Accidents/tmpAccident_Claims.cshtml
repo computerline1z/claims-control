@@ -1,0 +1,20 @@
+﻿<table id="tblClaims">
+	{{#each view.content}}
+	<tr {{bindAttr class="finished:claimOK"}} @Html.Raw("{{action tbodyClick this target=\"this\"}}")>{{#if finished}}
+		<td class="td"><i class="img32-check"></i></td>
+		{{else}}
+		<td class="td">&nbsp; </td>
+		{{/if}}
+		<td>{{no}}</td>
+		<td>{{type}}</td>
+		<td>{{autoNo}}</td>
+		<td>{{insurer}}</td>
+		<td>{{loss}}</td>
+		<td><a href="#">Reguliavimas</a></td>
+	</tr>
+	{{/each}}
+</table>
+<div class="tr newClaim">
+	<div class="rightFooterBig"><button {{action newClaim this}} class="btn"><i class="img18-plus" style="margin:0;"></i>Nauja žala</button></div>
+</div>
+<div class="tr newClaimContent"></div>

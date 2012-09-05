@@ -1,0 +1,20 @@
+﻿{{log this}}
+{{log c}}
+@*{{#with c}}*@
+<div class="td w03pr">{{unbound c.c1}}</div>
+<div class="td w395pr">
+	<div><b>{{unbound c.c3}}</b></div>
+	<div>{{unbound c.c4}}</div>
+</div>
+<div class="td w3pr">
+	<div><b>{{unbound c.c9}}</b></div>
+	<div>{{unbound c.c7}}</div>
+</div>
+<div class="td w2pr">
+	<div>Visos žalos:{{unbound c.c5}}</div>
+	<div>Atviros:{{unbound c.c6}} </div>
+</div>
+<div class="td w03pr"><a href="#"><i class="img32-mono_edit"></i></a>
+</div>
+<div class="hidden">{{unbound c.c10}}{{unbound c.c11}}{{unbound c.c12}}{{unbound c.c13}}{{unbound c.c14}}</div>
+@*{{/with}}*@

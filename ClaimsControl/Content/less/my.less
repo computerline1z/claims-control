@@ -1,0 +1,66 @@
+/* Bootstrap buttonai pattern.less */
+
+div.container{
+	div.right{float:right}
+	div.left{float:left}
+	.clearfix();
+	div.big {
+		div{ padding: 20px 4px;}
+	}
+}
+div.cont{
+	div.right{float:right; text-align:left;}
+	div.left{float:left;}
+	.clearfix(); 
+}
+div.centerBlock {
+	.center-block()
+}
+div.w02px {width:20px;}
+div.w03px {width:30px;}
+div.w04px {width:40px;}
+
+div.w03pr {width:3%;}
+div.w05pr {width:5%;}
+div.w15pr {width:15%;}
+div.w20pr {width:20%;}//is w2pr
+div.w30pr {width:30%;}//is w3pr
+div.w32pr {width:32%;}
+div.w35pr {width:35%;}
+div.w395pr {width:39.5%;}
+div.w45pr {width:45%;}
+div.w45pr {width:70%;}
+div.w47pr_mp{width:47%; margin: 1.5%; padding: 1.5%; }
+div.w47pr_m{width:47%; margin: 1.5%;}
+
+div.box{margin:0; padding:0;}
+div.box_3pr_p{margin:0; padding:3%;}
+div.border { border: 1px ridge #C0C0C0; }
+
+
+.btn {
+  // Button Sizes
+  //&.large {
+  //  font-size: @basefont + 10px;
+  //  line-height: normal;
+  //  padding: 9px 14px 9px;
+  //  .border-radius(6px);
+  //}
+  //&.small {
+  //  padding: 7px 9px 7px;
+  //  font-size: @basefont - 2px;
+  //}
+}
+
+.big {padding: 25px;}
+
+a, .btn, div, span{
+.large, &.large {padding: 9px 14px; font-size: @basefont + 10px;}
+.medium, &.medium {padding: 6px 8px; font-size: @basefont;}
+.small, &.small {padding: 4px 6px; font-size: @basefont - 2px;}
+.mini, &.mini {padding: 2px 4px; font-size: @basefont - 4px;}
+}
+.btn{
+&.large {.border-radius(6px);}
+&.medium {.border-radius(3px);}
+}

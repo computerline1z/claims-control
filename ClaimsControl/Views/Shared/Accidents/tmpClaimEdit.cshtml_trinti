@@ -1,0 +1,43 @@
+﻿{{#each c in view.content}} 
+{{#unless c.newClaim}}
+	<div id='divClaimCard' data-ctrl='{"id":"{{unbound c.claimID}}","NewRec":"0","Source":"tblClaims","ClaimTypeID":"{{unbound c.claimTypeID}}"}'>
+{{else}}
+	<div id='divClaimCardDetails'>
+{{/unless}}
+{{#compare "claimTypeID" "===" "6"}} 
+	<div class='HalfDivleft'>
+	{{updatableField c Field="Days" id="inputDays" labelType="Top"}}
+	{{updatableField c Field="PerDay" id="inputPerDay" labelType="Top"}}
+	{{updatableField c Field="LossAmount" id="inputSum" attr="DISABLED" labelType="Top"}}@*(Math.round((Claim.Days*Claim.PerDay*100))/100)*@
+	</div><div class='HalfDivright'>
+	{{updatableField c Field="VehicleID" id="lstVehicles" labelType="Top"}}
+	</div>
+{{else}}
+	<div class='HalfDivleft'>
+	{{updatableField c Field="VehicleID" id="lstVehicles" labelType="Top"}}
+	{{updatableField c Field="InsPolicyID" id="lstInsPolicies" labelType="Top"}}
+	{{updatableField c Field="InsurerClaimID" labelType="Top"}}
+	</div><div class='HalfDivright'>
+	{{updatableField c Field="LossAmount" id="LossAmount" labelType="Top"}} @*"classes\":\"LossAmount*@
+	{{updatableField c Field="InsuranceClaimAmount" id="InsuranceClaimAmount" labelType="Top"}} @*"classes\":\"InsuranceClaimAmount*@
+	
+	{{#compare "claimTypeID" "===" "1"}} 
+		{{updatableField c Field="IsTotalLoss" labelType="Top"}}
+	{{/compare}}
+	{{#compare "claimTypeID" "===" "2"}} 
+		{{updatableField c Field="IsInjuredPersons" labelType="Top"}}
+	{{/compare}}
+	</div>
+{{/compare}}
+{{#unless c.newClaim}}</div>{{/unless}}
+{{/each}}
+
+<div class="frmbottom cont">
+	{{#unless c.newClaim}}
+	<div class="left small"><button class="btn small"><i style="margin-top:0" class="img32-bin" title="Ištrinti žalą"></i></button></div>
+	{{/unless}}
+	<div class="right medium" style="margin-top:10px;">
+		<button class="btn success small {{#if c.newClaim}}NewClaim{{/if}}"></i>IŠSAUGOTI</button>
+		<a href="#" title="Atšaukti pakeitimus" style="margin:10px;">Atšaukti</a>
+	</div>
+</div>

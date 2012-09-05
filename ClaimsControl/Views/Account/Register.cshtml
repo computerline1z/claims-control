@@ -1,0 +1,112 @@
+﻿@model CC.Models.RegisterModel
+
+@{
+    ViewBag.Title = "Register";
+    //ViewBag.Title = "Create account";
+    Layout = "Register_Layout.cshtml";
+}
+<p>
+    @{ Html.RenderAction("Header", "Account"); }
+</p>
+
+
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { }))
+{
+    <div class="shadow" style="border: 2px solid #e8e8e4; background-color: #FFFFFF;">
+        <div class="content">
+            <div style="float: left; width: 100%; ">
+                <div style="float: right; width: 45%; text-align: right; padding-top: 20px;">
+                        <span style=" padding-right: 10px; line-height: 2em;">Pasirinkite kalbą: </span>
+                        @Html.DropDownList("LanguageId", null, new { @style = "width: 120px; height: 1.5em;" })
+                </div>
+                <h2 style="padding: 0;">Žalų valdymo sistema</h2>
+                                                     
+            <br />                
+            <p style=" margin-bottom: 15px;">
+                Sukurkite naują paskyrą Žalų valdymo sistemoje: 
+            </p>
+            </div>
+            <table border="0" cellspacing="0" width="100%" style=" margin-left: 0px;">
+                <colgroup>
+                    <col width="45%" />
+                    <col width="50%" />
+                    <col width="5%" />
+                </colgroup>                    
+                <tr valign="middle">
+                    <td style="text-align:left;">@Html.LabelFor(m => m.UserName)</td>
+                    <td>
+                        @Html.TextBoxFor(m => m.UserName, new { id = "UserName", @class = "input_Long" })
+                    </td>
+                    <td style="padding-left: 5px;">
+                        <img src="../../Content/images/Question.png" alt="Paskyros pavadinimas bus naudojamas... " title="Paskyros pavadinimas bus naudojamas... " />
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;&nbsp;</td>
+                    <td colspan="2" style="padding: 0 0 5px 5px;">
+                        @Html.ValidationMessageFor(m => m.UserName)                    
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:left; padding-right:1em;">@Html.LabelFor(m => m.Name)</td>                       
+                    <td colspan="2">
+                        @Html.TextBoxFor(m => m.Name, new { id = "Vardas", @class = "input_Long" })
+                                                    
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;&nbsp;</td>
+                    <td colspan="2" style="padding: 0 0 5px 5px;">
+                        @Html.ValidationMessageFor(m => m.Name)                    
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:left; padding-right:1em; ">@Html.LabelFor(m => m.Surname)</td>                       
+                    <td colspan="2">
+                        @Html.TextBoxFor(m => m.Surname, new { id = "Pavarde", @class = "input_Long" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;&nbsp;</td>
+                    <td colspan="2" style="padding: 0 0 5px 5px;">
+                        @Html.ValidationMessageFor(m => m.Surname)                            
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:left; padding-right:1em; ">@Html.LabelFor(m => m.Email)</td>
+                    <td colspan="2">
+                        @Html.TextBoxFor(m => m.Email, new { id = "EMail", @class = "input_Long" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;&nbsp;</td>
+                    <td colspan="2" style="padding: 0 0 5px 5px;">
+                        @Html.ValidationMessageFor(m => m.Email)
+                    </td>
+                </tr>
+            </table><br />
+
+            <fieldset>
+                <legend>Vieta Capcha</legend>
+                <p>Jei Capcha nereikalingas išmesti visą fieldset</p><br />
+                <p>Įveskite simbolius, kuriuos matote žemiau esančiame paveikslėlyje.</p>
+            </fieldset><br />
+                
+            <p>
+                @Html.ActionLink("Paslaugų teikimo sutartį", "Sutartis", null, new { @style = "color: #2b7bcb;", target = "_blank" })
+                perskaičiau ir ją patvirtinu
+                <span class="editor-label" id="ConfirmBlock">
+                    @Html.CheckBoxFor(m => m.Accept, new { id = "chkConfirm" })  @Html.LabelFor(m => m.Accept)<br />
+                    @Html.ValidationMessageFor(m => m.Accept)
+                </span>            
+            </p>
+            <div style=" height: 40px;">
+                @Html.ValidationSummary(true, "Registracija nepavyko. Pataisykite klaidas ir registruokitės iš naujo.")<br />
+            </div>
+
+            <input type="submit" id="btnCreateUser" value="Sukurti paskyrą" class="button" style="margin: 30px 0 20px 0; width: 250px; font-size: 13px; height: 25px;" />
+        </div>
+    </div>
+}
+
+
