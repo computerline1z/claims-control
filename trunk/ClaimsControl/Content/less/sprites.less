@@ -1,0 +1,50 @@
+// All icons receive the styles of the <i> tag with a base class
+// of .i and are then given a unique class to add width, height,
+// and background-position. Your resulting HTML will look like
+// <i class="icon-inbox"></i>.
+
+// For the white version of the icons, just add the .icon-white class:
+// <i class="icon-inbox icon-white"></i>
+//.ie7-restore-right-whitespace(); - ismestas mixinas
+[class^="img32"],[class*=" img32"] {
+  display: inline-block;width: 32px;height: 32px; line-height: 32px;vertical-align: middle; //text-top;
+  background-image: url('images/Sprite32.png');background-position: 32px 32px;background-repeat: no-repeat;
+}
+.btn:hover [class^="img32"], .btn:hover [class*=" img32"] {
+	background-image: url('images/Sprite32-hover.png');
+ }
+.img32-attach {background-position:0px 0px;}
+.img32-bin {background-position:-32px 0px;}
+.img32-check {background-position:-64px 0px;}
+.img32-delete {background-position:-96px 0px;}
+.img32-doc_doc {background-position:0px -32px;}
+.img32-doc_img {background-position:-32px -32px;}
+.img32-doc_pdf {background-position:-64px -32px;}
+.img32-doc_unknown {background-position:-96px -32px;}
+.img32-doc_xls {background-position:0px -64px;}
+.img32-mono_delete {background-position:-32px -64px;}
+.img32-mono_edit {background-position:-64px -64px;}
+.img32-pencil {background-position:-96px -64px;}
+.img32-plus {background-position:0px -96px;}
+.img32-print {background-position:-32px -96px;}
+.img32-Search {background-position:-64px -96px;}
+.img32-warning {background-position:-96px -96px;}
+
+ [class^="img18"],[class*=" img18"] {
+  display: inline-block;width: 18px;height: 18px; line-height: 18px;vertical-align: middle; //text-top;
+  background-image: url('images/Sprite18.png');background-position: 18px 18px;background-repeat: no-repeat;
+}
+ .btn:hover [class^="img18"], .btn:hover [class*=" img18"] {
+	background-image: url('images/Sprite18-hover.png');
+ }
+.img18-exit {background-position:0px 0px;}
+.img18-plus {background-position:-18px 0px;}
+.img18-search {background-position:-36px 0px;}
+.img18-select {background-position:0px -18px;}
+.img18-table {background-position:-18px -18px;}
+.img18-triangle_green {background-position:-36px -18px;}
+.img18-triangle_red {background-position:0px -36px;}
+
+i{margin-top:-6px;}//kai iconos su tekstu, vien iconom to nereikia.
+
+//#srcSubmit:hover {}
