@@ -38,7 +38,7 @@ else {<h2 style="margin: 15px; display: inline-block">Įvykis Nr.:@Model.Acciden
 	 else {
 			<div>
 				<div class='ExtendIt' style="width: 48%;" data-ctrl='{"Value":@Model.Accident.AccidentTypeID, "Field":"AccidentTypeID","classes":"UpdateField","id":"lstAccidentTypes","labelType":"Top"}'></div>
-				<div class='ExtendIt' style="width: 48%; float:right;" data-ctrl='{"Value":@Model.Accident.DriverID, "Field":"DriverID","classes":"UpdateField","id":"lstDrivers","labelType":"Top"}'></div>
+				<div class='ExtendIt' style="width: 48%; float:right;" data-ctrl='{"Value":@Model.Accident.DriverID, "Field":"DriverID","classes":"UpdateField","id":"lstDrivers","labelType":"Top", "List":{"ListType": "None","Editable":{"Add": true, "Edit": true}}}'></div>
 			</div>
 			<div class='ExtendIt' data-ctrl='{"Value":"@Model.Accident.ShortNote", "Field":"ShortNote","classes":"UpdateField","id":"ShortNote","labelType":"Top"}'></div>
 			<div class='ExtendIt' data-ctrl='{"Value":"@Model.Accident.Date", "Field":"Date","classes":"UpdateField","id":"Date","labelType":"Top","Type":"DateTimeLess","Default":"Today","Plugin":{"datepicker":{"minDate":"-3y","maxDate":"0"}}}'></div>

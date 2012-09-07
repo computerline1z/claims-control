@@ -71,7 +71,8 @@
 		var MapHeight = $('#AccidentForm').outerHeight(false) - $('#divMapHead').outerHeight(false);
 		$('#divMap').height(MapHeight).width('100%');
 		oGLOBAL.AccidentForm = $("#AccidentForm").data("ctrl"); //NewRec id Lat Lng
-		oGLOBAL.mapFn.loadGoogleMapScript(oGLOBAL.mapFn.loadGMap);
+		//oGLOBAL.mapFn.loadGoogleMapScript(oGLOBAL.mapFn.loadGMap);
+		//oGLOBAL.mapFn.loadGMap();
 	};
 	return false;
 	//*****************************************************************************************************************************************
@@ -167,7 +168,9 @@ oGLOBAL.mapFn = {
 		"use strict";
 		if (typeof GMap2 === 'function') { callback(); return; }
 		var script = document.createElement('script');
-		script.setAttribute('src', 'http://maps.google.com/maps?file=api&v=2.133d&key=ABQIAAAAPnON2Rz9y3X5Mqknkx6ddhT2CXUl8nztVe9hJc_0UrwHdCv9pRR14Z_ti-1Z_5Dj_pUHY7QnFqoatQ&async=2&callback=oGLOBAL.mapFn.loadGMap');
+		//script.setAttribute('src', 'http://maps.google.com/maps?file=api&v=2.133d&key=ABQIAAAAPnON2Rz9y3X5Mqknkx6ddhT2CXUl8nztVe9hJc_0UrwHdCv9pRR14Z_ti-1Z_5Dj_pUHY7QnFqoatQ&async=2&callback=oGLOBAL.mapFn.loadGMap');
+		script.setAttribute('src', 'http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=true&amp;key=AIzaSyBmiyz9zmTD_hY7qT7Degr0o7tqAzjKQos&async=2&callback=oGLOBAL.mapFn.loadGMap');
+		//http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=true&amp;key=AIzaSyBmiyz9zmTD_hY7qT7Degr0o7tqAzjKQos
 		script.setAttribute('type', 'text/javascript');
 		document.documentElement.firstChild.appendChild(script);
 	},
