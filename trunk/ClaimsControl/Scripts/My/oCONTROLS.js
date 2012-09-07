@@ -103,7 +103,7 @@ var oCONTROLS = {
             if (data !== "NoData") {
                 col = $.extend({}, data.Cols[ix]);
             } //Naujas objektas turi but
-            col = $.extend({}, col, eOpt); //overridinu data.Cols<----e.data('ctrl')
+            col = $.extend(true, col, eOpt); //overridinu data.Cols<----e.data('ctrl')
             var Type = (col.Type) ? col.Type : ((col.List) ? "List" : ""); // (col.List)?"List":col.Type;
             if (Type === undefined) {
                 alert("Nesusiparsino ctrl elemento objFunc.js-UpdatableForm (n�ra Type)");

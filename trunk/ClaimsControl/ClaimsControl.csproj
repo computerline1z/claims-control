@@ -238,6 +238,8 @@
     <Content Include="Scripts\Ember\Sprite32-hover.png" />
     <Content Include="Scripts\Forms\accidents.js" />
     <Content Include="Scripts\Forms\accidents2.js" />
+    <Content Include="Scripts\My\clsEditableForm.js" />
+    <Content Include="Scripts\My\Copy of MyPlugins_ComboBox.js" />
     <Content Include="Scripts\My\General.js" />
     <Content Include="Scripts\My\MyPlugins_ComboBox.js" />
     <Content Include="Scripts\My\Views.js" />
@@ -346,6 +348,8 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\Sutartis.cshtml" />
     <Content Include="Views\Shared\Accidents\tmpAccident_Claims.cshtml" />
+    <None Include="Scripts\My\clsEditableForm.coffee" />
+    <None Include="Scripts\My\MyPlugins_ComboBox.coffee" />
     <None Include="Views\Main\tmpClaimEdit.cshtml" />
     <Content Include="Views\Shared\Accidents\tmpAccidentsMain.cshtml" />
     <Content Include="Views\Shared\Accidents\tmpAccidentRow.cshtml" />
