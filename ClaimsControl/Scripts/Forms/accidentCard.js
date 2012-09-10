@@ -72,7 +72,7 @@
 		$('#divMap').height(MapHeight).width('100%');
 		oGLOBAL.AccidentForm = $("#AccidentForm").data("ctrl"); //NewRec id Lat Lng
 		//oGLOBAL.mapFn.loadGoogleMapScript(oGLOBAL.mapFn.loadGMap);
-		//oGLOBAL.mapFn.loadGMap();
+		oGLOBAL.mapFn.loadGMap();
 	};
 	return false;
 	//*****************************************************************************************************************************************

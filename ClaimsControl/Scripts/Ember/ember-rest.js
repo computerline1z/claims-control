@@ -69,6 +69,9 @@ var oDATA = Ember.Object.create({
 			this.get("fnErr")("Object " + objName + " not downloaded yet.")
 		}
 	},
+	GetRow: function (id, tbl) {
+		return this.GET(tbl).Data.getRowByColValue(id, 0);
+	},
 	NEED: function (objNames, fnExec) {//jei objektu nera siunciames ir kai turim executinam funkcija
 		var all_queued = false, noHits = 0, me = this;
 		objNames.forEach(function (objName) {

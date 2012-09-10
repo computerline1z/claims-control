@@ -1,4 +1,64 @@
-﻿// $('selector').log('BEGIN')
+﻿(function ($) {
+	$.fn.spinner = function (options) {
+		var opts = $.extend({}, $.fn.spinner.defaults, options);
+		return this.each(function () {
+			var l = 0, t = 0, w = 0, h = 0, shim = 0, $s, $this = $(this);
+			// removal handling
+			if (options == 'remove' || options == 'close') {
+				var $s = $this.data('spinner');
+				var o = $this.data('opts');
+				if (typeof $s != 'undefined') {
+					$s.remove();
+					$this.removeData('spinner').removeData('opts');
+					if (o.hide) $this.css('visibility', 'visible');
+					o.onFinish.call(this);
+					return;
+				}
+			}
+			if (opts.img === "spinnerBig.gif") { opts.height = 66; opts.width = 66; }
+
+			var pos = $this.offset();
+			w = $this.outerWidth();
+			h = $this.outerHeight();
+
+			// calculate vertical centering
+			if (h > opts.height) shim = Math.round((h - opts.height) / 2);
+			else if (h < opts.height) shim = 0 - Math.round((opts.height - h) / 2);
+			t = pos.top + shim + 'px';
+
+			// calculate horizontal positioning
+			if (opts.position == 'right') {
+				l = pos.left + w + 10 + 'px';
+			} else if (opts.position == 'left') {
+				l = pos.left - opts.width - 10 + 'px';
+			} else {
+				l = pos.left + Math.round(.5 * w) - Math.round(.5 * opts.width) + 'px';
+			}
+			// call start callback
+			opts.onStart.call(this);
+			// hide element?
+			if (opts.hide) $this.css('visibility', 'hidden');
+			// create the spinner and attach
+			$s = $('<img class="spinner" src="/Content/images/' + opts.img + '" style="position: absolute; left: ' + l + '; top: ' + t + '; width: ' + opts.width + 'px; height: ' + opts.height + 'px; z-index: ' + opts.zIndex + ';" />').appendTo('body')
+			// removal handling
+			$this.data('spinner', $s).data('opts', opts);
+		});
+	};
+	// default spinner options
+	$.fn.spinner.defaults = {
+		position: 'right'       // left, right, center
+		  , img: 'spinner.gif' //'spinnerBig.gif'  path to spinner img
+		  , height: 16            // height of spinner img
+		  , width: 16            // width of spinner img
+		  , zIndex: 1001          // z-index of spinner
+		  , hide: false         // whether to hide the elem
+		  , onStart: function () { } // start callback
+		  , onFinish: function () { } // end callback
+	};
+})(jQuery);
+if ($("div.content:visible:first").length > 0) { $("div.content:visible:first").spinner({ centerOnBody: true, position: 'center', img: 'spinnerBig.gif' }); }
+else $("body").spinner({ centerOnBody: true, position: 'center', img: 'spinnerBig.gif' });
+// $('selector').log('BEGIN')
 //     .css('color', 'red')
 //     .log('new value')
 //         // etc
@@ -47,8 +107,8 @@ var MY = {
 function fnGetTodayDateString() {
 	var d = new Date();
 	return d.getFullYear() + '-' +
-    ((d.getMonth() < 9) ? '0' + (d.getMonth() + 1) : (d.getMonth() + 1)) + '-' +
-    ((d.getDate() < 9) ? '0' + d.getDate() : d.getDate());
+	 ((d.getMonth() < 9) ? '0' + (d.getMonth() + 1) : (d.getMonth() + 1)) + '-' +
+	 ((d.getDate() < 9) ? '0' + d.getDate() : d.getDate());
 }
 function fnGetDateString(Desc) {//Pradžios data
 	var d = new Date(), Y = d.getFullYear(), m = d.getMonth() + 1, M = fn2No(d.getMonth() + 1), D = fn2No(d.getDate()), retD;
@@ -99,8 +159,8 @@ function fnGetDateTime(expr) {
 function fnGetTodayDateString() {
 	var d = new Date();
 	return d.getFullYear() + '-' +
-    ((d.getMonth() < 9) ? '0' + (d.getMonth() + 1) : (d.getMonth() + 1)) + '-' +
-    ((d.getDate() < 9) ? '0' + d.getDate() : d.getDate());
+	 ((d.getMonth() < 9) ? '0' + (d.getMonth() + 1) : (d.getMonth() + 1)) + '-' +
+	 ((d.getDate() < 9) ? '0' + d.getDate() : d.getDate());
 }
 function fnGetDateString(Desc) {//Pradžios data
 	var d = new Date(), Y = d.getFullYear(), m = d.getMonth() + 1, M = fn2No(d.getMonth() + 1), D = fn2No(d.getDate()), retD;
@@ -146,8 +206,6 @@ function fnGetDateTime(expr) {
 		return regs[1] + "-" + regs[2] + "-" + regs[3] + " " + regs[4] + ":00";
 	}
 }
-
-
 Array.prototype.FNameIndex = function (FNameVal) {
 	var ctr = "";
 	for (var i = 0; i < this.length; i++) {
@@ -198,10 +256,10 @@ Array.prototype.findColValueByID = function (ID, ValueCol) {//Randa reiksme stul
 	}
 	return ctr;
 };
-Array.prototype.findRowByColValue = function (value, Col) {
+Array.prototype.getRowByColValue = function (value, Col) {
 	for (var Row = 0; Row < this.length; Row++) {
 		if (this[Row][Col] == value) {
-			return Row;
+			return this[Row];
 		}
 	}
 	return "";

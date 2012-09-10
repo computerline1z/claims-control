@@ -170,7 +170,7 @@
     <Content Include="Content\less\images\Sprite32-hover.png" />
     <Content Include="Content\less\images\Sprite32.png" />
     <Content Include="Content\less\images\Sprite32-white.png" />
-    <Content Include="Content\less\main.css" />
+    <Content Include="Content\less\main1.css" />
     <Content Include="Content\less\images\ico-search.png" />
     <Content Include="Content\images\navi_bg.png" />
     <Content Include="Content\images\navi_bg_divider.png" />

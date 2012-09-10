@@ -5,25 +5,21 @@
   var clsEditableForm;
 
   clsEditableForm = (function() {
-    var fnResetForm, fnSaveChanges, opt;
-
-    opt = {
-      DialogFormId: "divDialogForm",
-      fnAddNewForm: "Dialog",
-      CallBackAfter: 0,
-      aRowData: 0
-    };
-
-    var id=0, oData={}, Config={},Row={}, oData={}, Action={};
-
+    var fnResetForm, fnSaveChanges;
 
     function clsEditableForm(options) {
-      var Action, AddToTitle, Config, Row, id, ix, oData, rows, _i, _len, _ref;
+      var Action, AddToTitle, Config, Row, id, ix, oData, opt, rows, _i, _len, _ref;
       $("body").css("cursor", "wait");
-      opt.Title = 0;
+      opt = {
+        DialogFormId: "divDialogForm",
+        fnAddNewForm: "Dialog",
+        CallBackAfter: 0,
+        aRowData: 0,
+        Title: 0
+      };
       $.extend(opt, options);
       id = opt.aRowData != null ? opt.aRowData[0] : 0;
-      oData = oDATA.Get(opt.objData);
+      oData = oDATA.GET(opt.objData);
       Action = opt.Action;
       if (oData == null) {
         alert("Neradau objekto " + opt.objData + " clsEditableForm klaseje");
@@ -60,24 +56,27 @@
           opt.Title += " - " + AddToTitle.join(' ');
         }
       }
-      this.fnLoadEditableForm();
+      this.fnLoadEditableForm(opt, id, oData, Row);
       $("body").css("cursor", "default");
     }
 
-    clsEditableForm.prototype.fnLoadEditableForm = function() {
-      var dlgEditableOpt, form, _html;
+    clsEditableForm.prototype.fnLoadEditableForm = function(opt, id, oData, Row) {
+      var Config, dlgEditableOpt, form, _html;
+      Config = $.extend(true, {}, {
+        Source: opt.objData
+      }, oData.Config);
       if (!opt.form || opt.form === "Dialog") {
         dlgEditableOpt = {
           autoOpen: false,
-          minWidth: '65em',
+          minWidth: '35em',
           minHeight: '40em',
-          width: '80em',
+          width: '50em',
           modal: true,
           title: opt.Title,
           draggable: true,
           buttons: {
             "Išsaugoti pakeitimus": function() {
-              return fnSaveChanges();
+              return fnSaveChanges(opt, oData, Row);
             },
             "Ištrinti": function() {
               return $(this).dialog("close");
@@ -87,21 +86,22 @@
             }
           },
           close: function() {
+            $("div.validity-tooltip").remove();
             return $(this).remove();
           },
           dragStart: function() {
-            return $("div.validity-modal-msg").remove();
+            return $("div.validity-tooltip").remove();
           }
         };
-        _html = opt.RenderHTML ? opt.RenderHTML : this.fnGenerateHTML(Row, id);
+        _html = opt.RenderHTML ? opt.RenderHTML : this.fnGenerateHTML(Row, id, Config);
         $("#dialog:ui-dialog").dialog("destroy");
         $("<div id='" + opt.DialogFormId + "'></div>").html(_html).dialog(dlgEditableOpt).dialog('open');
       } else {
-        _html = opt.RenderHTML ? opt.RenderHTML : this.fnGenerateHTML(Row, id);
+        _html = opt.RenderHTML ? opt.RenderHTML : this.fnGenerateHTML(Row, id, Config);
         $(_html).append('<button style="float:right;" title="Atšaukti">Atšaukti</button>').find('button:last').button().click(function() {
-          return fnResetForm();
+          return fnResetForm(opt);
         }).end().append('<button style="float:right;" title="Išsaugoti">Išsaugoti</button>').find('button:last').button().click(function() {
-          return fnSaveChanges();
+          return fnSaveChanges(opt, oData, Row);
         }).end().appendTo(opt.form).append('<div style="clear:both;"></div>').prepend("<h3>" + opt.Title + "</h3>");
       }
       oCONTROLS.UpdatableForm($("#divEditableForm"));
@@ -116,19 +116,19 @@
       return form.find("button:contains('Ištrinti')").css("display", "none");
     };
 
-    fnResetForm = function() {
+    fnResetForm = function(opt) {
       if (opt.target) {
         opt.target.css("display", "block");
       }
       return opt.form.empty();
     };
 
-    fnSaveChanges = function() {
+    fnSaveChanges = function(opt, oData, Row) {
       var DataToSave;
-      DataToSave = oGLOBAL.ValidateForm($('#divEditableForm'));
+      DataToSave = oCONTROLS.ValidateForm($('#divEditableForm'));
       if (DataToSave) {
-        return oGLOBAL.UpdateServer({
-          Action: Action,
+        return SERVER.update({
+          Action: opt.Action,
           DataToSave: DataToSave,
           CallBack: {
             Success: function(resp, updData) {
@@ -136,9 +136,10 @@
               RowLength = Row.Cols.length;
               RowI = 0;
               updLength = updData.DataToSave.Fields.length;
-              if (Action === "Add") {
+              if (opt.Action === "Add") {
                 Row.Data = new Array(RowLength);
                 Row.Data[0] = resp.ResponseMsg.ID;
+                oData.Data.push(Row.Data);
               }
               while (RowI < RowLength - 1) {
                 updI = 0;
@@ -152,7 +153,7 @@
                   }
                   updI++;
                 }
-                if (!Found && Action === "Add") {
+                if (!Found && opt.Action === "Add") {
                   if (Row.Cols[RowI].Default != null) {
                     if (Row.Cols[RowI].Default === "Today") {
                       Row.Data[RowI] = fnGetTodayDateString();
@@ -182,17 +183,16 @@
                   id = Row.Data[ix];
                   obj = Row.Cols[ix].List.Source;
                   TextId = Row.Cols[ix].List.iText;
-                  Row.Data[RowI] = oDATA.GetStringFromIndexes(id, obj, TextId);
+                  Row.Data[RowI] = oData.GetStringFromIndexes(id, obj, TextId);
                 }
               }
-              oDATA.UpdateRow(Row.Data, oData, Action);
               if (opt.CallBackAfter) {
                 opt.CallBackAfter(Row.Data);
               }
               if (!opt.form || opt.form === "Dialog") {
                 return $("#" + opt.DialogFormId).dialog("close");
               } else {
-                return fnResetForm();
+                return fnResetForm(opt);
               }
             }
           },
@@ -204,7 +204,7 @@
       }
     };
 
-    clsEditableForm.prototype.fnGenerateHTML = function(Row, id) {
+    clsEditableForm.prototype.fnGenerateHTML = function(Row, id, Config) {
       var Append, Head, Length, html, i, t, val;
       Length = Row.Cols.length;
       i = 0;
@@ -229,12 +229,15 @@
       } else {
         Head = '"NewRec":1,';
       }
-      Head += '"Source":"' + (Config.Source ? Config.Source : Config.tblUpdate) + '","tblUpdate":"' + Config.tblUpdate + '"';
+      Head += '"Source":"' + Config.Source + '","tblUpdate":"' + Config.tblUpdate + '"';
       return "<div id='divEditableForm' class='inputform' style='margin:0 2em;' data-ctrl='{" + Head + "}'>" + html + "</div>";
     };
 
     return clsEditableForm;
 
   })();
+
+  window.oGLOBAL.clsEditableForm=clsEditableForm;
+
 
 }).call(this);
