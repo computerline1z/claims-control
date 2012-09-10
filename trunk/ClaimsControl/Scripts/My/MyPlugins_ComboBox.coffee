@@ -21,19 +21,20 @@ _create: ->
 	alert "Error! Input not found for ComboBox! (MyPlugins_ComboBox:15)"	if input is `undefined`
 	opt = $.extend(true, @options, $(input).data("ctrl"))
 	fnEditItem = (id) ->
-		new clsEditableForm(
+		new oGLOBAL.clsEditableForm(
 			objData: opt.Source
 			Action: (if (id) then "Edit" else "Add")
 			aRowData: (if (id) then oDATA.GetRow(id, opt.Source) else 0)
 			CallBackAfter: (RowData) -> #Ikisam naujas val i newval, o teksta i inputa
 				$(input).data "newval", RowData[opt.iVal]
 				$(input).val RowData.MapArrToString(opt.iText)
-				$(input).removeClass "inputTip"
-				Action = (if (id) then "Edit" else "Add")
-				if Action is "Add"
-					data[data.length] = RowData.MapArrToString(opt.iText)
-				else
-					data.UpdateArrToNew RowData.MapArrToString(opt.iText)
+				#$(input).removeClass "inputTip"
+				#if (this.Action=="Add"){}#pakeiciam value nauju
+				#Action = (if (id) then "Edit" else "Add")
+				#if Action is "Add" - clsEditableForm jau viskas padaryta
+				#	data[data.length] = RowData.MapArrToString(opt.iText)
+				#else
+				#	data.UpdateArrToNew RowData.MapArrToString(opt.iText)
 		)
 	#opt = $.extend({ ListType: "List", Editable: false, iVal: 0, iText: [1], selectFirst: false }, opt);		 //ListType:{None(be nieko, galima spausdint), List(listas, spausdint negalima), Combo(Listas, spausdint galima)}
 	Editable = (if (opt.Editable.Add or opt.Editable.Edit) then true else false)

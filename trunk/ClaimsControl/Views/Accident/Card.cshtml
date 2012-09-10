@@ -14,18 +14,18 @@ else {<h2 style="margin: 15px; display: inline-block">Įvykis Nr.:@Model.Acciden
 		<span>Įvykio dokumentai</span></a></li>
 </ul>
 <div id="AccidentForm" class="inputForm whiteTab cont" data-ctrl=
-   @{if (Model.NewRec == 1) {
-        <text>'{"NewRec":1,"Source":"tblAccidents","tblUpdate":"tblAccidents"}'</text>
+	@{if (Model.NewRec == 1) {
+		  <text>'{"NewRec":1,"Source":"tblAccidents","tblUpdate":"tblAccidents"}'</text>
 	  }
 	  else {
-        <text>'{"NewRec":0,"Source":"tblAccidents","id":@Model.Accident.ID,"Lat":"@Model.Accident.Lat.ToString().Replace(",", ".")","Lng":"@Model.Accident.Lng.ToString().Replace(",", ".")"}'</text>
+		  <text>'{"NewRec":0,"Source":"tblAccidents","id":@Model.Accident.ID,"Lat":"@Model.Accident.Lat.ToString().Replace(",", ".")","Lng":"@Model.Accident.Lng.ToString().Replace(",", ".")"}'</text>
 	  }}
-   >
+	>
 	<div class='left border w47pr_mp ui-corner-all'>
 		@{if (Model.NewRec == 1) {
 			<div>
 				<div class='ExtendIt' style="width: 48%;" data-ctrl='{"Field":"AccidentTypeID","classes":"UpdateField","id":"lstAccidentTypes","labelType":"Top"}'></div>
-				<div class='ExtendIt' style="width: 48%;float:right;" data-ctrl='{"Field":"DriverID","classes":"UpdateField","id":"lstDrivers","labelType":"Top"}'></div>
+				<div class='ExtendIt' style="width: 48%;float:right;" data-ctrl='{"Field":"DriverID","classes":"UpdateField","id":"lstDrivers","labelType":"Top","List":{"ListType": "None","Editable":{"Add": true, "Edit": true}}}'></div>
 			</div>
 			<div class='ExtendIt' data-ctrl='{"Field":"ShortNote","classes":"UpdateField","id":"ShortNote","labelType":"Top"}'></div>
 			<div class='ExtendIt' data-ctrl='{"Field":"Date","classes":"UpdateField","id":"Date","labelType":"Top", "Type":"DateTimeLess","Default":"Today","Plugin":{"datepicker":{"minDate":"-3y","maxDate":"0"}}}'></div>
@@ -57,7 +57,7 @@ else {<h2 style="margin: 15px; display: inline-block">Įvykis Nr.:@Model.Acciden
 			<div class='box_3pr_p border ui-corner-all'>
 				<div class='dialog-form-label'>Įvykio vieta:</div>
 				@*<span style='font-size: medium; font-weight: bold; float: left;' id='txtPlace'>Nurodykite spragtelėjimu žemėlapyje..</span><a style='font-size: small;
-               float: right; margin-right: 20px;' href="#">Keisti</a>*@
+					float: right; margin-right: 20px;' href="#">Keisti</a>*@
 				@{if (Model.NewRec == 1) {
 					<span style='font-size: medium; font-weight: bold; float: left;' id='txtPlace'>Nurodykite spragtelėjimu žemėlapyje..</span>
 		}

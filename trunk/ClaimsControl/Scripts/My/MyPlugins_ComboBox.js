@@ -24,21 +24,13 @@
       }
       opt = $.extend(true, this.options, $(input).data("ctrl"));
       fnEditItem = function(id) {
-        return new clsEditableForm({
+        return new oGLOBAL.clsEditableForm({
           objData: opt.Source,
           Action: (id ? "Edit" : "Add"),
           aRowData: (id ? oDATA.GetRow(id, opt.Source) : 0),
           CallBackAfter: function(RowData) {
-            var Action;
             $(input).data("newval", RowData[opt.iVal]);
-            $(input).val(RowData.MapArrToString(opt.iText));
-            $(input).removeClass("inputTip");
-            Action = (id ? "Edit" : "Add");
-            if (Action === "Add") {
-              return data[data.length] = RowData.MapArrToString(opt.iText);
-            } else {
-              return data.UpdateArrToNew(RowData.MapArrToString(opt.iText));
-            }
+            return $(input).val(RowData.MapArrToString(opt.iText));
           }
         });
       };

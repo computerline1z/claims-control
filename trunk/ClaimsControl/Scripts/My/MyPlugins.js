@@ -35,19 +35,19 @@
 					}
 					else if (opt.Allow === 'Date' || opt.Allow === 'DateCtrl' || opt.Allow === 'DateNotLessCtrl' || opt.Allow === 'DateNotMoreCtrl') {
 						inputVal = inputVal.replace('.', '-').replace('/', '-').replace('\\', '-');
-						re = /\.*((19|20\d{2})-([0]?[1-9]|[1][0-2])-([0-2][1-9]|3[0-1]|\d))+\.*/;
+						re = $.validity.patterns.date;
 						if (re.test(inputVal))
 							inputVal = inputVal.replace(re, "$1");
-						if (oVALIDATE.IsNumeric(inputVal) && opt.Allow === 'DateNotMoreCtrl') { if ((parseInt(inputVal, 10)) >= ((new Date()).getFullYear())) { inputVal = ((new Date()).getFullYear()); } }
-						if (oVALIDATE.IsNumeric(inputVal) && opt.Allow === 'DateNotLessCtrl') { if ((parseInt(inputVal, 10)) <= ((new Date()).getFullYear())) { inputVal = ((new Date()).getFullYear()); } }
+						if ($.isNumeric(inputVal) && opt.Allow === 'DateNotMoreCtrl') { if ((parseInt(inputVal, 10)) >= ((new Date()).getFullYear())) { inputVal = ((new Date()).getFullYear()); } }
+						if ($.isNumeric(inputVal) && opt.Allow === 'DateNotLessCtrl') { if ((parseInt(inputVal, 10)) <= ((new Date()).getFullYear())) { inputVal = ((new Date()).getFullYear()); } }
 						else { t.val(""); return; }
 					}
 					else if (opt.Allow === 'Year' || opt.Allow === 'YearNotMore' || opt.Allow === 'YearNotLess') {
 						inputVal = inputVal.replace('.', '-').replace('/', '-').replace('\\', '-');
 						re = /\.*(19|20\d{2})\.*/;
 						if (re.test(inputVal)) inputVal = inputVal.replace(re, "$1");
-						if (oVALIDATE.IsNumeric(inputVal) && opt.Allow === 'YearNotMore') { if ((parseInt(inputVal, 10)) >= ((new Date()).getFullYear())) { inputVal = ((new Date()).getFullYear()); } }
-						if (oVALIDATE.IsNumeric(inputVal) && opt.Allow === 'YearNotLess') { if ((parseInt(inputVal, 10)) <= ((new Date()).getFullYear())) { inputVal = ((new Date()).getFullYear()); } }
+						if ($.isNumeric(inputVal) && opt.Allow === 'YearNotMore') { if ((parseInt(inputVal, 10)) >= ((new Date()).getFullYear())) { inputVal = ((new Date()).getFullYear()); } }
+						if ($.isNumeric(inputVal) && opt.Allow === 'YearNotLess') { if ((parseInt(inputVal, 10)) <= ((new Date()).getFullYear())) { inputVal = ((new Date()).getFullYear()); } }
 						else { t.val(""); return; }
 					}
 					// \.*(19|20\d{2})\.*
@@ -68,14 +68,14 @@ jQuery(function ($) {
 		nextText: 'Pirmyn&#x3e;',
 		currentText: 'Šiandien',
 		monthNames: ['Sausis', 'Vasaris', 'Kovas', 'Balandis', 'Gegužė', 'Birželis',
-                'Liepa', 'Rugpjūtis', 'Rugsėjis', 'Spalis', 'Lapkritis', 'Gruodis'],
+					 'Liepa', 'Rugpjūtis', 'Rugsėjis', 'Spalis', 'Lapkritis', 'Gruodis'],
 		monthNamesShort: ['Sau', 'Vas', 'Kov', 'Bal', 'Geg', 'Bir',
-                'Lie', 'Rugp', 'Rugs', 'Spa', 'Lap', 'Gru'],
+					 'Lie', 'Rugp', 'Rugs', 'Spa', 'Lap', 'Gru'],
 		dayNames: ['sekmadienis', 'pirmadienis', 'antradienis', 'trečiadienis', 'ketvirtadienis', 'penktadienis', 'šeštadienis'],
 		dayNamesShort: ['sek', 'pir', 'ant', 'tre', 'ket', 'pen', 'šeš'],
 		dayNamesMin: ['Se', 'Pr', 'An', 'Tr', 'Ke', 'Pe', 'Še'],
 		weekHeader: 'Sv',
-		//dateFormat: 'yy-mm-dd',
+		dateFormat: 'yy.mm.dd',
 		firstDay: 1,
 		isRTL: false,
 		showMonthAfterYear: false,
