@@ -14,7 +14,9 @@
       iVal: 0,
       iText: [1],
       selectFirst: false,
-      Value: ""
+      Value: "",
+      mapWithNoCommas: false,
+      addNewIfNotExists: false
     },
     _create: function() {
       var Editable, OptVal, data, fnEditItem, id, input, opt, val;
@@ -23,14 +25,32 @@
         alert("Error! Input not found for ComboBox! (MyPlugins_ComboBox:15)");
       }
       opt = $.extend(true, this.options, $(input).data("ctrl"));
-      fnEditItem = function(id) {
+      if (opt.Source === "proc_Drivers") {
+        opt.mapWithNoCommas = true;
+      }
+      fnEditItem = function(id, newVals) {
         return new oGLOBAL.clsEditableForm({
+          newVals: newVals ? {
+            vals: newVals,
+            cols: opt.iText
+          } : null,
           objData: opt.Source,
           Action: (id ? "Edit" : "Add"),
           aRowData: (id ? oDATA.GetRow(id, opt.Source) : 0),
           CallBackAfter: function(RowData) {
+            var newVal;
             $(input).data("newval", RowData[opt.iVal]);
-            return $(input).val(RowData.MapArrToString(opt.iText));
+            newVal = RowData.MapArrToString(opt.iText, opt.mapWithNoCommas);
+            $(input).val(newVal);
+            if (this.Action === "Edit") {
+              data.findObjectByProperty("id", RowData[0]).label = newVal;
+            } else {
+              data.push({
+                id: RowData[0],
+                label: newVal
+              });
+            }
+            return input.autocomplete("search", input.val());
           }
         });
       };
@@ -39,17 +59,19 @@
       OptVal = parseInt(opt.Value, 10);
       data = $.map(oDATA.GET(opt.Source).Data, function(a) {
         if (a[0] === OptVal) {
-          input.val(a.MapArrToString(opt.iText));
+          input.val(a.MapArrToString(opt.iText, opt.mapWithNoCommas));
         }
         return {
           id: a[0],
-          label: a.MapArrToString(opt.iText)
+          label: a.MapArrToString(opt.iText, opt.mapWithNoCommas)
         };
       });
       if (typeof opt.Append !== "undefined") {
         data[data.length] = opt.Append;
       }
-      $(input).data("newval", opt.Value).autocomplete({
+      $(input).on('keyup', function() {
+        return $(this).parent().find("span.ui-menu-icon").remove();
+      }).data("newval", opt.Value).autocomplete({
         selectFirst: opt.selectFirst,
         delay: 0,
         minLength: (this.options.ListType === "None" ? 2 : 0),
@@ -58,7 +80,18 @@
           return response($.ui.autocomplete.filter(data, request.term));
         },
         select: function(event, ui) {
+          if ($(event.srcElement).hasClass("ui-menu-icon")) {
+            input.data("autocomplete").fnClickOnBtn({
+              id: ui.item.id,
+              elm: $(event.srcElement),
+              fromInput: false
+            });
+            return false;
+          }
           if (ui.item) {
+            if (!$(event.target).parent().find("span.ui-menu-item").length && opt.appendToList) {
+              $(event.target).parent().append(opt.appendToList);
+            }
             if (ui.item.id !== $(this).data("newval")) {
               $(this).data("newval", ui.item.id).val(($(this).data("ctrl").Type === "List" ? ui.item.value : ui.item.label));
               if (opt.fnChangeCallBack) {
@@ -71,54 +104,36 @@
         change: function(event, ui) {
           var t;
           if (!ui.item) {
+            fnEditItem(0, input.val());
             if (opt.fnChangeCallBack) {
               MY.execByName(opt.fnChangeCallBack, MY, this, null);
             }
             t = $(this);
             t.data("newval", "");
-            if (opt.Tip ? opt.Tip === t.val() : void 0) {
-              return true;
-            }
             if (opt.Type === "List") {
               t.val("");
             }
             if (typeof input.data("autocomplete") !== "undefined") {
               input.data("autocomplete").term = "";
             }
-            t.removeClass("alink");
             return false;
           }
-          return $(this).removeClass("inputTip");
         },
         close: function(event, ui) {
           var newVal, t;
           if (opt.Editable.Edit) {
             t = input;
             newVal = t.data("newval");
-            if (!t.hasClass("alink") && newVal) {
-              t.addClass("alink").unbind("dblclick").bind("dblclick", function() {
-                return fnEditItem(newVal);
-              });
-            } else if (newVal) {
-              t.unbind("dblclick").bind("dblclick", function() {
-                return fnEditItem(newVal);
-              });
-            } else {
-              if (t.hasClass("alink") && !newVal) {
-                t.removeClass("alink").unbind("dblclick");
-              }
-            }
           }
-          input.removeClass("activeField");
           if (opt.fnValueChanged && input.data("newval")) {
             return opt.fnValueChanged(input.data("newval"), input.val());
           }
         },
         open: function() {
           var acData, termTemplate;
-          if (!(opt.ListType !== "List" ? input.hasClass("activeField") : void 0)) {
-            input.addClass("activeField");
-          }
+          //if (!(opt.ListType !== "List" ? input.hasClass("activeField") : void 0)) {
+          //  input.addClass("activeField");
+          //}
           if (opt.ListType === "None" || opt.ListType === "Combo") {
             acData = $(this).data("autocomplete");
             termTemplate = "<span style=\"color:red\">%s</span>";
@@ -126,20 +141,23 @@
               var me, regex;
               me = $(this);
               regex = new RegExp(acData.term, "gi");
-              return me.html(me.text().replace(regex, function(matched) {
+              me.html(me.text().replace(regex, function(matched) {
                 return termTemplate.replace("%s", matched);
               }));
+              if (opt.appendToList) {
+                return me.append(opt.appendToList);
+              }
             });
           }
         }
       });
+      if (opt.addNewIfNotExists) {
+        input.on("blur", function() {
+          return alert("opa");
+        });
+      }
       if (opt.Editable.Edit) {
         val = input.data("newval");
-        if (val) {
-          input.addClass("alink").bind("dblclick", function() {
-            return fnEditItem((val ? val : 0));
-          });
-        }
       }
       if (opt.ListType !== "None" || opt.Editable.Add) {
         input.removeClass("ui-corner-all").addClass("ui-corner-left");
@@ -156,19 +174,68 @@
         }), menu.element.children().first());
       });
       $(input).data("autocomplete")._renderItem = function(ul, item) {
-        return $("<li></li>").data("item.autocomplete", item).append("<a>" + item.value + "</a>").appendTo(ul);
+        var toAdd;
+        if (opt.Editable.Add) {
+          toAdd = "<a " + ("data-id=" + item.id) + ">" + item.value + opt.appendToList + "</a>";
+        } else {
+          toAdd = "<a> " + item.value + "</a>";
+        }
+        return $("<li></li>").data("item.autocomplete", item).append(toAdd).appendTo(ul);
       };
       if (opt.Editable.Add) {
         id = $(this).data("newval");
         id = (id ? id : 0);
-        this.addButton({
-          title: "Pridėti naują",
-          icon: "img18-plus",
-          fn: function() {
-            return fnEditItem(0);
-          },
-          NoCorners: false
-        }, input);
+        opt.appendToList = "<span style='margin:-22px 20px auto auto;' title='redaguoti..' class='ui-icon ui-icon-pencil ui-menu-icon'>&nbsp;</span>		<span style='margin:-16px 2px auto auto;' title='ištrinti..' class='ui-icon ui-icon-trash ui-menu-icon'>&nbsp;</span>";
+        input.after(opt.appendToList);
+        input.data("autocomplete").fnClickOnBtn = function(p) {
+          var Action, c, msg, oData;
+          Action = p.elm.hasClass("ui-icon-pencil") ? "Edit" : "Delete";
+          oData = oDATA.GET(opt.Source);
+          if (p.elm.hasClass("ui-icon-pencil")) {
+            return fnEditItem(p.id);
+          } else {
+            val = oData.Data.findValueByID(p.id).MapArrToString(input.data("ctrl").iText, true);
+            c = oData.Config.Msg.Delete;
+            msg = c + " <b>\"" + val + "\"</b>?";
+            return oCONTROLS.dialog.Confirm({
+              title: c,
+              msg: msg
+            }, function() {
+              return SERVER.update({
+                Action: "Delete",
+                DataToSave: {
+                  id: p.id,
+                  DataTable: oData.Config.tblUpdate
+                },
+                Msg: {
+                  Title: "Duomenų ištrynimas",
+                  Success: oData.Config.Msg.GenName + " " + val + " buvo pašalintas.",
+                  Error: oData.Config.Msg.Delete + " " + val + " nepavyko."
+                },
+                CallBack: {
+                  Success: function(resp, updData) {
+                    if (data.findObjectByProperty("id", p.id).label === input.val()) {
+                      input.val("").parent().find("span.ui-menu-icon").remove();
+                    }
+                    oData.Data.removeRowByID(p.id);
+                    data.removeRowByProperty("id", p.id);
+                    return input.autocomplete("search", input.val());
+                  }
+                }
+              });
+            });
+          }
+        };
+        input.parent().on("click", "span.ui-menu-icon", function() {
+          var e;
+          e = $(this);
+          id = e.parent().find("input").data("newval");
+          return input.data("autocomplete").fnClickOnBtn({
+            id: id,
+            elm: e,
+            fromInput: true
+          });
+        });
       }
       if (opt.ListType !== "None") {
         this.addButton({

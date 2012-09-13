@@ -22,7 +22,7 @@ Handlebars.registerHelper('updatableField', function (prop, options) {
 	var lblT = options.hash['labelType']; lblT = (lblT) ? "\"labelType\":\"" + lblT + "\"," : "";
 	var attr = options.hash['attr']; attr = (attr) ? "\"attr\":\"" + attr + "\"," : "";
 
-	var retString = "<div class='ExtendIt' data-ctrl='{\"Value\":" + v + ",\"Field\":\"" + f + "\",\"classes\":\"" + cl + "\"," + id + lblT + attr;
+	var retString = "<div class='ExtendIt' data-ctrl='{\"Value\":" + (v===""?"\"\"":v) + ",\"Field\":\"" + f + "\",\"classes\":\"" + cl + "\"," + id + lblT + attr;
 	if (retString.charAt(retString.length - 1) === ",") {retString = retString.slice(0, -1); } //iškertam paskutini kalbeli jei yra
 	
 	return new Handlebars.SafeString(retString + "}'></div>");

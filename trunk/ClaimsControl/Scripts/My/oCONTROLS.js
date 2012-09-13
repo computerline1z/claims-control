@@ -274,7 +274,7 @@ var oCONTROLS = {
 							}
 						}
 					} else if (Type === "List") {
-						if (e.data("newval")) {
+						if ($.isNumeric(e.data("newval"))) {
 							val = e.data("newval");
 						} //log("ui, val:"+(val)?"":val);
 						else {
@@ -482,7 +482,7 @@ var oCONTROLS = {
 				 + "<div class='right'><a id='aCancelSelectOpt' class='floatright' href='#'>Atšaukti</a></div></div>";
 			HTML += "<div class='megaselectlistoptions'>";
 			var listHTML = "";
-			for (var i = 0; i < d.oDATA.Data.length; i += 3) {
+			for (var i = 1; i < d.oDATA.Data.length; i += 3) {//0-neimam, nes ten neapdrausta - jei kitur naudosim reiks tai daryt tik Source='tblClaimTypes'
 				listHTML += "<div class='megaselectlistcolumn'><ul>";
 				listHTML += "<li 'tabindex=-1' data-val=" + d.oDATA.Data[i][d.opt.val] + ">" + d.oDATA.Data[i][d.opt.text] + "</li>";
 				listHTML += "<li 'tabindex=-1' data-val=" + d.oDATA.Data[i + 1][d.opt.val] + ">" + d.oDATA.Data[i + 1][d.opt.text] + "</li>";
@@ -539,7 +539,7 @@ var oCONTROLS = {
 					d.DataToSave.Data[0] = d.ctrl.find("input").val();
 					SERVER.update("Edit", d.DataToSave, d.Data.tblToUpdate, d.fnCallBack, "");
 				}
-				d.ctrl.block("Siun�iami duomenys..");
+				d.ctrl.block("Siunčiami duomenys..");
 				return false;
 			});
 		},
@@ -550,9 +550,32 @@ var oCONTROLS = {
 				e.preventDefault();
 				//var DataToSave={ Data: [null], Fields: ["DataEnd"] }; DataToSave["id"]=RowData[0];
 				SERVER.update("Edit", d.DataToSave, d.Data.tblToUpdate, d.fnCallBack, "");
-				d.ctrl.block("Siun�iami duomenys..");
+				d.ctrl.block("Siunčiami duomenys..");
 				return false;
 			});
+		}
+	},
+	dialog: {
+		opt: {
+			title: '', msg: '', autoOpen: false, height: 'auto', width: 350, minWidth: 300, modal: true, show: 'clip', hide: 'clip',
+			close: function () { oCONTROLS.dialog.destroy(this); },
+		},
+		destroy: function (t) { $(t).dialog("destroy"); $('#dialog_form_tmp_id').remove(); }, //$(this).dialog("close");
+		Alert: function (opt) {//iskvietimui oCONTROLS.dialog.Alert({title:"fds",msg:"sdf"})
+			buttons = { "Gerai": function () { oCONTROLS.dialog.destroy(this); } };
+			this.showDialog(opt, buttons);
+		},
+		Confirm: function (opt, fnCallBack) {//iskvietimui oCONTROLS.dialog.Confirm({title:"fds",msg:"sdf"},fnCallBack)
+			oCONTROLS.dialog.fnCallBack=fnCallBack;
+			buttons = {
+				"Patvirtinti": function () { d=oCONTROLS.dialog; d.fnCallBack(); d.destroy(this); },
+				"Atšaukti": function () { oCONTROLS.dialog.destroy(this); }
+			};
+			this.showDialog(opt, buttons);
+		},
+		showDialog: function (opt, buttons) {
+			var o = $.extend(true, {}, this.opt, {buttons:buttons}, opt);
+			var $dialog = $('<div id="dialog_form_tmp_id">').html(opt.msg).dialog(o).dialog('open');
 		}
 	}
 };

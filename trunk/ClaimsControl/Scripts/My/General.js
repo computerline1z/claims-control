@@ -154,8 +154,6 @@ function fnGetDateTime(expr) {
 		return regs[1] + "-" + regs[2] + "-" + regs[3] + " " + regs[4] + ":00";
 	}
 }
-
-//-----Date functions---------------------------------------------------------------------------------------
 function fnGetTodayDateString() {
 	var d = new Date();
 	return d.getFullYear() + '-' +
@@ -206,6 +204,8 @@ function fnGetDateTime(expr) {
 		return regs[1] + "-" + regs[2] + "-" + regs[3] + " " + regs[4] + ":00";
 	}
 }
+//-----Date functions---------------------------------------------------------------------------------------
+
 Array.prototype.FNameIndex = function (FNameVal) {
 	var ctr = "";
 	for (var i = 0; i < this.length; i++) {
@@ -231,6 +231,11 @@ Array.prototype.findValueByID = function (ID) {//Randa reiksme stulelio ValueCol
 		if (this[i][0] === ID) { return this[i]; }
 	}
 	return false;
+};
+Array.prototype.findObjectByProperty = function (propertyName, propertyValue) {
+	for (var i = 0; i < this.length; i++) {
+		if (this[i][propertyName] === propertyValue) return this[i];	
+	}
 };
 Array.prototype.findColValuesByID = function (ID, ArrValuesCol) {//Randa reiksme stulelio ValueCol kurio id yra ID [tik dvieju dimensiju array'ems]
 	var ctr = "";
@@ -263,6 +268,15 @@ Array.prototype.getRowByColValue = function (value, Col) {
 		}
 	}
 	return "";
+};
+Array.prototype.removeRowByProperty = function (propertyName,propertyValue) {
+	for (var i = 0; i < this.length; i++) {
+		if (this[i][propertyName] === propertyValue) {
+			this.splice(i, 1);
+			return i;
+		}
+	}
+	return false;
 };
 Array.prototype.removeRowByID = function (ID) {//Istrina eilute kurios id yra ID
 	var ctr = "";
@@ -325,12 +339,14 @@ String.prototype.endsWith = function (suffix) {
 String.prototype.startsWith = function (prefix) {
 	return (this.substr(0, prefix.length) === prefix);
 }
-Array.prototype.MapArrToString = function (arrIndexes) {
-	var arrRet = [];
+Array.prototype.MapArrToString = function (arrIndexes,mapWithNoCommas) {
+	var arrRet = [],e;
 	for (var i = 0; i < arrIndexes.length; i++) {
-		arrRet[arrRet.length] = this[arrIndexes[i]];
+		e=$.trim(this[arrIndexes[i]]);
+		if (e!=="") arrRet[arrRet.length]=e;
 	}
-	return arrRet.join(", ");
+	if  (mapWithNoCommas) return  arrRet.join(" ");
+	else return arrRet.join(", ");
 }
 Array.prototype.UpdateArrToNew = function (NewArr, fieldsToInt) {
 	if (fieldsToInt) {//jei reikia paverciam integeriu

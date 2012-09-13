@@ -93,11 +93,11 @@
             return $("div.validity-tooltip").remove();
           }
         };
-        _html = opt.RenderHTML ? opt.RenderHTML : this.fnGenerateHTML(Row, id, Config);
+        _html = opt.RenderHTML ? opt.RenderHTML : this.fnGenerateHTML(Row, id, Config, opt);
         $("#dialog:ui-dialog").dialog("destroy");
         $("<div id='" + opt.DialogFormId + "'></div>").html(_html).dialog(dlgEditableOpt).dialog('open');
       } else {
-        _html = opt.RenderHTML ? opt.RenderHTML : this.fnGenerateHTML(Row, id, Config);
+        _html = opt.RenderHTML ? opt.RenderHTML : this.fnGenerateHTML(Row, id, Config, opt);
         $(_html).append('<button style="float:right;" title="Atšaukti">Atšaukti</button>').find('button:last').button().click(function() {
           return fnResetForm(opt);
         }).end().append('<button style="float:right;" title="Išsaugoti">Išsaugoti</button>').find('button:last').button().click(function() {
@@ -204,18 +204,29 @@
       }
     };
 
-    clsEditableForm.prototype.fnGenerateHTML = function(Row, id, Config) {
-      var Append, Head, Length, html, i, t, val;
+    clsEditableForm.prototype.fnGenerateHTML = function(Row, id, Config, opt) {
+      var Append, Head, Length, html, i, inewVals, t, val;
       Length = Row.Cols.length;
       i = 0;
       html = "";
       Head = "";
+      inewVals = 0;
+      if (opt.newVals) {
+        opt.newVals.vals = opt.newVals.vals instanceof Array ? opt.newVals.vals : opt.newVals.vals.split(" ");
+      }
       while (i < Length) {
         Append = "";
         if (Row.Grid.aoColumns[i].sTitle != null) {
           if ((Row.Data[i] != null) && Row.Data[i]) {
             t = (Row.Cols[i].Type ? Row.Cols[i].Type : "");
             val = (t === "String" || t === "Email") || t.substring(0, 4) === "Date" ? '"' + Row.Data[i].replace(/"/g, "\\u0027") + '"' : Row.Data[i];
+          } else if (opt.newVals != null) {
+            if (i === opt.newVals.cols[inewVals]) {
+              val = opt.newVals.vals[inewVals] ? '"' + opt.newVals.vals[inewVals].replace(/"/g, "\\u0027") + '"' : "\"\"";
+              inewVals++;
+            } else {
+              val = "\"\"";
+            }
           } else {
             val = "\"\"";
           }
