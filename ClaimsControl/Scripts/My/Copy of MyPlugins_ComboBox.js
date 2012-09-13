@@ -111,10 +111,10 @@
    			else if (newVal) { t.unbind('dblclick').bind('dblclick', function () { fnEditItem(newVal); }) }
    			else if (t.hasClass('alink') && !newVal) { t.removeClass('alink').unbind('dblclick'); }
    		}
-   		input.removeClass("activeField"); //if(opt.ListType!=="List") { input.removeClass("activeField"); }
+   		//input.removeClass("activeField"); //if(opt.ListType!=="List") { input.removeClass("activeField"); }
    		if (opt.fnValueChanged && input.data("newval")) { opt.fnValueChanged(input.data("newval"), input.val()); } //NewVal,NewText
    	}, open: function () {
-   		if (opt.ListType !== "List") { if (!input.hasClass("activeField")) { input.addClass("activeField"); } }
+   		//if (opt.ListType !== "List") { if (!input.hasClass("activeField")) { input.addClass("activeField"); } }
    		if (opt.ListType == "None" || opt.ListType == "Combo") {
    			var acData = $(this).data('autocomplete');
    			var termTemplate = '<span style="color:red">%s</span>';

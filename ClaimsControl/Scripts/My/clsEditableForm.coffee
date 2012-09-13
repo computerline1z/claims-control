@@ -1,4 +1,5 @@
-﻿##opt={objData:??, Action:Edit/Add/Delete, aRowData:[??], Title:??, DialogFormId(divDialogForm),RenderHTML:[opcija], CallBackAfter
+﻿##opt={objData:??, Action:Edit/Add/Delete, aRowData:[??], Title:??, DialogFormId(divDialogForm),RenderHTML:[opcija], CallBackAfter,
+##newVals: {vals:newVals,cols:opt.iText} vertės ir indeksai kuriuos reik ikist
 ##GridButtons:{form:"Dialog"/"Head"/Container(doom el),Action:"Add"/function,icon}
 class clsEditableForm
 	constructor: (options) ->
@@ -41,11 +42,11 @@ class clsEditableForm
 				close: () -> $("div.validity-tooltip").remove(); $(this).remove()
 				#dragStart: () -> $("div.validity-modal-msg").remove()
 				dragStart: () -> $("div.validity-tooltip").remove()
-			_html=if (opt.RenderHTML) then opt.RenderHTML else @fnGenerateHTML(Row,id,Config)
+			_html=if (opt.RenderHTML) then opt.RenderHTML else @fnGenerateHTML(Row,id,Config,opt)
 			$( "#dialog:ui-dialog" ).dialog("destroy")
 			$("<div id='"+opt.DialogFormId+"'></div>").html(_html).dialog(dlgEditableOpt).dialog('open')
 		else
-			_html=if (opt.RenderHTML) then opt.RenderHTML else @fnGenerateHTML(Row,id,Config)
+			_html=if (opt.RenderHTML) then opt.RenderHTML else @fnGenerateHTML(Row,id,Config,opt)
 			$(_html)
 				.append('<button style="float:right;" title="Atšaukti">Atšaukti</button>').find('button:last').button().click( ->fnResetForm(opt))
 				.end().append('<button style="float:right;" title="Išsaugoti">Išsaugoti</button>').find('button:last').button().click( ->fnSaveChanges(opt,oData,Row))
@@ -124,8 +125,10 @@ class clsEditableForm
 			)
 		else if DataToSave==0##reiskia, kad niekas nepakeista
 			$("#"+opt.DialogFormId).dialog("close")
-	fnGenerateHTML: (Row,id,Config) ->
-		Length=Row.Cols.length; i=0;html="";Head=""
+	fnGenerateHTML: (Row,id,Config,opt) ->
+		Length=Row.Cols.length; i=0;html="";Head="";inewVals=0
+		if opt.newVals #naujai įkišamos vertės turi būt array, jei ne suskaldom ir įkišam
+			opt.newVals.vals=if opt.newVals.vals instanceof Array then opt.newVals.vals else opt.newVals.vals.split(" ")
 		while i<Length
 			Append=""
 			if Row.Grid.aoColumns[i].sTitle? ## laukus generuojam tik su sTitle
@@ -133,6 +136,12 @@ class clsEditableForm
 					t=(if Row.Cols[i].Type then Row.Cols[i].Type else "")
 					val=if t in ["String","Email"]||t.substring(0,4)=="Date" then ('"'+ Row.Data[i].replace(/"/g,"\\u0027")+'"') else Row.Data[i]
 					##Row.Data[i].replace('"',"\'")
+				else if opt.newVals? #newVals: {vals:newVals,cols:opt.iText}
+					if i==opt.newVals.cols[inewVals]
+						val=if opt.newVals.vals[inewVals] then ('"'+ opt.newVals.vals[inewVals].replace(/"/g,"\\u0027")+'"') else "\"\""
+						inewVals++
+					else
+						val="\"\""
 				else
 					val="\"\"" 
 				Append+="\"Value\":#{val},"

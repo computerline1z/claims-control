@@ -283,11 +283,12 @@ namespace CC.Models {
          };
          return JSON;
       }
-
+		        // JSON.Data = from d in dc.tblAccidents
+              //       where d.No == No && d.IsDeleted == false
       public jsonArrays GetJSON_tblClaimTypes() {
          jsonArrays JSON = new jsonArrays();
          //JSON.Data = from c in dc.proc_Clients(LoginData.LoginID, null)
-         JSON.Data = from d in dc.tblClaimTypes //orderby d.Name
+         JSON.Data = from d in dc.tblClaimTypes //where d.ID>0 //orderby d.Name
                      select new object[] {
 				d.ID,//0
 				d.Name//1
@@ -600,7 +601,7 @@ namespace CC.Models {
 				new { FName = "ID"},//0
 				new { FName = "ClaimTypeID",Tip="Pasirinkite žalos tipą..", List=new{Source="tblClaimTypes",iVal=0,iText=new object[]{1},Editable=0,ListType="List"}},//1
 				new { FName = "AccidentID"},//2
-				new { FName = "InsPolicyID",Tip="Pasirinkite iš sąrašo..", List=new{Source="proc_InsPolicies",iVal=0,iText=new object[]{1,2},Editable=1,ListType="List",Append=new{id=0,value="Neapdrausta"}}},//3
+				new { FName = "InsPolicyID",Tip="Pasirinkite iš sąrašo..", List=new{Source="proc_InsPolicies",iVal=0,iText=new object[]{1,2},Editable=1,ListType="List"}},//3 ,Append=new{id=0,value="Neapdrausta"}
 				new { FName = "VehicleID",Tip="Valst.Nr., markė, modelis arba metai..", List=new{Source="proc_Vehicles",iVal=0,iText=new object[]{1,2,3,4},Editable=1,ListType="None"}},//4
 				new { FName = "No",Type="Integer", LenMax=10,Validity="require().match('integer').maxLength(13).greaterThanOrEqualTo(0)"},//5
 				new { FName = "IsTotalLoss",Type="Boolean"},//6

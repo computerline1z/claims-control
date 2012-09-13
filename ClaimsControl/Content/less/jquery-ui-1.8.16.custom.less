@@ -23,7 +23,6 @@
 
 /* Icons
 ----------------------------------*/
-
 /* states and images */
 .ui-icon { display: block; text-indent: -99999px; overflow: hidden; background-repeat: no-repeat; }
 
@@ -92,7 +91,7 @@
   -ms-transition: 0.1s linear background-image;
   -o-transition: 0.1s linear background-image;
   transition: 0.1s linear background-image;
-   overflow: visible;
+	overflow: visible;
 
  }
 
@@ -188,10 +187,11 @@
 .ui-priority-secondary, .ui-widget-content .ui-priority-secondary,  .ui-widget-header .ui-priority-secondary { opacity: .7; filter:Alpha(Opacity=70); font-weight: normal; }
 .ui-state-disabled, .ui-widget-content .ui-state-disabled, .ui-widget-header .ui-state-disabled { opacity: .35; filter:Alpha(Opacity=35); background-image: none;  }
 
-
-
 /* Icons
 ----------------------------------*/
+.ui-menu-icon {position: relative !important; cursor: pointer !important;}
+#ui-active-menuitem .ui-icon {background-image: url(images_ui/ui-icons_f6cf3b_256x240.png)!important; }
+a.ui-state-hover .ui-icon { background-image: url(images_ui/ui-icons_888888_256x240.png)!important; }
 
 /* states and images */
 .ui-icon { width: 16px; height: 16px; background-image: url(images_ui/ui-icons_222222_256x240.png); }
@@ -452,8 +452,7 @@
  * http://docs.jquery.com/UI/Autocomplete#theming
  */
 .ui-autocomplete { position: absolute; cursor: default; }
-
-/* workarounds */
+/* workarounds .ui-autocomplete*/
 * html .ui-autocomplete { width:1px; } /* without this, the menu expands to 100% in IE6 */
 
 /*
@@ -537,7 +536,7 @@
   -ms-transition: 0.1s linear background-image;
   -o-transition: 0.1s linear background-image;
   transition: 0.1s linear background-image;
-   overflow: visible;
+	overflow: visible;
 
 } /* the overflow property removes extra width in IE */
 
@@ -822,7 +821,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
   background:whiteSmoke;
   border-bottom:1px solid #ddd;
   padding-bottom:0px;
-   color:#00438A;
+	color:#00438A;
 }
 
 
@@ -833,8 +832,8 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 
 .ui-tabs-nav .ui-state-default{
   -webkit-box-shadow: 0px 0px 0px #ffffff; /* Saf3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
-     -moz-box-shadow: 0px 0px 0px #ffffff; /* FF3.5 - 3.6 */
-          box-shadow: 0px 0px 0px #ffffff; /* Opera 10.5, IE9, FF4+, Chrome 6+, iOS 5 */
+	  -moz-box-shadow: 0px 0px 0px #ffffff; /* FF3.5 - 3.6 */
+			 box-shadow: 0px 0px 0px #ffffff; /* Opera 10.5, IE9, FF4+, Chrome 6+, iOS 5 */
 }
 .ui-tabs .ui-tabs-nav li a {
 
@@ -1031,7 +1030,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 .ui-progressbar .ui-progressbar-value {margin: -1px; height:100%;
 
 /*this can be removed if ui-widget-header is blue*/
-    color: #ffffff;
+	 color: #ffffff;
   background-color: #0064cd;
   background-repeat: repeat-x;
   background-image: -khtml-gradient(linear, left top, left bottom, from(#049cdb), to(#0064cd));
@@ -1149,5 +1148,5 @@ textarea,
   -ms-transition: 0.1s linear all;
   -o-transition: 0.1s linear all;
   transition: 0.1s linear all;
-   overflow: visible;
+	overflow: visible;
 }
