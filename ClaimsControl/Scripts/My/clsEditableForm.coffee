@@ -1,4 +1,4 @@
-﻿##opt={objData:??, Action:Edit/Add/Delete, aRowData:[??], Title:??, DialogFormId(divDialogForm),RenderHTML:[opcija], CallBackAfter,
+##opt={objData:??, Action:Edit/Add/Delete, aRowData:[??], Title:??, DialogFormId(divDialogForm),RenderHTML:[opcija], CallBackAfter,
 ##newVals: {vals:newVals,cols:opt.iText} vertės ir indeksai kuriuos reik ikist
 ##GridButtons:{form:"Dialog"/"Head"/Container(doom el),Action:"Add"/function,icon}
 class clsEditableForm
@@ -89,7 +89,7 @@ class clsEditableForm
 						if (not Found and opt.Action=="Add") 
 							if Row.Cols[RowI].Default?
 								if Row.Cols[RowI].Default=="Today"
-									Row.Data[RowI]=fnGetTodayDateString()
+									Row.Data[RowI]=oGLOBAL.date.getTodayString()
 								else if Row.Cols[RowI].Default=="UserName"
 									Row.Data[RowI]=UserData.Name()#UserData turėt būt
 								else if Row.Cols[RowI].Default=="UserId"
@@ -133,9 +133,12 @@ class clsEditableForm
 			Append=""
 			if Row.Grid.aoColumns[i].sTitle? ## laukus generuojam tik su sTitle
 				if Row.Data[i]? and Row.Data[i]
-					t=(if Row.Cols[i].Type then Row.Cols[i].Type else "")
-					val=if t in ["String","Email"]||t.substring(0,4)=="Date" then ('"'+ Row.Data[i].replace(/"/g,"\\u0027")+'"') else Row.Data[i]
-					##Row.Data[i].replace('"',"\'")
+					if typeof Row.Data[i] == "number"
+						val=Row.Data[i]
+					else
+						t=(if Row.Cols[i].Type then Row.Cols[i].Type else "")
+						val=if t in ["String","Email"]||t.substring(0,4)=="Date" then ('"'+ Row.Data[i].replace(/"/g,"\\u0027")+'"') else Row.Data[i]
+						##Row.Data[i].replace('"',"\'")
 				else if opt.newVals? #newVals: {vals:newVals,cols:opt.iText}
 					if i==opt.newVals.cols[inewVals]
 						val=if opt.newVals.vals[inewVals] then ('"'+ opt.newVals.vals[inewVals].replace(/"/g,"\\u0027")+'"') else "\"\""

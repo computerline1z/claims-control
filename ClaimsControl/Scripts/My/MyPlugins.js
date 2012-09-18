@@ -1,4 +1,4 @@
-﻿(function ($) {
+(function ($) {
 	$.fn.extend({
 		//pass the options variable to the function
 		ValidateOnBlur: function (options) {

@@ -1,4 +1,4 @@
-﻿/// <reference path="../Main/jquery-1.7.2-vsdoc.js" />
+/// <reference path="../Main/jquery-1.7.2-vsdoc.js" />
 $(function () {
 	Em.run.next(function () {
 		oGLOBAL.logFromStart("Ember finished.");
@@ -64,7 +64,7 @@ var oDATA = Ember.Object.create({
 		this.Obj[objName] = oINST;
 	},
 	GET: function (objName) {
-		if (this.get("exists").call(this, objName)) return this.Obj[objName];
+		if ( this.Obj[objName]) return this.Obj[objName];
 		else {
 			this.get("fnErr")("Object " + objName + " not downloaded yet.")
 		}

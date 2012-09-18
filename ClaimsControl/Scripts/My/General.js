@@ -1,4 +1,4 @@
-﻿(function ($) {
+(function ($) {
 	$.fn.spinner = function (options) {
 		var opts = $.extend({}, $.fn.spinner.defaults, options);
 		return this.each(function () {
@@ -103,109 +103,6 @@ var MY = {
 		}
 	}
 }
-//-----Date functions---------------------------------------------------------------------------------------
-function fnGetTodayDateString() {
-	var d = new Date();
-	return d.getFullYear() + '-' +
-	 ((d.getMonth() < 9) ? '0' + (d.getMonth() + 1) : (d.getMonth() + 1)) + '-' +
-	 ((d.getDate() < 9) ? '0' + d.getDate() : d.getDate());
-}
-function fnGetDateString(Desc) {//Pradžios data
-	var d = new Date(), Y = d.getFullYear(), m = d.getMonth() + 1, M = fn2No(d.getMonth() + 1), D = fn2No(d.getDate()), retD;
-	if (Desc === "ThisYear") { retD = Y + ".01.01" }
-	else if (Desc === "Last6M") { retD = ((m < 6) ? Y - 1 : Y) + "." + ((m < 6) ? fn2No(m + 6) : fn2No(m - 6)) + "." + D; }
-	else if (Desc === "Last12M") { retD = Y - 1 + "." + M + "." + D; }
-	else { retD = Y + '.' + M + '.' + D; }
-	return retD;
-}
-function fnGetDateString_noDay(Desc) {//Pradžios data
-	var d = new Date(), Y = d.getFullYear(), m = d.getMonth() + 1, M = fn2No(d.getMonth() + 1), retD;
-	if (Desc === "ThisYear") { retD = Y + ".01" }
-	else if (Desc === "Last6M") { retD = ((m < 6) ? Y - 1 : Y) + "." + ((m < 6) ? fn2No(m + 6) : fn2No(m - 6)); }
-	else if (Desc === "Last12M") { retD = Y - 1 + "." + M; }
-	else { retD = Y + "." + M; }
-	return retD;
-}
-function fn2No(No) { return No < 10 ? '0' + No : No; }
-function fnGetStringFromjDate(jDate) {
-	var d = new Date(parseInt(jsonDate.substr(6)));
-	return [d.format("yy/mm/dd"), d.format("HH:MM")];
-}
-function fnGetDateTime(expr) {
-	var re = /^(\d{4})[\-|\/|\.]?(\d{1,2})[\-|\/|\.]?(\d{1,2})[\s\S]*(\d{2}:\d{2})$/; //2011-02-31 / 06:47
-	if (expr != '') {
-		if (regs = expr.match(re)) {
-			if (regs[3] < 1 || regs[3] > 31) {
-				alert("Invalid value for day: " + regs[1]);
-				return false;
-			}
-			if (regs[2] < 1 || regs[2] > 12) {
-				alert("Invalid value for month: " + regs[2]);
-				return false;
-			}
-			if (regs[1] < 1902 || regs[1] > (new Date()).getFullYear()) {
-				alert("Invalid value for year: " + regs[3] + " - must be between 1902 and " + (new Date()).getFullYear());
-				return false;
-			}
-		} else {
-			alert("Invalid date format: " + expr);
-			return false;
-		}
-		return regs[1] + "-" + regs[2] + "-" + regs[3] + " " + regs[4] + ":00";
-	}
-}
-function fnGetTodayDateString() {
-	var d = new Date();
-	return d.getFullYear() + '-' +
-	 ((d.getMonth() < 9) ? '0' + (d.getMonth() + 1) : (d.getMonth() + 1)) + '-' +
-	 ((d.getDate() < 9) ? '0' + d.getDate() : d.getDate());
-}
-function fnGetDateString(Desc) {//Pradžios data
-	var d = new Date(), Y = d.getFullYear(), m = d.getMonth() + 1, M = fn2No(d.getMonth() + 1), D = fn2No(d.getDate()), retD;
-	if (Desc === "ThisYear") { retD = Y + ".01.01" }
-	else if (Desc === "Last6M") { retD = ((m < 6) ? Y - 1 : Y) + "." + ((m < 6) ? fn2No(m + 6) : fn2No(m - 6)) + "." + D; }
-	else if (Desc === "Last12M") { retD = Y - 1 + "." + M + "." + D; }
-	else { retD = Y + '.' + M + '.' + D; }
-	return retD;
-}
-function fnGetDateString_noDay(Desc) {//Pradžios data
-	var d = new Date(), Y = d.getFullYear(), m = d.getMonth() + 1, M = fn2No(d.getMonth() + 1), retD;
-	if (Desc === "ThisYear") { retD = Y + ".01" }
-	else if (Desc === "Last6M") { retD = ((m < 6) ? Y - 1 : Y) + "." + ((m < 6) ? fn2No(m + 6) : fn2No(m - 6)); }
-	else if (Desc === "Last12M") { retD = Y - 1 + "." + M; }
-	else { retD = Y + "." + M; }
-	return retD;
-}
-function fn2No(No) { return No < 10 ? '0' + No : No; }
-function fnGetStringFromjDate(jDate) {
-	var d = new Date(parseInt(jsonDate.substr(6)));
-	return [d.format("yy/mm/dd"), d.format("HH:MM")];
-}
-function fnGetDateTime(expr) {
-	var re = /^(\d{4})[\-|\/|\.]?(\d{1,2})[\-|\/|\.]?(\d{1,2})[\s\S]*(\d{2}:\d{2})$/; //2011-02-31 / 06:47
-	if (expr != '') {
-		if (regs = expr.match(re)) {
-			if (regs[3] < 1 || regs[3] > 31) {
-				alert("Invalid value for day: " + regs[1]);
-				return false;
-			}
-			if (regs[2] < 1 || regs[2] > 12) {
-				alert("Invalid value for month: " + regs[2]);
-				return false;
-			}
-			if (regs[1] < 1902 || regs[1] > (new Date()).getFullYear()) {
-				alert("Invalid value for year: " + regs[3] + " - must be between 1902 and " + (new Date()).getFullYear());
-				return false;
-			}
-		} else {
-			alert("Invalid date format: " + expr);
-			return false;
-		}
-		return regs[1] + "-" + regs[2] + "-" + regs[3] + " " + regs[4] + ":00";
-	}
-}
-//-----Date functions---------------------------------------------------------------------------------------
-
 Array.prototype.FNameIndex = function (FNameVal) {
 	var ctr = "";
 	for (var i = 0; i < this.length; i++) {
@@ -234,7 +131,7 @@ Array.prototype.findValueByID = function (ID) {//Randa reiksme stulelio ValueCol
 };
 Array.prototype.findObjectByProperty = function (propertyName, propertyValue) {
 	for (var i = 0; i < this.length; i++) {
-		if (this[i][propertyName] === propertyValue) return this[i];	
+		if (this[i][propertyName] === propertyValue) return this[i];
 	}
 };
 Array.prototype.findColValuesByID = function (ID, ArrValuesCol) {//Randa reiksme stulelio ValueCol kurio id yra ID [tik dvieju dimensiju array'ems]
@@ -269,7 +166,7 @@ Array.prototype.getRowByColValue = function (value, Col) {
 	}
 	return "";
 };
-Array.prototype.removeRowByProperty = function (propertyName,propertyValue) {
+Array.prototype.removeRowByProperty = function (propertyName, propertyValue) {
 	for (var i = 0; i < this.length; i++) {
 		if (this[i][propertyName] === propertyValue) {
 			this.splice(i, 1);
@@ -339,13 +236,13 @@ String.prototype.endsWith = function (suffix) {
 String.prototype.startsWith = function (prefix) {
 	return (this.substr(0, prefix.length) === prefix);
 }
-Array.prototype.MapArrToString = function (arrIndexes,mapWithNoCommas) {
-	var arrRet = [],e;
+Array.prototype.MapArrToString = function (arrIndexes, mapWithNoCommas) {
+	var arrRet = [], e;
 	for (var i = 0; i < arrIndexes.length; i++) {
-		e=$.trim(this[arrIndexes[i]]);
-		if (e!=="") arrRet[arrRet.length]=e;
+		e = $.trim(this[arrIndexes[i]]);
+		if (e !== "") arrRet[arrRet.length] = e;
 	}
-	if  (mapWithNoCommas) return  arrRet.join(" ");
+	if (mapWithNoCommas) return arrRet.join(" ");
 	else return arrRet.join(", ");
 }
 Array.prototype.UpdateArrToNew = function (NewArr, fieldsToInt) {
@@ -462,60 +359,60 @@ oGLOBAL.Start = {
 		oGLOBAL.Start.FormLoaded(undefined, APar.Ctrl);
 		console.log("oGLOBAL.Start.fnSetNewData," + "#" + APar.Ctrl + " height:" + $("#" + APar.Ctrl).height());
 	},
-	Ctrl: {
-		CtrlHeight: {},
-		GetMinCtrlHeight: function (CtrlName) {
-			this.CtrlHeight[CtrlName] = $(document).height() - $('#ulMainMenu').outerHeight(true) - $('#divlogindisplay').outerHeight(true);
-			return this.CtrlHeight[CtrlName];
-		},
-		InnerHeight: function (ChildToFit) {
-			var h = 0;
-			$.each($(ChildToFit).children(), function (index, child) {
-				h += parseInt($(child).outerHeight(true));
-			});
-			return h;
-		},
-		ResizeChilds: function (CtrlName) {
-			var h = this.CtrlHeight[CtrlName], t = $(CtrlName); t.height(h);
-			$.each(t.children(), function (index, child) { $(child).height(h); });
-		},
-		CheckCtrlHeight: function (p) {//CtrlName, ChildToFit, ToSetCtrlHeight
-			//{ CtrlName: "#"+Ctrl, LayOutPanel: "#"+Ctrl+"-center",FirstResize:true };
-			var inner = this.InnerHeight((p.LayOutPanel) ? p.LayOutPanel : p.CtrlName); //Jei yra Layoutas matuojam layouto paneli, priesingu atveju MainCtrl
-			var container = ((this.CtrlHeight[p.CtrlName]) ? (this.CtrlHeight[p.CtrlName]) : this.GetMinCtrlHeight(p.CtrlName));
-			var Resize = ((container < (inner + p.padding)) ? (inner + p.padding) : 0);
+	// Ctrl: {
+	// CtrlHeight: {},
+	// GetMinCtrlHeight: function (CtrlName) {
+	// this.CtrlHeight[CtrlName] = $(document).height() - $('#ulMainMenu').outerHeight(true) - $('#divlogindisplay').outerHeight(true);
+	// return this.CtrlHeight[CtrlName];
+	// },
+	// InnerHeight: function (ChildToFit) {
+	// var h = 0;
+	// $.each($(ChildToFit).children(), function (index, child) {
+	// h += parseInt($(child).outerHeight(true));
+	// });
+	// return h;
+	// },
+	// ResizeChilds: function (CtrlName) {
+	// var h = this.CtrlHeight[CtrlName], t = $(CtrlName); t.height(h);
+	// $.each(t.children(), function (index, child) { $(child).height(h); });
+	// },
+	// CheckCtrlHeight: function (p) {//CtrlName, ChildToFit, ToSetCtrlHeight
+	// //{ CtrlName: "#"+Ctrl, LayOutPanel: "#"+Ctrl+"-center",FirstResize:true };
+	// var inner = this.InnerHeight((p.LayOutPanel) ? p.LayOutPanel : p.CtrlName); //Jei yra Layoutas matuojam layouto paneli, priesingu atveju MainCtrl
+	// var container = ((this.CtrlHeight[p.CtrlName]) ? (this.CtrlHeight[p.CtrlName]) : this.GetMinCtrlHeight(p.CtrlName));
+	// var Resize = ((container < (inner + p.padding)) ? (inner + p.padding) : 0);
 
-			if (Resize) {
-				this.CtrlHeight[p.CtrlName] = Resize;
-				if (typeof p.LayOutPanel !== 'undefined') { this.ResizeChilds(p.CtrlName) }
-				else { $(p.CtrlName).height(Resize); }
-			} else if (p.FirstResize) { $(p.CtrlName).height(this.CtrlHeight[p.CtrlName]); }
-		}
-	},
-	MakeSizes: function () {
-		function scrollbarWidth() {
-			var b = document.body; b.style.overflow = 'hidden'; b.style.overflow = 'scroll';
-			var width = b.clientWidth; width -= b.clientWidth;
-			if (!width) width = b.offsetWidth - b.clientWidth;
-			b.style.overflow = '';
-			return width;
-		}
-		if (oSIZES.DoneSizes) return;
-		oSIZES = { width: $(document).width() - scrollbarWidth(), height: $(document).height(), scr: scrollbarWidth, DoneSizes: 1 };
-		window.setTimeout(function () { oSIZES.DoneSizes = 0; }, 1000);
-	},
-	fnApplyLayout: function (Ctrl, oTable, padding) {
-		var t = $("#" + Ctrl);
-		if ($("#" + Ctrl + "-center").length) {
-			setTimeout(function () {
-				var p = { CtrlName: "#" + Ctrl, LayOutPanel: "#" + Ctrl + "-center", FirstResize: true, padding: (padding) ? padding : 0 }; //FirstResize-butina resizint, bet tik Ctrla (ne jo vaikus)
-				$('#divMainPage').fadeIn(); oGLOBAL.Start.Ctrl.CheckCtrlHeight(p);
-				t.layout({ East: { size: '500px' }, //applyDefaultStyles: true, t.children(":first").outerHeight(true)
-					onresize_end: function () { oTable.fnAdjustColumnSizing(false); }
-				}); oTable.fnAdjustColumnSizing(false);
-			}, 5);
-		}
-	},
+	// if (Resize) {
+	// this.CtrlHeight[p.CtrlName] = Resize;
+	// if (typeof p.LayOutPanel !== 'undefined') { this.ResizeChilds(p.CtrlName) }
+	// else { $(p.CtrlName).height(Resize); }
+	// } else if (p.FirstResize) { $(p.CtrlName).height(this.CtrlHeight[p.CtrlName]); }
+	// }
+	// },
+	// MakeSizes: function () {
+	// function scrollbarWidth() {
+	// var b = document.body; b.style.overflow = 'hidden'; b.style.overflow = 'scroll';
+	// var width = b.clientWidth; width -= b.clientWidth;
+	// if (!width) width = b.offsetWidth - b.clientWidth;
+	// b.style.overflow = '';
+	// return width;
+	// }
+	// if (oSIZES.DoneSizes) return;
+	// oSIZES = { width: $(document).width() - scrollbarWidth(), height: $(document).height(), scr: scrollbarWidth, DoneSizes: 1 };
+	// window.setTimeout(function () { oSIZES.DoneSizes = 0; }, 1000);
+	// },
+	// fnApplyLayout: function (Ctrl, oTable, padding) {
+	// var t = $("#" + Ctrl);
+	// if ($("#" + Ctrl + "-center").length) {
+	// setTimeout(function () {
+	// var p = { CtrlName: "#" + Ctrl, LayOutPanel: "#" + Ctrl + "-center", FirstResize: true, padding: (padding) ? padding : 0 }; //FirstResize-butina resizint, bet tik Ctrla (ne jo vaikus)
+	// $('#divMainPage').fadeIn(); oGLOBAL.Start.Ctrl.CheckCtrlHeight(p);
+	// t.layout({ East: { size: '500px' }, //applyDefaultStyles: true, t.children(":first").outerHeight(true)
+	// onresize_end: function () { oTable.fnAdjustColumnSizing(false); }
+	// }); oTable.fnAdjustColumnSizing(false);
+	// }, 5);
+	// }
+	// },
 	FormLoaded: function (SERVER, Ctrl) {
 		//if(SERVER!==undefined) { CallServer(SERVER.SPar, oGLOBAL.Start.fnSetPostLoadedData, SERVER.APar, SERVER.url, "json"); }
 		//Wait.Hide();
@@ -523,4 +420,74 @@ oGLOBAL.Start = {
 		//$('#divMainPage').fadeIn();
 		$("img.spinner").remove();
 	}
+}
+oGLOBAL.date = {
+	dateFormat: "yyyy.mm.dd",
+	dateDelimiter: ".",
+	getTodayString: function () {
+		var d = new Date();
+		this.checkFormat();
+		return d.getFullYear() + this.dateDelimiter +
+		 ((d.getMonth() < 9) ? '0' + (d.getMonth() + 1) : (d.getMonth() + 1)) + this.dateDelimiter +
+		 ((d.getDate() < 9) ? '0' + d.getDate() : d.getDate());
+	},
+	getDate: function (stringDate) {
+		// accepts a date in the format 2011-01-01 (year, month, day)
+		// Internet Explorer does not like dashes in dates when converting, so lets use a regular expression to get the year, month, and day 
+		//var DateRegex = /([^-]*)+this.dateDelimiter+([^-]*)+this.dateDelimiter+([^-]*)/;
+		var pattern = new RegExp("([^-]*)"+this.dateDelimiter+"([^-]*)"+this.dateDelimiter+"([^-]*)");
+		this.checkFormat();
+		var DateRegexResult = stringDate.match(pattern);
+		return new Date(DateRegexResult[2] + "/" + DateRegexResult[3] + "/" + DateRegexResult[1]);
+	},
+	firstBigger: function (date1, date2) {
+		return this.getDate(date1) > this.getDate(date2);
+	},
+	checkFormat: function () {
+		if (this.dateFormat !== "yyyy.mm.dd") { throw new Error(err + "no such format in General.js date obj."); }
+	}
+	// function fnGetDateString(Desc) {//Pradžios data
+	// var d = new Date(), Y = d.getFullYear(), m = d.getMonth() + 1, M = fn2No(d.getMonth() + 1), D = fn2No(d.getDate()), retD;
+	// if (Desc === "ThisYear") { retD = Y + ".01.01" }
+	// else if (Desc === "Last6M") { retD = ((m < 6) ? Y - 1 : Y) + "." + ((m < 6) ? fn2No(m + 6) : fn2No(m - 6)) + "." + D; }
+	// else if (Desc === "Last12M") { retD = Y - 1 + "." + M + "." + D; }
+	// else { retD = Y + '.' + M + '.' + D; }
+	// return retD;
+	// }
+	// function fnGetDateString_noDay(Desc) {//Pradžios data
+	// var d = new Date(), Y = d.getFullYear(), m = d.getMonth() + 1, M = fn2No(d.getMonth() + 1), retD;
+	// if (Desc === "ThisYear") { retD = Y + ".01" }
+	// else if (Desc === "Last6M") { retD = ((m < 6) ? Y - 1 : Y) + "." + ((m < 6) ? fn2No(m + 6) : fn2No(m - 6)); }
+	// else if (Desc === "Last12M") { retD = Y - 1 + "." + M; }
+	// else { retD = Y + "." + M; }
+	// return retD;
+	// }
+	// function fn2No(No) { return No < 10 ? '0' + No : No; }
+	// function fnGetStringFromjDate(jDate) {
+	// var d = new Date(parseInt(jsonDate.substr(6)));
+	// return [d.format("yy/mm/dd"), d.format("HH:MM")];
+	// }
+	// function fnGetDateTime(expr) {
+	// var re = /^(\d{4})[\-|\/|\.]?(\d{1,2})[\-|\/|\.]?(\d{1,2})[\s\S]*(\d{2}:\d{2})$/; //2011-02-31 / 06:47
+	// if (expr != '') {
+	// if (regs = expr.match(re)) {
+	// if (regs[3] < 1 || regs[3] > 31) {
+	// alert("Invalid value for day: " + regs[1]);
+	// return false;
+	// }
+	// if (regs[2] < 1 || regs[2] > 12) {
+	// alert("Invalid value for month: " + regs[2]);
+	// return false;
+	// }
+	// if (regs[1] < 1902 || regs[1] > (new Date()).getFullYear()) {
+	// alert("Invalid value for year: " + regs[3] + " - must be between 1902 and " + (new Date()).getFullYear());
+	// return false;
+	// }
+	// } else {
+	// alert("Invalid date format: " + expr);
+	// return false;
+	// }
+	// return regs[1] + "-" + regs[2] + "-" + regs[3] + " " + regs[4] + ":00";
+	// }
+	// }
 }
