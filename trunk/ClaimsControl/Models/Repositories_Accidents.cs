@@ -330,7 +330,7 @@ namespace CC.Models {
 				new { FName = "Plate",Type="String", LenMax=10,IsUnique=new object[]{2},Validity="require().nonHtml().maxLength(10)"},//2
 				new { FName = "Make",IdInMe=9},//3
 				new { FName = "Model",Type="String", LenMax=30,Validity="require().nonHtml().maxLength(30)"},//4
-				new { FName = "Year",Type="DateYearLess", LenEqual=4,Validity="require()"},//5
+				new { FName = "Year",Type="Integer", LenEqual=4,Validity="require()"},//5
 				new { FName = "Docs",Type="String",NotEditable=1},//6
 				new { FName = "EndDate",Type="Date", LenMax=30,Validity="require().match('date').lessThanOrEqualTo(new Date())"},//7
 				new { FName = "TypeID",List=new{Source="tblVehicleTypes",Editable=0,ListType="List", iVal=0,iText=new object []{1}}},//8
@@ -602,7 +602,7 @@ namespace CC.Models {
 				new { FName = "ClaimTypeID",Tip="Pasirinkite žalos tipą..", List=new{Source="tblClaimTypes",iVal=0,iText=new object[]{1},Editable=0,ListType="List"}},//1
 				new { FName = "AccidentID"},//2
 				new { FName = "InsPolicyID",Tip="Pasirinkite iš sąrašo..", List=new{Source="proc_InsPolicies",iVal=0,iText=new object[]{1,2},Editable=1,ListType="List"}},//3 ,Append=new{id=0,value="Neapdrausta"}
-				new { FName = "VehicleID",Tip="Valst.Nr., markė, modelis arba metai..", List=new{Source="proc_Vehicles",iVal=0,iText=new object[]{1,2,3,4},Editable=1,ListType="None"}},//4
+				new { FName = "VehicleID",Tip="Valst.Nr., markė, modelis arba metai..", List=new{Source="proc_Vehicles",iVal=0,iText=new object[]{1,2,3,4},ListType="None"}},//4
 				new { FName = "No",Type="Integer", LenMax=10,Validity="require().match('integer').maxLength(13).greaterThanOrEqualTo(0)"},//5
 				new { FName = "IsTotalLoss",Type="Boolean"},//6
 				new { FName = "LossAmount",Type="Decimal", LenMax=15,Validity="require().match('number').greaterThanOrEqualTo(0)"},//7
@@ -628,7 +628,7 @@ namespace CC.Models {
 				new {sTitle="Visiškas praradimas"},//6//IsTotalLoss//
 				new {sTitle="Planuojama žalos suma"},//7//LossAmount//
 				new {sTitle="Planuojama draudimo išmoka"},//8//InsuranceClaimAmount//
-				new {sTitle="Įvykio metu sužaloti žmonės"},//9//IsInjuredPersons//
+				new {sTitle="Įvykio metu sužaloti tretieji asmenys"},//9//IsInjuredPersons//
 				new {sTitle="Žalos nr. draudiko sistemoje"},//10//InsurerClaimID////DefaultUpdate=0
 				new {sTitle="Žalos būklė"},//11//ClaimStatus//
 				new {sTitle="Žalos suma patvirtinta"},//12//AmountIsConfirmed//

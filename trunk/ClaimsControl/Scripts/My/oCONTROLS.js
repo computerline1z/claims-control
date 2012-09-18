@@ -1,4 +1,4 @@
-﻿/// <reference path="../Main/jquery-1.7.2-vsdoc.js"/>
+/// <reference path="../Main/jquery-1.7.2-vsdoc.js"/>
 var oCONTROLS = {
 	UpdatableForm_reset: function (frm) {//resetinam į buvusias reikšmes
 		$(frm).find(".UpdateField").each(function () {
@@ -130,7 +130,7 @@ var oCONTROLS = {
 				if (prop === 'List') {
 					$.extend(data_ctrl, col[prop]);
 				} //Listo propercius dedu vienam lygyje su kitais data_ctrl.Type="List";
-				else if (prop === 'Value' || prop === 'Validity' || prop === 'AgrValidity' || prop === 'Tip' || prop === 'Field' || prop === 'Type' || prop === 'Ext' || prop === 'UpdateField') {
+				else if (prop === 'Value' || prop === 'Validity' || prop === 'AgrValidity' || prop === 'Tip' || prop === 'Field' || prop === 'Type' || prop === 'Ext' || prop === 'UpdateField'|| prop === 'Editable') {
 					data_ctrl[prop] = col[prop];
 				}
 			}
@@ -179,7 +179,7 @@ var oCONTROLS = {
 			else if (Type.search("Date") !== -1) {// Date DateNotMore DateNotLess DateNotMoreCtrl DateNotLessCtrl
 				var isTime = 0;
 				if (!col.Value && col.Default === "Today") {
-					col.Value = fnGetTodayDateString();
+					col.Value = oGLOBAL.date.getTodayString();
 				}  //Jei col.Default.Today
 				if (Type.search("Time") !== -1) {
 					var TimeValue = (col.Value.length >= 16) ? col.Value.substring(11, 16) : "00:00";
@@ -229,7 +229,7 @@ var oCONTROLS = {
 	},
 	ValidateForm: function (frm, DataToSaveAppend) { //Formos lauku validacija (pagal data-ctrl duomenis)
 		$("div.validity-modal-msg").remove(); //panaikinam validacijos msg jei buvo
-		var c = frm.data("ctrl"), id = c.id, NewRec = parseInt(c.NewRec, 10), DataTable = (c.tblUpdate) ? (c.tblUpdate) : (oDATA.GET(c.Source).Config.tblUpdate); //Updatinimui imam is markupo, jei nera is objekto
+		var c = frm.data("ctrl"), id = parseInt(c.id,10), NewRec = parseInt(c.NewRec, 10), DataTable = (c.tblUpdate) ? (c.tblUpdate) : (oDATA.GET(c.Source).Config.tblUpdate); //Updatinimui imam is markupo, jei nera is objekto
 		if (!id & !NewRec) {
 			alert("Nėra nurodyta id formos data(ctrl)!");
 		}
@@ -568,8 +568,8 @@ var oCONTROLS = {
 		Confirm: function (opt, fnCallBack) {//iskvietimui oCONTROLS.dialog.Confirm({title:"fds",msg:"sdf"},fnCallBack)
 			oCONTROLS.dialog.fnCallBack=fnCallBack;
 			buttons = {
-				"Patvirtinti": function () { d=oCONTROLS.dialog; d.fnCallBack(); d.destroy(this); },
-				"Atšaukti": function () { oCONTROLS.dialog.destroy(this); }
+				"Taip": function () { d=oCONTROLS.dialog; d.fnCallBack(); d.destroy(this); },
+				"Ne": function () { oCONTROLS.dialog.destroy(this); }
 			};
 			this.showDialog(opt, buttons);
 		},

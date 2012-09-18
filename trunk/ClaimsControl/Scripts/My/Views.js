@@ -1,4 +1,4 @@
-﻿Handlebars.registerHelper('highlight', function (prop, options) {
+Handlebars.registerHelper('highlight', function (prop, options) {
 	var value = Ember.getPath(this, prop);
 	return new Handlebars.SafeString('<span class="highlight">' + value + '</span>');
 });
@@ -21,8 +21,10 @@ Handlebars.registerHelper('updatableField', function (prop, options) {
 	var id = options.hash['id']; id = (id) ? "\"id\":\"" + id + "\"," : "";
 	var lblT = options.hash['labelType']; lblT = (lblT) ? "\"labelType\":\"" + lblT + "\"," : "";
 	var attr = options.hash['attr']; attr = (attr) ? "\"attr\":\"" + attr + "\"," : "";
-
-	var retString = "<div class='ExtendIt' data-ctrl='{\"Value\":" + (v===""?"\"\"":v) + ",\"Field\":\"" + f + "\",\"classes\":\"" + cl + "\"," + id + lblT + attr;
+	var List = options.hash['List']; List = (List) ? "\"List\":" + List + "," : ""; //List yra objektas ir jam kabuciu nereikia
+	var Editable = options.hash['Editable']; Editable = (Editable) ? "\"Editable\":" + Editable + "," : ""; //Editable yra objektas ir jam kabuciu nereikia
+	
+	var retString = "<div class='ExtendIt' data-ctrl='{\"Value\":" + (v===""?"\"\"":v) + ",\"Field\":\"" + f + "\",\"classes\":\"" + cl + "\"," + id + lblT + attr+List+Editable;
 	if (retString.charAt(retString.length - 1) === ",") {retString = retString.slice(0, -1); } //iškertam paskutini kalbeli jei yra
 	
 	return new Handlebars.SafeString(retString + "}'></div>");

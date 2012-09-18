@@ -13,8 +13,8 @@ App.NavbarController = Em.Controller.extend({
 		} else { controller.set("currentState", "tabAccidents"); }
 		Em.run.next(function () {
 			$('#ulMainMenu a:eq(' + viewIx + ')').removeClass("notactive").addClass("selected ui-corner-top"); //Pazymim naujo menu taba
-			$('#' + controller.get("currentState")).addClass("hidden"); //Paslepiam aktyvø taba
-			$('#' + newState).removeClass("hidden"); //Atslepiam naujai aktyvø taba
+			$('#' + controller.get("currentState")).addClass("hidden"); //Paslepiam aktyvÅ³ taba
+			$('#' + newState).removeClass("hidden"); //Atslepiam naujai aktyvÅ³ taba
 			controller.set("currentState", newState);
 		})
 	}

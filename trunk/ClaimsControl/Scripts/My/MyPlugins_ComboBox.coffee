@@ -1,4 +1,4 @@
-﻿
+
 `var $ = window.jQuery`
 $.widget "ui.ComboBox",  
 #fnChangeCallBack:fn($(this).data("newval")
@@ -159,7 +159,7 @@ _create: ->
 					me = $(this)					
 					regex = new RegExp(acData.term, "gi")
 					me.html me.text().replace(regex, (matched) -> termTemplate.replace "%s", matched)
-					me.append(opt.appendToList) if opt.appendToList
+					# me.append(opt.appendToList) if opt.appendToList
 
 	#-----Inicializavimas pagal parametrus-------------------------------------------------------------------------------------
 	if (opt.addNewIfNotExists)
@@ -184,17 +184,18 @@ _create: ->
 	#---------------------------------------------------------------------------------------------------
 	# This line added to set default value of the combobox
 	$(input).data("autocomplete")._renderItem = (ul, item) ->
-		if opt.Editable.Add
-			toAdd="<a "+("data-id="+item.id)+">"+item.value+opt.appendToList+"</a>"
-		else
-			toAdd="<a> " + item.value + "</a>"	
+		# if opt.Editable.Add
+			# toAdd="<a "+("data-id="+item.id)+">"+item.value+opt.appendToList+"</a>"
+		# else
+		toAdd="<a> " + item.value + "</a>"	
 		$("<li></li>").data("item.autocomplete", item).append(toAdd).appendTo ul
 
 	if opt.Editable.Add
 		id = $(this).data("newval")
 		id = (if (id) then id else 0)#onclick='alert(\"opa\"); return false;'
-		opt.appendToList="<span style='margin:-22px 20px auto auto;' title='redaguoti..' class='ui-icon ui-icon-pencil ui-menu-icon'>&nbsp;</span>
-		<span style='margin:-16px 2px auto auto;' title='ištrinti..' class='ui-icon ui-icon-trash ui-menu-icon'>&nbsp;</span>"
+		opt.appendToList="<span style='margin:-24px 4px auto auto;' title='redaguoti..' class='ui-icon ui-icon-pencil ui-menu-icon'>&nbsp;</span>"
+		#"<span style='margin:-22px 20px auto auto;' title='redaguoti..' class='ui-icon ui-icon-pencil ui-menu-icon'>&nbsp;</span>"
+		# <span style='margin:-16px 2px auto auto;' title='ištrinti..' class='ui-icon ui-icon-trash ui-menu-icon'>&nbsp;</span>"
 		input.after(opt.appendToList)
 		input.data("autocomplete").fnClickOnBtn=(p) ->
 			Action=if p.elm.hasClass("ui-icon-pencil") then "Edit" else "Delete"

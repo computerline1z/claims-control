@@ -1,4 +1,4 @@
-﻿oGLOBAL.LoadAccident_Card = function (AccidentNo) {
+oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 	"use strict"; var UpdateServer, DefaultTime, fnChangeCheck, fnChange, LoadScript;
 	SERVER.send("{'AccidentNo':" + AccidentNo + "}", oGLOBAL.Start.fnSetNewData, { Ctrl: "divAccidentEdit", RenderNew: 1, fnCallBack: function () { LoadScript(); } }, "/Accident/GetAccident", "json");
 
