@@ -314,8 +314,8 @@ namespace CC.Models {
          JSON.Data = from d in dc.proc_Vehicles(UserData.AccountID, OnlyTop)
                      select new object[] {
 				d.ID,//0
-				d.Type,//1
 				d.Plate,//2
+				d.Type,//1
 				d.Make,//3
 				d.Model,//4
 				d.Year,//5
@@ -326,8 +326,8 @@ namespace CC.Models {
 				};
          object[] Cols ={
 				new { FName = "ID"},//0
-				new { FName = "Type",Type="String",IdInMe=8},//1
 				new { FName = "Plate",Type="String", LenMax=10,IsUnique=new object[]{2},Validity="require().nonHtml().maxLength(10)"},//2
+				new { FName = "Type",Type="String",IdInMe=8},//1
 				new { FName = "Make",IdInMe=9},//3
 				new { FName = "Model",Type="String", LenMax=30,Validity="require().nonHtml().maxLength(30)"},//4
 				new { FName = "Year",Type="Integer", LenEqual=4,Validity="require()"},//5
@@ -340,8 +340,8 @@ namespace CC.Models {
          JSON.Grid = new {
             aoColumns = new object[]{
 					new {bVisible=false,bSearchable=false},//0//ID
-					new {sTitle="Tipas"},//1//Type//
 					new {sTitle="Valst.Nr."},//2//Plate//
+					new {sTitle="Tipas"},//1//Type//
 					new {sTitle="Markė"},//3//Make
 					new {sTitle="Modelis"},//4//Model//
 					new {sTitle="Metai"},//5//Year//
@@ -602,7 +602,7 @@ namespace CC.Models {
 				new { FName = "ClaimTypeID",Tip="Pasirinkite žalos tipą..", List=new{Source="tblClaimTypes",iVal=0,iText=new object[]{1},Editable=0,ListType="List"}},//1
 				new { FName = "AccidentID"},//2
 				new { FName = "InsPolicyID",Tip="Pasirinkite iš sąrašo..", List=new{Source="proc_InsPolicies",iVal=0,iText=new object[]{1,2},Editable=1,ListType="List"}},//3 ,Append=new{id=0,value="Neapdrausta"}
-				new { FName = "VehicleID",Tip="Valst.Nr., markė, modelis arba metai..", List=new{Source="proc_Vehicles",iVal=0,iText=new object[]{1,2,3,4},ListType="None"}},//4
+				new { FName = "VehicleID",Tip="Valst.Nr.", List=new{Source="proc_Vehicles",iVal=0,iText=new object[]{1,2,3,4},ListType="None"}},//4 , markė, modelis arba metai
 				new { FName = "No",Type="Integer", LenMax=10,Validity="require().match('integer').maxLength(13).greaterThanOrEqualTo(0)"},//5
 				new { FName = "IsTotalLoss",Type="Boolean"},//6
 				new { FName = "LossAmount",Type="Decimal", LenMax=15,Validity="require().match('number').greaterThanOrEqualTo(0)"},//7

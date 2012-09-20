@@ -48,7 +48,9 @@
                 label: newVal
               });
             }
-            return input.autocomplete("search", input.val());
+            if (!input.find("span.ui-menu-item").length && opt.appendToList) {
+              return input.parent().append(opt.appendToList);
+            }
           }
         });
       };

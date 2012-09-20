@@ -81,5 +81,11 @@ jQuery(function ($) {
 		showMonthAfterYear: false,
 		yearSuffix: ''
 	};
-	$.datepicker.setDefaults($.datepicker.regional['lt'], { duration: 'fast' });
+	$.datepicker.setDefaults($.datepicker.regional['lt']);
+	$.datepicker.setDefaults({
+		duration: 'fast',
+		changeMonth: true,
+		changeYear: true,
+		showOtherMonths: true
+	});
 });
