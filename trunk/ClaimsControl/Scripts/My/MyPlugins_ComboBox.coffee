@@ -31,7 +31,9 @@ _create: ->
 					data.findObjectByProperty("id",RowData[0]).label=newVal
 				else #pridedam naują
 					data.push({id:RowData[0],label:newVal})
-				input.autocomplete "search", input.val() #refreshinam duomenis
+				if (!input.find("span.ui-menu-item").length&&opt.appendToList)#pridedu redagavimo controlsus jei nebuvo
+					input.parent().append(opt.appendToList)
+				#input.autocomplete "search", input.val() #refreshinam duomenis - tik kai buvo su listais, dabar nereikia
 				#$(input).removeClass "inputTip"
 				#if (this.Action=="Add"){}#pakeiciam value nauju
 				#Action = (if (id) then "Edit" else "Add")

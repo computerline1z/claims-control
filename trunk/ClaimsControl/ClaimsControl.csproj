@@ -237,7 +237,6 @@
     <Content Include="Scripts\Ember\ember-0.9.8.1.js" />
     <Content Include="Scripts\Ember\Sprite32-hover.png" />
     <Content Include="Scripts\Forms\accidents.js" />
-    <Content Include="Scripts\Forms\accidents2.js" />
     <Content Include="Scripts\My\clsEditableForm.js" />
     <Content Include="Scripts\My\Copy of MyPlugins_ComboBox.js" />
     <Content Include="Scripts\My\General.js" />
@@ -281,6 +280,7 @@
     <Content Include="Views\Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Views\Shared\Lists\tmpMain.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Uploads\" />
@@ -348,6 +348,7 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\Sutartis.cshtml" />
     <Content Include="Views\Shared\Accidents\tmpAccident_Claims.cshtml" />
+    <None Include="Scripts\Forms\lists.coffee" />
     <None Include="Scripts\My\clsEditableForm.coffee" />
     <None Include="Scripts\My\MyPlugins_ComboBox.coffee" />
     <None Include="Views\Main\tmpClaimEdit.cshtml" />
@@ -358,6 +359,7 @@
     <None Include="Views\Main\tmpAccidentRowObj.cshtml_trinti" />
     <None Include="Views\Shared\Accidents\tmpAccidentRow2.cshtml_trinti" />
     <None Include="Views\Main\NotifyViews.cshtml" />
+    <Content Include="Views\Shared\Accidents\tmpSidePanel.cshtml" />
     <None Include="Views\Shared\LayOut_Main_Debug.cshtml" />
     <Content Include="Views\Main\Start.cshtml" />
   </ItemGroup>
@@ -379,11 +381,11 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>81</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:6969/</IISUrl>
+          <IISUrl>http://localhost:81/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

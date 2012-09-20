@@ -109,7 +109,6 @@ App.SelectedClaimView = Em.View.extend(
 		oCONTROLS.UpdatableForm(frm)
 		if c.TypeID==2
 			IClaim=$("#InsuranceClaimAmount").parent(); IClaim.find("span").html("Planuojama žalos suma asmeniui")
-			$("#LossAmount").parent().find("span").html("Planuojama žalos suma turtui");
 			fnCheckIsInjured =() ->
 				if this.attr("checked") then IClaim.css("display","block").find("input").data("ctrl").Validity=IClaim.find("input").data("ctrl").Validity.replace("require().","")
 				else IClaim.css("display","none").find("input").val("").data("ctrl").Validity="require()."+IClaim.find("input").data("ctrl").Validity				

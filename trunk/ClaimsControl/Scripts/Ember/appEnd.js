@@ -56,6 +56,10 @@ App.Router = Em.Router.extend({
 			connectOutlets: function (router, context) {
 				MY.NavbarController.fnSetNewTab(router.currentState.name, 4);
 				//router.get('applicationController').connectOutlet('lists');
+			},
+			openList: function (e) {
+				//App.accidentsController.tbodyClick(e);
+				alert("opa");
 			}
 		}),
 		tabAdmin: Em.Route.extend({

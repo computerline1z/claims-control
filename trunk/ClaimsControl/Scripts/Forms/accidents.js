@@ -160,6 +160,7 @@
       if (c.TypeID === 2) {
         IClaim = $("#InsuranceClaimAmount").parent();
         IClaim.find("span").html("Planuojama žalos suma asmeniui");
+        $("#LossAmount").parent().find("span").html("Planuojama žalos suma turtui");
         fnCheckIsInjured = function() {
           if (this.attr("checked")) {
             return IClaim.css("display", "block").find("input").data("ctrl").Validity = IClaim.find("input").data("ctrl").Validity.replace("require().", "");

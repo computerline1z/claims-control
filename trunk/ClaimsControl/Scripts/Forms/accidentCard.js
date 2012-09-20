@@ -19,7 +19,7 @@ oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 			if (DataToSave) {
 				if (oGLOBAL.AccidentForm.NewRec) {
 					if (!(oGLOBAL.AccidentForm.Lat) ? 1 : 0) {
-						DIALOG.Alert("Pažymėkite įvykio vietą pelės spragtelėjimu žemėlapyje..", "Naujo įvykio įvedimas"); return;
+						oCONTROLS.dialog.Alert({msg:"Pažymėkite įvykio vietą pelės spragtelėjimu žemėlapyje..", title:"Naujo įvykio įvedimas"}); return;
 					} else {
 						DataToSave.Data.push(oGLOBAL.AccidentForm.Lat); DataToSave.Fields.push("Lat");
 						DataToSave.Data.push(oGLOBAL.AccidentForm.Lng); DataToSave.Fields.push("Lng");
@@ -37,9 +37,37 @@ oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 
 				SERVER.update({ Action: Action, DataToSave: DataToSave,
 					CallBack: { Success: function (resp) {
-						//SERVER.send("", oGLOBAL.Start.fnSetNewData, { "Ctrl": "divAccidentEdit" }, "/Main/divAccidentEdit", "json");
-						SERVER.send("", oGLOBAL.Start.fnSetNewData, {}, "/Accident/AccidentsList", "json"); //Atsisiunciam atnaujinta lista
-						if (oGLOBAL.AccidentForm.NewRec) { $('#divAccidentEdit').empty(); LoadAccident_Card(resp.ResponseMsg.Ext); return false; }
+						//SERVER.send("", oGLOBAL.Start.fnSetNewData, {}, "/Accident/AccidentsList", "json"); //Atsisiunciam atnaujinta lista
+						//if (oGLOBAL.AccidentForm.NewRec) { $('#divAccidentEdit').empty(); LoadAccident_Card(resp.ResponseMsg.Ext); return false; }						
+						var newRow = resp.ResponseMsg.Ext.replace(/#\|#\|/g,":::").split("|#|"); newRow[13]=newRow[13].replace(/:::/g,"#|#|");//atkeičiam atgal
+						App.accidentsController.get("setNewVal").call(App.accidentsController, {newVal:newRow,toAppend:true,fieldsToInt:[0, 1, 5, 6, 7, 8]})[0];//kuriuos reikia paverst integeriais
+						var newContext = App.accidentsController.findProperty("iD",parseInt(newRow[0], 10));
+						var newView = App.AccidentView.create({
+							content:newContext,
+							templateName: "tmpAccidentRow"
+						});						
+						if (oGLOBAL.AccidentForm.NewRec) {//naujam Accidentui nukeliu useri i lista ir scroolinu, senam nieko nereikia
+							var tbl = $("#accidentsTable");
+							newView.appendTo(tbl);
+							$("#btnReturnToAccidents").trigger("click");//paspaudžiam, kad grįžtam į lista												
+							//tbl.find("tr:last").trigger("click");						
+							Em.run.next(function(){
+								//var tbl = $("#accidentsTable"), tr=tbl.find("div.tr:last");
+								//$("h4:last").scrollintoview({ duration: "slow", direction: "y", complete: function(){ alert("Done"); } });
+								$("#accidentsTable").find("div.tr:last").trigger("click");
+								Em.run.next(function(){
+									$("#AccDetailsContent").find("button").trigger("click");
+									Em.run.next(function(){
+										var scroolTop=$(document).height()-$(window).height()+200;
+										$('html, body').animate({scrollTop: scroolTop}, 'slow');
+									});
+								});
+							});	
+							//var scrollTop=tr.offset().top - tbl.offset().top + tbl.scrollTop();
+							//tbl.scrollTop(tr.offset().top - tbl.offset().top + tbl.scrollTop());
+							//tbl.animate({scrollTop:scrollTop});​
+							//tbl.scrollTop(scrollTop);
+						}
 					}
 					}, Msg: Msg
 				});
@@ -104,14 +132,14 @@ oGLOBAL.mapFn = {
 		var address = p[0].address, district = (len > 3) ? p[3].address : "", address1 = (len > 1) ? p[1].address : "", address2 = (len > 2) ? p[2].address : "";
 		var ArrAddr = address.split(', '), ArrDistr = district.split(', '), ArrAddr1 = address1.split(', '), ArrAddr2 = address2.split(', '), Last = (ArrAddr.length > 1) ? ArrAddr.length - 2 : 0;
 		oGLOBAL.AccidentForm.Country = ArrAddr[ArrAddr.length - 1];
-		oGLOBAL.AccidentForm.District = (ArrDistr[0]) ? ArrDistr[0] : ((ArrAddr.length > 1) ? ArrAddr[ArrAddr.length - 2] : "");
+		oGLOBAL.AccidentForm.District = ((ArrDistr[0]) ? ArrDistr[0] : ((ArrAddr.length > 1) ? ArrAddr[ArrAddr.length - 2] : "")).replace("'","");
 
 		if (ArrAddr[Last].search(ArrDistr[0]) > -1) { Last--; } //Neimam paskutinio, nes jis jau yra apskrities pavadinime
 		if (Last === -1) { oGLOBAL.AccidentForm.Address = ""; } else {
 			if (ArrAddr[Last].search(ArrAddr1[0]) === -1) { ArrAddr[Last] += ", " + ArrAddr1[0]; } //Pridedu prie paskutinio Addr1 jei jo nera
 			if (ArrAddr[Last].search(ArrAddr2[0]) === -1) { ArrAddr[Last] += ", " + ArrAddr2[0]; } //Pridedu prie paskutinio Addr2 jei jo nera
 			address = ArrAddr.splice(0, Last + 1);
-			oGLOBAL.AccidentForm.Address = address.join(', ');
+			oGLOBAL.AccidentForm.Address = (address.join(', ')).replace("'","");
 		}
 		return ((oGLOBAL.AccidentForm.Address) ? (oGLOBAL.AccidentForm.Address + ', ') : "") + oGLOBAL.AccidentForm.District + ', ' + oGLOBAL.AccidentForm.Country;
 	},
@@ -122,7 +150,7 @@ oGLOBAL.mapFn = {
 			oGLOBAL.AccidentForm.Lng = latlng.x;
 			oGLOBAL.Ggeocoder.getLocations(latlng, function (addresses) {
 				if (addresses.Status.code !== 200) {
-					DIALOG.Alert("Nepavyko rasti šios vietos adreso - " + latlng.toUrlValue(), "Nepavyko rasti adreso", 2000);
+					oCONTROLS.dialog.Alert({msg:"Nepavyko rasti šios vietos adreso - " + latlng.toUrlValue(), title:"Nepavyko rasti adreso"});
 				} else {
 					var place = oGLOBAL.mapFn.fnGetAddress(addresses.Placemark);
 					oGLOBAL.map.openInfoWindow(latlng, place);
