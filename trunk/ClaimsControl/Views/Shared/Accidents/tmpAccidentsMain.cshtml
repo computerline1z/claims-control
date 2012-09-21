@@ -7,8 +7,11 @@
 <div class="table zebra-striped selectable tall" id="accidentsTable">
 
 {{#each "App.accidentsController"}}@*{{#each person in people}}*@
+@*{{log this}}*@
+{{#if this.visible}}
 <div {{action tbodyClick  this target="App.accidentsController"}} class="tr accident">
 	{{view App.AccidentView}}
 </div>
+{{/if}}
 {{/each}}
 </div>

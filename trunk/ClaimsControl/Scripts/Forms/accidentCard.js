@@ -40,25 +40,31 @@ oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 						//SERVER.send("", oGLOBAL.Start.fnSetNewData, {}, "/Accident/AccidentsList", "json"); //Atsisiunciam atnaujinta lista
 						//if (oGLOBAL.AccidentForm.NewRec) { $('#divAccidentEdit').empty(); LoadAccident_Card(resp.ResponseMsg.Ext); return false; }						
 						var newRow = resp.ResponseMsg.Ext.replace(/#\|#\|/g,":::").split("|#|"); newRow[13]=newRow[13].replace(/:::/g,"#|#|");//atkeičiam atgal
-						App.accidentsController.get("setNewVal").call(App.accidentsController, {newVal:newRow,toAppend:true,fieldsToInt:[0, 1, 5, 6, 7, 8]})[0];//kuriuos reikia paverst integeriais
-						var newContext = App.accidentsController.findProperty("iD",parseInt(newRow[0], 10));
-						var newView = App.AccidentView.create({
-							content:newContext,
-							templateName: "tmpAccidentRow"
-						});						
+						var no=parseInt(newRow[1],10);
+						App.accidentsController.get("setNewVal").call(App.accidentsController, {newVal:newRow,toAppend:{"sort":"desc","col":"date"},fieldsToInt:[0, 1, 5, 6, 7, 8]})[0];//kuriuos reikia paverst integeriais
+						
+						//var newContext = App.accidentsController.findProperty("iD",parseInt(newRow[0], 10));
+						//var newView = App.AccidentView.create({
+						//	content:newContext,
+						//	templateName: "tmpAccidentRow"
+						//});						
 						if (oGLOBAL.AccidentForm.NewRec) {//naujam Accidentui nukeliu useri i lista ir scroolinu, senam nieko nereikia
-							var tbl = $("#accidentsTable");
-							newView.appendTo(tbl);
+							//var tbl = $("#accidentsTable");
+							//tbl.find("div.accident div.td:contains("+no+")").							
+							//newView.appendTo(tbl);
 							$("#btnReturnToAccidents").trigger("click");//paspaudžiam, kad grįžtam į lista												
 							//tbl.find("tr:last").trigger("click");						
-							Em.run.next(function(){
+							Em.run.next({newNo:no},function(){
+								var tr=$("#accidentsTable").find("div.accident").find("div.td:nth(0):contains("+this.newNo+")").parent().addClass("selectedAccident");						
 								//var tbl = $("#accidentsTable"), tr=tbl.find("div.tr:last");
 								//$("h4:last").scrollintoview({ duration: "slow", direction: "y", complete: function(){ alert("Done"); } });
-								$("#accidentsTable").find("div.tr:last").trigger("click");
+								//$("#accidentsTable").find("div.tr:last").trigger("click");
+								$("#accidentsTable").find("div.selectedAccident").trigger("click");
 								Em.run.next(function(){
 									$("#AccDetailsContent").find("button").trigger("click");
 									Em.run.next(function(){
-										var scroolTop=$(document).height()-$(window).height()+200;
+										var scroolTop=tr.offset().top-$(window).height()/2+100;
+										//var scroolTop=$(document).height()-$(window).height()+200;
 										$('html, body').animate({scrollTop: scroolTop}, 'slow');
 									});
 								});

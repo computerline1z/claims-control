@@ -48,10 +48,10 @@ App.SelectedAccidentView = Em.View.extend(
 		App.thisAccidentController.set("accidentID", @get("iD")) #butinai masyvas		
 	tbodyClick: (e) -> #Reik daryti tik kai ant claimo, kitu atveju matyt išeinam
 		#fnFilterPolicies=(i)-> if (oGLOBAL.date.firstBigger(i[4],options.contexts[0].rowContext.accidentDate)) then return [i] else return null
-		accidentDate=@date
-		thisAccidentPolicies=$.map(oDATA.GET("proc_InsPolicies").Data, (i)-> if (oGLOBAL.date.firstBigger(i[4],accidentDate)) then return [i] else return null)
-		proc_InsPolicies_forThisAccident=$.extend({},oDATA.GET("proc_InsPolicies"),{Data:thisAccidentPolicies})#not deep copy -overwrite
-		oDATA.SET("proc_InsPolicies_forThisAccident", proc_InsPolicies_forThisAccident)
+		# accidentDate=@date
+		# thisAccidentPolicies=$.map(oDATA.GET("proc_InsPolicies").Data, (i)-> if (oGLOBAL.date.firstBigger(i[4],accidentDate)) then return [i] else return null)
+		# proc_InsPolicies_forThisAccident=$.extend({},oDATA.GET("proc_InsPolicies"),{Data:thisAccidentPolicies})#not deep copy -overwrite
+		# oDATA.SET("proc_InsPolicies_forThisAccident", proc_InsPolicies_forThisAccident)
 		tr = $(e.target).closest("tr");ClaimW = $("#ClaimWraper")
 		if (ClaimW.length > 0)
 			MY.accidents.SelectedClaimView.remove()
@@ -211,6 +211,7 @@ App.accidentsController = Em.ResourceController.create(
 			MY.accidents.AcccidentdetailsView.remove(); AddWr.remove(); # AddWr.hide('slow', () -> AddWr.remove();) 
 	tbodyClick: (e) ->
 		tr = $(e.target).closest("div.tr")
+		@setfilteredPolicies(e.context.date)#Filtruojam polisus		
 		AddWr = $("#AccDetailsWraper"); parent=tr.parent()		
 		if tr.hasClass("selectedAccident") and not e.isTrigger
 			if parent.find("div.dividers").length
@@ -238,6 +239,10 @@ App.accidentsController = Em.ResourceController.create(
 				# item[3].toLowerCase().indexOf(f) + item[4].toLowerCase().indexOf(f) + item[9].toLowerCase().indexOf(f) + item[10].toLowerCase().indexOf(f) + item[11].toLowerCase().indexOf(f) + item[12].toLowerCase().indexOf(f) + item[13].toLowerCase().indexOf(f) + item[14].toLowerCase().indexOf(f) > -8
 			# )
 	# ).property('filter', 'content.@each').cacheable(),
+	setfilteredPolicies: (accidentDate) ->
+		thisAccidentPolicies=$.map(oDATA.GET("proc_InsPolicies").Data, (i)-> if (oGLOBAL.date.firstBigger(i[4],accidentDate)) then return [i] else return null)
+		proc_InsPolicies_forThisAccident=$.extend({},oDATA.GET("proc_InsPolicies"),{Data:thisAccidentPolicies})#not deep copy -overwrite
+		oDATA.SET("proc_InsPolicies_forThisAccident", proc_InsPolicies_forThisAccident)
 	editAccident: (e) ->
 		this.openAccident(e.context.no)		
 	#	filteredRecords: -> ##valueBinding=\"App.accidentsController.filter\"

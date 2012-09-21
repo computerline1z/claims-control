@@ -57,19 +57,7 @@
       return App.thisAccidentController.set("accidentID", this.get("iD"));
     },
     tbodyClick: function(e) {
-      var ClaimW, accidentDate, d, proc_InsPolicies_forThisAccident, thisAccidentPolicies, tr;
-      accidentDate = this.date;
-      thisAccidentPolicies = $.map(oDATA.GET("proc_InsPolicies").Data, function(i) {
-        if (oGLOBAL.date.firstBigger(i[4], accidentDate)) {
-          return [i];
-        } else {
-          return null;
-        }
-      });
-      proc_InsPolicies_forThisAccident = $.extend({}, oDATA.GET("proc_InsPolicies"), {
-        Data: thisAccidentPolicies
-      });
-      oDATA.SET("proc_InsPolicies_forThisAccident", proc_InsPolicies_forThisAccident);
+      var ClaimW, d, tr;
       tr = $(e.target).closest("tr");
       ClaimW = $("#ClaimWraper");
       if (ClaimW.length > 0) {
@@ -328,6 +316,7 @@
     tbodyClick: function(e) {
       var AddWr, parent, tr;
       tr = $(e.target).closest("div.tr");
+      this.setfilteredPolicies(e.context.date);
       AddWr = $("#AccDetailsWraper");
       parent = tr.parent();
       if (tr.hasClass("selectedAccident") && !e.isTrigger) {
@@ -355,6 +344,20 @@
         });
       }
       return false;
+    },
+    setfilteredPolicies: function(accidentDate) {
+      var proc_InsPolicies_forThisAccident, thisAccidentPolicies;
+      thisAccidentPolicies = $.map(oDATA.GET("proc_InsPolicies").Data, function(i) {
+        if (oGLOBAL.date.firstBigger(i[4], accidentDate)) {
+          return [i];
+        } else {
+          return null;
+        }
+      });
+      proc_InsPolicies_forThisAccident = $.extend({}, oDATA.GET("proc_InsPolicies"), {
+        Data: thisAccidentPolicies
+      });
+      return oDATA.SET("proc_InsPolicies_forThisAccident", proc_InsPolicies_forThisAccident);
     },
     editAccident: function(e) {
       return this.openAccident(e.context.no);
