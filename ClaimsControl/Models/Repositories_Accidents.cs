@@ -139,7 +139,7 @@ namespace CC.Models {
 
       public jsonArrays GetJSON_proc_Accidents() {
          jsonArrays JSON = new jsonArrays();
-         JSON.Data = from d in dc.proc_Accidents(UserData.AccountID, null)
+         JSON.Data = from d in dc.proc_Accidents(UserData.AccountID, null) orderby d.Date descending
                      select new object[] {
 				d.ID,//0
 				d.No,//1
