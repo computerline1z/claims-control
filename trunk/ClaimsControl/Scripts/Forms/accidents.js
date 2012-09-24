@@ -93,8 +93,8 @@
         ctrl: $('#divNewClaimCard'),
         oDATA: oDATA.GET("tblClaimTypes"),
         opt: {
-          val: 0,
-          text: 1,
+          val: "iD",
+          text: "name",
           FieldName: "ClaimTypeID",
           SelectText: "Pasirinkite žalos tipą:"
         },
@@ -171,7 +171,7 @@
       d = this.get("rowContext");
       if (!d.newClaim) {
         C2 = d.Claims2;
-        TypeID = oDATA.GET("tblClaimTypes").Data.findColValByColVal(d.InsuranceType, 1, 0);
+        TypeID = oDATA.GET("tblClaimTypes").emData.findProperty("name", d.InsuranceType).iD;
         Claim = {
           ID: C2[0],
           VehicleID: C2[1],

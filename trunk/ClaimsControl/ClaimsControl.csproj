@@ -238,7 +238,6 @@
     <Content Include="Scripts\Ember\Sprite32-hover.png" />
     <Content Include="Scripts\Forms\accidents.js" />
     <Content Include="Scripts\My\clsEditableForm.js" />
-    <Content Include="Scripts\My\Copy of MyPlugins_ComboBox.js" />
     <Content Include="Scripts\My\General.js" />
     <Content Include="Scripts\My\MyPlugins_ComboBox.js" />
     <Content Include="Scripts\My\Views.js" />
@@ -355,9 +354,7 @@
     <Content Include="Views\Shared\Accidents\tmpAccidentsMain.cshtml" />
     <Content Include="Views\Shared\Accidents\tmpAccidentRow.cshtml" />
     <Content Include="Views\Main\Copy of Start.cshtml" />
-    <None Include="Views\Shared\Accidents\tmpClaimEdit.cshtml_trinti" />
     <None Include="Views\Main\tmpAccidentRowObj.cshtml_trinti" />
-    <None Include="Views\Shared\Accidents\tmpAccidentRow2.cshtml_trinti" />
     <None Include="Views\Main\NotifyViews.cshtml" />
     <Content Include="Views\Shared\Accidents\tmpSidePanel.cshtml" />
     <None Include="Views\Shared\LayOut_Main_Debug.cshtml" />

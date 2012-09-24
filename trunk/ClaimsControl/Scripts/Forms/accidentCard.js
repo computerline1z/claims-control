@@ -19,7 +19,7 @@ oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 			if (DataToSave) {
 				if (oGLOBAL.AccidentForm.NewRec) {
 					if (!(oGLOBAL.AccidentForm.Lat) ? 1 : 0) {
-						oCONTROLS.dialog.Alert({msg:"Pažymėkite įvykio vietą pelės spragtelėjimu žemėlapyje..", title:"Naujo įvykio įvedimas"}); return;
+						oCONTROLS.dialog.Alert({msg:"Pažymėkite įvykio vietą pelės spragtelėjimu žemėlapyje..", title:"Naujo įvykio įvedimas"}); return false;
 					} else {
 						DataToSave.Data.push(oGLOBAL.AccidentForm.Lat); DataToSave.Fields.push("Lat");
 						DataToSave.Data.push(oGLOBAL.AccidentForm.Lng); DataToSave.Fields.push("Lng");
@@ -40,8 +40,8 @@ oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 						//SERVER.send("", oGLOBAL.Start.fnSetNewData, {}, "/Accident/AccidentsList", "json"); //Atsisiunciam atnaujinta lista
 						//if (oGLOBAL.AccidentForm.NewRec) { $('#divAccidentEdit').empty(); LoadAccident_Card(resp.ResponseMsg.Ext); return false; }						
 						var newRow = resp.ResponseMsg.Ext.replace(/#\|#\|/g,":::").split("|#|"); newRow[13]=newRow[13].replace(/:::/g,"#|#|");//atkeičiam atgal
-						var no=parseInt(newRow[1],10);
-						App.accidentsController.get("setNewVal").call(App.accidentsController, {newVal:newRow,toAppend:{"sort":"desc","col":"date"},fieldsToInt:[0, 1, 5, 6, 7, 8]})[0];//kuriuos reikia paverst integeriais
+						var no=parseInt(newRow[1],10), toAppend=(Action==="Edit")?false:{"sort":"desc","col":"date"};
+						App.accidentsController.get("setNewVal").call(App.accidentsController, {newVal:newRow,toAppend:toAppend,fieldsToInt:[0, 1, 5, 6, 7, 8]})[0];//kuriuos reikia paverst integeriais
 						
 						//var newContext = App.accidentsController.findProperty("iD",parseInt(newRow[0], 10));
 						//var newView = App.AccidentView.create({
@@ -145,7 +145,7 @@ oGLOBAL.mapFn = {
 			if (ArrAddr[Last].search(ArrAddr1[0]) === -1) { ArrAddr[Last] += ", " + ArrAddr1[0]; } //Pridedu prie paskutinio Addr1 jei jo nera
 			if (ArrAddr[Last].search(ArrAddr2[0]) === -1) { ArrAddr[Last] += ", " + ArrAddr2[0]; } //Pridedu prie paskutinio Addr2 jei jo nera
 			address = ArrAddr.splice(0, Last + 1);
-			oGLOBAL.AccidentForm.Address = (address.join(', ')).replace("'","");
+			oGLOBAL.AccidentForm.Address = (address)?(address.join(', ').replace("'","")):"";
 		}
 		return ((oGLOBAL.AccidentForm.Address) ? (oGLOBAL.AccidentForm.Address + ', ') : "") + oGLOBAL.AccidentForm.District + ', ' + oGLOBAL.AccidentForm.Country;
 	},

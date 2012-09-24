@@ -70,7 +70,7 @@ var oDATA = Ember.Object.create({
 		}
 	},
 	GetRow: function (id, tbl) {
-		return this.GET(tbl).Data.getRowByColValue(id, 0);
+		return this.GET(tbl).emData.findProperty("iD", id);
 	},
 	NEED: function (objNames, fnExec) {//jei objektu nera siunciames ir kai turim executinam funkcija
 		var all_queued = false, noHits = 0, me = this;
@@ -85,17 +85,61 @@ var oDATA = Ember.Object.create({
 		}, this); //second parameter becomes this in the callback function
 		all_queued = true;
 	},
+	emBuilder: function (p) {//{newData:newData, tblName:tblName, toAppend:{"sort":"asc/desc","col":"date"}}
+		oData=oDATA.GET(p.tblName);if  (!oData.emData){oData.emData=[];}
+		if (!p.newData) return;
+		var d = p.newData, c = oData.Cols, f = [], n, i, y, cnt=oData.emData;
+		
+		for (i = 0; i < c.length; i++) {//Sudedam vardus, kad prasidetų nuo mažos raidės
+			n = c[i].FName;
+			f[f.length] = n.slice(0, 1).toLowerCase() + n.slice(1);
+		};
+		if (p.toAppend) {
+			for (i = 0; i < d.length; i++) {//bėgam per eilutes
+				var e = {};
+				for (y = 0; y < c.length; y++) {//bėgam per stulpelius
+					e[f[y]] = d[i][y];
+				}
+				e.visible=true;//Visi pradzioj matomi
+				if (p.toAppend.sort){//ikisam ne bet kur
+					oDATA.setToPlace(p.toAppend,e,cnt);
+				}else{
+					cnt.pushObject(Em.Object.create(e));
+				}
+			}
+		} else {
+			for (i = 0; i < d.length; i++) {//bėgam per eilutes
+				var toReplace = cnt.findProperty("iD", d[i][0]);
+				for (y = 1; y < c.length; y++) {//bėgam per stulpelius
+					toReplace.set(f[y], d[i][y]);
+				}
+			}
+		}
+		if (p.toAppend){oData.Data.length=0;}//
+		return cnt;
+	},
+	setToPlace: function (toAppend,e,cnt){//toAppend:{"sort":"asc/desc","col":"date"}
+		var col=toAppend.col, fn,before;
+		if  (toAppend.sort==="desc")
+			fn =function(index,item){ if (item.get(col)<=e[col]) {before=index; return false;} }
+		else {
+			fn =function(index,item){ if (item.get(col)>=e[col]) {before=index; return false;} }
+		}
+		$.each(cnt,fn);
+		cnt.insertAt(before, Em.Object.create(e));
+	},
 	load: function (objName, execOnSuccess) {
 		if (!this.get("exists").call(this, objName)) {//jei neturim sito objekto tai atsisiunciam
-			setter = this.get("SET");
-			me = this;
+			var setter = this.get("SET"),emBuilder = this.get("emBuilder");
+			var me = this;
 			$.ajax({
 				url: this.get("listUrl")[objName],
 				dataType: 'json',
 				type: 'POST',
 				success: function (json) {
-					setter.call(me, objName, json[objName]);
-					execOnSuccess(json[objName]);
+					setter.call(me, objName, json[objName]); 
+					var emData=emBuilder.call(me, {newData:json[objName].Data,tblName:objName,toAppend:true});//{newData:newData, tblName:tblName, toAppend:{"sort":"asc/desc","col":"date"}}
+					execOnSuccess(emData);//čia įkišam json'ą
 				}
 			});
 		} else throw new Error(objName + "  already loaded");
@@ -117,15 +161,18 @@ var oDATA = Ember.Object.create({
 		}
 	},
 	fnLoadNext: function () {
-		var start = new Date().getTime(), setter = this.get("SET"), me = this, obj;
+		var start = new Date().getTime(), setter = this.get("SET"), emBuilder = this.get("emBuilder"),me = this, obj;
 		$.ajax({
 			url: "Main/tabAccidents",
 			dataType: 'json',
 			type: 'POST',
 			success: function (json) {
-				oGLOBAL.logFromStart("Baigiau siūst fnLoadNext");
+				oGLOBAL.logFromStart("Pradedu apdorot fnLoadNext");
 				$.each(json.jsonObj, function (objName, value) {
-					setter.call(me, objName, value)
+					console.log("New object:" + objName);
+					console.log(value);
+					setter.call(me, objName, value);
+					emBuilder.call(me, { newData:value.Data,tblName:objName,toAppend:true});//{oData, toAppend:{"sort":"asc/desc","col":"date"}}
 				});
 				$.each(json.templates, function (objName, value) {
 					//var toAppend = "<script type=\"text/x-handlebars\" data-template-name=\"" + tmpClaimEdit + ">" + obj[objName] + "</script>";
@@ -138,167 +185,6 @@ var oDATA = Ember.Object.create({
 				oGLOBAL.logFromStart("Baigiau apdorot fnLoadNext");
 			}
 		});
-	}
-});
-//oDATA.NEED(["vehicles","proc_Accidents"],function(){alert("jo");})
-//$.when($.ajax("/page1.php"), $.ajax("/page2.php"))
-//  .then(myFunc, myFailure);
-
-if (Ember.ResourceAdapter === undefined) {
-	Ember.ResourceAdapter = Ember.Mixin.create({
-		//Performs an XHR request with `$.ajax()`. Calls `_prepareResourceRequest(params)` if defined.
-		_resourceRequest: function (params) {
-			//params.url=this._resourceUrl(); - naudosiu sava
-			params.dataType = 'json';
-			if (this._prepareResourceRequest !== undefined) {
-				this._prepareResourceRequest(params);
-			}
-			return $.ajax(params);
-		}
-	});
-}
-/**
-A model class for RESTful resources Extend this class and define the following properties:
-* `resourceIdField` -- the id field for this resource ('id' by default)
-* `resourceUrl` -- the base url of the resource (e.g. '/contacts');
-will append '/' + id for individual resources (required)
-* `resourceName` -- the name used to contain the serialized data in this object's JSON representation (required only for serialization)
-* `resourceProperties` -- an array of property names to be returned in this object's JSON representation (required only for serialization)
-Because `resourceName` and `resourceProperties` are only used for serialization, they aren't required for read-only resources.
-You may also wish to override / define the following methods:
-* `serialize()`
-* `serializeProperty(prop)`
-* `deserialize(json)`
-* `deserializeProperty(prop, value)`
-* `validate()`
-*/
-Ember.Resource = Ember.Object.extend(Ember.ResourceAdapter, Ember.Copyable, {
-	resourceIdField: 'id',
-	resourceUrl: Ember.required(),
-	/**
-	Duplicate properties from another resource
-	* `source` -- an Ember.Resource object
-	* `props` -- the array of properties to be duplicated;
-	defaults to `resourceProperties`
-	*/
-	duplicateProperties: function (source, props) {
-		var prop;
-		if (props === undefined) props = this.resourceProperties;
-		for (var i = 0; i < props.length; i++) {
-			prop = props[i];
-			this.set(prop, source.get(prop));
-		}
-	},
-
-	/**
-	Create a copy of this resource Needed to implement Ember.Copyable
-	REQUIRED: `resourceProperties`
-	*/
-	copy: function (deep) {
-		var c = this.constructor.create();
-		c.duplicateProperties(this);
-		c.set(this.resourceIdField, this.get(this.resourceIdField));
-		return c;
-	},
-
-	/**
-	Generate this resource's JSON representation
-	Override this or `serializeProperty` to provide custom serialization
-	REQUIRED: `resourceProperties` and `resourceName` (see note above)
-	*/
-	serialize: function () {
-		var name = this.resourceName, props = this.resourceProperties, prop, ret = {};
-		ret[name] = {};
-		for (var i = 0; i < props.length; i++) {
-			prop = props[i];
-			ret[name][prop] = this.serializeProperty(prop);
-		}
-		return ret;
-	},
-	/*Generate an individual property's JSON representation Override to provide custom serialization */
-	serializeProperty: function (prop) {
-		return this.get(prop);
-	},
-	/**
-	Set this resource's properties from JSON
-	Override this or `deserializeProperty` to provide custom deserialization
-	*/
-	deserialize: function (json) {
-		Ember.beginPropertyChanges(this);
-		for (var prop in json) {
-			if (json.hasOwnProperty(prop)) this.deserializeProperty(prop, json[prop]);
-		}
-		Ember.endPropertyChanges(this);
-		return this;
-	},
-
-	/**
-	Set an individual property from its value in JSON
-	Override to provide custom serialization
-	*/
-	deserializeProperty: function (prop, value) {
-		this.set(prop, value);
-	},
-
-	/**
-	Request resource and deserialize
-	REQUIRED: `id`
-	*/
-	findResource: function () {
-		var self = this;
-		return this._resourceRequest({
-			type: 'GET'
-		})
-        .done(function (json) {
-        	self.deserialize(json);
-        });
-	},
-
-	/**
-	Create (if new) or update (if existing) record
-	Will call validate() if defined for this record
-	If successful, updates this record's id and other properties
-	by calling `deserialize()` with the data returned.
-	REQUIRED: `properties` and `name` (see note above)
-	*/
-	saveResource: function () {
-		var self = this;
-
-		if (this.validate !== undefined) {
-			var error = this.validate();
-			if (error) {
-				return {
-					fail: function (f) {
-						f(error);
-						return this;
-					},
-					done: function () {
-						return this;
-					},
-					always: function (f) {
-						f();
-						return this;
-					}
-				};
-			}
-		}
-
-		return this._resourceRequest({
-			type: this.isNew() ? 'POST' : 'PUT',
-			data: this.serialize()
-		})
-        .done(function (json) {
-        	// Update properties
-        	if (json) self.deserialize(json);
-        });
-	},
-	destroyResource: function () {
-		return this._resourceRequest({
-			type: 'DELETE'
-		});
-	},
-	isNew: function () {
-		return (this._resourceId() === undefined);
 	}
 });
 /**
@@ -320,50 +206,62 @@ Ember.ResourceController = Ember.ArrayController.extend(Ember.ResourceAdapter, {
 		} else {
 			console.log("loading new table" + tbl);
 			me.set("loadStatus", "loading")
-			oDATA.load(tbl, function (json) {
+			oDATA.load(tbl, function (emData) {
 				oGLOBAL.logFromStart("Data recieved in controller - '" + me.get("tableName") + "' ");
-				if (json.Data) {
-					//me.set("content", json.Data);
-					me.get("setContent").call(me, { data: json.Data, toAppend: true });
+				//if (json.Data) {
+					me.set("content", emData);
+					//me.get("setContent").call(me, { data: json.Data, toAppend: true });
+					//json.json=me.get("content");
 					me.set("loadStatus", "ok");
-				}
-				else {
-					throw new Error("json need to have data in ResourceController;");
-				}
+				//}
+				//else {
+				//	throw new Error("json need to have data in ResourceController;");
+				//}
 			});
 			me.set("loadStatus", "loading");
 		}
-		//		if (tbl === undefined || tbl === "?") { return false; }
-		//		var path = me.get("list").findProperty(tbl)[tbl];
-		//		if (path && !me.get("loadStatus")) {
-		//			me.getAll(path); me.set("loadStatus", "loading")
-		//		} else { alert("jau yra"); }
 	},
 	//setContent: function (data, toAppend) {
-	setContent: function (p) {
-		var d = p.data, c = oDATA.GET(this.get("tableName")).Cols, f = [], n, i, y, cnt;
-		for (i = 0; i < c.length; i++) {//Sudedam vardus, kad prasidetų nuo mažos raidės
-			n = c[i].FName;
-			f[f.length] = n.slice(0, 1).toLowerCase() + n.slice(1);
-		};
-		cnt = this.get("content");
-		if (p.toAppend) {
-			for (i = 0; i < d.length; i++) {//bėgam per eilutes
-				var e = {};
-				for (y = 0; y < c.length; y++) {//bėgam per stulpelius
-					e[f[y]] = d[i][y];
-				}
-				cnt.pushObject(Em.Object.create(e));
-			}
-		} else {
-			for (i = 0; i < d.length; i++) {//bėgam per eilutes
-				var toReplace = cnt.findProperty("iD", d[i][0]);
-				for (y = 1; y < c.length; y++) {//bėgam per stulpelius
-					toReplace.set(f[y], d[i][y]);
-				}
-			}
-		}
-	},
+	// setContent: function (p) { //{data, toAppend:{"sort":"asc/desc","col":"date"}}
+		// var d = p.data, c = oDATA.GET(this.get("tableName")).Cols, f = [], n, i, y, cnt;
+		// for (i = 0; i < c.length; i++) {//Sudedam vardus, kad prasidetų nuo mažos raidės
+			// n = c[i].FName;
+			// f[f.length] = n.slice(0, 1).toLowerCase() + n.slice(1);
+		// };
+		// cnt = this.get("content");
+		// if (p.toAppend) {
+			// for (i = 0; i < d.length; i++) {//bėgam per eilutes
+				// var e = {};
+				// for (y = 0; y < c.length; y++) {//bėgam per stulpelius
+					// e[f[y]] = d[i][y];
+				// }
+				// e.visible=true;//Visi pradzioj matomi
+				// if (p.toAppend.sort){//ikisam ne bet kur
+					// this.setToPlace(p.toAppend,e);
+				// }else{
+					// cnt.pushObject(Em.Object.create(e));
+				// }
+			// }
+		// } else {
+			// for (i = 0; i < d.length; i++) {//bėgam per eilutes
+				// var toReplace = cnt.findProperty("iD", d[i][0]);
+				// for (y = 1; y < c.length; y++) {//bėgam per stulpelius
+					// toReplace.set(f[y], d[i][y]);
+				// }
+			// }
+		// }
+	// },
+	// setToPlace: function (toAppend,e){//toAppend:{"sort":"asc/desc","col":"date"}
+		// var col=toAppend.col, fn,before;
+		// if  (toAppend.sort==="desc")
+			// fn =function(index,item){ if (item.get(col)<=e[col]) {before=index; return false;} }
+		// else {
+			// fn =function(index,item){ if (item.get(col)>=e[col]) {before=index; return false;} }
+		// }
+		// var cnt=this.get("content");
+		// $.each(cnt,fn);
+		// cnt.insertAt(before-1, Em.Object.create(e));
+	// },	
 	content: [], //overridinam
 	tableName: Ember.required(),
 	cols: null,
@@ -390,7 +288,8 @@ Ember.ResourceController = Ember.ArrayController.extend(Ember.ResourceAdapter, {
 				val.arrElementToInt(p.fieldsToInt)
 			});
 		} //paverciam i intigerius
-		me.get("setContent").call(me, { data: p.newVal, toAppend: p.toAppend });
+		oDATA.emBuilder.call(me, { newData:p.newVal,tblName:me.tableName,toAppend: p.toAppend });
+		//me.get("setContent").call(me, { data: p.newVal, toAppend: p.toAppend });
 		return p.newVal; //grazinam array
 	},
 	refreshContent: function () {

@@ -6,17 +6,14 @@ class clsEditableForm
 		$("body").css("cursor","wait")
 		opt={DialogFormId:"divDialogForm",fnAddNewForm:"Dialog",CallBackAfter:0,aRowData:0,Title:0}	
 		$.extend(opt,options)
-		id=if opt.aRowData? then opt.aRowData[0] else 0 ##jei 0 reiskia naujas irasas
+		id=if opt.aRowData? then opt.aRowData.iD else 0 ##jei 0 reiskia naujas irasas
 		oData=oDATA.GET(opt.objData)
 		Action=opt.Action
 		unless oData?
 			alert("Neradau objekto #{opt.objData} clsEditableForm klaseje")
 		Row = Cols:oData.Cols, Grid:oData.Grid, Data:opt.aRowData
 		if id and not Row.Data? ##jei yra id ir nera Row.Data surasom duomenis is oData
-			for rows in oData.Data
-				if rows[0]==id 
-					Row.Data = rows
-					break
+			Row.Data =oData.emData.findProperty("iD", id)
 		if (!opt.Title)
 			Config=oData.Config
 			opt.Title=if Action=="Add" then Config.Msg.AddNew else Config.Msg.Edit
@@ -71,50 +68,43 @@ class clsEditableForm
 			SERVER.update(Action: opt.Action, DataToSave: DataToSave
 			,CallBack:
 				Success:(resp,updData) -> ##{ "Action": p.Action, "DataToSave": p.DataToSave, "CallBack": p.CallBack, "Msg": p.Msg };
-					RowLength=Row.Cols.length; RowI=0
-					updLength=updData.DataToSave.Fields.length
+					# RowLength=Row.Cols.length; RowI=0
+					# updLength=updData.DataToSave.Fields.length					
 					if opt.Action=="Add"
-						Row.Data=new Array(RowLength) ##inicializuojam nauja Arr jei "Add"
-						Row.Data[0]=resp.ResponseMsg.ID
-						oData.Data.push(Row.Data)#ikišam naujus duomenis
-					##Prabegam iš eilės per visus  per visus Row.Cols[RowI].FName ir surašom ką keitėm arba įstatom default values (Add keisis visi, Edit tik dalis)
-					while RowI<RowLength-1 
-						updI=0;Found=0;RowI++##Pradedam ne nuo 0, nes ten ID ir jis neupdatinamas
-						while updI<updLength
-							if Row.Cols[RowI].FName==updData.DataToSave.Fields[updI]
-								Row.Data[RowI]=updData.DataToSave.Data[updI]
-								Found=1; break
-							updI++
-						## jei nera tokio lauko ir pridedam nauja irasa idedam defaultine arba tuscia reiksme ir iskertam null, nes meta errorus kisant i grida
-						if (not Found and opt.Action=="Add") 
-							if Row.Cols[RowI].Default?
-								if Row.Cols[RowI].Default=="Today"
-									Row.Data[RowI]=oGLOBAL.date.getTodayString()
-								else if Row.Cols[RowI].Default=="UserName"
-									Row.Data[RowI]=UserData.Name()#UserData turėt būt
-								else if Row.Cols[RowI].Default=="UserId"
-									Row.Data[RowI]=UserData.Id()
-								else	
-									Row.Data[RowI]=Row.Cols[RowI].Default
-							else if Row.Cols[RowI].UpdateField ##pvz Date
-								f=Row.Cols[RowI].UpdateField
-								Row.Data[RowI]=updData.DataToSave[f]
+						Row.Data=Em.Object.create({})
+						Row.Data.iD=resp.ResponseMsg.ID
+					# if opt.Action=="Add"
+						# Row.Data=new Array(RowLength) ##inicializuojam nauja Arr jei "Add"
+						# Row.Data.iD=resp.ResponseMsg.ID
+						
+					Row.Cols.forEach((col,i)->
+						ok=false; fieldName=col.FName.slice(0, 1).toLowerCase() + col.FName.slice(1)
+						updData.DataToSave.Fields.forEach((updateField,i2)->
+							if col.FName==updateField
+								Row.Data[fieldName]=updData.DataToSave.Data[i2]; ok=true
+						if not ok and (opt.Action=="Add" and fieldName!="iD")
+							if (col.IdInMe)								
+								infoRow=Row.Cols[col.IdInMe]
+								source=infoRow.List.Source
+								Field=infoRow.FName
+								id=oCONTROLS.helper.getData_fromDataToSave(updData.DataToSave,Field)							
+								Row.Data[fieldName]=oDATA.GET(source).emData.findProperty("iD", id).MapArrToString(infoRow.List.iText, false)
+							else if (col.Default)
+								if col.Default=="Today"
+									Row.Data[fieldName]=oGLOBAL.date.getTodayString()
+								else if col.Default=="UserName"
+									Row.Data[fieldName]=UserData.Name() 
+								else if col.Default=="UserId"
+									Row.Data[fieldName]=UserData.Id()
+								else Row.Data[fieldName]=col.Default
 							else
-								Row.Data[RowI]=""
-						if Row.Data[RowI]==null
-							Row.Data[RowI]=""
-					##Prabegam per visus jau surašytus Row.Data ir jei ten stovi IdInMe, tada įrašom teksta is kitos lenteles (kad nepalikt tuscio lauko)
-					RowI=0
-					while RowI<RowLength-1
-						RowI++
-						if Row.Cols[RowI].IdInMe
-							ix=Row.Cols[RowI].IdInMe
-							id=Row.Data[ix]
-							obj=Row.Cols[ix].List.Source
-							TextId=Row.Cols[ix].List.iText
-							Row.Data[RowI]=oData.GetStringFromIndexes(id,obj,TextId)
-					#Updatinasi per Row, nieko daugiau nereikia
-					#oData.UpdateRow(Row.Data,oData,opt.Action)##Updatinam duomenis masyve ???Reikia tokio metodo array prototype
+								Row.Data[fieldName]=""
+						)
+						console.log("col: "+col.FName+", ok: "+ok+", fieldValue:" +Row.Data[fieldName])
+					) 
+					if opt.Action=="Add"
+						oDATA.GET(opt.objData).emData.pushObject(Row.Data)
+					
 					if opt.CallBackAfter
 						opt.CallBackAfter(Row.Data)
 					if !opt.form or opt.form=="Dialog" 
@@ -130,17 +120,16 @@ class clsEditableForm
 		if opt.newVals #naujai įkišamos vertės turi būt array, jei ne suskaldom ir įkišam
 			opt.newVals.vals=if opt.newVals.vals instanceof Array then opt.newVals.vals else opt.newVals.vals.split(" ")
 		while i<Length
-			Append=""
-			if Row.Grid.aoColumns[i].sTitle? ## laukus generuojam tik su sTitle
-				if Row.Data[i]? and Row.Data[i]
-					if typeof Row.Data[i] == "number"
-						val=Row.Data[i]
+			Append=""; n=Row.Cols[i].FName; n=n.slice(0, 1).toLowerCase() + n.slice(1); colVal=Row.Data[n];
+			if Row.Grid.aoColumns[i].sTitle? and not (Row.Cols[i].IdInMe or Row.Cols[i].NotEditable) ## laukus generuojam tik su sTitle
+				if colVal? and colVal
+					if typeof colVal == "number"
+						val=colVal
 					else
 						t=(if Row.Cols[i].Type then Row.Cols[i].Type else "")
-						val=if t in ["String","Email"]||t.substring(0,4)=="Date" then ('"'+ Row.Data[i].replace(/"/g,"\\u0027")+'"') else Row.Data[i]
-						##Row.Data[i].replace('"',"\'")
+						val=if t in ["String","Email"]||t.substring(0,4)=="Date" then ('"'+ colVal.replace(/"/g,"\\u0027")+'"') else colVal
 				else if opt.newVals? #newVals: {vals:newVals,cols:opt.iText}
-					if i==opt.newVals.cols[inewVals]
+					if n==opt.newVals.cols[inewVals]
 						val=if opt.newVals.vals[inewVals] then ('"'+ opt.newVals.vals[inewVals].replace(/"/g,"\\u0027")+'"') else "\"\""
 						inewVals++
 					else

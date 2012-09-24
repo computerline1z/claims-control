@@ -9,8 +9,6 @@
         Add: false,
         Edit: false
       },
-      iVal: 0,
-      iText: [1],
       selectFirst: false,
       Value: "",
       mapWithNoCommas: false,
@@ -41,14 +39,14 @@
             newVal = RowData.MapArrToString(opt.iText, opt.mapWithNoCommas);
             $(input).val(newVal);
             if (this.Action === "Edit") {
-              data.findObjectByProperty("id", RowData[0]).label = newVal;
+              data.findObjectByProperty("id", RowData[opt.iVal]).label = newVal;
             } else {
               data.push({
-                id: RowData[0],
+                id: RowData[opt.iVal],
                 label: newVal
               });
             }
-            if (!input.find("span.ui-menu-item").length && opt.appendToList) {
+            if (!input.parent().find("span.ui-menu-icon").length && opt.appendToList) {
               return input.parent().append(opt.appendToList);
             }
           }
@@ -57,12 +55,12 @@
       Editable = (opt.Editable.Add || opt.Editable.Edit ? true : false);
       data = void 0;
       OptVal = parseInt(opt.Value, 10);
-      data = $.map(oDATA.GET(opt.Source).Data, function(a) {
-        if (a[0] === OptVal) {
+      data = $.map(oDATA.GET(opt.Source).emData, function(a) {
+        if (a.iD === OptVal) {
           input.val(a.MapArrToString(opt.iText, opt.mapWithNoCommas));
         }
         return {
-          id: a[0],
+          id: a[opt.iVal],
           label: a.MapArrToString(opt.iText, opt.mapWithNoCommas)
         };
       });
@@ -89,7 +87,7 @@
             return false;
           }
           if (ui.item) {
-            if (!$(event.target).parent().find("span.ui-menu-item").length && opt.appendToList) {
+            if (!$(event.target).parent().find("span.ui-menu-icon").length && opt.appendToList) {
               $(event.target).parent().append(opt.appendToList);
             }
             if (ui.item.id !== $(this).data("newval")) {
