@@ -174,7 +174,7 @@ var oCONTROLS = {
 			}
 			else if (Type === 'Integer' || Type === 'Decimal') {
 				eHTML += oCONTROLS.txt(col);
-				input = $(eHTML).prependTo(e).parent();
+				input = $(eHTML).prependTo(e).find("input:first");
 			}
 			else if (Type.search("Date") !== -1) {// Date DateNotMore DateNotLess DateNotMoreCtrl DateNotLessCtrl
 				var isTime = 0;
@@ -203,7 +203,9 @@ var oCONTROLS = {
 					input.ComboBox();
 				} else {
 					eHTML += oCONTROLS.txt(col);
-					input = $(eHTML).prependTo(e).parent().find('input').ComboBox();
+					input = $(eHTML).prependTo(e)
+					.parent().find('input')
+					.ComboBox();
 				}
 			}
 			if (col.Plugin) {
@@ -249,8 +251,9 @@ var oCONTROLS = {
 				alert("Nerasta data(ctrl),el: " + elDesc);
 				return true;
 			}
-			var Type, FName = e.data("ctrl").Field, OldVal = (NewRec) ? '' : e.data("ctrl").Value, val = '';
+			var Type, FName = e.data("ctrl").Field, OldVal = (NewRec) ? '' : $.trim(e.data("ctrl").Value), val = '';
 			if (e.attr("type") === "checkbox") {
+				if(!NewRec) {OldVal=(!OldVal||OldVal==="False"||OldVal==="0" )?0:1;}//leidžiam neupdatint checkbox'o tik jai ne naujas rekordas
 				val = (e.attr("checked")) ? 1 : 0; // Type="CheckBox";
 			} else {
 				if (typeof e.data("ctrl").Type === 'undefined') {
@@ -389,9 +392,7 @@ var oCONTROLS = {
 		return this.appendLabel(p, "<textarea cols='100' rows='4' " + this.basic(p) + ">" + ((p.Value) ? p.Value : "") + "</textarea>");
 	},
 	chk: function (p) {
-		if (typeof p.Value === "string") {
-			p.Value = ((p.Value.search(/false/i) > -1) ? 0 : 1);
-		}
+		if (typeof p.Value === "string") {p.Value = ((p.Value.search(/false/i) > -1||p.Value==="") ? 0 : 1);}	
 		return "<label " + ((p.label.classes) ? " class='" + p.label.classes + "'" : "") + ((p.attr) ? p.attr + " " : "") + "><input type='checkbox' " + this.basic(p) + ((p.Value) ? "checked='checked'" : "") + "/>" + ((p.label.txt) ? p.label.txt : "") + "</label>";
 	},
 	//{src:??,alt:??,onclickfn:??}
@@ -482,11 +483,11 @@ var oCONTROLS = {
 				 + "<div class='right'><a id='aCancelSelectOpt' class='floatright' href='#'>Atšaukti</a></div></div>";
 			HTML += "<div class='megaselectlistoptions'>";
 			var listHTML = "";
-			for (var i = 1; i < d.oDATA.Data.length; i += 3) {//0-neimam, nes ten neapdrausta - jei kitur naudosim reiks tai daryt tik Source='tblClaimTypes'
+			for (var i = 1; i < d.oDATA.emData.length; i += 3) {//0-neimam, nes ten neapdrausta - jei kitur naudosim reiks tai daryt tik Source='tblClaimTypes'
 				listHTML += "<div class='megaselectlistcolumn'><ul>";
-				listHTML += "<li 'tabindex=-1' data-val=" + d.oDATA.Data[i][d.opt.val] + ">" + d.oDATA.Data[i][d.opt.text] + "</li>";
-				listHTML += "<li 'tabindex=-1' data-val=" + d.oDATA.Data[i + 1][d.opt.val] + ">" + d.oDATA.Data[i + 1][d.opt.text] + "</li>";
-				listHTML += "<li 'tabindex=-1' data-val=" + d.oDATA.Data[i + 2][d.opt.val] + ">" + d.oDATA.Data[i + 2][d.opt.text] + "</li></ul></div>";
+				listHTML += "<li 'tabindex=-1' data-val=" + d.oDATA.emData[i][d.opt.val] + ">" + d.oDATA.emData[i][d.opt.text] + "</li>";
+				listHTML += "<li 'tabindex=-1' data-val=" + d.oDATA.emData[i + 1][d.opt.val] + ">" + d.oDATA.emData[i + 1][d.opt.text] + "</li>";
+				listHTML += "<li 'tabindex=-1' data-val=" + d.oDATA.emData[i + 2][d.opt.val] + ">" + d.oDATA.emData[i + 2][d.opt.text] + "</li></ul></div>";
 			}
 			HTML += listHTML + "<div style='clear: both;'></div></div></hr>"; //&nbsp;
 			$(d.ctrl).append(HTML);
@@ -576,6 +577,17 @@ var oCONTROLS = {
 		showDialog: function (opt, buttons) {
 			var o = $.extend(true, {}, this.opt, {buttons:buttons}, opt);
 			var $dialog = $('<div id="dialog_form_tmp_id">').html(opt.msg).dialog(o).dialog('open');
+		}
+	},
+	helper: {//oCONTROLS.helper.getData_fromDataToSave(DataToSave,Field)
+		getData_fromDataToSave: function(DataToSave,field){
+			ret ="";
+			DataToSave.Fields.forEach(
+				function (Field,i){
+					if(Field===field) ret=DataToSave.Data[i];
+				}
+			);
+			return ret;
 		}
 	}
 };

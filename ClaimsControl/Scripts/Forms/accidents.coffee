@@ -72,7 +72,7 @@ App.SelectedAccidentView = Em.View.extend(
 		d =	
 			ctrl: $('#divNewClaimCard')
 			oDATA: oDATA.GET("tblClaimTypes")
-			opt: { val: 0, text: 1, FieldName: "ClaimTypeID", SelectText: "Pasirinkite žalos tipą:" }
+			opt: { val: "iD", text: "name", FieldName: "ClaimTypeID", SelectText: "Pasirinkite žalos tipą:" }
 			fnAfterOptClick: (T) ->
 				$('#divNewClaimCard').find('#divClaimCardDetails,div.frmbottom').remove();
 				#fnSetClaimCard(1, T)
@@ -119,9 +119,9 @@ App.SelectedClaimView = Em.View.extend(
 			$("#IsInjuredPersons").on("click",-> fnCheckIsInjured.call($("#IsInjuredPersons")))	
 		$("#inputDays, #inputPerDay").on("keyup",-> $("#inputSum").val(($("#inputDays").val()*$("#inputPerDay").val()));)
 	init: ->
-		@_super(); d = @get("rowContext");		
+		@_super(); d = @get("rowContext"); 		
 		if not d.newClaim
-			C2 = d.Claims2; TypeID = oDATA.GET("tblClaimTypes").Data.findColValByColVal(d.InsuranceType, 1, 0)
+			C2 = d.Claims2; TypeID = oDATA.GET("tblClaimTypes").emData.findProperty("name",d.InsuranceType).iD
 			#Claims2: 0-ClaimID, 1-VehicleID, 2-InsPolicyID, 3-InsuranceClaimAmount, 4-InsurerClaimID, 5-IsTotalLoss, 6-IsInjuredPersons, 7-Days, 8-PerDay
 			Claim =
 				ID: C2[0],VehicleID: C2[1],InsPolicyID: C2[2],InsuranceClaimAmount: C2[3],InsurerClaimID: C2[4]

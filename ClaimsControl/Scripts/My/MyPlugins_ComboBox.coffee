@@ -4,15 +4,10 @@ $.widget "ui.ComboBox",
 #fnChangeCallBack:fn($(this).data("newval")
 #Jeigu controlsas neturi tipo(Type), Type="List", kitais atvejai kitas, tada inputas gali turėt bet kokia reiksme, OnlyListItems
 options:
-	ListType: "List", Editable: {Add: false, Edit: false}, iVal: 0,	iText: [1]
+	ListType: "List", Editable: {Add: false, Edit: false},# iVal: 0,	iText: [1]
 	selectFirst: false, Value: "", mapWithNoCommas: false, addNewIfNotExists: false
 _create: ->	
 	#surandam artimiausia inputa ant kurio desim listboxa
-	#				 if(this.element[0].nodeName==='INPUT') { var input=$(this.element[0]); }
-	#				 else {
-	#						var t=this.element.parent().find('input')[0];
-	#						if(t.nodeName==='INPUT') { var input=$(t); } else { alert('Error! Input not found for ComboBox! (MyPlugins_ComboBox:10)'); }
-	#				 }
 	input = $(@element[0])
 	alert "Error! Input not found for ComboBox! (MyPlugins_ComboBox:15)"	if input is `undefined`
 	opt = $.extend(true, @options, $(input).data("ctrl"))
@@ -28,10 +23,10 @@ _create: ->
 				newVal=RowData.MapArrToString(opt.iText,opt.mapWithNoCommas)
 				$(input).val newVal
 				if this.Action=="Edit"#pakeiciam comboboxo duomenis, oDATA jau pakeista
-					data.findObjectByProperty("id",RowData[0]).label=newVal
+					data.findObjectByProperty("id",RowData[opt.iVal]).label=newVal
 				else #pridedam naują
-					data.push({id:RowData[0],label:newVal})
-				if (!input.find("span.ui-menu-item").length&&opt.appendToList)#pridedu redagavimo controlsus jei nebuvo
+					data.push({id:RowData[opt.iVal],label:newVal})
+				if (!input.parent().find("span.ui-menu-icon").length&&opt.appendToList)#pridedu redagavimo controlsus jei nebuvo
 					input.parent().append(opt.appendToList)
 				#input.autocomplete "search", input.val() #refreshinam duomenis - tik kai buvo su listais, dabar nereikia
 				#$(input).removeClass "inputTip"
@@ -48,11 +43,13 @@ _create: ->
 	
 	#if(opt.Type==="List") { //Jei Type==List mapinam pagal opt.iText kitu atveju pagal Field
 	OptVal = parseInt(opt.Value, 10)
-	data = $.map(oDATA.GET(opt.Source).Data, (a) ->		
+	data = $.map(oDATA.GET(opt.Source).emData, (a) ->		
 		#for(var i=0; i<opt.iText.length; i++) { { ret.push(a[opt.iText[i]]); } }
-		input.val a.MapArrToString(opt.iText,opt.mapWithNoCommas)	if a[0] is OptVal #Idedam verte i textboxa
+		
+		input.val a.MapArrToString(opt.iText,opt.mapWithNoCommas) if a.iD is OptVal #Idedam verte i textboxa
+		
 		#return { id: a[0], value: a.MapArrToString(opt.iText), label: a[opt.iText[0]] };
-		id: a[0]
+		id: a[opt.iVal]
 		label: a.MapArrToString(opt.iText,opt.mapWithNoCommas)
 	)
 	
@@ -109,7 +106,7 @@ _create: ->
 				#event.stopPropagation()#event.preventDefault()				
 				return false
 			if ui.item
-				if (!$(event.target).parent().find("span.ui-menu-item").length&&opt.appendToList)#pridedu redagavimo controlsus jei nebuvo
+				if (!$(event.target).parent().find("span.ui-menu-icon").length&&opt.appendToList)#pridedu redagavimo controlsus jei nebuvo
 					$(event.target).parent().append(opt.appendToList)
 				if ui.item.id isnt $(this).data("newval")
 					$(this).data("newval", ui.item.id).val (if ($(this).data("ctrl").Type is "List") then ui.item.value else ui.item.label) #jeigu ne List tipo kisam viska priesingu atveju tik pirma lauka

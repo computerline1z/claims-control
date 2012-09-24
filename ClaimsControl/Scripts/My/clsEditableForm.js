@@ -6,7 +6,7 @@
     var fnResetForm, fnSaveChanges;
 
     function clsEditableForm(options) {
-      var Action, AddToTitle, Config, Row, id, ix, oData, opt, rows, _i, _len, _ref;
+      var Action, AddToTitle, Config, Row, id, ix, oData, opt;
       $("body").css("cursor", "wait");
       opt = {
         DialogFormId: "divDialogForm",
@@ -16,7 +16,7 @@
         Title: 0
       };
       $.extend(opt, options);
-      id = opt.aRowData != null ? opt.aRowData[0] : 0;
+      id = opt.aRowData != null ? opt.aRowData.iD : 0;
       oData = oDATA.GET(opt.objData);
       Action = opt.Action;
       if (oData == null) {
@@ -28,25 +28,18 @@
         Data: opt.aRowData
       };
       if (id && !(Row.Data != null)) {
-        _ref = oData.Data;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          rows = _ref[_i];
-          if (rows[0] === id) {
-            Row.Data = rows;
-            break;
-          }
-        }
+        Row.Data = oData.emData.findProperty("iD", id);
       }
       if (!opt.Title) {
         Config = oData.Config;
         opt.Title = Action === "Add" ? Config.Msg.AddNew : Config.Msg.Edit;
         if (Config.Msg.AddToTitle && Action === "Edit") {
           AddToTitle = (function() {
-            var _j, _len1, _ref1, _results;
-            _ref1 = Config.Msg.AddToTitle;
+            var _i, _len, _ref, _results;
+            _ref = Config.Msg.AddToTitle;
             _results = [];
-            for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-              ix = _ref1[_j];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              ix = _ref[_i];
               _results.push(Row.Data[ix]);
             }
             return _results;
@@ -130,59 +123,24 @@
           DataToSave: DataToSave,
           CallBack: {
             Success: function(resp, updData) {
-              var Found, RowI, RowLength, TextId, f, id, ix, obj, updI, updLength;
-              RowLength = Row.Cols.length;
-              RowI = 0;
-              updLength = updData.DataToSave.Fields.length;
               if (opt.Action === "Add") {
-                Row.Data = new Array(RowLength);
-                Row.Data[0] = resp.ResponseMsg.ID;
-                oData.Data.push(Row.Data);
+                Row.Data = Em.Object.create({});
+                Row.Data.iD = resp.ResponseMsg.ID;
               }
-              while (RowI < RowLength - 1) {
-                updI = 0;
-                Found = 0;
-                RowI++;
-                while (updI < updLength) {
-                  if (Row.Cols[RowI].FName === updData.DataToSave.Fields[updI]) {
-                    Row.Data[RowI] = updData.DataToSave.Data[updI];
-                    Found = 1;
-                    break;
+              Row.Cols.forEach(function(col, i) {
+                var Field, fieldName, id, infoRow, ok, source;
+                ok = false;
+                fieldName = col.FName.slice(0, 1).toLowerCase() + col.FName.slice(1);
+                updData.DataToSave.Fields.forEach(function(updateField, i2) {
+                  if (col.FName === updateField) {
+                    Row.Data[fieldName] = updData.DataToSave.Data[i2];
+                    return ok = true;
                   }
-                  updI++;
-                }
-                if (!Found && opt.Action === "Add") {
-                  if (Row.Cols[RowI].Default != null) {
-                    if (Row.Cols[RowI].Default === "Today") {
-                      Row.Data[RowI] = oGLOBAL.date.getTodayString();
-                    } else if (Row.Cols[RowI].Default === "UserName") {
-                      Row.Data[RowI] = UserData.Name();
-                    } else if (Row.Cols[RowI].Default === "UserId") {
-                      Row.Data[RowI] = UserData.Id();
-                    } else {
-                      Row.Data[RowI] = Row.Cols[RowI].Default;
-                    }
-                  } else if (Row.Cols[RowI].UpdateField) {
-                    f = Row.Cols[RowI].UpdateField;
-                    Row.Data[RowI] = updData.DataToSave[f];
-                  } else {
-                    Row.Data[RowI] = "";
-                  }
-                }
-                if (Row.Data[RowI] === null) {
-                  Row.Data[RowI] = "";
-                }
-              }
-              RowI = 0;
-              while (RowI < RowLength - 1) {
-                RowI++;
-                if (Row.Cols[RowI].IdInMe) {
-                  ix = Row.Cols[RowI].IdInMe;
-                  id = Row.Data[ix];
-                  obj = Row.Cols[ix].List.Source;
-                  TextId = Row.Cols[ix].List.iText;
-                  Row.Data[RowI] = oData.GetStringFromIndexes(id, obj, TextId);
-                }
+                }, !ok && (opt.Action === "Add" && fieldName !== "iD") ? col.IdInMe ? (infoRow = Row.Cols[col.IdInMe], source = infoRow.List.Source, Field = infoRow.FName, id = oCONTROLS.helper.getData_fromDataToSave(updData.DataToSave, Field), Row.Data[fieldName] = oDATA.GET(source).emData.findProperty("iD", id).MapArrToString(infoRow.List.iText, false)) : col.Default ? col.Default === "Today" ? Row.Data[fieldName] = oGLOBAL.date.getTodayString() : col.Default === "UserName" ? Row.Data[fieldName] = UserData.Name() : col.Default === "UserId" ? Row.Data[fieldName] = UserData.Id() : Row.Data[fieldName] = col.Default : Row.Data[fieldName] = "" : void 0);
+                return console.log("col: " + col.FName + ", ok: " + ok + ", fieldValue:" + Row.Data[fieldName]);
+              });
+              if (opt.Action === "Add") {
+                oDATA.GET(opt.objData).emData.pushObject(Row.Data);
               }
               if (opt.CallBackAfter) {
                 opt.CallBackAfter(Row.Data);
@@ -203,7 +161,7 @@
     };
 
     clsEditableForm.prototype.fnGenerateHTML = function(Row, id, Config, opt) {
-      var Append, Head, Length, html, i, inewVals, t, val;
+      var Append, Head, Length, colVal, html, i, inewVals, n, t, val;
       Length = Row.Cols.length;
       i = 0;
       html = "";
@@ -214,16 +172,19 @@
       }
       while (i < Length) {
         Append = "";
-        if (Row.Grid.aoColumns[i].sTitle != null) {
-          if ((Row.Data[i] != null) && Row.Data[i]) {
-            if (typeof Row.Data[i] === "number") {
-              val = Row.Data[i];
+        n = Row.Cols[i].FName;
+        n = n.slice(0, 1).toLowerCase() + n.slice(1);
+        colVal = Row.Data[n];
+        if ((Row.Grid.aoColumns[i].sTitle != null) && !(Row.Cols[i].IdInMe || Row.Cols[i].NotEditable)) {
+          if ((colVal != null) && colVal) {
+            if (typeof colVal === "number") {
+              val = colVal;
             } else {
               t = (Row.Cols[i].Type ? Row.Cols[i].Type : "");
-              val = (t === "String" || t === "Email") || t.substring(0, 4) === "Date" ? '"' + Row.Data[i].replace(/"/g, "\\u0027") + '"' : Row.Data[i];
+              val = (t === "String" || t === "Email") || t.substring(0, 4) === "Date" ? '"' + colVal.replace(/"/g, "\\u0027") + '"' : colVal;
             }
           } else if (opt.newVals != null) {
-            if (i === opt.newVals.cols[inewVals]) {
+            if (n === opt.newVals.cols[inewVals]) {
               val = opt.newVals.vals[inewVals] ? '"' + opt.newVals.vals[inewVals].replace(/"/g, "\\u0027") + '"' : "\"\"";
               inewVals++;
             } else {

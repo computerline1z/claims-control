@@ -103,6 +103,16 @@ var MY = {
 		}
 	}
 }
+Em.Object.prototype.MapArrToString = function (arrNames, mapWithNoCommas) {
+	var arrRet = [], e;
+	for (var i = 0; i < arrNames.length; i++) {
+		e = $.trim(this[arrNames[i]]);
+		if (e !== "") arrRet[arrRet.length] = e;
+	}
+	if (mapWithNoCommas) return arrRet.join(" ");
+	else return arrRet.join(", ");
+}
+
 Array.prototype.FNameIndex = function (FNameVal) {
 	var ctr = "";
 	for (var i = 0; i < this.length; i++) {
@@ -158,14 +168,14 @@ Array.prototype.findColValueByID = function (ID, ValueCol) {//Randa reiksme stul
 	}
 	return ctr;
 };
-Array.prototype.getRowByColValue = function (value, Col) {
-	for (var Row = 0; Row < this.length; Row++) {
-		if (this[Row][Col] == value) {
-			return this[Row];
-		}
-	}
-	return "";
-};
+//Array.prototype.getRowByColValue = function (value, Col) {
+//	for (var Row = 0; Row < this.length; Row++) {
+//		if (this[Row][Col] == value) {
+//			return this[Row];
+//		}
+//	}
+//	return "";
+//};
 Array.prototype.removeRowByProperty = function (propertyName, propertyValue) {
 	for (var i = 0; i < this.length; i++) {
 		if (this[i][propertyName] === propertyValue) {
