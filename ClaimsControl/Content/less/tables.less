@@ -56,3 +56,12 @@ div.notSelectable > div { cursor: default; }
 div.table {
     > div.tr:hover { background-color: @grayLight; color:@white; }
 }
+
+table.zebra-striped
+{
+	width: 100%;
+	tr th {font-weight: bold; background-color: @systemBlueLight;border-bottom: 4px solid @grayLighter; padding: 8px 8px 7px; text-align:left;}
+	tr td {border-bottom: 4px solid @grayLighter; padding: 8px 8px 7px;}
+	tr:nth-child(odd) {background-color: @grayUltraLight;}		
+	tr:hover { background-color: @grayLight; color:@white; }
+}

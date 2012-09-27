@@ -52,7 +52,20 @@ namespace ClaimsControl.Controllers {
 
 			);
 		}
+		[HttpPost]
+		public JsonResult topNew() {
+			Repositories_Accidents acc = new Repositories_Accidents();
+			return Json(
+				new {
+					jsonObj = new {
+						proc_topDrivers = acc.GetJSON_proc_Drivers(true),
+						proc_topVehicles = acc.GetJSON_proc_Vehicles(true),
+						proc_topInsPolicies = acc.GetJSON_proc_InsPolicies(true)
+					}
+				}
 
+			);
+		}
 		[HttpPost]
 		public JsonResult Claims() {
 			return Json(new { Proba = "Šalia kelio karčema1" });
