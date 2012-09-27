@@ -1,21 +1,21 @@
 
 `var w=window, App=w.App, Em=w.Em, oGLOBAL=w.oGLOBAL, oDATA=w.oDATA, oCONTROLS=w.oCONTROLS, MY=w.MY`
-App.AccidentsView = App.mainMenuView.extend(
-	content: null
-	viewIx: 0
-	templateName: 'tmpAccidentsMain'
-	init: -> 
-		@_super()
-		console.log("accidentInit")
-	didInsertElement: -> 
-		alert("loaded")
-		@_super()
-		console.log("I loaded all accidents")
-	#contentObserver: (->
-	#	@rerender()
-	#	alert("App.AccidentsssssView has changed!")
-	#	).observes("App.accidentsController.content")
-)
+# App.AccidentsView = App.mainMenuView.extend(
+	# content: null
+	# viewIx: 0
+	# templateName: 'tmpAccidentsMain'
+	# init: -> 
+		# @_super()
+		# console.log("accidentInit")
+	# didInsertElement: -> 
+		# alert("loaded")
+		# @_super()
+		# console.log("I loaded all accidents")
+	# #contentObserver: (->
+	# #	@rerender()
+	# #	alert("App.AccidentsssssView has changed!")
+	# #	).observes("App.accidentsController.content")
+# )
 App.AccidentView = Em.View.extend(
 	#@addObserver('content.lossSum', ->
 	#	alert("New lossSum: " + @getPath('App.AccidentView.lossSum'))

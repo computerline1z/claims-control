@@ -1,23 +1,31 @@
-﻿<div style="background-color: #505860; color: #FFFFFF; width: 100%;">
+﻿@{
+    string LogoutUrl = Url.Action("LogOff", "Account"),
+           LoginUrl = Url.Action("LogOn", "Account");
+}
+<div style="background-color: #505860; color: #FFFFFF; width: 100%;">
     <table border="0" cellpadding="0" cellspacing="0" style="width: 100%; color: White;">
-        <tr style="height: 1.6em;"><td style="width: 10px;"><img src="../../Content/images/Logo.png" alt="" />
+        <tr style="height: 1.6em;"><td style="width: 10px;">
+                    <img src= "@Url.Content("~/Content/images/Logo.png")" alt="" />
         </td><td style="font-size: 10pt; width: 100px;"><b>Claims</b>Control </td>
             @if (Request.IsAuthenticated) {
                 <text> <td>
                     <span id="spanLogAccount">@CC.Classes.UserData.Account</span>
-                </td><td style="width: 10px; padding: 0px;"><img src="../../Content/images/Zvaigzde.png" />
+                </td><td style="width: 10px; padding: 0px;">
+                    <img src= "@Url.Content("~/Content/images/Zvaigzde.png")" alt="Žvaigždė" />
                 </td><td style="width: 110px;">
-                    <span id='spanLogAction' onclick="location='/Account/LogOff'">Atsijungti</span></td><td style="width: 100px;">
+                    <span id='spanLogAction' onclick="location='@LogoutUrl'">Atsijungti</span>
+                </td><td style="width: 100px;">
                         <span id='spanLogName'>@CC.Classes.UserData.UserName</span></td>
                 </text>
             }
             else {
                 <td>
                     <span style="font-weight: bold; font-size: 8pt;">Transporto žalų valdymo sistema</span>
-                </td><td style="width: 10px; padding: 0px;"><img src="../../Content/images/Zvaigzde.png" />
+                </td><td style="width: 10px; padding: 0px;">
+                    <img src= "@Url.Content("~/Content/images/Zvaigzde.png")" alt="Žvaigždė" />
                 </td>
                 <text> <td style="width: 110px;">
-                    <span id='spanLogAction' onclick="location='/Account/LogOn'">Prisijungti</span></td><td style="width: 100px;">
+                    <span id='spanLogAction' onclick="location='@LoginUrl'">Prisijungti</span></td><td style="width: 100px;">
                         <span id='spanLogName'>@CC.Classes.UserData.UserName</span></td>
                 </text>
             }

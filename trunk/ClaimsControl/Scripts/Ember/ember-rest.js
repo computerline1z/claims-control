@@ -64,7 +64,7 @@ var oDATA = Ember.Object.create({
 		this.Obj[objName] = oINST;
 	},
 	GET: function (objName) {
-		if ( this.Obj[objName]) return this.Obj[objName];
+		if (this.Obj[objName]) return this.Obj[objName];
 		else {
 			this.get("fnErr")("Object " + objName + " not downloaded yet.")
 		}
@@ -86,10 +86,10 @@ var oDATA = Ember.Object.create({
 		all_queued = true;
 	},
 	emBuilder: function (p) {//{newData:newData, tblName:tblName, toAppend:{"sort":"asc/desc","col":"date"}}
-		oData=oDATA.GET(p.tblName);if  (!oData.emData){oData.emData=[];}
+		oData = oDATA.GET(p.tblName); if (!oData.emData) { oData.emData = []; }
 		if (!p.newData) return;
-		var d = p.newData, c = oData.Cols, f = [], n, i, y, cnt=oData.emData;
-		
+		var d = p.newData, c = oData.Cols, f = [], n, i, y, cnt = oData.emData;
+
 		for (i = 0; i < c.length; i++) {//Sudedam vardus, kad prasidetų nuo mažos raidės
 			n = c[i].FName;
 			f[f.length] = n.slice(0, 1).toLowerCase() + n.slice(1);
@@ -100,10 +100,10 @@ var oDATA = Ember.Object.create({
 				for (y = 0; y < c.length; y++) {//bėgam per stulpelius
 					e[f[y]] = d[i][y];
 				}
-				e.visible=true;//Visi pradzioj matomi
-				if (p.toAppend.sort){//ikisam ne bet kur
-					oDATA.setToPlace(p.toAppend,e,cnt);
-				}else{
+				e.visible = true; //Visi pradzioj matomi
+				if (p.toAppend.sort) {//ikisam ne bet kur
+					oDATA.setToPlace(p.toAppend, e, cnt);
+				} else {
 					cnt.pushObject(Em.Object.create(e));
 				}
 			}
@@ -115,31 +115,31 @@ var oDATA = Ember.Object.create({
 				}
 			}
 		}
-		if (p.toAppend){oData.Data.length=0;}//
+		if (p.toAppend) { oData.Data.length = 0; } //
 		return cnt;
 	},
-	setToPlace: function (toAppend,e,cnt){//toAppend:{"sort":"asc/desc","col":"date"}
-		var col=toAppend.col, fn,before;
-		if  (toAppend.sort==="desc")
-			fn =function(index,item){ if (item.get(col)<=e[col]) {before=index; return false;} }
+	setToPlace: function (toAppend, e, cnt) {//toAppend:{"sort":"asc/desc","col":"date"}
+		var col = toAppend.col, fn, before;
+		if (toAppend.sort === "desc")
+			fn = function (index, item) { if (item.get(col) <= e[col]) { before = index; return false; } }
 		else {
-			fn =function(index,item){ if (item.get(col)>=e[col]) {before=index; return false;} }
+			fn = function (index, item) { if (item.get(col) >= e[col]) { before = index; return false; } }
 		}
-		$.each(cnt,fn);
+		$.each(cnt, fn);
 		cnt.insertAt(before, Em.Object.create(e));
 	},
 	load: function (objName, execOnSuccess) {
 		if (!this.get("exists").call(this, objName)) {//jei neturim sito objekto tai atsisiunciam
-			var setter = this.get("SET"),emBuilder = this.get("emBuilder");
+			var setter = this.get("SET"), emBuilder = this.get("emBuilder");
 			var me = this;
 			$.ajax({
 				url: this.get("listUrl")[objName],
 				dataType: 'json',
 				type: 'POST',
 				success: function (json) {
-					setter.call(me, objName, json[objName]); 
-					var emData=emBuilder.call(me, {newData:json[objName].Data,tblName:objName,toAppend:true});//{newData:newData, tblName:tblName, toAppend:{"sort":"asc/desc","col":"date"}}
-					execOnSuccess(emData);//čia įkišam json'ą
+					setter.call(me, objName, json[objName]);
+					var emData = emBuilder.call(me, { newData: json[objName].Data, tblName: objName, toAppend: true }); //{newData:newData, tblName:tblName, toAppend:{"sort":"asc/desc","col":"date"}}
+					execOnSuccess(emData); //čia įkišam json'ą
 				}
 			});
 		} else throw new Error(objName + "  already loaded");
@@ -161,28 +161,30 @@ var oDATA = Ember.Object.create({
 		}
 	},
 	fnLoadNext: function () {
-		var start = new Date().getTime(), setter = this.get("SET"), emBuilder = this.get("emBuilder"),me = this, obj;
+		oGLOBAL.logFromStart("Pradedu apdorot fnLoadNext");
+		this.fnLoad({ url: "Main/tabAccidents" });
+		oGLOBAL.logFromStart("Baigiau apdorot fnLoadNext");
+	},
+	fnLoad: function (p) {//url:url, callBack:callBack
+		var start = new Date().getTime(), setter = this.get("SET"), emBuilder = this.get("emBuilder"), me = this, obj;
 		$.ajax({
-			url: "Main/tabAccidents",
-			dataType: 'json',
-			type: 'POST',
+			url: p.url, dataType: 'json', type: 'POST',
 			success: function (json) {
-				oGLOBAL.logFromStart("Pradedu apdorot fnLoadNext");
-				$.each(json.jsonObj, function (objName, value) {
-					console.log("New object:" + objName);
-					console.log(value);
-					setter.call(me, objName, value);
-					emBuilder.call(me, { newData:value.Data,tblName:objName,toAppend:true});//{oData, toAppend:{"sort":"asc/desc","col":"date"}}
-				});
-				$.each(json.templates, function (objName, value) {
-					//var toAppend = "<script type=\"text/x-handlebars\" data-template-name=\"" + tmpClaimEdit + ">" + obj[objName] + "</script>";
-					var start = new Date().getTime();
-					console.log("New template:" + objName);
-					Em.TEMPLATES[objName] = Em.Handlebars.compile(value);
-					oGLOBAL.logFromStart(("Compiled template '" + objName + "'"));
-					//kitas variantas: http://stackoverflow.com/questions/8659787/using-pre-compiled-templates-with-handlebars-js-jquery-mobile-environment
-				});
-				oGLOBAL.logFromStart("Baigiau apdorot fnLoadNext");
+				if  (json.jsonObj) {
+					$.each(json.jsonObj, function (objName, value) {
+						console.log("New jsonObj:" + objName);
+						setter.call(me, objName, value);
+						emBuilder.call(me, { newData: value.Data, tblName: objName, toAppend: true }); //{oData, toAppend:{"sort":"asc/desc","col":"date"}}
+					});
+				}
+				if  (json.templates) {
+					$.each(json.templates, function (objName, value) {
+						console.log("New template:" + objName);
+						Em.TEMPLATES[objName] = Em.Handlebars.compile(value);
+						//kitas variantas: http://stackoverflow.com/questions/8659787/using-pre-compiled-templates-with-handlebars-js-jquery-mobile-environment
+					});
+				}
+				if  (p.callBack) p.callBack();
 			}
 		});
 	}
@@ -209,10 +211,10 @@ Ember.ResourceController = Ember.ArrayController.extend(Ember.ResourceAdapter, {
 			oDATA.load(tbl, function (emData) {
 				oGLOBAL.logFromStart("Data recieved in controller - '" + me.get("tableName") + "' ");
 				//if (json.Data) {
-					me.set("content", emData);
-					//me.get("setContent").call(me, { data: json.Data, toAppend: true });
-					//json.json=me.get("content");
-					me.set("loadStatus", "ok");
+				me.set("content", emData);
+				//me.get("setContent").call(me, { data: json.Data, toAppend: true });
+				//json.json=me.get("content");
+				me.set("loadStatus", "ok");
 				//}
 				//else {
 				//	throw new Error("json need to have data in ResourceController;");
@@ -223,44 +225,44 @@ Ember.ResourceController = Ember.ArrayController.extend(Ember.ResourceAdapter, {
 	},
 	//setContent: function (data, toAppend) {
 	// setContent: function (p) { //{data, toAppend:{"sort":"asc/desc","col":"date"}}
-		// var d = p.data, c = oDATA.GET(this.get("tableName")).Cols, f = [], n, i, y, cnt;
-		// for (i = 0; i < c.length; i++) {//Sudedam vardus, kad prasidetų nuo mažos raidės
-			// n = c[i].FName;
-			// f[f.length] = n.slice(0, 1).toLowerCase() + n.slice(1);
-		// };
-		// cnt = this.get("content");
-		// if (p.toAppend) {
-			// for (i = 0; i < d.length; i++) {//bėgam per eilutes
-				// var e = {};
-				// for (y = 0; y < c.length; y++) {//bėgam per stulpelius
-					// e[f[y]] = d[i][y];
-				// }
-				// e.visible=true;//Visi pradzioj matomi
-				// if (p.toAppend.sort){//ikisam ne bet kur
-					// this.setToPlace(p.toAppend,e);
-				// }else{
-					// cnt.pushObject(Em.Object.create(e));
-				// }
-			// }
-		// } else {
-			// for (i = 0; i < d.length; i++) {//bėgam per eilutes
-				// var toReplace = cnt.findProperty("iD", d[i][0]);
-				// for (y = 1; y < c.length; y++) {//bėgam per stulpelius
-					// toReplace.set(f[y], d[i][y]);
-				// }
-			// }
-		// }
+	// var d = p.data, c = oDATA.GET(this.get("tableName")).Cols, f = [], n, i, y, cnt;
+	// for (i = 0; i < c.length; i++) {//Sudedam vardus, kad prasidetų nuo mažos raidės
+	// n = c[i].FName;
+	// f[f.length] = n.slice(0, 1).toLowerCase() + n.slice(1);
+	// };
+	// cnt = this.get("content");
+	// if (p.toAppend) {
+	// for (i = 0; i < d.length; i++) {//bėgam per eilutes
+	// var e = {};
+	// for (y = 0; y < c.length; y++) {//bėgam per stulpelius
+	// e[f[y]] = d[i][y];
+	// }
+	// e.visible=true;//Visi pradzioj matomi
+	// if (p.toAppend.sort){//ikisam ne bet kur
+	// this.setToPlace(p.toAppend,e);
+	// }else{
+	// cnt.pushObject(Em.Object.create(e));
+	// }
+	// }
+	// } else {
+	// for (i = 0; i < d.length; i++) {//bėgam per eilutes
+	// var toReplace = cnt.findProperty("iD", d[i][0]);
+	// for (y = 1; y < c.length; y++) {//bėgam per stulpelius
+	// toReplace.set(f[y], d[i][y]);
+	// }
+	// }
+	// }
 	// },
 	// setToPlace: function (toAppend,e){//toAppend:{"sort":"asc/desc","col":"date"}
-		// var col=toAppend.col, fn,before;
-		// if  (toAppend.sort==="desc")
-			// fn =function(index,item){ if (item.get(col)<=e[col]) {before=index; return false;} }
-		// else {
-			// fn =function(index,item){ if (item.get(col)>=e[col]) {before=index; return false;} }
-		// }
-		// var cnt=this.get("content");
-		// $.each(cnt,fn);
-		// cnt.insertAt(before-1, Em.Object.create(e));
+	// var col=toAppend.col, fn,before;
+	// if  (toAppend.sort==="desc")
+	// fn =function(index,item){ if (item.get(col)<=e[col]) {before=index; return false;} }
+	// else {
+	// fn =function(index,item){ if (item.get(col)>=e[col]) {before=index; return false;} }
+	// }
+	// var cnt=this.get("content");
+	// $.each(cnt,fn);
+	// cnt.insertAt(before-1, Em.Object.create(e));
 	// },	
 	content: [], //overridinam
 	tableName: Ember.required(),
@@ -288,7 +290,7 @@ Ember.ResourceController = Ember.ArrayController.extend(Ember.ResourceAdapter, {
 				val.arrElementToInt(p.fieldsToInt)
 			});
 		} //paverciam i intigerius
-		oDATA.emBuilder.call(me, { newData:p.newVal,tblName:me.tableName,toAppend: p.toAppend });
+		oDATA.emBuilder.call(me, { newData: p.newVal, tblName: me.tableName, toAppend: p.toAppend });
 		//me.get("setContent").call(me, { data: p.newVal, toAppend: p.toAppend });
 		return p.newVal; //grazinam array
 	},
@@ -306,25 +308,25 @@ Ember.ResourceController = Ember.ArrayController.extend(Ember.ResourceAdapter, {
 			type: 'POST',
 			url: url
 		})		//, complete: callBack
-        .done(function (json) {
-        	self.set("loadStatus", "ok");
-        	var tbl = json[self.get('tableName')];
-        	//oDATA.SET(
-        	if (tbl.Data) {
-        		self.set("content", tbl.Data);
-        	}
-        	if (tbl.cols) {
-        		self.set("cols", tbl.cols);
-        	}
-        	if (tbl.config) {
-        		self.set("config", tbl.config);
-        	}
-        	if (tbl.grid) {
-        		self.set("grid", tbl.grid);
-        	}
-        	console.log("data loaded");
-        	//Ember.run.next(function () { self.set("loaded", true); });
-        });
+		  .done(function (json) {
+			self.set("loadStatus", "ok");
+			var tbl = json[self.get('tableName')];
+			//oDATA.SET(
+			if (tbl.Data) {
+				self.set("content", tbl.Data);
+			}
+			if (tbl.cols) {
+				self.set("cols", tbl.cols);
+			}
+			if (tbl.config) {
+				self.set("config", tbl.config);
+			}
+			if (tbl.grid) {
+				self.set("grid", tbl.grid);
+			}
+			console.log("data loaded");
+			//Ember.run.next(function () { self.set("loaded", true); });
+		  });
 	}
 	/*Pakeitimai:
 	1. Ištrinu _recourceUrl, kiekvienoj resoursu funkcijoj naudosiu url kaip parametra
@@ -355,8 +357,8 @@ var SERVER = {
 		///<param name="url">example '/[Controler]Tab/GetTab[Action]'</param>
 		///<param name="dataType">JSONarg datatype 'json'|'html'|'texc'</param>
 		///<returns type="calls_CallFunc(Response,updData)"/>
-                if (updData.Ctrl){$(updData.Ctrl).spinner({ position: 'center', img: 'spinnerBig.gif' });}
-                else $("div.content:first").spinner({ position: 'center', img: 'spinnerBig.gif' });
+		if (updData.Ctrl) { $(updData.Ctrl).spinner({ position: 'center', img: 'spinnerBig.gif' }); }
+		else $("div.content:first").spinner({ position: 'center', img: 'spinnerBig.gif' });
 		if (!dataType) {
 			dataType = 'json';
 		}
@@ -411,7 +413,7 @@ var SERVER = {
 		var MsgObj = $.extend({}, DefMsg, updData.Msg), Msg;
 		if (resp.ErrorMsg) {
 			Msg = MsgObj.Error[updData.Action];
-                        Msg = (Msg)?Msg:MsgObj.Error;
+			Msg = (Msg) ? Msg : MsgObj.Error;
 			Msg += " Klaida:\n" + resp.ErrorMsg;
 			if (updData.CallBack) {
 				if (typeof updData.CallBack.Error === 'function') {
@@ -419,11 +421,11 @@ var SERVER = {
 				}
 			}
 			//DIALOG.Alert(Msg, DefMsg.Title);
-			oGLOBAL.notify.withIcon(DefMsg.Title, Msg, "img32-warning",true);
+			oGLOBAL.notify.withIcon(DefMsg.Title, Msg, "img32-warning", true);
 			return false;
 		} else {
 			Msg = MsgObj.Success[updData.Action];
-                        Msg = (Msg)?Msg:MsgObj.Success;
+			Msg = (Msg) ? Msg : MsgObj.Success;
 			if (updData.CallBack) {
 				if (typeof updData.CallBack.Success === 'function') {
 					updData.CallBack.Success(resp, updData);

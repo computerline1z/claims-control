@@ -2,21 +2,6 @@
 (function() {
   var w=window, App=w.App, Em=w.Em, oGLOBAL=w.oGLOBAL, oDATA=w.oDATA, oCONTROLS=w.oCONTROLS, MY=w.MY;
 
-  App.AccidentsView = App.mainMenuView.extend({
-    content: null,
-    viewIx: 0,
-    templateName: 'tmpAccidentsMain',
-    init: function() {
-      this._super();
-      return console.log("accidentInit");
-    },
-    didInsertElement: function() {
-      alert("loaded");
-      this._super();
-      return console.log("I loaded all accidents");
-    }
-  });
-
   App.AccidentView = Em.View.extend({
     templateName: 'tmpAccidentRow',
     tagName: ""
