@@ -1,0 +1,22 @@
+﻿<div class="cont">
+	<div class="right medium w35pr">
+	<div id="cont">{{view App.SearchField context="insPolicies"}}</div>
+	</div>
+</div>
+<h2 style="margin:0 20px;">Draudimo polisų sąrašas</h2><a {{action toTop}} href="#">(Atgal į naujausius įrašus sąrašuose)</a>
+<div class="cont">
+	<div class="right medium w15pr" data-ctrl='{"source":"proc_InsPolicies","controller":"listAllController","emObject":"insPolicies"}'>
+	<button class="btn small" {{action addNew target="App.listAllController"}}>Pridėti naują</button>
+	</div>
+</div>
+<table class="zebra-striped">
+	<thead><tr><th>Draudimo rūšis</th><th>Draudimo kompanija</th><th>Sutarties Nr</th><th>Pabaigos data</th><th>Draudėjas</th></tr></thead><tbody>
+	{{#each "App.listAllController.insPolicies"}}
+		{{view App.InsPolicyView}}
+	{{/each}}
+</tbody></table>
+<div class="cont">
+	<div class="right medium w15pr" data-ctrl='{"source":"proc_InsPolicies","controller":"listAllController","emObject":"insPolicies"}'>
+	<button class="btn small" {{action addNew target="App.listAllController"}}>Pridėti naują</button>
+	</div>
+</div>
