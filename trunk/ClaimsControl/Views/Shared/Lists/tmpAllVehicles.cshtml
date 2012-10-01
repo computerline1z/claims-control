@@ -1,0 +1,22 @@
+﻿<div class="cont">
+	<div class="right medium w35pr">
+	<div id="cont">{{view App.SearchField context="vehicles"}}</div>
+	</div>
+</div>
+<h2 style="margin:0 20px;">Transporto priemonių sąrašas</h2><a {{action toTop}} href="#">(Atgal į naujausius įrašus sąrašuose)</a>
+<div class="cont">
+	<div class="right medium w15pr" data-ctrl='{"source":"proc_Vehicles","controller":"listAllController","emObject":"vehicles"}'>
+	<button class="btn small" {{action addNew target="App.listAllController"}}>Pridėti naują</button>
+	</div>
+</div>
+<table class="zebra-striped">
+	<thead><tr><th>Registracijos Nr.</th><th>Tipas</th><th>Markė</th><th>Modelis</th><th>Gamybos metai</th><th>Ekspl. pabaigos metai</th><th>Dokumentai</th></tr></thead><tbody>
+	{{#each "App.listAllController.vehicles"}}
+		{{view App.VehicleView}}
+	{{/each}}
+</tbody></table>
+<div class="cont">
+	<div class="right medium w15pr" data-ctrl='{"source":"proc_Vehicles","controller":"listAllController","emObject":"vehicles"}'>
+	<button class="btn small" {{action addNew target="App.listAllController"}}>Pridėti naują</button>
+	</div>
+</div>

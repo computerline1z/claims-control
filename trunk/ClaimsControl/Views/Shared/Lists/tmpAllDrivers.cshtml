@@ -1,0 +1,23 @@
+﻿<div class="cont">
+	<div class="right medium w35pr">
+	<div id="cont">{{view App.SearchField context="drivers"}}</div>
+	</div>
+</div>
+<h2 style="margin:0 20px;">Vairuotojų sąrašas</h2><a {{action toTop}} href="#">(Atgal į naujausius įrašus sąrašuose)</a>
+<div class="cont">
+	<div class="right medium w15pr" data-ctrl='{"source":"proc_Drivers","controller":"listAllController","emObject":"drivers"}'>
+	<button class="btn small" {{action addNew target="App.listAllController"}}>Pridėti naują</button>
+	</div>
+</div>
+<table class="zebra-striped">
+	<thead><tr><th>Vardas</th><th>Pavardė</th><th>Vairavimo stažas</th><th>Kategorijos</th><th>Kontaktas</th><th>Dokumentai</th></tr></thead><tbody>
+	{{#each "App.listAllController.drivers"}}
+		{{view App.DriverView}}
+	{{/each}}
+</tbody></table>
+<div class="cont">
+	<div class="right medium w15pr" data-ctrl='{"source":"proc_Drivers","controller":"listAllController","emObject":"drivers"}'>
+	<button class="btn small" {{action addNew target="App.listAllController"}}>Pridėti naują</button>
+	</div>
+</div>
+

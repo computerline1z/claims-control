@@ -1,4 +1,4 @@
-﻿<h2 style="margin: 15px; display: inline-block">Naujausi įrašai sąrašuose</h2>
+﻿<h2 style="margin: 15px; display: block">Naujausi įrašai sąrašuose</h2>
 <h3>Vairuotojai</h3>
 <div class="cont" id="topNewDrivers">
 	<table class="zebra-striped">
@@ -7,7 +7,7 @@
 		{{view App.DriverView}}
 	{{/each}}
 	</tbody></table>
-	<div class="right medium"><a class="medium" href="#">Peržiūrėti pilną sąrašą</a><button class="btn small" {{action addNewAccident target="App.accidentsController"}}>Pridėti naują</button></div>
+	<div class="right medium" data-ctrl='{"goTo":"allDrivers","source":"proc_Drivers","controller":"topNewController","emObject":"drivers"}'><a class="medium" {{action toListAll}} href="#">Peržiūrėti pilną sąrašą</a><button class="btn small" {{action addNew target="App.listAllController"}}>Pridėti naują</button></div>
 </div>
 <hr />
 
@@ -19,7 +19,7 @@
 		{{view App.VehicleView}}
 	{{/each}}
 	</tbody></table>
-	<div class="right medium"><a class="medium" href="#">Peržiūrėti pilną sąrašą</a><button class="btn small" {{action addNewAccident target="App.accidentsController"}}>Pridėti naują</button></div>
+	<div class="right medium" data-ctrl='{"goTo":"allVehicles","source":"proc_Vehicles","controller":"topNewController","emObject":"vehicles"}'><a class="medium" {{action toListAll}} href="#">Peržiūrėti pilną sąrašą</a><button class="btn small" {{action addNew target="App.listAllController"}}>Pridėti naują</button></div>
 </div>
 <hr />
 
@@ -27,31 +27,9 @@
 <div class="cont" id="topNewInsPolicies">
 	<table class="zebra-striped">
 	<thead><tr><th>Draudimo rūšis</th><th>Draudimo kompanija</th><th>Sutarties Nr</th><th>Pabaigos data</th><th>Draudėjas</th></tr></thead><tbody>
-	{{#each "App.topNewController.InsPolicies"}}
+	{{#each "App.topNewController.insPolicies"}}
 		{{view App.InsPolicyView}}
 	{{/each}}
 	</tbody></table>
-	<div class="right medium"><a class="medium" href="#">Peržiūrėti pilną sąrašą</a><button class="btn small" {{action addNewAccident target="App.accidentsController"}}>Pridėti naują</button></div>
+	<div class="right medium" data-ctrl='{"goTo":"allInsPolicies","source":"proc_InsPolicies","controller":"topNewController","emObject":"insPolicies"}'><a class="medium" {{action toListAll}} href="#">Peržiūrėti pilną sąrašą</a><button class="btn small" {{action addNew target="App.listAllController"}}>Pridėti naują</button></div>
 </div>
-@*App.DriverView = Em.View.extend(
-	templateName: 'tmpDriverRow'
-	tagName: ""
-)
-App.VehicleView = Em.View.extend(
-	templateName: 'tmpVehicleRow' 
-	tagName: ""
-)
-App.InsPolicyView = Em.View.extend(
-	templateName: 'tmpInsPolicyRow'
-	tagName: ""
-)
-*@
-@*<div><a data-ctrl='{"oName":"proc_Drivers"}' href="#" {{action "openList" "proc_Drivers"}}>
-	<span>Vairuotojai</span></a>
-</div>
-<div><a data-ctrl='{"oName":"proc_Vehicles"}' href="#" {{action "openList" "proc_Vehicles"}}>
-	<span>Transporto priemonės</span></a>
-</div>
-<div><a data-ctrl='{"oName":"proc_InsPolicies"}' href="#" {{action "openList" "proc_InsPolicies"}}>
-	<span>Draudimo sutartys</span></a>
-</div>*@

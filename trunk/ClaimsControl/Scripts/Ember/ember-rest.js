@@ -85,11 +85,25 @@ var oDATA = Ember.Object.create({
 		}, this); //second parameter becomes this in the callback function
 		all_queued = true;
 	},
+	execWhenLoaded: function (objNames, fnExec,timeoutId) {//jei objektu nera laukiam kol ateis
+		var tId=(timeoutId)? timeoutId:0, me = this, notExists=false;
+		objNames.forEach(function (objName) {
+			console.log("cheking obj "+objName);
+			if (!this.get("exists").call(this, objName)) {
+				console.log("obj "+objName+" not exists");notExists=true;			
+			}
+		}, me); //second parameter becomes this in the callback function
+		if (notExists) {tId=setTimeout ( function (){
+			oDATA.execWhenLoaded(objNames,fnExec,tId)}, 1000 ); return false;
+		}
+		else if (tId!==0) {clearTimeout ( tId );}
+		fnExec();
+	},
 	emBuilder: function (p) {//{newData:newData, tblName:tblName, toAppend:{"sort":"asc/desc","col":"date"}}
-		oData = oDATA.GET(p.tblName); if (!oData.emData) { oData.emData = []; }
+		oData = oDATA.GET(p.tblName); 
+		if (!oData.emData) { oData.emData = []; }
 		if (!p.newData) return;
 		var d = p.newData, c = oData.Cols, f = [], n, i, y, cnt = oData.emData;
-
 		for (i = 0; i < c.length; i++) {//Sudedam vardus, kad prasidetų nuo mažos raidės
 			n = c[i].FName;
 			f[f.length] = n.slice(0, 1).toLowerCase() + n.slice(1);
@@ -103,11 +117,13 @@ var oDATA = Ember.Object.create({
 				e.visible = true; //Visi pradzioj matomi
 				if (p.toAppend.sort) {//ikisam ne bet kur
 					oDATA.setToPlace(p.toAppend, e, cnt);
-				} else {
+				}
+				else {
 					cnt.pushObject(Em.Object.create(e));
 				}
 			}
-		} else {
+		}
+		else {
 			for (i = 0; i < d.length; i++) {//bėgam per eilutes
 				var toReplace = cnt.findProperty("iD", d[i][0]);
 				for (y = 1; y < c.length; y++) {//bėgam per stulpelius
@@ -189,10 +205,7 @@ var oDATA = Ember.Object.create({
 		});
 	}
 });
-/**
-A controller for RESTful resources Extend this class and define the following:
-* `resourceType` -- an Ember.Resource class; the class must have a `serialize()` method that returns a JSON representation of the object
-* `resourceUrl` -- (optional) the base url of the resource (e.g. '/contacts/active'); will default to the `resourceUrl` for `resourceType`
+/**************************************************************************************************************************
 */
 Ember.ResourceController = Ember.ArrayController.extend(Ember.ResourceAdapter, {
 	list: [{

@@ -44,9 +44,12 @@ namespace ClaimsControl.Controllers {
 						tblClaims = acc.GetJSON_tblClaims()
 					},
 					templates = new {
-						tmpClaimEdit = RenderPartialViewToString("tmpClaimEdit")
-						//tmpAccidentRowObj = RenderPartialViewToString("tmpAccidentRowObj")
-						//tmpAccidentRow = RenderPartialViewToString("tmpAccidentRow")
+						tmpClaimEdit = RenderPartialViewToString("Accidents/tmpClaimEdit"),
+						tmpDriverRow = RenderPartialViewToString("Lists/tmpDriverRow")
+						//tmpClaimEdit = RenderPartialViewToString("tmpClaimEdit")
+						//tmpClaimEdit = RenderPartialViewToString("tmpClaimEdit")
+						//tmpClaimEdit = RenderPartialViewToString("tmpClaimEdit")
+
 						}
 				}
 
