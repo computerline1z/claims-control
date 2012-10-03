@@ -356,6 +356,38 @@ namespace CC.Models {
          return JSON;
       }
 
+		public jsonArrays GetJSON_tblUsers() {
+			jsonArrays JSON = new jsonArrays();
+			JSON.Data = from d in dc.tblUsers where d.AccountID== UserData.AccountID && d.IsDeleted==false
+							select new object[] {
+				d.ID,//0
+				d.FirstName,//2
+				d.Surname,//1
+				d.Email//3
+				};
+			object[] Cols ={
+				new { FName = "ID"},//0
+				new { FName = "FirstName",Type="String",Validity="require().nonHtml().maxLength(50)"},//2
+				new { FName = "Surname",Type="String",Validity="require().nonHtml().maxLength(50)"},//1
+				new { FName = "Email",Validity="require().nonHtml().match('email').maxLength(35)"}//3
+			}; JSON.Cols = Cols;
+			JSON.Config = new { tblUpdate = "tblUsers", Msg = new { AddNew = "Naujo vartotojo sukūrimas", Edit = "Vartotojo redagavimas", Delete = "Ištrinti vartotoją", GenName = "Vartotojas", GenNameWhat = "Vartotoją", ListName = "Vartotojų sąrašas" } };
+			JSON.Grid = new {
+				aoColumns = new object[]{
+					new {bVisible=false,bSearchable=false},//0//ID
+					new {sTitle="Vardas"},
+					new {sTitle="Pavardė"},
+					new {sTitle="E-paštas"}
+				},
+				//aaSorting = new object[] { new object[] { 1, "asc" } },//???
+			};
+			return JSON;
+		}
+
+
+
+
+
       public jsonArrays GetJSON_proc_InsPolicies(bool? OnlyTop) {
          jsonArrays JSON = new jsonArrays();
          JSON.Data = from p in dc.proc_InsPolicies(UserData.AccountID, OnlyTop)

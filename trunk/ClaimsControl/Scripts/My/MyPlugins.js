@@ -89,3 +89,34 @@ jQuery(function ($) {
 		showOtherMonths: true
 	});
 });
+(function ($) {
+	$.fn.extend({
+		tblSortable: function (options) {
+			var defaults = { cols: [], controller: null, sortedCol: 1 }
+			var opt = $.extend(defaults, options);
+			return this.each(function () {
+				$(this).find('th').each(function(index){
+					if (opt.cols[index]){
+						$(this).addClass("clickable").on("click",function(e){
+							var $e=$(e.target), classes=$e.find("span").attr("class"),newClass,n="ui-icon-carat-1-n",s="ui-icon-carat-1-s",ns="ui-icon-carat-2-n-s"							
+							if (classes.indexOf(ns)>-1){newClass=s;}	//Nerūšiuota	
+							else if (classes.indexOf(n)>-1){newClass=s;}//desc
+							else if (classes.indexOf(s)>-1){newClass=n;}//asc
+							else  throw new Error("no needed class found");
+							
+							$e.closest("tr").find("span."+n).toggleClass(n+" "+ns);
+							$e.closest("tr").find("span."+s).toggleClass(s+" "+ns);
+							$e.find("span").toggleClass(ns+" "+newClass);
+							
+							var c=App[opt.controller];							
+							if (newClass===s){c.set("sortAscending", true);}else{c.set("sortAscending", false);}
+							c.set("sortProperties",[opt.cols[index]]);
+							c.set("content",c.get("arrangedContent"));
+						}).append('<span class="ui-icon ui-icon-carat-2-n-s ui-tblHead-icon"></span>');
+						if (index===opt.sortedCol){$(this).trigger("click"); }
+					}
+				});
+			});
+		}
+	});
+})(jQuery);

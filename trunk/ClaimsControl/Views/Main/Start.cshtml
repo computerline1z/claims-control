@@ -21,28 +21,6 @@
 	<script type="text/x-handlebars" data-template-name="tmpAccident_Claims">
 		  @Html.Partial("Accidents/tmpAccident_Claims")
 	</script>
-
-	<script type="text/x-handlebars" data-template-name="tmpDriverRow">
-		  @Html.Partial("Lists/tmpDriverRow")
-	</script>
-	<script type="text/x-handlebars" data-template-name="tmpVehicleRow">
-		  @Html.Partial("Lists/tmpVehicleRow")
-	</script>
-	<script type="text/x-handlebars" data-template-name="tmpInsPolicyRow">
-		  @Html.Partial("Lists/tmpInsPolicyRow")
-	</script>
-	<script type="text/x-handlebars" data-template-name="tmpAllDrivers">
-		  @Html.Partial("Lists/tmpAllDrivers")
-	</script>
-	<script type="text/x-handlebars" data-template-name="tmpAllInsPolicies">
-		  @Html.Partial("Lists/tmpAllInsPolicies")
-	</script>
-	<script type="text/x-handlebars" data-template-name="tmpAllVehicles">
-		  @Html.Partial("Lists/tmpAllVehicles")
-	</script>	
-	<script type="text/x-handlebars" data-template-name="tmpListsTop">
-		  @Html.Partial("Lists/tmpListsTop")
-	</script>
 	<script type="text/x-handlebars" data-template-name="tmpNavbar">
 	  <ul id="ulMainMenu">
 		 <li><a class="notactive" {{action viewAccidents}}>ĮVYKIAI</a></li>
@@ -53,7 +31,6 @@
 		 <li style="float:right;"><a class="notactive" {{action viewAdmin}}>ADMINISTRAVIMAS</a></li>
 	  </ul>
 	</script>
-	@* {{outlet}}*@
 	<script type="text/x-handlebars" data-template-name="tmpApplication">
   {{view App.NavbarView controllerBinding="controller.controllers.navbarController"}}	 
 <div class="colmask hidden" id="tabAccidents">
@@ -63,7 +40,6 @@
 	</div>
 	<div class="content hidden" id="divAccidentEdit">divAccidentEdit</div>
 </div>
-
 <div class="content hidden" id="tabClaims">tmpClaims!</div>
 <div class="content hidden" id="tabMap">tmpMap!</div>
 <div class="content hidden" id="tabReports">tmpReports!</div>

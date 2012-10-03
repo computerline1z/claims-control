@@ -1,6 +1,6 @@
 ﻿<div class="cont">
 	<div class="right medium w35pr">
-	<div id="cont">{{view App.SearchField context="insPolicies"}}</div>
+	<div id="cont">{{view App.SearchField controller="listAllController"}}</div>
 	</div>
 </div>
 <h2 style="margin:0 20px;">Draudimo polisų sąrašas</h2><a {{action toTop}} href="#">(Atgal į naujausius įrašus sąrašuose)</a>
@@ -11,8 +11,14 @@
 </div>
 <table class="zebra-striped">
 	<thead><tr><th>Draudimo rūšis</th><th>Draudimo kompanija</th><th>Sutarties Nr</th><th>Pabaigos data</th><th>Draudėjas</th></tr></thead><tbody>
-	{{#each "App.listAllController.insPolicies"}}
-		{{view App.InsPolicyView}}
+	{{#each "App.listAllController.content"}}
+		{{#if this.visible}}
+		{{#if this.iD}}
+@*		{{#compare "this.iD" ">" "0"  }}
+*@			{{view App.InsPolicyView}}
+		@*{{/compare}}*@
+		{{/if}}
+		{{/if}}
 	{{/each}}
 </tbody></table>
 <div class="cont">
