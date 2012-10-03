@@ -63,5 +63,7 @@ table.zebra-striped
 	tr th {font-weight: bold; background-color: @systemBlueLight;border-bottom: 4px solid @grayLighter; padding: 8px 8px 7px; text-align:left;}
 	tr td {border-bottom: 4px solid @grayLighter; padding: 8px 8px 7px;}
 	tr:nth-child(odd) {background-color: @grayUltraLight;}		
-	tr:hover { background-color: @grayLight; color:@white; }
+	tbody tr:hover { background-color: @grayLight; color:@white; }
+	th.clickable:hover { background-color: darken(@systemBlueLight, 10%); color:@white; }
+	th.clickable:hover span.ui-tblHead-icon { background-image: url(images_ui/ui-icons_2e83ff_256x240.png) !important; }
 }

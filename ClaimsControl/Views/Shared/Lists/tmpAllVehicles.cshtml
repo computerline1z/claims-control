@@ -1,18 +1,26 @@
 ﻿<div class="cont">
 	<div class="right medium w35pr">
-	<div id="cont">{{view App.SearchField context="vehicles"}}</div>
+	<div id="cont">{{view App.SearchField controller="listAllController"}}</div>
 	</div>
 </div>
 <h2 style="margin:0 20px;">Transporto priemonių sąrašas</h2><a {{action toTop}} href="#">(Atgal į naujausius įrašus sąrašuose)</a>
+<div class="ui-tabs"><ul class='ulWhiteMenu ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header'>
+	<li class="ui-state-default ui-corner-top"><a href="#" {{action filterWorking target="App.listAllController"}}>
+		<span>Naudojamos</span></a></li>
+	<li class="ui-state-default ui-corner-top"><a href="#" {{action filterNotWorking target="App.listAllController"}}>
+		<span>Nebenaudojamos</span></a></li>
+</ul></div>
 <div class="cont">
 	<div class="right medium w15pr" data-ctrl='{"source":"proc_Vehicles","controller":"listAllController","emObject":"vehicles"}'>
 	<button class="btn small" {{action addNew target="App.listAllController"}}>Pridėti naują</button>
 	</div>
 </div>
 <table class="zebra-striped">
-	<thead><tr><th>Registracijos Nr.</th><th>Tipas</th><th>Markė</th><th>Modelis</th><th>Gamybos metai</th><th>Ekspl. pabaigos metai</th><th>Dokumentai</th></tr></thead><tbody>
-	{{#each "App.listAllController.vehicles"}}
-		{{view App.VehicleView}}
+	<thead><tr><th>Registracijos Nr.</th><th>Tipas</th><th>Markė</th><th>Modelis</th><th>Metai</th><th>Dokumentai</th></tr></thead><tbody>
+	{{#each "App.listAllController.content"}}
+		{{#if this.visible}}
+			{{view App.VehicleView}}
+		{{/if}}
 	{{/each}}
 </tbody></table>
 <div class="cont">

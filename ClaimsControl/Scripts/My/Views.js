@@ -116,6 +116,8 @@ App.SearchField = Ember.View.extend({
 				}
 			});
 		}
+		controller = this.get("controller");
+		if (controller) {App[controller].set("filterValue",f.toLowerCase());}
 	}
 })
 App.AccidentViewObj = Em.View.extend({

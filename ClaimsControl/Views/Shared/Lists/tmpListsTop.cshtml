@@ -7,19 +7,19 @@
 		{{view App.DriverView}}
 	{{/each}}
 	</tbody></table>
-	<div class="right medium" data-ctrl='{"goTo":"allDrivers","source":"proc_Drivers","controller":"topNewController","emObject":"drivers"}'><a class="medium" {{action toListAll}} href="#">Peržiūrėti pilną sąrašą</a><button class="btn small" {{action addNew target="App.listAllController"}}>Pridėti naują</button></div>
+	<div class="right medium" data-ctrl='{"goTo":"allDrivers","source":"proc_Drivers","controller":"topNewController","emObject":"drivers","filterCols":["firstName","lastName","phone"]}'><a class="medium" {{action toListAll}} href="#">Peržiūrėti pilną sąrašą</a><button class="btn small" {{action addNew target="App.listAllController"}}>Pridėti naują</button></div>
 </div>
 <hr />
 
 <h3>Transporto priemonės</h3>
 <div class="cont" id="topNewVehicles">
 	<table class="zebra-striped">
-	<thead><tr><th>Registracijos Nr.</th><th>Tipas</th><th>Markė</th><th>Modelis</th><th>Gamybos metai</th><th>Ekspl. pabaigos metai</th><th>Dokumentai</th></tr></thead><tbody>
+	<thead><tr><th>Registracijos Nr.</th><th>Tipas</th><th>Markė</th><th>Modelis</th><th>Metai</th><th>Dokumentai</th></tr></thead><tbody>
 	{{#each "App.topNewController.vehicles"}}
 		{{view App.VehicleView}}
 	{{/each}}
 	</tbody></table>
-	<div class="right medium" data-ctrl='{"goTo":"allVehicles","source":"proc_Vehicles","controller":"topNewController","emObject":"vehicles"}'><a class="medium" {{action toListAll}} href="#">Peržiūrėti pilną sąrašą</a><button class="btn small" {{action addNew target="App.listAllController"}}>Pridėti naują</button></div>
+	<div class="right medium" data-ctrl='{"goTo":"allVehicles","source":"proc_Vehicles","controller":"topNewController","emObject":"vehicles","filterCols":["model","plate","type","make"]}'><a class="medium" {{action toListAll}} href="#">Peržiūrėti pilną sąrašą</a><button class="btn small" {{action addNew target="App.listAllController"}}>Pridėti naują</button></div>
 </div>
 <hr />
 
@@ -28,8 +28,10 @@
 	<table class="zebra-striped">
 	<thead><tr><th>Draudimo rūšis</th><th>Draudimo kompanija</th><th>Sutarties Nr</th><th>Pabaigos data</th><th>Draudėjas</th></tr></thead><tbody>
 	{{#each "App.topNewController.insPolicies"}}
+	{{#if this.iD}}
 		{{view App.InsPolicyView}}
+	{{/if}}
 	{{/each}}
 	</tbody></table>
-	<div class="right medium" data-ctrl='{"goTo":"allInsPolicies","source":"proc_InsPolicies","controller":"topNewController","emObject":"insPolicies"}'><a class="medium" {{action toListAll}} href="#">Peržiūrėti pilną sąrašą</a><button class="btn small" {{action addNew target="App.listAllController"}}>Pridėti naują</button></div>
+	<div class="right medium" data-ctrl='{"goTo":"allInsPolicies","source":"proc_InsPolicies","controller":"topNewController","emObject":"insPolicies","filterCols":["claimType","policyNumber","insuredName","insurerName"]}'><a class="medium" {{action toListAll}} href="#">Peržiūrėti pilną sąrašą</a><button class="btn small" {{action addNew target="App.listAllController"}}>Pridėti naują</button></div>
 </div>

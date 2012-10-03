@@ -451,6 +451,8 @@ oGLOBAL.date = {
 		return new Date(DateRegexResult[2] + "/" + DateRegexResult[3] + "/" + DateRegexResult[1]);
 	},
 	firstBigger: function (date1, date2) {
+		if (arguments.length===1){date2=this.getTodayString();}
+		//console.log(this.getDate(date1));console.log(this.getDate(date2));
 		return this.getDate(date1) > this.getDate(date2);
 	},
 	checkFormat: function () {

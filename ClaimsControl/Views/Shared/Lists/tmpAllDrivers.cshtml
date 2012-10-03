@@ -1,18 +1,29 @@
 ﻿<div class="cont">
 	<div class="right medium w35pr">
-	<div id="cont">{{view App.SearchField context="drivers"}}</div>
+	<div>{{view App.SearchField controller="listAllController"}}</div>
 	</div>
 </div>
 <h2 style="margin:0 20px;">Vairuotojų sąrašas</h2><a {{action toTop}} href="#">(Atgal į naujausius įrašus sąrašuose)</a>
+
+<div class="ui-tabs"><ul class='ulWhiteMenu ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header'>
+	<li class="ui-state-default ui-corner-top"><a href="#" {{action filterWorking target="App.listAllController"}}>
+		<span>Dirbantys</span></a></li>
+	<li class="ui-state-default ui-corner-top"><a href="#" {{action filterNotWorking target="App.listAllController"}}>
+		<span>Nedirbantys</span></a></li>
+</ul></div>
 <div class="cont">
 	<div class="right medium w15pr" data-ctrl='{"source":"proc_Drivers","controller":"listAllController","emObject":"drivers"}'>
 	<button class="btn small" {{action addNew target="App.listAllController"}}>Pridėti naują</button>
 	</div>
 </div>
 <table class="zebra-striped">
-	<thead><tr><th>Vardas</th><th>Pavardė</th><th>Vairavimo stažas</th><th>Kategorijos</th><th>Kontaktas</th><th>Dokumentai</th></tr></thead><tbody>
-	{{#each "App.listAllController.drivers"}}
-		{{view App.DriverView}}
+	<thead><tr><th>Vardas</th><th>Pavardė</th><th>Vairavimo stažas</th>
+	<th>Kategorijos</th><th>Kontaktas</th><th>Dokumentai</th></tr></thead><tbody>
+	{{#each "App.listAllController.content"}}
+@*		{{log this.visible}}
+*@		{{#if this.visible}}
+			{{view App.DriverView}}
+		{{/if}}
 	{{/each}}
 </tbody></table>
 <div class="cont">

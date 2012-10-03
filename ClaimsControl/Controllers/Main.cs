@@ -41,15 +41,18 @@ namespace ClaimsControl.Controllers {
 						tblInsurers = acc.GetJSON_tblInsurers(),
 						tblVehicleMakes = acc.GetJSON_tblVehicleMakes(),
 						tblVehicleTypes = acc.GetJSON_tblVehicleTypes(),
-						tblClaims = acc.GetJSON_tblClaims()
+						tblClaims = acc.GetJSON_tblClaims(),
+						tblUsers = acc.GetJSON_tblUsers()
 					},
 					templates = new {
 						tmpClaimEdit = RenderPartialViewToString("Accidents/tmpClaimEdit"),
-						tmpDriverRow = RenderPartialViewToString("Lists/tmpDriverRow")
-						//tmpClaimEdit = RenderPartialViewToString("tmpClaimEdit")
-						//tmpClaimEdit = RenderPartialViewToString("tmpClaimEdit")
-						//tmpClaimEdit = RenderPartialViewToString("tmpClaimEdit")
-
+						tmpDriverRow = RenderPartialViewToString("Lists/tmpDriverRow"),
+						tmpVehicleRow = RenderPartialViewToString("Lists/tmpVehicleRow"),
+						tmpInsPolicyRow = RenderPartialViewToString("Lists/tmpInsPolicyRow"),
+						tmpAllDrivers = RenderPartialViewToString("Lists/tmpAllDrivers"),
+						tmpAllVehicles = RenderPartialViewToString("Lists/tmpAllVehicles"),
+						tmpAllInsPolicies = RenderPartialViewToString("Lists/tmpAllInsPolicies"),
+						tmpListsTop = RenderPartialViewToString("Lists/tmpListsTop")
 						}
 				}
 
