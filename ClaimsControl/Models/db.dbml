@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="ClaimsControl" Class="dbDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=sauliusb\sqlexpress;Initial Catalog=ClaimsControl;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="ClaimsControlConnectionString1" Provider="System.Data.SqlClient" />
+  <Connection Mode="WebSettings" ConnectionString="Data Source=localhost;Initial Catalog=ClaimsControl;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="ClaimsControlConnectionString2" Provider="System.Data.SqlClient" />
   <Table Name="dbo.tblAccidentsTypes" Member="tblAccidentsTypes">
     <Type Name="tblAccidentsType">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -258,26 +258,9 @@
       <Column Name="DocGroupID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="AccountID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Association Name="tblDocType_tblDoc" Member="tblDocs" ThisKey="ID" OtherKey="DocTypeID" Type="tblDoc" />
       <Association Name="tblDocType_tblInsPolicyDoc" Member="tblInsPolicyDocs" ThisKey="ID" OtherKey="DocTypeID" Type="tblInsPolicyDoc" />
+      <Association Name="tblDocType_tblDoc" Member="tblDocs" ThisKey="ID" OtherKey="DocTypeID" Type="tblDoc" />
       <Association Name="tblDocGroup_tblDocType" Member="tblDocGroup" ThisKey="DocGroupID" OtherKey="ID" Type="tblDocGroup" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.tblDocs" Member="tblDocs">
-    <Type Name="tblDoc">
-      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="DocName" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
-      <Column Name="FileName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
-      <Column Name="FileType" Type="System.String" DbType="VarChar(5) NOT NULL" CanBeNull="false" />
-      <Column Name="FileDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
-      <Column Name="FileSize" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="UserID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="DocTypeID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="RefID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="SortNo" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
-      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Association Name="tblDocType_tblDoc" Member="tblDocType" ThisKey="DocTypeID" OtherKey="ID" Type="tblDocType" IsForeignKey="true" />
-      <Association Name="tblUser_tblDoc" Member="tblUser" ThisKey="UserID" OtherKey="ID" Type="tblUser" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.tblInsPolicyDocs" Member="tblInsPolicyDocs">
@@ -361,8 +344,8 @@
       <Column Name="Comment" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
       <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Association Name="tblUser_tblUsersActivities_Update" Member="tblUsersActivities_Updates" ThisKey="ID" OtherKey="UserID" Type="tblUsersActivities_Update" />
-      <Association Name="tblUser_tblDoc" Member="tblDocs" ThisKey="ID" OtherKey="UserID" Type="tblDoc" />
       <Association Name="tblUser_tblInsPolicy" Member="tblInsPolicies" ThisKey="ID" OtherKey="InsuredContactID" Type="tblInsPolicy" />
+      <Association Name="tblUser_tblDoc" Member="tblDocs" ThisKey="ID" OtherKey="UserID" Type="tblDoc" />
       <Association Name="tblAccount_tblUser" Member="tblAccount" ThisKey="AccountID" OtherKey="ID" Type="tblAccount" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="tblLanguage_tblUser" Member="tblLanguage" ThisKey="LanguageID" OtherKey="ID" Type="tblLanguage" IsForeignKey="true" />
       <Association Name="tblUsers_RolesGroup_tblUser" Member="tblUsers_RolesGroup" ThisKey="RoleGroupID" OtherKey="ID" Type="tblUsers_RolesGroup" IsForeignKey="true" />
@@ -375,6 +358,28 @@
       <Column Name="RoleID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Controler" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
       <Column Name="OrderNo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tblDocs" Member="tblDocs">
+    <Type Name="tblDoc">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="DocName" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="FileName" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="FileType" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
+      <Column Name="FileDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="FileSize" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UserID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DocTypeID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RefID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SortNo" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Icon" Type="System.Data.Linq.Binary" DbType="Image" CanBeNull="true" />
+      <Column Name="IsPublic" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Version" Type="System.Data.Linq.Binary" DbType="rowversion NOT NULL" CanBeNull="false" IsVersion="true" />
+      <Association Name="tblDoc_tblDoc" Member="tblDocs" ThisKey="ID" OtherKey="RefID" Type="tblDoc" />
+      <Association Name="tblDoc_tblDoc" Member="tblDoc1" ThisKey="RefID" OtherKey="ID" Type="tblDoc" IsForeignKey="true" />
+      <Association Name="tblDocType_tblDoc" Member="tblDocType" ThisKey="DocTypeID" OtherKey="ID" Type="tblDocType" IsForeignKey="true" />
+      <Association Name="tblUser_tblDoc" Member="tblUser" ThisKey="UserID" OtherKey="ID" Type="tblUser" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="dbo.proc_Accidents" Method="proc_Accidents">
