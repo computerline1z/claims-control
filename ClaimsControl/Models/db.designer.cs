@@ -99,6 +99,9 @@ namespace CC.Models
     partial void InserttblDocType(tblDocType instance);
     partial void UpdatetblDocType(tblDocType instance);
     partial void DeletetblDocType(tblDocType instance);
+    partial void InserttblDoc(tblDoc instance);
+    partial void UpdatetblDoc(tblDoc instance);
+    partial void DeletetblDoc(tblDoc instance);
     partial void InserttblInsPolicyDoc(tblInsPolicyDoc instance);
     partial void UpdatetblInsPolicyDoc(tblInsPolicyDoc instance);
     partial void DeletetblInsPolicyDoc(tblInsPolicyDoc instance);
@@ -120,13 +123,10 @@ namespace CC.Models
     partial void InserttblAction_Tab(tblAction_Tab instance);
     partial void UpdatetblAction_Tab(tblAction_Tab instance);
     partial void DeletetblAction_Tab(tblAction_Tab instance);
-    partial void InserttblDoc(tblDoc instance);
-    partial void UpdatetblDoc(tblDoc instance);
-    partial void DeletetblDoc(tblDoc instance);
     #endregion
 		
 		public dbDataContext() : 
-				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["ClaimsControlConnectionString2"].ConnectionString, mappingSource)
+				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["ClaimsControlConnectionString1"].ConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
@@ -339,6 +339,14 @@ namespace CC.Models
 			}
 		}
 		
+		public System.Data.Linq.Table<tblDoc> tblDocs
+		{
+			get
+			{
+				return this.GetTable<tblDoc>();
+			}
+		}
+		
 		public System.Data.Linq.Table<tblInsPolicyDoc> tblInsPolicyDocs
 		{
 			get
@@ -392,14 +400,6 @@ namespace CC.Models
 			get
 			{
 				return this.GetTable<tblAction_Tab>();
-			}
-		}
-		
-		public System.Data.Linq.Table<tblDoc> tblDocs
-		{
-			get
-			{
-				return this.GetTable<tblDoc>();
 			}
 		}
 		
@@ -5657,9 +5657,9 @@ namespace CC.Models
 		
 		private bool _IsDeleted;
 		
-		private EntitySet<tblInsPolicyDoc> _tblInsPolicyDocs;
-		
 		private EntitySet<tblDoc> _tblDocs;
+		
+		private EntitySet<tblInsPolicyDoc> _tblInsPolicyDocs;
 		
 		private EntityRef<tblDocGroup> _tblDocGroup;
 		
@@ -5681,8 +5681,8 @@ namespace CC.Models
 		
 		public tblDocType()
 		{
-			this._tblInsPolicyDocs = new EntitySet<tblInsPolicyDoc>(new Action<tblInsPolicyDoc>(this.attach_tblInsPolicyDocs), new Action<tblInsPolicyDoc>(this.detach_tblInsPolicyDocs));
 			this._tblDocs = new EntitySet<tblDoc>(new Action<tblDoc>(this.attach_tblDocs), new Action<tblDoc>(this.detach_tblDocs));
+			this._tblInsPolicyDocs = new EntitySet<tblInsPolicyDoc>(new Action<tblInsPolicyDoc>(this.attach_tblInsPolicyDocs), new Action<tblInsPolicyDoc>(this.detach_tblInsPolicyDocs));
 			this._tblDocGroup = default(EntityRef<tblDocGroup>);
 			OnCreated();
 		}
@@ -5791,19 +5791,6 @@ namespace CC.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblDocType_tblInsPolicyDoc", Storage="_tblInsPolicyDocs", ThisKey="ID", OtherKey="DocTypeID")]
-		public EntitySet<tblInsPolicyDoc> tblInsPolicyDocs
-		{
-			get
-			{
-				return this._tblInsPolicyDocs;
-			}
-			set
-			{
-				this._tblInsPolicyDocs.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblDocType_tblDoc", Storage="_tblDocs", ThisKey="ID", OtherKey="DocTypeID")]
 		public EntitySet<tblDoc> tblDocs
 		{
@@ -5814,6 +5801,19 @@ namespace CC.Models
 			set
 			{
 				this._tblDocs.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblDocType_tblInsPolicyDoc", Storage="_tblInsPolicyDocs", ThisKey="ID", OtherKey="DocTypeID")]
+		public EntitySet<tblInsPolicyDoc> tblInsPolicyDocs
+		{
+			get
+			{
+				return this._tblInsPolicyDocs;
+			}
+			set
+			{
+				this._tblInsPolicyDocs.Assign(value);
 			}
 		}
 		
@@ -5871,6 +5871,18 @@ namespace CC.Models
 			}
 		}
 		
+		private void attach_tblDocs(tblDoc entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblDocType = this;
+		}
+		
+		private void detach_tblDocs(tblDoc entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblDocType = null;
+		}
+		
 		private void attach_tblInsPolicyDocs(tblInsPolicyDoc entity)
 		{
 			this.SendPropertyChanging();
@@ -5882,17 +5894,389 @@ namespace CC.Models
 			this.SendPropertyChanging();
 			entity.tblDocType = null;
 		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tblDocs")]
+	public partial class tblDoc : INotifyPropertyChanging, INotifyPropertyChanged
+	{
 		
-		private void attach_tblDocs(tblDoc entity)
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _DocName;
+		
+		private string _FileName;
+		
+		private string _FileType;
+		
+		private System.DateTime _FileDate;
+		
+		private int _FileSize;
+		
+		private int _UserID;
+		
+		private int _DocTypeID;
+		
+		private int _RefID;
+		
+		private short _SortNo;
+		
+		private bool _IsDeleted;
+		
+		private EntityRef<tblDocType> _tblDocType;
+		
+		private EntityRef<tblUser> _tblUser;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnDocNameChanging(string value);
+    partial void OnDocNameChanged();
+    partial void OnFileNameChanging(string value);
+    partial void OnFileNameChanged();
+    partial void OnFileTypeChanging(string value);
+    partial void OnFileTypeChanged();
+    partial void OnFileDateChanging(System.DateTime value);
+    partial void OnFileDateChanged();
+    partial void OnFileSizeChanging(int value);
+    partial void OnFileSizeChanged();
+    partial void OnUserIDChanging(int value);
+    partial void OnUserIDChanged();
+    partial void OnDocTypeIDChanging(int value);
+    partial void OnDocTypeIDChanged();
+    partial void OnRefIDChanging(int value);
+    partial void OnRefIDChanged();
+    partial void OnSortNoChanging(short value);
+    partial void OnSortNoChanged();
+    partial void OnIsDeletedChanging(bool value);
+    partial void OnIsDeletedChanged();
+    #endregion
+		
+		public tblDoc()
 		{
-			this.SendPropertyChanging();
-			entity.tblDocType = this;
+			this._tblDocType = default(EntityRef<tblDocType>);
+			this._tblUser = default(EntityRef<tblUser>);
+			OnCreated();
 		}
 		
-		private void detach_tblDocs(tblDoc entity)
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
 		{
-			this.SendPropertyChanging();
-			entity.tblDocType = null;
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DocName", DbType="NVarChar(100)")]
+		public string DocName
+		{
+			get
+			{
+				return this._DocName;
+			}
+			set
+			{
+				if ((this._DocName != value))
+				{
+					this.OnDocNameChanging(value);
+					this.SendPropertyChanging();
+					this._DocName = value;
+					this.SendPropertyChanged("DocName");
+					this.OnDocNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FileName", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string FileName
+		{
+			get
+			{
+				return this._FileName;
+			}
+			set
+			{
+				if ((this._FileName != value))
+				{
+					this.OnFileNameChanging(value);
+					this.SendPropertyChanging();
+					this._FileName = value;
+					this.SendPropertyChanged("FileName");
+					this.OnFileNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FileType", DbType="VarChar(5) NOT NULL", CanBeNull=false)]
+		public string FileType
+		{
+			get
+			{
+				return this._FileType;
+			}
+			set
+			{
+				if ((this._FileType != value))
+				{
+					this.OnFileTypeChanging(value);
+					this.SendPropertyChanging();
+					this._FileType = value;
+					this.SendPropertyChanged("FileType");
+					this.OnFileTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FileDate", DbType="Date NOT NULL")]
+		public System.DateTime FileDate
+		{
+			get
+			{
+				return this._FileDate;
+			}
+			set
+			{
+				if ((this._FileDate != value))
+				{
+					this.OnFileDateChanging(value);
+					this.SendPropertyChanging();
+					this._FileDate = value;
+					this.SendPropertyChanged("FileDate");
+					this.OnFileDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FileSize", DbType="Int NOT NULL")]
+		public int FileSize
+		{
+			get
+			{
+				return this._FileSize;
+			}
+			set
+			{
+				if ((this._FileSize != value))
+				{
+					this.OnFileSizeChanging(value);
+					this.SendPropertyChanging();
+					this._FileSize = value;
+					this.SendPropertyChanged("FileSize");
+					this.OnFileSizeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserID", DbType="Int NOT NULL")]
+		public int UserID
+		{
+			get
+			{
+				return this._UserID;
+			}
+			set
+			{
+				if ((this._UserID != value))
+				{
+					if (this._tblUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUserIDChanging(value);
+					this.SendPropertyChanging();
+					this._UserID = value;
+					this.SendPropertyChanged("UserID");
+					this.OnUserIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DocTypeID", DbType="Int NOT NULL")]
+		public int DocTypeID
+		{
+			get
+			{
+				return this._DocTypeID;
+			}
+			set
+			{
+				if ((this._DocTypeID != value))
+				{
+					if (this._tblDocType.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnDocTypeIDChanging(value);
+					this.SendPropertyChanging();
+					this._DocTypeID = value;
+					this.SendPropertyChanged("DocTypeID");
+					this.OnDocTypeIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RefID", DbType="Int NOT NULL")]
+		public int RefID
+		{
+			get
+			{
+				return this._RefID;
+			}
+			set
+			{
+				if ((this._RefID != value))
+				{
+					this.OnRefIDChanging(value);
+					this.SendPropertyChanging();
+					this._RefID = value;
+					this.SendPropertyChanged("RefID");
+					this.OnRefIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SortNo", DbType="SmallInt NOT NULL")]
+		public short SortNo
+		{
+			get
+			{
+				return this._SortNo;
+			}
+			set
+			{
+				if ((this._SortNo != value))
+				{
+					this.OnSortNoChanging(value);
+					this.SendPropertyChanging();
+					this._SortNo = value;
+					this.SendPropertyChanged("SortNo");
+					this.OnSortNoChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsDeleted", DbType="Bit NOT NULL")]
+		public bool IsDeleted
+		{
+			get
+			{
+				return this._IsDeleted;
+			}
+			set
+			{
+				if ((this._IsDeleted != value))
+				{
+					this.OnIsDeletedChanging(value);
+					this.SendPropertyChanging();
+					this._IsDeleted = value;
+					this.SendPropertyChanged("IsDeleted");
+					this.OnIsDeletedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblDocType_tblDoc", Storage="_tblDocType", ThisKey="DocTypeID", OtherKey="ID", IsForeignKey=true)]
+		public tblDocType tblDocType
+		{
+			get
+			{
+				return this._tblDocType.Entity;
+			}
+			set
+			{
+				tblDocType previousValue = this._tblDocType.Entity;
+				if (((previousValue != value) 
+							|| (this._tblDocType.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._tblDocType.Entity = null;
+						previousValue.tblDocs.Remove(this);
+					}
+					this._tblDocType.Entity = value;
+					if ((value != null))
+					{
+						value.tblDocs.Add(this);
+						this._DocTypeID = value.ID;
+					}
+					else
+					{
+						this._DocTypeID = default(int);
+					}
+					this.SendPropertyChanged("tblDocType");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblUser_tblDoc", Storage="_tblUser", ThisKey="UserID", OtherKey="ID", IsForeignKey=true)]
+		public tblUser tblUser
+		{
+			get
+			{
+				return this._tblUser.Entity;
+			}
+			set
+			{
+				tblUser previousValue = this._tblUser.Entity;
+				if (((previousValue != value) 
+							|| (this._tblUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._tblUser.Entity = null;
+						previousValue.tblDocs.Remove(this);
+					}
+					this._tblUser.Entity = value;
+					if ((value != null))
+					{
+						value.tblDocs.Add(this);
+						this._UserID = value.ID;
+					}
+					else
+					{
+						this._UserID = default(int);
+					}
+					this.SendPropertyChanged("tblUser");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
 	}
 	
@@ -7229,9 +7613,9 @@ namespace CC.Models
 		
 		private EntitySet<tblUsersActivities_Update> _tblUsersActivities_Updates;
 		
-		private EntitySet<tblInsPolicy> _tblInsPolicies;
-		
 		private EntitySet<tblDoc> _tblDocs;
+		
+		private EntitySet<tblInsPolicy> _tblInsPolicies;
 		
 		private EntityRef<tblAccount> _tblAccount;
 		
@@ -7284,8 +7668,8 @@ namespace CC.Models
 		public tblUser()
 		{
 			this._tblUsersActivities_Updates = new EntitySet<tblUsersActivities_Update>(new Action<tblUsersActivities_Update>(this.attach_tblUsersActivities_Updates), new Action<tblUsersActivities_Update>(this.detach_tblUsersActivities_Updates));
-			this._tblInsPolicies = new EntitySet<tblInsPolicy>(new Action<tblInsPolicy>(this.attach_tblInsPolicies), new Action<tblInsPolicy>(this.detach_tblInsPolicies));
 			this._tblDocs = new EntitySet<tblDoc>(new Action<tblDoc>(this.attach_tblDocs), new Action<tblDoc>(this.detach_tblDocs));
+			this._tblInsPolicies = new EntitySet<tblInsPolicy>(new Action<tblInsPolicy>(this.attach_tblInsPolicies), new Action<tblInsPolicy>(this.detach_tblInsPolicies));
 			this._tblAccount = default(EntityRef<tblAccount>);
 			this._tblLanguage = default(EntityRef<tblLanguage>);
 			this._tblUsers_RolesGroup = default(EntityRef<tblUsers_RolesGroup>);
@@ -7677,19 +8061,6 @@ namespace CC.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblUser_tblInsPolicy", Storage="_tblInsPolicies", ThisKey="ID", OtherKey="InsuredContactID")]
-		public EntitySet<tblInsPolicy> tblInsPolicies
-		{
-			get
-			{
-				return this._tblInsPolicies;
-			}
-			set
-			{
-				this._tblInsPolicies.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblUser_tblDoc", Storage="_tblDocs", ThisKey="ID", OtherKey="UserID")]
 		public EntitySet<tblDoc> tblDocs
 		{
@@ -7700,6 +8071,19 @@ namespace CC.Models
 			set
 			{
 				this._tblDocs.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblUser_tblInsPolicy", Storage="_tblInsPolicies", ThisKey="ID", OtherKey="InsuredContactID")]
+		public EntitySet<tblInsPolicy> tblInsPolicies
+		{
+			get
+			{
+				return this._tblInsPolicies;
+			}
+			set
+			{
+				this._tblInsPolicies.Assign(value);
 			}
 		}
 		
@@ -7837,18 +8221,6 @@ namespace CC.Models
 			entity.tblUser = null;
 		}
 		
-		private void attach_tblInsPolicies(tblInsPolicy entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblUser = this;
-		}
-		
-		private void detach_tblInsPolicies(tblInsPolicy entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblUser = null;
-		}
-		
 		private void attach_tblDocs(tblDoc entity)
 		{
 			this.SendPropertyChanging();
@@ -7856,6 +8228,18 @@ namespace CC.Models
 		}
 		
 		private void detach_tblDocs(tblDoc entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblUser = null;
+		}
+		
+		private void attach_tblInsPolicies(tblInsPolicy entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblUser = this;
+		}
+		
+		private void detach_tblInsPolicies(tblInsPolicy entity)
 		{
 			this.SendPropertyChanging();
 			entity.tblUser = null;
@@ -8017,531 +8401,6 @@ namespace CC.Models
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tblDocs")]
-	public partial class tblDoc : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _ID;
-		
-		private string _DocName;
-		
-		private string _FileName;
-		
-		private string _FileType;
-		
-		private System.DateTime _FileDate;
-		
-		private int _FileSize;
-		
-		private int _UserID;
-		
-		private int _DocTypeID;
-		
-		private System.Nullable<int> _RefID;
-		
-		private short _SortNo;
-		
-		private bool _IsDeleted;
-		
-		private System.Data.Linq.Binary _Icon;
-		
-		private bool _IsPublic;
-		
-		private System.Data.Linq.Binary _Version;
-		
-		private EntitySet<tblDoc> _tblDocs;
-		
-		private EntityRef<tblDoc> _tblDoc1;
-		
-		private EntityRef<tblDocType> _tblDocType;
-		
-		private EntityRef<tblUser> _tblUser;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIDChanging(int value);
-    partial void OnIDChanged();
-    partial void OnDocNameChanging(string value);
-    partial void OnDocNameChanged();
-    partial void OnFileNameChanging(string value);
-    partial void OnFileNameChanged();
-    partial void OnFileTypeChanging(string value);
-    partial void OnFileTypeChanged();
-    partial void OnFileDateChanging(System.DateTime value);
-    partial void OnFileDateChanged();
-    partial void OnFileSizeChanging(int value);
-    partial void OnFileSizeChanged();
-    partial void OnUserIDChanging(int value);
-    partial void OnUserIDChanged();
-    partial void OnDocTypeIDChanging(int value);
-    partial void OnDocTypeIDChanged();
-    partial void OnRefIDChanging(System.Nullable<int> value);
-    partial void OnRefIDChanged();
-    partial void OnSortNoChanging(short value);
-    partial void OnSortNoChanged();
-    partial void OnIsDeletedChanging(bool value);
-    partial void OnIsDeletedChanged();
-    partial void OnIconChanging(System.Data.Linq.Binary value);
-    partial void OnIconChanged();
-    partial void OnIsPublicChanging(bool value);
-    partial void OnIsPublicChanged();
-    partial void OnVersionChanging(System.Data.Linq.Binary value);
-    partial void OnVersionChanged();
-    #endregion
-		
-		public tblDoc()
-		{
-			this._tblDocs = new EntitySet<tblDoc>(new Action<tblDoc>(this.attach_tblDocs), new Action<tblDoc>(this.detach_tblDocs));
-			this._tblDoc1 = default(EntityRef<tblDoc>);
-			this._tblDocType = default(EntityRef<tblDocType>);
-			this._tblUser = default(EntityRef<tblUser>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true, UpdateCheck=UpdateCheck.Never)]
-		public int ID
-		{
-			get
-			{
-				return this._ID;
-			}
-			set
-			{
-				if ((this._ID != value))
-				{
-					this.OnIDChanging(value);
-					this.SendPropertyChanging();
-					this._ID = value;
-					this.SendPropertyChanged("ID");
-					this.OnIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DocName", DbType="NVarChar(100)", UpdateCheck=UpdateCheck.Never)]
-		public string DocName
-		{
-			get
-			{
-				return this._DocName;
-			}
-			set
-			{
-				if ((this._DocName != value))
-				{
-					this.OnDocNameChanging(value);
-					this.SendPropertyChanging();
-					this._DocName = value;
-					this.SendPropertyChanged("DocName");
-					this.OnDocNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FileName", DbType="NVarChar(MAX)", UpdateCheck=UpdateCheck.Never)]
-		public string FileName
-		{
-			get
-			{
-				return this._FileName;
-			}
-			set
-			{
-				if ((this._FileName != value))
-				{
-					this.OnFileNameChanging(value);
-					this.SendPropertyChanging();
-					this._FileName = value;
-					this.SendPropertyChanged("FileName");
-					this.OnFileNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FileType", DbType="NVarChar(128)", UpdateCheck=UpdateCheck.Never)]
-		public string FileType
-		{
-			get
-			{
-				return this._FileType;
-			}
-			set
-			{
-				if ((this._FileType != value))
-				{
-					this.OnFileTypeChanging(value);
-					this.SendPropertyChanging();
-					this._FileType = value;
-					this.SendPropertyChanged("FileType");
-					this.OnFileTypeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FileDate", DbType="Date NOT NULL", UpdateCheck=UpdateCheck.Never)]
-		public System.DateTime FileDate
-		{
-			get
-			{
-				return this._FileDate;
-			}
-			set
-			{
-				if ((this._FileDate != value))
-				{
-					this.OnFileDateChanging(value);
-					this.SendPropertyChanging();
-					this._FileDate = value;
-					this.SendPropertyChanged("FileDate");
-					this.OnFileDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FileSize", DbType="Int NOT NULL", UpdateCheck=UpdateCheck.Never)]
-		public int FileSize
-		{
-			get
-			{
-				return this._FileSize;
-			}
-			set
-			{
-				if ((this._FileSize != value))
-				{
-					this.OnFileSizeChanging(value);
-					this.SendPropertyChanging();
-					this._FileSize = value;
-					this.SendPropertyChanged("FileSize");
-					this.OnFileSizeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserID", DbType="Int NOT NULL", UpdateCheck=UpdateCheck.Never)]
-		public int UserID
-		{
-			get
-			{
-				return this._UserID;
-			}
-			set
-			{
-				if ((this._UserID != value))
-				{
-					if (this._tblUser.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnUserIDChanging(value);
-					this.SendPropertyChanging();
-					this._UserID = value;
-					this.SendPropertyChanged("UserID");
-					this.OnUserIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DocTypeID", DbType="Int NOT NULL", UpdateCheck=UpdateCheck.Never)]
-		public int DocTypeID
-		{
-			get
-			{
-				return this._DocTypeID;
-			}
-			set
-			{
-				if ((this._DocTypeID != value))
-				{
-					if (this._tblDocType.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnDocTypeIDChanging(value);
-					this.SendPropertyChanging();
-					this._DocTypeID = value;
-					this.SendPropertyChanged("DocTypeID");
-					this.OnDocTypeIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RefID", DbType="Int", UpdateCheck=UpdateCheck.Never)]
-		public System.Nullable<int> RefID
-		{
-			get
-			{
-				return this._RefID;
-			}
-			set
-			{
-				if ((this._RefID != value))
-				{
-					if (this._tblDoc1.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnRefIDChanging(value);
-					this.SendPropertyChanging();
-					this._RefID = value;
-					this.SendPropertyChanged("RefID");
-					this.OnRefIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SortNo", DbType="SmallInt NOT NULL", UpdateCheck=UpdateCheck.Never)]
-		public short SortNo
-		{
-			get
-			{
-				return this._SortNo;
-			}
-			set
-			{
-				if ((this._SortNo != value))
-				{
-					this.OnSortNoChanging(value);
-					this.SendPropertyChanging();
-					this._SortNo = value;
-					this.SendPropertyChanged("SortNo");
-					this.OnSortNoChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsDeleted", DbType="Bit NOT NULL", UpdateCheck=UpdateCheck.Never)]
-		public bool IsDeleted
-		{
-			get
-			{
-				return this._IsDeleted;
-			}
-			set
-			{
-				if ((this._IsDeleted != value))
-				{
-					this.OnIsDeletedChanging(value);
-					this.SendPropertyChanging();
-					this._IsDeleted = value;
-					this.SendPropertyChanged("IsDeleted");
-					this.OnIsDeletedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Icon", DbType="Image", UpdateCheck=UpdateCheck.Never)]
-		public System.Data.Linq.Binary Icon
-		{
-			get
-			{
-				return this._Icon;
-			}
-			set
-			{
-				if ((this._Icon != value))
-				{
-					this.OnIconChanging(value);
-					this.SendPropertyChanging();
-					this._Icon = value;
-					this.SendPropertyChanged("Icon");
-					this.OnIconChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsPublic", DbType="Bit NOT NULL", UpdateCheck=UpdateCheck.Never)]
-		public bool IsPublic
-		{
-			get
-			{
-				return this._IsPublic;
-			}
-			set
-			{
-				if ((this._IsPublic != value))
-				{
-					this.OnIsPublicChanging(value);
-					this.SendPropertyChanging();
-					this._IsPublic = value;
-					this.SendPropertyChanged("IsPublic");
-					this.OnIsPublicChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Version", AutoSync=AutoSync.Always, DbType="rowversion NOT NULL", CanBeNull=false, IsDbGenerated=true, IsVersion=true, UpdateCheck=UpdateCheck.Never)]
-		public System.Data.Linq.Binary Version
-		{
-			get
-			{
-				return this._Version;
-			}
-			set
-			{
-				if ((this._Version != value))
-				{
-					this.OnVersionChanging(value);
-					this.SendPropertyChanging();
-					this._Version = value;
-					this.SendPropertyChanged("Version");
-					this.OnVersionChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblDoc_tblDoc", Storage="_tblDocs", ThisKey="ID", OtherKey="RefID")]
-		public EntitySet<tblDoc> tblDocs
-		{
-			get
-			{
-				return this._tblDocs;
-			}
-			set
-			{
-				this._tblDocs.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblDoc_tblDoc", Storage="_tblDoc1", ThisKey="RefID", OtherKey="ID", IsForeignKey=true)]
-		public tblDoc tblDoc1
-		{
-			get
-			{
-				return this._tblDoc1.Entity;
-			}
-			set
-			{
-				tblDoc previousValue = this._tblDoc1.Entity;
-				if (((previousValue != value) 
-							|| (this._tblDoc1.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._tblDoc1.Entity = null;
-						previousValue.tblDocs.Remove(this);
-					}
-					this._tblDoc1.Entity = value;
-					if ((value != null))
-					{
-						value.tblDocs.Add(this);
-						this._RefID = value.ID;
-					}
-					else
-					{
-						this._RefID = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("tblDoc1");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblDocType_tblDoc", Storage="_tblDocType", ThisKey="DocTypeID", OtherKey="ID", IsForeignKey=true)]
-		public tblDocType tblDocType
-		{
-			get
-			{
-				return this._tblDocType.Entity;
-			}
-			set
-			{
-				tblDocType previousValue = this._tblDocType.Entity;
-				if (((previousValue != value) 
-							|| (this._tblDocType.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._tblDocType.Entity = null;
-						previousValue.tblDocs.Remove(this);
-					}
-					this._tblDocType.Entity = value;
-					if ((value != null))
-					{
-						value.tblDocs.Add(this);
-						this._DocTypeID = value.ID;
-					}
-					else
-					{
-						this._DocTypeID = default(int);
-					}
-					this.SendPropertyChanged("tblDocType");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblUser_tblDoc", Storage="_tblUser", ThisKey="UserID", OtherKey="ID", IsForeignKey=true)]
-		public tblUser tblUser
-		{
-			get
-			{
-				return this._tblUser.Entity;
-			}
-			set
-			{
-				tblUser previousValue = this._tblUser.Entity;
-				if (((previousValue != value) 
-							|| (this._tblUser.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._tblUser.Entity = null;
-						previousValue.tblDocs.Remove(this);
-					}
-					this._tblUser.Entity = value;
-					if ((value != null))
-					{
-						value.tblDocs.Add(this);
-						this._UserID = value.ID;
-					}
-					else
-					{
-						this._UserID = default(int);
-					}
-					this.SendPropertyChanged("tblUser");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_tblDocs(tblDoc entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblDoc1 = this;
-		}
-		
-		private void detach_tblDocs(tblDoc entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblDoc1 = null;
 		}
 	}
 	
