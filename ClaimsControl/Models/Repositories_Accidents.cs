@@ -242,7 +242,7 @@ namespace CC.Models {
 				new { FName = "DateExpierence",Type="Date", Default="Today",Validity="require().match('date').lessThanOrEqualTo(new Date())", Plugin = new {datepicker = new {minDate="-25y", maxDate=0}}},//3  "Plugin":{"datepicker":{"minDate":"-3y","maxDate":"0"}}
 				new { FName = "DrivingCategory",Type="String", LenMax=20,Validity="require().nonHtml().maxLength(20)"},//4
 				new { FName = "Phone",Type="Integer", LenMax=20,Validity="require().nonHtml().maxLength(20)"},//5
-				new { FName = "Docs",Type="String"},//6
+				new { FName = "Docs",Type="String", NotEditable=1},//6
 				new { FName = "DateEnd",Type="DateLess", Default="",Validity="match('date').lessThanOrEqualTo(new Date())", Plugin = new {datepicker = new {minDate="-25y", maxDate=0}}},//7
 			}; JSON.Cols = Cols;
          JSON.Config = new { Controler = "Drivers", tblUpdate = "tblDrivers", Msg = new { AddNew = "Pridėti naują vairuotoją", Edit = "Vairuotojo duomenų redagavimas", Delete = "Ištrinti vairuotoją", GenName = "Vairuotojas", GenNameWhat = "vairuotoją", ListName = "Vairuotojų sąrašas" } };
