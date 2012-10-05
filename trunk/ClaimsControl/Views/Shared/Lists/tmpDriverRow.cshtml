@@ -1,9 +1,9 @@
-﻿@*<div class="tr">
+﻿@*<div class="tr"> "view.parentView"  target="App.accidentsController"
 	{{log this}}
 	<div class="td w20pr">{{firstName}}</div><div class="td w20pr">{{lastName}}</div><div class="td w20pr">{{dateExpierence}}</div>
 	<div class="td w15pr">{{drivingCategory}}</div><div class="td w20pr">{{phone}}</div>  
 </div>*@
-<tr>
+<tr  class="clickable" {{action "edit" target="App.listAllController"}}>
 	<td>{{firstName}}</td><td>{{lastName}}</td><td>{{dateExpierence}}</td>
 	<td>{{drivingCategory}}</td><td>{{phone}}</td><td>{{docs}}</td> 
 </tr>

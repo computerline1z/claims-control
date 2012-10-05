@@ -4,10 +4,6 @@ App.ClaimsView = App.mainMenuView.extend({ templateName: 'tmpClaims', viewIx: 1 
 App.MapView = App.mainMenuView.extend({ templateName: 'tmpMap', viewIx: 2 });
 App.ReportsView = App.mainMenuView.extend({ templateName: 'tmpReports', viewIx: 3 });
 
-App.TopListsView = App.mainMenuView.extend({ templateName: 'tmpListsTop', viewIx: 4 });
-App.AllDriversView = App.mainMenuView.extend({ templateName: 'tmpAllDrivers', viewIx: 4 });
-App.AllInsPoliciesView = App.mainMenuView.extend({ templateName: 'tmpAllInsPolicies', viewIx: 4 });
-App.AllVehiclesView = App.mainMenuView.extend({ templateName: 'tmpAllVehicles', viewIx: 4 });
 App.AdminView = App.mainMenuView.extend({ templateName: 'tmpAdmin', viewIx: 5 });
 
 App.Router = Em.Router.extend({
@@ -60,15 +56,20 @@ App.Router = Em.Router.extend({
 			connectOutlets: function (router, context) {
 				MY.NavbarController.fnSetNewTab(router.currentState.name, 4);
 				App.listsStart();
-				router.get('applicationController').connectOutlet('listsOutlet','topLists');
+				oDATA.execWhenLoaded(["tmpAllVehicles"], function (){
+					router.get('applicationController').connectOutlet('listsOutlet','topLists');
+				});			
 				//Ember.run.later({router2:router},function(){
 				//	this.router2.get('applicationController').connectOutlet('listsOutlet','topLists2');
 				//},2000);
 			},
-			toListAll: function (router, context) {			
-				router.get('applicationController').connectOutlet('listsOutlet',$(context.target).parent().data("ctrl").goTo);
+			toListAll: function (router, context) {
+				d=$(context.target).parent().data("ctrl");
+				 App.listAllController.set("current",d);
+				router.get('applicationController').connectOutlet('listsOutlet',d.goTo);
 			},
 			toTop: function (router, context){
+				App.listsStart();//Atnaujinam, jai buvo keista
 				router.get('applicationController').connectOutlet('listsOutlet','topLists');
 			}
 		}),

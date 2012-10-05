@@ -1,17 +1,11 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿<?xml version="1.0" encoding="UTF-8">
+<!DOCTYPE html>
+<html lang="lt-LT">
 <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
 	<title>Žalų valdymo sistema</title>
-	@*	<link href="@Url.Content("~/Content/jquery-ui-1.8.16.custom.css")" rel="stylesheet" type="text/css"/>
-*@ <link href="@Url.Content("~/Content/Bootstrap/main.css")" rel="stylesheet" type="text/css"/>
-	@* 
-	<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css"/>
-	
-
-	<link href="@Url.Content("~/Content/bootstrap.css")" rel="stylesheet" type="text/css"/>
-	 <link href="@Url.Content("~/Content/bootstrap-resp.css")" rel="stylesheet" type="text/css"/>
-		<link href="@Url.Content("~/Content/dataTables.css")" rel="stylesheet" type="text/css"/>
-	 <link href="@Url.Content("~/Content/jquery-ui-1.8.10.custom.css")" rel="stylesheet" type="text/css"/>*@ <link rel="shortcut icon" href="../../Content/images/favicon.ico" type="image/x-icon" />
+	<link href="@Url.Content("~/Content/less/main6.css")" rel="stylesheet" type="text/css"/>
+	 <link rel="shortcut icon" href="../../Content/images/favicon.ico" type="image/x-icon" />
 	<style type="text/css">
 		
 	</style>
@@ -20,35 +14,16 @@
 	<div id="divlogindisplay">
 		@Html.Partial("_LogOnPartial")
 	</div>
-	<script type="text/x-handlebars" data-template-name="tmpAccidentsMain">
-	 <div class="colmask"><div class="colleft">
-		  <div class="col1 content">@Html.Partial("Accidents/tmpAccidentsMain")</div>
-		  <div class="col2 content">Stulpelis šone</div>
-	 </div>	</script>
-	<script type="text/x-handlebars" data-template-name="tmpAccidentRow">
+		@Html.Partial("NotifyViews")
+	<script id="tmpAccidentRowID" type="text/x-handlebars" data-template-name="tmpAccidentRow">
 		@Html.Partial("Accidents/tmpAccidentRow")
 	</script>
 	<script type="text/x-handlebars" data-template-name="tmpAccident_Claims">
 		  @Html.Partial("Accidents/tmpAccident_Claims")
 	</script>
-	<script type="text/x-handlebars" data-template-name="tmpClaims">
-		  <div class="content">tmpClaims!</div>
-	</script>
-	<script type="text/x-handlebars" data-template-name="tmpMap">
-		  <div class="content">tmpMap!</div>
-	</script>
-	<script type="text/x-handlebars" data-template-name="tmpReports">
-		  <div class="content">tmpReports!</div>
-	</script>
-	<script type="text/x-handlebars" data-template-name="tmpLists">
-		  <div class="content">tmpLists!</div>
-	</script>
-	<script type="text/x-handlebars" data-template-name="tmpAdmin">
-		  <div class="content">tmpAdmin!</div>
-	</script>
 	<script type="text/x-handlebars" data-template-name="tmpNavbar">
 	  <ul id="ulMainMenu">
-		 <li><a class="notactive" {{action viewAccidents}} ix=1>ĮVYKIAI</a></li>
+		 <li><a class="notactive" {{action viewAccidents}}>ĮVYKIAI</a></li>
 		 <li><a class="notactive" {{action viewClaims}}>ŽALŲ REGULIAVIMAS</a></li>
 		 <li><a class="notactive" {{action viewMap}}>ŽEMĖLAPIS</a></li>
 		 <li><a class="notactive" {{action viewReports}}>ATASKAITOS</a></li>
@@ -57,39 +32,25 @@
 	  </ul>
 	</script>
 	<script type="text/x-handlebars" data-template-name="tmpApplication">
-  {{view App.NavbarView controllerBinding="controller.controllers.navbarController"}}
-    {{outlet}}
+  {{view App.NavbarView controllerBinding="controller.controllers.navbarController"}}	 
+<div class="colmask hidden" id="tabAccidents">
+	<div class="colleft" id="divAccidentsList">
+		<div class="col1 content">@Html.Partial("Accidents/tmpAccidentsMain")</div>
+		<div class="col2 content">@Html.Partial("Accidents/tmpSidePanel")</div>
+	</div>
+	<div class="content hidden" id="divAccidentEdit">divAccidentEdit</div>
+</div>
+<div class="content hidden" id="tabClaims">tmpClaims!</div>
+<div class="content hidden" id="tabMap">tmpMap!</div>
+<div class="content hidden" id="tabReports">tmpReports!</div>
+<div class="content hidden" id="tabLists">{{outlet listsOutlet}}</div>
+<div class="content hidden" id="tabAdmin">tmpNavbar!</div>
 	</script>
-	​ ​​ @*	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
-*@
-	<script src="@Url.Content("~/Scripts/Main/jquery-1.7.2.min.js")" type="text/javascript"></script>
-	<script type="text/javascript">
-		//{{action MenuClicked}}
-		//        $.fn.log=function (msg) {
-		//            if(window.console&&console.log) { console.log("%s: %o", msg, this); }
-		//            return this;
-		//        };
-		jQuery.fn.log = function (msg) {
-			msg = msg || "log";
-			console.log("%s: %o", msg, this);
-			this.each(function (n) {
-				id = this.id ? "ID: " + this.id : ""
-				console.log("%d: %s.%s %s", n, this.tagName, this.className, id)
-			})
-			return this;
-		};
-	</script>
-	<script src="@Url.Content("~/Scripts/Ember/handlebars-1.0.0.beta.6.js")" type="text/javascript"></script>
-	<script src="@Url.Content("~/Scripts/Ember/ember-1.0.pre.min.js")" type="text/javascript"></script>
-	@*	<script src="@Url.Content("~/Scripts/Ember/ember-latest.min.js")" type="text/javascript"></script>
-	<script src="@Url.Content("~/Scripts/Ember/ember-0.9.8.1.js")" type="text/javascript"></script>
-*@
-	<script src="@Url.Content("~/Scripts/My/General.js")" type="text/javascript"></script>
-	<script src="@Url.Content("~/Scripts/My/oControls.js")" type="text/javascript"></script>
-	<script src="@Url.Content("~/Scripts/My/Views.js")" type="text/javascript"></script>
-	<script src="@Url.Content("~/Scripts/Ember/ember-rest.js")" type="text/javascript"></script>
-	<script src="@Url.Content("~/Scripts/Ember/appStart.js")" type="text/javascript"></script>
-	<script src="@Url.Content("~/Scripts/Forms/accidents.js")" type="text/javascript"></script>
-	<script src="@Url.Content("~/Scripts/Ember/appEnd.js")" type="text/javascript"></script>
+<script>
+	var oGLOBAL = { appStart: new Date().getTime(), logFromStart: function (msg) { console.warn("logFromStart. " + msg + " Time from start:"+(new Date().getTime() - oGLOBAL.appStart)); } }; 
+</script>
+<script src='http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=true&amp;key=AIzaSyBmiyz9zmTD_hY7qT7Degr0o7tqAzjKQos' type='text/javascript'></script>
+<script src="@Url.Content("~/Scripts/Main/jquery-1.8.0.combined.min.js")" type="text/javascript" charset="utf-8"></script>
+<script src="@Url.Content("~/Scripts/Final/combined7.min.js")" type="text/javascript"></script>
 </body>
 </html>

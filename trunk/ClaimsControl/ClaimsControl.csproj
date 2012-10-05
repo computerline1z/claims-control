@@ -125,6 +125,9 @@
     <Compile Include="Models\clsObjects.cs" />
     <Compile Include="Models\CCMemProvider.cs" />
     <Compile Include="Models\cls_db_partial.cs" />
+    <Compile Include="Models\db.cs">
+      <DependentUpon>db.dbml</DependentUpon>
+    </Compile>
     <Compile Include="Models\HeaderModel.cs" />
     <Compile Include="Models\Repositories_Lists.cs" />
     <Compile Include="Models\Repositories_Update.cs" />
@@ -343,7 +346,6 @@
     <Content Include="Views\Lists\tblInsPolicies.cshtml" />
     <Content Include="Views\Account\RegisterOK.cshtml" />
     <Content Include="Views\Account\Register_Layout.cshtml" />
-    <Content Include="Views\Main\StartPublish.cshtml" />
     <Content Include="Views\Account\ChangeEmail.cshtml" />
     <Content Include="Views\Account\ChangeEmail_Layout.cshtml" />
     <Content Include="Views\Account\Header.cshtml" />
@@ -356,10 +358,10 @@
     <None Include="Scripts\Forms\lists.coffee" />
     <None Include="Scripts\My\clsEditableForm.coffee" />
     <None Include="Scripts\My\MyPlugins_ComboBox.coffee" />
+    <Content Include="Views\Main\Copy of Start.cshtml" />
     <None Include="Views\Shared\Accidents\tmpClaimEdit.cshtml" />
     <Content Include="Views\Shared\Accidents\tmpAccidentsMain.cshtml" />
     <Content Include="Views\Shared\Accidents\tmpAccidentRow.cshtml" />
-    <Content Include="Views\Main\Copy of Start.cshtml" />
     <None Include="Views\Main\NotifyViews.cshtml" />
     <Content Include="Views\Shared\Accidents\tmpSidePanel.cshtml" />
     <None Include="Views\Shared\LayOut_Main_Debug.cshtml" />

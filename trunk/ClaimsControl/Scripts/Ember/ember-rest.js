@@ -89,7 +89,10 @@ var oDATA = Ember.Object.create({
 		var tId=(timeoutId)? timeoutId:0, me = this, notExists=false;
 		objNames.forEach(function (objName) {
 			console.log("cheking obj "+objName);
-			if (!this.get("exists").call(this, objName)) {
+			if  (objName.slice(0,3)==="tmp") {
+				if (!Em.TEMPLATES[objName]){console.log("template "+objName+" not exists");notExists=true;}
+			}
+			else if (!this.get("exists").call(this, objName)) {
 				console.log("obj "+objName+" not exists");notExists=true;			
 			}
 		}, me); //second parameter becomes this in the callback function
