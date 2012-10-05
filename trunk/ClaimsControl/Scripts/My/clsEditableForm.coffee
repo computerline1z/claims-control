@@ -81,24 +81,31 @@ class clsEditableForm
 						ok=false; fieldName=col.FName.slice(0, 1).toLowerCase() + col.FName.slice(1)
 						updData.DataToSave.Fields.forEach((updateField,i2)->
 							if col.FName==updateField
-								Row.Data[fieldName]=updData.DataToSave.Data[i2]; ok=true
+								#Row.Data[fieldName]=updData.DataToSave.Data[i2]; ok=true
+								Row.Data.set(fieldName,updData.DataToSave.Data[i2]); ok=true
 						if not ok and (opt.Action=="Add" and fieldName!="iD")
 							if (col.IdInMe)								
 								infoRow=Row.Cols[col.IdInMe]
 								source=infoRow.List.Source
 								Field=infoRow.FName
 								id=oCONTROLS.helper.getData_fromDataToSave(updData.DataToSave,Field)							
-								Row.Data[fieldName]=oDATA.GET(source).emData.findProperty("iD", id).MapArrToString(infoRow.List.iText, false)
+								#Row.Data[fieldName]=oDATA.GET(source).emData.findProperty("iD", id).MapArrToString(infoRow.List.iText, false)
+								Row.Data.set(fieldName,oDATA.GET(source).emData.findProperty("iD", id).MapArrToString(infoRow.List.iText, false))
 							else if (col.Default)
 								if col.Default=="Today"
-									Row.Data[fieldName]=oGLOBAL.date.getTodayString()
+									#Row.Data[fieldName]=oGLOBAL.date.getTodayString()
+									Row.Data.set(fieldName,oGLOBAL.date.getTodayString())
 								else if col.Default=="UserName"
-									Row.Data[fieldName]=UserData.Name() 
+									#Row.Data[fieldName]=UserData.Name()
+									Row.Data.set(fieldName,UserData.Name())
 								else if col.Default=="UserId"
-									Row.Data[fieldName]=UserData.Id()
+									#Row.Data[fieldName]=UserData.Id()
+									Row.Data.set(fieldName,UserData.Id())
 								else Row.Data[fieldName]=col.Default
+								
 							else
 								Row.Data[fieldName]=""
+								Row.Data.set(fieldName,"")
 						)
 						console.log("col: "+col.FName+", ok: "+ok+", fieldValue:" +Row.Data[fieldName])
 					) 
@@ -106,7 +113,7 @@ class clsEditableForm
 						oDATA.GET(opt.objData).emData.pushObject(Row.Data)
 					
 					if opt.CallBackAfter
-						opt.CallBackAfter(Row.Data)
+						opt.CallBackAfter(Row.Data, opt)
 					if !opt.form or opt.form=="Dialog" 
 						$("#"+opt.DialogFormId).dialog("close")
 					else
