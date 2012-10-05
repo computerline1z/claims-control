@@ -112,7 +112,15 @@ Em.Object.prototype.MapArrToString = function (arrNames, mapWithNoCommas) {
 	if (mapWithNoCommas) return arrRet.join(" ");
 	else return arrRet.join(", ");
 }
-
+Em.Object.prototype.updateTo = function (newObject) {//very ew very good, very cool!!!!!!!!!!!!!!!
+	for (var prop in this) {
+		if (!this.hasOwnProperty(prop)) continue;
+		if (newObject[prop]&&this[prop]!==newObject[prop]){
+			this.set(prop, newObject[prop]);
+			// o ne this[prop]=newObject[prop];
+		}
+	}
+}
 Array.prototype.FNameIndex = function (FNameVal) {
 	var ctr = "";
 	for (var i = 0; i < this.length; i++) {
