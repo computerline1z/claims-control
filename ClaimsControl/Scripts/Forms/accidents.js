@@ -288,7 +288,6 @@
   });
 
   App.accidentsController = Em.ResourceController.create({
-    filter: null,
     tableName: "proc_Accidents",
     fields: {},
     removeClaims: function(AddWr) {
@@ -361,6 +360,52 @@
       });
       oGLOBAL.LoadAccident_Card(AccNo);
       return false;
+    },
+    filterDidChange: (function() {
+      return alert(this.filterValue);
+    }).observes('chkDocs', 'chkOpen', 'chkData', 'chkClaim', 'filterValue'),
+    filterValue: null,
+    chkDocs: null,
+    chkOpen: null,
+    chkData: null,
+    chkClaim: null,
+    filterByField: function() {
+      var fn;
+      fn = !this.filterValue ? "return true;" : "var ret=false,cols=" + JSON.stringify(this.current.filterCols) + ";console.log('Filtering by val:" + this.filterValue + "'); for(var i=0; i < cols.length; i++){console.log(row[cols[i]]+', '+(row[cols[i]].toLowerCase().indexOf('" + this.filterValue + "')>-1));		if (row[cols[i]].toLowerCase().indexOf('" + this.filterValue + "')>-1){ret=true; break;}} console.log('filterByval rez: '+ret);return ret;";
+      return new Function("row", fn);
+    },
+    filterByTab: function() {
+      var fn, mark;
+      if (this.current.emObject === "drivers") {
+        mark = this.clicked === "NotWorking" ? "!" : "";
+        fn = "var ret=true; if ($.trim(row.dateEnd)) {ret=oGLOBAL.date.firstBigger(row.dateEnd);} console.log('dateEnd: '+row.dateEnd+', '+ret);return " + mark + "ret";
+      } else if (this.current.emObject === "vehicles") {
+        mark = this.clicked === "NotWorking" ? "!" : "";
+        fn = "var ret=true; if ($.trim(row.endDate)) {ret=oGLOBAL.date.firstBigger(row.endDate);} console.log('endDate: '+row.endDate+', '+ret);return " + mark + "ret";
+      } else {
+        throw new Error("filterByTab has no such emObject");
+      }
+      return new Function("row", fn);
+    },
+    filterItems: function() {
+      var fn,
+        _this = this;
+      if (this.current.emObject === "insPolicies") {
+        fn = function(row) {
+          var v;
+          v = _this.filterByField()(row);
+          console.log("finalRez: " + v);
+          return row.set('visible', v);
+        };
+      } else {
+        fn = function(row) {
+          var v;
+          v = (_this.filterByTab()(row) ? _this.filterByField()(row) : false);
+          console.log("finalRez: " + v);
+          return row.set('visible', v);
+        };
+      }
+      return App.listAllController[this.current.emObject].forEach(fn);
     }
   });
 
@@ -375,6 +420,54 @@
 
   App.newClaimController = Em.ResourceController.create({
     tableName: "?"
+  });
+
+  App.SidePanelView = Em.View.extend({
+    templateName: "tmpSidePanel",
+    didInsertElement: function() {
+      this._super();
+      $("#chkOpen").buttonset().on("click", function(e) {
+        var chk, newVal;
+        chk = $(e.target).closest("label").prev();
+        newVal = chk.next().hasClass("ui-state-active") ? chk.attr("id") : null;
+        $("#chkOpen").find("label").not(chk.next()).removeClass("ui-state-active").end().prev().not(chk).removeAttr("checked");
+        App.accidentsController.set("chkOpen", newVal);
+        return false;
+      });
+      $("#chkDocs").buttonset().on("click", function(e) {
+        var chk, newVal;
+        chk = $(e.target).closest("label").prev();
+        newVal = chk.next().hasClass("ui-state-active") ? chk.attr("id") : null;
+        $("#chkDocs").find("label").not(chk.next()).removeClass("ui-state-active").end().prev().not(chk).removeAttr("checked");
+        App.accidentsController.set("chkDocs", newVal);
+        return false;
+      });
+      $("#chk12month,#chk2011,#chk2010,#chk2009").checkbox().on("click", function(e) {
+        var chk, newVal;
+        chk = $(e.target);
+        newVal = chk.attr("checked") ? chk.attr("id") : null;
+        $("#chk12month,#chk2011,#chk2010,#chk2009").not(chk).removeAttr("checked").parent().next().next().find("span.ui-checkbox-icon").removeClass("ui-icon ui-icon-check").attr("aria-checked", "false");
+        App.accidentsController.set("chkData", newVal);
+        return false;
+      });
+      return $("#chkClaim_1,#chkClaim_2,#chkClaim_3,#chkClaim_4,#chkClaim_5,#chkClaim_6").checkbox().on("click", function(e) {
+        var chk, newVal;
+        chk = $(e.target);
+        newVal = chk.attr("checked") ? chk.attr("id") : null;
+        $("#chkClaim_1,#chkClaim_2,#chkClaim_3,#chkClaim_4,#chkClaim_5,#chkClaim_6").not(chk).removeAttr("checked").parent().next().next().find("span.ui-checkbox-icon").removeClass("ui-icon ui-icon-check").attr("aria-checked", "false");
+        App.accidentsController.set("chkClaim", newVal);
+        return false;
+      });
+    },
+    showAll: function() {
+      $("#chkOpen,#chkDocs").find("label").removeClass("ui-state-active").end().prev().removeAttr("checked");
+      $("#chk12month,#chk2011,#chk2010,#chk2009,#chkClaim_1,#chkClaim_2,#chkClaim_3,#chkClaim_4,#chkClaim_5,#chkClaim_6").removeAttr("checked").parent().next().next().find("span.ui-checkbox-icon").removeClass("ui-icon ui-icon-check").attr("aria-checked", "false");
+      App.accidentsController.chkOpen = null;
+      App.accidentsController.chkDocs = null;
+      App.accidentsController.chkData = null;
+      App.accidentsController.chkClaim = null;
+      return App.accidentsController.filterDidChange();
+    }
   });
 
   MY.accidents = {};
