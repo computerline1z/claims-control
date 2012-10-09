@@ -107,7 +107,7 @@
 .ui-state-hover a, .ui-state-hover a:hover { color: #212121; text-decoration: none; }
 .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active { border: 1px solid #aaaaaa;  font-weight: normal; color: #212121; }
 .ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited { color: #212121; text-decoration: none; }
-.ui-widget :active { outline: none; }
+/*.ui-widget :active { outline: none; }*/
 
 /* Interaction Cues
 ----------------------------------*/
@@ -508,7 +508,7 @@ a.ui-state-hover .ui-icon { background-image: url(images_ui/ui-icons_888888_256x
  * http://docs.jquery.com/UI/Button#theming
  */
 .ui-button {
-
+	position: relative;/*papildomai pridëta*/
   cursor: pointer;
   display: inline-block;
   background-color: #e6e6e6;
@@ -520,7 +520,7 @@ a.ui-state-hover .ui-icon { background-image: url(images_ui/ui-icons_888888_256x
   background-image: -o-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
   background-image: linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6', GradientType=0);
-  padding: 5px 14px 6px;
+  /*padding: 5px 14px 6px; iðkirtau dël checkoboxu */
   margin: 0;
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
   color: #333;
@@ -610,23 +610,38 @@ button.ui-button-icons-only { width: 3.7em; }
 .ui-button .ui-button-text { display: block;   }
 .ui-button-text-only .ui-button-text {  }
 .ui-button-icon-only .ui-button-text, .ui-button-icons-only .ui-button-text { padding: .4em; text-indent: -9999999px; /*tempfix*/ display:none;}
-.ui-button-text-icon-primary .ui-button-text, .ui-button-text-icons .ui-button-text { padding: .4em 1em .4em 2.1em; }
-.ui-button-text-icon-secondary .ui-button-text, .ui-button-text-icons .ui-button-text { padding: .4em 2.1em .4em 1em; }
+/*.ui-button-text-icon-primary .ui-button-text, .ui-button-text-icons .ui-button-text { padding: .4em 1em .4em 2.1em; }
+.ui-button-text-icon-secondary .ui-button-text, .ui-button-text-icons .ui-button-text { padding: .4em 2.1em .4em 1em; }*/
+.ui-button-text-icon-primary .ui-button-text, .ui-button-text-icons .ui-button-text { padding: .4em 1em .4em 1.8em;}
+.ui-button-text-icon-secondary .ui-button-text, .ui-button-text-icons .ui-button-text { padding: .4em 1em .4em 1.8em;}
 .ui-button-text-icons .ui-button-text { padding-left: 2.1em; padding-right: 2.1em; }
 /* no icon support for input elements, provide padding by default */
 /* input.ui-button { padding: .4em 1em; } */
 
 /*button icon element(s) */
-.ui-button-icon-only .ui-icon, .ui-button-text-icon-primary .ui-icon, .ui-button-text-icon-secondary .ui-icon, .ui-button-text-icons .ui-icon, .ui-button-icons-only .ui-icon { top: 50%; margin-top:-3px; margin-bottom:3px; }
+/*.ui-button-icon-only .ui-icon, .ui-button-text-icon-primary .ui-icon, .ui-button-text-icon-secondary .ui-icon, .ui-button-text-icons .ui-icon, .ui-button-icons-only .ui-icon { top: 50%; margin-top:-3px; margin-bottom:3px; }
+*/
+.ui-button-icon-only .ui-icon, .ui-button-text-icon-primary .ui-icon, .ui-button-text-icon-secondary .ui-icon, .ui-button-text-icons .ui-icon, .ui-button-icons-only .ui-icon { top: 50%; margin-top:-8px; position:absolute;}
 .ui-button-icon-only .ui-icon { left: 50%; margin-left: -8px; }
-.ui-button-text-icon-primary .ui-button-icon-primary, .ui-button-text-icons .ui-button-icon-primary, .ui-button-icons-only .ui-button-icon-primary { left: .5em; }
-.ui-button-text-icon-secondary .ui-button-icon-secondary, .ui-button-text-icons .ui-button-icon-secondary, .ui-button-icons-only .ui-button-icon-secondary { right: .5em; }
-.ui-button-text-icons .ui-button-icon-secondary, .ui-button-icons-only .ui-button-icon-secondary { right: .5em; }
+.ui-button-text-icon-primary .ui-button-icon-primary, .ui-button-text-icons .ui-button-icon-primary, .ui-button-icons-only .ui-button-icon-primary { left: .2em; }  /*buvo left: .5em;*/
+.ui-button-text-icon-secondary .ui-button-icon-secondary, .ui-button-text-icons .ui-button-icon-secondary, .ui-button-icons-only .ui-button-icon-secondary { right: .2em; }
+.ui-button-text-icons .ui-button-icon-secondary, .ui-button-icons-only .ui-button-icon-secondary { right: .2em; }
 
 /*button sets*/
+/* Checkbox
+----------------------------------*/
+div.ui-checkbox-box { border:1px solid #AAA; }
+div.ui-checkbox-box.ui-state-hover { border-color: darken(#AAA, 20%); border-width: 2px; }
 
+.ui-checkbox { position: relative; }
+.ui-checkbox .ui-checkbox-inputwrapper { width: 0; height: 0; overflow: hidden; }
+.ui-checkbox label { display: block; position: relative; padding-right: 1em; line-height: 1; padding: .5em 0 .5em 30px; margin: 0 0 .3em; cursor: pointer; z-index: 1; }
+.ui-checkbox .ui-checkbox-box { position: absolute; top: 0; left: 0; width: 1.5em; height: 1.6em; }
+/*.ui-checkbox-icon { border:1px solid #AAA; }
+*/	
 
 .ui-buttonset { margin-right: 7px; }
+.ui-buttonset .ui-button-text { padding: .2em; }
 .ui-buttonset .ui-state-active {
   color: #ffffff;
   background-color: #0064cd;

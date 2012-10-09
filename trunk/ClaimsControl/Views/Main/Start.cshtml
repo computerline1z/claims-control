@@ -21,6 +21,9 @@
 	<script type="text/x-handlebars" data-template-name="tmpAccident_Claims">
 		  @Html.Partial("Accidents/tmpAccident_Claims")
 	</script>
+	<script type="text/x-handlebars" data-template-name="tmpSidePanel">
+		  @Html.Partial("Accidents/tmpSidePanel")
+	</script>
 	<script type="text/x-handlebars" data-template-name="tmpNavbar">
 	  <ul id="ulMainMenu">
 		 <li><a class="notactive" {{action viewAccidents}}>ĮVYKIAI</a></li>
@@ -36,7 +39,7 @@
 <div class="colmask hidden" id="tabAccidents">
 	<div class="colleft" id="divAccidentsList">
 		<div class="col1 content">@Html.Partial("Accidents/tmpAccidentsMain")</div>
-		<div class="col2 content">@Html.Partial("Accidents/tmpSidePanel")</div>
+		<div class="col2 content">{{view App.SidePanelView}}</div>
 	</div>
 	<div class="content hidden" id="divAccidentEdit">divAccidentEdit</div>
 </div>
@@ -65,6 +68,8 @@
 	<script src="@Url.Content("~/Scripts/Forms/accidents.js")" type="text/javascript"  charset="utf-8"></script>
 
 	<script src="@Url.Content("~/Scripts/My/clsEditableForm.js")" type="text/javascript"  charset="utf-8"></script>
+	@*<script src="@Url.Content("~/Scripts/My/MyPlugins_Checkbox.js")" type="text/javascript"  charset="utf-8"></script>*@
+	<script src="@Url.Content("~/Scripts/My/ui-checkbox.js")" type="text/javascript"  charset="utf-8"></script>
 	<script src="@Url.Content("~/Scripts/My/MyPlugins_ComboBox.js")" type="text/javascript"  charset="utf-8"></script>
 	<script src="@Url.Content("~/Scripts/My/MyPlugins.js")" type="text/javascript"  charset="utf-8"></script>
 	<script src="@Url.Content("~/Scripts/Plugins/plugs.min.js")" type="text/javascript"  charset="utf-8"></script>

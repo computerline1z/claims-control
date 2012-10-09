@@ -1,50 +1,35 @@
-﻿<div><a href="#" {{action "showAll" "proc_Drivers"}}>
-	<span>Rodyti visus įvykius</span></a>@*žalas*@
+﻿<div style="margin: 4px;">
+<div><a href="#" {{action "showAll"  target="view"}}>
+	<span>Panaikinti filtro nustatymus (rodyti visus įvykius)</span></a>
 </div>
-</br></br>
-<div>Rodyti įvykius tik:
-</div>
-<div><a href="#" {{action "showAll" "proc_Drivers"}}>
-	<span>su atvirom žalom</span></a>@*žalas*@
-</div>
-<div><a href="#" {{action "showAll" "proc_Drivers"}}>
-	<span>be atvirų žalų</span></a>@*žalas*@
-</div>
-<hr>
-<div><a href="#" {{action "showAll" "proc_Drivers"}}>
-	<span>su dokumentais</span></a>@*žalas*@
-</div>
-<div><a href="#" {{action "showAll" "proc_Drivers"}}>
-	<span>be dokumentų</span></a>@*žalas*@
-</div>
-</br></br>
+</br>
+<fieldset style="border:2px groove threedface;" class="ui-corner-all"><legend>Rodyti įvykius tik</legend>
+	<span id="chkOpen" style="margin:5px;display:inline-block;"  >	
+	<input type="checkbox" id="chkWithOpen" /><label for="chkWithOpen">su</label>
+	<input type="checkbox" id="chkWithOutOpen" /><label for="chkWithOutOpen">be</label>
+	<span style="margin-left:5px;" class="ui-button-text">atvirų žalų</span>
+	</span>
 
-<div>Pagal įvykio datą:</div>
-<div><a href="#" {{action "showAll" "proc_Drivers"}}>
-	<span>2011 metai</span></a>@*žalas*@
-</div>
-<div><a href="#" {{action "showAll" "proc_Drivers"}}>
-	<span>2010 metai</span></a>@*žalas*@
-</div>
-<div><a href="#" {{action "showAll" "proc_Drivers"}}>
-	<span>2009 metai</span></a>@*žalas*@
-</div>
-<div><a href="#" {{action "showAll" "proc_Drivers"}}>
-	<span>Paskutiniai 12 mėn</span></a>@*žalas*@
-</div>
-</br></br>
-<div>Rodyti tik įvykius turinčius šio tipo žalas:</div>
-<div><a href="#" {{action "showAll" "proc_Drivers"}}>
-	<span>TP valdytojų civilinė atsakomybė</span></a>
-</div>
-<div><a href="#" {{action "showAll" "proc_Drivers"}}>
-	<span>KASKO</span></a>
-</div><div><a href="#" {{action "showAll" "proc_Drivers"}}>
-	<span>Vežėjo civilinė atsakomybė</span></a>
-</div><div><a href="#" {{action "showAll" "proc_Drivers"}}>
-	<span>Ekspeditoriaus civilinė atsakomybė</span></a>
-</div><div><a href="#" {{action "showAll" "proc_Drivers"}}>
-	<span>Darbdavio civilinė atsakomybė</span></a>
-</div><div><a href="#" {{action "showAll" "proc_Drivers"}}>
-	<span>Prastova</span></a>
+	<span id="chkDocs"style="margin:5px;display:inline-block;">	
+	<input type="checkbox" id="chkWithDocs" /><label for="chkWithDocs">su</label>
+	<input type="checkbox" id="chkWithOutDocs" /><label for="chkWithOutDocs">be</label>
+	<span style="margin-left:5px;" class="ui-button-text">dokumentų</span>
+	</span>
+</fieldset>
+</br>
+<fieldset style="border:2px groove threedface;" class="ui-corner-all"><legend>Rodyti įvykius atitinkančius datą</legend>
+	<label><input type="checkbox" id="chk12month" /><a href="#">Paskutiniai 12 mėn</a></label>
+	<label><input type="checkbox" id="chk2011" /><a href="#">2011 metai</a></label>
+	<label><input type="checkbox" id="chk2010" /><a href="#">2010 metai</a></label>
+	<label><input type="checkbox" id="chk2009" /><a href="#">2009 metai</a></label>
+</fieldset>
+</br>
+<fieldset style="border:2px groove threedface;" class="ui-corner-all"><legend>Įvykiai turintys sekančių žalų</legend>
+	<label><input type="checkbox" id="chkClaim_1" /><a href="#">TP valdytojų civilinė atsakomybė</a></label>
+	<label><input type="checkbox" id="chkClaim_2" /><a href="#">KASKO</a></label>
+	<label><input type="checkbox" id="chkClaim_3" /><a href="#">Vežėjo civilinė atsakomybė</a></label>
+	<label><input type="checkbox" id="chkClaim_4" /><a href="#">Ekspeditoriaus civilinė atsakomybė</a></label>
+	<label><input type="checkbox" id="chkClaim_5" /><a href="#">Darbdavio civilinė atsakomybė</a></label>
+	<label><input type="checkbox" id="chkClaim_6" /><a href="#">Prastova</a></label>
+</fieldset>
 </div>

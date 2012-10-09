@@ -301,7 +301,7 @@ var oCONTROLS = {
 						var NotEmpty = (val === "") ? false : true;
 
 						if (CheckIt && (Require || NotEmpty)) {//Pasikeite reiksme && (Require arba Netuscias)
-							if (Validity) eval("$(this)." + Validity); //Validuojam tik jei skirtingos reiksmes
+							if (Validity) eval("$(this)." + Validity);
 						}
 						if (IsTip) {
 							e.val(cTip);

@@ -202,7 +202,6 @@ App.SelectedClaimView = Em.View.extend(
 )
 #***************************************Controler**************************************************************
 App.accidentsController = Em.ResourceController.create(
-	filter: null,
 	tableName: "proc_Accidents",
 	fields: {},
 	removeClaims: (AddWr) ->
@@ -229,16 +228,6 @@ App.accidentsController = Em.ResourceController.create(
 		else
 			Em.run.next(-> $("#AccDetailsContent, div.dividers").slideDown())
 		false
-	# filteredRecords: (->
-		# f = @get("filter")
-		# if (!f)
-			# @get('content')
-		# else
-			# f = f.toLowerCase()
-			# @get('content').filter((item, index, self)->
-				# item[3].toLowerCase().indexOf(f) + item[4].toLowerCase().indexOf(f) + item[9].toLowerCase().indexOf(f) + item[10].toLowerCase().indexOf(f) + item[11].toLowerCase().indexOf(f) + item[12].toLowerCase().indexOf(f) + item[13].toLowerCase().indexOf(f) + item[14].toLowerCase().indexOf(f) > -8
-			# )
-	# ).property('filter', 'content.@each').cacheable(),
 	setfilteredPolicies: (accidentDate) ->
 		thisAccidentPolicies=$.map(oDATA.GET("proc_InsPolicies").Data, (i)-> if (oGLOBAL.date.firstBigger(i[4],accidentDate)) then return [i] else return null)
 		proc_InsPolicies_forThisAccident=$.extend({},oDATA.GET("proc_InsPolicies"),{Data:thisAccidentPolicies})#not deep copy -overwrite
@@ -257,6 +246,36 @@ App.accidentsController = Em.ResourceController.create(
 		ctrlEdit.spinner({ position: 'center', img: 'spinnerBig.gif' })
 		oGLOBAL.LoadAccident_Card(AccNo)
 		false
+	filterDidChange: (()->		
+		alert @filterValue
+		#@filterItems()
+	).observes('chkDocs','chkOpen','chkData','chkClaim','filterValue')
+	filterValue:null
+	chkDocs:null #chkWithDocs,#chkWithOutDocs
+	chkOpen:null #chkWithOpen,#chkWithoutOpen
+	chkData:null #chk12month,#chk2011,#chk2010,#chk2009
+	chkClaim:null #chkClaim_1,chkClaim_2,chkClaim_3,chkClaim_4,chkClaim_5,chkClaim_6
+	filterByField: ()->#jei yra filterValue grazina true jei ten randa, jei ne grazina true visada
+		fn=if not @filterValue then "return true;" else "var ret=false,cols="+JSON.stringify(this.current.filterCols)+
+		";console.log('Filtering by val:"+@filterValue+"'); for(var i=0; i < cols.length; i++){console.log(row[cols[i]]+', '+(row[cols[i]].toLowerCase().indexOf('"+@filterValue+"')>-1));
+		if (row[cols[i]].toLowerCase().indexOf('"+@filterValue+"')>-1){ret=true; break;}} console.log('filterByval rez: '+ret);return ret;"
+		new Function("row",fn)
+	filterByTab: ()->
+		if @current.emObject=="drivers"
+			mark=if (@clicked=="NotWorking") then "!" else "";
+			fn="var ret=true; if ($.trim(row.dateEnd)) {ret=oGLOBAL.date.firstBigger(row.dateEnd);} console.log('dateEnd: '+row.dateEnd+', '+ret);return "+mark+"ret"
+		else if @current.emObject=="vehicles"
+			mark=if (@clicked=="NotWorking") then "!" else "";
+			fn="var ret=true; if ($.trim(row.endDate)) {ret=oGLOBAL.date.firstBigger(row.endDate);} console.log('endDate: '+row.endDate+', '+ret);return "+mark+"ret"
+		else
+			throw new Error("filterByTab has no such emObject")
+		new Function("row",fn)
+	filterItems: ()->
+		if @current.emObject=="insPolicies"
+			fn=(row)=>(v=@filterByField()(row); console.log("finalRez: "+v); row.set('visible',v);)	
+		else
+			fn=(row)=>(v=(if (@filterByTab()(row)) then (@filterByField()(row)) else false;); console.log("finalRez: "+v); row.set('visible',v);)			
+		App.listAllController[@current.emObject].forEach(fn)
 )
 App.thisAccidentController = Em.ResourceController.create(
 	content: [],
@@ -277,5 +296,65 @@ App.newClaimController = Em.ResourceController.create(
 	#    	@set("content", ArrView)
 	#    }
 )
-
+# $ ->
+	# alert "function: "+$("#radio3").length
+	# $("#radio3").on( (e)->
+	
+		# console.log $(@).attr("checked")
+		
+		# if $(@).attr("checked")
+			# $(@).attr("checked","")
+		# )
+# $(window).load( ()-> 
+	# alert "load: "+$("#radio3").length
+# )
+# Em.run.next(()->
+	# alert "Em: "+$("#radio3").length
+# )
+App.SidePanelView = Em.View.extend(
+	#init: -> @_super();App.listAllController.set("content",oDATA.GET("proc_Vehicles").emData)
+	templateName: "tmpSidePanel"
+	didInsertElement: ()->
+		@_super(); 
+		$("#chkOpen").buttonset().on("click",(e)->
+			chk=$(e.target).closest("label").prev();
+			newVal=if (chk.next().hasClass("ui-state-active")) then chk.attr("id") else null #Jei aktyvus priskiriam
+			$("#chkOpen").find("label").not(chk.next()).removeClass("ui-state-active").end().prev().not(chk).removeAttr("checked")	
+			App.accidentsController.set("chkOpen",newVal)
+			false
+		)
+		$("#chkDocs").buttonset().on("click",(e)->
+			chk=$(e.target).closest("label").prev();
+			newVal=if (chk.next().hasClass("ui-state-active")) then chk.attr("id") else null #Jei aktyvus priskiriam
+			$("#chkDocs").find("label").not(chk.next()).removeClass("ui-state-active").end().prev().not(chk).removeAttr("checked")	
+			App.accidentsController.set("chkDocs",newVal)
+			false
+		)
+		$("#chk12month,#chk2011,#chk2010,#chk2009").checkbox().on("click",(e)->
+			chk=$(e.target);
+			newVal=if (chk.attr("checked")) then chk.attr("id") else null
+			$("#chk12month,#chk2011,#chk2010,#chk2009").not(chk).removeAttr("checked").parent().next().next().find("span.ui-checkbox-icon").removeClass("ui-icon ui-icon-check").attr("aria-checked","false")
+			App.accidentsController.set("chkData",newVal)
+			false
+			#$("#chk12month").attr("checked")
+		)
+		$("#chkClaim_1,#chkClaim_2,#chkClaim_3,#chkClaim_4,#chkClaim_5,#chkClaim_6").checkbox().on("click",(e)->
+			chk=$(e.target);
+			newVal=if (chk.attr("checked")) then chk.attr("id") else null
+			$("#chkClaim_1,#chkClaim_2,#chkClaim_3,#chkClaim_4,#chkClaim_5,#chkClaim_6").not(chk).removeAttr("checked").parent().next().next().find("span.ui-checkbox-icon").removeClass("ui-icon ui-icon-check").attr("aria-checked","false")
+			App.accidentsController.set("chkClaim",newVal)
+			false
+		)
+	showAll: ()->		
+		$("#chkOpen,#chkDocs").find("label").removeClass("ui-state-active").end().prev().removeAttr("checked")
+		$("#chk12month,#chk2011,#chk2010,#chk2009,#chkClaim_1,#chkClaim_2,#chkClaim_3,#chkClaim_4,#chkClaim_5,#chkClaim_6").removeAttr("checked").parent().next().next().find("span.ui-checkbox-icon").removeClass("ui-icon ui-icon-check").attr("aria-checked","false")				
+		App.accidentsController.chkOpen=null
+		App.accidentsController.chkDocs=null
+		App.accidentsController.chkData=null
+		App.accidentsController.chkClaim=null
+		App.accidentsController.filterDidChange()	
+		#e.stopPropagation();
+		#e.preventDefault();
+		#if $(this.target).attr("checked") then $(this.target).attr("checked", "") else $(this.target).attr("checked", "checked")	
+)
 MY.accidents={}

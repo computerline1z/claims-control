@@ -242,6 +242,8 @@
     <Content Include="Scripts\Forms\accidents.js" />
     <Content Include="Scripts\Main\jquery-1.8.0.combined.min.js" />
     <Content Include="Scripts\My\clsEditableForm.js" />
+    <Content Include="Scripts\My\ui-checkbox.js" />
+    <Content Include="Scripts\My\MyPlugins_Checkbox.js" />
     <Content Include="Scripts\My\General.js" />
     <Content Include="Scripts\My\MyPlugins_ComboBox.js" />
     <Content Include="Scripts\My\Views.js" />

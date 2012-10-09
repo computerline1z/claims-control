@@ -37,7 +37,7 @@ namespace CC.Controllers {
       public JsonResult AccidentsList() {
          Repositories_Accidents acc = new Repositories_Accidents();
          return Json(new {
-            proc_Accidents = acc.GetJSON_proc_Accidents(),
+            proc_Accidents = acc.GetJSON_proc_Accidents()		
          });
       }
    }
