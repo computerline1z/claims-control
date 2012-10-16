@@ -7,8 +7,8 @@ using CC.Classes;
 namespace CC.Models {
 
    public class clsAccident {
-
-      public clsAccident(int? id) {
+		
+		public clsAccident(int? id) {
          Repositories_Accidents AccRep = new Repositories_Accidents();
          Accident = AccRep.Get_tblAccident((id == null) ? 0 : id.Value);
          if (Accident == null) {
@@ -116,10 +116,10 @@ namespace CC.Models {
          JSON.Config = new { Controler = "Accidents", tblUpdate = "tblAccidents" };
          JSON.Grid = new {
             aoColumns = new object[]{
-					new {bVisible=false,bSearchable=false},//0//ID////DefaultUpdate=0
+					new {bVisible=false},//0//ID////DefaultUpdate=0
 					new {sTitle="Įvykio tipas"},//1//AccidentTypeID////DefaultUpdate=0
-					//new {bVisible=false,bSearchable=false},//2//AccountID////DefaultUpdate=0
-					new {sTitle="Atsakingas vairuotojas",bVisible=false,bSearchable=false},//3//DriverID////DefaultUpdate=0
+					//new {bVisible=false},//2//AccountID////DefaultUpdate=0
+					new {sTitle="Atsakingas vairuotojas",bVisible=false},//3//DriverID////DefaultUpdate=0
 					new {sTitle="Nr"},//4//No//
 					new {sTitle="Įvykio data ir laikas (vietos laiku)"},//5//Date//
 					new {sTitle="Kaltininkas trečia šalis"},//6//IsOurFault//
@@ -156,8 +156,10 @@ namespace CC.Models {
 				d.Driver,//11
 				d.UserName,//12
 				d.Claims_C,//13
-				d.Claims_C2//,13
-				//d.ID
+				d.Claims_C2,//,13
+				d.DaysFrom,
+				d.DocNo,
+				d.Claims_TypeID
 			};
          object[] Cols ={//NotEditable=true // Unique=true// LenMax/LenEqual/LenMin:10
 				//Date,DateLess,DateNoLess,Time,String
@@ -175,44 +177,49 @@ namespace CC.Models {
 				new { FName = "Driver"},//11
 				new { FName = "UserName"},//12
 				new { FName = "Claims_C"},//13
-				new { FName = "Claims_C2"}
-				//new { FName = "Icons"},//14
+				new { FName = "Claims_C2"},//14
+				new { FName = "DaysFrom"},//15
+				new { FName = "DocNo"},//15
+				new { FName = "Claims_TypeID"},//15
 			}; JSON.Cols = Cols;
          JSON.Config = new { Controler = "Accidents", tblUpdate = "" };
          JSON.Grid = new {
             //                aoColumns = new object[]{
-            //new {bVisible=false,bSearchable=false},//0//ID//
-            //new {sTitle="Nr",bSearchable=false,bSortable=false},//1//No
-            //new {sTitle="Data",bSearchable=false,bSortable=false},//2//Date
-            //new {sTitle="Vieta",bSortable=false},//3//Place
-            //new {sTitle="Tipas",bSortable=false},//4//AccType
-            //new {sTitle="Visos",bSearchable=false,bSortable=false},//5//CNo_All
-            //new {sTitle="Atviros",bSearchable=false,bSortable=false},//6//CNo_NotF
-            //new {sTitle="Žalos suma",bSearchable=false,bSortable=false},//7//LossSum
-            //new {sTitle="Visa žalos suma?",bVisible=false,bSearchable=false,bSortable=false},//8//AmountIsConfirmed
-            //new {sTitle="Kas atsitiko",bSortable=false},//9//ShortNote//
-            //new {sTitle="Pastabos",bVisible=false,sClass="smallFont",bSortable=false},//10//LongNote//
-            //new {sTitle="Vairuotojas",bVisible=false,bSortable=false},//11//Driver
-            //new {sTitle="Kas įvedė",bVisible=false,bSortable=false},//12//UserName
-            //new {sTitle="Žalos",bVisible=false,bSortable=false},//13//Claims_C
-            //new {sTitle="Žalos2",bVisible=false,bSortable=false},//14//Claims_C2
+            //new {bVisible=false},//0//ID//
+            //new {sTitle="Nr"},//1//No
+            //new {sTitle="Data"},//2//Date
+            //new {sTitle="Vieta"},//3//Place
+            //new {sTitle="Tipas"},//4//AccType
+            //new {sTitle="Visos"},//5//CNo_All
+            //new {sTitle="Atviros"},//6//CNo_NotF
+            //new {sTitle="Žalos suma"},//7//LossSum
+            //new {sTitle="Visa žalos suma?",bVisible=false},//8//AmountIsConfirmed
+            //new {sTitle="Kas atsitiko"},//9//ShortNote//
+            //new {sTitle="Pastabos",bVisible=false,sClass="smallFont"},//10//LongNote//
+            //new {sTitle="Vairuotojas",bVisible=false},//11//Driver
+            //new {sTitle="Kas įvedė",bVisible=false},//12//UserName
+            //new {sTitle="Žalos",bVisible=false},//13//Claims_C
+            //new {sTitle="Žalos2",bVisible=false},//14//Claims_C2
             //new {bSortable=false}//14//Claims_C
             aoColumns = new object[]{
-					new {bVisible=false,bSearchable=false},//0//ID//
-					new {sTitle="Nr",bSearchable=false,bSortable=false},//1//No
-					new {bVisible=false,sTitle="Data",bSearchable=false,bSortable=false},//2//Date
-					new {bVisible=false,sTitle="Vieta",bSortable=false},//3//Place
-					new {bVisible=false,sTitle="Tipas",bSortable=false},//4//AccType
-					new {bVisible=false,sTitle="Visos",bSearchable=false,bSortable=false},//5//CNo_All
-					new {bVisible=false,sTitle="Atviros",bSearchable=false,bSortable=false},//6//CNo_NotF
-					new {bVisible=false,sTitle="Žalos suma",bSearchable=false,bSortable=false},//7//LossSum
-					new {bVisible=false,sTitle="Visa žalos suma",bSearchable=false,bSortable=false},//8//AmountIsConfirmed
-					new {bVisible=false,sTitle="Kas atsitiko",bSortable=false},//9//ShortNote//
-					new {bVisible=false,sTitle="Pastabos",sClass="smallFont",bSortable=false},//10//LongNote//
-					new {bVisible=false,sTitle="Vairuotojas",bSortable=false},//11//Driver
-					new {bVisible=false,sTitle="Kas įvedė",bSortable=false},//12//UserName
-					new {bVisible=false,sTitle="Žalos",bSortable=false},//13//Claims_C
-					new {bVisible=false,sTitle="Žalos2",bSortable=false}//14//Claims_C2
+					new {bVisible=false},//0//ID//
+					new {sTitle="Nr"},//1//No
+					new {sTitle="Data"},//2//Date
+					new {sTitle="Vieta"},//3//Place
+					new {sTitle="Tipas"},//4//AccType
+					new {sTitle="Visos"},//5//CNo_All
+					new {sTitle="Atviros"},//6//CNo_NotF
+					new {sTitle="Žalos suma"},//7//LossSum
+					new {sTitle="Visa žalos suma"},//8//AmountIsConfirmed
+					new {sTitle="Kas atsitiko"},//9//ShortNote//
+					new {sTitle="Pastabos",sClass="smallFont"},//10//LongNote//
+					new {sTitle="Vairuotojas"},//11//Driver
+					new {sTitle="Kas įvedė"},//12//UserName
+					new {sTitle="Žalos"},//13//Claims_C
+					new {sTitle="Žalos2"},//14//Claims_C2
+					new {sTitle="Praėjo dienų"},//14//Claims_C2
+					new {sTitle="Dokumentai"},//14//Claims_C2
+					new {sTitle="Žalų tipai"}//14//Claims_C2
 					//new {bSortable=false,fnRender=function(){return <span class='ui-icon ui-icon-mail-closed'></span><span class='ui-icon ui-icon-mail-closed'></span>;}} //"function(oObj){return oObj.aData[0];}"}
 				}
             //aaSorting = new object[] { new object[] { 2, "desc" } },
@@ -248,14 +255,14 @@ namespace CC.Models {
          JSON.Config = new { Controler = "Drivers", tblUpdate = "tblDrivers", Msg = new { AddNew = "Pridėti naują vairuotoją", Edit = "Vairuotojo duomenų redagavimas", Delete = "Ištrinti vairuotoją", GenName = "Vairuotojas", GenNameWhat = "vairuotoją", ListName = "Vairuotojų sąrašas" } };
          JSON.Grid = new {
             aoColumns = new object[]{
-					new {bVisible=false,bSearchable=false},//0//ID////DefaultUpdate=0
+					new {bVisible=false},//0//ID////DefaultUpdate=0
 					new {sTitle="Vardas",sClass="smallFont"},//1//FirstName//
 					new {sTitle="Pavardė",sClass="smallFont"},//2//LastName//
 					new {sTitle="Darbo stažas nuo"},//3//DateExpierence//
 					new {sTitle="Vairavimo kategorijos"},//4//DrivingCategory//
 					new {sTitle="Telefonas"},//5//Phone//
 					new {sTitle="Dokumentai"},//6//Docs//
-					new {sTitle="Darbo pabaiga",bVisible=false,bSearchable=false},//7//DateEnd//
+					new {sTitle="Darbo pabaiga",bVisible=false},//7//DateEnd//
 				}, //aaSorting = new object[] { new object[] { 2, "asc" } },//???
          };
          return JSON;
@@ -277,7 +284,7 @@ namespace CC.Models {
          JSON.Config = new { Controler = "AccidentsTypes", tblUpdate = "tblAccidentsTypes" };
          JSON.Grid = new {
             aoColumns = new object[]{
-					new {bVisible=false,bSearchable=false},//0//ID////DefaultUpdate=0
+					new {bVisible=false},//0//ID////DefaultUpdate=0
 					new {sTitle="Name",sClass="smallFont"}//1//Name//
 				},
             aaSorting = new object[] { new object[] { 1, "asc" } },//???
@@ -302,13 +309,20 @@ namespace CC.Models {
          JSON.Config = new { Controler = "ClaimTypes", tblUpdate = "tblClaimTypes" };
          JSON.Grid = new {
             aoColumns = new object[]{
-					new {bVisible=false,bSearchable=false},//0//ID////DefaultUpdate=0
+					new {bVisible=false},//0//ID////DefaultUpdate=0
 					new {sTitle="Name"}//1//Name//
-				},
-            aaSorting = new object[] { new object[] { 1, "asc" } },//???
+				}//,
+            //aaSorting = new object[] { new object[] { 1, "asc" } },//???
          };
          return JSON;
       }
+		public jsonArrays GetJSON_proc_Years() {
+			jsonArrays JSON = new jsonArrays();
+			JSON.Data = from d in dc.proc_AccidentsYears(UserData.AccountID)
+							select new object[] {d.years};
+			object[] Cols ={new { FName = "Year"}}; JSON.Cols = Cols;
+			return JSON;
+		}
 
       public jsonArrays GetJSON_proc_Vehicles(bool? OnlyTop) {
          jsonArrays JSON = new jsonArrays();
@@ -340,16 +354,16 @@ namespace CC.Models {
          JSON.Config = new { Controler = "Vehicles", tblUpdate = "tblVehicles", Msg = new { AddNew = "Naujos transporto priemonės sukūrimas", Edit = "Transporto priemonių redagavimas", Delete = "Ištrinti transporoto priemonę", GenName = "Transporto priemonė", GenNameWhat = "transporto priemonę", ListName = "Transporto priemonių sąrašas" } };
          JSON.Grid = new {
             aoColumns = new object[]{
-					new {bVisible=false,bSearchable=false},//0//ID
+					new {bVisible=false},//0//ID
 					new {sTitle="Valst.Nr."},//2//Plate//
 					new {sTitle="Tipas"},//1//Type//
 					new {sTitle="Markė"},//3//Make
 					new {sTitle="Modelis"},//4//Model//
 					new {sTitle="Metai"},//5//Year//
 					new {sTitle="Dokumentai"},//6//Docs//
-					new {bVisible=false,bSearchable=false,sTitle="Naudojimo pabaigos data"},//7//EndDate//
-					new {bVisible=false,bSearchable=false,sTitle="Tipas"},//8//TypeID//
-					new {bVisible=false,bSearchable=false,sTitle="Markė"}//9//MakeID//
+					new {bVisible=false,sTitle="Naudojimo pabaigos data"},//7//EndDate//
+					new {bVisible=false,sTitle="Tipas"},//8//TypeID//
+					new {bVisible=false,sTitle="Markė"}//9//MakeID//
 				},
             //aaSorting = new object[] { new object[] { 1, "asc" } },//???
          };
@@ -374,7 +388,7 @@ namespace CC.Models {
 			JSON.Config = new { tblUpdate = "tblUsers", Msg = new { AddNew = "Naujo vartotojo sukūrimas", Edit = "Vartotojo redagavimas", Delete = "Ištrinti vartotoją", GenName = "Vartotojas", GenNameWhat = "Vartotoją", ListName = "Vartotojų sąrašas" } };
 			JSON.Grid = new {
 				aoColumns = new object[]{
-					new {bVisible=false,bSearchable=false},//0//ID
+					new {bVisible=false},//0//ID
 					new {sTitle="Vardas"},
 					new {sTitle="Pavardė"},
 					new {sTitle="E-paštas"}
@@ -425,7 +439,7 @@ namespace CC.Models {
          JSON.Config = new { Controler = "InsPolicy", tblUpdate = "tblInsPolicies", Msg = new { AddNew = "Naujo draudimo poliso sukūrimas", Edit = "Draudimo poliso redagavimas", Delete = "Ištrinti draudimo polisą", GenName = "Draudimo polisas", GenNameWhat = "draudimo polisą", ListName = "Draudimo polisų sąrašas" } };
          JSON.Grid = new {
             aoColumns = new object[]{
-					new {bVisible=false,bSearchable=false},//0//ID////DefaultUpdate=0
+					new {bVisible=false},//0//ID////DefaultUpdate=0
 					new {sTitle="Draudimo rūšis"},//1//ClaimType//
 					new {sTitle="Draudimo kompanija"},//2//InsurerName//
 					new {sTitle="Poliso Nr."},//3//PolicyNumber//
@@ -433,12 +447,12 @@ namespace CC.Models {
 					new {sTitle="Galiojimo data"},//4//EndDate//
 
 					new {sTitle="Draudėjas"},//5//InsuredName////DefaultUpdate=0
-					new {sTitle="Draudėjo kodas",bVisible=false,bSearchable=false},//6//InsuredName//
-					new {sTitle="Draudėjo adresas",bVisible=false,bSearchable=false},//7//InsuredCode//
-					new {sTitle="Draudėjo kontaktas",bVisible=false,bSearchable=false},//8//InsuredContact//
-					new {bVisible=false,bSearchable=false,sTitle="Draudėjo kontaktas"},//9//InsuredContactID////UserID
-					new {bVisible=false,bSearchable=false,sTitle="Žalos tipas"},//10//ClaimTypeID////DefaultUpdate=0
-					new {bVisible=false,bSearchable=false,sTitle="Draudikas"}//11//InsurerID////
+					new {sTitle="Draudėjo kodas",bVisible=false},//6//InsuredName//
+					new {sTitle="Draudėjo adresas",bVisible=false},//7//InsuredCode//
+					new {sTitle="Draudėjo kontaktas",bVisible=false},//8//InsuredContact//
+					new {bVisible=false,sTitle="Draudėjo kontaktas"},//9//InsuredContactID////UserID
+					new {bVisible=false,sTitle="Žalos tipas"},//10//ClaimTypeID////DefaultUpdate=0
+					new {bVisible=false,sTitle="Draudikas"}//11//InsurerID////
 				}
             // aaSorting = new object[] { new object[] { 3, "asc" } },//???
          };
@@ -493,10 +507,10 @@ namespace CC.Models {
          JSON.Config = new { Controler = "Accidents", tblUpdate = "tblAccidents" };
          JSON.Grid = new {
             aoColumns = new object[]{
-					new {bVisible=false,bSearchable=false},//0//ID////DefaultUpdate=0
-					new {bVisible=false,bSearchable=false},//1//AccidentTypeID////DefaultUpdate=0
-					new {bVisible=false,bSearchable=false},//2//AccountID////DefaultUpdate=0
-					new {bVisible=false,bSearchable=false},//3//DriverID////DefaultUpdate=0
+					new {bVisible=false},//0//ID////DefaultUpdate=0
+					new {bVisible=false},//1//AccidentTypeID////DefaultUpdate=0
+					new {bVisible=false},//2//AccountID////DefaultUpdate=0
+					new {bVisible=false},//3//DriverID////DefaultUpdate=0
 					new {sTitle="Nr"},//4//No//
 					new {sTitle="Įvykio data ir laikas (vietos laiku)"},//5//Date//
 					new {sTitle="Kaltininkas trečia šalis"},//6//IsNotOurFault//
@@ -542,9 +556,9 @@ namespace CC.Models {
 
          JSON.Grid = new {
             aoColumns = new object[]{
-					new {bVisible=false,bSearchable=false},//0//ID////DefaultUpdate=0
+					new {bVisible=false},//0//ID////DefaultUpdate=0
 					new {sTitle="Name",sClass="smallFont"},//1//Name//
-					new {bVisible=false,bSearchable=false},//2//CountryID////DefaultUpdate=0
+					new {bVisible=false},//2//CountryID////DefaultUpdate=0
 					new {sTitle="CountryDefault"},//3//CountryDefault//
 				}, aaSorting = new object[] { new object[] { 3, "asc" } },//???
          };
@@ -568,7 +582,7 @@ namespace CC.Models {
          JSON.Config = new { Controler = "VehicleMakes", tblUpdate = "tblVehicleMakes", Msg = new { AddNew = "Naujos tr. priemonių markės sukūrimas", Edit = "Tr. priemonių markės redagavimas", Delete = "Ištrinti tr. priemonių markę", GenName = "Tr. priemonės markė", GenNameWhat = "transporto priemonę", ListName = "Tr. priemonių sąrašas" } };
          JSON.Grid = new {
             aoColumns = new object[]{
-					new {bVisible=false,bSearchable=false,sTitle="Markė1"},//0//ID////DefaultUpdate=0
+					new {bVisible=false,sTitle="Markė1"},//0//ID////DefaultUpdate=0
 					new {sTitle="Name",sClass="smallFont"}//1//Name//
 				}//, aaSorting = new object[] { new object[] { 3, "asc" } },//???
          };
@@ -591,7 +605,7 @@ namespace CC.Models {
          //JSON.Config = new { Controler = "VehicleMakes", tblUpdate = "tblVehicleMakes", Msg = new { AddNew = "Naujos tr. priemonių markės sukūrimas", Edit = "Tr. priemonių markės redagavimas", Delete = "Ištrinti tr. priemonių markę", GenName = "Tr. priemonės markė", GenNameWhat = "transporto priemonę", ListName = "Tr. priemonių sąrašas" } };
          JSON.Grid = new {
             aoColumns = new object[]{
-					new {bVisible=false,bSearchable=false},//0//ID////DefaultUpdate=0
+					new {bVisible=false},//0//ID////DefaultUpdate=0
 					new {sTitle="Name",sClass="smallFont"},//1//Name//
 				}//, aaSorting = new object[] { new object[] { 3, "asc" } },//???
          };
@@ -652,11 +666,11 @@ namespace CC.Models {
          };
          JSON.Grid = new {
             aoColumns = new object[]{
-				new {bVisible=false,bSearchable=false},//0//ID////DefaultUpdate=0
-				new {sTitle="Žalos tipas",bSearchable=false},//1//ClaimTypeID////DefaultUpdate=0
-				new {bVisible=false,bSearchable=false},//2//AccidentID////DefaultUpdate=0
-				new {sTitle="Polisas",bSearchable=false},//3//InsPolicyID////DefaultUpdate=0
-				new {sTitle="Transporto priemonė",bSearchable=false},//4//VehicleID////DefaultUpdate=0
+				new {bVisible=false},//0//ID////DefaultUpdate=0
+				new {sTitle="Žalos tipas"},//1//ClaimTypeID////DefaultUpdate=0
+				new {bVisible=false},//2//AccidentID////DefaultUpdate=0
+				new {sTitle="Polisas"},//3//InsPolicyID////DefaultUpdate=0
+				new {sTitle="Transporto priemonė"},//4//VehicleID////DefaultUpdate=0
 				new {sTitle="Nr"},//5//No//
 				new {sTitle="Visiškas praradimas"},//6//IsTotalLoss//
 				new {sTitle="Planuojama žalos suma"},//7//LossAmount//

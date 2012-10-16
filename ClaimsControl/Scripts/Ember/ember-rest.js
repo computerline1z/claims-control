@@ -85,25 +85,27 @@ var oDATA = Ember.Object.create({
 		}, this); //second parameter becomes this in the callback function
 		all_queued = true;
 	},
-	execWhenLoaded: function (objNames, fnExec,timeoutId) {//jei objektu nera laukiam kol ateis
-		var tId=(timeoutId)? timeoutId:0, me = this, notExists=false;
+	execWhenLoaded: function (objNames, fnExec, timeoutId) {//jei objektu nera laukiam kol ateis
+		var tId = (timeoutId) ? timeoutId : 0, me = this, notExists = false;
 		objNames.forEach(function (objName) {
-			console.log("cheking obj "+objName);
-			if  (objName.slice(0,3)==="tmp") {
-				if (!Em.TEMPLATES[objName]){console.log("template "+objName+" not exists");notExists=true;}
+			console.log("cheking obj " + objName);
+			if (objName.slice(0, 3) === "tmp") {
+				if (!Em.TEMPLATES[objName]) { console.log("template " + objName + " not exists"); notExists = true; }
 			}
 			else if (!this.get("exists").call(this, objName)) {
-				console.log("obj "+objName+" not exists");notExists=true;			
+				console.log("obj " + objName + " not exists"); notExists = true;
 			}
 		}, me); //second parameter becomes this in the callback function
-		if (notExists) {tId=setTimeout ( function (){
-			oDATA.execWhenLoaded(objNames,fnExec,tId)}, 1000 ); return false;
+		if (notExists) {
+			tId = setTimeout(function () {
+				oDATA.execWhenLoaded(objNames, fnExec, tId)
+			}, 1000); return false;
 		}
-		else if (tId!==0) {clearTimeout ( tId );}
+		else if (tId !== 0) { clearTimeout(tId); }
 		fnExec();
 	},
 	emBuilder: function (p) {//{newData:newData, tblName:tblName, toAppend:{"sort":"asc/desc","col":"date"}}
-		oData = oDATA.GET(p.tblName); 
+		oData = oDATA.GET(p.tblName);
 		if (!oData.emData) { oData.emData = []; }
 		if (!p.newData) return;
 		var d = p.newData, c = oData.Cols, f = [], n, i, y, cnt = oData.emData;
@@ -189,21 +191,21 @@ var oDATA = Ember.Object.create({
 		$.ajax({
 			url: p.url, dataType: 'json', type: 'POST',
 			success: function (json) {
-				if  (json.jsonObj) {
+				if (json.jsonObj) {
 					$.each(json.jsonObj, function (objName, value) {
 						console.log("New jsonObj:" + objName);
 						setter.call(me, objName, value);
 						emBuilder.call(me, { newData: value.Data, tblName: objName, toAppend: true }); //{oData, toAppend:{"sort":"asc/desc","col":"date"}}
 					});
 				}
-				if  (json.templates) {
+				if (json.templates) {
 					$.each(json.templates, function (objName, value) {
 						console.log("New template:" + objName);
 						Em.TEMPLATES[objName] = Em.Handlebars.compile(value);
 						//kitas variantas: http://stackoverflow.com/questions/8659787/using-pre-compiled-templates-with-handlebars-js-jquery-mobile-environment
 					});
 				}
-				if  (p.callBack) p.callBack();
+				if (p.callBack) p.callBack();
 			}
 		});
 	}
@@ -325,23 +327,23 @@ Ember.ResourceController = Ember.ArrayController.extend(Ember.ResourceAdapter, {
 			url: url
 		})		//, complete: callBack
 		  .done(function (json) {
-			self.set("loadStatus", "ok");
-			var tbl = json[self.get('tableName')];
-			//oDATA.SET(
-			if (tbl.Data) {
-				self.set("content", tbl.Data);
-			}
-			if (tbl.cols) {
-				self.set("cols", tbl.cols);
-			}
-			if (tbl.config) {
-				self.set("config", tbl.config);
-			}
-			if (tbl.grid) {
-				self.set("grid", tbl.grid);
-			}
-			console.log("data loaded");
-			//Ember.run.next(function () { self.set("loaded", true); });
+		  	self.set("loadStatus", "ok");
+		  	var tbl = json[self.get('tableName')];
+		  	//oDATA.SET(
+		  	if (tbl.Data) {
+		  		self.set("content", tbl.Data);
+		  	}
+		  	if (tbl.cols) {
+		  		self.set("cols", tbl.cols);
+		  	}
+		  	if (tbl.config) {
+		  		self.set("config", tbl.config);
+		  	}
+		  	if (tbl.grid) {
+		  		self.set("grid", tbl.grid);
+		  	}
+		  	console.log("data loaded");
+		  	//Ember.run.next(function () { self.set("loaded", true); });
 		  });
 	}
 	/*Pakeitimai:
@@ -452,7 +454,7 @@ var SERVER = {
 			return false;
 		}
 	}
-}
+};
 
 //App.peopleController = Ember.ArrayController.create({
 //    findByName: function(name) {

@@ -115,7 +115,7 @@ Em.Object.prototype.MapArrToString = function (arrNames, mapWithNoCommas) {
 Em.Object.prototype.updateTo = function (newObject) {//very ew very good, very cool!!!!!!!!!!!!!!!
 	for (var prop in this) {
 		if (!this.hasOwnProperty(prop)) continue;
-		if (newObject[prop]&&this[prop]!==newObject[prop]){
+		if (newObject[prop] && this[prop] !== newObject[prop]) {
 			this.set(prop, newObject[prop]);
 			// o ne this[prop]=newObject[prop];
 		}
@@ -277,19 +277,19 @@ Array.prototype.UpdateArrToNew = function (NewArr, fieldsToInt) {
 
 	}
 	return false;
-}
+};
 Array.prototype.arrElementToInt = function (fieldsToInt) {
 	for (var i = 0; i < fieldsToInt.length; i++) {
 		this[fieldsToInt[i]] = parseInt(this[fieldsToInt[i]], 10);
 	}
-}
+};
 String.prototype.IsImage = function () {
 	var type = (this.substring(this.search("\\.") + 1)).toUpperCase();
 	if (type === "PNG" || type === "JPG" || type === "GIF" || type === "JPEG" || type === "BMP") {
 		return true;
 	}
 	return false;
-}
+};
 String.prototype.format = function () {
 	//'{0} {0} {1} {2}'.format(3.14, 'abc', 'foo'); // outputs: 3.14 3.14 abc foo
 	//'Your balance is {0} USD'.format(77.7)
@@ -453,13 +453,13 @@ oGLOBAL.date = {
 		// accepts a date in the format 2011-01-01 (year, month, day)
 		// Internet Explorer does not like dashes in dates when converting, so lets use a regular expression to get the year, month, and day 
 		//var DateRegex = /([^-]*)+this.dateDelimiter+([^-]*)+this.dateDelimiter+([^-]*)/;
-		var pattern = new RegExp("([^-]*)"+this.dateDelimiter+"([^-]*)"+this.dateDelimiter+"([^-]*)");
+		var pattern = new RegExp("([^-]*)" + this.dateDelimiter + "([^-]*)" + this.dateDelimiter + "([^-]*)");
 		this.checkFormat();
 		var DateRegexResult = stringDate.match(pattern);
 		return new Date(DateRegexResult[2] + "/" + DateRegexResult[3] + "/" + DateRegexResult[1]);
 	},
 	firstBigger: function (date1, date2) {
-		if (arguments.length===1){date2=this.getTodayString();}
+		if (arguments.length === 1) { date2 = this.getTodayString(); }
 		//console.log(this.getDate(date1));console.log(this.getDate(date2));
 		return this.getDate(date1) > this.getDate(date2);
 	},
@@ -510,4 +510,4 @@ oGLOBAL.date = {
 	// return regs[1] + "-" + regs[2] + "-" + regs[3] + " " + regs[4] + ":00";
 	// }
 	// }
-}
+};

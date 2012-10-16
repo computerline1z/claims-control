@@ -7,7 +7,7 @@ App.ReportsView = App.mainMenuView.extend({ templateName: 'tmpReports', viewIx: 
 App.AdminView = App.mainMenuView.extend({ templateName: 'tmpAdmin', viewIx: 5 });
 
 App.Router = Em.Router.extend({
-	enableLogging: true,
+	enableLogging: false,
 	location: 'hash',
 	root: Em.Route.extend({
 		// EVENTS

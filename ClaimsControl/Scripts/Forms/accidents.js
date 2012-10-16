@@ -2,6 +2,8 @@
 (function() {
   var w=window, App=w.App, Em=w.Em, oGLOBAL=w.oGLOBAL, oDATA=w.oDATA, oCONTROLS=w.oCONTROLS, MY=w.MY;
 
+  var panelFilterIsActive, textFilterIsActive;
+
   App.AccidentView = Em.View.extend({
     templateName: 'tmpAccidentRow',
     tagName: ""
@@ -295,6 +297,10 @@
       if (AddWr.length > 0) {
         MY.accidents.AcccidentdetailsView.remove();
         return AddWr.remove();
+      } else if (MY.accidents.AcccidentdetailsView) {
+        MY.accidents.AcccidentdetailsView.destroy();
+        MY.accidents.AcccidentdetailsView = null;
+        return $('div.dividers').remove();
       }
     },
     tbodyClick: function(e) {
@@ -361,51 +367,129 @@
       oGLOBAL.LoadAccident_Card(AccNo);
       return false;
     },
-    filterDidChange: (function() {
-      return alert(this.filterValue);
-    }).observes('chkDocs', 'chkOpen', 'chkData', 'chkClaim', 'filterValue'),
+    filterDidChange: (function(thisObj, filterName) {
+      var filterValue;
+      console.log("filterDidChange");
+      filterValue = filterName === "All" ? void 0 : thisObj[filterName];
+      if (filterName === "filterValue") {
+        this.textFilterIsActive = filterValue === "" ? false : true;
+      } else {
+        this.panelFilterIsActive = this.chkDocs || this.chkOpen || this.chkData || this.chkClaim ? true : false;
+        this.filterByPanel = this.get_filterByPanel();
+      }
+      this.filterItems(filterName, filterValue, thisObj);
+      return Em.run.next(function() {
+        var tbl;
+        tbl = $('#accidentsTable');
+        if (!tbl.find('div.selectedAccident').length) {
+          return tbl.find('div.dividers').remove();
+        }
+      });
+    }).observes('chkDocs', 'chkOpen', 'chkData', 'chkClaim', 'filterValue')
+  }, textFilterIsActive = false, panelFilterIsActive = false, {
+    filterFromVisible: false,
+    filterCols: ['accType', 'driver', 'shortNote', 'userName', 'place', 'claims_C'],
     filterValue: null,
     chkDocs: null,
     chkOpen: null,
     chkData: null,
     chkClaim: null,
-    filterByField: function() {
+    filterByField: function(row) {
+      var cols, fnFilter, i, me, ret, _i, _ref;
+      if (row.filterToHide) {
+        return false;
+      }
+      me = this;
+      ret = false;
+      cols = JSON.parse(JSON.stringify(me.filterCols));
+      fnFilter = function(i) {
+        if (row[cols[i]].toLowerCase().indexOf(me.filterValue) > -1) {
+          return true;
+        } else {
+          return false;
+        }
+      };
+      console.log("---Start filtering----");
+      for (i = _i = 0, _ref = cols.length; _i < _ref; i = _i += 1) {
+        if (fnFilter(i)) {
+          ret = true;
+          console.log("true - " + row[cols[i]]);
+          break;
+        } else {
+          console.log("false - " + row[cols[i]]);
+        }
+      }
+      console.log("---End filtering----");
+      if (!ret) {
+        row.filterToHide = true;
+      }
+      return ret;
+    },
+    get_filterByPanel: function() {
       var fn;
-      fn = !this.filterValue ? "return true;" : "var ret=false,cols=" + JSON.stringify(this.current.filterCols) + ";console.log('Filtering by val:" + this.filterValue + "'); for(var i=0; i < cols.length; i++){console.log(row[cols[i]]+', '+(row[cols[i]].toLowerCase().indexOf('" + this.filterValue + "')>-1));		if (row[cols[i]].toLowerCase().indexOf('" + this.filterValue + "')>-1){ret=true; break;}} console.log('filterByval rez: '+ret);return ret;";
-      return new Function("row", fn);
-    },
-    filterByTab: function() {
-      var fn, mark;
-      if (this.current.emObject === "drivers") {
-        mark = this.clicked === "NotWorking" ? "!" : "";
-        fn = "var ret=true; if ($.trim(row.dateEnd)) {ret=oGLOBAL.date.firstBigger(row.dateEnd);} console.log('dateEnd: '+row.dateEnd+', '+ret);return " + mark + "ret";
-      } else if (this.current.emObject === "vehicles") {
-        mark = this.clicked === "NotWorking" ? "!" : "";
-        fn = "var ret=true; if ($.trim(row.endDate)) {ret=oGLOBAL.date.firstBigger(row.endDate);} console.log('endDate: '+row.endDate+', '+ret);return " + mark + "ret";
-      } else {
-        throw new Error("filterByTab has no such emObject");
+      fn = "";
+      if (this.chkOpen) {
+        fn += this.chkOpen === "chkWithOpen" ? "if (row.cNo_NotF===0) return false;" : "if (row.cNo_NotF>0) return false;";
       }
+      if (this.chkDocs) {
+        fn += this.chkDocs === "chkWithDocs" ? "if (row.docNo===0) return false;" : "if (row.docNo>0) return false;";
+      }
+      if (this.chkData) {
+        fn += this.chkData === "12month" ? "if (row.daysFrom>365) return false;" : "if (row.date.indexOf(" + this.chkData + ")===-1) return false;";
+      }
+      if (this.chkClaim) {
+        fn += "if (row.claims_TypeID.indexOf('" + this.chkClaim + "')===-1) return false;";
+      }
+      fn += "return true;";
       return new Function("row", fn);
     },
-    filterItems: function() {
-      var fn,
+    filterByPanel: null,
+    filterItems: function(filterName, filterValue, thisObj) {
+      var fnFilter,
         _this = this;
-      if (this.current.emObject === "insPolicies") {
-        fn = function(row) {
-          var v;
-          v = _this.filterByField()(row);
-          console.log("finalRez: " + v);
-          return row.set('visible', v);
-        };
+      if (filterName === 'filterValue') {
+        if (filterValue === "") {
+          fnFilter = this.panelFilterIsActive ? function(row) {
+            row.filterToHide = false;
+            return _this.filterByPanel(row);
+          } : function(row) {
+            row.filterToHide = false;
+            return true;
+          };
+        } else {
+          if (this.panelFilterIsActive) {
+            fnFilter = function(row) {
+              var result;
+              result = (!_this.filterByField(row) ? false : _this.filterByPanel(row));
+              return result;
+            };
+          } else {
+            fnFilter = function(row) {
+              return _this.filterByField(row);
+            };
+          }
+        }
+        console.log("Filtro pradžia - tekstas---------------");
       } else {
-        fn = function(row) {
-          var v;
-          v = (_this.filterByTab()(row) ? _this.filterByField()(row) : false);
-          console.log("finalRez: " + v);
-          return row.set('visible', v);
-        };
+        if (!this.textFilterIsActive && !this.panelFilterIsActive) {
+          fnFilter = function(row) {
+            return true;
+          };
+        } else {
+          fnFilter = function(row) {
+            if (row.filterToHide) {
+              return false;
+            }
+            return _this.filterByPanel(row);
+          };
+        }
+        console.log("Filtro pradžia - kiti filtrai---------------");
       }
-      return App.listAllController[this.current.emObject].forEach(fn);
+      return this.content.forEach(function(row) {
+        var res;
+        res = fnFilter(row);
+        return row.set('visible', res);
+      });
     }
   });
 
@@ -422,51 +506,70 @@
     tableName: "?"
   });
 
+  App.sidePanelController = Em.ResourceController.create({
+    tableName: "?",
+    chkHandler: function(chk, option) {
+      var newVal;
+      newVal = chk.attr("checked") ? chk.data("opt") : null;
+      return App.accidentsController.set(option, newVal);
+    },
+    init: function() {
+      var _this = this;
+      this._super();
+      return oDATA.execWhenLoaded(["tblClaimTypes"], function() {
+        _this.set('years', oDATA.GET("proc_Years").emData);
+        _this.set('claimTypes', oDATA.GET("tblClaimTypes").emData);
+        _this.claimTypes.findProperty("iD", 0).visible = false;
+        return Em.run.next(_this, function() {
+          var me;
+          me = this;
+          $("#sidePanel").find("fieldset.datesOptions").find("input:checkbox").checkbox({
+            "onClick": function(chk) {
+              return me.chkHandler(chk, "chkData");
+            }
+          });
+          return $("#sidePanel").find("fieldset.claimsTypesOptions").find("input:checkbox").checkbox({
+            "onClick": function(chk) {
+              return me.chkHandler(chk, "chkClaim");
+            }
+          });
+        });
+      });
+    },
+    years: [],
+    claimTypes: []
+  });
+
   App.SidePanelView = Em.View.extend({
     templateName: "tmpSidePanel",
     didInsertElement: function() {
       this._super();
-      $("#chkOpen").buttonset().on("click", function(e) {
+      return Em.run.next(function() {
+        return $("#sidePanel").closest("div.col2").scrollelement();
+      }, console.log("Pradedu"), console.log($("#chkOpen")), $("#chkOpen").buttonset().on("click", function(e) {
         var chk, newVal;
         chk = $(e.target).closest("label").prev();
         newVal = chk.next().hasClass("ui-state-active") ? chk.attr("id") : null;
         $("#chkOpen").find("label").not(chk.next()).removeClass("ui-state-active").end().prev().not(chk).removeAttr("checked");
         App.accidentsController.set("chkOpen", newVal);
-        return false;
-      });
-      $("#chkDocs").buttonset().on("click", function(e) {
+        return e.preventDefault();
+      }), $("#chkDocs").buttonset().on("click", function(e) {
         var chk, newVal;
         chk = $(e.target).closest("label").prev();
         newVal = chk.next().hasClass("ui-state-active") ? chk.attr("id") : null;
         $("#chkDocs").find("label").not(chk.next()).removeClass("ui-state-active").end().prev().not(chk).removeAttr("checked");
         App.accidentsController.set("chkDocs", newVal);
-        return false;
-      });
-      $("#chk12month,#chk2011,#chk2010,#chk2009").checkbox().on("click", function(e) {
-        var chk, newVal;
-        chk = $(e.target);
-        newVal = chk.attr("checked") ? chk.attr("id") : null;
-        $("#chk12month,#chk2011,#chk2010,#chk2009").not(chk).removeAttr("checked").parent().next().next().find("span.ui-checkbox-icon").removeClass("ui-icon ui-icon-check").attr("aria-checked", "false");
-        App.accidentsController.set("chkData", newVal);
-        return false;
-      });
-      return $("#chkClaim_1,#chkClaim_2,#chkClaim_3,#chkClaim_4,#chkClaim_5,#chkClaim_6").checkbox().on("click", function(e) {
-        var chk, newVal;
-        chk = $(e.target);
-        newVal = chk.attr("checked") ? chk.attr("id") : null;
-        $("#chkClaim_1,#chkClaim_2,#chkClaim_3,#chkClaim_4,#chkClaim_5,#chkClaim_6").not(chk).removeAttr("checked").parent().next().next().find("span.ui-checkbox-icon").removeClass("ui-icon ui-icon-check").attr("aria-checked", "false");
-        App.accidentsController.set("chkClaim", newVal);
-        return false;
-      });
+        return e.preventDefault();
+      }));
     },
     showAll: function() {
       $("#chkOpen,#chkDocs").find("label").removeClass("ui-state-active").end().prev().removeAttr("checked");
-      $("#chk12month,#chk2011,#chk2010,#chk2009,#chkClaim_1,#chkClaim_2,#chkClaim_3,#chkClaim_4,#chkClaim_5,#chkClaim_6").removeAttr("checked").parent().next().next().find("span.ui-checkbox-icon").removeClass("ui-icon ui-icon-check").attr("aria-checked", "false");
+      $("#sidePanel").find("input:checkbox").removeAttr("checked").parent().next().next().find("span.ui-checkbox-icon").removeClass("ui-icon ui-icon-check").attr("aria-checked", "false");
       App.accidentsController.chkOpen = null;
       App.accidentsController.chkDocs = null;
       App.accidentsController.chkData = null;
       App.accidentsController.chkClaim = null;
-      return App.accidentsController.filterDidChange();
+      return App.accidentsController.filterDidChange(this, 'All');
     }
   });
 
