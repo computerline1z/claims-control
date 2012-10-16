@@ -403,13 +403,6 @@ namespace CC.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.proc_Accidents")]
-		public ISingleResult<proc_AccidentsResult> proc_Accidents([global::System.Data.Linq.Mapping.ParameterAttribute(Name="AccountID", DbType="Int")] System.Nullable<int> accountID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="AccidentID", DbType="Int")] System.Nullable<int> accidentID)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), accountID, accidentID);
-			return ((ISingleResult<proc_AccidentsResult>)(result.ReturnValue));
-		}
-		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.proc_Vehicles")]
 		public ISingleResult<proc_VehiclesResult> proc_Vehicles([global::System.Data.Linq.Mapping.ParameterAttribute(Name="AccountID", DbType="Int")] System.Nullable<int> accountID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Top", DbType="Bit")] System.Nullable<bool> top)
 		{
@@ -437,6 +430,20 @@ namespace CC.Models
 		{
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), accountID, top);
 			return ((ISingleResult<proc_DriversResult>)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.proc_Accidents")]
+		public ISingleResult<proc_AccidentsResult> proc_Accidents([global::System.Data.Linq.Mapping.ParameterAttribute(Name="AccountID", DbType="Int")] System.Nullable<int> accountID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="AccidentID", DbType="Int")] System.Nullable<int> accidentID)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), accountID, accidentID);
+			return ((ISingleResult<proc_AccidentsResult>)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.proc_AccidentsYears")]
+		public ISingleResult<proc_AccidentsYearsResult> proc_AccidentsYears([global::System.Data.Linq.Mapping.ParameterAttribute(Name="AccountID", DbType="Int")] System.Nullable<int> accountID)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), accountID);
+			return ((ISingleResult<proc_AccidentsYearsResult>)(result.ReturnValue));
 		}
 	}
 	
@@ -8404,284 +8411,6 @@ namespace CC.Models
 		}
 	}
 	
-	public partial class proc_AccidentsResult
-	{
-		
-		private int _ID;
-		
-		private int _No;
-		
-		private string _Date;
-		
-		private string _Place;
-		
-		private string _AccType;
-		
-		private int _CNo_All;
-		
-		private int _CNo_NotF;
-		
-		private double _LossSum;
-		
-		private byte _AmountIsConfirmed;
-		
-		private string _ShortNote;
-		
-		private string _LongNote;
-		
-		private string _Driver;
-		
-		private string _UserName;
-		
-		private string _Claims_C;
-		
-		private string _Claims_C2;
-		
-		public proc_AccidentsResult()
-		{
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="Int NOT NULL")]
-		public int ID
-		{
-			get
-			{
-				return this._ID;
-			}
-			set
-			{
-				if ((this._ID != value))
-				{
-					this._ID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_No", DbType="Int NOT NULL")]
-		public int No
-		{
-			get
-			{
-				return this._No;
-			}
-			set
-			{
-				if ((this._No != value))
-				{
-					this._No = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Date", DbType="VarChar(10)")]
-		public string Date
-		{
-			get
-			{
-				return this._Date;
-			}
-			set
-			{
-				if ((this._Date != value))
-				{
-					this._Date = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Place", DbType="NVarChar(252)")]
-		public string Place
-		{
-			get
-			{
-				return this._Place;
-			}
-			set
-			{
-				if ((this._Place != value))
-				{
-					this._Place = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AccType", DbType="NVarChar(30) NOT NULL", CanBeNull=false)]
-		public string AccType
-		{
-			get
-			{
-				return this._AccType;
-			}
-			set
-			{
-				if ((this._AccType != value))
-				{
-					this._AccType = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CNo_All", DbType="Int NOT NULL")]
-		public int CNo_All
-		{
-			get
-			{
-				return this._CNo_All;
-			}
-			set
-			{
-				if ((this._CNo_All != value))
-				{
-					this._CNo_All = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CNo_NotF", DbType="Int NOT NULL")]
-		public int CNo_NotF
-		{
-			get
-			{
-				return this._CNo_NotF;
-			}
-			set
-			{
-				if ((this._CNo_NotF != value))
-				{
-					this._CNo_NotF = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LossSum", DbType="Float NOT NULL")]
-		public double LossSum
-		{
-			get
-			{
-				return this._LossSum;
-			}
-			set
-			{
-				if ((this._LossSum != value))
-				{
-					this._LossSum = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AmountIsConfirmed", DbType="TinyInt NOT NULL")]
-		public byte AmountIsConfirmed
-		{
-			get
-			{
-				return this._AmountIsConfirmed;
-			}
-			set
-			{
-				if ((this._AmountIsConfirmed != value))
-				{
-					this._AmountIsConfirmed = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ShortNote", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
-		public string ShortNote
-		{
-			get
-			{
-				return this._ShortNote;
-			}
-			set
-			{
-				if ((this._ShortNote != value))
-				{
-					this._ShortNote = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LongNote", DbType="NVarChar(500) NOT NULL", CanBeNull=false)]
-		public string LongNote
-		{
-			get
-			{
-				return this._LongNote;
-			}
-			set
-			{
-				if ((this._LongNote != value))
-				{
-					this._LongNote = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Driver", DbType="NVarChar(201)")]
-		public string Driver
-		{
-			get
-			{
-				return this._Driver;
-			}
-			set
-			{
-				if ((this._Driver != value))
-				{
-					this._Driver = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserName", DbType="NVarChar(101) NOT NULL", CanBeNull=false)]
-		public string UserName
-		{
-			get
-			{
-				return this._UserName;
-			}
-			set
-			{
-				if ((this._UserName != value))
-				{
-					this._UserName = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Claims_C", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
-		public string Claims_C
-		{
-			get
-			{
-				return this._Claims_C;
-			}
-			set
-			{
-				if ((this._Claims_C != value))
-				{
-					this._Claims_C = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Claims_C2", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
-		public string Claims_C2
-		{
-			get
-			{
-				return this._Claims_C2;
-			}
-			set
-			{
-				if ((this._Claims_C2 != value))
-				{
-					this._Claims_C2 = value;
-				}
-			}
-		}
-	}
-	
 	public partial class proc_VehiclesResult
 	{
 		
@@ -9241,6 +8970,364 @@ namespace CC.Models
 				if ((this._DateEnd != value))
 				{
 					this._DateEnd = value;
+				}
+			}
+		}
+	}
+	
+	public partial class proc_AccidentsResult
+	{
+		
+		private int _ID;
+		
+		private int _No;
+		
+		private string _Date;
+		
+		private string _Place;
+		
+		private string _AccType;
+		
+		private int _CNo_All;
+		
+		private int _CNo_NotF;
+		
+		private double _LossSum;
+		
+		private byte _AmountIsConfirmed;
+		
+		private string _ShortNote;
+		
+		private string _LongNote;
+		
+		private string _Driver;
+		
+		private string _UserName;
+		
+		private string _Claims_C;
+		
+		private string _Claims_C2;
+		
+		private System.Nullable<int> _DaysFrom;
+		
+		private int _DocNo;
+		
+		private string _Claims_TypeID;
+		
+		public proc_AccidentsResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="Int NOT NULL")]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this._ID = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_No", DbType="Int NOT NULL")]
+		public int No
+		{
+			get
+			{
+				return this._No;
+			}
+			set
+			{
+				if ((this._No != value))
+				{
+					this._No = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Date", DbType="VarChar(10)")]
+		public string Date
+		{
+			get
+			{
+				return this._Date;
+			}
+			set
+			{
+				if ((this._Date != value))
+				{
+					this._Date = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Place", DbType="NVarChar(334) NOT NULL", CanBeNull=false)]
+		public string Place
+		{
+			get
+			{
+				return this._Place;
+			}
+			set
+			{
+				if ((this._Place != value))
+				{
+					this._Place = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AccType", DbType="NVarChar(30) NOT NULL", CanBeNull=false)]
+		public string AccType
+		{
+			get
+			{
+				return this._AccType;
+			}
+			set
+			{
+				if ((this._AccType != value))
+				{
+					this._AccType = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CNo_All", DbType="Int NOT NULL")]
+		public int CNo_All
+		{
+			get
+			{
+				return this._CNo_All;
+			}
+			set
+			{
+				if ((this._CNo_All != value))
+				{
+					this._CNo_All = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CNo_NotF", DbType="Int NOT NULL")]
+		public int CNo_NotF
+		{
+			get
+			{
+				return this._CNo_NotF;
+			}
+			set
+			{
+				if ((this._CNo_NotF != value))
+				{
+					this._CNo_NotF = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LossSum", DbType="Float NOT NULL")]
+		public double LossSum
+		{
+			get
+			{
+				return this._LossSum;
+			}
+			set
+			{
+				if ((this._LossSum != value))
+				{
+					this._LossSum = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AmountIsConfirmed", DbType="TinyInt NOT NULL")]
+		public byte AmountIsConfirmed
+		{
+			get
+			{
+				return this._AmountIsConfirmed;
+			}
+			set
+			{
+				if ((this._AmountIsConfirmed != value))
+				{
+					this._AmountIsConfirmed = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ShortNote", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string ShortNote
+		{
+			get
+			{
+				return this._ShortNote;
+			}
+			set
+			{
+				if ((this._ShortNote != value))
+				{
+					this._ShortNote = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LongNote", DbType="NVarChar(500) NOT NULL", CanBeNull=false)]
+		public string LongNote
+		{
+			get
+			{
+				return this._LongNote;
+			}
+			set
+			{
+				if ((this._LongNote != value))
+				{
+					this._LongNote = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Driver", DbType="NVarChar(201)")]
+		public string Driver
+		{
+			get
+			{
+				return this._Driver;
+			}
+			set
+			{
+				if ((this._Driver != value))
+				{
+					this._Driver = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserName", DbType="NVarChar(101) NOT NULL", CanBeNull=false)]
+		public string UserName
+		{
+			get
+			{
+				return this._UserName;
+			}
+			set
+			{
+				if ((this._UserName != value))
+				{
+					this._UserName = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Claims_C", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string Claims_C
+		{
+			get
+			{
+				return this._Claims_C;
+			}
+			set
+			{
+				if ((this._Claims_C != value))
+				{
+					this._Claims_C = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Claims_C2", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string Claims_C2
+		{
+			get
+			{
+				return this._Claims_C2;
+			}
+			set
+			{
+				if ((this._Claims_C2 != value))
+				{
+					this._Claims_C2 = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DaysFrom", DbType="Int")]
+		public System.Nullable<int> DaysFrom
+		{
+			get
+			{
+				return this._DaysFrom;
+			}
+			set
+			{
+				if ((this._DaysFrom != value))
+				{
+					this._DaysFrom = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DocNo", DbType="Int NOT NULL")]
+		public int DocNo
+		{
+			get
+			{
+				return this._DocNo;
+			}
+			set
+			{
+				if ((this._DocNo != value))
+				{
+					this._DocNo = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Claims_TypeID", DbType="VarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string Claims_TypeID
+		{
+			get
+			{
+				return this._Claims_TypeID;
+			}
+			set
+			{
+				if ((this._Claims_TypeID != value))
+				{
+					this._Claims_TypeID = value;
+				}
+			}
+		}
+	}
+	
+	public partial class proc_AccidentsYearsResult
+	{
+		
+		private System.Nullable<int> _years;
+		
+		public proc_AccidentsYearsResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_years", DbType="Int")]
+		public System.Nullable<int> years
+		{
+			get
+			{
+				return this._years;
+			}
+			set
+			{
+				if ((this._years != value))
+				{
+					this._years = value;
 				}
 			}
 		}

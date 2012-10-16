@@ -130,7 +130,7 @@ var oCONTROLS = {
 				if (prop === 'List') {
 					$.extend(data_ctrl, col[prop]);
 				} //Listo propercius dedu vienam lygyje su kitais data_ctrl.Type="List";
-				else if (prop === 'Value' || prop === 'Validity' || prop === 'AgrValidity' || prop === 'Tip' || prop === 'Field' || prop === 'Type' || prop === 'Ext' || prop === 'UpdateField'|| prop === 'Editable') {
+				else if (prop === 'Value' || prop === 'Validity' || prop === 'AgrValidity' || prop === 'Tip' || prop === 'Field' || prop === 'Type' || prop === 'Ext' || prop === 'UpdateField' || prop === 'Editable') {
 					data_ctrl[prop] = col[prop];
 				}
 			}
@@ -231,7 +231,7 @@ var oCONTROLS = {
 	},
 	ValidateForm: function (frm, DataToSaveAppend) { //Formos lauku validacija (pagal data-ctrl duomenis)
 		$("div.validity-modal-msg").remove(); //panaikinam validacijos msg jei buvo
-		var c = frm.data("ctrl"), id = parseInt(c.id,10), NewRec = parseInt(c.NewRec, 10), DataTable = (c.tblUpdate) ? (c.tblUpdate) : (oDATA.GET(c.Source).Config.tblUpdate); //Updatinimui imam is markupo, jei nera is objekto
+		var c = frm.data("ctrl"), id = parseInt(c.id, 10), NewRec = parseInt(c.NewRec, 10), DataTable = (c.tblUpdate) ? (c.tblUpdate) : (oDATA.GET(c.Source).Config.tblUpdate); //Updatinimui imam is markupo, jei nera is objekto
 		if (!id & !NewRec) {
 			alert("Nėra nurodyta id formos data(ctrl)!");
 		}
@@ -253,7 +253,7 @@ var oCONTROLS = {
 			}
 			var Type, FName = e.data("ctrl").Field, OldVal = (NewRec) ? '' : $.trim(e.data("ctrl").Value), val = '';
 			if (e.attr("type") === "checkbox") {
-				if(!NewRec) {OldVal=(!OldVal||OldVal==="False"||OldVal==="0" )?0:1;}//leidžiam neupdatint checkbox'o tik jai ne naujas rekordas
+				if (!NewRec) { OldVal = (!OldVal || OldVal === "False" || OldVal === "0") ? 0 : 1; } //leidžiam neupdatint checkbox'o tik jai ne naujas rekordas
 				val = (e.attr("checked")) ? 1 : 0; // Type="CheckBox";
 			} else {
 				if (typeof e.data("ctrl").Type === 'undefined') {
@@ -392,7 +392,7 @@ var oCONTROLS = {
 		return this.appendLabel(p, "<textarea cols='100' rows='4' " + this.basic(p) + ">" + ((p.Value) ? p.Value : "") + "</textarea>");
 	},
 	chk: function (p) {
-		if (typeof p.Value === "string") {p.Value = ((p.Value.search(/false/i) > -1||p.Value==="") ? 0 : 1);}	
+		if (typeof p.Value === "string") { p.Value = ((p.Value.search(/false/i) > -1 || p.Value === "") ? 0 : 1); }
 		return "<label " + ((p.label.classes) ? " class='" + p.label.classes + "'" : "") + ((p.attr) ? p.attr + " " : "") + "><input type='checkbox' " + this.basic(p) + ((p.Value) ? "checked='checked'" : "") + "/>" + ((p.label.txt) ? p.label.txt : "") + "</label>";
 	},
 	//{src:??,alt:??,onclickfn:??}
@@ -559,7 +559,7 @@ var oCONTROLS = {
 	dialog: {
 		opt: {
 			title: '', msg: '', autoOpen: false, height: 'auto', width: 350, minWidth: 300, modal: true, show: 'clip', hide: 'clip',
-			close: function () { oCONTROLS.dialog.destroy(this); },
+			close: function () { oCONTROLS.dialog.destroy(this); }
 		},
 		destroy: function (t) { $(t).dialog("destroy"); $('#dialog_form_tmp_id').remove(); }, //$(this).dialog("close");
 		Alert: function (opt) {//iskvietimui oCONTROLS.dialog.Alert({title:"fds",msg:"sdf"})
@@ -567,24 +567,24 @@ var oCONTROLS = {
 			this.showDialog(opt, buttons);
 		},
 		Confirm: function (opt, fnCallBack) {//iskvietimui oCONTROLS.dialog.Confirm({title:"fds",msg:"sdf"},fnCallBack)
-			oCONTROLS.dialog.fnCallBack=fnCallBack;
+			oCONTROLS.dialog.fnCallBack = fnCallBack;
 			buttons = {
-				"Taip": function () { d=oCONTROLS.dialog; d.fnCallBack(); d.destroy(this); },
+				"Taip": function () { d = oCONTROLS.dialog; d.fnCallBack(); d.destroy(this); },
 				"Ne": function () { oCONTROLS.dialog.destroy(this); }
 			};
 			this.showDialog(opt, buttons);
 		},
 		showDialog: function (opt, buttons) {
-			var o = $.extend(true, {}, this.opt, {buttons:buttons}, opt);
+			var o = $.extend(true, {}, this.opt, { buttons: buttons }, opt);
 			var $dialog = $('<div id="dialog_form_tmp_id">').html(opt.msg).dialog(o).dialog('open');
 		}
 	},
 	helper: {//oCONTROLS.helper.getData_fromDataToSave(DataToSave,Field)
-		getData_fromDataToSave: function(DataToSave,field){
-			ret ="";
+		getData_fromDataToSave: function (DataToSave, field) {
+			ret = "";
 			DataToSave.Fields.forEach(
-				function (Field,i){
-					if(Field===field) ret=DataToSave.Data[i];
+				function (Field, i) {
+					if (Field === field) ret = DataToSave.Data[i];
 				}
 			);
 			return ret;

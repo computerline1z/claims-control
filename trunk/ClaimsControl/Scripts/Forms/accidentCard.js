@@ -19,7 +19,7 @@ oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 			if (DataToSave) {
 				if (oGLOBAL.AccidentForm.NewRec) {
 					if (!(oGLOBAL.AccidentForm.Lat) ? 1 : 0) {
-						oCONTROLS.dialog.Alert({msg:"Pažymėkite įvykio vietą pelės spragtelėjimu žemėlapyje..", title:"Naujo įvykio įvedimas"}); return false;
+						oCONTROLS.dialog.Alert({ msg: "Pažymėkite įvykio vietą pelės spragtelėjimu žemėlapyje..", title: "Naujo įvykio įvedimas" }); return false;
 					} else {
 						DataToSave.Data.push(oGLOBAL.AccidentForm.Lat); DataToSave.Fields.push("Lat");
 						DataToSave.Data.push(oGLOBAL.AccidentForm.Lng); DataToSave.Fields.push("Lng");
@@ -39,10 +39,10 @@ oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 					CallBack: { Success: function (resp) {
 						//SERVER.send("", oGLOBAL.Start.fnSetNewData, {}, "/Accident/AccidentsList", "json"); //Atsisiunciam atnaujinta lista
 						//if (oGLOBAL.AccidentForm.NewRec) { $('#divAccidentEdit').empty(); LoadAccident_Card(resp.ResponseMsg.Ext); return false; }						
-						var newRow = resp.ResponseMsg.Ext.replace(/#\|#\|/g,":::").split("|#|"); newRow[13]=newRow[13].replace(/:::/g,"#|#|");//atkeičiam atgal
-						var no=parseInt(newRow[1],10), toAppend=(Action==="Edit")?false:{"sort":"desc","col":"date"};
-						App.accidentsController.get("setNewVal").call(App.accidentsController, {newVal:newRow,toAppend:toAppend,fieldsToInt:[0, 1, 5, 6, 7, 8]})[0];//kuriuos reikia paverst integeriais
-						
+						var newRow = resp.ResponseMsg.Ext.replace(/#\|#\|/g, ":::").split("|#|"); newRow[13] = newRow[13].replace(/:::/g, "#|#|"); //atkeičiam atgal
+						var no = parseInt(newRow[1], 10), toAppend = (Action === "Edit") ? false : { "sort": "desc", "col": "date" };
+						App.accidentsController.get("setNewVal").call(App.accidentsController, { newVal: newRow, toAppend: toAppend, fieldsToInt: [0, 1, 5, 6, 7, 8] })[0]; //kuriuos reikia paverst integeriais
+
 						//var newContext = App.accidentsController.findProperty("iD",parseInt(newRow[0], 10));
 						//var newView = App.AccidentView.create({
 						//	content:newContext,
@@ -52,23 +52,23 @@ oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 							//var tbl = $("#accidentsTable");
 							//tbl.find("div.accident div.td:contains("+no+")").							
 							//newView.appendTo(tbl);
-							$("#btnReturnToAccidents").trigger("click");//paspaudžiam, kad grįžtam į lista												
+							$("#btnReturnToAccidents").trigger("click"); //paspaudžiam, kad grįžtam į lista												
 							//tbl.find("tr:last").trigger("click");						
-							Em.run.next({newNo:no},function(){
-								var tr=$("#accidentsTable").find("div.accident").find("div.td:nth(0):contains("+this.newNo+")").parent().addClass("selectedAccident");						
+							Em.run.next({ newNo: no }, function () {
+								var tr = $("#accidentsTable").find("div.accident").find("div.td:nth(0):contains(" + this.newNo + ")").parent().addClass("selectedAccident");
 								//var tbl = $("#accidentsTable"), tr=tbl.find("div.tr:last");
 								//$("h4:last").scrollintoview({ duration: "slow", direction: "y", complete: function(){ alert("Done"); } });
 								//$("#accidentsTable").find("div.tr:last").trigger("click");
 								$("#accidentsTable").find("div.selectedAccident").trigger("click");
-								Em.run.next(function(){
+								Em.run.next(function () {
 									$("#AccDetailsContent").find("button").trigger("click");
-									Em.run.next(function(){
-										var scroolTop=tr.offset().top-$(window).height()/2+100;
+									Em.run.next(function () {
+										var scroolTop = tr.offset().top - $(window).height() / 2 + 100;
 										//var scroolTop=$(document).height()-$(window).height()+200;
-										$('html, body').animate({scrollTop: scroolTop}, 'slow');
+										$('html, body').animate({ scrollTop: scroolTop }, 'slow');
 									});
 								});
-							});	
+							});
 							//var scrollTop=tr.offset().top - tbl.offset().top + tbl.scrollTop();
 							//tbl.scrollTop(tr.offset().top - tbl.offset().top + tbl.scrollTop());
 							//tbl.animate({scrollTop:scrollTop});​
@@ -81,7 +81,7 @@ oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 			return false;
 		});
 
-		$("#btnCancel").click(function () { LoadAccident_Card(AccidentNo); return false; });
+		$("#btnCancel").click(function () { oGLOBAL.LoadAccident_Card(AccidentNo); return false; });
 		$("#btnReturnToAccidents").click(function (e) {
 			e.preventDefault();
 
@@ -110,7 +110,7 @@ oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 	};
 	return false;
 	//*****************************************************************************************************************************************
-}
+};
 oGLOBAL.map = null; //Gmap
 oGLOBAL.Ggeocoder = null;
 oGLOBAL.AccidentForm = {};

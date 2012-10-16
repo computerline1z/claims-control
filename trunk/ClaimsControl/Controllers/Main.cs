@@ -35,6 +35,7 @@ namespace ClaimsControl.Controllers {
 						tblAccidents = acc.GetJSON_tblAccidents(),
 						proc_Drivers = acc.GetJSON_proc_Drivers(false),
 						tblAccidentsTypes = acc.GetJSON_tblAccidentTypes(),
+						proc_Years = acc.GetJSON_proc_Years(),
 						tblClaimTypes = acc.GetJSON_tblClaimTypes(),
 						proc_Vehicles = acc.GetJSON_proc_Vehicles(false),
 						proc_InsPolicies = acc.GetJSON_proc_InsPolicies(false),
@@ -58,6 +59,7 @@ namespace ClaimsControl.Controllers {
 
 			);
 		}
+
 		[HttpPost]
 		public JsonResult topNew() {
 			Repositories_Accidents acc = new Repositories_Accidents();

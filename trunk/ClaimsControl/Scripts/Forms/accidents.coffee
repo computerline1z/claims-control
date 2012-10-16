@@ -205,9 +205,12 @@ App.accidentsController = Em.ResourceController.create(
 	tableName: "proc_Accidents",
 	fields: {},
 	removeClaims: (AddWr) ->
+		#return;
 		AddWr.parent().find("div.dividers").remove()
 		if (AddWr.length > 0)
 			MY.accidents.AcccidentdetailsView.remove(); AddWr.remove(); # AddWr.hide('slow', () -> AddWr.remove();) 
+		else if MY.accidents.AcccidentdetailsView #jei filtruojant pakavojom ir spaudziam kitur panaikinam jį
+			MY.accidents.AcccidentdetailsView.destroy();MY.accidents.AcccidentdetailsView=null;$('div.dividers').remove()
 	tbodyClick: (e) ->
 		tr = $(e.target).closest("div.tr")
 		@setfilteredPolicies(e.context.date)#Filtruojam polisus		
@@ -246,36 +249,91 @@ App.accidentsController = Em.ResourceController.create(
 		ctrlEdit.spinner({ position: 'center', img: 'spinnerBig.gif' })
 		oGLOBAL.LoadAccident_Card(AccNo)
 		false
-	filterDidChange: (()->		
-		alert @filterValue
-		#@filterItems()
+	# filterWillChange: ((thisobj, keyName)->
+		# if (not thisobj[keyName] or keyName=='filterValue') then @filterFromVisible=true else @filterFromVisible=false ##jei pirmas paspaudimas arba filtruojama pagal filterValue galim filtruot tik matomus
+		# console.log(@filterFromVisible)
+	# ).observesBefore('chkDocs','chkOpen','chkData','chkClaim','filterValue')	
+	filterDidChange: ((thisObj, filterName)->	
+		console.log("filterDidChange")
+		#alert @filterValue
+		filterValue=if filterName=="All" else thisObj[filterName]
+		if (filterName=="filterValue")
+			@textFilterIsActive=if(filterValue=="")then false else true
+		else
+			@panelFilterIsActive=if (@chkDocs||@chkOpen||@chkData||@chkClaim) then true else false
+			@filterByPanel=@get_filterByPanel() #generate new function
+		@filterItems(filterName,filterValue,thisObj);		
+		Em.run.next(-> tbl=$('#accidentsTable'); if (not tbl.find('div.selectedAccident').length) then tbl.find('div.dividers').remove())
 	).observes('chkDocs','chkOpen','chkData','chkClaim','filterValue')
+	#claims_C: "0#|47-1#|TP valdytojų civilinė atsakomybė#|BRU641#|Ergo Lietuva#|1520{{TGH-152 Man 160 Jonas Jonaitis}}"
+	#claims_C2: "175#|4#|2#|500#|'bb10'#|0#|1#|0#|0"
+	textFilterIsActive=false
+	panelFilterIsActive=false
+	filterFromVisible: false
+	filterCols: ['accType','driver','shortNote','userName','place','claims_C']#no neimam, nes jis jau yra claims_C
 	filterValue:null
 	chkDocs:null #chkWithDocs,#chkWithOutDocs
 	chkOpen:null #chkWithOpen,#chkWithoutOpen
 	chkData:null #chk12month,#chk2011,#chk2010,#chk2009
 	chkClaim:null #chkClaim_1,chkClaim_2,chkClaim_3,chkClaim_4,chkClaim_5,chkClaim_6
-	filterByField: ()->#jei yra filterValue grazina true jei ten randa, jei ne grazina true visada
-		fn=if not @filterValue then "return true;" else "var ret=false,cols="+JSON.stringify(this.current.filterCols)+
-		";console.log('Filtering by val:"+@filterValue+"'); for(var i=0; i < cols.length; i++){console.log(row[cols[i]]+', '+(row[cols[i]].toLowerCase().indexOf('"+@filterValue+"')>-1));
-		if (row[cols[i]].toLowerCase().indexOf('"+@filterValue+"')>-1){ret=true; break;}} console.log('filterByval rez: '+ret);return ret;"
+	filterByField: (row)->#jei yra filterValue grazina true jei ten randa, jei ne grazina true visada
+		#fn=if not @filterValue then "return true;" else "var ret=false,cols="+JSON.stringify(this.current.filterCols)+
+		#";console.log('Filtering by val:"+@filterValue+"'); for(var i=0; i < cols.length; i++){console.log(row[cols[i]]+', '+(row[cols[i]].toLowerCase().indexOf('"+@filterValue+"')>-1));
+		#if (row[cols[i]].toLowerCase().indexOf('"+@filterValue+"')>-1){ret=true; break;}} console.log('filterByval rez: '+ret);return ret;"
+		#new Function("row",fn)
+		if (row.filterToHide) then return false #hidden by textFilter so return
+		me=this;ret=false;cols=JSON.parse(JSON.stringify(me.filterCols)); #console.log("Filtering by val:"+cols)
+		fnFilter =(i)-> 
+			#console.log(row[cols[i]]+', '+(row[cols[i]].toLowerCase().indexOf(me.filterValue)>-1));
+			if (row[cols[i]].toLowerCase().indexOf(me.filterValue)>-1) then true else false
+		console.log("---Start filtering----")
+		for i in [0...cols.length] by 1			
+			if fnFilter(i) then ret=true;console.log("true - "+row[cols[i]]); break else console.log("false - "+row[cols[i]])
+		console.log("---End filtering----")
+		if not ret then row.filterToHide=true
+		ret
+	get_filterByPanel: ()-> #ikisam nauja funkcija
+		fn=""#"console.log('-----------Filtering by panel-------');"#grazina tik kai tenkinamos visos sąlygos var ret=true;
+		if @chkOpen 
+			#fn+="console.log('chkOpen result:'+row.cNo_NotF+', '+((this.chkOpen==='chkWithOpen')?row.cNo_NotF!==0:row.cNo_NotF===0));"
+			fn+=if(@chkOpen=="chkWithOpen") then "if (row.cNo_NotF===0) return false;" else "if (row.cNo_NotF>0) return false;"
+		if @chkDocs 
+			#fn+="console.log('chkDocs result:'+row.docNo);"
+			fn+=if(@chkDocs=="chkWithDocs") then "if (row.docNo===0) return false;" else "if (row.docNo>0) return false;"		
+		if @chkData 
+			#fn+="console.log('chkData result:'+row.date+', dienų:'+row.daysFrom);"
+			#option=@chkData #'12month','2011','2010'
+			fn+=if(@chkData=="12month") then "if (row.daysFrom>365) return false;" else "if (row.date.indexOf("+@chkData+")===-1) return false;"
+		if @chkClaim 
+			#fn+="console.log('chkClaim types:'+row.claims_TypeID);"
+			#option=@chkClaim #option iD Claim_1,Claim_2,chkClaim_3,chkClaim_4,chkClaim_5,chkClaim_6
+			#fn+="console.log('chkClaim option:"+option+"');"
+			fn+="if (row.claims_TypeID.indexOf('"+@chkClaim+"')===-1) return false;"
+		fn+="return true;"	
 		new Function("row",fn)
-	filterByTab: ()->
-		if @current.emObject=="drivers"
-			mark=if (@clicked=="NotWorking") then "!" else "";
-			fn="var ret=true; if ($.trim(row.dateEnd)) {ret=oGLOBAL.date.firstBigger(row.dateEnd);} console.log('dateEnd: '+row.dateEnd+', '+ret);return "+mark+"ret"
-		else if @current.emObject=="vehicles"
-			mark=if (@clicked=="NotWorking") then "!" else "";
-			fn="var ret=true; if ($.trim(row.endDate)) {ret=oGLOBAL.date.firstBigger(row.endDate);} console.log('endDate: '+row.endDate+', '+ret);return "+mark+"ret"
+	filterByPanel: null
+	filterItems: (filterName,filterValue,thisObj)->
+		if (filterName=='filterValue')
+			if (filterValue=="")
+				fnFilter=if @panelFilterIsActive then (row)=>row.filterToHide=false; return @filterByPanel(row); else (row)=>row.filterToHide=false; return true
+			else 
+				if @panelFilterIsActive then fnFilter=(row)=>result=(if(not@filterByField(row))then false else@filterByPanel(row)); return result;
+				else fnFilter=(row)=>return @filterByField(row)			
+			console.log("Filtro pradžia - tekstas---------------")
 		else
-			throw new Error("filterByTab has no such emObject")
-		new Function("row",fn)
-	filterItems: ()->
-		if @current.emObject=="insPolicies"
-			fn=(row)=>(v=@filterByField()(row); console.log("finalRez: "+v); row.set('visible',v);)	
-		else
-			fn=(row)=>(v=(if (@filterByTab()(row)) then (@filterByField()(row)) else false;); console.log("finalRez: "+v); row.set('visible',v);)			
-		App.listAllController[@current.emObject].forEach(fn)
+			if not @textFilterIsActive and not @panelFilterIsActive
+				fnFilter=(row)->return true
+			else
+				fnFilter=(row)=>
+					if row.filterToHide then return false
+					@filterByPanel(row)
+					#return @filterByPanel.call(thisObj,row)		
+			console.log("Filtro pradžia - kiti filtrai---------------")
+		#fnFilter=(row)=>(v=fn(row);console.log("finalRez: "+v); row.set('visible',v);)
+		#panelFilterIsActive
+		#fn=(row)=>(v=@filterByField()(row); console.log("finalRez: "+v); row.set('visible',v);)
+		#fn=(row)=>(v=(if (@filterByTab()(row)) then (@filterByField()(row)) else false;); console.log("finalRez: "+v); row.set('visible',v);)			
+		@content.forEach((row)->res=fnFilter(row);row.set('visible',res); ) #console.log("finalResult: "+res);
 )
 App.thisAccidentController = Em.ResourceController.create(
 	content: [],
@@ -305,54 +363,57 @@ App.newClaimController = Em.ResourceController.create(
 		# if $(@).attr("checked")
 			# $(@).attr("checked","")
 		# )
-# $(window).load( ()-> 
-	# alert "load: "+$("#radio3").length
-# )
-# Em.run.next(()->
-	# alert "Em: "+$("#radio3").length
-# )
+App.sidePanelController = Em.ResourceController.create(
+	tableName: "?"
+	chkHandler: (chk, option)->
+		newVal=if (chk.attr("checked")) then chk.data("opt") else null
+		App.accidentsController.set(option,newVal)
+	init: -> 
+		@_super();
+		oDATA.execWhenLoaded(["tblClaimTypes"],()=>
+			@.set('years',oDATA.GET("proc_Years").emData)
+			@.set('claimTypes',oDATA.GET("tblClaimTypes").emData)	
+			@claimTypes.findProperty("iD",0).visible=false	
+			Em.run.next(@,()->(
+				me=@
+				$("#sidePanel").find("fieldset.datesOptions").find("input:checkbox").checkbox("onClick":(chk)->me.chkHandler(chk,"chkData"))
+				$("#sidePanel").find("fieldset.claimsTypesOptions").find("input:checkbox").checkbox("onClick":(chk)->me.chkHandler(chk,"chkClaim"))
+			))
+		)
+	years:[], claimTypes:[]
+)
+
 App.SidePanelView = Em.View.extend(
-	#init: -> @_super();App.listAllController.set("content",oDATA.GET("proc_Vehicles").emData)
 	templateName: "tmpSidePanel"
 	didInsertElement: ()->
-		@_super(); 
-		$("#chkOpen").buttonset().on("click",(e)->
-			chk=$(e.target).closest("label").prev();
-			newVal=if (chk.next().hasClass("ui-state-active")) then chk.attr("id") else null #Jei aktyvus priskiriam
-			$("#chkOpen").find("label").not(chk.next()).removeClass("ui-state-active").end().prev().not(chk).removeAttr("checked")	
-			App.accidentsController.set("chkOpen",newVal)
-			false
-		)
-		$("#chkDocs").buttonset().on("click",(e)->
-			chk=$(e.target).closest("label").prev();
-			newVal=if (chk.next().hasClass("ui-state-active")) then chk.attr("id") else null #Jei aktyvus priskiriam
-			$("#chkDocs").find("label").not(chk.next()).removeClass("ui-state-active").end().prev().not(chk).removeAttr("checked")	
-			App.accidentsController.set("chkDocs",newVal)
-			false
-		)
-		$("#chk12month,#chk2011,#chk2010,#chk2009").checkbox().on("click",(e)->
-			chk=$(e.target);
-			newVal=if (chk.attr("checked")) then chk.attr("id") else null
-			$("#chk12month,#chk2011,#chk2010,#chk2009").not(chk).removeAttr("checked").parent().next().next().find("span.ui-checkbox-icon").removeClass("ui-icon ui-icon-check").attr("aria-checked","false")
-			App.accidentsController.set("chkData",newVal)
-			false
-			#$("#chk12month").attr("checked")
-		)
-		$("#chkClaim_1,#chkClaim_2,#chkClaim_3,#chkClaim_4,#chkClaim_5,#chkClaim_6").checkbox().on("click",(e)->
-			chk=$(e.target);
-			newVal=if (chk.attr("checked")) then chk.attr("id") else null
-			$("#chkClaim_1,#chkClaim_2,#chkClaim_3,#chkClaim_4,#chkClaim_5,#chkClaim_6").not(chk).removeAttr("checked").parent().next().next().find("span.ui-checkbox-icon").removeClass("ui-icon ui-icon-check").attr("aria-checked","false")
-			App.accidentsController.set("chkClaim",newVal)
-			false
+		@_super(); 	
+		Em.run.next(()->$("#sidePanel").closest("div.col2").scrollelement()			
+		console.log("Pradedu")
+		console.log($("#chkOpen"))
+			$("#chkOpen").buttonset().on("click",(e)->
+				chk=$(e.target).closest("label").prev();
+				newVal=if (chk.next().hasClass("ui-state-active")) then chk.attr("id") else null #Jei aktyvus priskiriam
+				$("#chkOpen").find("label").not(chk.next()).removeClass("ui-state-active").end().prev().not(chk).removeAttr("checked")	
+				App.accidentsController.set("chkOpen",newVal)
+				e.preventDefault()
+			)
+			$("#chkDocs").buttonset().on("click",(e)->
+				chk=$(e.target).closest("label").prev();
+				newVal=if (chk.next().hasClass("ui-state-active")) then chk.attr("id") else null #Jei aktyvus priskiriam
+				$("#chkDocs").find("label").not(chk.next()).removeClass("ui-state-active").end().prev().not(chk).removeAttr("checked")	
+				App.accidentsController.set("chkDocs",newVal)
+				e.preventDefault()
+			)	
 		)
 	showAll: ()->		
 		$("#chkOpen,#chkDocs").find("label").removeClass("ui-state-active").end().prev().removeAttr("checked")
-		$("#chk12month,#chk2011,#chk2010,#chk2009,#chkClaim_1,#chkClaim_2,#chkClaim_3,#chkClaim_4,#chkClaim_5,#chkClaim_6").removeAttr("checked").parent().next().next().find("span.ui-checkbox-icon").removeClass("ui-icon ui-icon-check").attr("aria-checked","false")				
+		$("#sidePanel").find("input:checkbox").removeAttr("checked").parent().next().next().find("span.ui-checkbox-icon").removeClass("ui-icon ui-icon-check").attr("aria-checked","false")				
+		#App.accidentsController.filterwillChange()	
 		App.accidentsController.chkOpen=null
 		App.accidentsController.chkDocs=null
 		App.accidentsController.chkData=null
 		App.accidentsController.chkClaim=null
-		App.accidentsController.filterDidChange()	
+		App.accidentsController.filterDidChange(@,'All')	
 		#e.stopPropagation();
 		#e.preventDefault();
 		#if $(this.target).attr("checked") then $(this.target).attr("checked", "") else $(this.target).attr("checked", "checked")	

@@ -266,6 +266,7 @@
     <Content Include="Scripts\Plugins scripts\MegaSelectList.js" />
     <Content Include="Scripts\Plugins scripts\TimePicker.js" />
     <Content Include="Content\LoginStyles.css" />
+    <Content Include="SQL\sql10_15.sql" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
