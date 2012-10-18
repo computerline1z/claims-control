@@ -34,13 +34,14 @@
 						else { t.val(""); return; }
 					}
 					else if (opt.Allow === 'Date' || opt.Allow === 'DateCtrl' || opt.Allow === 'DateNotLessCtrl' || opt.Allow === 'DateNotMoreCtrl') {
-						inputVal = inputVal.replace('.', '-').replace('/', '-').replace('\\', '-');
-						re = $.validity.patterns.date;
-						if (re.test(inputVal))
-							inputVal = inputVal.replace(re, "$1");
-						if ($.isNumeric(inputVal) && opt.Allow === 'DateNotMoreCtrl') { if ((parseInt(inputVal, 10)) >= ((new Date()).getFullYear())) { inputVal = ((new Date()).getFullYear()); } }
-						if ($.isNumeric(inputVal) && opt.Allow === 'DateNotLessCtrl') { if ((parseInt(inputVal, 10)) <= ((new Date()).getFullYear())) { inputVal = ((new Date()).getFullYear()); } }
-						else { t.val(""); return; }
+						//inputVal = inputVal.replace('.', '-').replace('/', '-').replace('\\', '-');
+						inputVal = inputVal.replace('-', '.').replace('/', '.').replace('\\', '.');
+						//re = $.validity.patterns.date;
+						//if (re.test(inputVal))
+						//	inputVal = inputVal.replace(re, "$1");
+						//if ($.isNumeric(inputVal) && opt.Allow === 'DateNotMoreCtrl') { if ((parseInt(inputVal, 10)) >= ((new Date()).getFullYear())) { inputVal = ((new Date()).getFullYear()); } }
+						//if ($.isNumeric(inputVal) && opt.Allow === 'DateNotLessCtrl') { if ((parseInt(inputVal, 10)) <= ((new Date()).getFullYear())) { inputVal = ((new Date()).getFullYear()); } }
+						//else { t.val(""); return; }
 					}
 					else if (opt.Allow === 'Year' || opt.Allow === 'YearNotMore' || opt.Allow === 'YearNotLess') {
 						inputVal = inputVal.replace('.', '-').replace('/', '-').replace('\\', '-');
