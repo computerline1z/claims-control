@@ -8,7 +8,7 @@ div.container{
 		div{ padding: 20px 4px;}
 	}
 }
-div.cont{
+div.cont{ 
 	div.right{float:right; text-align:left;}
 	div.left{float:left;}
 	.clearfix();
@@ -41,7 +41,7 @@ div.w47pr_m{width:47%; margin: 1.5%;}
 
 div.box{margin:0; padding:0;}
 div.box_3pr_p{margin:0; padding:3%;}
-div.border { border: 1px solid #C0C0C0; }
+div.border { border: 1px solid #DDD; }
 
 
 .btn {
@@ -60,14 +60,29 @@ div.border { border: 1px solid #C0C0C0; }
 
 .big {padding: 25px;}
 
-a, .btn, div, span{
+a, .btn, div, span {
 .large, &.large {padding: 9px 14px; font-size: @basefont + 10px;}
 .medium, &.medium {padding: 6px 8px; font-size: @basefont;}
 .small, &.small {padding: 4px 6px; font-size: @basefont - 2px;}
 .mini, &.mini {padding: 2px 4px; font-size: @basefont - 4px;}
 }
 .btn{
-&.large {.border-radius(6px);}
-&.medium {.border-radius(3px);}
+.btn > .large {.border-radius(6px);}
+.btn > .medium {.border-radius(3px);}
 }
 .fieldSetBorder{border: 2px groove threedface;}
+#btnSave, #btnMapTown { 
+    color: gray;
+    font-weight: bold;
+    .border-radius(3px);
+    .btn > .small;
+}
+
+// Download Font
+.dlFont {
+    src:url('fonts/Asap-Regular-webfont.eot');  
+    src:url('fonts/Asap-Regular-webfont.eot?#iefix') format('embedded-opentype'),  
+    url('fonts/Asap-Regular-webfont.woff') format('woff'),  
+    url('fonts/Asap-Regular-webfont.ttf') format('truetype'),  
+    url('fonts/Asap-Regular-webfont.svg#AsapRegular') format('svg');       
+    }
