@@ -1,4 +1,4 @@
-﻿/* Mixins.less
+/* Mixins.less
  * Snippets of reusable CSS to develop faster and keep code readable
  * ----------------------------------------------------------------- */
 
@@ -45,27 +45,16 @@
 
 // Font Stacks
 #font {
-  .regular(@size: 80%) {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: @size;
-  }
-/*
-#font {
     font-size: 11pt;
-  .regular(@size: 80%, @weight: normal, @lineHeight: 37px, @color: #000) {
+  .regular(@size: 80%, @weight: normal, @lineHeight: 12pt, @color: #000) {
     font-family: 'AsapRegular', "Arial" Arial, "Helvetica Neue", Helvetica, sans-serif;
     font-size: @size;
     font-weight: @weight;
     line-height: @lineHeight;
     color: @color;
     
-    src:url('fonts/Asap-Regular-webfont.eot');  
-    src:url('fonts/Asap-Regular-webfont.eot?#iefix') format('embedded-opentype'),  
-    url('fonts/Asap-Regular-webfont.woff') format('woff'),  
-    url('fonts/Asap-Regular-webfont.ttf') format('truetype'),  
-    url('fonts/Asap-Regular-webfont.svg#AsapRegular') format('svg');          
+    .dlFont
   }
- */
   .shorthand(@weight: normal, @size: 14px, @lineHeight: 20px) {
     font-size: @size;
     font-weight: @weight;

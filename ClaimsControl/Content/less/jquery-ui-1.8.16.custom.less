@@ -508,7 +508,7 @@ a.ui-state-hover .ui-icon { background-image: url(images_ui/ui-icons_888888_256x
  * http://docs.jquery.com/UI/Button#theming
  */
 .ui-button {
-	position: relative;/*papildomai pridëta*/
+	position: relative;/*papildomai pridÃ«ta*/
   cursor: pointer;
   display: inline-block;
   background-color: #e6e6e6;
@@ -520,7 +520,7 @@ a.ui-state-hover .ui-icon { background-image: url(images_ui/ui-icons_888888_256x
   background-image: -o-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
   background-image: linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6', GradientType=0);
-  /*padding: 5px 14px 6px; iðkirtau dël checkoboxu */
+  /*padding: 5px 14px 6px; iÃ°kirtau dÃ«l checkoboxu */
   margin: 0;
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
   color: #333;
@@ -830,14 +830,15 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
  .ui-tabs .ui-tabs-nav{ background:none; border-color: #ddd;
   border-style: solid;
   border-width: 0 0 1px;}
-.ui-tabs { position: relative; padding: .2em; zoom: 1; border:0px;} /* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
+.ui-tabs { position: relative; padding: .2em; zoom: 1; border:0px; } /* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
 
 
 .ui-tabs .ui-tabs-nav li:hover, .ui-tabs .ui-tabs-nav li a:hover{
   background:whiteSmoke;
   border-bottom:1px solid #ddd;
   padding-bottom:0px;
-	color:#00438A;
+	color:#555555;
+   // width: 135px;
 }
 
 
@@ -888,7 +889,8 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
   outline:none;
 }
 
-.ui-tabs .ui-tabs-nav li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; color:#0069D6; background:none; font-weight:normal; margin-bottom:-1px;} 
+.ui-tabs .ui-tabs-nav li a { cursor: pointer; /*color:#0069D6;*/  background:none; font-weight:normal; margin-bottom:-1px;} 
+.ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; color:#89898a; background:none; font-weight:bold; margin-bottom:-1px;}
 /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
 .ui-tabs .ui-tabs-panel { display: block; border-width: 0; padding: 1em 1.4em; background: none; }
 .ui-tabs-panel .ui-button{text-decoration:none;}
@@ -964,7 +966,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 /* IE6 IFRAME FIX (taken from datepicker 1.5.3 */
 .ui-datepicker-cover {
   display: none; /*sorry for IE5*/
-  display/**/: block; /*sorry for IE5*/
+  display: block; /*sorry for IE5*/
   position: absolute; /*must have*/
   z-index: -1; /*must have*/
   filter: mask(); /*must have*/
