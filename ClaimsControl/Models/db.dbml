@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="ClaimsControl" Class="dbDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=SAULIUS-PC\SQLEXPRESS;Initial Catalog=ClaimsControl;Persist Security Info=True;User ID=sa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="ClaimsControlConnectionString3" Provider="System.Data.SqlClient" />
+  <Connection Mode="WebSettings" ConnectionString="Data Source=SAULIUS-PC\LOCALHOST;Initial Catalog=ClaimsControl;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="ClaimsControlConnectionString1" Provider="System.Data.SqlClient" />
   <Table Name="dbo.tblAccidentsTypes" Member="tblAccidentsTypes">
     <Type Name="tblAccidentsType">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -146,6 +146,7 @@
       <Column Name="GMT" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Association Name="tblAccident_tblClaim" Member="tblClaims" ThisKey="ID" OtherKey="AccidentID" Type="tblClaim" />
+      <Association Name="tblAccident_tblDoc" Member="tblDocs" ThisKey="ID" OtherKey="AccidentID" Type="tblDoc" />
       <Association Name="tblAccidentsType_tblAccident" Member="tblAccidentsType" ThisKey="AccidentTypeID" OtherKey="ID" Type="tblAccidentsType" IsForeignKey="true" />
       <Association Name="tblAccount_tblAccident" Member="tblAccount" ThisKey="AccountID" OtherKey="ID" Type="tblAccount" IsForeignKey="true" />
       <Association Name="tblDriver_tblAccident" Member="tblDriver" ThisKey="DriverID" OtherKey="ID" Type="tblDriver" IsForeignKey="true" />
@@ -249,6 +250,7 @@
       <Column Name="Name" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
       <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Association Name="tblDocGroup_tblDocType" Member="tblDocTypes" ThisKey="ID" OtherKey="DocGroupID" Type="tblDocType" />
+      <Association Name="tblDocGroup_tblDoc" Member="tblDocs" ThisKey="ID" OtherKey="GroupID" Type="tblDoc" />
     </Type>
   </Table>
   <Table Name="dbo.tblDocTypes" Member="tblDocTypes">
@@ -369,10 +371,14 @@
       <Column Name="FileDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
       <Column Name="FileSize" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="UserID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="DocTypeID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DocTypeID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="RefID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="SortNo" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
       <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="GroupID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AccidentID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="tblAccident_tblDoc" Member="tblAccident" ThisKey="AccidentID" OtherKey="ID" Type="tblAccident" IsForeignKey="true" />
+      <Association Name="tblDocGroup_tblDoc" Member="tblDocGroup" ThisKey="GroupID" OtherKey="ID" Type="tblDocGroup" IsForeignKey="true" />
       <Association Name="tblDocType_tblDoc" Member="tblDocType" ThisKey="DocTypeID" OtherKey="ID" Type="tblDocType" IsForeignKey="true" />
       <Association Name="tblUser_tblDoc" Member="tblUser" ThisKey="UserID" OtherKey="ID" Type="tblUser" IsForeignKey="true" />
     </Type>
@@ -391,24 +397,6 @@
       <Column Name="EndDate" Type="System.String" DbType="Char(10)" CanBeNull="true" />
       <Column Name="TypeID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="MakeID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-    </ElementType>
-  </Function>
-  <Function Name="dbo.proc_InsPolicies" Method="proc_InsPolicies">
-    <Parameter Name="AccountID" Parameter="accountID" Type="System.Int32" DbType="Int" />
-    <Parameter Name="Top" Parameter="top" Type="System.Boolean" DbType="Bit" />
-    <ElementType Name="proc_InsPoliciesResult">
-      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="ClaimType" Type="System.String" DbType="VarChar(45) NOT NULL" CanBeNull="false" />
-      <Column Name="InsurerName" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="InsuredCode" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="InsuredAddress" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
-      <Column Name="PolicyNumber" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="EndDate" Type="System.String" DbType="Char(10)" CanBeNull="true" />
-      <Column Name="InsuredName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="InsuredContactName" Type="System.String" DbType="NVarChar(101) NOT NULL" CanBeNull="false" />
-      <Column Name="InsuredContactID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="ClaimTypeID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="InsurerID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
     </ElementType>
   </Function>
   <Function Name="dbo.proc_Update_Edit_tblUsers" Method="proc_Update_Edit_tblUsers">
@@ -463,6 +451,25 @@
     <Parameter Name="AccountID" Parameter="accountID" Type="System.Int32" DbType="Int" />
     <ElementType Name="proc_AccidentsYearsResult">
       <Column Name="years" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.proc_InsPolicies" Method="proc_InsPolicies">
+    <Parameter Name="AccountID" Parameter="accountID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Top" Parameter="top" Type="System.Boolean" DbType="Bit" />
+    <ElementType Name="proc_InsPoliciesResult">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ClaimType" Type="System.String" DbType="VarChar(45) NOT NULL" CanBeNull="false" />
+      <Column Name="InsurerName" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="InsuredCode" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="MailsAddresses" Type="System.String" DbType="VarChar(250) NOT NULL" CanBeNull="false" />
+      <Column Name="InsuredAddress" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="PolicyNumber" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="EndDate" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="InsuredName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="InsuredContactName" Type="System.String" DbType="NVarChar(101) NOT NULL" CanBeNull="false" />
+      <Column Name="InsuredContactID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ClaimTypeID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="InsurerID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
     </ElementType>
   </Function>
 </Database>

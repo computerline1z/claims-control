@@ -98,24 +98,24 @@ App.SearchField = Ember.View.extend({
 	clear: function (e) { $(e.target).closest("form").find("input").val(""); this.get("valueDidChange").call(this, ""); },
 	valueDidChange: function (e) {
 		var f = (e) ? $(e.target).val() : "", context = this.get("context");
-		if (context === "accidents") {
-			if (!f) { $("#accidentsTable").find(">div.tr").removeClass("hidden"); return; }
-			else { f = f.toLowerCase(); }
-			$("#accidentsTable").find(">div.tr").each(function () {
-				var t = this, c = t.children, hidden = (t.className.indexOf("hidden") > -1) ? true : false, toHide = true;
-				if (c[0].innerHTML.indexOf(f) + c[1].innerHTML.toLowerCase().indexOf(f) + c[2].innerHTML.toLowerCase().indexOf(f) + c[5].innerHTML.toLowerCase().indexOf(f) > -4) {
-					if (hidden) { t.className = t.className.replace(" hidden", ""); }
-					toHide = false;
-				} else {
-					if (!hidden) { t.className = t.className + " hidden"; }
-				}
-				if (t.className.indexOf("selectedAccident") > -1) {//pagal selected rodom/pakavojam ir jo details
-					var d = $("#AccDetailsWraper");
-					if (toHide && !d.hasClass("hidden")) { d.addClass("hidden"); $("#accidentsTable").find(">div.dividers").css("display", "none"); }
-					else if (!toHide && d.hasClass("hidden")) { d.removeClass("hidden"); $("#accidentsTable").find(">div.dividers").css("display", "block"); }
-				}
-			});
-		}
+//		if (context === "accidents") {
+//			if (!f) { $("#accidentsTable").find(">div.tr").removeClass("hidden"); return; }
+//			else { f = f.toLowerCase(); }
+//			$("#accidentsTable").find(">div.tr").each(function () {
+//				var t = this, c = t.children, hidden = (t.className.indexOf("hidden") > -1) ? true : false, toHide = true;
+//				if (c[0].innerHTML.indexOf(f) + c[1].innerHTML.toLowerCase().indexOf(f) + c[2].innerHTML.toLowerCase().indexOf(f) + c[5].innerHTML.toLowerCase().indexOf(f) > -4) {
+//					if (hidden) { t.className = t.className.replace(" hidden", ""); }
+//					toHide = false;
+//				} else {
+//					if (!hidden) { t.className = t.className + " hidden"; }
+//				}
+//				if (t.className.indexOf("selectedAccident") > -1) {//pagal selected rodom/pakavojam ir jo details
+//					var d = $("#AccDetailsWraper");
+//					if (toHide && !d.hasClass("hidden")) { d.addClass("hidden"); $("#accidentsTable").find(">div.dividers").css("display", "none"); }
+//					else if (!toHide && d.hasClass("hidden")) { d.removeClass("hidden"); $("#accidentsTable").find(">div.dividers").css("display", "block"); }
+//				}
+//			});
+//		}
 		controller = this.get("controller");
 		if (controller) {App[controller].set("filterValue",f.toLowerCase());}
 	}

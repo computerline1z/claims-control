@@ -53,7 +53,10 @@ namespace ClaimsControl.Controllers {
 						tmpAllDrivers = RenderPartialViewToString("Lists/tmpAllDrivers"),
 						tmpAllVehicles = RenderPartialViewToString("Lists/tmpAllVehicles"),
 						tmpAllInsPolicies = RenderPartialViewToString("Lists/tmpAllInsPolicies"),
-						tmpListsTop = RenderPartialViewToString("Lists/tmpListsTop")
+						tmpListsTop = RenderPartialViewToString("Lists/tmpListsTop"),
+						tmp_Drivers = RenderPartialViewToString("Lists/tmp_Drivers"),
+						tmp_InsPolicies = RenderPartialViewToString("Lists/tmp_InsPolicies"),
+						tmp_Vehicles = RenderPartialViewToString("Lists/tmp_Vehicles")
 						}
 				}
 

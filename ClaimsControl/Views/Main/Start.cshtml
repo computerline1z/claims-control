@@ -15,7 +15,7 @@
 		@Html.Partial("_LogOnPartial")
 	</div>
 	@Html.Partial("NotifyViews")
-	<script id="tmpAccidentRowID" type="text/x-handlebars" data-template-name="tmpAccidentRow">
+	<script type="text/x-handlebars" data-template-name="tmpAccidentRow">
 		@Html.Partial("Accidents/tmpAccidentRow")
 	</script>
 	<script type="text/x-handlebars" data-template-name="tmpAccident_Claims">
@@ -53,9 +53,10 @@
 	var oGLOBAL = { appStart: new Date().getTime(), logFromStart: function (msg) { console.warn("logFromStart. " + msg + " Time from start:" + (new Date().getTime() - oGLOBAL.appStart)); } }; 
 </script>
 
-@*<script src='http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=true&amp;key=AIzaSyBmiyz9zmTD_hY7qT7Degr0o7tqAzjKQos' type='text/javascript'></script>*@
-<script src="@Url.Content("~/Scripts/Main/jquery-1.8.0.combined.min.js")" type="text/javascript" charset="utf-8"></script>
+@*<script src='http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=true&amp;key=AIzaSyBmiyz9zmTD_hY7qT7Degr0o7tqAzjKQos' type='text/javascript'></script>
+*@<script src="@Url.Content("~/Scripts/Main/jquery-1.8.0.combined1.min.js")" type="text/javascript" charset="utf-8"></script>
 
+<script src="@Url.Content("~/Scripts/My/ui-ember.js")" type="text/javascript"  charset="utf-8"></script>
 <script src="@Url.Content("~/Scripts/My/General.js")" type="text/javascript"  charset="utf-8"></script>
 <script src="@Url.Content("~/Scripts/My/oCONTROLS.js")" type="text/javascript"  charset="utf-8"></script>
 <script src="@Url.Content("~/Scripts/Ember/ember-rest.js")" type="text/javascript"  charset="utf-8"></script>

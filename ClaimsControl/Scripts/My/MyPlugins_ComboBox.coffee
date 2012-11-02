@@ -13,30 +13,40 @@ _create: ->
 	opt = $.extend(true, @options, $(input).data("ctrl"))
 	opt.mapWithNoCommas=true if opt.Source=="proc_Drivers"
 	fnEditItem = (id,newVals) ->
-		new oGLOBAL.clsEditableForm(
-			newVals: if newVals then {vals:newVals,cols:opt.iText} else null
-			objData: opt.Source
+		# new oGLOBAL.clsEditableForm(
+			# newVals: if newVals then {vals:newVals,cols:opt.iText} else null
+			# objData: opt.Source
+			# Action: (if (id) then "Edit" else "Add")
+			# aRowData: (if (id) then oDATA.GetRow(id, opt.Source) else 0)
+			# CallBackAfter: (RowData) -> #Ikisam naujas val i newval, o teksta i inputa
+				# $(input).data "newval", RowData[opt.iVal]
+				# newVal=RowData.MapArrToString(opt.iText,opt.mapWithNoCommas)
+				# $(input).val newVal
+				# if this.Action=="Edit"#pakeiciam comboboxo duomenis, oDATA jau pakeista
+					# data.findObjectByProperty("id",RowData[opt.iVal]).label=newVal
+				# else #pridedam naują
+					# data.push({id:RowData[opt.iVal],label:newVal})
+				# if (!input.parent().find("span.ui-menu-icon").length&&opt.appendToList)#pridedu redagavimo controlsus jei nebuvo
+					# input.parent().append(opt.appendToList)
+		#)
+		#"source":"proc_Drivers","template":"tmp_Drivers","controller":"listAllController","emObject":"content"
+		#"source":"proc_InsPolicies","template":"tmp_InsPolicies","controller":"listAllController","emObject":"content"
+		#"source":"proc_Vehicles","template":"tmp_Vehicles","controller":"listAllController","emObject":"content
+		Action= if (id) then "Edit" else "Add"
+		pars=
+			source: opt.Source, template: opt.Source.replace("proc_","tmp_")#controllerio ir emObject reikia tik iš listAll (dėl updatinimo)
+			row: if (id) then oDATA.GET("proc_Vehicles").emData.findProperty("iD",id) else 0
 			Action: (if (id) then "Edit" else "Add")
-			aRowData: (if (id) then oDATA.GetRow(id, opt.Source) else 0)
-			CallBackAfter: (RowData) -> #Ikisam naujas val i newval, o teksta i inputa
-				$(input).data "newval", RowData[opt.iVal]
-				newVal=RowData.MapArrToString(opt.iText,opt.mapWithNoCommas)
-				$(input).val newVal
-				if this.Action=="Edit"#pakeiciam comboboxo duomenis, oDATA jau pakeista
-					data.findObjectByProperty("id",RowData[opt.iVal]).label=newVal
-				else #pridedam naują
-					data.push({id:RowData[opt.iVal],label:newVal})
-				if (!input.parent().find("span.ui-menu-icon").length&&opt.appendToList)#pridedu redagavimo controlsus jei nebuvo
-					input.parent().append(opt.appendToList)
-				#input.autocomplete "search", input.val() #refreshinam duomenis - tik kai buvo su listais, dabar nereikia
-				#$(input).removeClass "inputTip"
-				#if (this.Action=="Add"){}#pakeiciam value nauju
-				#Action = (if (id) then "Edit" else "Add")
-				#if Action is "Add" - clsEditableForm jau viskas padaryta
-				#	data[data.length] = RowData.MapArrToString(opt.iText)
-				#else
-				#	data.UpdateArrToNew RowData.MapArrToString(opt.iText)
-		)
+			newVals: if newVals then {vals:newVals,cols:opt.iText} else null#?
+			CallBackAfter:(Row)->
+				dialogFrm.dialog("close");
+				alert "fnEditItem finished!"
+			
+		App.listAllController.openItem(pars)			
+					
+					
+					
+		
 	#opt = $.extend({ ListType: "List", Editable: false, iVal: 0, iText: [1], selectFirst: false }, opt);		 //ListType:{None(be nieko, galima spausdint), List(listas, spausdint negalima), Combo(Listas, spausdint galima)}
 	Editable = (if (opt.Editable.Add or opt.Editable.Edit) then true else false)
 	data = undefined
@@ -133,6 +143,7 @@ _create: ->
 			#$(this).removeClass "inputTip"
 
 		close: (event, ui) ->
+			return false
 			#if $(event.srcElement).hasClass("ui-menu-icon")#buvo paspaudimas ant controlsu todel atidarau selecta vel
 			#	input.autocomplete "search", input.val()
 			#$(input).rem
@@ -159,7 +170,9 @@ _create: ->
 					regex = new RegExp(acData.term, "gi")
 					me.html me.text().replace(regex, (matched) -> termTemplate.replace "%s", matched)
 					# me.append(opt.appendToList) if opt.appendToList
-
+			
+		blur: ->
+			alert "nu ble"
 	#-----Inicializavimas pagal parametrus-------------------------------------------------------------------------------------
 	if (opt.addNewIfNotExists)
 		input.on("blur", ->
@@ -192,7 +205,7 @@ _create: ->
 	if opt.Editable.Add
 		id = $(this).data("newval")
 		id = (if (id) then id else 0)#onclick='alert(\"opa\"); return false;'
-		opt.appendToList="<span style='margin:-24px 4px auto auto;' title='redaguoti..' class='ui-icon ui-icon-pencil ui-menu-icon'>&nbsp;</span>"
+		opt.appendToList="<span style='margin:-26px 4px auto auto;' title='redaguoti..' class='ui-icon ui-icon-pencil ui-menu-icon'>&nbsp;</span>"
 		#"<span style='margin:-22px 20px auto auto;' title='redaguoti..' class='ui-icon ui-icon-pencil ui-menu-icon'>&nbsp;</span>"
 		# <span style='margin:-16px 2px auto auto;' title='ištrinti..' class='ui-icon ui-icon-trash ui-menu-icon'>&nbsp;</span>"
 		input.after(opt.appendToList)
@@ -282,7 +295,7 @@ addButton: (p, input) ->
 	#if ($.browser.mozilla) { this.button.attr() }
 	#else if ($.browser.msie) { }
 	#if (!$.browser.chrome) { this.button.css("margin", "0"); }
-	@button.css "margin", "0"	if $.browser.mozilla
+	#@button.css "margin", "0"	if $.browser.mozilla
 
 #var btnWidth = this.button.parent().outerWidth(); //31
 #var w = input.outerWidth() - btnWidth + 2; //223

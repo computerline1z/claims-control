@@ -103,6 +103,19 @@ var MY = {
 		}
 	}
 }
+String.prototype.toRowObject=function (fieldNamesArr){
+	var valsArr=this.split(" "); retObj={};
+	for (var i = 0; i < valsArr.length; i++) {
+		if  (fieldNamesArr[i]){retObj[fieldNamesArr[i]] = $.trim(valsArr[i]);}
+	}
+	return retObj;
+}
+String.prototype.firstSmall=function (){
+	return this.slice(0, 1).toLowerCase() +this.slice(1);
+}
+String.prototype.firstBig=function (){
+	return this.slice(0, 1).toUpperCase() +this.slice(1);
+}
 Em.Object.prototype.MapArrToString = function (arrNames, mapWithNoCommas) {
 	var arrRet = [], e;
 	for (var i = 0; i < arrNames.length; i++) {

@@ -1,11 +1,11 @@
-﻿<div class="cont">
+﻿<div class="container">
 	<div class="right medium w35pr">
-	<div id="cont">{{view App.SearchField controller="listAllController"}}</div>
+	<div id="container">{{view App.SearchField controller="listAllController"}}</div>
 	</div>
 </div>
-<h2 style="margin:0 20px;">Draudimo polisų sąrašas</h2><a {{action toTop}} href="#">(Atgal į sąrašus)</a>
-<div class="cont">
-	<div class="right medium w15pr" data-ctrl='{"source":"proc_InsPolicies","controller":"listAllController","emObject":"insPolicies"}'>
+<h2 style="margin:0 20px;">Draudimo polisų sąrašas</h2><a {{action toTop}} href="#">(Atgal į Sąrašus)</a>
+<div class="container">
+	<div class="right medium w15pr" data-ctrl='{"source":"proc_InsPolicies","template":"tmp_InsPolicies","controller":"listAllController","emObject":"content"}'>
 	<button class="btn small" {{action addNew target="App.listAllController"}}>Pridėti naują</button>
 	</div>
 </div>
@@ -21,8 +21,8 @@
 		{{/if}}
 	{{/each}}
 </tbody></table>
-<div class="cont">
-	<div class="right medium w15pr" data-ctrl='{"source":"proc_InsPolicies","controller":"listAllController","emObject":"insPolicies"}'>
+<div class="container">
+	<div class="right medium w15pr" data-ctrl='{"source":"proc_InsPolicies","template":"tmp_InsPolicies","controller":"listAllController","emObject":"content"}'>
 	<button class="btn small" {{action addNew target="App.listAllController"}}>Pridėti naują</button>
 	</div>
 </div>

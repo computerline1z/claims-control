@@ -2,7 +2,7 @@
 {{#each c in view.content}} 
 {{log c}}
 {{#unless c.newClaim}}
-	<div id='divClaimCard' class="cont centerBlock" style="width:750px;" data-ctrl='{"id":"{{unbound c.ID}}","NewRec":"0","Source":"tblClaims","TypeID":"{{unbound c.TypeID}}"}'>
+	<div id='divClaimCard' class="container centerBlock" style="width:750px;" data-ctrl='{"id":"{{unbound c.ID}}","NewRec":"0","Source":"tblClaims","TypeID":"{{unbound c.TypeID}}"}'>
 {{else}}
 	<div id='divClaimCardDetails' >
 {{/unless}}
@@ -34,7 +34,7 @@
 </div>
 {{/each}}
 
-<div class="frmbottom cont">
+<div class="frmbottom container">
 	{{#unless c.newClaim}}
 	<div class="left small"><button class="btn small"><i style="margin-top:0" class="img32-bin" title="Ištrinti žalą" {{action "DeleteClaim" this}}></i></button></div>
 	{{/unless}}

@@ -60,9 +60,14 @@ var oCONTROLS = {
 			});
 		});
 	},
-	UpdatableForm: function (frm) {
+	getValFromRow: function (field,row){
+		var f=field.slice(0, 1).toLowerCase() + field.slice(1);
+		return row[f];
+	},
+	UpdatableForm: function (frm,row) {
 		//frm data-ctrl:: labelType:Top/Left/undefined,
-		var sTitle = "", frmOpt = $(frm).data('ctrl');
+		var sTitle = "", frmOpt = $(frm).data('ctrl'), me=this; 
+		if (row){frmOpt.NewRec=0;frmOpt.id=row.iD;}//Jeigu yra row tai redagavimas
 		var data = (frmOpt.Source === 'NoData') ? "NoData" : oDATA.GET(frmOpt.Source);
 		//if(typeof data==='undefined') { alert('Source undefined in UpdatableForm(objFunc:79)!'); }
 		//log('<div>==========UpdatableForm========</div>');
@@ -123,9 +128,7 @@ var oCONTROLS = {
 				}
 			}    //classes+' text', textarea,
 			col.classes = (col.classes) ? col.classes + " " + AddToClasses : AddToClasses;
-			if (typeof col.Value !== "number") {
-				col.Value = (col.Value) ? col.Value.replace(/'/g, "\"") : "";
-			} //Kitaip gaidinasi
+			if (typeof col.Value !== "number") {col.Value = (col.Value) ? col.Value.replace(/'/g, "\"") : "";} //Kitaip gaidinasi	
 			for (var prop in col) {
 				if (prop === 'List') {
 					$.extend(data_ctrl, col[prop]);
@@ -134,6 +137,7 @@ var oCONTROLS = {
 					data_ctrl[prop] = col[prop];
 				}
 			}
+			if (row){var v =  me.getValFromRow(col.FName,row); if (v){data_ctrl.Value =  v; col.Value=v;}}
 			data_ctrl = JSON.stringify(data_ctrl);
 			//log("data_ctrl stringas:"+data_ctrl);
 			if (Type === 'Integer' || Type === 'Decimal') {
@@ -478,7 +482,7 @@ var oCONTROLS = {
 			//d={ctrl:??,oDATA:??, opt:{text:??,val:??,FieldName:??,SelectText:??},fnAfterOptClick:?? }
 			//oDATA.obj atiduodamas visas SD (kad turet ir Data ir Cols
 			//istatomas listas, kuris i data("ctrl")._FieldName_ pagal pasirinkima istato val, be to kolapsinasi
-			var HTML = "<div tabindex='0' class='cont medium' style='background-color:#d3d1ba;margin-top:0px;font-weight:bold;'><div class='left'>"
+			var HTML = "<div tabindex='0' class='container medium' style='background-color:#d3d1ba;margin-top:0px;font-weight:bold;'><div class='left'>"
 				 + d.opt.SelectText + "<span style='cursor:pointer;color: #3366CC;text-decoration: underline;'></span></div>"
 				 + "<div class='right'><a id='aCancelSelectOpt' class='floatright' href='#'>Atšaukti</a></div></div>";
 			HTML += "<div class='megaselectlistoptions'>";
