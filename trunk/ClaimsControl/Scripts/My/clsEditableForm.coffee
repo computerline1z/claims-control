@@ -37,10 +37,10 @@ class clsEditableForm
 					"Ištrinti": () -> $(this).dialog("close")
 					"Atšaukti": () -> $(this).dialog("close")
 				close: () -> $("div.validity-tooltip").remove(); $(this).remove()
-				#dragStart: () -> $("div.validity-modal-msg").remove()
 				dragStart: () -> $("div.validity-tooltip").remove()
 			_html=if (opt.RenderHTML) then opt.RenderHTML else @fnGenerateHTML(Row,id,Config,opt)
-			$( "#dialog:ui-dialog" ).dialog("destroy")
+			#$( "#dialog:ui-dialog" ).dialog("destroy")
+			$("#"+opt.DialogFormId).parent().dialog("destroy")
 			$("<div id='"+opt.DialogFormId+"'></div>").html(_html).dialog(dlgEditableOpt).dialog('open')
 		else
 			_html=if (opt.RenderHTML) then opt.RenderHTML else @fnGenerateHTML(Row,id,Config,opt)
@@ -49,6 +49,7 @@ class clsEditableForm
 				.end().append('<button style="float:right;" title="Išsaugoti">Išsaugoti</button>').find('button:last').button().click( ->fnSaveChanges(opt,oData,Row))
 				.end().appendTo(opt.form)
 				.append('<div style="clear:both;"></div>').prepend("<h3>"+opt.Title+"</h3>")
+		#return false;		
 		oCONTROLS.UpdatableForm($("#divEditableForm"))	##I pusiau sugeneruota forma (Extend) sudedam likusius dalykus 
 		form=$("#"+opt.DialogFormId).parent()
 		form.find("button:contains('Išsaugoti')").attr("disabled","disabled").addClass("ui-state-disabled")
@@ -84,8 +85,8 @@ class clsEditableForm
 								#Row.Data[fieldName]=updData.DataToSave.Data[i2]; ok=true
 								Row.Data.set(fieldName,updData.DataToSave.Data[i2]); ok=true
 						if not ok and (opt.Action=="Add" and fieldName!="iD")
-							if (col.IdInMe)								
-								infoRow=Row.Cols[col.IdInMe]
+							if (col.IdField)								
+								infoRow=Row.Cols[col.IdField]
 								source=infoRow.List.Source
 								Field=infoRow.FName
 								id=oCONTROLS.helper.getData_fromDataToSave(updData.DataToSave,Field)							
@@ -128,7 +129,7 @@ class clsEditableForm
 			opt.newVals.vals=if opt.newVals.vals instanceof Array then opt.newVals.vals else opt.newVals.vals.split(" ")
 		while i<Length
 			Append=""; n=Row.Cols[i].FName; n=n.slice(0, 1).toLowerCase() + n.slice(1); colVal=Row.Data[n];
-			if Row.Grid.aoColumns[i].sTitle? and not (Row.Cols[i].IdInMe or Row.Cols[i].NotEditable) ## laukus generuojam tik su sTitle
+			if Row.Grid.aoColumns[i].sTitle? and not (Row.Cols[i].IdField or Row.Cols[i].NotEditable) ## laukus generuojam tik su sTitle
 				if colVal? and colVal
 					if typeof colVal == "number"
 						val=colVal

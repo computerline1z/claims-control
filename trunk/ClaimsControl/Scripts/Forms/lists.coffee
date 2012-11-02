@@ -56,36 +56,69 @@ App.listAllController = Em.ResourceController.create(
 		App.listAllController.set("drivers",oDATA.GET("proc_Drivers").emData)
 		App.listAllController.set("insPolicies",oDATA.GET("proc_InsPolicies").emData)
 	))
+	openItem:(pars)->#source,template,row
+		config=oDATA.GET(pars.source).Config
+		title=if pars.row then config.Msg.GenName+" "+pars.row.MapArrToString(config.titleFields,true) else config.Msg.AddNew
+		if not pars.row and pars.newVals then pars.row=pars.newVals.vals.toRowObject(pars.newVals.cols) #ivedimo forma užpildom jau užpildytais iš langelio
+		JQ.Dialog.create(
+			init: ->
+				@_super(); @templateName=pars.template; @title=title;
+			didInsertElement: ()->
+				this._super(); dialogFrm=$("#openItemDialog");dialogContent=$("#dialogContent")
+				$("#btnSaveItem").on("click",()->
+					DataToSave=oCONTROLS.ValidateForm(dialogContent)
+					$.extend(pars,DataToSave:DataToSave,Ctrl:$("#tabLists"),CallBackAfter:(Row)->
+						dialogFrm.dialog("close");
+						if Row.iD
+							App[pars.controller][pars.emObject].findProperty("iD",Row.iD).set("docs","(0)")#Dokumentų skaičius priklausis nuo uploadintų doku						
+							$("#tabLists").find("div.ui-tabs").find("li.ui-tabs-selected a").trigger("click")#trigerinam, kad pagal tabus uzdėtų visible						
+					)
+					SERVER.update2(pars); false
+				)
+				$("#aCancelItem").on("click",()-> dialogFrm.dialog("close");false)
+				if @templateName=="tmp_InsPolicies" then @$().tabs().css("margin","-5px 1px 0 1px").find("ul").css("background-color","#505860")
+				oCONTROLS.UpdatableForm(dialogContent,pars.row)
+			width:800
+			# buttons:
+				# "Išsaugoti pakeitimus": ()-> alert("Išsaugoti")
+				# "Atšaukti": ()-> $(this).dialog("close")
+			templateName: 'dialog-content'	
+		).append();		
 	addNew: (e)->
 		pars=$(e.target).parent().data("ctrl")#{"source":"proc_Drivers","controller":"topNewController","emObject":"drivers"}
-		new oGLOBAL.clsEditableForm(
-			objData: pars.source
-			Action: "Add" #(if (id) then "Edit" else "Add")
-			#aRowData: (if (id) then oDATA.GetRow(id, Source) else 0)
-			CallBackAfter: (RowData) -> #Ikisam naujas val i newval, o teksta i inputa
-				RowData.docs='(0)' if RowData.docs!=undefined
-				#RowData.set("docs","(0)")
-				if pars.controller=="topNewController"
-					App[pars.controller][pars.emObject].unshiftObject(RowData)
-				#App[pars.controller][pars.emObject].addObject(RowData) visais atvejais listAllController prideda i gala ?reikia perrusiuoti is naujo
-		)
+		console.log("addNew");
+		console.log(pars);
+		$.extend(pars,row:0,Action:"Add",CallBackAfter:(Row)->)
+		@openItem(pars)	
+		# new oGLOBAL.clsEditableForm(
+			# objData: pars.source
+			# Action: "Add" #(if (id) then "Edit" else "Add")
+			# #aRowData: (if (id) then oDATA.GetRow(id, Source) else 0)
+			# CallBackAfter: (RowData) -> #Ikisam naujas val i newval, o teksta i inputa
+				# RowData.docs='(0)' if RowData.docs!=undefined
+				# #RowData.set("docs","(0)")
+				# if pars.controller=="topNewController"
+					# App[pars.controller][pars.emObject].unshiftObject(RowData)
+				# #App[pars.controller][pars.emObject].addObject(RowData) visais atvejais listAllController prideda i gala ?reikia perrusiuoti is naujo
+		# )
 	edit: (e)->
 		#tr=$(e.target).closest('tr')
 		context=e.view._context
 		pars=$(e.target).closest("table").next().data("ctrl")
 		pars=if(pars) then pars else @current #{"source":"proc_Drivers","controller":"topNewController","emObject":"drivers"}
-		#pars=if(@current) then @current else $(e.target).closest("table").next().data("ctrl")#{"source":"proc_Drivers","controller":"topNewController","emObject":"drivers"}
-		new oGLOBAL.clsEditableForm(
-			pars: pars
-			objData: pars.source
-			aRowData: context
-			Action: "Edit" #(if (id) then "Edit" else "Add")
-			CallBackAfter: (RowData,opt) -> #Ikisam naujas val i newval, o teksta i inputa
-				#data=if (opt.pars.controller=="topNewController") then App[opt.pars.controller][opt.pars.emObject] else App[opt.pars.controller]["content"]
-				#data.findProperty("iD",RowData.iD).updateTo(RowData)
-				if (opt.pars.controller=="topNewController")#Šitas nesiriša su kitais, todėl reik updatint ir pagrindinį
-					oDATA.GET(opt.pars.source).emData.findProperty("iD",RowData.iD).updateTo(RowData)
-		)
+		$.extend(pars,row:context,Action:"Edit")
+		@openItem(pars)
+		# new oGLOBAL.clsEditableForm(
+			# pars: pars
+			# objData: pars.source
+			# aRowData: context
+			# Action: "Edit" #(if (id) then "Edit" else "Add")
+			# CallBackAfter: (RowData,opt) -> #Ikisam naujas val i newval, o teksta i inputa
+				# #data=if (opt.pars.controller=="topNewController") then App[opt.pars.controller][opt.pars.emObject] else App[opt.pars.controller]["content"]
+				# #data.findProperty("iD",RowData.iD).updateTo(RowData)
+				# if (opt.pars.controller=="topNewController")#Šitas nesiriša su kitais, todėl reik updatint ir pagrindinį
+					# oDATA.GET(opt.pars.source).emData.findProperty("iD",RowData.iD).updateTo(RowData)
+		# )
 	filterByField: ()->#jei yra filterValue grazina true jei ten randa, jei ne grazina true visada
 		fn=if not @filterValue then "return true;" else "var ret=false,cols="+JSON.stringify(this.current.filterCols)+
 		";console.log('Filtering by val:"+@filterValue+"'); for(var i=0; i < cols.length; i++){console.log(row[cols[i]]+', '+(row[cols[i]].toLowerCase().indexOf('"+@filterValue+"')>-1));
@@ -131,8 +164,6 @@ App.AllDriversView = App.mainMenuView.extend(
 			cols:["firstName","lastName","dateExpierence","drivingCategory","phone","docs",]
 			controller: "listAllController", sortedCol: 1 
 		);
-	edit: (e)->
-		alert("opa")
 )
 App.AllInsPoliciesView = App.mainMenuView.extend(
 	init: ->
