@@ -11,13 +11,14 @@
 */
 #header { background-color: #505860; color: #FFFFFF; width: 100%; }
 
-#ulMainMenu { padding: 0 3% 0 3%; list-style-type: none; background-image: url(images/navi_bg.png); height: 37px; margin: 0px auto auto auto; .box-shadow(0 3px 8px #888);  
-    li { float: left; 
-        a { text-decoration: none; padding-right: 20px; padding-left: 20px; display: block; #font > .regular (100%, bold, 37px, #fff); text-shadow: #fff 0px 1px 0, #000 0 -1px 0; 
-            &.selected { text-decoration: none; position: relative; top: 5px; padding-top: 6px; background-color: white; color: #7A90A5; text-shadow: #fff 0px 1px 0, #000 0 -1px 0; box-shadow: 0 0 8px 2px #888; .border-radius(6px 6px 0 0 )}
+#ulMainMenu { padding: 0 3% 0 3%; list-style-type: none; background-image: url(images/navi_bg.png); height: 37px; margin: 0 auto 4px auto; .box-shadow(0 2px 8px #888);
+    li { float: left; .border-image; .border-image > .right; 
+        a { text-decoration: none; padding-right: 20px; padding-left: 20px; display: block; #font > .header (10pt, normal, 37px, #fff); text-shadow: #43576E -0.5px -0.5px 1px; 
+            &.selected { height: 41px; font-size: 11pt; text-decoration: none; position: relative; padding-top: 1px; background-color: white; color: #7A90A5; text-shadow: #43576E 0 0 0;/* box-shadow: 0 0 8px 2px #888;*/ .border-radius(0px 0px 0 0 )}
             &:hover {text-decoration: none;}
         }
-    &:hover a.notactive { cursor: pointer; background-color: #9EAEBD; .border-radius(6px 6px 0 0 );}
+    &:hover a.notactive { cursor: pointer; background-color: #9EAEBD; .border-radius(0px 0px 0 0 );}
+    &:last-child, &:first-child { .border-image > .left }
     }
 }
 
@@ -47,15 +48,15 @@
 }
 
 /*---------Content------------------- box-shadow: 0 0 8px 2px #888; margin: 5px 10px 5px 10px; */
-.content { margin: 0.5%; padding: 0.6%; position: relative; background: #fff;//.box-shadow(0 5px 3px #ccc); 
+.content { margin: 0 0.5% 0.5% 0.5%; padding: 0.6%; position: relative; background: #fff;//.box-shadow(0 5px 3px #ccc); 
 	-moz-box-shadow: 5px 5px 3px #ccc; -webkit-box-shadow: 5px 5px 3px #ccc; box-shadow: 5px 5px 3px #ccc; overflow: hidden; 
     //width: 100%;
  
  }
 /*---------two column layout--------*/
-.col1, .col2, col3 { float: left; position: relative; overflow: hidden; margin-top: 0.3%; padding:0;}
+.col1, .col2, .col3 { float: left; position: relative; overflow: hidden; padding:0;}
 /*.col1 {padding: 0 !important;}Accidents lentele per visa turi but*/
-.colmask { position: relative; clear: both; float: left; width: 100%; overflow: hidden; margin-top:-2px;}
+.colmask { position: relative; clear: both; float: left; width: 100%; overflow: hidden; /* margin-top:-2px; */}
 .colright, .colmid, .colleft { float: left; width: 100%; position: relative; }
 .colmask .col1 { width: 79%; left: 28.5%; }
 .colmask .col2 { width: 16%; left: 28%; }
