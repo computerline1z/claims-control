@@ -79,9 +79,11 @@ a, .btn, div, span {
 
 // Download Font
 .dlFont {
-    src:url('fonts/Asap-Regular-webfont.eot');  
-    src:url('fonts/Asap-Regular-webfont.eot?#iefix') format('embedded-opentype'),  
-    url('fonts/Asap-Regular-webfont.woff') format('woff'),  
-    url('fonts/Asap-Regular-webfont.ttf') format('truetype'),  
-    url('fonts/Asap-Regular-webfont.svg#AsapRegular') format('svg');       
+    @font-face {
+    font-family: 'Cabin';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Cabin Regular'), local('Cabin-Regular'), url(http://themes.googleusercontent.com/static/fonts/cabin/v4/JEgmtEDzc-IH8jBshQXrYA.woff) format('woff');
+     
     }
+}
