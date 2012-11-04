@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Threading;
 using System.Web.Mvc;
 using System.Web.Routing;
+using CC.Services.Ninject;
 
 namespace ClaimsControl {
    // Note: For instructions on enabling IIS6 or IIS7 classic mode,
@@ -32,6 +33,8 @@ namespace ClaimsControl {
          Thread.CurrentThread.CurrentUICulture = new CultureInfo("lt-LT");
          RegisterGlobalFilters(GlobalFilters.Filters);
          RegisterRoutes(RouteTable.Routes);
+
+         ControllerBuilder.Current.SetControllerFactory(new NinjectControllerFactory());
       }
    }
 }
