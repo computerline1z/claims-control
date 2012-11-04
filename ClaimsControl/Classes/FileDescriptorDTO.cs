@@ -49,7 +49,7 @@ namespace CC.Classes
         /// <summary>
         /// <code>[Path] [nvarchar](max) NOT NULL</code>
         /// </summary>
-        public string Path { get; set; }
+        public string Name { get; set; }
 	
         /// <summary>
         /// <code>[Version] [timestamp] NOT NULL</code>

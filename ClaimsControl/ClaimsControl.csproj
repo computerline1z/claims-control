@@ -16,10 +16,14 @@
     <MvcBuildViews>False</MvcBuildViews>
     <UseIISExpress>False</UseIISExpress>
     <JSLintSkip>\Scripts\Plugins scripts\TimePicker.js|\Scripts\Plugins scripts\jsonUpdate.js|\Scripts\Plugins scripts\MegaSelectList.js|\Scripts\Plugins scripts\JScript1.js|\Scripts\JSMain\jquery.validate-vsdoc.js|\Scripts\JSMain\jquery.validate.js|\Scripts\JSMain\jquery.validate.min.js|\Scripts\JSMain\jquery.validate.unobtrusive.js|\Scripts\JSMain\jquery.validate.unobtrusive.min.js|\Scripts\JSMain\MicrosoftAjax.js|\Scripts\JSPlugins\jquery.validity.min.js|\Scripts\JSPlugins\jquery.validity.js|\Scripts\JSPlugins\jquery.rich-array.js|\Scripts\JSPlugins\jquery.rich-array-min.js|\Scripts\JSPlugins\jquery.jEditable.min.js|\Scripts\JSPlugins\jquery.jEditable.js|\Scripts\JSPlugins\jquery.dataTables.min.js|\Scripts\JSPlugins\jquery.dataTables.min.1.7.4.js|\Scripts\JSPlugins\jquery.dataTables.js|\Scripts\JSPlugins\jquery-ui-1.8.6.custom.min.js|\Scripts\JSPlugins\TimePicker.js|\Scripts\JSPlugins\jquery-ui-1.8.10.custom.min.js</JSLintSkip>
-    <SccProjectName>Svn</SccProjectName>
-    <SccLocalPath>Svn</SccLocalPath>
-    <SccAuxPath>Svn</SccAuxPath>
-    <SccProvider>SubversionScc</SccProvider>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -75,12 +79,19 @@
       <HintPath>..\..\..\DLL\dotless.Core.dll</HintPath>
     </Reference>
     <Reference Include="Elmah">
-      <HintPath>..\packages\elmah.1.1\lib\Elmah.dll</HintPath>
+      <HintPath>packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework">
-      <HintPath>..\..\TemplateMVC4\packages\EntityFramework.4.3.1\lib\net40\EntityFramework.dll</HintPath>
+      <HintPath>packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -103,10 +114,14 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="WebActivator">
+      <HintPath>packages\WebActivator.1.5.1\lib\net40\WebActivator.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\Scripts\ScriptsAreaRegistration.cs" />
     <Compile Include="Classes\Converters.cs" />
+    <Compile Include="Classes\FileDescriptorDTO.cs" />
     <Compile Include="Classes\General.cs" />
     <Compile Include="Classes\Generics.cs" />
     <Compile Include="Classes\htmlHelpers.cs" />
@@ -115,6 +130,7 @@
     <Compile Include="Classes\SQLHelper.cs" />
     <Compile Include="Controllers\AccidentController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\FilesController.cs" />
     <Compile Include="Controllers\ListsController.cs" />
     <Compile Include="Controllers\UpdateController.cs" />
     <Compile Include="Controllers\Main.cs" />
@@ -136,8 +152,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>db.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Models\FileModels.cs" />
     <Compile Include="Models\Repositories_Accidents.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Implementation\FileManager.cs" />
+    <Compile Include="Services\Interfaces\IFileManager.cs" />
+    <Compile Include="Services\Ninject\NinjectControllerFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\Mail.template.lt.htm" />
@@ -147,11 +167,19 @@
     <None Include="Content\less\sprites.less" />
     <None Include="Content\less\tables.less" />
     <None Include="Content\less\site.less" />
-    <Content Include="Content\less\main.css" />
-    <Content Include="Content\less\site_ua.less" />
-    <Content Include="Content\Styles.css" />
+    <Content Include="Content\Files\css\bootstrap-ie6.min.css" />
+    <Content Include="Content\Files\css\bootstrap-image-gallery.min.css" />
+    <Content Include="Content\Files\css\bootstrap-responsive.css" />
+    <Content Include="Content\Files\css\bootstrap.css" />
+    <Content Include="Content\Files\css\fileuploader.css" />
+    <Content Include="Content\Files\css\jquery.fileupload-ui.css" />
     <Content Include="Content\images\spinner.gif" />
     <Content Include="Content\images\spinnerBig.gif" />
+    <Content Include="Content\Files\img\file-complete-icon.png" />
+    <Content Include="Content\Files\img\file-error-icon.png" />
+    <Content Include="Content\Files\img\glyphicons-halflings-white.png" />
+    <Content Include="Content\Files\img\glyphicons-halflings.png" />
+    <Content Include="Content\Files\img\loading.gif" />
     <Content Include="Content\less\images\alert.png" />
     <Content Include="Content\less\images_ui\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\less\images_ui\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -222,11 +250,68 @@
     <Content Include="Content\images_ui_seni\ui-icons_d8e7f3_256x240.png" />
     <Content Include="Content\images_ui_seni\ui-icons_f9bd01_256x240.png" />
     <Content Include="Content\Site.css" />
+    <Content Include="Content\Files\css\UploadFileStyle.css" />
+    <Content Include="Content\SwitchBrowser.htm" />
     <Content Include="Global.asax" />
     <Content Include="Library\compiler.jar" />
     <Content Include="Library\dotless.Compiler.exe" />
     <Content Include="Library\dotless.Core.dll" />
     <Content Include="Library\yuicompressor-2.4.7.jar" />
+    <Content Include="packages\elmah.1.2.2\content\App_Readme\Elmah.txt" />
+    <Content Include="packages\elmah.1.2.2\Readme.txt" />
+    <Content Include="packages\elmah.corelibrary.1.2.2\lib\Elmah.dll" />
+    <Content Include="packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll" />
+    <Content Include="packages\EntityFramework.5.0.0\lib\net40\EntityFramework.xml" />
+    <Content Include="packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll" />
+    <Content Include="packages\EntityFramework.5.0.0\lib\net45\EntityFramework.xml" />
+    <Content Include="packages\EntityFramework.5.0.0\tools\about_EntityFramework.help.txt" />
+    <Content Include="packages\EntityFramework.5.0.0\tools\EntityFramework.PowerShell.dll" />
+    <Content Include="packages\EntityFramework.5.0.0\tools\EntityFramework.PowerShell.Utility.dll" />
+    <Content Include="packages\EntityFramework.5.0.0\tools\migrate.exe" />
+    <Content Include="packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll" />
+    <Content Include="packages\Ninject.3.0.1.10\lib\net35\Ninject.dll" />
+    <Content Include="packages\Ninject.3.0.1.10\lib\net35\Ninject.pdb" />
+    <Content Include="packages\Ninject.3.0.1.10\lib\net35\Ninject.xml" />
+    <Content Include="packages\Ninject.3.0.1.10\lib\net40\Ninject.dll" />
+    <Content Include="packages\Ninject.3.0.1.10\lib\net40\Ninject.pdb" />
+    <Content Include="packages\Ninject.3.0.1.10\lib\net40\Ninject.xml" />
+    <Content Include="packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll" />
+    <Content Include="packages\Ninject.3.0.1.10\lib\net45-full\Ninject.pdb" />
+    <Content Include="packages\Ninject.3.0.1.10\lib\net45-full\Ninject.xml" />
+    <Content Include="packages\Ninject.3.0.1.10\lib\sl2\Ninject.dll" />
+    <Content Include="packages\Ninject.3.0.1.10\lib\sl2\Ninject.pdb" />
+    <Content Include="packages\Ninject.3.0.1.10\lib\sl2\Ninject.xml" />
+    <Content Include="packages\Ninject.3.0.1.10\lib\sl3-wp\Ninject.dll" />
+    <Content Include="packages\Ninject.3.0.1.10\lib\sl3-wp\Ninject.pdb" />
+    <Content Include="packages\Ninject.3.0.1.10\lib\sl3-wp\Ninject.xml" />
+    <Content Include="packages\Ninject.3.0.1.10\lib\sl3\Ninject.dll" />
+    <Content Include="packages\Ninject.3.0.1.10\lib\sl3\Ninject.pdb" />
+    <Content Include="packages\Ninject.3.0.1.10\lib\sl3\Ninject.xml" />
+    <Content Include="packages\Ninject.3.0.1.10\lib\sl4-windowsphone71\Ninject.dll" />
+    <Content Include="packages\Ninject.3.0.1.10\lib\sl4-windowsphone71\Ninject.pdb" />
+    <Content Include="packages\Ninject.3.0.1.10\lib\sl4-windowsphone71\Ninject.xml" />
+    <Content Include="packages\Ninject.3.0.1.10\lib\sl4\Ninject.dll" />
+    <Content Include="packages\Ninject.3.0.1.10\lib\sl4\Ninject.pdb" />
+    <Content Include="packages\Ninject.3.0.1.10\lib\sl4\Ninject.xml" />
+    <Content Include="packages\Ninject.3.0.1.10\lib\sl5\Ninject.dll" />
+    <Content Include="packages\Ninject.3.0.1.10\lib\sl5\Ninject.pdb" />
+    <Content Include="packages\Ninject.3.0.1.10\lib\sl5\Ninject.xml" />
+    <Content Include="packages\Ninject.MVC3.3.0.0.6\lib\net40-full\Ninject.Web.Mvc.dll" />
+    <Content Include="packages\Ninject.MVC3.3.0.0.6\lib\net40-full\Ninject.Web.Mvc.pdb" />
+    <Content Include="packages\Ninject.MVC3.3.0.0.6\lib\net40-full\Ninject.Web.Mvc.xml" />
+    <Content Include="packages\Ninject.MVC3.3.0.0.6\lib\net45-full\Ninject.Web.Mvc.dll" />
+    <Content Include="packages\Ninject.MVC3.3.0.0.6\lib\net45-full\Ninject.Web.Mvc.pdb" />
+    <Content Include="packages\Ninject.MVC3.3.0.0.6\lib\net45-full\Ninject.Web.Mvc.xml" />
+    <Content Include="packages\Ninject.Web.Common.3.0.0.7\lib\net35-full\Ninject.Web.Common.dll" />
+    <Content Include="packages\Ninject.Web.Common.3.0.0.7\lib\net35-full\Ninject.Web.Common.pdb" />
+    <Content Include="packages\Ninject.Web.Common.3.0.0.7\lib\net35-full\Ninject.Web.Common.xml" />
+    <Content Include="packages\Ninject.Web.Common.3.0.0.7\lib\net40-full\Ninject.Web.Common.dll" />
+    <Content Include="packages\Ninject.Web.Common.3.0.0.7\lib\net40-full\Ninject.Web.Common.pdb" />
+    <Content Include="packages\Ninject.Web.Common.3.0.0.7\lib\net40-full\Ninject.Web.Common.xml" />
+    <Content Include="packages\Ninject.Web.Common.3.0.0.7\lib\net45-full\Ninject.Web.Common.dll" />
+    <Content Include="packages\Ninject.Web.Common.3.0.0.7\lib\net45-full\Ninject.Web.Common.pdb" />
+    <Content Include="packages\Ninject.Web.Common.3.0.0.7\lib\net45-full\Ninject.Web.Common.xml" />
+    <Content Include="packages\WebActivator.1.5.1\lib\net40\WebActivator.dll" />
     <Content Include="Scripts\Ember\appEnd.js" />
     <Content Include="Scripts\Ember\Copy of ember-rest.js" />
     <Content Include="Scripts\Ember\ember-1.0.pre-h.min.js" />
@@ -241,14 +326,54 @@
     <Content Include="Scripts\Ember\ember-routemanager.js" />
     <Content Include="Scripts\Ember\ember-0.9.8.1.js" />
     <Content Include="Scripts\Ember\Sprite32-hover.png" />
+    <Content Include="Content\Files\css\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\Files\css\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\Files\css\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\Files\css\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\Files\css\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\Files\css\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\Files\css\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\Files\css\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\Files\css\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\Files\css\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\Files\css\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\Files\css\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\Files\css\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Scripts\Files\canvas-to-blob.min.js" />
+    <Content Include="Scripts\Files\customizedFileUploader.js" />
+    <Content Include="Scripts\Files\vendor\fileuploader.js" />
+    <Content Include="Scripts\Files\jquery-1.4.4-vsdoc.js" />
+    <Content Include="Content\Files\css\jquery-ui.css" />
+    <Content Include="Scripts\Files\jquery-1.8.2.js" />
+    <Content Include="Scripts\Files\jquery-ui-1.9.0.custom.js" />
+    <Content Include="Scripts\Files\jquery.fileupload-fp.js" />
+    <Content Include="Scripts\Files\jquery.fileupload-ui.js" />
+    <Content Include="Scripts\Files\jquery.fileupload.js" />
+    <Content Include="Scripts\Files\jquery.iframe-transport.js" />
+    <Content Include="Scripts\Files\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\Files\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\Files\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\Files\jquery.validate.js" />
+    <Content Include="Scripts\Files\jquery.validate.min.js" />
+    <Content Include="Scripts\Files\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\Files\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\Files\load-image.min.js" />
+    <Content Include="Scripts\Files\MicrosoftAjax.debug.js" />
+    <Content Include="Scripts\Files\MicrosoftAjax.js" />
+    <Content Include="Scripts\Files\MicrosoftMvcAjax.debug.js" />
+    <Content Include="Scripts\Files\MicrosoftMvcAjax.js" />
+    <Content Include="Scripts\Files\MicrosoftMvcValidation.debug.js" />
+    <Content Include="Scripts\Files\MicrosoftMvcValidation.js" />
+    <Content Include="Scripts\Files\tmpl.min.js" />
+    <Content Include="Scripts\Files\vendor\jquery.ui.widget.js" />
     <Content Include="Scripts\Forms\accidents.js" />
     <Content Include="Scripts\Forms\lists.js" />
+    <Content Include="Scripts\Files\UploadDialog.js" />
     <Content Include="Scripts\Main\jquery-1.8.0.combined.min.js" />
-    <Content Include="Scripts\Main\jquery-1.8.0.combined1.min.js" />
     <Content Include="Scripts\My\clsEditableForm.js" />
-    <Content Include="Scripts\My\ui-ember.js" />
     <Content Include="Scripts\My\ui-checkbox.js" />
     <Content Include="Scripts\My\MyPlugins_Checkbox.js" />
+    <Content Include="Scripts\My\General.js" />
     <Content Include="Scripts\My\General.js" />
     <Content Include="Scripts\My\MyPlugins_ComboBox.js" />
     <Content Include="Scripts\My\Views.js" />
@@ -272,6 +397,7 @@
     <Content Include="Scripts\Plugins scripts\TimePicker.js" />
     <Content Include="Content\LoginStyles.css" />
     <Content Include="SQL\sql10_15.sql" />
+    <Content Include="SwitchBrowser.htm" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -305,6 +431,7 @@
     <Folder Include="Areas\Scripts\Models\" />
     <Folder Include="Areas\Scripts\Views\Shared\" />
     <Folder Include="Scripts\Final\" />
+    <Folder Include="SQL\Procedures\" />
     <Folder Include="Temp\" />
   </ItemGroup>
   <ItemGroup>
@@ -346,6 +473,31 @@
     <Content Include="Scripts\Plugins\plugs.min.js" />
     <Content Include="Scripts\Plugins\jquery.notify.min.js" />
     <Content Include="Scripts\Plugins\jquery.notify.js" />
+    <None Include="Models\db.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>db.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages\elmah.1.2.2\content\web.config.transform" />
+    <None Include="packages\elmah.1.2.2\elmah.1.2.2.nupkg" />
+    <None Include="packages\elmah.corelibrary.1.2.2\elmah.corelibrary.1.2.2.nupkg" />
+    <None Include="packages\EntityFramework.5.0.0\Content\App.config.transform" />
+    <None Include="packages\EntityFramework.5.0.0\Content\Web.config.transform" />
+    <None Include="packages\EntityFramework.5.0.0\EntityFramework.5.0.0.nupkg" />
+    <None Include="packages\EntityFramework.5.0.0\tools\EntityFramework.PS3.psd1" />
+    <None Include="packages\EntityFramework.5.0.0\tools\EntityFramework.psd1" />
+    <None Include="packages\EntityFramework.5.0.0\tools\EntityFramework.psm1" />
+    <None Include="packages\EntityFramework.5.0.0\tools\init.ps1" />
+    <None Include="packages\EntityFramework.5.0.0\tools\install.ps1" />
+    <Content Include="packages\EntityFramework.5.0.0\tools\Redirect.config" />
+    <Content Include="packages\EntityFramework.5.0.0\tools\Redirect.VS11.config" />
+    <None Include="packages\Microsoft.Web.Infrastructure.1.0.0.0\Microsoft.Web.Infrastructure.1.0.0.0.nupkg" />
+    <None Include="packages\Ninject.3.0.1.10\Ninject.3.0.1.10.nupkg" />
+    <None Include="packages\Ninject.MVC3.3.0.0.6\Ninject.MVC3.3.0.0.6.nupkg" />
+    <None Include="packages\Ninject.Web.Common.3.0.0.7\Content\App_Start\NinjectWebCommon.cs.pp" />
+    <None Include="packages\Ninject.Web.Common.3.0.0.7\Ninject.Web.Common.3.0.0.7.nupkg" />
+    <Content Include="packages\repositories.config" />
+    <None Include="packages\WebActivator.1.5.1\WebActivator.1.5.1.nupkg" />
     <None Include="Scripts\Forms\accidents.coffee" />
     <Content Include="Scripts\Forms\accidentCard.js" />
     <Content Include="Views\Accident\Card.cshtml" />
@@ -366,8 +518,10 @@
     <None Include="Scripts\Forms\lists.coffee" />
     <None Include="Scripts\My\clsEditableForm.coffee" />
     <None Include="Scripts\My\MyPlugins_ComboBox.coffee" />
-    <Content Include="Views\Main\Copy of Start.cshtml" />
-    <Content Include="Views\Lists\Copy of tblDrivers.cshtml" />
+    <Content Include="Views\Files\Start.cshtml" />
+    <Content Include="Views\Files\_Start.cshtml" />
+    <Content Include="Views\Files\UploadTest.cshtml" />
+	
     <Content Include="Views\Lists\Copy of tblVehicles.cshtml" />
     <Content Include="Views\Lists\Copy of tblInsPolicies.cshtml" />
     <None Include="Views\Shared\Accidents\tmpClaimEdit.cshtml" />
@@ -380,6 +534,11 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Models\db.dbml.layout">
+      <DependentUpon>db.dbml</DependentUpon>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
@@ -398,9 +557,9 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>False</AutoAssignPort>
-          <DevelopmentServerPort>81</DevelopmentServerPort>
+          <DevelopmentServerPort>52441</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:81/</IISUrl>
+          <IISUrl>http://localhost/ClaimsControl</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
