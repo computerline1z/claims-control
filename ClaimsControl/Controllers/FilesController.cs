@@ -75,7 +75,7 @@ namespace CC.Controllers
                 if (String.IsNullOrEmpty(model.qqfile)) // IE explorer ?
                     model.qqfile = System.IO.Path.GetFileName(Request.Files[0].FileName);
                 if (model.fileSize != stream.Length)
-                    throw new Exception(String.Format("Duomenų perdavimo klaida: laukiama {0} baitų, gauta - {1}.", model.fileSize, stream.Length);
+                    throw new Exception(String.Format("Duomenų perdavimo klaida: laukiama {0} baitų, gauta - {1}.", model.fileSize, stream.Length));
 
                 var buffer = new byte[model.fileSize];  //     [stream.Length];
                 if (buffer.Length > 0)
