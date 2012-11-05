@@ -41,7 +41,7 @@ namespace CC.Controllers
         {
             var model = new CustomerDocumentsModel()
             {
-                AccountID = UserData.AccountID,
+                AccountID = accountId ?? UserData.AccountID,
                 Account = UserData.Account,
                 UserID = UserData.UserID,
                 UserName = UserData.UserName,
