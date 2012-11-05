@@ -31,9 +31,11 @@ namespace CC.Services.Ninject
                 .ToConstructor(c => new dbDataContext(ConfigurationManager.ConnectionStrings["ClaimsControlConnectionString"].ConnectionString))
                 .InScope(ctx => HttpContext.Current);
             
-            string uploadDirectory = HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["uploadDirectory"]);
+            string virtualUploadDirectory = ConfigurationManager.AppSettings["uploadDirectory"];
+            string uploadDirectory = HttpContext.Current.Server.MapPath(virtualUploadDirectory);
             ninjectKernel.Bind<IFileManager>().To<FileManager>()
                 .InScope(ctx => HttpContext.Current)
+                .WithConstructorArgument("virtualUploadDirectory", virtualUploadDirectory)
                 .WithConstructorArgument("uploadDirectory", uploadDirectory);
 
             string fileNameFormat = ConfigurationManager.AppSettings["fileNameFormat"] ?? "{0:D8}";
