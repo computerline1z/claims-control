@@ -14,11 +14,13 @@ namespace CC.Services.Implementation
     {
         private dbDataContext _dc;
         public string UploadDirectory { get; private set; }
+        public string VirtualUploadDirectory { get; private set; }
 
         [Inject]
-        public FileManager(dbDataContext dc, string uploadDirectory)
+        public FileManager(dbDataContext dc, string virtualUploadDirectory, string uploadDirectory)
         {
             this._dc = dc;
+            this.VirtualUploadDirectory = virtualUploadDirectory;
             this.UploadDirectory = uploadDirectory;
         }
 
@@ -104,6 +106,43 @@ namespace CC.Services.Implementation
             }
             return record;
         }
+        public void UpdateFileName(tblDoc record, string fileName, out string errorMessage)
+        {
+            _dc.Connection.Open();
+            _dc.Transaction = _dc.Connection.BeginTransaction(System.Data.IsolationLevel.ReadCommitted);
+            try
+            {
+                record.FileName = fileName;
+                _dc.SubmitChanges();
+                _dc.Transaction.Commit();
+                errorMessage = String.Empty;
+            }
+            catch (Exception ex)
+            {
+                _dc.Transaction.Rollback();
+                errorMessage = ex.Message;
+                record = null;
+            }
+            finally
+            {
+                _dc.Transaction = null;
+                _dc.Connection.Close();
+            }
+        }
+
+        public string GetIndividualDirectory(string account, string userName)
+        {
+            string rzlt = Path.Combine(UploadDirectory, account, userName);
+            if (!Directory.Exists(rzlt))
+                Directory.CreateDirectory(rzlt);
+            return rzlt;
+        }
+
+        public string GetIndividualVirtualDirectory(string account, string userName)
+        {
+            string rzlt = String.Format("{0}/{1}/{2}", this.VirtualUploadDirectory, account, userName);
+            return rzlt;
+        }
 
         #endregion
 
@@ -122,14 +161,6 @@ namespace CC.Services.Implementation
                 return (short)1;
             else
                 return (short)(maxSortNo.SortNo + 1);
-        }
-
-        private string GetIndividualDirectory(string account, string userName)
-        {
-            string rzlt = Path.Combine(UploadDirectory, account, userName);
-            if (!Directory.Exists(rzlt))
-                Directory.CreateDirectory(rzlt);
-            return rzlt;
         }
 
         #endregion
