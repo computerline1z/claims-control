@@ -195,7 +195,7 @@ var oCONTROLS = {
 				if (isTime) {
 					eHTML += oCONTROLS.txt({
 						Value: TimeValue,
-						style: "margin-left:20px;",
+						style: "margin:0 20px;",
 						title: "Laikas",
 						classes: "time ui-widget-content ui-corner-all"
 					});
