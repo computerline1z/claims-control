@@ -212,6 +212,8 @@
     <Content Include="Content\less\images\ico-search.png" />
     <Content Include="Content\images\navi_bg.png" />
     <Content Include="Content\images\navi_bg_divider.png" />
+    <Content Include="Content\less\main.css" />
+    <Content Include="Content\less\site_ua.less" />
     <Content Include="Content\SiteOld.css" />
     <Content Include="Content\dataTables.css" />
     <Content Include="Content\filetypes\doc.png" />
