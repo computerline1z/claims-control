@@ -47,6 +47,8 @@
   App.listAllController = Em.ResourceController.create({
     current: "",
     clicked: "",
+    endDate: "",
+    editItem: "",
     filterValue: "",
     valueDidChange: (function() {
       return this.filterItems();
@@ -66,17 +68,63 @@
       if (!pars.row && pars.newVals) {
         pars.row = pars.newVals.vals.toRowObject(pars.newVals.cols);
       }
-      return JQ.Dialog.create({
+      return MY.lists.dialog = JQ.Dialog.create({
+        controller: pars.me,
+        pars: pars,
         init: function() {
           this._super();
           this.templateName = pars.template;
           return this.title = title;
         },
         didInsertElement: function() {
-          var dialogContent, dialogFrm;
+          var dialogContent, dialogFrm, me;
           this._super();
           dialogFrm = $("#openItemDialog");
           dialogContent = $("#dialogContent");
+          me = this;
+          $("#dialogEndDateInput").datepicker({
+            "minDate": "-3y",
+            "maxDate": "0"
+          }).trigger("blur");
+          this.$().on("click", 'a.inLine', function(e) {
+            var endDate, input, isInput, newDate, obj, parentDiv, t;
+            t = $(e.target);
+            pars = me.pars;
+            endDate = pars.me.endDate;
+            parentDiv = t.parent().parent();
+            input = parentDiv.find("input");
+            isInput = input ? input.length : 0;
+            if (!isInput) {
+              parentDiv.css("background-color", "").css("color", "").find("span.inLine").replaceWith('<input type="text" style="width:100%;" placeholder="Nebedirba nuo.."/>').end().find("input").val(endDate).datepicker({
+                "minDate": "-3y",
+                "maxDate": "0"
+              }).end().find("a.inLine").css("color", "").html("Išsaugoti");
+            } else {
+              newDate = oGLOBAL.date.isDate(input.val()) ? input.val() : "";
+              if (newDate) {
+                parentDiv.css("background-color", "red").css("color", "White").find("input").replaceWith('<span class="inLine">Nebedirba nuo ' + newDate + '</span>').end().find("a.inLine").css("color", "White").html("Keisti");
+              }
+              obj = dialogContent.data("ctrl");
+              SERVER.update2({
+                "Action": "Edit",
+                "Ctrl": dialogFrm,
+                "source": obj.Source,
+                "row": pars.row,
+                DataToSave: {
+                  "id": obj.id,
+                  "Data": [newDate],
+                  "Fields": ["EndDate"],
+                  "DataTable": obj.tblUpdate
+                },
+                CallBackAfter: function(Row) {
+                  return $("#tabLists").find("div.ui-tabs").find("li.ui-tabs-selected a").trigger("click");
+                }
+              });
+              console.log("išsaugoti " + newDate);
+              pars.me.endDate = newDate;
+            }
+            return false;
+          });
           $("#btnSaveItem").on("click", function() {
             var DataToSave;
             DataToSave = oCONTROLS.ValidateForm(dialogContent);
@@ -115,19 +163,26 @@
       $.extend(pars, {
         row: 0,
         Action: "Add",
+        me: this,
         CallBackAfter: function(Row) {}
       });
+      this.set("endDate", "");
+      this.set("editItem", false);
       return this.openItem(pars);
     },
     edit: function(e) {
-      var context, pars;
+      var context, endDate, pars;
       context = e.view._context;
       pars = $(e.target).closest("table").next().data("ctrl");
       pars = pars ? pars : this.current;
       $.extend(pars, {
         row: context,
-        Action: "Edit"
+        Action: "Edit",
+        me: this
       });
+      endDate = pars.emObject === "drivers" ? pars.row.endDate : pars.row.endDate;
+      this.set("endDate", endDate);
+      this.set("editItem", true);
       return this.openItem(pars);
     },
     filterByField: function() {
@@ -139,7 +194,7 @@
       var fn, mark;
       if (this.current.emObject === "drivers") {
         mark = this.clicked === "NotWorking" ? "!" : "";
-        fn = "var ret=true; if ($.trim(row.dateEnd)) {ret=oGLOBAL.date.firstBigger(row.dateEnd);} console.log('dateEnd: '+row.dateEnd+', '+ret);return " + mark + "ret";
+        fn = "var ret=true; if ($.trim(row.endDate)) {ret=oGLOBAL.date.firstBigger(row.endDate);} console.log('endDate: '+row.endDate+', '+ret);return " + mark + "ret";
       } else if (this.current.emObject === "vehicles") {
         mark = this.clicked === "NotWorking" ? "!" : "";
         fn = "var ret=true; if ($.trim(row.endDate)) {ret=oGLOBAL.date.firstBigger(row.endDate);} console.log('endDate: '+row.endDate+', '+ret);return " + mark + "ret";
@@ -155,14 +210,12 @@
         fn = function(row) {
           var v;
           v = _this.filterByField()(row);
-          console.log("finalRez: " + v);
           return row.set('visible', v);
         };
       } else {
         fn = function(row) {
           var v;
           v = (_this.filterByTab()(row) ? _this.filterByField()(row) : false);
-          console.log("finalRez: " + v);
           return row.set('visible', v);
         };
       }

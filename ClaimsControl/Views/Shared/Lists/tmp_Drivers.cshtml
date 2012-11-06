@@ -1,6 +1,5 @@
 ﻿<div id="dialogContent" class="inputForm container w95pr centerBlock"
-data-ctrl='{"NewRec":1,"Source":"proc_Drivers","tblUpdate":"tblDrivers"}'>@*@((Model.NewRec == 1) ? "" : ",\"id\":" + Model.Driver.ID)*@
-@*   @{if (Model.NewRec == 1) {*@
+data-ctrl='{"NewRec":1,"Source":"proc_Drivers","tblUpdate":"tblDrivers"}'>
       <div class='left w45pr'>
          <div class='ExtendIt' data-ctrl='{"Field":"FirstName","classes":"UpdateField","id":"FirstName","labelType":"Left"}'>
          </div>
@@ -13,31 +12,21 @@ data-ctrl='{"NewRec":1,"Source":"proc_Drivers","tblUpdate":"tblDrivers"}'>@*@((M
          <div class='ExtendIt' data-ctrl='{"Field":"LastName","classes":"UpdateField","id":"LastName","labelType":"Left"}'>
          </div>
          <div class='ExtendIt' data-ctrl='{"Field":"DrivingCategory","classes":"UpdateField","id":"DrivingCategory","labelType":"Left"}'>
-         </div>
+         </div>	
+			{{#if this.editItem}}	
+			{{#if App.listAllController.endDate}}
+				<div style="background-color:Red;" class="ui-corner-all tr borderGroove">
+					<div class="td w70pr" style="padding:2%;color:White;"><span class="inLine">Nebedirba nuo {{App.listAllController.endDate}}</span></div>
+					<div class="td w25pr" style="text-align:center;padding:2%;"><a href="#" class="inLine" style="color:White;">Keisti</a></div>
+				</div>
+			{{else}}
+				<div class="ui-corner-all tr borderGroove">
+					<div class="td w70pr" style="padding:2%;"><input type="text" id="dialogEndDateInput" style="width:100%;" placeholder="Nebedirba nuo.."/></div>
+					<div class="td w25pr" style="text-align:center;padding:2%;"><a href="#" class="inLine">Išsaugoti</a></div>
+				</div>
+			{{/if}}
+			{{/if}}
       </div>
-@*     }
-     else {
-      <div class='HalfDivleft'>
-         <div class='ExtendIt' data-ctrl='{"Value":"@Model.Driver.FirstName", "Field":"FirstName","classes":"UpdateField","id":"FirstName","labelType":"Left"}'>
-         </div>
-         <div class='ExtendIt' data-ctrl='{"Value":"@Model.Driver.DateExpierence", "Field":"DateExpierence","classes":"UpdateField","id":"DateExpierence","labelType":"Left", "Type":"DateLess", "Default":"Today","Plugin":{"datepicker":{"minDate":"-5y","maxDate":"0"}}}'>
-         </div>
-         <div class='ExtendIt' data-ctrl='{"Value":"@Model.Driver.Phone", "Field":"Phone","classes":"UpdateField","id":"Phone","labelType":"Left"}'>
-         </div>
-      </div>
-      <div class='HalfDivright'>
-         <div class='ExtendIt' data-ctrl='{"Value":"@Model.Driver.LastName", "Field":"LastName","classes":"UpdateField","id":"LastName","labelType":"Left"}'>
-         </div>
-         <div class='ExtendIt' data-ctrl='{"Value":"@Model.Driver.DrivingCategory", "Field":"DrivingCategory","classes":"UpdateField","id":"DrivingCategory","labelType":"Left"}'>
-         </div>
-         <div id="divStatusPanel" class="ui-widget-content ui-corner-all" data-EndDate="@((Model.Driver.DateEnd.HasValue) ? Model.Driver.DateEnd.Value.ToString("yyyy.MM.dd") : "")" data-End='{"UpdateField":"DateEnd","Tip":"Nedirba nuo","NotUsed":"Nedirba nuo","ToNotUsed":"Perkelti prie nedirbančių","ToUsed":"Grąžinti prie dirbančių"}'>
-         </div>
-         @*         <div class="ui-widget-content ui-corner-all @((Model.Driver.DateEnd.HasValue) ? "WasBefore" : "ui-state-default IsNow")">
-            @((Model.Driver.DateEnd.HasValue) ? "Nedirba nuo " + Model.Driver.DateEnd.Value.ToString("yyyy MM dd") : "")
-            <a id="ListRecordChangeStatus" href="#">@((Model.Driver.DateEnd.HasValue) ? "Keisti" : "Perkelti prie nedirbančių")</a>
-         </div>
-      </div>
-     }}*@
 </div> 
 <center style="margin: 2em 0;"><button id="btnSaveItem" class="btn small">Išsaugoti</button><a style="margin-left: 2%;" id="aCancelItem" href="#">Atšaukti</a></center>
 <div class="DocsRow">

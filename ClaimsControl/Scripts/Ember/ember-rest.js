@@ -354,7 +354,7 @@ Ember.ResourceController = Ember.ArrayController.extend(Ember.ResourceAdapter, {
 var SERVER = {
 	update2: function (p){
 		//nereikia callbacko, updatina jsonObj, todėl papildomai reikia "source"(oDATA pavadinimas) ir "row" //oDATA.GET("proc_Vehicles").emData
-		//Action, DataToSave:{},"Ctrl":Ctrl,source,row
+		//SERVER.update2({"Action":Action,DataToSave:{},"Ctrl":Ctrl,"source":source,"row":row
 		if (!p.DataToSave) return false;
 		var CallBack={Success:function (resp, updData){
 				var Adding=(p.Action==="Add")?true:false, Row=(Adding)?Em.Object.create({}):p.row;
@@ -471,8 +471,8 @@ var SERVER = {
 		});
 	},
 	fnUpdated: function (resp, updData) {  //updData["Action"]
-		var titleFields = (updData.oDATA)?updData.oDATA.titleFields:false, Title;
-		if (titleFields){Title=(updData.row)?updData.row.MapArrToString(config.titleFields, true): "Duomenų keitimas."}	
+		var titleFields = (updData.source)?oDATA.GET(updData.source).Config.titleFields:false, Title;
+		if (titleFields){Title=(updData.row)?updData.row.MapArrToString(titleFields, true): "Duomenų keitimas."}	
 		DefMsg = {
 			Title: ((Title)?Title:"Duomenų keitimas."),
 			Error: {
@@ -489,20 +489,10 @@ var SERVER = {
 		var MsgObj = $.extend({}, DefMsg, updData.Msg), Msg,Sign,Type;
 		if (resp.ErrorMsg) {
 			Type="Error",Sign="img32-warning";
-			//Msg = MsgObj.Error[updData.Action];
-			//Msg = (Msg) ? Msg : MsgObj.Error;			
-			//if (updData.CallBack) {
-			//	if (typeof updData.CallBack.Error === 'function') {updData.CallBack.Error(resp);}			
-			//}
 		} else {
 			Type="Success",Sign="img32-check";
-			//Msg = MsgObj.Success[updData.Action];
-			//Msg = (Msg) ? Msg : MsgObj.Success;
-			//if (updData.CallBack) {
-			//	if (typeof updData.CallBack.Success === 'function') {updData.CallBack.Success(resp, updData);}		
-			//}
 		}
-		Msg = (MsgObj[Type][updData.Action]) ? Msg : MsgObj[Type];
+		Msg = MsgObj[Type][updData.Action];
 		if (Type==="Error"){Msg += " Klaida:\n" + resp.ErrorMsg;}
 		if (updData.CallBack) {
 			if (typeof updData.CallBack[Type] === 'function') {updData.CallBack[Type](resp, updData);}

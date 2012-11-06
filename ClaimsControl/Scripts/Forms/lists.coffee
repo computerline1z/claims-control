@@ -44,9 +44,8 @@ App.InsPolicyView = Em.View.extend(
 	tagName: ""
 )
 App.listAllController = Em.ResourceController.create(
-	current: "",#{emObject:drivers/vehicles/insPolicies, filterCols:["fsf","fss"]}
-	clicked: "",
-	filterValue: "",
+	current:"",#{emObject:drivers/vehicles/insPolicies, filterCols:["fsf","fss"]}
+	clicked:"", endDate:"", editItem:"", filterValue: ""
 	valueDidChange: (()->		
 		#alert @filterValue
 		@filterItems()
@@ -59,12 +58,34 @@ App.listAllController = Em.ResourceController.create(
 	openItem:(pars)->#source,template,row
 		config=oDATA.GET(pars.source).Config
 		title=if pars.row then config.Msg.GenName+" "+pars.row.MapArrToString(config.titleFields,true) else config.Msg.AddNew
-		if not pars.row and pars.newVals then pars.row=pars.newVals.vals.toRowObject(pars.newVals.cols) #ivedimo forma užpildom jau užpildytais iš langelio
-		JQ.Dialog.create(
-			init: ->
-				@_super(); @templateName=pars.template; @title=title;
+		if not pars.row and pars.newVals then pars.row=pars.newVals.vals.toRowObject(pars.newVals.cols) #ivedimo forma užpildom jau užpildytais iš langelio 
+		MY.lists.dialog=JQ.Dialog.create( #MY.lists.dialog needed to destroyElement in ui-ember.js
+			controller: pars.me, pars: pars
+			init: -> @_super(); @templateName=pars.template; @title=title
 			didInsertElement: ()->
-				this._super(); dialogFrm=$("#openItemDialog");dialogContent=$("#dialogContent")
+				@_super(); dialogFrm=$("#openItemDialog");dialogContent=$("#dialogContent");me=@;$("#dialogEndDateInput").datepicker({"minDate":"-3y","maxDate":"0"}).trigger("blur")
+				@$().on("click",'a.inLine',(e)-> #išsaugoti arba keisti endDate
+					t=$(e.target);pars=me.pars;endDate=pars.me.endDate;parentDiv=t.parent().parent();input=parentDiv.find("input");isInput=if input then input.length else 0
+					if not isInput # paruošiam inputui
+						parentDiv.css("background-color","").css("color","").find("span.inLine").replaceWith('<input type="text" style="width:100%;" placeholder="Nebedirba nuo.."/>').end()
+							.find("input").val(endDate).datepicker({"minDate":"-3y","maxDate":"0"}).end().find("a.inLine").css("color","").html("Išsaugoti")						
+					else #išsaugom naują reikšmę jei keitėsi						
+						newDate = if oGLOBAL.date.isDate(input.val()) then input.val() else "" 
+						if newDate
+							parentDiv.css("background-color","red").css("color","White").find("input").replaceWith('<span class="inLine">Nebedirba nuo '+newDate+'</span>').end()
+								.find("a.inLine").css("color","White").html("Keisti")	
+						#pars.row.set("endDate", newDate)
+						#App.listAllController[pars.emObject].findProperty("iD",pars.row.iD).set("endDate", newDate)				
+
+						obj=dialogContent.data("ctrl")
+						SERVER.update2("Action":"Edit","Ctrl":dialogFrm,"source":obj.Source,"row":pars.row,
+						DataToSave:{"id":obj.id,"Data":[newDate],"Fields":["EndDate"],"DataTable":obj.tblUpdate},
+						CallBackAfter:(Row)->$("#tabLists").find("div.ui-tabs").find("li.ui-tabs-selected a").trigger("click")#trigerinam, kad pagal tabus uzdėtų visible	
+						)						
+						console.log("išsaugoti "+newDate)			
+						pars.me.endDate=newDate#kitaip keikiasi dėl metamorpho
+					false
+				)
 				$("#btnSaveItem").on("click",()->
 					DataToSave=oCONTROLS.ValidateForm(dialogContent)
 					$.extend(pars,DataToSave:DataToSave,Ctrl:$("#tabLists"),CallBackAfter:(Row)->
@@ -88,8 +109,8 @@ App.listAllController = Em.ResourceController.create(
 		pars=$(e.target).parent().data("ctrl")#{"source":"proc_Drivers","controller":"topNewController","emObject":"drivers"}
 		console.log("addNew");
 		console.log(pars);
-		$.extend(pars,row:0,Action:"Add",CallBackAfter:(Row)->)
-		@openItem(pars)	
+		$.extend(pars,row:0,Action:"Add",me:@,CallBackAfter:(Row)->)
+		@set("endDate","");@set("editItem",false);@openItem(pars)	
 		# new oGLOBAL.clsEditableForm(
 			# objData: pars.source
 			# Action: "Add" #(if (id) then "Edit" else "Add")
@@ -106,8 +127,10 @@ App.listAllController = Em.ResourceController.create(
 		context=e.view._context
 		pars=$(e.target).closest("table").next().data("ctrl")
 		pars=if(pars) then pars else @current #{"source":"proc_Drivers","controller":"topNewController","emObject":"drivers"}
-		$.extend(pars,row:context,Action:"Edit")
-		@openItem(pars)
+		$.extend(pars,row:context,Action:"Edit",me:@)
+		endDate=if pars.emObject=="drivers" then pars.row.endDate else pars.row.endDate
+		@set("endDate",endDate);@set("editItem",true);@openItem(pars)
+		
 		# new oGLOBAL.clsEditableForm(
 			# pars: pars
 			# objData: pars.source
@@ -127,7 +150,7 @@ App.listAllController = Em.ResourceController.create(
 	filterByTab: ()->
 		if @current.emObject=="drivers"
 			mark=if (@clicked=="NotWorking") then "!" else "";
-			fn="var ret=true; if ($.trim(row.dateEnd)) {ret=oGLOBAL.date.firstBigger(row.dateEnd);} console.log('dateEnd: '+row.dateEnd+', '+ret);return "+mark+"ret"
+			fn="var ret=true; if ($.trim(row.endDate)) {ret=oGLOBAL.date.firstBigger(row.endDate);} console.log('endDate: '+row.endDate+', '+ret);return "+mark+"ret"
 		else if @current.emObject=="vehicles"
 			mark=if (@clicked=="NotWorking") then "!" else "";
 			fn="var ret=true; if ($.trim(row.endDate)) {ret=oGLOBAL.date.firstBigger(row.endDate);} console.log('endDate: '+row.endDate+', '+ret);return "+mark+"ret"
@@ -136,9 +159,9 @@ App.listAllController = Em.ResourceController.create(
 		new Function("row",fn)
 	filterItems: ()->
 		if @current.emObject=="insPolicies"
-			fn=(row)=>(v=@filterByField()(row); console.log("finalRez: "+v); row.set('visible',v);)	
+			fn=(row)=>(v=@filterByField()(row); row.set('visible',v);)	#console.log("finalRez: "+v); 
 		else
-			fn=(row)=>(v=(if (@filterByTab()(row)) then (@filterByField()(row)) else false;); console.log("finalRez: "+v); row.set('visible',v);)			
+			fn=(row)=>(v=(if (@filterByTab()(row)) then (@filterByField()(row)) else false;); row.set('visible',v);)	#console.log("finalRez: "+v);		
 		App.listAllController[@current.emObject].forEach(fn)
 	showTabs: (e)->
 		t=$(e.target); t.closest("ul").find("li").removeClass("ui-tabs-selected ui-state-active"); t.closest("li").addClass("ui-tabs-selected ui-state-active")

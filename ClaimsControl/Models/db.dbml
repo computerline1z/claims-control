@@ -202,7 +202,7 @@
       <Column Name="FirstName" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
       <Column Name="LastName" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
       <Column Name="DateExpierence" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
-      <Column Name="DateEnd" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="EndDate" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
       <Column Name="DrivingCategory" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
       <Column Name="Phone" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
       <Column Name="AccountID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
@@ -420,7 +420,7 @@
       <Column Name="DrivingCategory" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
       <Column Name="Phone" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
       <Column Name="Docs" Type="System.String" DbType="VarChar(17)" CanBeNull="true" />
-      <Column Name="DateEnd" Type="System.String" DbType="Char(10)" CanBeNull="true" />
+      <Column Name="EndDate" Type="System.String" DbType="Char(10)" CanBeNull="true" />
     </ElementType>
   </Function>
   <Function Name="dbo.proc_Accidents" Method="proc_Accidents">
