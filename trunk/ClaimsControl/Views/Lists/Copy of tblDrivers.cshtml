@@ -31,11 +31,11 @@ data-ctrl='{"NewRec":1,"Source":"proc_Drivers","tblUpdate":"tblDrivers"@((Model.
          </div>
          <div class='ExtendIt' data-ctrl='{"Value":"@Model.Driver.DrivingCategory", "Field":"DrivingCategory","classes":"UpdateField","id":"DrivingCategory","labelType":"Left"}'>
          </div>
-         <div id="divStatusPanel" class="ui-widget-content ui-corner-all" data-EndDate="@((Model.Driver.DateEnd.HasValue) ? Model.Driver.DateEnd.Value.ToString("yyyy.MM.dd") : "")" data-End='{"UpdateField":"DateEnd","Tip":"Nedirba nuo","NotUsed":"Nedirba nuo","ToNotUsed":"Perkelti prie nedirbančių","ToUsed":"Grąžinti prie dirbančių"}'>
+         <div id="divStatusPanel" class="ui-widget-content ui-corner-all" data-EndDate="@((Model.Driver.EndDate.HasValue) ? Model.Driver.EndDate.Value.ToString("yyyy.MM.dd") : "")" data-End='{"UpdateField":"EndDate","Tip":"Nedirba nuo","NotUsed":"Nedirba nuo","ToNotUsed":"Perkelti prie nedirbančių","ToUsed":"Grąžinti prie dirbančių"}'>
          </div>
-         @*         <div class="ui-widget-content ui-corner-all @((Model.Driver.DateEnd.HasValue) ? "WasBefore" : "ui-state-default IsNow")">
-            @((Model.Driver.DateEnd.HasValue) ? "Nedirba nuo " + Model.Driver.DateEnd.Value.ToString("yyyy MM dd") : "")
-            <a id="ListRecordChangeStatus" href="#">@((Model.Driver.DateEnd.HasValue) ? "Keisti" : "Perkelti prie nedirbančių")</a>
+         @*         <div class="ui-widget-content ui-corner-all @((Model.Driver.EndDate.HasValue) ? "WasBefore" : "ui-state-default IsNow")">
+            @((Model.Driver.EndDate.HasValue) ? "Nedirba nuo " + Model.Driver.EndDate.Value.ToString("yyyy MM dd") : "")
+            <a id="ListRecordChangeStatus" href="#">@((Model.Driver.EndDate.HasValue) ? "Keisti" : "Perkelti prie nedirbančių")</a>
          </div>*@
       </div>
      }}

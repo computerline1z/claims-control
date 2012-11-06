@@ -469,8 +469,10 @@ oGLOBAL.date = {
 		var pattern = new RegExp("([^-]*)" + this.dateDelimiter + "([^-]*)" + this.dateDelimiter + "([^-]*)");
 		this.checkFormat();
 		var DateRegexResult = stringDate.match(pattern);
-		return new Date(DateRegexResult[2] + "/" + DateRegexResult[3] + "/" + DateRegexResult[1]);
+		var result=(DateRegexResult)?(new Date(DateRegexResult[2] + "/" + DateRegexResult[3] + "/" + DateRegexResult[1])):"";
+		return result;
 	},
+	isDate: function (stringDate) {return !isNaN(Date.parse(this.getDate(stringDate)))},
 	firstBigger: function (date1, date2) {
 		if (arguments.length === 1) { date2 = this.getTodayString(); }
 		//console.log(this.getDate(date1));console.log(this.getDate(date2));

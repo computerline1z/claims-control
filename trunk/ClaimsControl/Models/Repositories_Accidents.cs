@@ -240,7 +240,7 @@ namespace CC.Models {
 				d.DrivingCategory,//4
 				d.Phone,//5
 				d.Docs,//6
-				d.DateEnd,//7
+				d.EndDate,//7
 			};
          object[] Cols ={
 				new { FName = "ID"},//0
@@ -250,7 +250,7 @@ namespace CC.Models {
 				new { FName = "DrivingCategory",Type="String", LenMax=20,Validity="require().nonHtml().maxLength(20)"},//4
 				new { FName = "Phone",Type="Integer", LenMax=20,Validity="require().nonHtml().maxLength(20)"},//5
 				new { FName = "Docs",Type="String", NotEditable=1},//6
-				new { FName = "DateEnd",Type="DateLess", Default="",Validity="match('date').lessThanOrEqualTo(new Date())", Plugin = new {datepicker = new {minDate="-25y", maxDate=0}}},//7
+				new { FName = "EndDate",Type="DateLess", Default="",Validity="match('date').lessThanOrEqualTo(new Date())", Plugin = new {datepicker = new {minDate="-25y", maxDate=0}}},//7
 			}; JSON.Cols = Cols;
          JSON.Config = new { Controler = "Drivers", tblUpdate = "tblDrivers",titleFields=new object []{"firstName","lastName"},Msg = new { AddNew = "Pridėti naują vairuotoją", Edit = "Vairuotojo duomenų redagavimas", Delete = "Ištrinti vairuotoją", GenName = "Vairuotojas", GenNameWhat = "vairuotoją", ListName = "Vairuotojų sąrašas" } };
          JSON.Grid = new {
@@ -262,7 +262,7 @@ namespace CC.Models {
 					new {sTitle="Vairavimo kategorijos"},//4//DrivingCategory//
 					new {sTitle="Telefonas"},//5//Phone//
 					new {sTitle="Dokumentai"},//6//Docs//
-					new {sTitle="Darbo pabaiga",bVisible=false},//7//DateEnd//
+					new {sTitle="Darbo pabaiga",bVisible=false},//7//EndDate//
 				}, //aaSorting = new object[] { new object[] { 2, "asc" } },//???
          };
          return JSON;

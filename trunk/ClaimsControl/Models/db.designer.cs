@@ -4548,7 +4548,7 @@ namespace CC.Models
 		
 		private System.Nullable<System.DateTime> _DateExpierence;
 		
-		private System.Nullable<System.DateTime> _DateEnd;
+		private System.Nullable<System.DateTime> _EndDate;
 		
 		private string _DrivingCategory;
 		
@@ -4574,8 +4574,8 @@ namespace CC.Models
     partial void OnLastNameChanged();
     partial void OnDateExpierenceChanging(System.Nullable<System.DateTime> value);
     partial void OnDateExpierenceChanged();
-    partial void OnDateEndChanging(System.Nullable<System.DateTime> value);
-    partial void OnDateEndChanged();
+    partial void OnEndDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnEndDateChanged();
     partial void OnDrivingCategoryChanging(string value);
     partial void OnDrivingCategoryChanged();
     partial void OnPhoneChanging(string value);
@@ -4673,22 +4673,22 @@ namespace CC.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateEnd", DbType="SmallDateTime")]
-		public System.Nullable<System.DateTime> DateEnd
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndDate", DbType="SmallDateTime")]
+		public System.Nullable<System.DateTime> EndDate
 		{
 			get
 			{
-				return this._DateEnd;
+				return this._EndDate;
 			}
 			set
 			{
-				if ((this._DateEnd != value))
+				if ((this._EndDate != value))
 				{
-					this.OnDateEndChanging(value);
+					this.OnEndDateChanging(value);
 					this.SendPropertyChanging();
-					this._DateEnd = value;
-					this.SendPropertyChanged("DateEnd");
-					this.OnDateEndChanged();
+					this._EndDate = value;
+					this.SendPropertyChanged("EndDate");
+					this.OnEndDateChanged();
 				}
 			}
 		}
@@ -8802,7 +8802,7 @@ namespace CC.Models
 		
 		private string _Docs;
 		
-		private string _DateEnd;
+		private string _EndDate;
 		
 		public proc_DriversResult()
 		{
@@ -8920,18 +8920,18 @@ namespace CC.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateEnd", DbType="Char(10)")]
-		public string DateEnd
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndDate", DbType="Char(10)")]
+		public string EndDate
 		{
 			get
 			{
-				return this._DateEnd;
+				return this._EndDate;
 			}
 			set
 			{
-				if ((this._DateEnd != value))
+				if ((this._EndDate != value))
 				{
-					this._DateEnd = value;
+					this._EndDate = value;
 				}
 			}
 		}
