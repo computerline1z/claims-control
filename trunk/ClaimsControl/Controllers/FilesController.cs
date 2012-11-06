@@ -87,7 +87,7 @@ namespace CC.Controllers
                         string fileName = String.Format(_fileNameFormat, newRecord.ID) + "." + newRecord.FileType;
                         _flManager.StoreFile(UserData.Account, UserData.UserName, fileName, buffer);
                         string relativeUri = String.Format("{0}/{1}",
-                            this._flManager.GetIndividualVirtualDirectory(UserData.Account, UserData.UserName), fileName);
+                            this._flManager.GetIndividualVirtualDirectory(UserData.Account, UserData.UserName, true), fileName);
                         this._flManager.UpdateFileName(newRecord, relativeUri, out errorMessage);
                         if (!String.IsNullOrEmpty(errorMessage))
                             throw new Exception(errorMessage);

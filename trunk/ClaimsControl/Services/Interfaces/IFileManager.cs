@@ -18,7 +18,7 @@ namespace CC.Services.Interfaces
         bool StoreFile(string account, string userName, string fileName, byte[] content);
         void UpdateFileName(tblDoc record, string fileName, out string errorMessage);
         tblDoc StoreTblDocs(FileDescriptor descriptor, out string errorMessage);
-        string GetIndividualDirectory(string account, string userName);
-        string GetIndividualVirtualDirectory(string account, string userName);
+        string GetIndividualDirectory(string account, string userName, bool uploadDirectory);
+        string GetIndividualVirtualDirectory(string account, string userName, bool uploadDirectory);
     }
 }
