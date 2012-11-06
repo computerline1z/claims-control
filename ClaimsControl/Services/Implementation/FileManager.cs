@@ -7,6 +7,7 @@ using CC.Models;
 using CC.Classes;
 using Ninject;
 using System.IO;
+using System.Drawing;
 
 namespace CC.Services.Implementation
 {
@@ -15,13 +16,21 @@ namespace CC.Services.Implementation
         private dbDataContext _dc;
         public string UploadDirectory { get; private set; }
         public string VirtualUploadDirectory { get; private set; }
+        public string ThumbnailDirectory { get; private set; }
+        public string VirtualThumbnailDirectory { get; private set; }
+        public int ThumbnailSize { get; private set; }
 
         [Inject]
-        public FileManager(dbDataContext dc, string virtualUploadDirectory, string uploadDirectory)
+        public FileManager(dbDataContext dc, string virtualUploadDirectory, string uploadDirectory,
+                           string virtualThumbnailDirectory, string thumbnailDirectory, 
+                           int thumbnailSize)
         {
             this._dc = dc;
             this.VirtualUploadDirectory = virtualUploadDirectory;
+            this.VirtualThumbnailDirectory = virtualThumbnailDirectory;
             this.UploadDirectory = uploadDirectory;
+            this.ThumbnailDirectory = thumbnailDirectory;
+            this.ThumbnailSize = thumbnailSize;
         }
 
         #region Interface implementation
@@ -36,9 +45,21 @@ namespace CC.Services.Implementation
 
         public bool StoreFile(string account, string userName, string fileName, byte[] content)
         {
-            string individualDirectory = GetIndividualDirectory(account, userName);
-            string storedFileName = Path.Combine(individualDirectory, fileName);
+            Func<bool, string> createDirectory = delegate(bool upload)
+            {
+                string aDirectory = GetIndividualDirectory(account, userName, upload);
+                return Path.Combine(aDirectory, fileName);
+            };
+
+            string storedFileName = createDirectory(true);
             File.WriteAllBytes(storedFileName, content);
+
+            Image img = CreateThumbNail(content);
+            if (img != null)
+            {
+                string thumbnailFileName = createDirectory(false);
+                img.Save(thumbnailFileName);
+            }
             return true;
         }
 
@@ -130,23 +151,62 @@ namespace CC.Services.Implementation
             }
         }
 
-        public string GetIndividualDirectory(string account, string userName)
+        public string GetIndividualDirectory(string account, string userName, bool uploadDirectory)
         {
-            string rzlt = Path.Combine(UploadDirectory, account, userName);
+            string rzlt = Path.Combine(uploadDirectory ? this.UploadDirectory : this.ThumbnailDirectory, 
+                                       account, userName);
             if (!Directory.Exists(rzlt))
                 Directory.CreateDirectory(rzlt);
             return rzlt;
         }
 
-        public string GetIndividualVirtualDirectory(string account, string userName)
+        public string GetIndividualVirtualDirectory(string account, string userName, bool uploadDirectory)
         {
-            string rzlt = String.Format("{0}/{1}/{2}", this.VirtualUploadDirectory, account, userName);
+            string rzlt = String.Format("{0}/{1}/{2}",
+                uploadDirectory ? this.VirtualUploadDirectory : this.VirtualThumbnailDirectory, 
+                account, userName);
             return rzlt;
         }
 
         #endregion
 
         #region Private methods
+
+        /// <summary>
+        /// <see cref="http://www.dotnetperls.com/getthumbnailimage"/>
+        /// </summary>
+        /// <param name="content"></param>
+        /// <returns></returns>
+        private Image CreateThumbNail(byte[] content)
+        {
+            var stream = new MemoryStream(content);
+            try
+            {
+                var image = Image.FromStream(stream);
+                Size thumbnailSize = GetThumbnailSize(image);
+                Image thumbnail = image.GetThumbnailImage(thumbnailSize.Width, thumbnailSize.Height, null, IntPtr.Zero);
+                return thumbnail;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        Size GetThumbnailSize(Image original)
+        {
+            int maxPixels = this.ThumbnailSize;
+            int originalWidth = original.Width;
+            int originalHeight = original.Height;
+
+            double factor;
+            if (originalWidth > originalHeight)
+                factor = (double)maxPixels / originalWidth;
+            else
+                factor = (double)maxPixels / originalHeight;
+
+            return new Size((int)(originalWidth * factor), (int)(originalHeight * factor));
+        }
 
         private short GetSortNumber(int userID, int? accidentID)
         {
