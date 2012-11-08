@@ -1,11 +1,12 @@
-﻿<div id="sidePanel" style="margin: 4px;">
-<div><a href="#" {{action "showAll"  target="view"}}>
-	<span>Panaikinti filtro nustatymus (rodyti visus įvykius)</span></a>
+﻿<div id="sidePanel" style="">
+	<div class = "filtergroup">
+		<a href="#" {{action "showAll"  target="view"}}>Panaikinti filtro nustatymus (rodyti visus įvykius)</a>
+	</div>
 </div>
-</br>
-<fieldset class="ui-corner-all fieldSetBorder"><legend>Rodyti įvykius tik</legend>
+
+<div class="lineTop filtergroup" ><h4>Rodyti įvykius tik</h4>
 	<span id="chkOpen" style="margin:5px;display:inline-block;"  >	
-	<input type="checkbox" id="chkWithOpen" /><label for="chkWithOpen">su</label>
+	<input type="checkbox" id="chkWithOpen" /><label for="chkWithOpen" style="font: Arial, bold, 12px;">su</label>
 	<input type="checkbox" id="chkWithOutOpen" /><label for="chkWithOutOpen">be</label>
 	<span style="margin-left:5px;" class="ui-button-text">atvirų žalų</span>
 	</span>
@@ -15,31 +16,25 @@
 	<input type="checkbox" id="chkWithOutDocs" /><label for="chkWithOutDocs">be</label>
 	<span style="margin-left:5px;" class="ui-button-text">dokumentų</span>
 	</span>
-</fieldset>
+</div>
 </br>
-<fieldset class="ui-corner-all datesOptions fieldSetBorder"><legend>Rodyti įvykius atitinkančius datą</legend>
-	<label><input type="checkbox" data-opt="12month" /><a href="#">Paskutiniai 12 mėn</a></label>@*id="chk12month" *@
+
+<div class="lineTop filtergroup" id="chkYears"><h4>Rodyti įvykius atitinkančius datą</h4>
+<input type="radio" name="chkYears" id="chk_12month" value="12month" data-opt="12month"/><label for="chk_12month"> Paskutiniai 12 mėn</label>
 	{{#each "App.sidePanelController.years"}}
-		<label><input type="checkbox" {{bindAttr data-opt="year"}} /><a href="#">{{year}} metai</a></label>
+	{{log this}}
+	<input type="checkbox" name="checkbox" id={{unbound chkId}} value={{unbound year}} data-opt={{unbound year}} /><label for={{unbound chkId}}>{{unbound year}} metai</label>
 	{{/each}}
-@*	<label><input type="checkbox" id="chk2011" /><a href="#">2011 metai</a></label>
-	<label><input type="checkbox" id="chk2010" /><a href="#">2010 metai</a></label>
-	<label><input type="checkbox" id="chk2009" /><a href="#">2009 metai</a></label>*@
-</fieldset>
-</br>
+</div>    
+<br/>
 
-
-<fieldset class="ui-corner-all claimsTypesOptions fieldSetBorder"><legend>Įvykiai turintys sekančių žalų</legend>
+<div class="lineTop filtergroup" id="chkClaimsTypes"><h4>Įvykiai, turintys šio tipo žalas</h4>
 	{{#each "App.sidePanelController.claimTypes"}}
 	{{#if this.visible}}
-		<label><input type="checkbox" {{bindAttr data-opt="iD"}} /><a href="#">{{name}}</a></label>
+		<input type="checkbox" name="checkbox" id={{unbound chkId}} value={{unbound chkId}} data-opt={{unbound chkId}} /><label for={{unbound chkId}}>{{unbound name}}</label>
 	{{/if}}
 	{{/each}}
-@*	<label><input type="checkbox" id="chkClaim_1" /><a href="#">KASKO</a></label>
-	<label><input type="checkbox" id="chkClaim_2" /><a href="#">TP valdytojų civilinė atsakomybė</a></label>
-	<label><input type="checkbox" id="chkClaim_3" /><a href="#">Vežėjo civilinė atsakomybė</a></label>
-	<label><input type="checkbox" id="chkClaim_4" /><a href="#">Ekspeditoriaus civilinė atsakomybė</a></label>
-	<label><input type="checkbox" id="chkClaim_5" /><a href="#">Darbdavio civilinė atsakomybė</a></label>
-	<label><input type="checkbox" id="chkClaim_6" /><a href="#">Prastova</a></label>*@
-</fieldset>
 </div>
+<br />
+
+

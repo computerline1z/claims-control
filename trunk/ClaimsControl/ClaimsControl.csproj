@@ -374,6 +374,7 @@
     <Content Include="Scripts\Files\tmpl.min.js" />
     <Content Include="Scripts\Files\vendor\jquery.ui.widget.js" />
     <Content Include="Scripts\Forms\accidents.js" />
+    <Content Include="Scripts\Forms\admin.js" />
     <Content Include="Scripts\Forms\lists.js" />
     <Content Include="Scripts\Files\UploadDialog.js" />
     <Content Include="Scripts\Main\jquery-1.8.0.combined.min.js" />
@@ -522,6 +523,7 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\Sutartis.cshtml" />
     <Content Include="Views\Shared\Accidents\tmpAccident_Claims.cshtml" />
+    <None Include="Scripts\Forms\admin.coffee" />
     <None Include="Scripts\Forms\lists.coffee" />
     <None Include="Scripts\My\clsEditableForm.coffee" />
     <None Include="Scripts\My\MyPlugins_ComboBox.coffee" />
@@ -530,11 +532,14 @@
     <Content Include="Views\Files\UploadTest.cshtml" />
     <Content Include="Views\Lists\Copy of tblVehicles.cshtml" />
     <Content Include="Views\Lists\Copy of tblInsPolicies.cshtml" />
+    <Content Include="Views\Shared\Accidents\Copy of tmpSidePanel.cshtml" />
     <None Include="Views\Shared\Accidents\tmpClaimEdit.cshtml" />
     <Content Include="Views\Shared\Accidents\tmpAccidentsMain.cshtml" />
     <Content Include="Views\Shared\Accidents\tmpAccidentRow.cshtml" />
     <None Include="Views\Main\NotifyViews.cshtml" />
     <Content Include="Views\Shared\Accidents\tmpSidePanel.cshtml" />
+    <Content Include="Views\Shared\Admin\tmpAdminMain.cshtml" />
+    <Content Include="Views\Shared\Admin\tmpUserRow.cshtml" />
     <None Include="Views\Shared\LayOut_Main_Debug.cshtml" />
     <Content Include="Views\Main\Start.cshtml" />
   </ItemGroup>
