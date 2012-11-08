@@ -59,9 +59,6 @@ App.Router = Em.Router.extend({
 				oDATA.execWhenLoaded(["tmpAllVehicles"], function (){
 					router.get('applicationController').connectOutlet('listsOutlet','topLists');
 				});			
-				//Ember.run.later({router2:router},function(){
-				//	this.router2.get('applicationController').connectOutlet('listsOutlet','topLists2');
-				//},2000);
 			},
 			toListAll: function (router, context) {
 				d=$(context.target).parent().data("ctrl");
@@ -77,7 +74,7 @@ App.Router = Em.Router.extend({
 			route: '/admin',
 			connectOutlets: function (router, context) {
 				MY.NavbarController.fnSetNewTab(router.currentState.name, 5);
-				//router.get('applicationController').connectOutlet('admin');
+				router.get('applicationController').connectOutlet('adminOutlet', 'admin');
 			}
 		})
 	})
