@@ -16,11 +16,6 @@ App.listsStart=()->
 		App.topNewController.insPolicies.pushObjects(oDATA.GET("proc_topInsPolicies").emData.slice(0,3))
 	) 
 	
-	#sortedDrivers = oDATA.GET("proc_Drivers").emData.sort( (a,b)-> return b.get('firstName') - a.get('firstName'))
-	
-	#App.topNewController.vehicles.pushObjects(oDATA.GET("proc_Vehicles").emData);
-	
-
 App.topNewController = Em.ResourceController.create(
 	vehicles: [],
 	drivers: [],
@@ -28,10 +23,6 @@ App.topNewController = Em.ResourceController.create(
 	tableName: "?"
 )	
 App.DriverView = Em.View.extend(
-	edit: (e)->
-		alert("opa")
-		tr=$(e.target).closest('tr')
-		id=e.view._context.iD
 	templateName: 'tmpDriverRow' #<div class="tr accident" @Html.Raw("{{action tbodyClick this target=\"this\"}}")>
 	tagName: ""
 )

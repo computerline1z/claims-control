@@ -70,6 +70,32 @@ a, .btn, div, span {
 .btn > .medium {.border-radius(3px);}
 }
 .fieldSetBorder{border: 2px groove threedface;}
+//******************************Naujai pridėta******************************************
+#sidePanel {
+    #font > .regular(12px, bold, 20px, #3399cc);
+   a { #font > .regular (12px, bold, 15px, #3399cc);
+        text-decoration: none;
+        &:hover { color: @linkColorHover;
+                  text-decoration: none;
+        }
+        &:selected {color: #65809d;}
+    }
+   h2 {// Arial - 14pt - #65809d - text-decoration: none;
+        padding: 0 15px;
+        #font > .regular(14px, bold, 14px, #65809d);
+        text-decoration: none;
+        margin: 15px 0;
+   }
+   .btn { 
+       width: 90%;
+        margin: 0 5px;
+//        margin-bottom: 5px;
+    #font > .regular (12px, bold, 15px, #3399cc);
+   }
+}
+.filtergroup { #font > .regular; padding: 0 15px; margin: 0; margin-top: 10px; list-style-type: none; }
+.lineTop {  width:100%; border-top: dotted 1px #c9c9c9;}
+
 #btnSave, #btnMapTown { 
     color: gray;
     font-weight: bold;
@@ -83,7 +109,7 @@ a, .btn, div, span {
     font-family: 'Cabin';
     font-style: normal;
     font-weight: 400;
-    src: local('Cabin Regular'), local('Cabin-Regular'), url(http://themes.googleusercontent.com/static/fonts/cabin/v4/JEgmtEDzc-IH8jBshQXrYA.woff) format('woff');
-     
+    src: local('Cabin Regular'), local('Cabin-Regular'), url(http://themes.googleusercontent.com/static/fonts/cabin/v4/JEgmtEDzc-IH8jBshQXrYA.woff) format('woff');    
     }
 }
+//**************************************************************************************

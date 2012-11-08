@@ -365,24 +365,31 @@ App.newClaimController = Em.ResourceController.create(
 		# )
 App.sidePanelController = Em.ResourceController.create(
 	tableName: "?"
-	chkHandler: (chk, option)->
-		newVal=if (chk.attr("checked")) then chk.data("opt") else null
+	chkHandler: (lbl, option)->		
+		#newVal=if (chk.attr("checked")) then chk.data("opt") else null
+		lbl.parent().find("label").not(lbl).removeClass("ui-state-active")
+		newVal=if (lbl.hasClass("ui-state-active")) then lbl.attr("for").replace("chk_claimTypes","").replace("chk_","") else null
+		#lbl.toggleClass("ui-state-active")
 		App.accidentsController.set(option,newVal)
 	init: -> 
 		@_super();
 		oDATA.execWhenLoaded(["tblClaimTypes"],()=>
-			@.set('years',oDATA.GET("proc_Years").emData)
-			@.set('claimTypes',oDATA.GET("tblClaimTypes").emData)	
+			# @.set('years',oDATA.GET("proc_Years").emData)
+			# @.set('claimTypes',oDATA.GET("tblClaimTypes").emData)
+			
+			@.set('years',oDATA.GET("proc_Years").emData.map((item)->item.chkId="chk_"+item.year; return item))
+			@.set('claimTypes',oDATA.GET("tblClaimTypes").emData.map((item)->item.chkId="chk_claimTypes"+item.iD; return item;))
 			@claimTypes.findProperty("iD",0).visible=false	
 			Em.run.next(@,()->(
 				me=@
-				$("#sidePanel").find("fieldset.datesOptions").find("input:checkbox").checkbox("onClick":(chk)->me.chkHandler(chk,"chkData"))
-				$("#sidePanel").find("fieldset.claimsTypesOptions").find("input:checkbox").checkbox("onClick":(chk)->me.chkHandler(chk,"chkClaim"))
+			#	$("#sidePanel").find("fieldset.datesOptions").find("input:checkbox").checkbox("onClick":(chk)->me.chkHandler(chk,"chkData"))
+			#	$("#sidePanel").find("fieldset.claimsTypesOptions").find("input:checkbox").checkbox("onClick":(chk)->me.chkHandler(chk,"chkClaim"))
+				$("#chkYears").buttonsetv().on("click",(e)-> e.preventDefault(); lbl=$(e.target).closest("label"); me.chkHandler(lbl,"chkData"); false)
+				$("#chkClaimsTypes").buttonsetv().on("click",(e)-> lbl=$(e.target).closest("label"); me.chkHandler(lbl,"chkClaim"); false)
 			))
 		)
 	years:[], claimTypes:[]
 )
-
 App.SidePanelView = Em.View.extend(
 	templateName: "tmpSidePanel"
 	didInsertElement: ()->
@@ -403,7 +410,7 @@ App.SidePanelView = Em.View.extend(
 				$("#chkDocs").find("label").not(chk.next()).removeClass("ui-state-active").end().prev().not(chk).removeAttr("checked")	
 				App.accidentsController.set("chkDocs",newVal)
 				e.preventDefault()
-			)	
+			)
 		)
 	showAll: ()->		
 		$("#chkOpen,#chkDocs").find("label").removeClass("ui-state-active").end().prev().removeAttr("checked")
