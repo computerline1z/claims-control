@@ -191,8 +191,42 @@ ul.ulWhiteMenu li.ui-tabs-selected { font-weight: bold; border-bottom: 0 !import
 ul.ulWhiteMenu li { margin-right: 5px; padding-right: 5px; border-bottom: 1px; }
 /*div.whiteTab { -moz-border-radius: 0 0 0 0 !important; border-width: 1px !important; border-color: #C0C0C0 #FFFFFF #C0C0C0 #FFFFFF !important; border-style: ridge !important; }
 #tabAccidents, #tabClaims, #tabMap, #tabReports, #tabLists, #tabAdmin { overflow: hidden;width: 100%; }
+*/
+/*-------------------------- Side Panel --------------------------*/
+#sidePanel {
+    #font > .regular(12px, bold, 20px, #3399cc);
+   a { #font > .regular (12px, bold, 15px, #3399cc);
+        text-decoration: none;
+        &:hover { color: @linkColorHover;
+                  text-decoration: none;
+        }
+        &:selected {color: #65809d;}
+    }
+}
+.filtergroup { 
+    #font > .regular(12px, normal, 12px, #3399cc); 
+    padding: 0 15px; 
+    margin: 0; margin-top: 10px; 
+    list-style-type: none;
+       h4 {// Arial - 14pt - #65809d - text-decoration: none;
+        //padding: 0 15px;
+        #font > .regular(14px, bold, 14px, #65809d);
+        text-decoration: none;
+        margin: 15px 0;
+   }
+   .btn { 
+       width: 90%;
+        margin: 0 5px 5px 5px;
+//        margin-bottom: 5px;
+    #font > .regular (12px, bold, 15px, #3399cc);
+   }
+   
+}
+.lineTop {  width:100%; border-top: dotted 1px #c9c9c9; }
 
-----------------------------------------------------Editable Form-------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------Editable Form-------------------------------------------------------------------------*/
 /*div.inputform textarea { width: 100%; font-size: small; }
 div.inputform input { font-size: small; }
 div.inputform { padding: 0 !important; }
