@@ -42,7 +42,7 @@
 .box{margin:0; padding:0;}
 .box_3pr_p{margin:0; padding:3%;}
 .border { border: 1px solid #DDD; }
-.borderGroove { border: 2px groove #DDD; }
+
 .btn {
   // Button Sizes
   //&.large {
@@ -66,11 +66,19 @@ a, .btn, div, span {
 .mini, &.mini {padding: 2px 4px; font-size: @basefont - 4px;}
 }
 .btn{
-.btn > .large {.border-radius(6px);}
-.btn > .medium {.border-radius(3px);}
+//.btn > .large {.border-radius(6px);}
+.btn > .medium;
+.border-radius(5px);
+border-style: double;
 }
 .fieldSetBorder{border: 2px groove threedface;}
-//******************************Naujai pridėta******************************************
+#btnSave, #btnMapTown { 
+    color: gray;
+    font-weight: bold;
+//    .border-radius(3px);
+    .btn > .small;
+}
+
 #sidePanel {
     #font > .regular(12px, bold, 20px, #3399cc);
    a { #font > .regular (12px, bold, 15px, #3399cc);
@@ -80,36 +88,63 @@ a, .btn, div, span {
         }
         &:selected {color: #65809d;}
     }
-   h2 {// Arial - 14pt - #65809d - text-decoration: none;
-        padding: 0 15px;
-        #font > .regular(14px, bold, 14px, #65809d);
-        text-decoration: none;
-        margin: 15px 0;
-   }
    .btn { 
        width: 90%;
-        margin: 0 5px;
+        margin: 0 5px 5px 5px;
 //        margin-bottom: 5px;
     #font > .regular (12px, bold, 15px, #3399cc);
    }
 }
-.filtergroup { #font > .regular; padding: 0 15px; margin: 0; margin-top: 10px; list-style-type: none; }
+.filtergroup { 
+    #font > .regular(12px, normal, 12px, #3399cc); 
+    padding: 0 15px; 
+    margin: 0; margin-top: 10px; 
+    list-style-type: none;
+       h4 {// Arial - 14pt - #65809d - text-decoration: none;
+        //padding: 0 15px;
+        #font > .regular(14px, bold, 14px, #65809d);
+        text-decoration: none;
+        margin: 15px 0;
+   }
+}
 .lineTop {  width:100%; border-top: dotted 1px #c9c9c9;}
 
-#btnSave, #btnMapTown { 
-    color: gray;
-    font-weight: bold;
-    .border-radius(3px);
-    .btn > .small;
-}
+.styled-select {
+    width: 100%;
+    height: 22px;
+    overflow: hidden;
+    background: url("./images/dropdown_arrow.png") no-repeat right #fff;    
+    #font > .regular;
+    
+select {
+    -webkit-appearance: none;
+       background: transparent;
+       width: 120%;
+       border: 1px solid #ccc;
+       height: 22px;
+       option { padding-bottom: 5px; }
+    }
+ }
 
 // Download Font
 .dlFont {
     @font-face {
-    font-family: 'Cabin';
+    font-family: 'Asap';
     font-style: normal;
     font-weight: 400;
-    src: local('Cabin Regular'), local('Cabin-Regular'), url(http://themes.googleusercontent.com/static/fonts/cabin/v4/JEgmtEDzc-IH8jBshQXrYA.woff) format('woff');    
+    src: local('Asap'), local('Asap'), 
+    url(http://fonts.googleapis.com/css?family=Asap)
+    url(http://themes.googleusercontent.com/static/fonts/cabin/v4/JEgmtEDzc-IH8jBshQXrYA.woff) format('woff');
+     
     }
 }
-//**************************************************************************************
+
+
+
+
+
+
+
+
+
+
