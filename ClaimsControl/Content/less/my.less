@@ -66,10 +66,23 @@ a, .btn, div, span {
 .mini, &.mini {padding: 2px 4px; font-size: @basefont - 4px;}
 }
 .btn{
-//.btn > .large {.border-radius(6px);}
-.btn > .medium;
-.border-radius(5px);
-border-style: double;
+    //.btn > .large {.border-radius(6px);}
+   &.large {
+        .border-radius(5px);
+        border-style: double;
+        border-width: 4px;
+        border-color: #d5d5d1;
+        #font > .header(20px, normal, 20px, #5d7c9b);
+        padding: 3px 15px;
+        .box-shadow(0px 0px 0px #fff);
+    }
+    // Mažas button'as
+    padding: 3px 10px; 
+    #font > .regular(12px, normal, 12px, #666);
+    text-shadow: #fff 0.5px 0.5px 0px;
+    .border-radius(5px);    
+    border-color: #888;
+    .box-shadow(0px 1px 0px #C3C3C3); 
 }
 .fieldSetBorder{border: 2px groove threedface;}
 #btnSave, #btnMapTown { 

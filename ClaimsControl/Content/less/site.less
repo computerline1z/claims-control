@@ -11,10 +11,10 @@
 */
 #header { background-color: #505860; color: #FFFFFF; width: 100%; }
 
-#ulMainMenu { padding: 0 3% 0 3%; list-style-type: none; background-image: url(images/navi_bg.png); height: 37px; margin: 0 auto 4px auto; .box-shadow(0 2px 8px #888);
+#ulMainMenu { padding: 0 3% 0 3%; list-style-type: none; background-image: url('images/navi_bg.png'); height: 37px; margin: 0 auto 4px auto; .box-shadow(0 2px 8px #888);
     li { float: left; .border-image; .border-image > .right; 
-        a { text-decoration: none; padding-right: 20px; padding-left: 20px; display: block; #font > .header (10pt, normal, 37px, #fff); text-shadow: #43576E -0.5px -0.5px 1px; 
-            &.selected { height: 41px; font-size: 11pt; text-decoration: none; position: relative; padding-top: 1px; background-color: white; color: #7A90A5; text-shadow: #43576E 0 0 0;/* box-shadow: 0 0 8px 2px #888;*/ .border-radius(0px 0px 0 0 )}
+        a { text-decoration: none; padding-right: 20px; padding-left: 20px; display: block; #font > .header(14px, normal, 37px, #fff); text-shadow: #43576E -0.5px -0.5px 1px; 
+            &.selected { height: 41px; /*font-size: 11pt; */text-decoration: none; position: relative; padding-top: 1px; background-color: white; color: #7A90A5; text-shadow: #43576E 0 0 0;/* box-shadow: 0 0 8px 2px #888;*/ .border-radius(0px 0px 0 0 )}
             &:hover {text-decoration: none;}
         }
     &:hover a.notactive { cursor: pointer; background-color: #9EAEBD; .border-radius(0px 0px 0 0 );}
@@ -73,18 +73,19 @@
 //			<input id="srcSubmit" name="submit" type="submit" value="Search" @Html.Raw("{{action aSearch}}")/>
 //	<input type="text" class="searchField"/><div class="divSearch"><span class="spanToClearText">x</span></div>
 
-
 form input.searchField {
-    float:left;width:75%; height:32px; line-height:23px;font-family:arial, sans-serif;font-size:1em;color:#333;background: @yellowlight; 
+    float:left;width:75%; height:32px; line-height:23px;font-family:sans-serif;font-size:1em;color:#333;background: @yellowlight; 
     border:solid 1px #d9d9d9; border-top:solid 1px #c0c0c0;border-right:none;margin-right:-2px; vertical-align:top; 
+    .border-radius(0);
+//    #gradient > .vertical(#eae4cf, #fbfbd8);
 }
 /* Style the "X" text button next to the search input field */
 form div.divSearch {
     float:left; width:26px;height:32px;line-height:22px;padding:3px 6px;font-size:22px;   
     background: @yellowlight;border:solid 1px #d9d9d9;border-top:solid 1px #c0c0c0;border-left:none;   
 }
-form span.spanToClearText {color:#A1B9ED;cursor:pointer;padding:0px 3px;}/* Set default state of "X" and hide it */
-form span.spanToClearText:hover {color:#36c;}/* Set the hover state of "X" */
+form span.spanToClearText {/*color:#A1B9ED;*/ color:#919191;cursor:pointer;padding:0px 3px;}/* Set default state of "X" and hide it */
+form span.spanToClearText:hover {/*color:#36c;*/ color:#575757}/* Set the hover state of "X" */
 /*
 
 
@@ -204,23 +205,22 @@ ul.ulWhiteMenu li { margin-right: 5px; padding-right: 5px; border-bottom: 1px; }
     }
 }
 .filtergroup { 
-    #font > .regular(12px, normal, 12px, #3399cc); 
-    padding: 0 15px; 
-    margin: 0; margin-top: 10px; 
+    #font > .regular(12px, normal, 12px, #3399cc);
+    width: 100%;
+    padding: 0 10px; 
+    margin: 10px 0 0 0;// margin-top: 10px; 
     list-style-type: none;
-       h4 {// Arial - 14pt - #65809d - text-decoration: none;
+    h4 {// Arial - 14pt - #65809d - text-decoration: none;
         //padding: 0 15px;
         #font > .regular(14px, bold, 14px, #65809d);
         text-decoration: none;
         margin: 15px 0;
-   }
-   .btn { 
+    }
+   &.btn, /*.ui-buttonset label.ui-button*/ &.ui-buttonset .ui-button { 
        width: 90%;
-        margin: 0 5px 5px 5px;
-//        margin-bottom: 5px;
-    #font > .regular (12px, bold, 15px, #3399cc);
+       margin: 0 auto;
+//    #font > .regular (12px, bold, 15px, #3399cc);
    }
-   
 }
 .lineTop {  width:100%; border-top: dotted 1px #c9c9c9; }
 
