@@ -1,5 +1,3 @@
--- testas
-
 ALTER TABLE dbo.tblDocs ADD GroupID int DEFAULT 5 NULL
 GO
 ALTER TABLE dbo.tblDocs ADD CONSTRAINT FK_tblDocs_tblDocGroups FOREIGN KEY(GroupID)REFERENCES tblDocGroups(ID)	
