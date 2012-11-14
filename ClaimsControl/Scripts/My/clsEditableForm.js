@@ -136,7 +136,7 @@
                     Row.Data.set(fieldName, updData.DataToSave.Data[i2]);
                     return ok = true;
                   }
-                }, !ok && (opt.Action === "Add" && fieldName !== "iD") ? col.IdField ? (infoRow = Row.Cols[col.IdField], source = infoRow.List.Source, Field = infoRow.FName, id = oCONTROLS.helper.getData_fromDataToSave(updData.DataToSave, Field), Row.Data.set(fieldName, oDATA.GET(source).emData.findProperty("iD", id).MapArrToString(infoRow.List.iText, false))) : col.Default ? col.Default === "Today" ? Row.Data.set(fieldName, oGLOBAL.date.getTodayString()) : col.Default === "UserName" ? Row.Data.set(fieldName, UserData.Name()) : col.Default === "UserId" ? Row.Data.set(fieldName, UserData.Id()) : Row.Data[fieldName] = col.Default : (Row.Data[fieldName] = "", Row.Data.set(fieldName, "")) : void 0);
+                }, !ok && (opt.Action === "Add" && fieldName !== "iD") ? col.IdField ? (infoRow = Row.Cols[col.IdField], source = infoRow.List.Source, Field = infoRow.FName, id = oGLOBAL.helper.getData_fromDataToSave(updData.DataToSave, Field), Row.Data.set(fieldName, oDATA.GET(source).emData.findProperty("iD", id).MapArrToString(infoRow.List.iText, false))) : col.Default ? col.Default === "Today" ? Row.Data.set(fieldName, oGLOBAL.date.getTodayString()) : col.Default === "UserName" ? Row.Data.set(fieldName, UserData.Name()) : col.Default === "UserId" ? Row.Data.set(fieldName, UserData.Id()) : Row.Data[fieldName] = col.Default : (Row.Data[fieldName] = "", Row.Data.set(fieldName, "")) : void 0);
                 return console.log("col: " + col.FName + ", ok: " + ok + ", fieldValue:" + Row.Data[fieldName]);
               });
               if (opt.Action === "Add") {

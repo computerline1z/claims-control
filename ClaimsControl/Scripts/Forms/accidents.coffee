@@ -354,15 +354,6 @@ App.newClaimController = Em.ResourceController.create(
 	#    	@set("content", ArrView)
 	#    }
 )
-# $ ->
-	# alert "function: "+$("#radio3").length
-	# $("#radio3").on( (e)->
-	
-		# console.log $(@).attr("checked")
-		
-		# if $(@).attr("checked")
-			# $(@).attr("checked","")
-		# )
 App.sidePanelController = Em.ResourceController.create(
 	tableName: "?"
 	chkHandler: (lbl, option)->		
@@ -376,7 +367,6 @@ App.sidePanelController = Em.ResourceController.create(
 		oDATA.execWhenLoaded(["tblClaimTypes"],()=>
 			# @.set('years',oDATA.GET("proc_Years").emData)
 			# @.set('claimTypes',oDATA.GET("tblClaimTypes").emData)
-			
 			@.set('years',oDATA.GET("proc_Years").emData.map((item)->item.chkId="chk_"+item.year; return item))
 			@.set('claimTypes',oDATA.GET("tblClaimTypes").emData.map((item)->item.chkId="chk_claimTypes"+item.iD; return item;))
 			@claimTypes.findProperty("iD",0).visible=false	
@@ -395,8 +385,6 @@ App.SidePanelView = Em.View.extend(
 	didInsertElement: ()->
 		@_super(); 	
 		Em.run.next(()->$("#sidePanel").closest("div.col2").scrollelement()			
-		console.log("Pradedu")
-		console.log($("#chkOpen"))
 			$("#chkOpen").buttonset().on("click",(e)->
 				chk=$(e.target).closest("label").prev();
 				newVal=if (chk.next().hasClass("ui-state-active")) then chk.attr("id") else null #Jei aktyvus priskiriam

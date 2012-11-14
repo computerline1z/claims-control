@@ -33,9 +33,6 @@ namespace CC.Models
     partial void InserttblAccidentsType(tblAccidentsType instance);
     partial void UpdatetblAccidentsType(tblAccidentsType instance);
     partial void DeletetblAccidentsType(tblAccidentsType instance);
-    partial void InserttblAccount(tblAccount instance);
-    partial void UpdatetblAccount(tblAccount instance);
-    partial void DeletetblAccount(tblAccount instance);
     partial void InserttblAction_Control(tblAction_Control instance);
     partial void UpdatetblAction_Control(tblAction_Control instance);
     partial void DeletetblAction_Control(tblAction_Control instance);
@@ -123,6 +120,15 @@ namespace CC.Models
     partial void InserttblDoc(tblDoc instance);
     partial void UpdatetblDoc(tblDoc instance);
     partial void DeletetblDoc(tblDoc instance);
+    partial void InserttblAccount(tblAccount instance);
+    partial void UpdatetblAccount(tblAccount instance);
+    partial void DeletetblAccount(tblAccount instance);
+    partial void InserttblCurrency(tblCurrency instance);
+    partial void UpdatetblCurrency(tblCurrency instance);
+    partial void DeletetblCurrency(tblCurrency instance);
+    partial void InserttblTimeZone(tblTimeZone instance);
+    partial void UpdatetblTimeZone(tblTimeZone instance);
+    partial void DeletetblTimeZone(tblTimeZone instance);
     #endregion
 		
 		public dbDataContext() : 
@@ -160,14 +166,6 @@ namespace CC.Models
 			get
 			{
 				return this.GetTable<tblAccidentsType>();
-			}
-		}
-		
-		public System.Data.Linq.Table<tblAccount> tblAccounts
-		{
-			get
-			{
-				return this.GetTable<tblAccount>();
 			}
 		}
 		
@@ -403,6 +401,30 @@ namespace CC.Models
 			}
 		}
 		
+		public System.Data.Linq.Table<tblAccount> tblAccounts
+		{
+			get
+			{
+				return this.GetTable<tblAccount>();
+			}
+		}
+		
+		public System.Data.Linq.Table<tblCurrency> tblCurrencies
+		{
+			get
+			{
+				return this.GetTable<tblCurrency>();
+			}
+		}
+		
+		public System.Data.Linq.Table<tblTimeZone> tblTimeZones
+		{
+			get
+			{
+				return this.GetTable<tblTimeZone>();
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.proc_Vehicles")]
 		public ISingleResult<proc_VehiclesResult> proc_Vehicles([global::System.Data.Linq.Mapping.ParameterAttribute(Name="AccountID", DbType="Int")] System.Nullable<int> accountID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Top", DbType="Bit")] System.Nullable<bool> top)
 		{
@@ -558,297 +580,6 @@ namespace CC.Models
 		{
 			this.SendPropertyChanging();
 			entity.tblAccidentsType = null;
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tblAccounts")]
-	public partial class tblAccount : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _ID;
-		
-		private string _Name;
-		
-		private System.Nullable<int> _CountryID;
-		
-		private EntitySet<tblAccident> _tblAccidents;
-		
-		private EntitySet<tblInsurer> _tblInsurers;
-		
-		private EntitySet<tblDriver> _tblDrivers;
-		
-		private EntitySet<tblVehicle> _tblVehicles;
-		
-		private EntitySet<tblUser> _tblUsers;
-		
-		private EntityRef<tblCountry> _tblCountry;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIDChanging(int value);
-    partial void OnIDChanged();
-    partial void OnNameChanging(string value);
-    partial void OnNameChanged();
-    partial void OnCountryIDChanging(System.Nullable<int> value);
-    partial void OnCountryIDChanged();
-    #endregion
-		
-		public tblAccount()
-		{
-			this._tblAccidents = new EntitySet<tblAccident>(new Action<tblAccident>(this.attach_tblAccidents), new Action<tblAccident>(this.detach_tblAccidents));
-			this._tblInsurers = new EntitySet<tblInsurer>(new Action<tblInsurer>(this.attach_tblInsurers), new Action<tblInsurer>(this.detach_tblInsurers));
-			this._tblDrivers = new EntitySet<tblDriver>(new Action<tblDriver>(this.attach_tblDrivers), new Action<tblDriver>(this.detach_tblDrivers));
-			this._tblVehicles = new EntitySet<tblVehicle>(new Action<tblVehicle>(this.attach_tblVehicles), new Action<tblVehicle>(this.detach_tblVehicles));
-			this._tblUsers = new EntitySet<tblUser>(new Action<tblUser>(this.attach_tblUsers), new Action<tblUser>(this.detach_tblUsers));
-			this._tblCountry = default(EntityRef<tblCountry>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int ID
-		{
-			get
-			{
-				return this._ID;
-			}
-			set
-			{
-				if ((this._ID != value))
-				{
-					this.OnIDChanging(value);
-					this.SendPropertyChanging();
-					this._ID = value;
-					this.SendPropertyChanged("ID");
-					this.OnIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-		public string Name
-		{
-			get
-			{
-				return this._Name;
-			}
-			set
-			{
-				if ((this._Name != value))
-				{
-					this.OnNameChanging(value);
-					this.SendPropertyChanging();
-					this._Name = value;
-					this.SendPropertyChanged("Name");
-					this.OnNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CountryID", DbType="Int")]
-		public System.Nullable<int> CountryID
-		{
-			get
-			{
-				return this._CountryID;
-			}
-			set
-			{
-				if ((this._CountryID != value))
-				{
-					if (this._tblCountry.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnCountryIDChanging(value);
-					this.SendPropertyChanging();
-					this._CountryID = value;
-					this.SendPropertyChanged("CountryID");
-					this.OnCountryIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblAccount_tblAccident", Storage="_tblAccidents", ThisKey="ID", OtherKey="AccountID")]
-		public EntitySet<tblAccident> tblAccidents
-		{
-			get
-			{
-				return this._tblAccidents;
-			}
-			set
-			{
-				this._tblAccidents.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblAccount_tblInsurer", Storage="_tblInsurers", ThisKey="ID", OtherKey="AccountID")]
-		public EntitySet<tblInsurer> tblInsurers
-		{
-			get
-			{
-				return this._tblInsurers;
-			}
-			set
-			{
-				this._tblInsurers.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblAccount_tblDriver", Storage="_tblDrivers", ThisKey="ID", OtherKey="AccountID")]
-		public EntitySet<tblDriver> tblDrivers
-		{
-			get
-			{
-				return this._tblDrivers;
-			}
-			set
-			{
-				this._tblDrivers.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblAccount_tblVehicle", Storage="_tblVehicles", ThisKey="ID", OtherKey="AccountID")]
-		public EntitySet<tblVehicle> tblVehicles
-		{
-			get
-			{
-				return this._tblVehicles;
-			}
-			set
-			{
-				this._tblVehicles.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblAccount_tblUser", Storage="_tblUsers", ThisKey="ID", OtherKey="AccountID")]
-		public EntitySet<tblUser> tblUsers
-		{
-			get
-			{
-				return this._tblUsers;
-			}
-			set
-			{
-				this._tblUsers.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblCountry_tblAccount", Storage="_tblCountry", ThisKey="CountryID", OtherKey="ID", IsForeignKey=true)]
-		public tblCountry tblCountry
-		{
-			get
-			{
-				return this._tblCountry.Entity;
-			}
-			set
-			{
-				tblCountry previousValue = this._tblCountry.Entity;
-				if (((previousValue != value) 
-							|| (this._tblCountry.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._tblCountry.Entity = null;
-						previousValue.tblAccounts.Remove(this);
-					}
-					this._tblCountry.Entity = value;
-					if ((value != null))
-					{
-						value.tblAccounts.Add(this);
-						this._CountryID = value.ID;
-					}
-					else
-					{
-						this._CountryID = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("tblCountry");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_tblAccidents(tblAccident entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblAccount = this;
-		}
-		
-		private void detach_tblAccidents(tblAccident entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblAccount = null;
-		}
-		
-		private void attach_tblInsurers(tblInsurer entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblAccount = this;
-		}
-		
-		private void detach_tblInsurers(tblInsurer entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblAccount = null;
-		}
-		
-		private void attach_tblDrivers(tblDriver entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblAccount = this;
-		}
-		
-		private void detach_tblDrivers(tblDriver entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblAccount = null;
-		}
-		
-		private void attach_tblVehicles(tblVehicle entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblAccount = this;
-		}
-		
-		private void detach_tblVehicles(tblVehicle entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblAccount = null;
-		}
-		
-		private void attach_tblUsers(tblUser entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblAccount = this;
-		}
-		
-		private void detach_tblUsers(tblUser entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblAccount = null;
 		}
 	}
 	
@@ -2976,9 +2707,9 @@ namespace CC.Models
 		
 		private EntityRef<tblAccidentsType> _tblAccidentsType;
 		
-		private EntityRef<tblAccount> _tblAccount;
-		
 		private EntityRef<tblDriver> _tblDriver;
+		
+		private EntityRef<tblAccount> _tblAccount;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -3025,8 +2756,8 @@ namespace CC.Models
 			this._tblClaims = new EntitySet<tblClaim>(new Action<tblClaim>(this.attach_tblClaims), new Action<tblClaim>(this.detach_tblClaims));
 			this._tblDocs = new EntitySet<tblDoc>(new Action<tblDoc>(this.attach_tblDocs), new Action<tblDoc>(this.detach_tblDocs));
 			this._tblAccidentsType = default(EntityRef<tblAccidentsType>);
-			this._tblAccount = default(EntityRef<tblAccount>);
 			this._tblDriver = default(EntityRef<tblDriver>);
+			this._tblAccount = default(EntityRef<tblAccount>);
 			OnCreated();
 		}
 		
@@ -3442,40 +3173,6 @@ namespace CC.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblAccount_tblAccident", Storage="_tblAccount", ThisKey="AccountID", OtherKey="ID", IsForeignKey=true)]
-		public tblAccount tblAccount
-		{
-			get
-			{
-				return this._tblAccount.Entity;
-			}
-			set
-			{
-				tblAccount previousValue = this._tblAccount.Entity;
-				if (((previousValue != value) 
-							|| (this._tblAccount.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._tblAccount.Entity = null;
-						previousValue.tblAccidents.Remove(this);
-					}
-					this._tblAccount.Entity = value;
-					if ((value != null))
-					{
-						value.tblAccidents.Add(this);
-						this._AccountID = value.ID;
-					}
-					else
-					{
-						this._AccountID = default(int);
-					}
-					this.SendPropertyChanged("tblAccount");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblDriver_tblAccident", Storage="_tblDriver", ThisKey="DriverID", OtherKey="ID", IsForeignKey=true)]
 		public tblDriver tblDriver
 		{
@@ -3506,6 +3203,40 @@ namespace CC.Models
 						this._DriverID = default(int);
 					}
 					this.SendPropertyChanged("tblDriver");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblAccount_tblAccident", Storage="_tblAccount", ThisKey="AccountID", OtherKey="ID", IsForeignKey=true)]
+		public tblAccount tblAccount
+		{
+			get
+			{
+				return this._tblAccount.Entity;
+			}
+			set
+			{
+				tblAccount previousValue = this._tblAccount.Entity;
+				if (((previousValue != value) 
+							|| (this._tblAccount.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._tblAccount.Entity = null;
+						previousValue.tblAccidents.Remove(this);
+					}
+					this._tblAccount.Entity = value;
+					if ((value != null))
+					{
+						value.tblAccidents.Add(this);
+						this._AccountID = value.ID;
+					}
+					else
+					{
+						this._AccountID = default(int);
+					}
+					this.SendPropertyChanged("tblAccount");
 				}
 			}
 		}
@@ -5159,11 +4890,11 @@ namespace CC.Models
 		
 		private EntitySet<tblClaim> _tblClaims;
 		
-		private EntityRef<tblAccount> _tblAccount;
-		
 		private EntityRef<tblVehicleMake> _tblVehicleMake;
 		
 		private EntityRef<tblVehicleType> _tblVehicleType;
+		
+		private EntityRef<tblAccount> _tblAccount;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -5192,9 +4923,9 @@ namespace CC.Models
 		public tblVehicle()
 		{
 			this._tblClaims = new EntitySet<tblClaim>(new Action<tblClaim>(this.attach_tblClaims), new Action<tblClaim>(this.detach_tblClaims));
-			this._tblAccount = default(EntityRef<tblAccount>);
 			this._tblVehicleMake = default(EntityRef<tblVehicleMake>);
 			this._tblVehicleType = default(EntityRef<tblVehicleType>);
+			this._tblAccount = default(EntityRef<tblAccount>);
 			OnCreated();
 		}
 		
@@ -5403,40 +5134,6 @@ namespace CC.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblAccount_tblVehicle", Storage="_tblAccount", ThisKey="AccountID", OtherKey="ID", IsForeignKey=true)]
-		public tblAccount tblAccount
-		{
-			get
-			{
-				return this._tblAccount.Entity;
-			}
-			set
-			{
-				tblAccount previousValue = this._tblAccount.Entity;
-				if (((previousValue != value) 
-							|| (this._tblAccount.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._tblAccount.Entity = null;
-						previousValue.tblVehicles.Remove(this);
-					}
-					this._tblAccount.Entity = value;
-					if ((value != null))
-					{
-						value.tblVehicles.Add(this);
-						this._AccountID = value.ID;
-					}
-					else
-					{
-						this._AccountID = default(int);
-					}
-					this.SendPropertyChanged("tblAccount");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblVehicleMake_tblVehicle", Storage="_tblVehicleMake", ThisKey="MakeID", OtherKey="ID", IsForeignKey=true)]
 		public tblVehicleMake tblVehicleMake
 		{
@@ -5501,6 +5198,40 @@ namespace CC.Models
 						this._TypeID = default(int);
 					}
 					this.SendPropertyChanged("tblVehicleType");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblAccount_tblVehicle", Storage="_tblAccount", ThisKey="AccountID", OtherKey="ID", IsForeignKey=true)]
+		public tblAccount tblAccount
+		{
+			get
+			{
+				return this._tblAccount.Entity;
+			}
+			set
+			{
+				tblAccount previousValue = this._tblAccount.Entity;
+				if (((previousValue != value) 
+							|| (this._tblAccount.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._tblAccount.Entity = null;
+						previousValue.tblVehicles.Remove(this);
+					}
+					this._tblAccount.Entity = value;
+					if ((value != null))
+					{
+						value.tblVehicles.Add(this);
+						this._AccountID = value.ID;
+					}
+					else
+					{
+						this._AccountID = default(int);
+					}
+					this.SendPropertyChanged("tblAccount");
 				}
 			}
 		}
@@ -7296,11 +7027,11 @@ namespace CC.Models
 		
 		private EntitySet<tblDoc> _tblDocs;
 		
-		private EntityRef<tblAccount> _tblAccount;
-		
 		private EntityRef<tblLanguage> _tblLanguage;
 		
 		private EntityRef<tblUsers_RolesGroup> _tblUsers_RolesGroup;
+		
+		private EntityRef<tblAccount> _tblAccount;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -7349,9 +7080,9 @@ namespace CC.Models
 			this._tblUsersActivities_Updates = new EntitySet<tblUsersActivities_Update>(new Action<tblUsersActivities_Update>(this.attach_tblUsersActivities_Updates), new Action<tblUsersActivities_Update>(this.detach_tblUsersActivities_Updates));
 			this._tblInsPolicies = new EntitySet<tblInsPolicy>(new Action<tblInsPolicy>(this.attach_tblInsPolicies), new Action<tblInsPolicy>(this.detach_tblInsPolicies));
 			this._tblDocs = new EntitySet<tblDoc>(new Action<tblDoc>(this.attach_tblDocs), new Action<tblDoc>(this.detach_tblDocs));
-			this._tblAccount = default(EntityRef<tblAccount>);
 			this._tblLanguage = default(EntityRef<tblLanguage>);
 			this._tblUsers_RolesGroup = default(EntityRef<tblUsers_RolesGroup>);
+			this._tblAccount = default(EntityRef<tblAccount>);
 			OnCreated();
 		}
 		
@@ -7766,40 +7497,6 @@ namespace CC.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblAccount_tblUser", Storage="_tblAccount", ThisKey="AccountID", OtherKey="ID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
-		public tblAccount tblAccount
-		{
-			get
-			{
-				return this._tblAccount.Entity;
-			}
-			set
-			{
-				tblAccount previousValue = this._tblAccount.Entity;
-				if (((previousValue != value) 
-							|| (this._tblAccount.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._tblAccount.Entity = null;
-						previousValue.tblUsers.Remove(this);
-					}
-					this._tblAccount.Entity = value;
-					if ((value != null))
-					{
-						value.tblUsers.Add(this);
-						this._AccountID = value.ID;
-					}
-					else
-					{
-						this._AccountID = default(int);
-					}
-					this.SendPropertyChanged("tblAccount");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblLanguage_tblUser", Storage="_tblLanguage", ThisKey="LanguageID", OtherKey="ID", IsForeignKey=true)]
 		public tblLanguage tblLanguage
 		{
@@ -7864,6 +7561,40 @@ namespace CC.Models
 						this._RoleGroupID = default(int);
 					}
 					this.SendPropertyChanged("tblUsers_RolesGroup");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblAccount_tblUser", Storage="_tblAccount", ThisKey="AccountID", OtherKey="ID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public tblAccount tblAccount
+		{
+			get
+			{
+				return this._tblAccount.Entity;
+			}
+			set
+			{
+				tblAccount previousValue = this._tblAccount.Entity;
+				if (((previousValue != value) 
+							|| (this._tblAccount.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._tblAccount.Entity = null;
+						previousValue.tblUsers.Remove(this);
+					}
+					this._tblAccount.Entity = value;
+					if ((value != null))
+					{
+						value.tblUsers.Add(this);
+						this._AccountID = value.ID;
+					}
+					else
+					{
+						this._AccountID = default(int);
+					}
+					this.SendPropertyChanged("tblAccount");
 				}
 			}
 		}
@@ -8594,6 +8325,679 @@ namespace CC.Models
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tblAccounts")]
+	public partial class tblAccount : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _Name;
+		
+		private System.Nullable<int> _CountryID;
+		
+		private System.Nullable<int> _CurrencyID;
+		
+		private System.Nullable<int> _TimeZoneID;
+		
+		private string _Email;
+		
+		private EntitySet<tblAccident> _tblAccidents;
+		
+		private EntitySet<tblInsurer> _tblInsurers;
+		
+		private EntitySet<tblDriver> _tblDrivers;
+		
+		private EntitySet<tblVehicle> _tblVehicles;
+		
+		private EntitySet<tblUser> _tblUsers;
+		
+		private EntityRef<tblCountry> _tblCountry;
+		
+		private EntityRef<tblCurrency> _tblCurrency;
+		
+		private EntityRef<tblTimeZone> _tblTimeZone;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnCountryIDChanging(System.Nullable<int> value);
+    partial void OnCountryIDChanged();
+    partial void OnCurrencyIDChanging(System.Nullable<int> value);
+    partial void OnCurrencyIDChanged();
+    partial void OnTimeZoneIDChanging(System.Nullable<int> value);
+    partial void OnTimeZoneIDChanged();
+    partial void OnEmailChanging(string value);
+    partial void OnEmailChanged();
+    #endregion
+		
+		public tblAccount()
+		{
+			this._tblAccidents = new EntitySet<tblAccident>(new Action<tblAccident>(this.attach_tblAccidents), new Action<tblAccident>(this.detach_tblAccidents));
+			this._tblInsurers = new EntitySet<tblInsurer>(new Action<tblInsurer>(this.attach_tblInsurers), new Action<tblInsurer>(this.detach_tblInsurers));
+			this._tblDrivers = new EntitySet<tblDriver>(new Action<tblDriver>(this.attach_tblDrivers), new Action<tblDriver>(this.detach_tblDrivers));
+			this._tblVehicles = new EntitySet<tblVehicle>(new Action<tblVehicle>(this.attach_tblVehicles), new Action<tblVehicle>(this.detach_tblVehicles));
+			this._tblUsers = new EntitySet<tblUser>(new Action<tblUser>(this.attach_tblUsers), new Action<tblUser>(this.detach_tblUsers));
+			this._tblCountry = default(EntityRef<tblCountry>);
+			this._tblCurrency = default(EntityRef<tblCurrency>);
+			this._tblTimeZone = default(EntityRef<tblTimeZone>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CountryID", DbType="Int")]
+		public System.Nullable<int> CountryID
+		{
+			get
+			{
+				return this._CountryID;
+			}
+			set
+			{
+				if ((this._CountryID != value))
+				{
+					if (this._tblCountry.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCountryIDChanging(value);
+					this.SendPropertyChanging();
+					this._CountryID = value;
+					this.SendPropertyChanged("CountryID");
+					this.OnCountryIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CurrencyID", DbType="Int")]
+		public System.Nullable<int> CurrencyID
+		{
+			get
+			{
+				return this._CurrencyID;
+			}
+			set
+			{
+				if ((this._CurrencyID != value))
+				{
+					if (this._tblCurrency.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCurrencyIDChanging(value);
+					this.SendPropertyChanging();
+					this._CurrencyID = value;
+					this.SendPropertyChanged("CurrencyID");
+					this.OnCurrencyIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TimeZoneID", DbType="Int")]
+		public System.Nullable<int> TimeZoneID
+		{
+			get
+			{
+				return this._TimeZoneID;
+			}
+			set
+			{
+				if ((this._TimeZoneID != value))
+				{
+					if (this._tblTimeZone.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnTimeZoneIDChanging(value);
+					this.SendPropertyChanging();
+					this._TimeZoneID = value;
+					this.SendPropertyChanged("TimeZoneID");
+					this.OnTimeZoneIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Email", DbType="VarChar(50)")]
+		public string Email
+		{
+			get
+			{
+				return this._Email;
+			}
+			set
+			{
+				if ((this._Email != value))
+				{
+					this.OnEmailChanging(value);
+					this.SendPropertyChanging();
+					this._Email = value;
+					this.SendPropertyChanged("Email");
+					this.OnEmailChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblAccount_tblAccident", Storage="_tblAccidents", ThisKey="ID", OtherKey="AccountID")]
+		public EntitySet<tblAccident> tblAccidents
+		{
+			get
+			{
+				return this._tblAccidents;
+			}
+			set
+			{
+				this._tblAccidents.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblAccount_tblInsurer", Storage="_tblInsurers", ThisKey="ID", OtherKey="AccountID")]
+		public EntitySet<tblInsurer> tblInsurers
+		{
+			get
+			{
+				return this._tblInsurers;
+			}
+			set
+			{
+				this._tblInsurers.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblAccount_tblDriver", Storage="_tblDrivers", ThisKey="ID", OtherKey="AccountID")]
+		public EntitySet<tblDriver> tblDrivers
+		{
+			get
+			{
+				return this._tblDrivers;
+			}
+			set
+			{
+				this._tblDrivers.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblAccount_tblVehicle", Storage="_tblVehicles", ThisKey="ID", OtherKey="AccountID")]
+		public EntitySet<tblVehicle> tblVehicles
+		{
+			get
+			{
+				return this._tblVehicles;
+			}
+			set
+			{
+				this._tblVehicles.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblAccount_tblUser", Storage="_tblUsers", ThisKey="ID", OtherKey="AccountID")]
+		public EntitySet<tblUser> tblUsers
+		{
+			get
+			{
+				return this._tblUsers;
+			}
+			set
+			{
+				this._tblUsers.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblCountry_tblAccount", Storage="_tblCountry", ThisKey="CountryID", OtherKey="ID", IsForeignKey=true)]
+		public tblCountry tblCountry
+		{
+			get
+			{
+				return this._tblCountry.Entity;
+			}
+			set
+			{
+				tblCountry previousValue = this._tblCountry.Entity;
+				if (((previousValue != value) 
+							|| (this._tblCountry.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._tblCountry.Entity = null;
+						previousValue.tblAccounts.Remove(this);
+					}
+					this._tblCountry.Entity = value;
+					if ((value != null))
+					{
+						value.tblAccounts.Add(this);
+						this._CountryID = value.ID;
+					}
+					else
+					{
+						this._CountryID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("tblCountry");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblCurrency_tblAccount", Storage="_tblCurrency", ThisKey="CurrencyID", OtherKey="ID", IsForeignKey=true)]
+		public tblCurrency tblCurrency
+		{
+			get
+			{
+				return this._tblCurrency.Entity;
+			}
+			set
+			{
+				tblCurrency previousValue = this._tblCurrency.Entity;
+				if (((previousValue != value) 
+							|| (this._tblCurrency.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._tblCurrency.Entity = null;
+						previousValue.tblAccounts.Remove(this);
+					}
+					this._tblCurrency.Entity = value;
+					if ((value != null))
+					{
+						value.tblAccounts.Add(this);
+						this._CurrencyID = value.ID;
+					}
+					else
+					{
+						this._CurrencyID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("tblCurrency");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblTimeZone_tblAccount", Storage="_tblTimeZone", ThisKey="TimeZoneID", OtherKey="ID", IsForeignKey=true)]
+		public tblTimeZone tblTimeZone
+		{
+			get
+			{
+				return this._tblTimeZone.Entity;
+			}
+			set
+			{
+				tblTimeZone previousValue = this._tblTimeZone.Entity;
+				if (((previousValue != value) 
+							|| (this._tblTimeZone.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._tblTimeZone.Entity = null;
+						previousValue.tblAccounts.Remove(this);
+					}
+					this._tblTimeZone.Entity = value;
+					if ((value != null))
+					{
+						value.tblAccounts.Add(this);
+						this._TimeZoneID = value.ID;
+					}
+					else
+					{
+						this._TimeZoneID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("tblTimeZone");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_tblAccidents(tblAccident entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblAccount = this;
+		}
+		
+		private void detach_tblAccidents(tblAccident entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblAccount = null;
+		}
+		
+		private void attach_tblInsurers(tblInsurer entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblAccount = this;
+		}
+		
+		private void detach_tblInsurers(tblInsurer entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblAccount = null;
+		}
+		
+		private void attach_tblDrivers(tblDriver entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblAccount = this;
+		}
+		
+		private void detach_tblDrivers(tblDriver entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblAccount = null;
+		}
+		
+		private void attach_tblVehicles(tblVehicle entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblAccount = this;
+		}
+		
+		private void detach_tblVehicles(tblVehicle entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblAccount = null;
+		}
+		
+		private void attach_tblUsers(tblUser entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblAccount = this;
+		}
+		
+		private void detach_tblUsers(tblUser entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblAccount = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tblCurrencies")]
+	public partial class tblCurrency : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _Name;
+		
+		private EntitySet<tblAccount> _tblAccounts;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    #endregion
+		
+		public tblCurrency()
+		{
+			this._tblAccounts = new EntitySet<tblAccount>(new Action<tblAccount>(this.attach_tblAccounts), new Action<tblAccount>(this.detach_tblAccounts));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(30) NOT NULL", CanBeNull=false)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblCurrency_tblAccount", Storage="_tblAccounts", ThisKey="ID", OtherKey="CurrencyID")]
+		public EntitySet<tblAccount> tblAccounts
+		{
+			get
+			{
+				return this._tblAccounts;
+			}
+			set
+			{
+				this._tblAccounts.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_tblAccounts(tblAccount entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblCurrency = this;
+		}
+		
+		private void detach_tblAccounts(tblAccount entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblCurrency = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tblTimeZones")]
+	public partial class tblTimeZone : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _Name;
+		
+		private EntitySet<tblAccount> _tblAccounts;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    #endregion
+		
+		public tblTimeZone()
+		{
+			this._tblAccounts = new EntitySet<tblAccount>(new Action<tblAccount>(this.attach_tblAccounts), new Action<tblAccount>(this.detach_tblAccounts));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(30) NOT NULL", CanBeNull=false)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblTimeZone_tblAccount", Storage="_tblAccounts", ThisKey="ID", OtherKey="TimeZoneID")]
+		public EntitySet<tblAccount> tblAccounts
+		{
+			get
+			{
+				return this._tblAccounts;
+			}
+			set
+			{
+				this._tblAccounts.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_tblAccounts(tblAccount entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblTimeZone = this;
+		}
+		
+		private void detach_tblAccounts(tblAccount entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblTimeZone = null;
 		}
 	}
 	

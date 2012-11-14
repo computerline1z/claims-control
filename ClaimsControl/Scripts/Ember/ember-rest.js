@@ -3,24 +3,7 @@ $(function () {
 	Em.run.next(function () {
 		oGLOBAL.logFromStart("Ember finished.");
 		oDATA.fnLoadNext();
-		//		if (document.createStyleSheet) {
-		//			document.createStyleSheet('/Content/jquery-ui-1.8.23.custom.css');
-		//		}
-		//		else {
-		//			$("head").append($("<link rel='stylesheet' href='/Content/jquery-ui-1.8.23.custom.css' type='text/css' media='screen' />"));
-		//		}
-
-		//		var css = 'h1 { background: red; }',
-		//    head = document.getElementsByTagName('head')[0],
-		//    style = document.createElement('style');
-
-		//		style.type = 'text/css';
-		//		if (style.styleSheet) {
-		//			style.styleSheet.cssText = css;
-		//		} else {
-		//			style.appendChild(document.createTextNode(css));
-		//		}
-		//		head.appendChild(style);
+		oDATA.fnWriteVersions();
 	});
 });
 $(window).load(function () {
@@ -65,8 +48,8 @@ var oDATA = Ember.Object.create({
 	},
 	GET: function (objName) {
 		if (this.Obj[objName]) return this.Obj[objName];
-		else {
-			this.get("fnErr")("Object " + objName + " not downloaded yet.")
+		else {//this.get("fnErr")("Object " + objName + " not downloaded yet.")
+			console.warn("Object " + objName + " not downloaded yet.");  return false;
 		}
 	},
 	GetRow: function (id, tbl) {
@@ -88,7 +71,7 @@ var oDATA = Ember.Object.create({
 	execWhenLoaded: function (objNames, fnExec, timeoutId) {//jei objektu nera laukiam kol ateis
 		var tId = (timeoutId) ? timeoutId : 0, me = this, notExists = false;
 		objNames.forEach(function (objName) {
-			console.log("cheking obj " + objName);
+			//console.log("cheking obj " + objName);
 			if (objName.slice(0, 3) === "tmp") {
 				if (!Em.TEMPLATES[objName]) { console.log("template " + objName + " not exists"); notExists = true; }
 			}
@@ -166,12 +149,9 @@ var oDATA = Ember.Object.create({
 		} else throw new Error(objName + "  already loaded");
 	},
 	exists: function (objName, mustBe) {
-		if (this.get("listUrl")[objName]) {
-			return typeof (this.Obj[objName]) !== "undefined";
-		}
-		else {
-			this.get("fnErr")(objName);
-		}
+		//if (this.get("listUrl")[objName]) {return typeof (this.Obj[objName]) !== "undefined";}
+		//else {this.get("fnErr")(objName);}
+		return typeof (this.Obj[objName]) !== "undefined";
 	},
 	fnErr: function (objName, msg) {
 		if (msg) {
@@ -205,9 +185,74 @@ var oDATA = Ember.Object.create({
 						//kitas variantas: http://stackoverflow.com/questions/8659787/using-pre-compiled-templates-with-handlebars-js-jquery-mobile-environment
 					});
 				}
+				if (json.Script) {
+					if (json.Script.File) $.getScript(json.Script.File);
+					//if (json.Script.oSCRIPT) return this.oSCRIPT = jsRes.Script.oSCRIPT;
+				}
 				if (p.callBack) p.callBack();
 			}
 		});
+	},
+	fnWriteVersions: function() {
+		if (localStorage){
+			localStorage["Lists/topNew_ver"]="1";		
+			localStorage["Admin/edit"]="1";		
+		}
+	},
+	fnLoad2: function (p) {
+		//url:url,callBack:callBack,checkFn:checkFn,checkObj:checkObj
+			//checkFn:checkFn[būtinas kaip stringas('App.startList')],checkObj:checkObj[nebūtinas] - pagal juos tikrinam ar reikia siustis ir ar reikia objekto
+		//užsikraunant įrašom localStorage["topNew_ver"] versijas ir siunčiam ar atitinka, jei neatitinka grazinam tuos objektus
+		//scripta užkraunam atsakydami, kontroleryj versijos kontroliuojamos "/controller/action?ver=123"
+		if (!p.checkFn) console.error("oDATA.fnLoad without checkFn");	
+		var start = new Date().getTime(), setter = this.get("SET"), emBuilder = this.get("emBuilder"), me = this, obj;
+		var finished=function (start,tmpLoaded){console.warn("loaded '"+ p.url+"'. Tmp loaded'"+tmpLoaded+"' Time,ms:" + (new Date().getTime() - start));
+			if (p.callBack) p.callBack();					
+		}
+		if (!oGLOBAL.helper.existsFunctionByName(p.checkFn,window)){
+			console.log("fnLoad2: no function loading data..");
+			var dataPars={tmp:true,obj:true},url=p.url,tmpNames=[];
+			if (localStorage){
+				if (localStorage[url]){
+					dataPars.tmp=(localStorage[url]!==(localStorage[url+"_ver"]));
+					dataPars.obj= (oDATA.GET(p.checkObj))?false:true;//false jei nesiunčiam - {tmp:false,obj:false}			
+				}//kitu atveju dataPars={tmp:true,obj:true}		
+			}else{console.warn("No localStorage!");}//siunčiam viską, scriptą kašinam, atnaujinus turės valyt kašą		
+			$.ajax({
+				url: p.url, dataType: 'json', type: 'POST', data: dataPars,
+				success: function (json) {
+					if (json.jsonObj) {
+						$.each(json.jsonObj, function (objName, value) {
+							console.log("New jsonObj:" + objName);
+							setter.call(me, objName, value);
+							emBuilder.call(me, { newData: value.Data, tblName: objName, toAppend: true }); //{oData, toAppend:{"sort":"asc/desc","col":"date"}}
+						});
+					}
+					if (json.templates) {
+						$.each(json.templates, function (objName, value) {
+							console.log("New template:" + objName);
+							if (!value){ value=localStorage[objName]; }//Jei nėra imam iš localStorage
+							else {localStorage[objName]=value;}				
+							if (!Em.TEMPLATES[objName]){Em.TEMPLATES[objName] = Em.Handlebars.compile(value);}
+							//kitas variantas: http://stackoverflow.com/questions/8659787/using-pre-compiled-templates-with-handlebars-js-jquery-mobile-environment
+						});
+					}
+					if (json.Script) {
+						//$.ajaxSetup ({cache: true});
+						if (json.Script.File) {
+							console.log("start downloading file - "+json.Script.File);
+							$.getScript(json.Script.File, function(){
+								console.log("callBack will be called");
+								finished(start,true);
+							});
+						}else{
+							finished(start,true);
+						}
+					}
+					localStorage[url]=localStorage[url+"_ver"];//išsaugom esama versijas				
+				}
+			});
+		}else {finished(start,false);}//jau užkrauta viskas		
 	}
 });
 /**************************************************************************************************************************
@@ -384,7 +429,7 @@ var SERVER = {
 							//	var infoRow=Cols[col.IdField];
 							//	var source=infoRow.List.Source;
 							//	var Field=infoRow.FName;
-							//	var id=oCONTROLS.helper.getData_fromDataToSave(updData.DataToSave,Field);							
+							//	var id=oGLOBAL.helper.getData_fromDataToSave(updData.DataToSave,Field);							
 							//	Row.set(fieldName,oData.emData.findProperty("iD", id).MapArrToString(infoRow.List.iText, false));
 							//}else
 							if (col.Default)													

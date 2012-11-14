@@ -1,38 +1,46 @@
 
 `var w=window, App=w.App, Em=w.Em, oGLOBAL=w.oGLOBAL, oDATA=w.oDATA, oCONTROLS=w.oCONTROLS, MY=w.MY`
+console.log("loading admin1")
+App.adminStart=()->
+	oDATA.execWhenLoaded(["tblUsers","tblAccount"], ()->
+		App.usersController.set("content",oDATA.GET("tblUsers").emData)
+		App.accountController.set("content",oDATA.GET("tblAccount").emData)
+	) #if not App.usersController
+console.log("loading admin2")
+
 App.AdminView = App.mainMenuView.extend(
-	templateName: 'tmpListsTop', viewIx: 4
+	didInsertElement: ->
+		#c=this.content[0] neturi	
+		@_super();
+		frm='#AccountForm'
+		oCONTROLS.UpdatableForm(frm)
+	templateName: 'tmpAdminMain', viewIx: 5
 )
 
 App.UsersRowView = Em.View.extend(
-	templateName: 'tmpInsPolicyRow' #<div class="tr accident" @Html.Raw("{{action tbodyClick this target=\"this\"}}")>
+	templateName: 'tmpUserRow'
 	tagName: ""
+	##fullName: ()-> (@.get('firstName')+' '+@.get('surname')).property('firstName','surname')
 )
-App.listAllController = Em.ResourceController.create(
-	current:"",#{emObject:drivers/vehicles/insPolicies, filterCols:["fsf","fss"]}
-	clicked:"", endDate:"", editItem:"", filterValue: ""
-	valueDidChange: (()->		
-		#alert @filterValue
-		@filterItems()
-	).observes('filterValue')
-	init: -> ( @_super();oDATA.execWhenLoaded(["proc_Vehicles","proc_Drivers","proc_InsPolicies"], ()->
-		App.listAllController.set("vehicles",oDATA.GET("proc_Vehicles").emData)
-		App.listAllController.set("drivers",oDATA.GET("proc_Drivers").emData)
-		App.listAllController.set("insPolicies",oDATA.GET("proc_InsPolicies").emData)
-	))
-	vehicles: [], drivers: [], insPolicies: [],
-	tableName: "?"
-)	
+console.log("loading admin3")
+console.log(oDATA.GET("tblAccount").emData)
 
-App.AllDriversView = App.mainMenuView.extend(
-	init: ->
-		@_super();App.listAllController.set("content",oDATA.GET("proc_Drivers").emData)
-	templateName: 'tmpAllDrivers', viewIx: 4
-	didInsertElement: ()->
-		@_super(); view=$("#tabLists"); view.find("div.ui-tabs").find("li:first a").trigger("click")
-		view.find("table.zebra-striped").tblSortable(
-			cols:["firstName","lastName","dateExpierence","drivingCategory","phone","docs",]
-			controller: "listAllController", sortedCol: 1 
-		);
+App.accountController = Em.ArrayController.create(
+	tableName: "tblAccount"
+	content: []
+	# init: ->
+		# console.log("loading in init admin4")
+		# console.log(oDATA.GET("tblAccount").emData)
+		# @_super();
+		# App.accountController.set("content",oDATA.GET("tblAccount").emData)
 )
-MY.lists={}
+console.log("loading admin4")
+
+App.usersController = Em.ArrayController.create(
+	tableName: "tblUsers"
+	content: []
+)
+console.log("loading admin5")
+
+MY.admin={}
+`//@ sourceURL= /Forms/admin.js`

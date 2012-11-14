@@ -9,6 +9,7 @@ Handlebars.registerHelper('checkOut', function (prop, options) {
 });
 
 Handlebars.registerHelper('updatableField', function (prop, options) {
+	if  (this.content.length===0) return false;
 	var err = "updatableField helper ";
 	var f = options.hash['Field'];
 	if (!f) throw new Error(err + "did not found Field");
@@ -16,7 +17,9 @@ Handlebars.registerHelper('updatableField', function (prop, options) {
 	if (typeof(v)==="undefined") console.error("Field "+f+"has no value in Handlebar updatableField helper");
 	if (!f) throw new Error(err + "did not found value for Field" + f);
 
-	v = (typeof (v) === "string") ? v.replace(/'/g, "\"") : v;
+	//v = (typeof (v) === "string") ? v.replace(/'/g, "\"") : v;
+	if (typeof (v) === "string"){v="\""+v.replace(/'/g,"")+"\"";}
+	
 	var cl = options.hash['classes']; cl = (cl) ? cl + " UpdateField" : "UpdateField";
 	var id = options.hash['id']; id = (id) ? "\"id\":\"" + id + "\"," : "";
 	var lblT = options.hash['labelType']; lblT = (lblT) ? "\"labelType\":\"" + lblT + "\"," : "";
@@ -24,7 +27,7 @@ Handlebars.registerHelper('updatableField', function (prop, options) {
 	var List = options.hash['List']; List = (List) ? "\"List\":" + List + "," : ""; //List yra objektas ir jam kabuciu nereikia
 	var Editable = options.hash['Editable']; Editable = (Editable) ? "\"Editable\":" + Editable + "," : ""; //Editable yra objektas ir jam kabuciu nereikia
 	
-	var retString = "<div class='ExtendIt' data-ctrl='{\"Value\":" + (v===""?"\"\"":v) + ",\"Field\":\"" + f + "\",\"classes\":\"" + cl + "\"," + id + lblT + attr+List+Editable;
+	var retString = "<div class='ExtendIt' data-ctrl='{\"Value\":" + (v===""?"\"\"":v) + ",\"Field\":\"" + f.firstBig() + "\",\"classes\":\"" + cl + "\"," + id + lblT + attr+List+Editable;
 	if (retString.charAt(retString.length - 1) === ",") {retString = retString.slice(0, -1); } //iškertam paskutini kalbeli jei yra
 	
 	return new Handlebars.SafeString(retString + "}'></div>");

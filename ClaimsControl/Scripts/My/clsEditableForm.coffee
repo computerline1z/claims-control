@@ -89,7 +89,7 @@ class clsEditableForm
 								infoRow=Row.Cols[col.IdField]
 								source=infoRow.List.Source
 								Field=infoRow.FName
-								id=oCONTROLS.helper.getData_fromDataToSave(updData.DataToSave,Field)							
+								id=oGLOBAL.helper.getData_fromDataToSave(updData.DataToSave,Field)							
 								#Row.Data[fieldName]=oDATA.GET(source).emData.findProperty("iD", id).MapArrToString(infoRow.List.iText, false)
 								Row.Data.set(fieldName,oDATA.GET(source).emData.findProperty("iD", id).MapArrToString(infoRow.List.iText, false))
 							else if (col.Default)

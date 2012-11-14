@@ -28,7 +28,6 @@ namespace ClaimsControl.Controllers {
 		public JsonResult tabAccidents() {
 			Repositories_Accidents acc = new Repositories_Accidents();
 			return Json(
-
 				new {
 					jsonObj = new {
 						//proc_Accidents = acc.GetJSON_proc_Accidents(),
@@ -43,24 +42,34 @@ namespace ClaimsControl.Controllers {
 						tblVehicleMakes = acc.GetJSON_tblVehicleMakes(),
 						tblVehicleTypes = acc.GetJSON_tblVehicleTypes(),
 						tblClaims = acc.GetJSON_tblClaims(),
-						tblUsers = acc.GetJSON_tblUsers()
+						tblUsers = acc.GetJSON_tblUsers(),
+						//tblAccount = acc.GetJSON_tblAccount(),
+						//tblCurrencies = acc.GetJSON_tblCurrencies(),
+						//tblCountries = acc.GetJSON_tblCountries(),
+						//tblTimeZones = acc.GetJSON_tblTimeZones()
 					},
 					templates = new {
-						tmpClaimEdit = RenderPartialViewToString("Accidents/tmpClaimEdit"),
-						tmpDriverRow = RenderPartialViewToString("Lists/tmpDriverRow"),
-						tmpVehicleRow = RenderPartialViewToString("Lists/tmpVehicleRow"),
-						tmpInsPolicyRow = RenderPartialViewToString("Lists/tmpInsPolicyRow"),
-						tmpAllDrivers = RenderPartialViewToString("Lists/tmpAllDrivers"),
-						tmpAllVehicles = RenderPartialViewToString("Lists/tmpAllVehicles"),
-						tmpAllInsPolicies = RenderPartialViewToString("Lists/tmpAllInsPolicies"),
-						tmpListsTop = RenderPartialViewToString("Lists/tmpListsTop"),
-						tmp_Drivers = RenderPartialViewToString("Lists/tmp_Drivers"),
-						tmp_InsPolicies = RenderPartialViewToString("Lists/tmp_InsPolicies"),
-						tmp_Vehicles = RenderPartialViewToString("Lists/tmp_Vehicles")
+						tmpClaimEdit = RenderPartialViewToString("Accidents/tmpClaimEdit")//,
+						//tmpDriverRow = RenderPartialViewToString("Lists/tmpDriverRow"),
+						//tmpVehicleRow = RenderPartialViewToString("Lists/tmpVehicleRow"),
+						//tmpInsPolicyRow = RenderPartialViewToString("Lists/tmpInsPolicyRow"),
+						//tmpAllDrivers = RenderPartialViewToString("Lists/tmpAllDrivers"),
+						//tmpAllVehicles = RenderPartialViewToString("Lists/tmpAllVehicles"),
+						//tmpAllInsPolicies = RenderPartialViewToString("Lists/tmpAllInsPolicies"),
+						//tmpListsTop = RenderPartialViewToString("Lists/tmpListsTop"),
+						//tmp_Drivers = RenderPartialViewToString("Lists/tmp_Drivers"),
+						//tmp_InsPolicies = RenderPartialViewToString("Lists/tmp_InsPolicies"),
+						//tmp_Vehicles = RenderPartialViewToString("Lists/tmp_Vehicles"),
+						//tmpAdminMain = RenderPartialViewToString("Admin/tmpAdminMain"),
+						//tmpUserRow = RenderPartialViewToString("Admin/tmpUserRow")
 						}
 				}
 
 			);
+		}
+		[HttpPost]
+		public JsonResult Proba() {
+			return Json(new { Script = new { File = "../Scripts/Final/Proba.js", Pars = "" } });
 		}
 
 		[HttpPost]
