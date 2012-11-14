@@ -2,308 +2,54 @@
 (function() {
   var w=window, App=w.App, Em=w.Em, oGLOBAL=w.oGLOBAL, oDATA=w.oDATA, oCONTROLS=w.oCONTROLS, MY=w.MY;
 
-  App.listsStart = function() {
-    return oDATA.fnLoad({
-      url: "Main/topNew",
-      callBack: function() {
-        App.topNewController.vehicles.clear();
-        App.topNewController.drivers.clear();
-        App.topNewController.insPolicies.clear();
-        App.topNewController.drivers.pushObjects(oDATA.GET("proc_topDrivers").emData.slice(0, 3));
-        App.topNewController.vehicles.pushObjects(oDATA.GET("proc_topVehicles").emData.slice(0, 3));
-        return App.topNewController.insPolicies.pushObjects(oDATA.GET("proc_topInsPolicies").emData.slice(0, 3));
-      }
+  console.log("loading admin1");
+
+  App.adminStart = function() {
+    return oDATA.execWhenLoaded(["tblUsers", "tblAccount"], function() {
+      App.usersController.set("content", oDATA.GET("tblUsers").emData);
+      return App.accountController.set("content", oDATA.GET("tblAccount").emData);
     });
   };
 
-  App.topNewController = Em.ResourceController.create({
-    vehicles: [],
-    drivers: [],
-    insPolicies: [],
-    tableName: "?"
+  console.log("loading admin2");
+
+  App.AdminView = App.mainMenuView.extend({
+    didInsertElement: function() {
+      var frm;
+      this._super();
+      frm = '#AccountForm';
+      return oCONTROLS.UpdatableForm(frm);
+    },
+    templateName: 'tmpAdminMain',
+    viewIx: 5
   });
 
-  App.DriverView = Em.View.extend({
-    edit: function(e) {
-      var id, tr;
-      alert("opa");
-      tr = $(e.target).closest('tr');
-      return id = e.view._context.iD;
-    },
-    templateName: 'tmpDriverRow',
+  App.UsersRowView = Em.View.extend({
+    templateName: 'tmpUserRow',
     tagName: ""
   });
 
-  App.VehicleView = Em.View.extend({
-    templateName: 'tmpVehicleRow',
-    tagName: ""
+  console.log("loading admin3");
+
+  console.log(oDATA.GET("tblAccount").emData);
+
+  App.accountController = Em.ArrayController.create({
+    tableName: "tblAccount",
+    content: []
   });
 
-  App.InsPolicyView = Em.View.extend({
-    templateName: 'tmpInsPolicyRow',
-    tagName: ""
+  console.log("loading admin4");
+
+  App.usersController = Em.ArrayController.create({
+    tableName: "tblUsers",
+    content: []
   });
 
-  App.listAllController = Em.ResourceController.create({
-    current: "",
-    clicked: "",
-    endDate: "",
-    editItem: "",
-    filterValue: "",
-    valueDidChange: (function() {
-      return this.filterItems();
-    }).observes('filterValue'),
-    init: function() {
-      this._super();
-      return oDATA.execWhenLoaded(["proc_Vehicles", "proc_Drivers", "proc_InsPolicies"], function() {
-        App.listAllController.set("vehicles", oDATA.GET("proc_Vehicles").emData);
-        App.listAllController.set("drivers", oDATA.GET("proc_Drivers").emData);
-        return App.listAllController.set("insPolicies", oDATA.GET("proc_InsPolicies").emData);
-      });
-    },
-    openItem: function(pars) {
-      var config, title;
-      config = oDATA.GET(pars.source).Config;
-      title = pars.row ? config.Msg.GenName + " " + pars.row.MapArrToString(config.titleFields, true) : config.Msg.AddNew;
-      if (!pars.row && pars.newVals) {
-        pars.row = pars.newVals.vals.toRowObject(pars.newVals.cols);
-      }
-      return MY.lists.dialog = JQ.Dialog.create({
-        controller: pars.me,
-        pars: pars,
-        init: function() {
-          this._super();
-          this.templateName = pars.template;
-          return this.title = title;
-        },
-        didInsertElement: function() {
-          var dialogContent, dialogFrm, me;
-          this._super();
-          dialogFrm = $("#openItemDialog");
-          dialogContent = $("#dialogContent");
-          me = this;
-          $("#dialogEndDateInput").datepicker({
-            "minDate": "-3y",
-            "maxDate": "0"
-          }).trigger("blur");
-          this.$().on("click", 'a.inLine', function(e) {
-            var endDate, input, isInput, newDate, obj, parentDiv, t;
-            t = $(e.target);
-            pars = me.pars;
-            endDate = pars.me.endDate;
-            parentDiv = t.parent().parent();
-            input = parentDiv.find("input");
-            isInput = input ? input.length : 0;
-            if (!isInput) {
-              parentDiv.css("background-color", "").css("color", "").find("span.inLine").replaceWith('<input type="text" style="width:100%;" placeholder="Nebedirba nuo.."/>').end().find("input").val(endDate).datepicker({
-                "minDate": "-3y",
-                "maxDate": "0"
-              }).end().find("a.inLine").css("color", "").html("Išsaugoti");
-            } else {
-              newDate = oGLOBAL.date.isDate(input.val()) ? input.val() : "";
-              if (newDate) {
-                parentDiv.css("background-color", "red").css("color", "White").find("input").replaceWith('<span class="inLine">Nebedirba nuo ' + newDate + '</span>').end().find("a.inLine").css("color", "White").html("Keisti");
-              }
-              obj = dialogContent.data("ctrl");
-              SERVER.update2({
-                "Action": "Edit",
-                "Ctrl": dialogFrm,
-                "source": obj.Source,
-                "row": pars.row,
-                DataToSave: {
-                  "id": obj.id,
-                  "Data": [newDate],
-                  "Fields": ["EndDate"],
-                  "DataTable": obj.tblUpdate
-                },
-                CallBackAfter: function(Row) {
-                  return $("#tabLists").find("div.ui-tabs").find("li.ui-tabs-selected a").trigger("click");
-                }
-              });
-              console.log("išsaugoti " + newDate);
-              pars.me.endDate = newDate;
-            }
-            return false;
-          });
-          $("#btnSaveItem").on("click", function() {
-            var DataToSave;
-            DataToSave = oCONTROLS.ValidateForm(dialogContent);
-            $.extend(pars, {
-              DataToSave: DataToSave,
-              Ctrl: $("#tabLists"),
-              CallBackAfter: function(Row) {
-                dialogFrm.dialog("close");
-                if (Row.iD) {
-                  App[pars.controller][pars.emObject].findProperty("iD", Row.iD).set("docs", "(0)");
-                  return $("#tabLists").find("div.ui-tabs").find("li.ui-tabs-selected a").trigger("click");
-                }
-              }
-            });
-            SERVER.update2(pars);
-            return false;
-          });
-          $("#aCancelItem").on("click", function() {
-            dialogFrm.dialog("close");
-            return false;
-          });
-          if (this.templateName === "tmp_InsPolicies") {
-            this.$().tabs().css("margin", "-5px 1px 0 1px").find("ul").css("background-color", "#505860");
-          }
-          return oCONTROLS.UpdatableForm(dialogContent, pars.row);
-        },
-        width: 800,
-        templateName: 'dialog-content'
-      }).append();
-    },
-    addNew: function(e) {
-      var pars;
-      pars = $(e.target).parent().data("ctrl");
-      console.log("addNew");
-      console.log(pars);
-      $.extend(pars, {
-        row: 0,
-        Action: "Add",
-        me: this,
-        CallBackAfter: function(Row) {}
-      });
-      this.set("endDate", "");
-      this.set("editItem", false);
-      return this.openItem(pars);
-    },
-    edit: function(e) {
-      var context, endDate, pars;
-      context = e.view._context;
-      pars = $(e.target).closest("table").next().data("ctrl");
-      pars = pars ? pars : this.current;
-      $.extend(pars, {
-        row: context,
-        Action: "Edit",
-        me: this
-      });
-      endDate = pars.emObject === "drivers" ? pars.row.endDate : pars.row.endDate;
-      this.set("endDate", endDate);
-      this.set("editItem", true);
-      return this.openItem(pars);
-    },
-    filterByField: function() {
-      var fn;
-      fn = !this.filterValue ? "return true;" : "var ret=false,cols=" + JSON.stringify(this.current.filterCols) + ";console.log('Filtering by val:" + this.filterValue + "'); for(var i=0; i < cols.length; i++){console.log(row[cols[i]]+', '+(row[cols[i]].toLowerCase().indexOf('" + this.filterValue + "')>-1));		if (row[cols[i]].toLowerCase().indexOf('" + this.filterValue + "')>-1){ret=true; break;}} console.log('filterByval rez: '+ret);return ret;";
-      return new Function("row", fn);
-    },
-    filterByTab: function() {
-      var fn, mark;
-      if (this.current.emObject === "drivers") {
-        mark = this.clicked === "NotWorking" ? "!" : "";
-        fn = "var ret=true; if ($.trim(row.endDate)) {ret=oGLOBAL.date.firstBigger(row.endDate);} console.log('endDate: '+row.endDate+', '+ret);return " + mark + "ret";
-      } else if (this.current.emObject === "vehicles") {
-        mark = this.clicked === "NotWorking" ? "!" : "";
-        fn = "var ret=true; if ($.trim(row.endDate)) {ret=oGLOBAL.date.firstBigger(row.endDate);} console.log('endDate: '+row.endDate+', '+ret);return " + mark + "ret";
-      } else {
-        throw new Error("filterByTab has no such emObject");
-      }
-      return new Function("row", fn);
-    },
-    filterItems: function() {
-      var fn,
-        _this = this;
-      if (this.current.emObject === "insPolicies") {
-        fn = function(row) {
-          var v;
-          v = _this.filterByField()(row);
-          return row.set('visible', v);
-        };
-      } else {
-        fn = function(row) {
-          var v;
-          v = (_this.filterByTab()(row) ? _this.filterByField()(row) : false);
-          return row.set('visible', v);
-        };
-      }
-      return App.listAllController[this.current.emObject].forEach(fn);
-    },
-    showTabs: function(e) {
-      var t;
-      t = $(e.target);
-      t.closest("ul").find("li").removeClass("ui-tabs-selected ui-state-active");
-      return t.closest("li").addClass("ui-tabs-selected ui-state-active");
-    },
-    filterWorking: function(e) {
-      this.set("clicked", "Working");
-      this.showTabs(e);
-      return this.filterItems();
-    },
-    filterNotWorking: function(e) {
-      this.set("clicked", "NotWorking");
-      this.showTabs(e);
-      return this.filterItems();
-    },
-    vehicles: [],
-    drivers: [],
-    insPolicies: [],
-    tableName: "?"
-  });
+  console.log("loading admin5");
 
-  App.TopListsView = App.mainMenuView.extend({
-    templateName: 'tmpListsTop',
-    viewIx: 4
-  });
+  MY.admin = {};
 
-  App.AllDriversView = App.mainMenuView.extend({
-    init: function() {
-      this._super();
-      return App.listAllController.set("content", oDATA.GET("proc_Drivers").emData);
-    },
-    templateName: 'tmpAllDrivers',
-    viewIx: 4,
-    didInsertElement: function() {
-      var view;
-      this._super();
-      view = $("#tabLists");
-      view.find("div.ui-tabs").find("li:first a").trigger("click");
-      return view.find("table.zebra-striped").tblSortable({
-        cols: ["firstName", "lastName", "dateExpierence", "drivingCategory", "phone", "docs"],
-        controller: "listAllController",
-        sortedCol: 1
-      });
-    }
-  });
+  //@ sourceURL= /Forms/admin.js;
 
-  App.AllInsPoliciesView = App.mainMenuView.extend({
-    init: function() {
-      this._super();
-      return App.listAllController.set("content", oDATA.GET("proc_InsPolicies").emData);
-    },
-    templateName: 'tmpAllInsPolicies',
-    viewIx: 4,
-    didInsertElement: function() {
-      return $("#tabLists").find("table.zebra-striped").tblSortable({
-        cols: ["claimType", "insurerName", "policyNumber", "endDate", "isuredName"],
-        controller: "listAllController",
-        sortedCol: 0
-      });
-    }
-  });
-
-  App.AllVehiclesView = App.mainMenuView.extend({
-    init: function() {
-      this._super();
-      return App.listAllController.set("content", oDATA.GET("proc_Vehicles").emData);
-    },
-    templateName: 'tmpAllVehicles',
-    viewIx: 4,
-    didInsertElement: function() {
-      var view;
-      this._super();
-      view = $("#tabLists");
-      view.find("div.ui-tabs").find("li:first a").trigger("click");
-      return view.find("table.zebra-striped").tblSortable({
-        cols: ["plate", "type", "make", "model", "year", "docs"],
-        controller: "listAllController",
-        sortedCol: 0
-      });
-    }
-  });
-
-  MY.lists = {};
 
 }).call(this);

@@ -526,3 +526,24 @@ oGLOBAL.date = {
 	// }
 	// }
 };
+oGLOBAL.helper = {//oGLOBAL.helper.getData_fromDataToSave(DataToSave,Field)
+	getData_fromDataToSave: function (DataToSave, field) {
+		ret = "";
+		DataToSave.Fields.forEach(
+			function (Field, i) {
+				if (Field === field) ret = DataToSave.Data[i];
+			}
+		);
+		return ret;
+	},//oGLOBAL.helper.existsFunctionByName
+	executeFunctionByName: function (functionName, context /*, args */) {
+		var args = Array.prototype.slice.call(arguments, 2),namespaces = functionName.split("."),func = namespaces.pop();
+		for (var i = 0; i < namespaces.length; i++) {context = context[namespaces[i]];}
+		return context[func].apply(context, args);
+	},
+	existsFunctionByName: function (functionName, context /*, args */) {
+		var args = Array.prototype.slice.call(arguments, 2), namespaces = functionName.split("."), func = namespaces.pop();
+		for (var i = 0; i < namespaces.length; i++) {context = context[namespaces[i]];if (!context){return false;}}
+		return context[func]||false;
+	}
+}

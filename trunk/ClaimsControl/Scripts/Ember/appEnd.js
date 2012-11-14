@@ -3,8 +3,7 @@
 App.ClaimsView = App.mainMenuView.extend({ templateName: 'tmpClaims', viewIx: 1 });
 App.MapView = App.mainMenuView.extend({ templateName: 'tmpMap', viewIx: 2 });
 App.ReportsView = App.mainMenuView.extend({ templateName: 'tmpReports', viewIx: 3 });
-
-App.AdminView = App.mainMenuView.extend({ templateName: 'tmpAdmin', viewIx: 5 });
+//App.AdminView = App.mainMenuView.extend({ templateName: 'tmpAdmin', viewIx: 5 });
 
 App.Router = Em.Router.extend({
 	enableLogging: false,
@@ -24,10 +23,6 @@ App.Router = Em.Router.extend({
 			connectOutlets: function (router, context) {
 				MY.NavbarController.fnSetNewTab(router.currentState.name, 0);
 				//router.get('applicationController').connectOutlet('accidents');
-			},
-			editAccident: function (e) {
-				App.accidentsController.tbodyClick(e);
-				alert("opa");
 			}
 		}),
 		tabClaims: Em.Route.extend({
@@ -55,10 +50,16 @@ App.Router = Em.Router.extend({
 			route: '/lists',
 			connectOutlets: function (router, context) {
 				MY.NavbarController.fnSetNewTab(router.currentState.name, 4);
-				App.listsStart();
-				oDATA.execWhenLoaded(["tmpAllVehicles"], function (){
-					router.get('applicationController').connectOutlet('listsOutlet','topLists');
-				});			
+				//App.listsStart();
+				//oDATA.execWhenLoaded(["tmpAllVehicles"], function (){
+				//	router.get('applicationController').connectOutlet('listsOutlet','topLists');
+				//});
+				//oDATA.fnLoad({url: "Main/Proba", callBack: function (){ console.log("baigiau downloadint");}});
+				oDATA.fnLoad2({url:"Lists/topNew",checkFn:"App.listsStart", callBack:function (){
+						App.listsStart();
+						router.get('applicationController').connectOutlet('listsOutlet','topLists');
+					}
+				});
 			},
 			toListAll: function (router, context) {
 				d=$(context.target).parent().data("ctrl");
@@ -74,7 +75,11 @@ App.Router = Em.Router.extend({
 			route: '/admin',
 			connectOutlets: function (router, context) {
 				MY.NavbarController.fnSetNewTab(router.currentState.name, 5);
-				router.get('applicationController').connectOutlet('adminOutlet', 'admin');
+				oDATA.fnLoad2({url:"Admin/edit",checkFn:"App.adminStart", callBack:function (){
+						App.adminStart();
+						router.get('applicationController').connectOutlet('adminOutlet','admin');
+					}
+				});			
 			}
 		})
 	})

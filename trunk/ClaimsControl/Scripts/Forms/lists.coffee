@@ -7,14 +7,17 @@ App.listsStart=()->
 	#LeftHeight=$(window).height()-$("#divlogindisplay").outerHeight()-$("#ulMainMenu").outerHeight()-$("#tabLists h3:first").outerHeight()
 	#LeftHeight-=($("#tabLists h3:first").outerHeight()+$("#topNewDrivers").outerHeight())*3
 	#totalRows=Math.floor(LeftHeight/31)
+	App.topNewController.vehicles.clear();App.topNewController.drivers.clear();App.topNewController.insPolicies.clear()
+	#oDATA.execWhenLoaded(["proc_topDrivers","proc_topVehicles","proc_topInsPolicies"], ()->)
+	App.topNewController.drivers.pushObjects(oDATA.GET("proc_topDrivers").emData.slice(0,3))	
+	App.topNewController.vehicles.pushObjects(oDATA.GET("proc_topVehicles").emData.slice(0,3))
+	App.topNewController.insPolicies.pushObjects(oDATA.GET("proc_topInsPolicies").emData.slice(0,3))	
 	
-	oDATA.fnLoad(url: "Main/topNew", callBack: -> #url:url, callBack:callBack
-		#proc_topDrivers,proc_topVehicles,proc_topInsPolicies
-		App.topNewController.vehicles.clear();App.topNewController.drivers.clear();App.topNewController.insPolicies.clear()
-		App.topNewController.drivers.pushObjects(oDATA.GET("proc_topDrivers").emData.slice(0,3))	
-		App.topNewController.vehicles.pushObjects(oDATA.GET("proc_topVehicles").emData.slice(0,3))
-		App.topNewController.insPolicies.pushObjects(oDATA.GET("proc_topInsPolicies").emData.slice(0,3))
-	) 
+	oDATA.execWhenLoaded(["proc_Vehicles","proc_Drivers","proc_InsPolicies"], ()->
+		App.listAllController.set("vehicles",oDATA.GET("proc_Vehicles").emData)
+		App.listAllController.set("drivers",oDATA.GET("proc_Drivers").emData)
+		App.listAllController.set("insPolicies",oDATA.GET("proc_InsPolicies").emData)
+	)
 	
 App.topNewController = Em.ResourceController.create(
 	vehicles: [],
@@ -38,14 +41,14 @@ App.listAllController = Em.ResourceController.create(
 	current:"",#{emObject:drivers/vehicles/insPolicies, filterCols:["fsf","fss"]}
 	clicked:"", endDate:"", editItem:"", filterValue: ""
 	valueDidChange: (()->		
-		#alert @filterValue
 		@filterItems()
 	).observes('filterValue')
-	init: -> ( @_super();oDATA.execWhenLoaded(["proc_Vehicles","proc_Drivers","proc_InsPolicies"], ()->
-		App.listAllController.set("vehicles",oDATA.GET("proc_Vehicles").emData)
-		App.listAllController.set("drivers",oDATA.GET("proc_Drivers").emData)
-		App.listAllController.set("insPolicies",oDATA.GET("proc_InsPolicies").emData)
-	))
+	#init: -> (
+		#@_super() #;oDATA.execWhenLoaded(["proc_Vehicles","proc_Drivers","proc_InsPolicies"], ()->
+		# App.listAllController.set("vehicles",oDATA.GET("proc_Vehicles").emData)
+		# App.listAllController.set("drivers",oDATA.GET("proc_Drivers").emData)
+		# App.listAllController.set("insPolicies",oDATA.GET("proc_InsPolicies").emData)
+	# ))	
 	openItem:(pars)->#source,template,row
 		config=oDATA.GET(pars.source).Config
 		title=if pars.row then config.Msg.GenName+" "+pars.row.MapArrToString(config.titleFields,true) else config.Msg.AddNew
@@ -200,8 +203,5 @@ App.AllVehiclesView = App.mainMenuView.extend(
 			controller: "listAllController", sortedCol: 0 
 		);
 )
-
-
-#console.log "App.listAllController.vehicles:" + App.listAllController.vehicles
-
 MY.lists={}
+`//@ sourceURL= /Forms/Lists.js`

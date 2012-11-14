@@ -7,19 +7,6 @@
       <Association Name="tblAccidentsType_tblAccident" Member="tblAccidents" ThisKey="ID" OtherKey="AccidentTypeID" Type="tblAccident" />
     </Type>
   </Table>
-  <Table Name="dbo.tblAccounts" Member="tblAccounts">
-    <Type Name="tblAccount">
-      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="CountryID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="tblAccount_tblAccident" Member="tblAccidents" ThisKey="ID" OtherKey="AccountID" Type="tblAccident" />
-      <Association Name="tblAccount_tblInsurer" Member="tblInsurers" ThisKey="ID" OtherKey="AccountID" Type="tblInsurer" />
-      <Association Name="tblAccount_tblDriver" Member="tblDrivers" ThisKey="ID" OtherKey="AccountID" Type="tblDriver" />
-      <Association Name="tblAccount_tblVehicle" Member="tblVehicles" ThisKey="ID" OtherKey="AccountID" Type="tblVehicle" />
-      <Association Name="tblAccount_tblUser" Member="tblUsers" ThisKey="ID" OtherKey="AccountID" Type="tblUser" />
-      <Association Name="tblCountry_tblAccount" Member="tblCountry" ThisKey="CountryID" OtherKey="ID" Type="tblCountry" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.tblAction_Controls" Member="tblAction_Controls">
     <Type Name="tblAction_Control">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -148,8 +135,8 @@
       <Association Name="tblAccident_tblClaim" Member="tblClaims" ThisKey="ID" OtherKey="AccidentID" Type="tblClaim" />
       <Association Name="tblAccident_tblDoc" Member="tblDocs" ThisKey="ID" OtherKey="AccidentID" Type="tblDoc" />
       <Association Name="tblAccidentsType_tblAccident" Member="tblAccidentsType" ThisKey="AccidentTypeID" OtherKey="ID" Type="tblAccidentsType" IsForeignKey="true" />
-      <Association Name="tblAccount_tblAccident" Member="tblAccount" ThisKey="AccountID" OtherKey="ID" Type="tblAccount" IsForeignKey="true" />
       <Association Name="tblDriver_tblAccident" Member="tblDriver" ThisKey="DriverID" OtherKey="ID" Type="tblDriver" IsForeignKey="true" />
+      <Association Name="tblAccount_tblAccident" Member="tblAccount" ThisKey="AccountID" OtherKey="ID" Type="tblAccount" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.tblClaimTypes" Member="tblClaimTypes">
@@ -239,9 +226,9 @@
       <Column Name="EndDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
       <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Association Name="tblVehicle_tblClaim" Member="tblClaims" ThisKey="ID" OtherKey="VehicleID" Type="tblClaim" />
-      <Association Name="tblAccount_tblVehicle" Member="tblAccount" ThisKey="AccountID" OtherKey="ID" Type="tblAccount" IsForeignKey="true" />
       <Association Name="tblVehicleMake_tblVehicle" Member="tblVehicleMake" ThisKey="MakeID" OtherKey="ID" Type="tblVehicleMake" IsForeignKey="true" />
       <Association Name="tblVehicleType_tblVehicle" Member="tblVehicleType" ThisKey="TypeID" OtherKey="ID" Type="tblVehicleType" IsForeignKey="true" />
+      <Association Name="tblAccount_tblVehicle" Member="tblAccount" ThisKey="AccountID" OtherKey="ID" Type="tblAccount" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.tblDocGroups" Member="tblDocGroups">
@@ -348,9 +335,9 @@
       <Association Name="tblUser_tblUsersActivities_Update" Member="tblUsersActivities_Updates" ThisKey="ID" OtherKey="UserID" Type="tblUsersActivities_Update" />
       <Association Name="tblUser_tblInsPolicy" Member="tblInsPolicies" ThisKey="ID" OtherKey="InsuredContactID" Type="tblInsPolicy" />
       <Association Name="tblUser_tblDoc" Member="tblDocs" ThisKey="ID" OtherKey="UserID" Type="tblDoc" />
-      <Association Name="tblAccount_tblUser" Member="tblAccount" ThisKey="AccountID" OtherKey="ID" Type="tblAccount" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="tblLanguage_tblUser" Member="tblLanguage" ThisKey="LanguageID" OtherKey="ID" Type="tblLanguage" IsForeignKey="true" />
       <Association Name="tblUsers_RolesGroup_tblUser" Member="tblUsers_RolesGroup" ThisKey="RoleGroupID" OtherKey="ID" Type="tblUsers_RolesGroup" IsForeignKey="true" />
+      <Association Name="tblAccount_tblUser" Member="tblAccount" ThisKey="AccountID" OtherKey="ID" Type="tblAccount" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.tblAction_Tabs" Member="tblAction_Tabs">
@@ -381,6 +368,38 @@
       <Association Name="tblDocGroup_tblDoc" Member="tblDocGroup" ThisKey="GroupID" OtherKey="ID" Type="tblDocGroup" IsForeignKey="true" />
       <Association Name="tblDocType_tblDoc" Member="tblDocType" ThisKey="DocTypeID" OtherKey="ID" Type="tblDocType" IsForeignKey="true" />
       <Association Name="tblUser_tblDoc" Member="tblUser" ThisKey="UserID" OtherKey="ID" Type="tblUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tblAccounts" Member="tblAccounts">
+    <Type Name="tblAccount">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CountryID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CurrencyID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TimeZoneID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Email" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="tblAccount_tblAccident" Member="tblAccidents" ThisKey="ID" OtherKey="AccountID" Type="tblAccident" />
+      <Association Name="tblAccount_tblInsurer" Member="tblInsurers" ThisKey="ID" OtherKey="AccountID" Type="tblInsurer" />
+      <Association Name="tblAccount_tblDriver" Member="tblDrivers" ThisKey="ID" OtherKey="AccountID" Type="tblDriver" />
+      <Association Name="tblAccount_tblVehicle" Member="tblVehicles" ThisKey="ID" OtherKey="AccountID" Type="tblVehicle" />
+      <Association Name="tblAccount_tblUser" Member="tblUsers" ThisKey="ID" OtherKey="AccountID" Type="tblUser" />
+      <Association Name="tblCountry_tblAccount" Member="tblCountry" ThisKey="CountryID" OtherKey="ID" Type="tblCountry" IsForeignKey="true" />
+      <Association Name="tblCurrency_tblAccount" Member="tblCurrency" ThisKey="CurrencyID" OtherKey="ID" Type="tblCurrency" IsForeignKey="true" />
+      <Association Name="tblTimeZone_tblAccount" Member="tblTimeZone" ThisKey="TimeZoneID" OtherKey="ID" Type="tblTimeZone" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tblCurrencies" Member="tblCurrencies">
+    <Type Name="tblCurrency">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Association Name="tblCurrency_tblAccount" Member="tblAccounts" ThisKey="ID" OtherKey="CurrencyID" Type="tblAccount" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tblTimeZones" Member="tblTimeZones">
+    <Type Name="tblTimeZone">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Association Name="tblTimeZone_tblAccount" Member="tblAccounts" ThisKey="ID" OtherKey="TimeZoneID" Type="tblAccount" />
     </Type>
   </Table>
   <Function Name="dbo.proc_Vehicles" Method="proc_Vehicles">

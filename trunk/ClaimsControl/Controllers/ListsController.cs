@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using CC.Classes;
 using CC.Models;
+using System.Dynamic;
 
 namespace CC.Controllers {
 
@@ -52,5 +53,85 @@ namespace CC.Controllers {
          else { obj = new { Render = new { divEditableForm = View } }; }
          return Json(obj);
       }
+
+		[HttpPost]
+		public JsonResult topNew(bool tmp, bool obj) {
+			Repositories_Accidents acc = new Repositories_Accidents();
+			System.Diagnostics.Debug.Print("obj - " + obj.ToString());
+			return Json(
+				new {
+					jsonObj = new {//šitam visada atnaujinu objektus
+						proc_topDrivers = acc.GetJSON_proc_Drivers(true),
+						proc_topVehicles = acc.GetJSON_proc_Vehicles(true),
+						proc_topInsPolicies = acc.GetJSON_proc_InsPolicies(true)
+					},
+					templates = (tmp)? new {
+						tmpDriverRow = RenderPartialViewToString("Lists/tmpDriverRow"),
+						tmpVehicleRow = RenderPartialViewToString("Lists/tmpVehicleRow"),
+						tmpInsPolicyRow = RenderPartialViewToString("Lists/tmpInsPolicyRow"),
+						tmpAllDrivers = RenderPartialViewToString("Lists/tmpAllDrivers"),
+						tmpAllVehicles = RenderPartialViewToString("Lists/tmpAllVehicles"),
+						tmpAllInsPolicies = RenderPartialViewToString("Lists/tmpAllInsPolicies"),
+						tmpListsTop = RenderPartialViewToString("Lists/tmpListsTop"),
+						tmp_Drivers = RenderPartialViewToString("Lists/tmp_Drivers"),
+						tmp_InsPolicies = RenderPartialViewToString("Lists/tmp_InsPolicies"),
+						tmp_Vehicles = RenderPartialViewToString("Lists/tmp_Vehicles")
+					} : new {
+						tmpDriverRow = "",
+						tmpVehicleRow = "",
+						tmpInsPolicyRow = "",
+						tmpAllDrivers = "",
+						tmpAllVehicles = "",
+						tmpAllInsPolicies = "",
+						tmpListsTop = "",
+						tmp_Drivers = "",
+						tmp_InsPolicies = "",
+						tmp_Vehicles = ""
+					},
+					Script = new { File = "/Scripts/Forms/lists.js?ver=1", Pars = "" } 
+				}
+			);
+		}
+
+
+
+		//[HttpPost]
+		//public JsonResult tabAccidents() {
+		//   Repositories_Accidents acc = new Repositories_Accidents();
+		//   return Json(
+		//      new {
+		//         jsonObj = new {
+		//            //proc_Accidents = acc.GetJSON_proc_Accidents(),
+		//            tblAccidents = acc.GetJSON_tblAccidents(),
+		//            proc_Drivers = acc.GetJSON_proc_Drivers(false),
+		//            tblAccidentsTypes = acc.GetJSON_tblAccidentTypes(),
+		//            proc_Years = acc.GetJSON_proc_Years(),
+		//            tblClaimTypes = acc.GetJSON_tblClaimTypes(),
+		//            proc_Vehicles = acc.GetJSON_proc_Vehicles(false),
+		//            proc_InsPolicies = acc.GetJSON_proc_InsPolicies(false),
+		//            tblInsurers = acc.GetJSON_tblInsurers(),
+		//            tblVehicleMakes = acc.GetJSON_tblVehicleMakes(),
+		//            tblVehicleTypes = acc.GetJSON_tblVehicleTypes(),
+		//            tblClaims = acc.GetJSON_tblClaims(),
+		//            tblUsers = acc.GetJSON_tblUsers()
+		//         },
+		//         templates = new {
+		//            tmpClaimEdit = RenderPartialViewToString("Accidents/tmpClaimEdit"),
+		//            tmpDriverRow = RenderPartialViewToString("Lists/tmpDriverRow"),
+		//            tmpVehicleRow = RenderPartialViewToString("Lists/tmpVehicleRow"),
+		//            tmpInsPolicyRow = RenderPartialViewToString("Lists/tmpInsPolicyRow"),
+		//            tmpAllDrivers = RenderPartialViewToString("Lists/tmpAllDrivers"),
+		//            tmpAllVehicles = RenderPartialViewToString("Lists/tmpAllVehicles"),
+		//            tmpAllInsPolicies = RenderPartialViewToString("Lists/tmpAllInsPolicies"),
+		//            tmpListsTop = RenderPartialViewToString("Lists/tmpListsTop"),
+		//            tmp_Drivers = RenderPartialViewToString("Lists/tmp_Drivers"),
+		//            tmp_InsPolicies = RenderPartialViewToString("Lists/tmp_InsPolicies"),
+		//            tmp_Vehicles = RenderPartialViewToString("Lists/tmp_Vehicles"),
+		//            tmpAdminMain = RenderPartialViewToString("Admin/tmpAdminMain"),
+		//            tmpUserRow = RenderPartialViewToString("Admin/tmpUserRow")
+		//         }
+		//      }
+		//   );
+		//}
    }
 }

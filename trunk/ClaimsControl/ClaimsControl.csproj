@@ -134,6 +134,7 @@
     <Compile Include="Classes\SQLHelper.cs" />
     <Compile Include="Controllers\AccidentController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\FilesController.cs" />
     <Compile Include="Controllers\ListsController.cs" />
     <Compile Include="Controllers\UpdateController.cs" />
@@ -145,6 +146,7 @@
     <Compile Include="Models\clsObjects.cs" />
     <Compile Include="Models\CCMemProvider.cs" />
     <Compile Include="Models\cls_db_partial.cs" />
+    <Compile Include="Models\Repositories_Admin.cs" />
     <Compile Include="Models\db.cs">
       <DependentUpon>db.dbml</DependentUpon>
     </Compile>
@@ -186,6 +188,7 @@
     <Content Include="Content\Files\img\glyphicons-halflings.png" />
     <Content Include="Content\Files\img\loading.gif" />
     <Content Include="Content\less\images\alert.png" />
+    <Content Include="Content\less\images\X_orange.png" />
     <Content Include="Content\less\images_ui\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\less\images_ui\ui-bg_glass_55_fbf9ee_1x400.png" />
     <Content Include="Content\less\images_ui\ui-bg_glass_65_ffffff_1x400.png" />
@@ -566,16 +569,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
-          <AutoAssignPort>False</AutoAssignPort>
-          <DevelopmentServerPort>81</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/ClaimsControl</IISUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
-          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>

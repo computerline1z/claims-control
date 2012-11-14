@@ -3,16 +3,16 @@
   var w=window, App=w.App, Em=w.Em, oGLOBAL=w.oGLOBAL, oDATA=w.oDATA, oCONTROLS=w.oCONTROLS, MY=w.MY;
 
   App.listsStart = function() {
-    return oDATA.fnLoad({
-      url: "Main/topNew",
-      callBack: function() {
-        App.topNewController.vehicles.clear();
-        App.topNewController.drivers.clear();
-        App.topNewController.insPolicies.clear();
-        App.topNewController.drivers.pushObjects(oDATA.GET("proc_topDrivers").emData.slice(0, 3));
-        App.topNewController.vehicles.pushObjects(oDATA.GET("proc_topVehicles").emData.slice(0, 3));
-        return App.topNewController.insPolicies.pushObjects(oDATA.GET("proc_topInsPolicies").emData.slice(0, 3));
-      }
+    App.topNewController.vehicles.clear();
+    App.topNewController.drivers.clear();
+    App.topNewController.insPolicies.clear();
+    App.topNewController.drivers.pushObjects(oDATA.GET("proc_topDrivers").emData.slice(0, 3));
+    App.topNewController.vehicles.pushObjects(oDATA.GET("proc_topVehicles").emData.slice(0, 3));
+    App.topNewController.insPolicies.pushObjects(oDATA.GET("proc_topInsPolicies").emData.slice(0, 3));
+    return oDATA.execWhenLoaded(["proc_Vehicles", "proc_Drivers", "proc_InsPolicies"], function() {
+      App.listAllController.set("vehicles", oDATA.GET("proc_Vehicles").emData);
+      App.listAllController.set("drivers", oDATA.GET("proc_Drivers").emData);
+      return App.listAllController.set("insPolicies", oDATA.GET("proc_InsPolicies").emData);
     });
   };
 
@@ -24,12 +24,6 @@
   });
 
   App.DriverView = Em.View.extend({
-    edit: function(e) {
-      var id, tr;
-      alert("opa");
-      tr = $(e.target).closest('tr');
-      return id = e.view._context.iD;
-    },
     templateName: 'tmpDriverRow',
     tagName: ""
   });
@@ -53,14 +47,6 @@
     valueDidChange: (function() {
       return this.filterItems();
     }).observes('filterValue'),
-    init: function() {
-      this._super();
-      return oDATA.execWhenLoaded(["proc_Vehicles", "proc_Drivers", "proc_InsPolicies"], function() {
-        App.listAllController.set("vehicles", oDATA.GET("proc_Vehicles").emData);
-        App.listAllController.set("drivers", oDATA.GET("proc_Drivers").emData);
-        return App.listAllController.set("insPolicies", oDATA.GET("proc_InsPolicies").emData);
-      });
-    },
     openItem: function(pars) {
       var config, title;
       config = oDATA.GET(pars.source).Config;
@@ -305,5 +291,8 @@
   });
 
   MY.lists = {};
+
+  //@ sourceURL= /Forms/Lists.js;
+
 
 }).call(this);

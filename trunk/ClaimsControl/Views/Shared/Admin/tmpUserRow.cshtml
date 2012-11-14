@@ -1,20 +1,12 @@
 ﻿@*{{{{log this}}
-checkOut this Field="Days" id="inputDays" labelType="Top"}}*@
-<div class="td w03pr">{{unbound no}}</div>
-<div class="td w12pr">{{unbound date}}</div>
-<div class="td w38pr">
-	<div><b>{{place}}</b></div>  
-	<div>{{accType}}</div>  
-</div>
-<div class="td w28pr">
-	<div><b>{{shortNote}}</b></div>  
-	<div>{{lossSum}}</div> 
-</div>
-<div class="td w15pr">
-	<div>Visos žalos:{{cNo_All}}</div> 
-	<div>Atviros:{{cNo_NotF}} </div>
-</div>
+checkOut this Field="Days" id="inputDays" labelType="Top"}}
+<div class="td w03pr">{{unbound no}}</div>*@
+<tr class="clickable" {{action "edit" target="App.usersController"}}>
+	<td>{{email}}</td><td>{{firstName}}&nbsp;{{surname}}</td>
 
-<div class="td w03pr"><a href="#" {{action editAccident this target="App.accidentsController"}}><i class="img32-mono_edit"></i></a>
-</div>
-@*<div class="hidden">{{longNote}}{{driver}}{{userName}}{{claims_C}}{{claims_C2}}</div>*@
+	{{#if isAdmin}}<td><i class="img32-check"></i></td>
+	{{else}}<td>&nbsp; </td>{{/if}}
+	
+	{{#if isActive}}<td><i class="img32-check"></i></td>
+	{{else}}<td>&nbsp; </td>{{/if}} 
+</tr>

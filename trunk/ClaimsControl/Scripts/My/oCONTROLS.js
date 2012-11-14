@@ -98,7 +98,7 @@ var oCONTROLS = {
 						}
 					}
 					if (ix === -1) {
-						alert('Wrong Field indicated ' + eOpt.Field + ' in UpdatableForm(objFunc:84)!');
+						console.error('Wrong Field indicated ' + eOpt.Field + ' in UpdatableForm(objFunc:84)!');
 					}
 				}
 			}
@@ -581,17 +581,6 @@ var oCONTROLS = {
 		showDialog: function (opt, buttons) {
 			var o = $.extend(true, {}, this.opt, { buttons: buttons }, opt);
 			var $dialog = $('<div id="dialog_form_tmp_id">').html(opt.msg).dialog(o).dialog('open');
-		}
-	},
-	helper: {//oCONTROLS.helper.getData_fromDataToSave(DataToSave,Field)
-		getData_fromDataToSave: function (DataToSave, field) {
-			ret = "";
-			DataToSave.Fields.forEach(
-				function (Field, i) {
-					if (Field === field) ret = DataToSave.Data[i];
-				}
-			);
-			return ret;
 		}
 	}
 };

@@ -1,16 +1,32 @@
 ﻿<h2 style="margin: 15px; display: block">Administravimas</h2>
 <hr />
 <h3>Bendrieji paskyros nustatymai</h3>
+{{#with App.accountController}}
+	{{log this}}
+	<div id="AccountForm" class="inputForm container" data-ctrl='{"id":"{{unbound c.ID}}","NewRec":1,"Source":"tblAccount","tblUpdate":"tblAccounts"}'>
+	<div class='left w47pr_mp'>
+			{{updatableField c Field="name" labelType="Top"}}
+			{{updatableField c Field="currencyID" labelType="Top" List="{\"Source\":\"tblCurrencies\"}"}}
+			{{updatableField c Field="countryID" labelType="Top" List="{\"Source\":\"tblCountries\"}"}}
+		</div>
 
-
+		<div class='right w47pr_mp'>
+			{{updatableField c Field="email" labelType="Top"}}<span>claimscontrol.com</span>
+			{{updatableField c Field="timeZoneID" labelType="Top" List="{\"Source\":\"tblTimeZones\"}"}}
+			<button class="btn small" {{action addNew target="App.accountController"}}>Išsaugoti</button>
+		</div>
+	</div>
+{{/with}}
+<hr />
+<h3>Naudotojų administravimas</h3>
 <div class="container" id="usersList">
 	<table class="zebra-striped">
 	<thead><tr><th>El.paštas</th><th>Vardas Pavardė</th><th>Yra administratorius</th><th>Yra aktyvus</th></tr></thead><tbody>
-	{{#each "App.adminController.users"}}
-		{{view App.UserRowView}}
+	{{#each "App.usersController.content"}}
+		{{view App.UsersRowView}}
 	{{/each}}
 	</tbody></table>
-<div><button class="btn small" {{action addNew target="App.listAllController"}}>Pridėti naują</button></div>
+<div><button class="btn small" {{action addNew target="App.usersController"}}>Pridėti naują</button></div>
 </div>
 <hr />
 <a class="medium" {{action deleteAccount}} href="#">Panaikinti paskyrą</a>
