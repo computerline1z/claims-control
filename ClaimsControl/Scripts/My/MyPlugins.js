@@ -174,6 +174,8 @@ jQuery(function ($) {
 		var ret=$(this).buttonset();
 		$('label:first', this).removeClass('ui-corner-left').addClass('ui-corner-top');
 		$('label:last', this).removeClass('ui-corner-right').addClass('ui-corner-bottom');
+        $('label:first', this).css('border-bottom', 'none');
+        $('label:last', this).css('border-bottom', 'solid 1px #ccc');
 		mw = 0; // max witdh
 		// $('label', this).each(function(index){
 			// w = $(this).width();
