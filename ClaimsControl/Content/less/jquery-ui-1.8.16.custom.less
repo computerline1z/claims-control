@@ -473,6 +473,9 @@ a.ui-state-hover .ui-icon { background-image: url(images_ui/ui-icons_888888_256x
 	margin: 0;
 	display:block;
 	float: left;
+ // ĮDĖTA:   
+    .border-radius(0);
+    border: solid 1px @borderGreen;
 }
 .ui-menu .ui-menu {
 	margin-top: -3px;
@@ -491,14 +494,20 @@ a.ui-state-hover .ui-icon { background-image: url(images_ui/ui-icons_888888_256x
 	padding:.2em .4em;
 	line-height:1.5;
 	zoom:1;
+    // ĮDĖTA:
+    color: gray;
 }
 .ui-menu .ui-menu-item a.ui-state-hover,
 .ui-menu .ui-menu-item a.ui-state-active,
  .ui-menu-item a.ui-state-focus
  {
 	font-weight: normal;
-  background:#0064CD;
-  color:#fff; cursor:pointer;
+//  color:#fff; cursor:pointer;
+
+//  background:#0064CD;
+// įdėta:
+    background: @yellowlight;
+    .border-radius(0);
 }
 
 
@@ -649,7 +658,7 @@ div.ui-checkbox-box.ui-state-hover { border-color: darken(#AAA, 20%); border-wid
 /*.ui-checkbox-icon { border:1px solid #AAA; }
 */	
 
-.ui-buttonset { margin-right: 7px; }
+.ui-buttonset { /*margin-right: 7px;*/ }
 .ui-buttonset .ui-button-text { padding: .1em; /*Ideta: */text-align: center; }
 .ui-buttonset .ui-state-active {
   color: #ffffff;
@@ -846,18 +855,19 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 
 
 .ui-tabs .ui-tabs-nav li:hover, .ui-tabs .ui-tabs-nav li a:hover{
-  background:whiteSmoke;
-  border-bottom:1px solid #ddd;
+//  background:whiteSmoke;
+  border-bottom: 1px solid @tabsBorder; //#ddd;
   padding-bottom:0px;
 	color:#555555;
    // width: 135px;
    
     // ĮDĖTA:
     font-weight: bold;
+    #gradient > .vertical-three-colors(#f9f6f7, #e9e7ea, 50%, #f9f6f7);
 }
 
 
-.ui-tabs .ui-tabs-nav { margin: 0; padding: .2em .2em 0; border-bottom:1px solid #DDD; }
+.ui-tabs .ui-tabs-nav { margin: 0; padding: .2em .2em 0; border-bottom:1px solid @tabsBorder; /*#DDD;*/ /* ĮDĖTA: */ padding-left: 3%; }
 .ui-tabs .ui-tabs-nav li {  text-decoration: none; list-style: none; float: left; position: relative; top: 1px; padding: 0px 0px 1px 0px; white-space: nowrap; background:none; border:0px; 
 
 }
@@ -884,7 +894,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
   border-radius: 4px 4px 0 0;
 
 // ĮDĖTA:
-    border: 1px solid #ddd;
+    border: 1px solid @tabsBorder; //#ddd;
     width: 135px;
     text-align: center;
  }
@@ -896,8 +906,8 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 .ui-tabs .ui-tabs-nav li.ui-state-processing a,
 .ui-tabs .ui-tabs-nav li.ui-tabs-active a {
 
-  background-color: #ffffff;
-  border: 1px solid #ddd;
+  background: #ffffff;
+  border: 1px solid #c1c1c1; //#ddd;
   border-bottom-color: #ffffff;
   cursor: default;
   color:gray;
@@ -913,7 +923,11 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
   outline:none;
 }
 
-.ui-tabs .ui-tabs-nav li a { cursor: pointer; /*color:#0069D6;*/  background:none; font-weight:normal; margin-bottom:-1px;} 
+.ui-tabs .ui-tabs-nav li a { cursor: pointer; /*color:#0069D6;*/  background:none; font-weight:normal; margin-bottom:-1px;
+// ĮDĖTA:
+    #gradient > .vertical-three-colors(#f6f7f9, #e8e8ea, 50%, #f6f7f9);
+
+} 
 .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; color:#89898a; background:none; font-weight:bold; margin-bottom:-1px;}
 /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
 .ui-tabs .ui-tabs-panel { display: block; border-width: 0; padding: 1em 1.4em; background: none; }
@@ -1069,7 +1083,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
  * http://docs.jquery.com/UI/Progressbar#theming
  */
 .ui-progressbar { height:2em; text-align: left; }
-.ui-progressbar .ui-progressbar-value {margin: -1px; height:100%; padding: 0; 
+.ui-progressbar .ui-progressbar-value {margin: -1px; height:100%; 
 
 /*this can be removed if ui-widget-header is blue*/
 	 color: #ffffff;

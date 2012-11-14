@@ -9,7 +9,7 @@
 /*---------Menu-------------------backkgroundas 7A90A5 RGB 122/144/165
 * { margin: 0; padding: 0; }
 */
-#header { background-color: #505860; color: #FFFFFF; width: 100%;
+#header { background-color: #505860; color: #FFFFFF; width: 100%; padding: 2px 0;
     .user, .logOut {
     background-repeat: no-repeat;
     background-position: left center;
@@ -20,7 +20,7 @@
     .logOut { width: 50px;
               background-image: url(../../Content/images/x_orange.png); }
     }
-    .logo { width: 10px; padding-left: 20px; }
+    .logo { width: 10px; padding: 3px 0 0 20px; }
 
 #ulMainMenu { padding: 0 3% 0 3%; list-style-type: none; background-image: url('images/navi_bg.png'); height: 37px; margin: 0 auto 4px auto; .box-shadow(0 2px 8px #888);
     li { float: left; .border-image; .border-image > .right; 
@@ -141,8 +141,16 @@ div.newClaimContent {background-color: @systemYellow3; .clearfix();}
 /*-------------------------------Updatable Form----------------------------*/
 .inputForm .ExtendIt { margin: 10px 3px 10px 0px; display: inline-block; vertical-align: top; }
 .ExtendIt { width: 100%; margin:15px auto 15px auto;text-align:left;}
-.ExtendIt button.ui-button-icon-only {height: @baseline;}/*comboboxo buttonas*/
-.ExtendIt input[text], .ExtendIt textarea {vertical-align:top;margin-top:0; width: 100%;}
+.ExtendIt button.ui-button-icon-only {height: @baseline;
+// ĮDĖTA:
+    .border-radius(0);
+    border-style: solid solid solid none;
+    border-color: @borderGreen;
+    background: url('images/DropDown-Arrow.png') no-repeat center;
+    &:hover, &:active { background: url('images/DropDown-Arrow_hover.png') no-repeat center; }
+
+}/*comboboxo buttonas*/
+.ExtendIt input[text], .ExtendIt textarea {vertical-align:top;margin-top:0; width: 100%; .border-radius(0); border-color: @borderGreen;}
 .ExtendIt button {vertical-align:top;margin-top:0;}/*comboboxo išlyginimui*/
 
 span.dialog-form-label { margin: 10px; font-size: @basefont; color: #666666; display: inline-block; }
@@ -151,8 +159,15 @@ div.dialog-form-label { font-size: @basefont; color: #666666; top: 2px; margin-b
 /*label { font-size: @basefont; color: #666666; cursor: pointer; }*/
  .ExtendIt label  { padding-left: 0px; margin-left: 0px; cursor: pointer; }
 
-label.toplabel > span { display: block; font-size: @basefont; color: #666666; cursor: pointer; margin-bottom: 5px;}
-label.toplabel input[type=text], label.top textarea { width: 100%; font-size: @basefont; vertical-align:top;}
+label.toplabel > span { display: block; font-size: @basefont; color: #666666; cursor: pointer; margin-bottom: 5px; 
+    &.ui-icon { 
+        left:-4px;top:3px;
+        width: 18px; height: 18px;
+        background: url('images/Sprite16.png') no-repeat center; 
+        background-position: -47px -32px;        
+}
+}
+label.toplabel input[type=text], label.top textarea { width: 100%; line-height: @baseline; font-size: @basefont; vertical-align:top;}
 
 label.leftlabel > span { width: 30%; font-size: x-small; margin: 0; padding: 0; color: #666666; cursor: pointer; display: inline-block; }
 label.leftlabel input[type=text], label.left textarea { width: 70%; font-size: @basefont; margin: 0; padding: 0; }
@@ -206,8 +221,8 @@ ul.ulWhiteMenu li { margin-right: 5px; padding-right: 5px; border-bottom: 1px; }
 */
 /*-------------------------- Side Panel --------------------------*/
 #sidePanel {
-    #font > .regular(12px, bold, 20px, #3399cc);
-   a { #font > .regular (12px, bold, 15px, #3399cc);
+    #font > .regular(@basefont, bold, @baseline, #3399cc);
+   a { #font > .regular (@basefont, bold, @baseline, #3399cc);
         text-decoration: none;
         &:hover { color: @linkColorHover;
                   text-decoration: none;
@@ -216,24 +231,23 @@ ul.ulWhiteMenu li { margin-right: 5px; padding-right: 5px; border-bottom: 1px; }
     }
 }
 .filtergroup { 
-    #font > .regular(12px, normal, 12px, #3399cc);
+    #font > .regular(@basefont, normal, @baseline, #3399cc);
     width: 100%;
     padding: 0 10px; 
     margin: 10px 0 0 0;// margin-top: 10px; 
     list-style-type: none;
-    h4 {// Arial - 14pt - #65809d - text-decoration: none;
+    h4 {
         //padding: 0 15px;
         #font > .regular(14px, bold, 14px, #65809d);
         text-decoration: none;
         margin: 15px 0;
     }
-   &.btn, /*.ui-buttonset label.ui-button*/ &.ui-buttonset .ui-button { 
-       width: 90%;
+   &.btn, &.ui-buttonset .ui-button { 
+       width: 100%;
        margin: 0 auto;
-//    #font > .regular (12px, bold, 15px, #3399cc);
    }
 }
-.lineTop {  width:100%; border-top: dotted 1px #c9c9c9; }
+.lineTop {  width: 95% margin: 0 auto; border-top: dotted 1px #c9c9c9; }
 
 
 
@@ -262,15 +276,27 @@ label input[type="checkbox"] { padding-left: 0px; margin-left: 0px; cursor: poin
 label.toplabel > span { display: block; font-size: small; color: #666666; cursor: pointer; }
 label.toplabel input[type=text], label.top textarea {
 	 width: 100%; font-size: small; margin: 0; 
+     // ĮDĖTA:
+     .border-radius(0);
+     border: 1px solid @borderGreen;
+     line-height:17px;
 }
 input[type=text].date {width:7em !important;}
-input[type=text].time {width:4em !important;}
+input[type=text].time {width:4em !important;
+     // ĮDĖTA:
+     .border-radius(0);
+     border: 1px solid @borderGreen;
+     line-height: 17px;
+}
 label.leftlabel > span { width: 30%; font-size: x-small; margin: 0; padding: 0; color: #666666; cursor: pointer; display: inline-block; }
 label.leftlabel input[type=text], label.left textarea { 
 	width: 70%; font-size: small; margin: 0; 
+    // ĮDĖTA:
+    .border-radius(0);
 }
 input [type="text"] {width:7em;}
-input.time [type="text"] {width:4em;}
+input.time [type="text"] {width:4em;
+}
 /*-----------------------------------------------------------------------------------------------*/
 /*butonai apacioj*/
 div.frmbottom { width: 100%; display: inline-block; overflow: hidden; }
