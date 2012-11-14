@@ -153,13 +153,13 @@ div.newClaimContent {background-color: @systemYellow3; .clearfix();}
 .ExtendIt input[text], .ExtendIt textarea {vertical-align:top;margin-top:0; width: 100%; .border-radius(0); border-color: @borderGreen;}
 .ExtendIt button {vertical-align:top;margin-top:0;}/*comboboxo išlyginimui*/
 
-span.dialog-form-label { margin: 10px; font-size: @basefont; color: #666666; display: inline-block; }
-div.dialog-form-label { font-size: @basefont; color: #666666; top: 2px; margin-bottom: 2px; }
+span.dialog-form-label { margin: 10px; font-size: @basefont; /*color: #666666;*/ display: inline-block; }
+div.dialog-form-label { font-size: @basefont; /*color: #666666;*/ top: 2px; margin-bottom: 2px; }
 
-/*label { font-size: @basefont; color: #666666; cursor: pointer; }*/
- .ExtendIt label  { padding-left: 0px; margin-left: 0px; cursor: pointer; }
+/*label { font-size: @basefont; color: 666; cursor: pointer; }*/
+ .ExtendIt label  { padding-left: 0px; margin-left: 0px; cursor: pointer; /* ideta: */ font-size: @smallfont; }
 
-label.toplabel > span { display: block; font-size: @basefont; color: #666666; cursor: pointer; margin-bottom: 5px; 
+label.toplabel > span { display: block; font-size: @basefont; /*color: #666666;*/ cursor: pointer; margin-bottom: 5px; 
     &.ui-icon { 
         left:-4px;top:3px;
         width: 18px; height: 18px;
@@ -169,7 +169,7 @@ label.toplabel > span { display: block; font-size: @basefont; color: #666666; cu
 }
 label.toplabel input[type=text], label.top textarea { width: 100%; line-height: @baseline; font-size: @basefont; vertical-align:top;}
 
-label.leftlabel > span { width: 30%; font-size: x-small; margin: 0; padding: 0; color: #666666; cursor: pointer; display: inline-block; }
+label.leftlabel > span { width: 30%; font-size: x-small; margin: 0; padding: 0; /*color: #666666;*/ cursor: pointer; display: inline-block; }
 label.leftlabel input[type=text], label.left textarea { width: 70%; font-size: @basefont; margin: 0; padding: 0; }
 
 /*div.inputform textarea { width: 100%; font-size: @basefont; }
@@ -267,19 +267,20 @@ div.IsNow a { text-decoration: underline !important; margin-left: 1em; }
 /*-----------------------------------------------------------------------------------------------*/
 div.inputform div.ExtendIt { margin: 10px 3px 10px 0px; display: inline-block; vertical-align: top; }
 
-span.dialog-form-label { margin: 10px; font-size: small; color: #666666; display: inline-block; }
-div.dialog-form-label { font-size: small; color: #666666; top: 2px; margin-bottom: 2px; }
+span.dialog-form-label { margin: 10px; font-size: small; /*color: #666666;*/ display: inline-block; }
+div.dialog-form-label { font-size: @smallfont; /*color: #666666;*/ top: 2px; margin-bottom: 2px; }
 
 /*label { font-size: small; color: #666666; cursor: pointer; }*/
 label input[type="checkbox"] { padding-left: 0px; margin-left: 0px; cursor: pointer; }
 
-label.toplabel > span { display: block; font-size: small; color: #666666; cursor: pointer; }
+label.toplabel > span { display: block; font-size: @smallfont; /*color: #666666;*/ cursor: pointer; }
 label.toplabel input[type=text], label.top textarea {
 	 width: 100%; font-size: small; margin: 0; 
      // ĮDĖTA:
      .border-radius(0);
      border: 1px solid @borderGreen;
      line-height:17px;
+     font-size: @smallfont;
 }
 input[type=text].date {width:7em !important;}
 input[type=text].time {width:4em !important;
@@ -287,8 +288,9 @@ input[type=text].time {width:4em !important;
      .border-radius(0);
      border: 1px solid @borderGreen;
      line-height: 17px;
+     font-size: @smallfont;
 }
-label.leftlabel > span { width: 30%; font-size: x-small; margin: 0; padding: 0; color: #666666; cursor: pointer; display: inline-block; }
+label.leftlabel > span { width: 30%; font-size: x-small; margin: 0; padding: 0; /*color: #666666;*/ cursor: pointer; display: inline-block; }
 label.leftlabel input[type=text], label.left textarea { 
 	width: 70%; font-size: small; margin: 0; 
     // ĮDĖTA:

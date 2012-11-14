@@ -52,7 +52,7 @@
 .ui-widget {   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size:13px; }
 .ui-widget .ui-widget { font-size: 1em; }
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 1em; }
-.ui-widget-content { border: 1px solid #aaaaaa; background: #ffffff url(images_ui/ui-bg_glass_75_ffffff_1x400.png) 50% 50% repeat-x; color: #404040; }
+.ui-widget-content { border: 1px solid #aaaaaa; background: #ffffff url(images_ui/ui-bg_glass_75_ffffff_1x400.png) 50% 50% repeat-x; /*color: #404040;*/ /* ideta: */ color: #000; }
 .ui-widget-header {
   font-weight:bold;
   border-color: #0064cd #0064cd #003f81;
@@ -97,7 +97,7 @@
  }
 
 
-.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: #555555; text-decoration: none; }
+.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { /*color: #555555;*/ text-decoration: none; /*ideta:*/ color: #000;}
 .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus {
   background-position: 0 -15px;
   color: #333;
@@ -121,8 +121,6 @@
 	margin:7px 15px;
 }
 .ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight  {
-
-
   position: relative;
   margin-bottom: 18px;
   color: #404040;
@@ -476,6 +474,7 @@ a.ui-state-hover .ui-icon { background-image: url(images_ui/ui-icons_888888_256x
  // ĮDĖTA:   
     .border-radius(0);
     border: solid 1px @borderGreen;
+    font-size: @smallfont;
 }
 .ui-menu .ui-menu {
 	margin-top: -3px;
@@ -858,12 +857,13 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 //  background:whiteSmoke;
   border-bottom: 1px solid @tabsBorder; //#ddd;
   padding-bottom:0px;
-	color:#555555;
+//	color:#555555;
    // width: 135px;
    
     // ĮDĖTA:
     font-weight: bold;
     #gradient > .vertical-three-colors(#f9f6f7, #e9e7ea, 50%, #f9f6f7);
+    color: #000;
 }
 
 
@@ -910,11 +910,12 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
   border: 1px solid #c1c1c1; //#ddd;
   border-bottom-color: #ffffff;
   cursor: default;
-  color:gray;
+//  color:gray;
   outline:none;
   
     // ĮDĖTA:
     font-weight: bold;
+    color: #000;
 }
 
 
