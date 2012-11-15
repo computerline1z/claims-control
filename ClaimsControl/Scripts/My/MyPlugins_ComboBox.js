@@ -149,9 +149,6 @@
       if (opt.Editable.Edit) {
         val = input.data("newval");
       }
-      if (opt.ListType !== "None" || opt.Editable.Add) {
-        input.removeClass("ui-corner-all").addClass("ui-corner-left");
-      }
       $(".ui-autocomplete-input").live("autocompleteopen", function() {
         var autocomplete, menu;
         autocomplete = $(this).data("autocomplete");
@@ -265,7 +262,7 @@
       }).click(function() {
         p.fn();
         return false;
-      }).removeClass("ui-corner-all").addClass("ui-button-icon" + (p.NoCorners ? "" : " ui-corner-right")).find("span.ui-icon");
+      }).removeClass("ui-corner-all").find("span").attr("class", "");
       if (p.icon === "img18-plus") {
         return this.button.removeClass("ui-button-icon-primary ui-icon").css("margin", "-2px 0 0 -8px");
       }
