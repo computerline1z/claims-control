@@ -114,7 +114,7 @@ var oCONTROLS = {
 				alert("Nesusiparsino ctrl elemento objFunc.js-UpdatableForm (n�ra Type)");
 				return true;
 			}
-			var AddToClasses = "ui-widget-content ui-corner-all"
+			var AddToClasses = "ui-widget-content " //ui-corner-all
 			AddToClasses += (e.hasClass("NotUpdateField")) ? " NotUpdateField" : " UpdateField";
 			if (Type === 'Integer' || Type === 'Decimal') {
 				AddToClasses += " number";

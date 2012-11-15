@@ -185,7 +185,7 @@ _create: ->
 				# fnEditItem (if (val) then val else 0)
 				
 	#---------------------------------------------------------------------------------------------------
-	input.removeClass("ui-corner-all").addClass "ui-corner-left"	if opt.ListType isnt "None" or opt.Editable.Add #ui-widget-content
+	#-->input.removeClass("ui-corner-all").addClass "ui-corner-left"	if opt.ListType isnt "None" or opt.Editable.Add #ui-widget-content
 	#pluginas AutoComplete Select first
 	$(".ui-autocomplete-input").live "autocompleteopen", ->
 		autocomplete = $(this).data("autocomplete")
@@ -290,7 +290,7 @@ addButton: (p, input) ->
 	).click(->
 		p.fn()
 		false
-	).removeClass("ui-corner-all").addClass("ui-button-icon" + ((if (p.NoCorners) then "" else " ui-corner-right"))).find("span.ui-icon")
+	).removeClass("ui-corner-all").find("span").attr("class","")#.addClass("ui-button-icon" + ((if (p.NoCorners) then "" else " ui-corner-right"))).find("span.ui-icon")
 	@button.removeClass("ui-button-icon-primary ui-icon").css("margin", "-2px 0 0 -8px") if p.icon=="img18-plus"
 	#if ($.browser.mozilla) { this.button.attr() }
 	#else if ($.browser.msie) { }
