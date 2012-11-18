@@ -117,6 +117,8 @@ namespace CC.Classes {
       //    }
       //    return sb.ToString();
       //}
+
+
       public static IEnumerable<T> Where<T>(this IEnumerable<T> sequence, Predicate<T> predicate) {
          foreach (T item in sequence) {
             if (predicate(item)) {

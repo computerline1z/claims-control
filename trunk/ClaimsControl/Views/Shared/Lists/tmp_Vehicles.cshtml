@@ -10,9 +10,9 @@ data-ctrl='{"NewRec":1,"Source":"proc_Vehicles","tblUpdate":"tblVehicles"}'>
          <div class='ExtendIt' data-ctrl='{"Field":"Model","classes":"UpdateField","id":"Model","labelType":"Left"}'></div>
 		{{#if this.editItem}}	
 		{{#if App.listAllController.endDate}}
-					<div style="background-color:Red;" class="ui-corner-all tr borderGroove">
-						<div class="td w70pr" style="padding:2%;color:White;"><span class="inLine">Nebenaudojamas nuo {{App.listAllController.endDate}}</span></div>
-						<div class="td w25pr" style="text-align:center;padding:2%;"><a href="#" class="inLine" style="color:White;">Keisti</a></div>
+					<div style="background-color:#f74343; font-weight:bolder;" class="ui-corner-all tr borderGroove">
+						<div class="td w70pr" style="padding:2%;color:White; font-weight:bolder;"><span class="inLine">Nebenaudojama nuo {{App.listAllController.endDate}}</span></div>
+						<div class="td w25pr" style="text-align:center;padding:2%;"><a href="#" class="inLine" style="color:White; border:none;">Keisti</a></div>
 					</div>
 		{{else}}
 					<div class="ui-corner-all tr borderGroove">
@@ -23,5 +23,5 @@ data-ctrl='{"NewRec":1,"Source":"proc_Vehicles","tblUpdate":"tblVehicles"}'>
 		{{/if}}      
 		</div>
 </div>
-<center style="margin: 2em 0;"><button id="btnSaveItem" class="btn small">Išsaugoti</button><a style="margin-left: 2%;" id="aCancelItem" href="#">Atšaukti</a></center>
+<center style="margin: 2em 0;"><button id="btnSaveItem" class="btn">Išsaugoti</button><a style="margin-left: 2%;" id="aCancelItem" href="#">Atšaukti</a></center>
 <div class="DocsRow"><strong>Dokumentai:</strong><img src="/Content/images/grapke.png" alt="" style="margin: auto 0.5em auto 3em" /><a id="#AttachListDocs" href="#">Prisegti naują dokumentą</a></div>
