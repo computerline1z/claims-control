@@ -196,7 +196,9 @@ a.ui-state-hover .ui-icon { background-image: url(images_ui/ui-icons_888888_256x
 /* states and images */
 .ui-icon { width: 16px; height: 16px; background-image: url(images_ui/ui-icons_222222_256x240.png); }
 .ui-widget-content .ui-icon {background-image: url(images_ui/ui-icons_222222_256x240.png); }
-.ui-widget-header .ui-icon.ui-icon-closethick {background-image: url(images_ui/ui-icons_white.png); }
+.ui-widget-header .ui-icon.ui-icon-closethick {/*Nėra tokio:*/ background-image: url(images_ui/ui-icons_white.png);
+background-image: url(images_ui/ui-icons-ffffff-256x240.png);
+}
 .ui-widget-header .ui-icon {background-image: url(images_ui/ui-icons_222222_256x240.png); }
 .ui-state-default .ui-icon { background-image: url(images_ui/ui-icons_888888_256x240.png); }
 .ui-state-hover .ui-icon, .ui-state-focus .ui-icon {background-image: url(images_ui/ui-icons_454545_256x240.png); }
@@ -719,11 +721,14 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 }
 .ui-dialog .ui-dialog-title {
   float: left;
-  color:White;
-  font-weight:bold;
+//  color:White;
+//  font-weight:bold;
   margin-top:5px;
   margin-bottom:5px;
   padding:5px;
+// ĮDĖTA:
+    #font > .header(@basefont, bold, @baseline, #fff);
+  
 
 }
 .ui-dialog .ui-dialog-titlebar-close {
@@ -734,14 +739,17 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
   margin: -10px 0 0 0;
   padding: 1px;
   height: 18px;
-  font-size: 20px;
-  font-weight: bold;
-  line-height: 13.5px;
+//  font-size: 20px;
+//  font-weight: bold;
+//  line-height: 13.5px;
   text-shadow: 0 1px 0 #ffffff;
+// ---------    
+/* Permatomumas (trukdo ikonoms)  
   filter: alpha(opacity=25);
   -khtml-opacity: 0.25;
   -moz-opacity: 0.25;
   opacity: 0.25;
+*/  
 }
 
 .ui-dialog .ui-dialog-titlebar-close span { 
@@ -1144,6 +1152,14 @@ textarea,
   //-webkit-border-radius: 3px;
   //-moz-border-radius: 3px;
   //border-radius: 3px;
+}
+
+input[type="text"],
+input[type="password"],
+.ui-autocomplete-input,
+.uneditable-input {
+// ĮDĖTA:
+    height: @inputHeight;
 }
 
 .inLine {

@@ -16,9 +16,9 @@
     padding: 5px 50px 5px 20px;
     }
     .user { float: right;
-            background-image: url(../../Content/images/Zvaigzde.png); }
+            background-image: url(/ClaimsControl/Content/images/Zvaigzde.png); }
     .logOut { width: 50px;
-              background-image: url(../../Content/images/x_orange.png); }
+              background-image: url(/ClaimsControl/Content/images/x_orange.png); }
     }
     .logo { width: 10px; padding: 3px 0 0 20px; }
 
@@ -147,7 +147,7 @@ div.newClaimContent {background-color: @systemYellow3; .clearfix();}
     border-style: solid solid solid none;
     border-color: @borderGreen;
     background: url('images/DropDown-Arrow.png') no-repeat center;
-    &:hover, &:active { background: url('images/DropDown-Arrow_hover.png') no-repeat center; }
+    &:hover, &:active { background: url('images/DropDown-Arrow-hover.png') no-repeat center; }
 
 }/*comboboxo buttonas*/
 .ExtendIt input[text], .ExtendIt textarea {vertical-align:top;margin-top:0; width: 100%; .border-radius(0); border-color: @borderGreen;}
@@ -245,6 +245,8 @@ ul.ulWhiteMenu li { margin-right: 5px; padding-right: 5px; border-bottom: 1px; }
    &.btn, &.ui-buttonset .ui-button { 
        width: 100%;
        margin: 0 auto;
+       border-style: solid solid none solid;
+       &:last-child { border-style: solid; }
    }
 }
 .lineTop {  width: 95% margin: 0 auto; border-top: dotted 1px #c9c9c9; }
@@ -267,38 +269,87 @@ div.IsNow a { text-decoration: underline !important; margin-left: 1em; }
 /*-----------------------------------------------------------------------------------------------*/
 div.inputform div.ExtendIt { margin: 10px 3px 10px 0px; display: inline-block; vertical-align: top; }
 
-span.dialog-form-label { margin: 10px; font-size: small; /*color: #666666;*/ display: inline-block; }
+span.dialog-form-label { margin: 10px; font-size: @smallfont; /*color: #666666;*/ display: inline-block; }
 div.dialog-form-label { font-size: @smallfont; /*color: #666666;*/ top: 2px; margin-bottom: 2px; }
 
 /*label { font-size: small; color: #666666; cursor: pointer; }*/
+/*
 label input[type="checkbox"] { padding-left: 0px; margin-left: 0px; cursor: pointer; }
 
-label.toplabel > span { display: block; font-size: @smallfont; /*color: #666666;*/ cursor: pointer; }
+label.toplabel > span { display: block; font-size: @smallfont; /*color: #666666;*/// cursor: pointer; }
+/*
 label.toplabel input[type=text], label.top textarea {
-	 width: 100%; font-size: small; margin: 0; 
+	 width: 100%; font-size: @smallfont; margin: 0; 
      // ĮDĖTA:
+     /*
      .border-radius(0);
      border: 1px solid @borderGreen;
-     line-height:17px;
+     //line-height:17px;
+     /*
      font-size: @smallfont;
+     height: @inputHeight;
+}
+input[type=text].date {width:7em !important;}
+input[type=text].time {width:4em !important;
+     // ĮDĖTA:/*
+     .border-radius(0);
+     border: 1px solid @borderGreen;
+     //line-height: 17px;
+     font-size: @smallfont;
+     height: @inputHeight;
+}
+label.leftlabel > span { width: 30%; font-size: @smallfont; margin: 0; padding: 0; /*color: #666666;*/// cursor: pointer; display: inline-block; }
+/*
+label.leftlabel input[type=text], label.left textarea { 
+	width: 70%; font-size: @basefont; margin: 0; 
+    // ĮDĖTA:
+    .border-radius(0);
+    height: @inputHeight;
+}
+input [type="text"] {width:7em;}
+input.time [type="text"] {width:4em;
+}
+*/
+
+label {
+    input[type="checkbox"] { padding-left: 0px; margin-left: 0px; cursor: pointer; }
+    input[type=text] { height: @inputHeight; }
+    &.toplabel {
+        > span { display: block; font-size: @smallfont; /*color: #666666;*/ cursor: pointer; }
+         input[type=text], label.top textarea {
+             width: 100%; font-size: @smallfont; margin: 0; 
+             // ĮDĖTA:
+             .border-radius(0);
+             border: 1px solid @borderGreen;
+             //line-height:17px;
+             font-size: @smallfont;
+        }
+    }
+    &.leftlabel {
+        > span { width: 30%; font-size: @smallfont; margin: 0; padding: 0; /*color: #666666;*/ cursor: pointer; display: inline-block; }
+        input[type=text], label.left textarea { 
+            width: 70%; font-size: @basefont; margin: 0; 
+            // ĮDĖTA:
+            .border-radius(0);
+        }
+    }
 }
 input[type=text].date {width:7em !important;}
 input[type=text].time {width:4em !important;
      // ĮDĖTA:
      .border-radius(0);
      border: 1px solid @borderGreen;
-     line-height: 17px;
+     //line-height: 17px;
      font-size: @smallfont;
+     height: @inputHeight;
 }
-label.leftlabel > span { width: 30%; font-size: x-small; margin: 0; padding: 0; /*color: #666666;*/ cursor: pointer; display: inline-block; }
-label.leftlabel input[type=text], label.left textarea { 
-	width: 70%; font-size: small; margin: 0; 
-    // ĮDĖTA:
-    .border-radius(0);
-}
+
 input [type="text"] {width:7em;}
 input.time [type="text"] {width:4em;
 }
+
+
+
 /*-----------------------------------------------------------------------------------------------*/
 /*butonai apacioj*/
 div.frmbottom { width: 100%; display: inline-block; overflow: hidden; }

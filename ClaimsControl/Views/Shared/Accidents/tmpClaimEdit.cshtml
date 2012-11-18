@@ -36,7 +36,7 @@
 
 <div class="frmbottom container">
 	{{#unless c.newClaim}}
-	<div class="left small"><button class="btn small"><i style="margin-top:0" class="img32-bin" title="Ištrinti žalą" {{action "DeleteClaim" this}}></i></button></div>
+	<div class="left small"><button class="btn"><i style="margin-top:0" class="img32-bin" title="Ištrinti žalą" {{action "DeleteClaim" this}}></i></button></div>
 	{{/unless}}
 	<div class="right medium" style="margin-top:10px;">
 		<button class="btn success small {{#if c.newClaim}}NewClaim{{/if}}" {{action "SaveClaim"}}></i>IŠSAUGOTI</button>
