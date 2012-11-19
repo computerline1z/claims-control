@@ -3,7 +3,7 @@ $(function () {
 	Em.run.next(function () {
 		oGLOBAL.logFromStart("Ember finished.");
 		oDATA.fnLoadNext();
-		oDATA.fnWriteVersions();
+		//oDATA.fnWriteVersions();
 	});
 });
 $(window).load(function () {
@@ -82,7 +82,7 @@ var oDATA = Ember.Object.create({
 		if (notExists) {
 			tId = setTimeout(function () {
 				oDATA.execWhenLoaded(objNames, fnExec, tId)
-			}, 1000); return false;
+			}, 200); return false;
 		}
 		else if (tId !== 0) { clearTimeout(tId); }
 		fnExec();
@@ -193,66 +193,65 @@ var oDATA = Ember.Object.create({
 			}
 		});
 	},
-	fnWriteVersions: function() {
-		if (localStorage){
-			localStorage["Lists/topNew_ver"]="1";		
-			localStorage["Admin/edit"]="1";		
-		}
-	},
+	// fnWriteVersions: function() {
+		// if (localStorage){
+			// localStorage["Lists/topNew_ver"]="1";		
+			// localStorage["Admin/edit"]="1";		
+		// }
+	// },
+	executed:{},//čia įsimenam kas buvo klikinta (tie turės viską atsisiuntę
 	fnLoad2: function (p) {
-		//url:url,callBack:callBack,checkFn:checkFn,checkObj:checkObj
-			//checkFn:checkFn[būtinas kaip stringas('App.startList')],checkObj:checkObj[nebūtinas] - pagal juos tikrinam ar reikia siustis ir ar reikia objekto
+		//url:url,callBack:callBack, checkObj:checkObj //checkObj:checkObj[nebūtinas] - pagal juos tikrinam ar reikia siustis ir ar reikia objekto
+		if (!localStorage)throw new Error("No localStorage in Browser");
 		//užsikraunant įrašom localStorage["topNew_ver"] versijas ir siunčiam ar atitinka, jei neatitinka grazinam tuos objektus
 		//scripta užkraunam atsakydami, kontroleryj versijos kontroliuojamos "/controller/action?ver=123"
-		if (!p.checkFn) console.error("oDATA.fnLoad without checkFn");	
+		//if (!p.checkFn) console.error("oDATA.fnLoad without checkFn");	
+		
+		
 		var start = new Date().getTime(), setter = this.get("SET"), emBuilder = this.get("emBuilder"), me = this, obj;
-		var finished=function (start,tmpLoaded){console.warn("loaded '"+ p.url+"'. Tmp loaded'"+tmpLoaded+"' Time,ms:" + (new Date().getTime() - start));
-			if (p.callBack) p.callBack();					
-		}
-		if (!oGLOBAL.helper.existsFunctionByName(p.checkFn,window)){
-			console.log("fnLoad2: no function loading data..");
-			var dataPars={tmp:true,obj:true},url=p.url,tmpNames=[];
-			if (localStorage){
-				if (localStorage[url]){
-					dataPars.tmp=(localStorage[url]!==(localStorage[url+"_ver"]));
-					dataPars.obj= (oDATA.GET(p.checkObj))?false:true;//false jei nesiunčiam - {tmp:false,obj:false}			
-				}//kitu atveju dataPars={tmp:true,obj:true}		
-			}else{console.warn("No localStorage!");}//siunčiam viską, scriptą kašinam, atnaujinus turės valyt kašą		
+		var finished=function (start,msg){console.warn("Started '"+ p.url+"'. "+msg+". Time,ms:" + (new Date().getTime() - start));if (p.callBack) p.callBack();}	
+
+		
+		if  (this.executed[p.url]){//jei jau buvo klikinta, nieko siųst nereikia
+			finished(start,"Second click no need to load.");
+		}else{
+			var url=p.url, dataPars={
+				ver: localStorage[url],
+				tmp:(localStorage[url]?false:true),
+				obj:(oDATA.GET(p.checkObj)?false:true)
+			}
 			$.ajax({
 				url: p.url, dataType: 'json', type: 'POST', data: dataPars,
 				success: function (json) {
 					if (json.jsonObj) {
 						$.each(json.jsonObj, function (objName, value) {
-							console.log("New jsonObj:" + objName);
-							setter.call(me, objName, value);
+							console.log("New jsonObj:" + objName); setter.call(me, objName, value);							
 							emBuilder.call(me, { newData: value.Data, tblName: objName, toAppend: true }); //{oData, toAppend:{"sort":"asc/desc","col":"date"}}
 						});
 					}
 					if (json.templates) {
 						$.each(json.templates, function (objName, value) {
 							console.log("New template:" + objName);
-							if (!value){ value=localStorage[objName]; }//Jei nėra imam iš localStorage
+							if (!value){ value=localStorage[objName]; }//Jei nėra imam iš localStorage					
 							else {localStorage[objName]=value;}				
-							if (!Em.TEMPLATES[objName]){Em.TEMPLATES[objName] = Em.Handlebars.compile(value);}
-							//kitas variantas: http://stackoverflow.com/questions/8659787/using-pre-compiled-templates-with-handlebars-js-jquery-mobile-environment
+							if (!Em.TEMPLATES[objName]){Em.TEMPLATES[objName] = Em.Handlebars.compile(value);}//kitas variantas: http://stackoverflow.com/questions/8659787/using-pre-compiled-templates-with-handlebars-js-jquery-mobile-environment						
 						});
 					}
 					if (json.Script) {
-						//$.ajaxSetup ({cache: true});
 						if (json.Script.File) {
-							console.log("start downloading file - "+json.Script.File);
+							//if (localStorage[localStorage[objName]]) new Function ("var1","var2","functionBody");
+							console.log("Downloading js file - "+json.Script.File);
+							$.ajaxSetup({ cache: true });
 							$.getScript(json.Script.File, function(){
-								console.log("callBack will be called");
-								finished(start,true);
+								finished(start,"First click, script loaded.");
 							});
-						}else{
-							finished(start,true);
-						}
+						}else{finished(start,"First click, no script.");}
 					}
-					localStorage[url]=localStorage[url+"_ver"];//išsaugom esama versijas				
+					localStorage[url]=json.ver;//išsaugom versija	
+					oDATA.executed[url]=(new Date()).getTime();
 				}
 			});
-		}else {finished(start,false);}//jau užkrauta viskas		
+		}	
 	}
 });
 /**************************************************************************************************************************
@@ -286,47 +285,6 @@ Ember.ResourceController = Ember.ArrayController.extend(Ember.ResourceAdapter, {
 			me.set("loadStatus", "loading");
 		}
 	},
-	//setContent: function (data, toAppend) {
-	// setContent: function (p) { //{data, toAppend:{"sort":"asc/desc","col":"date"}}
-	// var d = p.data, c = oDATA.GET(this.get("tableName")).Cols, f = [], n, i, y, cnt;
-	// for (i = 0; i < c.length; i++) {//Sudedam vardus, kad prasidetų nuo mažos raidės
-	// n = c[i].FName;
-	// f[f.length] = n.slice(0, 1).toLowerCase() + n.slice(1);
-	// };
-	// cnt = this.get("content");
-	// if (p.toAppend) {
-	// for (i = 0; i < d.length; i++) {//bėgam per eilutes
-	// var e = {};
-	// for (y = 0; y < c.length; y++) {//bėgam per stulpelius
-	// e[f[y]] = d[i][y];
-	// }
-	// e.visible=true;//Visi pradzioj matomi
-	// if (p.toAppend.sort){//ikisam ne bet kur
-	// this.setToPlace(p.toAppend,e);
-	// }else{
-	// cnt.pushObject(Em.Object.create(e));
-	// }
-	// }
-	// } else {
-	// for (i = 0; i < d.length; i++) {//bėgam per eilutes
-	// var toReplace = cnt.findProperty("iD", d[i][0]);
-	// for (y = 1; y < c.length; y++) {//bėgam per stulpelius
-	// toReplace.set(f[y], d[i][y]);
-	// }
-	// }
-	// }
-	// },
-	// setToPlace: function (toAppend,e){//toAppend:{"sort":"asc/desc","col":"date"}
-	// var col=toAppend.col, fn,before;
-	// if  (toAppend.sort==="desc")
-	// fn =function(index,item){ if (item.get(col)<=e[col]) {before=index; return false;} }
-	// else {
-	// fn =function(index,item){ if (item.get(col)>=e[col]) {before=index; return false;} }
-	// }
-	// var cnt=this.get("content");
-	// $.each(cnt,fn);
-	// cnt.insertAt(before-1, Em.Object.create(e));
-	// },	
 	content: [], //overridinam
 	tableName: Ember.required(),
 	cols: null,
@@ -336,17 +294,11 @@ Ember.ResourceController = Ember.ArrayController.extend(Ember.ResourceAdapter, {
 	loadStatus: null,
 	getByID: function (id) {
 		var r = this.get("content").findValueByID(id);
-		if (!r) {
-			throw new Error("Didn't found arr value in getById, id -" + id);
-		}
+		if (!r) {throw new Error("Didn't found arr value in getById, id -" + id);}		
 		return r;
 	},
-	//setNewVal: function (newVal, fieldsToInt) {
-	//setNewVal: function ({newVal:??,toAppend:true/false, fieldsToInt:??}) {
 	setNewVal: function (p) {
-		if (Em.typeOf(p.newVal[0]) !== "array") {
-			p.newVal = [p.newVal];
-		}
+		if (Em.typeOf(p.newVal[0]) !== "array") {p.newVal = [p.newVal];}
 		var me = this;
 		if (p.fieldsToInt) {
 			p.newVal.forEach(function (val, index) {
@@ -391,9 +343,6 @@ Ember.ResourceController = Ember.ArrayController.extend(Ember.ResourceAdapter, {
 		  	//Ember.run.next(function () { self.set("loaded", true); });
 		  });
 	}
-	/*Pakeitimai:
-	1. Ištrinu _recourceUrl, kiekvienoj resoursu funkcijoj naudosiu url kaip parametra
-	*/
 });
 
 var SERVER = {

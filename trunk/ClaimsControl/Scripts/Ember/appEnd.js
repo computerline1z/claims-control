@@ -1,11 +1,11 @@
-//accidents.js
+//tabAccidents.js
 //App.AccidentsView = App.mainMenuView.extend({ templateName: 'tmpAccidents', viewIx: 0 });
 App.ClaimsView = App.mainMenuView.extend({ templateName: 'tmpClaims', viewIx: 1 });
 App.MapView = App.mainMenuView.extend({ templateName: 'tmpMap', viewIx: 2 });
 App.ReportsView = App.mainMenuView.extend({ templateName: 'tmpReports', viewIx: 3 });
 //App.AdminView = App.mainMenuView.extend({ templateName: 'tmpAdmin', viewIx: 5 });
-
 App.Router = Em.Router.extend({
+	executed:{},//Užsižymim, kad buvo spausti
 	enableLogging: false,
 	location: 'hash',
 	root: Em.Route.extend({
@@ -22,7 +22,6 @@ App.Router = Em.Router.extend({
 			route: '/',
 			connectOutlets: function (router, context) {
 				MY.NavbarController.fnSetNewTab(router.currentState.name, 0);
-				//router.get('applicationController').connectOutlet('accidents');
 			}
 		}),
 		tabClaims: Em.Route.extend({
@@ -47,7 +46,7 @@ App.Router = Em.Router.extend({
 			}
 		}),
 		tabLists: Em.Route.extend({
-			route: '/lists',
+			route: '/tabLists',
 			connectOutlets: function (router, context) {
 				MY.NavbarController.fnSetNewTab(router.currentState.name, 4);
 				//App.listsStart();
@@ -55,7 +54,7 @@ App.Router = Em.Router.extend({
 				//	router.get('applicationController').connectOutlet('listsOutlet','topLists');
 				//});
 				//oDATA.fnLoad({url: "Main/Proba", callBack: function (){ console.log("baigiau downloadint");}});
-				oDATA.fnLoad2({url:"Lists/topNew",checkFn:"App.listsStart", callBack:function (){
+				oDATA.fnLoad2({ url: "Main/tabLists", checkFn: "App.listsStart", callBack: function () {
 						App.listsStart();
 						router.get('applicationController').connectOutlet('listsOutlet','topLists');
 					}
@@ -72,12 +71,13 @@ App.Router = Em.Router.extend({
 			}
 		}),
 		tabAdmin: Em.Route.extend({
-			route: '/admin',
+			route: '/tabAdmin',
 			connectOutlets: function (router, context) {
 				MY.NavbarController.fnSetNewTab(router.currentState.name, 5);
-				oDATA.fnLoad2({url:"Admin/edit",checkFn:"App.adminStart", callBack:function (){
-						App.adminStart();
-						router.get('applicationController').connectOutlet('adminOutlet','admin');
+				oDATA.fnLoad2({ url: "Main/tabAdmin", callBack: function () {
+					App.adminStart();
+					console.log(".connectOutlet('adminOutlet', 'tabAdmin');");
+					router.get('applicationController').connectOutlet('adminOutlet', 'tabAdmin');					
 					}
 				});			
 			}

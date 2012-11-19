@@ -54,7 +54,7 @@
       if (!pars.row && pars.newVals) {
         pars.row = pars.newVals.vals.toRowObject(pars.newVals.cols);
       }
-      return MY.lists.dialog = JQ.Dialog.create({
+      return MY.dialog = JQ.Dialog.create({
         controller: pars.me,
         pars: pars,
         init: function() {
@@ -290,9 +290,9 @@
     }
   });
 
-  MY.lists = {};
+  MY.tabLists = {};
 
-  //@ sourceURL= /Forms/Lists.js;
+  //@ sourceURL= /Forms/tabLists.js;
 
 
 }).call(this);

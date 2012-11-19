@@ -2,7 +2,9 @@
 <hr />
 <h3>Bendrieji paskyros nustatymai</h3>
 {{#with App.accountController}}
+	{{log "--------------------------"}}
 	{{log this}}
+	{{log "--------------------------"}}
 	<div id="AccountForm" class="inputForm container" data-ctrl='{"id":"{{unbound c.ID}}","NewRec":1,"Source":"tblAccount","tblUpdate":"tblAccounts"}'>
 	<div class='left w47pr_mp'>
 			{{updatableField c Field="name" labelType="Top"}}
