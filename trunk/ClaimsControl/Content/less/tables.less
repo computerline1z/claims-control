@@ -1,4 +1,4 @@
-﻿/*---------experimenting--------*/
+/*---------experimenting--------*/
 #MyTable { border-style: dotted; }
 #MyTable tr:nth-child(odd) { background:blue; }
 //div.table {display:table;border-collapse:collapse;width:100%;}
@@ -41,7 +41,7 @@ div.bordered-table {
 
 div.zebra-striped
 {
-	> div.tr {border-bottom: 4px solid @grayLighter; padding: 8px 8px 7px;}// div.td
+	> div.tr {/*border-bottom: 4px solid @grayLighter;*/ border-bottom: 1px solid @grayLighter; padding: 8px 8px 7px;}// div.td
     > div.tr:nth-child(odd) {background-color: @grayUltraLight;}
     > div.tr:hover { background-color: @grayLight; color:@white; }
 	> div.tr:hover { cursor: pointer; }// div.td 
@@ -60,8 +60,8 @@ div.table {
 table.zebra-striped
 {
 	width: 100%;
-	tr th {font-weight: bold; background-color: @systemBlueLight;border-bottom: 4px solid @grayLighter; padding: 8px 8px 7px; text-align:left;}
-	tr td {border-bottom: 4px solid @grayLighter; padding: 8px 8px 7px;}
+	tr th {font-weight: bold; background-color: @systemBlueLight;/*border-bottom: 4px solid @grayLighter;*/ border-bottom: 1px dotted @grayLighter; padding: 8px 8px 7px; text-align:left;}
+	tr td {/*border-bottom: 4px solid @grayLighter;*/ border-bottom: 1px dotted @grayLighter; padding: 8px 8px 7px;}
 	tr:nth-child(odd) {background-color: @grayUltraLight;}		
 	tbody tr:hover { background-color: @grayLight; color:@white; }
 	th.clickable:hover { background-color: darken(@systemBlueLight, 10%); color:@white; }

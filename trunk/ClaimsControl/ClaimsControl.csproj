@@ -38,14 +38,14 @@
         <ObjectGroup Name="CCConnectionString-Deployment" Order="1">
           <Destination Path="" />
           <Object Type="dbFullSql">
-            <PreSource Path="Data Source=SAULIUSB\SQLEXPRESS%3bInitial Catalog=ClaimsControl%3bIntegrated Security=True" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" />
+            <PreSource Path="Data Source=ACER-PC\SQLEXPRESSS%3bInitial Catalog=ClaimsControl%3bIntegrated Security=True" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" />
             <Source Path="obj\Debug\AutoScripts\CCConnectionString-Deployment_SchemaOnly.sql" Transacted="True" />
           </Object>
         </ObjectGroup>
         <ObjectGroup Name="ClaimsControlConnectionString-Deployment" Order="2">
           <Destination Path="" />
           <Object Type="dbFullSql">
-            <PreSource Path="Data Source=SAULIUSB\SQLEXPRESS%3bInitial Catalog=ClaimsControl%3bIntegrated Security=True" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" />
+            <PreSource Path="Data Source=ACER-PC\SQLEXPRESSS%3bInitial Catalog=ClaimsControl%3bIntegrated Security=True" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" />
             <Source Path="obj\Debug\AutoScripts\ClaimsControlConnectionString-Deployment_SchemaOnly.sql" Transacted="True" />
           </Object>
         </ObjectGroup>
@@ -64,7 +64,7 @@
         <ObjectGroup Name="ClaimsControlConnectionString-Deployment" Order="1">
           <Destination Path="" />
           <Object Type="dbFullSql">
-            <PreSource Path="Data Source=SAULIUSB\SQLEXPRESS%3bInitial Catalog=ClaimsControl%3bIntegrated Security=True" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" />
+            <PreSource Path="Data Source=ACER-PC\SQLEXPRESSS%3bInitial Catalog=ClaimsControl%3bIntegrated Security=True" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" />
             <Source Path="obj\Release\AutoScripts\ClaimsControlConnectionString-Deployment_SchemaOnly.sql" Transacted="True" />
           </Object>
         </ObjectGroup>
@@ -490,11 +490,6 @@
     <Content Include="Scripts\Plugins\plugs.min.js" />
     <Content Include="Scripts\Plugins\jquery.notify.min.js" />
     <Content Include="Scripts\Plugins\jquery.notify.js" />
-    <None Include="Models\db.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>db.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages\elmah.1.2.2\content\web.config.transform" />
     <None Include="packages\elmah.1.2.2\elmah.1.2.2.nupkg" />
     <None Include="packages\elmah.corelibrary.1.2.2\elmah.corelibrary.1.2.2.nupkg" />
