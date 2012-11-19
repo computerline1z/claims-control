@@ -53,7 +53,7 @@ App.listAllController = Em.ResourceController.create(
 		config=oDATA.GET(pars.source).Config
 		title=if pars.row then config.Msg.GenName+" "+pars.row.MapArrToString(config.titleFields,true) else config.Msg.AddNew
 		if not pars.row and pars.newVals then pars.row=pars.newVals.vals.toRowObject(pars.newVals.cols) #ivedimo forma užpildom jau užpildytais iš langelio 
-		MY.lists.dialog=JQ.Dialog.create( #MY.lists.dialog needed to destroyElement in ui-ember.js
+		MY.dialog=JQ.Dialog.create( #MY.dialog needed to destroyElement in ui-ember.js
 			controller: pars.me, pars: pars
 			init: -> @_super(); @templateName=pars.template; @title=title
 			didInsertElement: ()->
@@ -203,5 +203,5 @@ App.AllVehiclesView = App.mainMenuView.extend(
 			controller: "listAllController", sortedCol: 0 
 		);
 )
-MY.lists={}
-`//@ sourceURL= /Forms/Lists.js`
+MY.tabLists={}
+`//@ sourceURL= /Forms/tabLists.js`

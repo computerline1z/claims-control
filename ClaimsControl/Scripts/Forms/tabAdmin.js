@@ -2,8 +2,6 @@
 (function() {
   var w=window, App=w.App, Em=w.Em, oGLOBAL=w.oGLOBAL, oDATA=w.oDATA, oCONTROLS=w.oCONTROLS, MY=w.MY;
 
-  console.log("loading admin1");
-
   App.adminStart = function() {
     return oDATA.execWhenLoaded(["tblUsers", "tblAccount"], function() {
       App.usersController.set("content", oDATA.GET("tblUsers").emData);
@@ -11,9 +9,7 @@
     });
   };
 
-  console.log("loading admin2");
-
-  App.AdminView = App.mainMenuView.extend({
+  App.TabAdminView = App.mainMenuView.extend({
     didInsertElement: function() {
       var frm;
       this._super();
@@ -29,27 +25,19 @@
     tagName: ""
   });
 
-  console.log("loading admin3");
-
-  console.log(oDATA.GET("tblAccount").emData);
-
   App.accountController = Em.ArrayController.create({
     tableName: "tblAccount",
     content: []
   });
-
-  console.log("loading admin4");
 
   App.usersController = Em.ArrayController.create({
     tableName: "tblUsers",
     content: []
   });
 
-  console.log("loading admin5");
+  MY.tabAdmin = {};
 
-  MY.admin = {};
-
-  //@ sourceURL= /Forms/admin.js;
+  //@ sourceURL= /Forms/tabAdmin.js;
 
 
 }).call(this);

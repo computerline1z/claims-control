@@ -205,7 +205,7 @@ _create: ->
 	if opt.Editable.Add
 		id = $(this).data("newval")
 		id = (if (id) then id else 0)#onclick='alert(\"opa\"); return false;'
-		opt.appendToList="<span style='margin:-26px 4px auto auto;' title='redaguoti..' class='ui-icon ui-icon-pencil ui-menu-icon'>&nbsp;</span>"
+		opt.appendToList="<span style='margin:-32px 2px auto auto;' title='redaguoti..' class='ui-icon ui-icon-pencil ui-menu-icon'>&nbsp;</span>"
 		#"<span style='margin:-22px 20px auto auto;' title='redaguoti..' class='ui-icon ui-icon-pencil ui-menu-icon'>&nbsp;</span>"
 		# <span style='margin:-16px 2px auto auto;' title='ištrinti..' class='ui-icon ui-icon-trash ui-menu-icon'>&nbsp;</span>"
 		input.after(opt.appendToList)

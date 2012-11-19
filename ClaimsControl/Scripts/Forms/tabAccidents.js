@@ -48,12 +48,12 @@
       tr = $(e.target).closest("tr");
       ClaimW = $("#ClaimWraper");
       if (ClaimW.length > 0) {
-        MY.accidents.SelectedClaimView.remove();
+        MY.tabAccidents.SelectedClaimView.remove();
         ClaimW.remove();
       }
       tr.parent().find("tr.selectedClaim").removeClass("selectedClaim title");
       d = e.context;
-      MY.accidents.SelectedClaimView = App.SelectedClaimView.create({
+      MY.tabAccidents.SelectedClaimView = App.SelectedClaimView.create({
         rowContext: {
           Claims2: d.Claims2,
           newClaim: false,
@@ -66,7 +66,7 @@
         contentBinding: 'App.claimEditController.content'
       });
       tr.addClass("selectedClaim title").after("<tr><td id='ClaimWraper' colspan='7' class='selectedClaim content'></td></tr>");
-      MY.accidents.SelectedClaimView.appendTo("#ClaimWraper");
+      MY.tabAccidents.SelectedClaimView.appendTo("#ClaimWraper");
       Em.run.next(function() {
         return $("#ClaimDetailsContent").slideDown();
       });
@@ -87,11 +87,11 @@
         },
         fnAfterOptClick: function(T) {
           $('#divNewClaimCard').find('#divClaimCardDetails,div.frmbottom').remove();
-          if (MY.accidents.NewClaimView) {
-            MY.accidents.NewClaimView.remove();
+          if (MY.tabAccidents.NewClaimView) {
+            MY.tabAccidents.NewClaimView.remove();
             $("#newClaimDetailsContent").remove();
           }
-          MY.accidents.NewClaimView = App.SelectedClaimView.create({
+          MY.tabAccidents.NewClaimView = App.SelectedClaimView.create({
             rowContext: {
               newClaim: true,
               accidentID: App.thisAccidentController.get("accidentID")
@@ -99,19 +99,19 @@
             elementId: "newClaimDetailsContent",
             contentBinding: 'App.newClaimController.content'
           });
-          MY.accidents.NewClaimView.appendTo("#divNewClaimCard");
+          MY.tabAccidents.NewClaimView.appendTo("#divNewClaimCard");
           Em.run.next(function() {
             return $("#newClaimDetailsContent").slideDown();
           });
           false;
           return {
             fnCancel: function() {
-              return $("#accidentsTable").find("div.selectedAccident").trigger("click");
+              return $("#tabAccidentsTable").find("div.selectedAccident").trigger("click");
             }
           };
         },
         fnCancel: function() {
-          return $("#accidentsTable").find("div.selectedAccident").trigger("click");
+          return $("#tabAccidentsTable").find("div.selectedAccident").trigger("click");
         }
       };
       oCONTROLS.Set_Updatable_HTML.mega_select_list(d);
@@ -120,8 +120,8 @@
     elementId: "AccDetailsContent",
     contentBinding: 'App.thisAccidentController.content',
     destroyElement: function() {
-      if (MY.accidents.SelectedClaimView) {
-        return MY.accidents.SelectedClaimView.remove();
+      if (MY.tabAccidents.SelectedClaimView) {
+        return MY.tabAccidents.SelectedClaimView.remove();
       }
     }
   });
@@ -236,7 +236,7 @@
                 toAppend: false,
                 fieldsToInt: [0, 1, 5, 6, 7, 8]
               })[0];
-              tr = $("#accidentsTable").find("div.selectedAccident");
+              tr = $("#tabAccidentsTable").find("div.selectedAccident");
               return tr.trigger("click");
             }
           },
@@ -246,7 +246,7 @@
       }
     },
     CancelSaveClaim: function(e) {
-      return $("#accidentsTable").find("div.selectedAccident").trigger("click");
+      return $("#tabAccidentsTable").find("div.selectedAccident").trigger("click");
     },
     DeleteClaim: function(e) {
       var context, oData;
@@ -280,7 +280,7 @@
                 fieldsToInt: [0, 1, 5, 6, 7, 8]
               })[0];
               oData.Data.removeRowByID(parseInt(updData.DataToSave.id, 10));
-              return $("#accidentsTable").find("div.selectedAccident").trigger("click");
+              return $("#tabAccidentsTable").find("div.selectedAccident").trigger("click");
             }
           }
         });
@@ -295,11 +295,11 @@
     removeClaims: function(AddWr) {
       AddWr.parent().find("div.dividers").remove();
       if (AddWr.length > 0) {
-        MY.accidents.AcccidentdetailsView.remove();
+        MY.tabAccidents.AcccidentdetailsView.remove();
         return AddWr.remove();
-      } else if (MY.accidents.AcccidentdetailsView) {
-        MY.accidents.AcccidentdetailsView.destroy();
-        MY.accidents.AcccidentdetailsView = null;
+      } else if (MY.tabAccidents.AcccidentdetailsView) {
+        MY.tabAccidents.AcccidentdetailsView.destroy();
+        MY.tabAccidents.AcccidentdetailsView = null;
         return $('div.dividers').remove();
       }
     },
@@ -321,9 +321,9 @@
       if (!tr.hasClass("selectedAccident")) {
         tr.addClass("selectedAccident");
       }
-      MY.accidents.AcccidentdetailsView = App.SelectedAccidentView.create(e.context);
+      MY.tabAccidents.AcccidentdetailsView = App.SelectedAccidentView.create(e.context);
       tr.after("<div id='AccDetailsWraper'></div><div class='dividers'></div>").prev().before("<div class='dividers'></div>");
-      MY.accidents.AcccidentdetailsView.appendTo("#AccDetailsWraper");
+      MY.tabAccidents.AcccidentdetailsView.appendTo("#AccDetailsWraper");
       if (e.isTrigger) {
         Em.run.next(function() {
           return $("#AccDetailsContent, div.dividers").show();
@@ -357,8 +357,8 @@
     },
     openAccident: function(AccNo) {
       var ctrlEdit;
-      $('#tabAccidents').removeClass("colmask");
-      $('#divAccidentsList').hide();
+      $('#tabtabAccidents').removeClass("colmask");
+      $('#divtabAccidentsList').hide();
       ctrlEdit = $('#divAccidentEdit').show();
       ctrlEdit.spinner({
         position: 'center',
@@ -380,7 +380,7 @@
       this.filterItems(filterName, filterValue, thisObj);
       return Em.run.next(function() {
         var tbl;
-        tbl = $('#accidentsTable');
+        tbl = $('#tabAccidentsTable');
         if (!tbl.find('div.selectedAccident').length) {
           return tbl.find('div.dividers').remove();
         }
@@ -555,22 +555,24 @@
     didInsertElement: function() {
       this._super();
       return Em.run.next(function() {
-        return $("#sidePanel").closest("div.col2").scrollelement();
-      }, console.log("Pradedu"), console.log($("#chkOpen")), $("#chkOpen").buttonset().on("click", function(e) {
-        var chk, newVal;
-        chk = $(e.target).closest("label").prev();
-        newVal = chk.next().hasClass("ui-state-active") ? chk.attr("id") : null;
-        $("#chkOpen").find("label").not(chk.next()).removeClass("ui-state-active").end().prev().not(chk).removeAttr("checked");
-        App.accidentsController.set("chkOpen", newVal);
-        return e.preventDefault();
-      }), $("#chkDocs").buttonset().on("click", function(e) {
-        var chk, newVal;
-        chk = $(e.target).closest("label").prev();
-        newVal = chk.next().hasClass("ui-state-active") ? chk.attr("id") : null;
-        $("#chkDocs").find("label").not(chk.next()).removeClass("ui-state-active").end().prev().not(chk).removeAttr("checked");
-        App.accidentsController.set("chkDocs", newVal);
-        return e.preventDefault();
-      }));
+        $("#sidePanel").closest("div.col2").scrollelement();
+        $("#chkOpen").buttonset().on("click", function(e) {
+          var chk, newVal;
+          chk = $(e.target).closest("label").prev();
+          newVal = chk.next().hasClass("ui-state-active") ? chk.attr("id") : null;
+          $("#chkOpen").find("label").not(chk.next()).removeClass("ui-state-active").end().prev().not(chk).removeAttr("checked");
+          App.accidentsController.set("chkOpen", newVal);
+          return e.preventDefault();
+        });
+        return $("#chkDocs").buttonset().on("click", function(e) {
+          var chk, newVal;
+          chk = $(e.target).closest("label").prev();
+          newVal = chk.next().hasClass("ui-state-active") ? chk.attr("id") : null;
+          $("#chkDocs").find("label").not(chk.next()).removeClass("ui-state-active").end().prev().not(chk).removeAttr("checked");
+          App.accidentsController.set("chkDocs", newVal);
+          return e.preventDefault();
+        });
+      });
     },
     showAll: function() {
       $("#chkOpen,#chkDocs").find("label").removeClass("ui-state-active").end().prev().removeAttr("checked");
@@ -583,6 +585,6 @@
     }
   });
 
-  MY.accidents = {};
+  MY.tabAccidents = {};
 
 }).call(this);

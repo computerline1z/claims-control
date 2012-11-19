@@ -1,20 +1,20 @@
 
 `var w=window, App=w.App, Em=w.Em, oGLOBAL=w.oGLOBAL, oDATA=w.oDATA, oCONTROLS=w.oCONTROLS, MY=w.MY`
-# App.AccidentsView = App.mainMenuView.extend(
+# App.tabAccidentsView = App.mainMenuView.extend(
 	# content: null
 	# viewIx: 0
-	# templateName: 'tmpAccidentsMain'
+	# templateName: 'tmptabAccidentsMain'
 	# init: -> 
 		# @_super()
 		# console.log("accidentInit")
 	# didInsertElement: -> 
 		# alert("loaded")
 		# @_super()
-		# console.log("I loaded all accidents")
+		# console.log("I loaded all tabAccidents")
 	# #contentObserver: (->
 	# #	@rerender()
-	# #	alert("App.AccidentsssssView has changed!")
-	# #	).observes("App.accidentsController.content")
+	# #	alert("App.tabAccidentsssssView has changed!")
+	# #	).observes("App.tabAccidentsController.content")
 # )
 App.AccidentView = Em.View.extend(
 	#@addObserver('content.lossSum', ->
@@ -54,16 +54,16 @@ App.SelectedAccidentView = Em.View.extend(
 		# oDATA.SET("proc_InsPolicies_forThisAccident", proc_InsPolicies_forThisAccident)
 		tr = $(e.target).closest("tr");ClaimW = $("#ClaimWraper")
 		if (ClaimW.length > 0)
-			MY.accidents.SelectedClaimView.remove()
+			MY.tabAccidents.SelectedClaimView.remove()
 			ClaimW.remove();	
 		tr.parent().find("tr.selectedClaim").removeClass("selectedClaim title")
 		d = e.context;
-		MY.accidents.SelectedClaimView = App.SelectedClaimView.create(
+		MY.tabAccidents.SelectedClaimView = App.SelectedClaimView.create(
 			rowContext: { Claims2: d.Claims2, newClaim: false, LossAmount: d.loss, InsuranceType: d.type, accidentID: d.accidentID, accidentDate: d.accidentDate }
 			elementId: "ClaimDetailsContent", contentBinding: 'App.claimEditController.content'
 		)
 		tr.addClass("selectedClaim title").after("<tr><td id='ClaimWraper' colspan='7' class='selectedClaim content'></td></tr>");
-		MY.accidents.SelectedClaimView.appendTo("#ClaimWraper");
+		MY.tabAccidents.SelectedClaimView.appendTo("#ClaimWraper");
 		Em.run.next(() -> $("#ClaimDetailsContent").slideDown() )
 		false		
 	newClaim: (e) ->
@@ -77,24 +77,24 @@ App.SelectedAccidentView = Em.View.extend(
 				$('#divNewClaimCard').find('#divClaimCardDetails,div.frmbottom').remove();
 				#fnSetClaimCard(1, T)
 				#naujam Claimsui imamas redaguojamas viewsas SelectedClaimView ir kitas kontroleris newClaimController
-				if (MY.accidents.NewClaimView) ##($("#newClaimDetailsContent").length > 0)
-					MY.accidents.NewClaimView.remove()
+				if (MY.tabAccidents.NewClaimView) ##($("#newClaimDetailsContent").length > 0)
+					MY.tabAccidents.NewClaimView.remove()
 					$("#newClaimDetailsContent").remove();
-				MY.accidents.NewClaimView = App.SelectedClaimView.create(
+				MY.tabAccidents.NewClaimView = App.SelectedClaimView.create(
 					#rowContext: { Claims2: d.Claims2, newClaim: true, LossAmount: d.loss, InsuranceType: d.type, accidentID: d.accidentID }
 					rowContext: { newClaim: true, accidentID: App.thisAccidentController.get("accidentID") }
 					elementId: "newClaimDetailsContent", contentBinding: 'App.newClaimController.content'
 				)
-				MY.accidents.NewClaimView.appendTo("#divNewClaimCard")
+				MY.tabAccidents.NewClaimView.appendTo("#divNewClaimCard")
 				Em.run.next(() -> $("#newClaimDetailsContent").slideDown() )
 				false
-				fnCancel: () -> $("#accidentsTable").find("div.selectedAccident").trigger("click")# $(nTr).find('td').html(CancelNewClaimHtml)
-			fnCancel: () -> $("#accidentsTable").find("div.selectedAccident").trigger("click") #$(nTr).find('td').html(CancelNewClaimHtml)
+				fnCancel: () -> $("#tabAccidentsTable").find("div.selectedAccident").trigger("click")# $(nTr).find('td').html(CancelNewClaimHtml)
+			fnCancel: () -> $("#tabAccidentsTable").find("div.selectedAccident").trigger("click") #$(nTr).find('td').html(CancelNewClaimHtml)
 		oCONTROLS.Set_Updatable_HTML.mega_select_list(d)
 		false
 	elementId: "AccDetailsContent"
 	contentBinding: 'App.thisAccidentController.content'
-	destroyElement: () -> MY.accidents.SelectedClaimView.remove() if (MY.accidents.SelectedClaimView)
+	destroyElement: () -> MY.tabAccidents.SelectedClaimView.remove() if (MY.tabAccidents.SelectedClaimView)
 )
 App.SelectedClaimView = Em.View.extend(
 	didInsertElement: ->
@@ -167,7 +167,7 @@ App.SelectedClaimView = Em.View.extend(
 						#var newView = App.AccidentView.create({
 						#    content:newContext,
 						#    templateName: "tmpAccidentRow"
-						tr = $("#accidentsTable").find("div.selectedAccident") #.empty()
+						tr = $("#tabAccidentsTable").find("div.selectedAccident") #.empty()
 						#newView.appendTo(tr)
 						#Em.View.create({
 						#    personName: 'Dr. Tobias Fünke',
@@ -178,7 +178,7 @@ App.SelectedClaimView = Em.View.extend(
 			SERVER.update(opt)
 	CancelSaveClaim: (e) ->
 		#oCONTROLS.UpdatableForm_reset("#divClaimCard")
-		$("#accidentsTable").find("div.selectedAccident").trigger("click")
+		$("#tabAccidentsTable").find("div.selectedAccident").trigger("click")
 	DeleteClaim: (e) ->
 		oData=oDATA.GET("tblClaims"); context=e.context.rowContext;
 		console.log("Žalos ID: "+context.Claims2[0])
@@ -194,7 +194,7 @@ App.SelectedClaimView = Em.View.extend(
 					App.accidentsController.get("setNewVal").call(App.accidentsController, {newVal:newRow,toAppend:false,fieldsToInt:[0, 1, 5, 6, 7, 8]})[0] #kuriuos reikia paverst integeriais
 					oData.Data.removeRowByID(parseInt(updData.DataToSave.id,10)) #ištrinam ir iš tblClaims jau ištrintą žalą					
 					#oData.Data.removeRowByID(p.id) data.removeRowByProperty("id",p.id)
-					$("#accidentsTable").find("div.selectedAccident").trigger("click")
+					$("#tabAccidentsTable").find("div.selectedAccident").trigger("click")
 			)
 	templateName: 'tmpClaimEdit'
 	#elementId: "ClaimDetailsContent",
@@ -208,9 +208,9 @@ App.accidentsController = Em.ResourceController.create(
 		#return;
 		AddWr.parent().find("div.dividers").remove()
 		if (AddWr.length > 0)
-			MY.accidents.AcccidentdetailsView.remove(); AddWr.remove(); # AddWr.hide('slow', () -> AddWr.remove();) 
-		else if MY.accidents.AcccidentdetailsView #jei filtruojant pakavojom ir spaudziam kitur panaikinam jį
-			MY.accidents.AcccidentdetailsView.destroy();MY.accidents.AcccidentdetailsView=null;$('div.dividers').remove()
+			MY.tabAccidents.AcccidentdetailsView.remove(); AddWr.remove(); # AddWr.hide('slow', () -> AddWr.remove();) 
+		else if MY.tabAccidents.AcccidentdetailsView #jei filtruojant pakavojom ir spaudziam kitur panaikinam jį
+			MY.tabAccidents.AcccidentdetailsView.destroy();MY.tabAccidents.AcccidentdetailsView=null;$('div.dividers').remove()
 	tbodyClick: (e) ->
 		tr = $(e.target).closest("div.tr")
 		@setfilteredPolicies(e.context.date)#Filtruojam polisus		
@@ -223,9 +223,9 @@ App.accidentsController = Em.ResourceController.create(
 			parent.find("div.selectedAccident").removeClass("selectedAccident"); this.removeClaims(AddWr) #priešingu atveju ištrinam ir pridedam
 			
 		tr.addClass("selectedAccident")	if not tr.hasClass("selectedAccident")
-		MY.accidents.AcccidentdetailsView = App.SelectedAccidentView.create(e.context)
+		MY.tabAccidents.AcccidentdetailsView = App.SelectedAccidentView.create(e.context)
 		tr.after("<div id='AccDetailsWraper'></div><div class='dividers'></div>").prev().before("<div class='dividers'></div>")
-		MY.accidents.AcccidentdetailsView.appendTo("#AccDetailsWraper")
+		MY.tabAccidents.AcccidentdetailsView.appendTo("#AccDetailsWraper")
 		if e.isTrigger
 			Em.run.next(-> $("#AccDetailsContent, div.dividers").show())
 		else
@@ -243,8 +243,8 @@ App.accidentsController = Em.ResourceController.create(
 	addNewAccident: ->
 		this.openAccident(null)
 	openAccident: (AccNo) ->
-		$('#tabAccidents').removeClass("colmask")
-		$('#divAccidentsList').hide()
+		$('#tabtabAccidents').removeClass("colmask")
+		$('#divtabAccidentsList').hide()
 		ctrlEdit=$('#divAccidentEdit').show()
 		ctrlEdit.spinner({ position: 'center', img: 'spinnerBig.gif' })
 		oGLOBAL.LoadAccident_Card(AccNo)
@@ -263,7 +263,7 @@ App.accidentsController = Em.ResourceController.create(
 			@panelFilterIsActive=if (@chkDocs||@chkOpen||@chkData||@chkClaim) then true else false
 			@filterByPanel=@get_filterByPanel() #generate new function
 		@filterItems(filterName,filterValue,thisObj);		
-		Em.run.next(-> tbl=$('#accidentsTable'); if (not tbl.find('div.selectedAccident').length) then tbl.find('div.dividers').remove())
+		Em.run.next(-> tbl=$('#tabAccidentsTable'); if (not tbl.find('div.selectedAccident').length) then tbl.find('div.dividers').remove())
 	).observes('chkDocs','chkOpen','chkData','chkClaim','filterValue')
 	#claims_C: "0#|47-1#|TP valdytojų civilinė atsakomybė#|BRU641#|Ergo Lietuva#|1520{{TGH-152 Man 160 Jonas Jonaitis}}"
 	#claims_C2: "175#|4#|2#|500#|'bb10'#|0#|1#|0#|0"
@@ -384,7 +384,8 @@ App.SidePanelView = Em.View.extend(
 	templateName: "tmpSidePanel"
 	didInsertElement: ()->
 		@_super(); 	
-		Em.run.next(()->$("#sidePanel").closest("div.col2").scrollelement()			
+		Em.run.next(()->
+			$("#sidePanel").closest("div.col2").scrollelement()			
 			$("#chkOpen").buttonset().on("click",(e)->
 				chk=$(e.target).closest("label").prev();
 				newVal=if (chk.next().hasClass("ui-state-active")) then chk.attr("id") else null #Jei aktyvus priskiriam
@@ -413,4 +414,4 @@ App.SidePanelView = Em.View.extend(
 		#e.preventDefault();
 		#if $(this.target).attr("checked") then $(this.target).attr("checked", "") else $(this.target).attr("checked", "checked")	
 )
-MY.accidents={}
+MY.tabAccidents={}

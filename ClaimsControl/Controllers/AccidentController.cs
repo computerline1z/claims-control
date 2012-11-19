@@ -16,7 +16,7 @@ namespace CC.Controllers {
       [HttpPost]
       public JsonResult GetAccident(int? AccidentNo)//GetAccidentLists()//Naudoja AccidentsCard
       {
-         Repositories_Accidents AccRep = new Repositories_Accidents();
+         Repositories_Main AccRep = new Repositories_Main();
          string View = ""; int AccNo = (AccidentNo.HasValue) ? AccidentNo.Value : 0;
          clsAccident a = new clsAccident(AccNo);
          View = RenderPartialViewToString("Card", a);
@@ -35,7 +35,7 @@ namespace CC.Controllers {
 
       [HttpPost]
       public JsonResult AccidentsList() {
-         Repositories_Accidents acc = new Repositories_Accidents();
+         Repositories_Main acc = new Repositories_Main();
          return Json(new {
             proc_Accidents = acc.GetJSON_proc_Accidents()		
          });
