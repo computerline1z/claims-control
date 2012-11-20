@@ -38,7 +38,8 @@
                         @Html.TextBoxFor(m => m.UserName, new { id = "UserName", @class = "input_Long" })
                     </td>
                     <td style="padding-left: 5px;">
-                        <img src="../../Content/images/Question.png" alt="Paskyros pavadinimas bus naudojamas... " title="Paskyros pavadinimas bus naudojamas... " />
+                        <img src='@Url.Content("~/Content/images/Question.png")' alt="Paskyros pavadinimas bus naudojamas... " 
+                             title="Paskyros pavadinimas bus naudojamas... " />
                     </td>
                 </tr>
                 <tr>
