@@ -1,7 +1,7 @@
 ﻿@*{{{{log this}}
 checkOut this Field="Days" id="inputDays" labelType="Top"}}
 <div class="td w03pr">{{unbound no}}</div>*@
-<tr class="clickable" {{action "edit" target="App.usersController"}}>
+<tr class="clickable" {{action editUser target="App.usersController"}}>
 	<td>{{email}}</td><td>{{firstName}}&nbsp;{{surname}}</td>
 
 	{{#if isAdmin}}<td><i class="img32-check"></i></td>

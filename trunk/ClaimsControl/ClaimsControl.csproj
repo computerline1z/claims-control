@@ -382,6 +382,7 @@
     <Content Include="Scripts\Files\MicrosoftMvcValidation.js" />
     <Content Include="Scripts\Files\tmpl.min.js" />
     <Content Include="Scripts\Files\vendor\jquery.ui.widget.js" />
+    <Content Include="Scripts\Final\combined.min.js" />
     <Content Include="Scripts\Forms\tabAccidents.js" />
     <Content Include="Scripts\Forms\tabAdmin.js" />
     <Content Include="Scripts\Forms\tabLists.js" />
@@ -447,7 +448,6 @@
     <Folder Include="Areas\Scripts\Controllers\" />
     <Folder Include="Areas\Scripts\Models\" />
     <Folder Include="Areas\Scripts\Views\Shared\" />
-    <Folder Include="Scripts\Final\" />
     <Folder Include="SQL\Procedures\" />
     <Folder Include="Temp\" />
   </ItemGroup>

@@ -22,10 +22,11 @@ namespace ClaimsControl.Controllers {
 		[HttpPost]
 		public JsonResult tabLists(string ver, bool tmp, bool obj) {
 			Repositories_Main acc = new Repositories_Main();
-			string currentVer = "2"; if (ver != currentVer) tmp = true; ver = currentVer;
+			string currentVer = "3"; if (ver != currentVer) tmp = true; ver = currentVer;
 			System.Diagnostics.Debug.Print("ver - " + ver + "; obj - " + obj.ToString());
 			return Json(
 				new {
+					ver = ver,
 					jsonObj = new {//šitam visada atnaujinu objektus
 						proc_topDrivers = acc.GetJSON_proc_Drivers(true),
 						proc_topVehicles = acc.GetJSON_proc_Vehicles(true),
@@ -64,6 +65,7 @@ namespace ClaimsControl.Controllers {
 			Repositories_Main acc = new Repositories_Main();
 			return Json(
 				new {
+					ver = "No ver",//kol kas šitas be versijų
 					jsonObj = new {
 						//proc_Accidents = acc.GetJSON_proc_Accidents(),
 						tblAccidents = acc.GetJSON_tblAccidents(),
@@ -106,10 +108,11 @@ namespace ClaimsControl.Controllers {
 		[HttpPost]
 		public JsonResult tabAdmin(string ver, bool tmp, bool obj) {
 			Repositories_Main acc = new Repositories_Main();
-			string currentVer = "1";if (ver != currentVer) tmp = true; ver = currentVer;
+			string currentVer = "3";if (ver != currentVer) tmp = true; ver = currentVer;
 			System.Diagnostics.Debug.Print("ver - " + ver + "; obj - " + obj.ToString());
 			return Json(
 				new {
+					ver = ver,
 					jsonObj = (obj) ? new {
 						tblAccount = acc.GetJSON_tblAccount(),
 						tblCurrencies = acc.GetJSON_tblCurrencies(),
@@ -122,11 +125,11 @@ namespace ClaimsControl.Controllers {
 						tblTimeZones = acc.GetJSON_tblTimeZones()
 					},
 					templates = (tmp) ? new {
-						tmpAdminMain = RenderPartialViewToString("Admin/tmpAdminMain"),
-						tmpUserRow = RenderPartialViewToString("Admin/tmpUserRow")
+						tmpUserRow = RenderPartialViewToString("Admin/tmpUserRow"),
+						tmpAdminMain = RenderPartialViewToString("Admin/tmpAdminMain")
 					} : new {
-						tmpAdminMain = "",
-						tmpUserRow = ""
+						tmpUserRow = "",
+						tmpAdminMain = ""
 					},
 					Script = new { File = "/Scripts/Forms/tabAdmin.js?ver="+ver, Pars = "" }
 				}

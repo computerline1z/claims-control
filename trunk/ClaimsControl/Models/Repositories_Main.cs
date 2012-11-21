@@ -184,7 +184,7 @@ namespace CC.Models {
 				new { FName = "CountryID",List=new{Source="tblCountries",ListType="List", iVal="iD",iText=new object []{"name"}}},//3
 				new { FName = "CurrencyID",List=new{Source="tblCurrencies",ListType="List", iVal="iD",iText=new object []{"name"}}},//3
 				new { FName = "TimeZoneID",List=new{Source="tblTimeZones",ListType="List", iVal="iD",iText=new object []{"name"}}},//3
-				new { FName = "Email",Type="String", LenMax=50,Validity="require().match('textWithPoint').maxLength(50)"},//5
+				new { FName = "Email",Type="String", LenMax=50,Validity="require().match(\"textWithPoint\").maxLength(50)"},//5
 			}; JSON.Cols = Cols;
 			JSON.Config = new { tblUpdate = "tblAccounts", Msg = new { Edit = "Sąskaitos redagavimas", GenName = "Sąskaita", GenNameWhat = "Sąskaitą" } };
 			JSON.Grid = new {
@@ -574,9 +574,9 @@ namespace CC.Models {
 				new { FName = "ID"},//0
 				new { FName = "FirstName",Type="String",Validity="require().nonHtml().maxLength(50)"},//2
 				new { FName = "Surname",Type="String",Validity="require().nonHtml().maxLength(50)"},//1
-				new { FName = "Email",Validity="require().nonHtml().match('email').maxLength(35)"},//3
-				new { FName = "IsAdmin"},//3
-				new { FName = "IsActive"}//3
+				new { FName = "Email",Type="Email",Validity="require().nonHtml().match(\"email\").maxLength(35)"},//3 'email'
+				new { FName = "IsAdmin",Type="Boolean"},//3
+				new { FName = "IsActive",Type="Boolean"}//3
 			}; JSON.Cols = Cols;
 			JSON.Config = new { tblUpdate = "tblUsers", Msg = new { AddNew = "Naujo vartotojo sukūrimas", Edit = "Vartotojo redagavimas", Delete = "Ištrinti vartotoją", GenName = "Vartotojas", GenNameWhat = "Vartotoją", ListName = "Vartotojų sąrašas" } };
 			JSON.Grid = new {
