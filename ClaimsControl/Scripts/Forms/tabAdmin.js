@@ -27,12 +27,82 @@
 
   App.accountController = Em.ArrayController.create({
     tableName: "tblAccount",
-    content: []
+    content: [],
+    SaveChanges: function(e) {
+      var Action, DataToSave, Msg, frm, opt;
+      console.log(e);
+      frm = $('#AccountForm');
+      Action = 'Edit';
+      Msg = {
+        Title: "Paskyros redagavimas",
+        Success: "Paskyros duomenys pakeisti.",
+        Error: "Nepavyko pakeisti paskyros duomenų."
+      };
+      $(frm).data("ctrl").id = App.accountController.content[0].iD;
+      DataToSave = oCONTROLS.ValidateForm(frm);
+      if (DataToSave) {
+        opt = {
+          Action: Action,
+          DataToSave: DataToSave,
+          row: App.accountController.content[0],
+          source: "tblAccount",
+          Ctrl: frm,
+          Msg: Msg
+        };
+        return SERVER.update2(opt);
+      }
+    },
+    deleteAccount: function(e) {
+      var title;
+      title = "Paskyros naikinimas";
+      return oCONTROLS.dialog.Confirm({
+        title: title,
+        msg: "Ištrinti šią paskyrą?"
+      }, function() {
+        return oCONTROLS.dialog.Alert({
+          title: title,
+          msg: "Negaliu ištrinti šitos paskyros.."
+        });
+      });
+    }
   });
 
   App.usersController = Em.ArrayController.create({
     tableName: "tblUsers",
-    content: []
+    content: [],
+    modifyUsers: function(pars) {
+      pars = $.extend(pars, {
+        objData: "tblUsers",
+        CallBackAfter: (function(RowData, opt) {
+          var inputs, mail, msg, name, surname, title;
+          inputs = $("#divDialogForm").find("div.ExtendIt input");
+          name = $(inputs[0]);
+          surname = $(inputs[1]);
+          mail = $(inputs[2]);
+          if (opt.Action === "Add" || mail.data("ctrl").Value !== mail.val) {
+            msg = "Vartotojui '<b>" + name.val() + " " + surname.val() + "</b>' bus išsiųstas pranešimas susikurti prisijungimo prie sistemos slaptažodį e-paštu <b>" + mail.val() + "</b>. Bet kuriuo metu galite pakeisti e-paštą, tokiu atveju bus siunčiamas naujas pranešimas, o prieš tai buvęs nustos galioti.";
+            title = opt.Action === "Add" ? "Sukurtas naujas vartotojas" : "Pakeistas e-paštas";
+            return oCONTROLS.dialog.Alert({
+              title: title,
+              msg: msg
+            });
+          }
+        })
+      });
+      return new oGLOBAL.clsEditableForm(pars);
+    },
+    addNewUser: function(e) {
+      return this.modifyUsers({
+        Action: "Add",
+        aRowData: 0
+      });
+    },
+    editUser: function(e) {
+      return this.modifyUsers({
+        Action: "Edit",
+        aRowData: e.view._context
+      });
+    }
   });
 
   MY.tabAdmin = {};

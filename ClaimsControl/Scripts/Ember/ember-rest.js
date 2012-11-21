@@ -368,8 +368,7 @@ var SERVER = {
 								if (updateCol){
 									var field=updateCol.FName.firstSmall(),newVal1=oDATA.GET(col.List.Source).emData.findObjectByProperty("iD",newVal).MapArrToString(col.List.iText, true);
 									Row.set(field,newVal1);
-									//Row[updateCol.FName.firstSmall()]=oDATA.GET(col.List.Source).emData.findObjectByProperty("iD",newVal).MapArrToString(col.List.iText, true);
-								}else{console.error("List field '"+updateField+"' without IdField");}
+								}else{console.warn("List field '"+updateField+"' without IdField");}								
 							}
 						}
 					});
@@ -468,7 +467,7 @@ var SERVER = {
 		var titleFields = (updData.source)?oDATA.GET(updData.source).Config.titleFields:false, Title;
 		if (titleFields){Title=(updData.row)?updData.row.MapArrToString(titleFields, true): "Duomenų keitimas."}	
 		DefMsg = {
-			Title: ((Title)?Title:"Duomenų keitimas."),
+			Title: (Title||updData.Title||"Duomenų keitimas"),
 			Error: {
 				Add: "Nepavyko išsaugot naujų duomenų.",
 				Edit: "Nepavyko pakeisti duomenų.",
@@ -480,19 +479,18 @@ var SERVER = {
 				Delete: "Duomenys ištrinti."
 			}
 		};
-		var MsgObj = $.extend({}, DefMsg, updData.Msg), Msg,Sign,Type;
-		if (resp.ErrorMsg) {
-			Type="Error",Sign="img32-warning";
-		} else {
-			Type="Success",Sign="img32-check";
-		}
-		Msg = MsgObj[Type][updData.Action];
+		var Msg,Sign,Type,notExpires;
+		if (resp.ErrorMsg) {Type="Error",Sign="img32-warning",notExpires=true;} 			
+		else {Type="Success",Sign="img32-check",notExpires=false;}			
+		
+		Msg =  updData.Msg[Type]||DefMsg[Type][updData.Action];
 		if (Type==="Error"){Msg += " Klaida:\n" + resp.ErrorMsg;}
 		if (updData.CallBack) {
 			if (typeof updData.CallBack[Type] === 'function') {updData.CallBack[Type](resp, updData);}
 		}		
 		//$.growlUI(DefMsg.Title, Msg);
-		oGLOBAL.notify.withIcon(DefMsg.Title, Msg, Sign);		
+		
+		oGLOBAL.notify.withIcon(DefMsg.Title, Msg, Sign,notExpires);		
 		return false;
 	}
 };

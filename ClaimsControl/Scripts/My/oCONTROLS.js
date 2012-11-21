@@ -128,7 +128,7 @@ var oCONTROLS = {
 				}
 			}    //classes+' text', textarea,
 			col.classes = (col.classes) ? col.classes + " " + AddToClasses : AddToClasses;
-			if (typeof col.Value !== "number") {col.Value = (col.Value) ? col.Value.replace(/'/g, "\"") : "";} //Kitaip gaidinasi	
+			if (typeof col.Value !== "number"&&typeof col.Value !== "boolean") {col.Value = (col.Value) ? col.Value.replace(/'/g, "\"") : "";} //Kitaip gaidinasi	
 			for (var prop in col) {
 				if (prop === 'List') {
 					$.extend(data_ctrl, col[prop]);
@@ -224,11 +224,7 @@ var oCONTROLS = {
 						Allow: Type
 					});
 				}
-				if (typeof col.Tip !== 'undefined') {
-					//input.labelify({ labelledClass: " inputTip ", text: function (input) { return $(input).data('ctrl').Tip; } }); 
-					//input.attr("")
-					input.attr("placeholder", col.Tip)
-				}       //, labelledClass: "inputTip"
+				if (typeof col.Tip !== 'undefined') {input.attr("placeholder", col.Tip)} 
 			}
 		});
 		//log('<div>==========UpdatableForm========</div>');
@@ -237,7 +233,7 @@ var oCONTROLS = {
 		$("div.validity-modal-msg").remove(); //panaikinam validacijos msg jei buvo
 		var c = frm.data("ctrl"), id = parseInt(c.id, 10), NewRec = parseInt(c.NewRec, 10), DataTable = (c.tblUpdate) ? (c.tblUpdate) : (oDATA.GET(c.Source).Config.tblUpdate); //Updatinimui imam is markupo, jei nera is objekto
 		if (!id & !NewRec) {
-			alert("Nėra nurodyta id formos data(ctrl)!");
+			console.error("Nėra nurodyta id formos data(ctrl)!");
 		}
 		//$.validity.setup({
 		//    outputMode: "modal"
@@ -252,7 +248,7 @@ var oCONTROLS = {
 			var e = $(v);
 			var elDesc = e[0].tagName + ", id-" + e.attr("id"), Value, UpdateField = (e.data("ctrl").UpdateField) ? e.data("ctrl").UpdateField : false;
 			if (e.data("ctrl") === undefined) {
-				alert("Nerasta data(ctrl),el: " + elDesc);
+				console.error("Nerasta data(ctrl),el: " + elDesc);
 				return true;
 			}
 			var Type, FName = e.data("ctrl").Field, OldVal = (NewRec) ? '' : $.trim(e.data("ctrl").Value), val = '';
@@ -261,7 +257,7 @@ var oCONTROLS = {
 				val = (e.attr("checked")) ? 1 : 0; // Type="CheckBox";
 			} else {
 				if (typeof e.data("ctrl").Type === 'undefined') {
-					alert("Nerastas elemento Tipas!");
+					console.error("Nerastas elemento Tipas!");
 					//log("<div style='color:red'>Nerastas elemento Tipas!</div>");
 				} else {
 					Type = e.data("ctrl").Type;
@@ -289,12 +285,6 @@ var oCONTROLS = {
 							e.require("Reikalinga parinkti reikšmę iš sarašo..");
 						}
 					} else {
-						var cTip = (e.data("ctrl").Tip) ? e.data("ctrl").Tip : "", IsTip = false;
-						if (cTip && cTip === e.val()) {
-							e.val("");
-							IsTip = true;
-						} //Isvalom tipus jei yra (isskyrus datos)
-
 						if (Type === "Decimal" || Type === "Integer") {
 							e.val(e.val().replace(/,/g, "."));
 							Validity = Validity.replace(/match\(number\)/g, "match('number')").replace(/match\(integer\)/g, "match('integer')");
@@ -307,9 +297,6 @@ var oCONTROLS = {
 						if (CheckIt && (Require || NotEmpty)) {//Pasikeite reiksme && (Require arba Netuscias)
 							if (Validity) eval("$(this)." + Validity);
 						}
-						if (IsTip) {
-							e.val(cTip);
-						} //Grazinam tipus
 					}
 				}
 				if (typeof e.data("ctrl").AgrValidity !== 'undefined') {//Jeigu reikia uzpildyti viena is privalomu lauku
