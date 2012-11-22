@@ -108,7 +108,7 @@ JQ.Dialog = Ember.View.extend(JQ.Widget, {
 		//this.get('ui').dialog('destroy'); // has no method getS
 		$(this).dialog('destroy');
 		$(this).remove();
-		if (MY.lists.dialog)MY.lists.dialog.remove();
+		if (MY.dialog)MY.dialog.remove();
 	},			
 	open: function () {
 		//this.get('ui').dialog('open'); //Object [object Object] has no method 'dialog' 
