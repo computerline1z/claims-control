@@ -44,7 +44,7 @@ App.usersController = Em.ArrayController.create(
 		pars=$.extend(pars, objData: "tblUsers",CallBackAfter: ((RowData,opt) ->
 			inputs=$("#divDialogForm").find("div.ExtendIt input"); name=$(inputs[0]); surname=$(inputs[1]); mail=$(inputs[2]);
 			if opt.Action=="Add" or mail.data("ctrl").Value!=mail.val
-				msg="Vartotojui '<b>"+name.val()+" "+ surname.val()+"</b>' bus išsiųstas pranešimas susikurti prisijungimo prie sistemos slaptažodį e-paštu <b>"+mail.val()+"</b>. Bet kuriuo metu galite pakeisti e-paštą, tokiu atveju bus siunčiamas naujas pranešimas, o prieš tai buvęs nustos galioti."		
+				msg="Vartotojui '<b>"+name.val()+" "+ surname.val()+"</b>' bus išsiųstas pranešimas susikurti prisijungimo prie sistemos slaptažodį e-paštu <b>"+mail.val()+"</b>. Bet kuriuo metu galite pakeisti e-paštą, tokiu atveju bus siunčiamas naujas pranešimas, o prieš tai buvęs slaptažodis nustos galioti."		
 				title=if opt.Action=="Add" then "Sukurtas naujas vartotojas" else "Pakeistas e-paštas"
 				oCONTROLS.dialog.Alert( title:title,msg:msg)
 			)
