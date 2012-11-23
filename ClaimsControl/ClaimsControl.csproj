@@ -334,6 +334,7 @@
     <Content Include="packages\Ninject.Web.Common.3.0.0.7\lib\net45-full\Ninject.Web.Common.xml" />
     <Content Include="packages\WebActivator.1.5.1\lib\net40\WebActivator.dll" />
     <Content Include="Scripts\Ember\appEnd.js" />
+    <Content Include="Scripts\Ember\ember-rest.js" />
     <Content Include="Scripts\Ember\handlebars-1.0.0.beta.6.js" />
     <Content Include="Content\Files\css\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\Files\css\images\ui-bg_flat_75_ffffff_40x100.png" />
