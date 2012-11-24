@@ -77,11 +77,13 @@ namespace CC.Controllers
                     throw new Exception(String.Format("Duomenų perdavimo klaida: laukiama {0} baitų, gauta - {1}.", model.fileSize, stream.Length));
 
                 var buffer = new byte[model.fileSize];  //     [stream.Length];
+                int recordId = 0;
                 if (buffer.Length > 0)
                 {
                     stream.Read(buffer, 0, buffer.Length);
                     FileDescriptor descriptor = FileDescriptor.CreateFileDescriptor(model, buffer.Length, UserData.UserID);
                     tblDoc newRecord = this._flManager.StoreTblDocs(descriptor, out errorMessage);
+                    recordId = newRecord.ID;
                     if (String.IsNullOrEmpty(errorMessage))
                     {
                         string fileName = String.Format(_fileNameFormat, newRecord.ID) + "." + newRecord.FileType;
@@ -95,11 +97,12 @@ namespace CC.Controllers
                     else
                         throw new Exception(errorMessage);
                 }
-                return Json(new { success = true }, "text/html");
+
+                return Json(new { success = true, id = recordId, message = String.Empty }, "text/html");
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = ex.Message }, "application/json");
+                return Json(new { success = false, id = 0, message = ex.Message }, "application/json");
             }
         }
 
