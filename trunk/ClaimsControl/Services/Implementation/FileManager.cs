@@ -153,8 +153,7 @@ namespace CC.Services.Implementation
 
         public string GetIndividualDirectory(string account, string userName, bool uploadDirectory)
         {
-            string rzlt = Path.Combine(uploadDirectory ? this.UploadDirectory : this.ThumbnailDirectory, 
-                                       account, userName);
+            string rzlt = Path.Combine(uploadDirectory ? this.UploadDirectory : this.ThumbnailDirectory, account);
             if (!Directory.Exists(rzlt))
                 Directory.CreateDirectory(rzlt);
             return rzlt;
