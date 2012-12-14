@@ -33,8 +33,8 @@ namespace CC.Services.Ninject
             
             string virtualUploadDirectory = ConfigurationManager.AppSettings["uploadDirectory"];
             string uploadDirectory = HttpContext.Current.Server.MapPath(virtualUploadDirectory);
-            string virtualThumbnailDirectory = ConfigurationManager.AppSettings["thumbnailDirectory"];
-            string thumbnailDirectory = HttpContext.Current.Server.MapPath(virtualThumbnailDirectory);
+            //string virtualThumbnailDirectory = ConfigurationManager.AppSettings["thumbnailDirectory"];
+            //string thumbnailDirectory = HttpContext.Current.Server.MapPath(virtualThumbnailDirectory);
             int thumbnailSize;
             if (!Int32.TryParse(ConfigurationManager.AppSettings["thumbnailSize"], out thumbnailSize))
                 thumbnailSize = 32;
@@ -43,8 +43,8 @@ namespace CC.Services.Ninject
                 .InScope(ctx => HttpContext.Current)
                 .WithConstructorArgument("virtualUploadDirectory", virtualUploadDirectory)
                 .WithConstructorArgument("uploadDirectory", uploadDirectory)
-                .WithConstructorArgument("virtualThumbnailDirectory", virtualThumbnailDirectory)
-                .WithConstructorArgument("thumbnailDirectory", thumbnailDirectory)
+                //.WithConstructorArgument("virtualThumbnailDirectory", virtualThumbnailDirectory)
+                //.WithConstructorArgument("thumbnailDirectory", thumbnailDirectory)
                 .WithConstructorArgument("thumbnailSize", thumbnailSize);
 
             string fileNameFormat = ConfigurationManager.AppSettings["fileNameFormat"] ?? "{0:D8}";

@@ -81,13 +81,13 @@
 /*-------------------------------------Search container---------------*/
 /* div container containing the form  */
 /* Style the search input field. */
-//					<form>
-//			@Html.Raw("{{view App.SearchField_accidents placeholder=\"Ieškoti..\" id=\"srcField\" name=\"field\"}}")
-//			<div id="srcDelete">
-//				<span id="x">x</span></div>
-//			</form>
+//<form>
+//@Html.Raw("{{view App.SearchField_accidents placeholder=\"Ieškoti..\" id=\"srcField\" name=\"field\"}}")
+//<div id="srcDelete">
+//<span id="x">x</span></div>
+//</form>
 
-//			<input id="srcSubmit" name="submit" type="submit" value="Search" @Html.Raw("{{action aSearch}}")/>
+//<input id="srcSubmit" name="submit" type="submit" value="Search" @Html.Raw("{{action aSearch}}")/>
 //	<input type="text" class="searchField"/><div class="divSearch"><span class="spanToClearText">x</span></div>
 
 form input.searchField {
@@ -149,9 +149,9 @@ div.newClaimContent {background-color: @systemYellow3; .clearfix();}
 .ExtendIt { width: 100%; margin:15px auto 15px auto;text-align:left;}
 .ExtendIt button.ui-button-icon-only {height: @baseline;
 // ĮDĖTA:
-    .border-radius(0);
-    border-style: solid solid solid none;
-    border-color: @borderGreen;
+    //.border-radius(0);
+    border-style: none; //solid solid solid none; iš inputo pasiima (kitaip kartais nepataiko ant inputo borderiu)
+    //border-color: @borderGreen;
     background: url('images/DropDown-Arrow.png') no-repeat center;
     &:hover, &:active { background: url('images/DropDown-Arrow-hover.png') no-repeat center; }
 
@@ -384,3 +384,19 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 #openItemDialog { padding: 0; background-color:#f8f7f2;}
 #openItemDialog ul a { color:#505860; background-color:#C3C5C3;}
 #openItemDialog ul li.ui-tabs-active a { color:#505860; background-color:#f8f7f2; border-bottom-color: #f8f7f2;}
+/*Autocomplete li a su veiksmais*/
+.actionLink {font-weight:bold !important;color:#09C !important;text-decoration:underline !important; cursor:pointer !important;}
+/*------------------------Dokumentų medis--------------------------------*/
+.gallery li {float: left;width: 150px;padding: 0.4em;margin: 10px;border:1px solid #dddddd;}
+.gallery li img {width: 100%;cursor: move;}
+#dynamicTree ul {list-style: none;margin-left:10px;}/*padding-left: 10px;*/
+.expandImage, .spacerImage {margin-right: 2px;height: 16px;width: 16px;}
+.textHolder {height: 16px;line-height: 16px;padding:0 3px;}
+.treeItem {list-style: none;margin:0;}
+.treeItemHover{font-weight:bold;}
+/*------------------------photo/ docs view--------------------------------*/
+.icon-custom-edit {background-image: url("../images/Sprite32-hover.png");background-position: -64px -64px;height: 32px;line-height: 32px;width: 32px;}
+.icon-custom-delete {background-image: url("../images/Sprite32-hover.png");background-position: -32px -64px;height: 32px;line-height: 32px;width: 32px;}
+.icon-custom-doc {background-image: url("../images/Sprite32-hover.png");background-position: 0 -32px;height: 32px;line-height: 32px;width: 32px;}
+.icon-custom-img {background-image: url("../images/Sprite32-hover.png");background-position: -32px -32px;height: 32px;line-height: 32px; width: 32px;}
+.icon-custom-pdf {background-image: url("../images/Sprite32-hover.png");background-position: -64px -32px;height: 32px;line-height: 32px; width: 32px;}

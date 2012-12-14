@@ -1,8 +1,8 @@
 ﻿@model CC.Models.clsAccident
-@*Vaizdavimo markupa dedam cia, o info apie duomenu tipa ir pan JSON'e
-List info yra JSON'e, taciau jei bus cia tures aukstesni prioriteta
-Markup:{Ctrl:"Date"/"DateTime/Button",Value:"btnTitle",Default:"Today",Plugin:{["DatePicker"]}}
-*@
+@{string vehicles="";
+  foreach (CC.Models.AccidentVehicles vehicle in Model.Vehicles) { vehicles += "{\"iD\":" + vehicle.ID + ",\"title\":\""+ vehicle.Title + "\"},"; }
+  vehicles = vehicles.TrimEnd(',');
+	}
 @if (@Model.NewRec == 1) { <h2 style="margin: 15px; display: inline-block">Naujo įvykio registravimas</h2>}
 else {<h2 style="margin: 15px; display: inline-block">Įvykis Nr.:@Model.Accident.No</h2>}
 <a id="btnReturnToAccidents" href="javascript:void(0);return false;">(Atgal į Įvykių sąrašą)</a>
@@ -18,7 +18,8 @@ else {<h2 style="margin: 15px; display: inline-block">Įvykis Nr.:@Model.Acciden
 		  <text>'{"NewRec":1,"Source":"tblAccidents","tblUpdate":"tblAccidents"}'</text>
 	  }
 	  else {
-		  <text>'{"NewRec":0,"Source":"tblAccidents","id":@Model.Accident.ID,"Lat":"@Model.Accident.Lat.ToString().Replace(",", ".")","Lng":"@Model.Accident.Lng.ToString().Replace(",", ".")"}'</text>
+		  <text>'{"NewRec":0,"Source":"tblAccidents","vehicles":[@vehicles],
+		  "id":@Model.Accident.ID,"Lat":"@Model.Accident.Lat.ToString().Replace(",", ".")","Lng":"@Model.Accident.Lng.ToString().Replace(",", ".")"}'</text>
 	  }}
 	>
 	<div class='left border w47pr_mp ui-corner-all'>
@@ -81,5 +82,12 @@ else {<h2 style="margin: 15px; display: inline-block">Įvykis Nr.:@Model.Acciden
 		<div id='divMap' class="ui-corner-bottom;">map</div>
 	</div>
 </div>
-<div id="AccDocs" class="whiteTab"></div>
+<div id="AccDocs" class="whiteTab"  data-ctrl='{"id":0}'>
+<div  class="cont" id="uploadDocsToAccident2"  style="width:80%; margin:0 auto;"></div>@* height:80px;*@
+
+<div class="cont" style="background:#ffffff;border:1px solid #ddd;width:100%;height:500px">
+	<div id="dynamicTree" style="float: left;border-right: 1px solid #ddd; width: 20%">
+	</div>
+	<div id="docViewForTree" style="float:left; padding:10px;width:70%;"></div>	
+</div>
 </div>

@@ -17,10 +17,10 @@
     _create: function() {
       var Editable, OptVal, data, fnEditItem, id, input, opt, val;
       input = $(this.element[0]);
-      if (input === undefined) {
-        alert("Error! Input not found for ComboBox! (MyPlugins_ComboBox:15)");
+      if (input.length === 0) {
+        console.error("Input not found for ComboBox!");
       }
-      opt = $.extend(true, this.options, $(input).data("ctrl"));
+      opt = $.extend(true, this.options, input.data("ctrl"));
       if (opt.Source === "proc_Drivers") {
         opt.mapWithNoCommas = true;
       }
@@ -46,15 +46,19 @@
       Editable = (opt.Editable.Add || opt.Editable.Edit ? true : false);
       data = void 0;
       OptVal = parseInt(opt.Value, 10);
-      data = $.map(oDATA.GET(opt.Source).emData, function(a) {
-        if (a.iD === OptVal) {
-          input.val(a.MapArrToString(opt.iText, opt.mapWithNoCommas));
-        }
-        return {
-          id: a[opt.iVal],
-          label: a.MapArrToString(opt.iText, opt.mapWithNoCommas)
-        };
-      });
+      if (opt.data) {
+        data = opt.data;
+      } else {
+        data = $.map(oDATA.GET(opt.Source).emData, function(a) {
+          if (a.iD === OptVal) {
+            input.val(a.MapArrToString(opt.iText, opt.mapWithNoCommas));
+          }
+          return {
+            id: a[opt.iVal],
+            label: a.MapArrToString(opt.iText, opt.mapWithNoCommas)
+          };
+        });
+      }
       if (typeof opt.Append !== "undefined") {
         data[data.length] = opt.Append;
       }
@@ -69,6 +73,10 @@
           return response($.ui.autocomplete.filter(data, request.term));
         },
         select: function(event, ui) {
+          if (typeof ui.item.id === "function") {
+            ui.item.id();
+            return false;
+          }
           if ($(event.srcElement).hasClass("ui-menu-icon")) {
             input.data("autocomplete").fnClickOnBtn({
               id: ui.item.id,
@@ -86,6 +94,10 @@
               if (opt.fnChangeCallBack) {
                 MY.execByName(opt.fnChangeCallBack, MY, this, ui.item);
               }
+            }
+            if (ui.item.refID) {
+              $(this).data("refID", ui.item.refID);
+              $(this).data("categoryID", ui.item.categoryID);
               return false;
             }
           }
@@ -269,6 +281,74 @@
     },
     destroy: function() {
       return $.Widget.prototype.destroy.call(this);
+    }
+  });
+
+  $.widget("ui.ComboBoxCategory", $.ui.ComboBox, {
+    _create: function() {
+      var categoryOpts, data, emCategories, emTypes, opts, renderGroup;
+      opts = this.options;
+      categoryOpts = opts.categoryOpts;
+      emCategories = oDATA.GET("tblDocGroup").emData;
+      emTypes = oDATA.GET("tblDocType").emData;
+      data = $.map.call(this, emTypes, function(a) {
+        return {
+          id: a[opts.iVal],
+          label: a.MapArrToString(opts.iText, opts.mapWithNoCommas),
+          categoryID: a["docGroupID"]
+        };
+      });
+      $.extend(true, this.options, {
+        data: data
+      });
+      this._super();
+      renderGroup = function(me, ul, myCategory, docTypes, categoryID) {
+        var currentTypes;
+        currentTypes = docTypes.filter(function(type) {
+          return type.categoryID === categoryID;
+        });
+        return myCategory.forEach(function(category) {
+          ul.append("<li class='ui-autocomplete-category'>" + category.title + "</li>");
+          currentTypes.setEach("refID", category.iD);
+          return currentTypes.forEach(function(type, i) {
+            return me._renderItemData(ul, type);
+          });
+        });
+      };
+      return this.element.data("autocomplete")._renderMenu = function(ul, docTypes) {
+        var currentCategoryID, me;
+        me = this;
+        currentCategoryID = "";
+        emCategories.forEach(function(catItem, i) {
+          if (catItem.iD === 0) {
+
+          } else if (catItem.iD === 1) {
+            return me._renderItemData(ul, {
+              id: 0,
+              label: "Nuotrauka",
+              value: "Nuotrauka",
+              categoryID: 1,
+              refID: categoryOpts.accident.iD
+            });
+          } else if (catItem.iD === 3 && categoryOpts.driver) {
+            return renderGroup(me, ul, [categoryOpts.driver], docTypes, 3);
+          } else if (catItem.iD === 4 && categoryOpts.vehicles) {
+            return renderGroup(me, ul, categoryOpts.vehicles, docTypes, 4);
+          } else if (catItem.iD === 2 && categoryOpts.accident) {
+            return renderGroup(me, ul, [categoryOpts.accident], docTypes, 2);
+          }
+        });
+        if (categoryOpts.editList) {
+          me._renderItemData(ul, {
+            id: (function() {
+              return alert("Redaguoti");
+            }),
+            label: "Redaguoti sarašą",
+            value: "Redaguoti sarašą"
+          });
+          return ul.find("li:last a").addClass("actionLink");
+        }
+      };
     }
   });
 

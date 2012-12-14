@@ -1,21 +1,27 @@
 
 `var w=window, App=w.App, Em=w.Em, oGLOBAL=w.oGLOBAL, oDATA=w.oDATA, oCONTROLS=w.oCONTROLS, MY=w.MY`
-# App.tabAccidentsView = App.mainMenuView.extend(
-	# content: null
-	# viewIx: 0
-	# templateName: 'tmptabAccidentsMain'
+App.tabAccidentsView = App.mainMenuView.extend(
+	content: null
+	viewIx: 0
+	templateName: 'tmpAccidentsMain'
 	# init: -> 
 		# @_super()
 		# console.log("accidentInit")
-	# didInsertElement: -> 
-		# alert("loaded")
-		# @_super()
-		# console.log("I loaded all tabAccidents")
-	# #contentObserver: (->
-	# #	@rerender()
-	# #	alert("App.tabAccidentsssssView has changed!")
-	# #	).observes("App.tabAccidentsController.content")
-# )
+	didInsertElement: -> 
+		@_super()
+		console.log("I loaded all tabAccidents")
+		# oDATA.execWhenLoaded(["tmpUploadForm"], ()-> $('#uploadDocsToAccident').UploadFiles(
+		# 	categoryOpts:
+		# 		accident:{iD:24,title:"Įvykio dokumentai"}
+		# 		driver:{iD:87,title:"Vairuotojo Albinas Palubinskas dokumentai"},
+		# 		vehicles:[{iD:14,title:"TP BBB, Volvo __ dokumentai"},{iD:7,title:"BRU643, Volvo, FH12"}]	
+		# ))	
+		
+	#contentObserver: (->
+	#	@rerender()
+	#	alert("App.tabAccidentsssssView has changed!")
+	#	).observes("App.tabAccidentsController.content")
+)
 App.AccidentView = Em.View.extend(
 	#@addObserver('content.lossSum', ->
 	#	alert("New lossSum: " + @getPath('App.AccidentView.lossSum'))
@@ -202,7 +208,8 @@ App.SelectedClaimView = Em.View.extend(
 )
 #***************************************Controler**************************************************************
 App.accidentsController = Em.ResourceController.create(
-	tableName: "proc_Accidents",
+	url: "Accident/AccidentsList",#jei yra atsisiunčiam
+	tableName: "proc_Accidents",#jei yra, turinį į content
 	fields: {},
 	removeClaims: (AddWr) ->
 		#return;
@@ -243,8 +250,8 @@ App.accidentsController = Em.ResourceController.create(
 	addNewAccident: ->
 		this.openAccident(null)
 	openAccident: (AccNo) ->
-		$('#tabtabAccidents').removeClass("colmask")
-		$('#divtabAccidentsList').hide()
+		$('#tabAccidents').removeClass("colmask")
+		$('#divAccidentsList').hide()
 		ctrlEdit=$('#divAccidentEdit').show()
 		ctrlEdit.spinner({ position: 'center', img: 'spinnerBig.gif' })
 		oGLOBAL.LoadAccident_Card(AccNo)

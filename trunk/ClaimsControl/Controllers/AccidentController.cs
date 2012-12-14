@@ -34,11 +34,15 @@ namespace CC.Controllers {
       }
 
       [HttpPost]
-      public JsonResult AccidentsList() {
+      public JsonResult AccidentsList(string ver, bool tmp, bool obj) {
          Repositories_Main acc = new Repositories_Main();
-         return Json(new {
-            proc_Accidents = acc.GetJSON_proc_Accidents()		
-         });
+			return Json(
+				new {
+					ver = "No ver",//kol kas šitas be versijų
+					jsonObj = new {proc_Accidents = acc.GetJSON_proc_Accidents()}
+					//templates = new {tmpClaimEdit = RenderPartialViewToString("Accidents/tmpClaimEdit")}					
+				}
+			);
       }
    }
 }

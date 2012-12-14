@@ -29,22 +29,24 @@ $(oGLOBAL.logFromStart("DOM ready."));
 var oDATA = Ember.Object.create({
 	me: this,
 	Obj: {},
-	//1-reiÅ�kia, kad atsisiusta po sistemos uÅ¾sikrovimo per 'fnLoadNext'
-	listUrl: {
-		proc_Accidents: "Accident/AccidentsList",
-		tblAccidents: 1,
-		proc_Drivers: 1,
-		tblAccidentsTypes: 1,
-		tblClaimTypes: 1,
-		proc_Vehicles: 1,
-		proc_InsPolicies: 1,
-		tblInsurers: 1,
-		tblVehicleMakes: 1,
-		tblClaims: 1
-	},
+	objNames:[],
+	//1-reiškia, kad atsisiusta po sistemos užsikrovimo per 'fnLoadNext'
+	// listUrl: {
+		// proc_Accidents: "Accident/AccidentsList",
+		// tblAccidents: 1,
+		// proc_Drivers: 1,
+		// tblAccidentsTypes: 1,
+		// tblClaimTypes: 1,
+		// proc_Vehicles: 1,
+		// proc_InsPolicies: 1,
+		// tblInsurers: 1,
+		// tblVehicleMakes: 1,
+		// tblClaims: 1
+	// },
 	listTemplates: {},
+	
 	SET: function (objName, oINST) {
-		this.Obj[objName] = oINST;
+		this.Obj[objName] = oINST; if (!this.objNames.contains(objName)){this.objNames.push(objName);}
 	},
 	GET: function (objName) {
 		if (this.Obj[objName]) return this.Obj[objName];
@@ -55,19 +57,19 @@ var oDATA = Ember.Object.create({
 	GetRow: function (id, tbl) {
 		return this.GET(tbl).emData.findProperty("iD", id);
 	},
-	NEED: function (objNames, fnExec) {//jei objektu nera siunciames ir kai turim executinam funkcija
-		var all_queued = false, noHits = 0, me = this;
-		objNames.forEach(function (objName) {
-			if (!this.get("exists").call(this, objName)) {//jei neturim sito objekto tai atsisiunciam
-				noHits++;
-				this.get("load").call(this, objName, function (json) {
-					noHits--;
-					if (all_queued && noHits === 0) fnExec();
-				});
-			}
-		}, this); //second parameter becomes this in the callback function
-		all_queued = true;
-	},
+//	NEED: function (objNames, fnExec) {//jei objektu nera siunciames ir kai turim executinam funkcija
+//		var all_queued = false, noHits = 0, me = this;
+//		objNames.forEach(function (objName) {
+//			if (!this.get("exists").call(this, objName)) {//jei neturim sito objekto tai atsisiunciam
+//				noHits++;
+//				this.get("load").call(this, objName, function (json) {
+//					noHits--;
+//					if (all_queued && noHits === 0) fnExec();
+//				});
+//			}
+//		}, this); //second parameter becomes this in the callback function
+//		all_queued = true;
+//	},
 	execWhenLoaded: function (objNames, fnExec, timeoutId) {//jei objektu nera laukiam kol ateis
 		var tId = (timeoutId) ? timeoutId : 0, me = this, notExists = false;
 		objNames.forEach(function (objName) {
@@ -92,7 +94,7 @@ var oDATA = Ember.Object.create({
 		if (!oData.emData) { oData.emData = []; }
 		if (!p.newData) return;
 		var d = p.newData, c = oData.Cols, f = [], n, i, y, cnt = oData.emData;
-		for (i = 0; i < c.length; i++) {//Sudedam vardus, kad prasidetÅ³ nuo maÅ¾os raidÄ—s
+		for (i = 0; i < c.length; i++) {//Sudedam vardus, kad prasidetų nuo mažos raidÄ—s
 			n = c[i].FName;
 			f[f.length] = n.slice(0, 1).toLowerCase() + n.slice(1);
 		};
@@ -143,7 +145,7 @@ var oDATA = Ember.Object.create({
 				success: function (json) {
 					setter.call(me, objName, json[objName]);
 					var emData = emBuilder.call(me, { newData: json[objName].Data, tblName: objName, toAppend: true }); //{newData:newData, tblName:tblName, toAppend:{"sort":"asc/desc","col":"date"}}
-					execOnSuccess(emData); //Ä¨ia ÄÆkiÅ�am json'Ä…
+					execOnSuccess(emData); //čia įkišam json'č…
 				}
 			});
 		} else throw new Error(objName + "  already loaded");
@@ -163,56 +165,51 @@ var oDATA = Ember.Object.create({
 	},
 	fnLoadNext: function () {
 		oGLOBAL.logFromStart("Pradedu apdorot fnLoadNext");
-		this.fnLoad({ url: "Main/tabAccidents" });
+		this.fnLoad2({ url: "Main/tabAccidents" });
 		oGLOBAL.logFromStart("Baigiau apdorot fnLoadNext");
 	},
-	fnLoad: function (p) {//url:url, callBack:callBack
-		var start = new Date().getTime(), setter = this.get("SET"), emBuilder = this.get("emBuilder"), me = this, obj;
-		$.ajax({
-			url: p.url, dataType: 'json', type: 'POST',
-			success: function (json) {
-				if (json.jsonObj) {
-					$.each(json.jsonObj, function (objName, value) {
-						console.log("New jsonObj:" + objName);
-						setter.call(me, objName, value);
-						emBuilder.call(me, { newData: value.Data, tblName: objName, toAppend: true }); //{oData, toAppend:{"sort":"asc/desc","col":"date"}}
-					});
-				}
-				if (json.templates) {
-					$.each(json.templates, function (objName, value) {
-						console.log("New template:" + objName);
-						Em.TEMPLATES[objName] = Em.Handlebars.compile(value);
-						//kitas variantas: http://stackoverflow.com/questions/8659787/using-pre-compiled-templates-with-handlebars-js-jquery-mobile-environment
-					});
-				}
-				if (json.Script) {
-					if (json.Script.File) $.getScript(json.Script.File);
-					//if (json.Script.oSCRIPT) return this.oSCRIPT = jsRes.Script.oSCRIPT;
-				}
-				if (p.callBack) p.callBack();
-			}
-		});
-	},
-	// fnWriteVersions: function() {
-	// if (localStorage){
-	// localStorage["Lists/topNew_ver"]="1";		
-	// localStorage["Admin/edit"]="1";		
-	// }
+	// fnLoad: function (p) {//url:url, callBack:callBack
+		// var start = new Date().getTime(), setter = this.get("SET"), emBuilder = this.get("emBuilder"), me = this, obj;
+		// $.ajax({
+			// url: p.url, dataType: 'json', type: 'POST',
+			// success: function (json) {
+				// if (json.jsonObj) {
+					// $.each(json.jsonObj, function (objName, value) {
+						// console.log("New jsonObj:" + objName);
+						// setter.call(me, objName, value);
+						// emBuilder.call(me, { newData: value.Data, tblName: objName, toAppend: true }); //{oData, toAppend:{"sort":"asc/desc","col":"date"}}
+					// });
+				// }
+				// if (json.templates) {
+					// $.each(json.templates, function (objName, value) {
+						// console.log("New template:" + objName);
+						// Em.TEMPLATES[objName] = Em.Handlebars.compile(value);
+						// //kitas variantas: http://stackoverflow.com/questions/8659787/using-pre-compiled-templates-with-handlebars-js-jquery-mobile-environment
+					// });
+				// }
+				// if (json.Script) {
+					// if (json.Script.File) $.getScript(json.Script.File);
+					// //if (json.Script.oSCRIPT) return this.oSCRIPT = jsRes.Script.oSCRIPT;
+				// }
+				// if (p.callBack) p.callBack();
+			// }
+		// });
 	// },
-	executed: {}, //Ä¨ia ÄÆsimenam kas buvo klikinta (tie turÄ—s viskÄ… atsisiuntÄ™
+	executed: {}, //Čia įsimenam kas buvo klikinta (tie turės viską atsisiuntę
 	fnLoad2: function (p) {
-		//url:url,callBack:callBack, checkObj:checkObj //checkObj:checkObj[nebÅ«tinas] - pagal juos tikrinam ar reikia siustis ir ar reikia objekto
+		//url:url,callBack:callBack, checkObj:checkObj //checkObj:checkObj[nebūinas] - pagal juos tikrinam ar reikia siustis ir ar reikia objekto
 		if (!localStorage) throw new Error("No localStorage in Browser");
-		//uÅ¾sikraunant ÄÆraÅ�om localStorage["topNew_ver"] versijas ir siunÄ¨iam ar atitinka, jei neatitinka grazinam tuos objektus
-		//scripta uÅ¾kraunam atsakydami, kontroleryj versijos kontroliuojamos "/controller/action?ver=123"
+		//užsikraunant įrašom localStorage["topNew_ver"] versijas ir siunčiam ar atitinka, jei neatitinka grazinam tuos objektus
+		//scripta užkraunam atsakydami, kontroleryj versijos kontroliuojamos "/controller/action?ver=123"
 		//if (!p.checkFn) console.error("oDATA.fnLoad without checkFn");	
 
-
 		var start = new Date().getTime(), setter = this.get("SET"), emBuilder = this.get("emBuilder"), me = this, obj;
-		var finished = function (start, msg) { console.warn("Started '" + p.url + "'. " + msg + ". Time,ms:" + (new Date().getTime() - start)); if (p.callBack) p.callBack(); }
+		var finished = function (start, msg) { 
+			console.warn("Started '" + p.url + "'. " + msg + ". Time,ms:" + (new Date().getTime() - start)); 
+			if (p.callBack) p.callBack();
+		}
 
-
-		if (this.executed[p.url]) {//jei jau buvo klikinta, nieko siÅ³st nereikia
+		if (this.executed[p.url]) {//jei jau buvo klikinta, nieko siųst nereikia
 			finished(start, "Second click no need to load.");
 		} else {
 			var url = p.url, dataPars = {
@@ -226,15 +223,21 @@ var oDATA = Ember.Object.create({
 					if (json.jsonObj) {
 						$.each(json.jsonObj, function (objName, value) {
 							console.log("New jsonObj:" + objName); setter.call(me, objName, value);
+							setter.call(me, objName, value);
 							emBuilder.call(me, { newData: value.Data, tblName: objName, toAppend: true }); //{oData, toAppend:{"sort":"asc/desc","col":"date"}}
 						});
 					}
 					if (json.templates) {
 						$.each(json.templates, function (objName, value) {
 							console.log("New template:" + objName);
-							if (!value) { value = localStorage[objName]; } //Jei nÄ—ra imam iÅ� localStorage					
+							if (!value) { value = localStorage[objName]; } //Jei nėra imam iš localStorage					
 							else { localStorage[objName] = value; }
-							if (!Em.TEMPLATES[objName]) { Em.TEMPLATES[objName] = Em.Handlebars.compile(value); } //kitas variantas: http://stackoverflow.com/questions/8659787/using-pre-compiled-templates-with-handlebars-js-jquery-mobile-environment						
+							if (!value) log.error("No template" + objName);
+							if (objName.slice(0,4)==="tmp2") {//tmpl template naudojama file uploads
+								$("body").append('<script id="'+objName+'" type="text/x-tmpl">'+value+'</script>');
+							} else {
+								if (!Em.TEMPLATES[objName]) { Em.TEMPLATES[objName] = Em.Handlebars.compile(value); } //kitas variantas: http://stackoverflow.com/questions/8659787/using-pre-compiled-templates-with-handlebars-js-jquery-mobile-environment						
+							}
 						});
 					}
 					if (json.Script) {
@@ -245,9 +248,12 @@ var oDATA = Ember.Object.create({
 							$.getScript(json.Script.File, function () {
 								finished(start, "First click, script loaded.");
 							});
-						} else { finished(start, "First click, no script."); }
+						} 
+					} else{//Jei yra scriptas callBack executinam tik po scripto užkrovimo (viršuj), šiuo atveju nėra, taigi executinam čia
+						finished(start, "First click, no script.");
 					}
-					localStorage[url] = json.ver; //iÅ�saugom versija	
+					
+					localStorage[url] = json.ver; //išsaugom versija	
 					oDATA.executed[url] = (new Date()).getTime();
 				}
 			});
@@ -257,36 +263,48 @@ var oDATA = Ember.Object.create({
 /**************************************************************************************************************************
 */
 Ember.ResourceController = Ember.ArrayController.extend(Ember.ResourceAdapter, {
-	list: [{
-		"vehicles": ""
-	}, {
-		"proc_Accidents": "Accident/AccidentsList"
-	}],
+	//	list: [{
+	//		"vehicles": ""
+	//	}, {
+	//		"proc_Accidents": "Accident/AccidentsList"
+	//	}],
+	//	init: function () {
+	//		this._super();
+	//		var me = this, tbl = me.get("tableName");
+	//		if (tbl === "?") {
+	//			me.set("loadStatus", "ok");
+	//		} else {
+	//			console.log("loading new table" + tbl);
+	//			me.set("loadStatus", "loading")
+	//			oDATA.load2(tbl, function (emData) {
+	//				oGLOBAL.logFromStart("Data recieved in controller - '" + me.get("tableName") + "' ");
+	//				//if (json.Data) {
+	//				me.set("content", emData);
+	//				//me.get("setContent").call(me, { data: json.Data, toAppend: true });
+	//				//json.json=me.get("content");
+	//				me.set("loadStatus", "ok");
+	//				//}
+	//				//else {
+	//				//	throw new Error("json need to have data in ResourceController;");
+	//				//}
+	//			});
+	//			me.set("loadStatus", "loading");
+	//		}
+	//	},
 	init: function () {
 		this._super();
-		var me = this, tbl = me.get("tableName");
-		if (tbl === "?") {
-			me.set("loadStatus", "ok");
-		} else {
-			console.log("loading new table" + tbl);
-			me.set("loadStatus", "loading")
-			oDATA.load(tbl, function (emData) {
-				oGLOBAL.logFromStart("Data recieved in controller - '" + me.get("tableName") + "' ");
-				//if (json.Data) {
-				me.set("content", emData);
-				//me.get("setContent").call(me, { data: json.Data, toAppend: true });
-				//json.json=me.get("content");
-				me.set("loadStatus", "ok");
-				//}
-				//else {
-				//	throw new Error("json need to have data in ResourceController;");
-				//}
-			});
-			me.set("loadStatus", "loading");
-		}
+		var me = this, url = me.get("url");	
+		if (url)	oDATA.fnLoad2({ 
+				url: url,
+				callBack: function () {
+					if (me.tableName) {
+						me.set("content", oDATA.GET(me.tableName).emData);				
+					}
+			}
+		});
 	},
 	content: [], //overridinam
-	tableName: Ember.required(),
+	tableName: null,
 	cols: null,
 	config: null,
 	grid: null,
@@ -317,7 +335,7 @@ Ember.ResourceController = Ember.ArrayController.extend(Ember.ResourceAdapter, {
 			alert("Not populated");
 		}
 	},
-	getAll: function (url) { //loadinam per init, tai Å�itas nereikalingas ko gero
+	getAll: function (url) { //loadinam per init, tai šitas nereikalingas ko gero
 		var self = this;
 		return this._resourceRequest({
 			type: 'POST',
@@ -392,7 +410,7 @@ var SERVER = {
 			if (Adding) { Row.set("visible", true); oData.emData.pushObject(Row); }
 			else { oData.emData.findProperty("iD", Row.iD).updateTo(Row); }
 			var controller = updData.controller, emObject = (updData.emObject) ? updData.emObject : "content";
-			if (controller) {//Updatinam ir ÄÆ pagrindinÄÆ kontrolerÄÆ tik insertinant (kiti updatinasi
+			if (controller) {//Updatinam ir į pagrindinį kontrolerį tik insertinant (kiti updatinasi
 				if (Adding) { App[controller][emObject].pushObject(Row); }
 				//else{App[controller][emObject].findProperty("iD",Row.iD).updateTo(Row);}				
 			}
@@ -436,7 +454,7 @@ var SERVER = {
 		//		e.html("<center><img style='margin-top:" + h / 2.2 + "px;' src='/Content/images/ajax-loader.gif' alt='' /></center>");
 		//	}
 		//}
-		oGLOBAL.notify.msg("", "SiunÄ¨iami duomenys..");
+		oGLOBAL.notify.msg("", "Siunčiami duomenys..");
 		$.ajax({
 			type: "POST",
 			url: url,
@@ -448,7 +466,7 @@ var SERVER = {
 			dataType: dataType,
 			erorr: function (msg) {
 				//Wait.Hide();
-				//if (msg.d ==="Er_Saving") //{ alert("Nepavyko iÅ�saugoti duomenÅ³. \n Bandykite dar kartÄ….."); } //return else
+				//if (msg.d ==="Er_Saving") //{ alert("Nepavyko išsaugoti duomenų. \n Bandykite dar kartÄ….."); } //return else
 				{
 					alert("Nepavyko prisijungti..");
 				}
@@ -465,18 +483,18 @@ var SERVER = {
 	},
 	fnUpdated: function (resp, updData) {  //updData["Action"]
 		var titleFields = (updData.source) ? oDATA.GET(updData.source).Config.titleFields : false, Title;
-		if (titleFields) { Title = (updData.row) ? updData.row.MapArrToString(titleFields, true) : "DuomenÅ³ keitimas." }
+		if (titleFields) { Title = (updData.row) ? updData.row.MapArrToString(titleFields, true) : "Duomenų keitimas." }
 		DefMsg = {
-			Title: (Title || updData.Title || "DuomenÅ³ keitimas"),
+			Title: (Title || updData.Title || "Duomenų keitimas"),
 			Error: {
-				Add: "Nepavyko iÅ�saugot naujÅ³ duomenÅ³.",
-				Edit: "Nepavyko pakeisti duomenÅ³.",
-				Delete: "Nepavyko iÅ�trinti duomenÅ³."
+				Add: "Nepavyko išsaugot naujų duomenų.",
+				Edit: "Nepavyko pakeisti duomenų.",
+				Delete: "Nepavyko ištrinti duomenų."
 			},
 			Success: {
-				Add: "Duomenys sÄ—kmingai pridÄ—ti.",
-				Edit: "Duomenys sÄ—kmingai pakeisti.",
-				Delete: "Duomenys iÅ�trinti."
+				Add: "Duomenys sėkmingai pridėti.",
+				Edit: "Duomenys sėkmingai pakeisti.",
+				Delete: "Duomenys ištrinti."
 			}
 		};
 		var Msg, Sign, Type, notExpires;

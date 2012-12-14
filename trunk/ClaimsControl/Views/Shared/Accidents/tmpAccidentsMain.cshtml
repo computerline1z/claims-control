@@ -4,13 +4,8 @@
 	</div>
 	<div class="right big"><button class="btn large" {{action addNewAccident target="App.accidentsController"}}><i class="img32-plus"></i>Registruoti naują įvykį</button></div>
 </div>
-
-@Html.ActionLink("Įkelti dokumentus", "Start", "Files", 
-                  new { accountId = 2, docGroupId = 2, refID = 7, accidentID = 28 },
-                  new { @class = "openDialog", data_dialog_id = "fileUploadDialog", data_dialog_title = "Įkelti dokumentus" })
-
+@*<div id="uploadDocsToAccident" class="well" style="width:80%; margin:0 auto;"></div>*@
 <div class="table zebra-striped selectable tall" id="accidentsTable">
-
 {{#each "App.accidentsController.content"}}@*{{#each person in people}}*@
 @*{{log this}}*@
 {{#if this.visible}}

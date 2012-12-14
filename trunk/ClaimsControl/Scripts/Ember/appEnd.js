@@ -22,6 +22,9 @@ App.Router = Em.Router.extend({
 			route: '/',
 			connectOutlets: function (router, context) {
 				MY.NavbarController.fnSetNewTab(router.currentState.name, 0);
+			},
+			uploadFiles:function (e){
+				oCONTROLS.fnStartUploader({title:"mano titulas"});
 			}
 		}),
 		tabClaims: Em.Route.extend({
