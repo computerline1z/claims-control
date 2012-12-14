@@ -9,29 +9,10 @@ options:
 _create: ->	
 	#surandam artimiausia inputa ant kurio desim listboxa
 	input = $(@element[0])
-	alert "Error! Input not found for ComboBox! (MyPlugins_ComboBox:15)"	if input is `undefined`
-	opt = $.extend(true, @options, $(input).data("ctrl"))
+	console.error("Input not found for ComboBox!")	if input.length==0
+	opt = $.extend(true, @options, input.data("ctrl"))
 	opt.mapWithNoCommas=true if opt.Source=="proc_Drivers"
 	fnEditItem = (id,newVals) ->
-		# new oGLOBAL.clsEditableForm(
-			# newVals: if newVals then {vals:newVals,cols:opt.iText} else null
-			# objData: opt.Source
-			# Action: (if (id) then "Edit" else "Add")
-			# aRowData: (if (id) then oDATA.GetRow(id, opt.Source) else 0)
-			# CallBackAfter: (RowData) -> #Ikisam naujas val i newval, o teksta i inputa
-				# $(input).data "newval", RowData[opt.iVal]
-				# newVal=RowData.MapArrToString(opt.iText,opt.mapWithNoCommas)
-				# $(input).val newVal
-				# if this.Action=="Edit"#pakeiciam comboboxo duomenis, oDATA jau pakeista
-					# data.findObjectByProperty("id",RowData[opt.iVal]).label=newVal
-				# else #pridedam naują
-					# data.push({id:RowData[opt.iVal],label:newVal})
-				# if (!input.parent().find("span.ui-menu-icon").length&&opt.appendToList)#pridedu redagavimo controlsus jei nebuvo
-					# input.parent().append(opt.appendToList)
-		#)
-		#"source":"proc_Drivers","template":"tmp_Drivers","controller":"listAllController","emObject":"content"
-		#"source":"proc_InsPolicies","template":"tmp_InsPolicies","controller":"listAllController","emObject":"content"
-		#"source":"proc_Vehicles","template":"tmp_Vehicles","controller":"listAllController","emObject":"content
 		Action= if (id) then "Edit" else "Add"
 		pars=
 			source: opt.Source, template: opt.Source.replace("proc_","tmp_")#controllerio ir emObject reikia tik iš listAll (dėl updatinimo)
@@ -40,77 +21,33 @@ _create: ->
 			newVals: if newVals then {vals:newVals,cols:opt.iText} else null#?
 			CallBackAfter:(Row)->
 				dialogFrm.dialog("close");
-				alert "fnEditItem finished!"
-			
+				alert "fnEditItem finished!"		
 		App.listAllController.openItem(pars)			
-					
-					
-					
-		
-	#opt = $.extend({ ListType: "List", Editable: false, iVal: 0, iText: [1], selectFirst: false }, opt);		 //ListType:{None(be nieko, galima spausdint), List(listas, spausdint negalima), Combo(Listas, spausdint galima)}
 	Editable = (if (opt.Editable.Add or opt.Editable.Edit) then true else false)
 	data = undefined
 	
 	#if(opt.Type==="List") { //Jei Type==List mapinam pagal opt.iText kitu atveju pagal Field
 	OptVal = parseInt(opt.Value, 10)
-	data = $.map(oDATA.GET(opt.Source).emData, (a) ->		
-		#for(var i=0; i<opt.iText.length; i++) { { ret.push(a[opt.iText[i]]); } }
-		
-		input.val a.MapArrToString(opt.iText,opt.mapWithNoCommas) if a.iD is OptVal #Idedam verte i textboxa
-		
-		#return { id: a[0], value: a.MapArrToString(opt.iText), label: a[opt.iText[0]] };
-		id: a[opt.iVal]
-		label: a.MapArrToString(opt.iText,opt.mapWithNoCommas)
-	)
-	
-	#						} else {
-	#								input.val(opt.Value);
-	#								var i=oDATA.GET(opt.Source).Cols.FNameIndex(opt.Field);
-	#								data=$.map(oDATA.GET(opt.Source).Data, function(a) { return { id: a[0], value: a[i] }; });
-	#						}
-	#if(typeof data!='undefined') { if(input.val()==='') { log('<p style="color:red;">Listas "'+opt.Source+'" nerado value:'+opt.Value+'</p>'); } }
+	if opt.data then data = opt.data else
+		data = $.map(oDATA.GET(opt.Source).emData, (a) -> 
+			#for(var i=0; i<opt.iText.length; i++) { { ret.push(a[opt.iText[i]]); } }
+			input.val a.MapArrToString(opt.iText,opt.mapWithNoCommas) if a.iD is OptVal #Idedam verte i textboxa
+			#return { id: a[0], value: a.MapArrToString(opt.iText), label: a[opt.iText[0]] };
+			id: a[opt.iVal]
+			label: a.MapArrToString(opt.iText,opt.mapWithNoCommas)
+		)
 	data[data.length] = opt.Append	if typeof opt.Append isnt "undefined" #Pridedam prie listo pvz: {Value:0, Text:"Neapdrausta"}
-	
-	#.val(value)
 	$(input).on('keyup',->$(this).parent().find("span.ui-menu-icon").remove()
 	).data("newval", opt.Value).autocomplete
 		selectFirst: opt.selectFirst
 		delay: 0
 		minLength: ((if (@options.ListType is "None") then 2 else 0))
 		autoFocus: true
-		#			source: function(request, response) {
-		#				 response($.ui.autocomplete.filter(data, request.term));
-		#			},
-		#						source: function(request, response) {
-		#							 var matcher=new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
-		#							 response(Ul.children("a").map(function() {
-		#									var text=$(this).text();
-		#									if(this.value&&(!request.term||matcher.test(text)))
-		#										 return {
-		#												label: text.replace(
-		#																	new RegExp("(?![^&;]+;)(?!<[^<>]*)("+$.ui.autocomplete.escapeRegex(request.term)+")(?![^<>]*>)(?![^&;]+;)", "gi"), "<strong>$1</strong>"),
-		#												value: text,
-		#												option: this
-		#										 };
-		#							 }));
-		#						},
-		#			source: function(request, response) {
-		#				 var matcher=new RegExp($.ui.autocomplete.escapeRegex(request.term), "i"), suggestions=[];
-		#				 input.removeClass('alink');
-		#				 $.each(data, function(i, a) {
-		#						if(a.value&&(!request.term||matcher.test(a.value)))
-		#						//suggestions.push({ label: text.replace(new RegExp("(?![^&;]+;)(?!<[^<>]*)("+$.ui.autocomplete.escapeRegex(request.term)+")(?![^<>]*>)(?![^&;]+;)", "gi"), "<strong>$1</strong>"),
-		#						suggestions.push({ label: a.value,
-		#							 value: a.value, // option: this,
-		#							 id: a.id
-		#						});
-		#				 });
-		#				 response(suggestions);
-		#			},
 		source: (request, response) ->
 			response $.ui.autocomplete.filter(data, request.term)
 
 		select: (event, ui) ->
+			if typeof ui.item.id=="function" then ui.item.id(); return false#jei id yra funkcija executinam ir iseinam
 			if $(event.srcElement).hasClass("ui-menu-icon")#paspaudimas ant controlu
 				input.data("autocomplete").fnClickOnBtn(id:ui.item.id,elm:$(event.srcElement),fromInput:false)
 				#event.stopPropagation()#event.preventDefault()				
@@ -121,43 +58,26 @@ _create: ->
 				if ui.item.id isnt $(this).data("newval")
 					$(this).data("newval", ui.item.id).val (if ($(this).data("ctrl").Type is "List") then ui.item.value else ui.item.label) #jeigu ne List tipo kisam viska priesingu atveju tik pirma lauka
 					MY.execByName opt.fnChangeCallBack, MY, this, ui.item	if opt.fnChangeCallBack
+				if ui.item.refID #Su kategorijom naudojamas
+					$(this).data("refID", ui.item.refID)
+					$(this).data("categoryID", ui.item.categoryID)
 					false #kad nieko daugiau nedarytu
 
 		change: (event, ui) ->
-			#if(ui.item) { if(opt.Type!=="List") { $(this).val(ui.item.label); } }
-			#var lbl =(ui.item)?ui.item.label:"";
-			#if($(this).val()!==lbl) {
 			unless ui.item
 				fnEditItem(0,input.val()) #čia iškviečiu naujo pridėjimo popupa, jei įrašė ko nėra
 				# opt.fnChangeCallBack yra stringas, o opt.fnValueChanged funkcija
 				MY.execByName opt.fnChangeCallBack, MY, this, null	if opt.fnChangeCallBack #ui.item===null kitais atvejais eina per select
 				t = $(this)
 				t.data "newval", ""
-				#return true	if opt.Tip is t.val()	if opt.Tip
-				
-				# remove invalid value, as it didn't match anything
 				t.val ""	if opt.Type is "List"
 				input.data("autocomplete").term = ""	unless typeof input.data("autocomplete") is "undefined"
-				#t.removeClass "alink"
 				return false
-			#$(this).removeClass "inputTip"
-
 		close: (event, ui) ->
 			return false
-			#if $(event.srcElement).hasClass("ui-menu-icon")#buvo paspaudimas ant controlsu todel atidarau selecta vel
-			#	input.autocomplete "search", input.val()
-			#$(input).rem
 			if opt.Editable.Edit #linko pridėjimas
 				t = input # (t.data("newval"))?t.data("newval").replace("0", ""):"";
 				newVal = t.data("newval")
-				# if not t.hasClass("alink") and newVal
-					# t.addClass("alink").unbind("dblclick").bind "dblclick", ->
-						# fnEditItem newVal
-				# else if newVa
-					# t.unbind("dblclick").bind "dblclick", ->
-						# fnEditItem newVal
-				# else t.removeClass("alink").unbind "dblclick"	if t.hasClass("alink") and not newVal
-			#input.removeClass "activeField" #if(opt.ListType!=="List") { input.removeClass("activeField"); }
 			opt.fnValueChanged input.data("newval"), input.val()	if opt.fnValueChanged and input.data("newval") #NewVal,NewText
 
 		open: ->
@@ -169,8 +89,6 @@ _create: ->
 					me = $(this)					
 					regex = new RegExp(acData.term, "gi")
 					me.html me.text().replace(regex, (matched) -> termTemplate.replace "%s", matched)
-					# me.append(opt.appendToList) if opt.appendToList
-			
 		blur: ->
 			alert "nu ble"
 	#-----Inicializavimas pagal parametrus-------------------------------------------------------------------------------------
@@ -180,12 +98,7 @@ _create: ->
 		)
 	if opt.Editable.Edit
 		val = input.data("newval")
-		# if val
-			# input.addClass("alink").bind "dblclick", ->
-				# fnEditItem (if (val) then val else 0)
-				
 	#---------------------------------------------------------------------------------------------------
-	#-->input.removeClass("ui-corner-all").addClass "ui-corner-left"	if opt.ListType isnt "None" or opt.Editable.Add #ui-widget-content
 	#pluginas AutoComplete Select first
 	$(".ui-autocomplete-input").live "autocompleteopen", ->
 		autocomplete = $(this).data("autocomplete")
@@ -195,6 +108,16 @@ _create: ->
 
 	#---------------------------------------------------------------------------------------------------
 	# This line added to set default value of the combobox
+	# $(input).data("autocomplete")._renderMenu = (ul, items) ->
+		# that = this; currentCategory = "";
+		# $.each( items, ( index, item ) ->
+			# # if ( item.category != currentCategory )
+				# # ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
+				# # currentCategory = item.category;
+			# ul.append( "<li class='ui-autocomplete-category'>OpaOpa</li>" );
+			# that._renderItemData( ul, item );
+		# )
+	
 	$(input).data("autocomplete")._renderItem = (ul, item) ->
 		# if opt.Editable.Add
 			# toAdd="<a "+("data-id="+item.id)+">"+item.value+opt.appendToList+"</a>"
@@ -235,22 +158,6 @@ _create: ->
 			e=$(this);id=e.parent().find("input").data("newval");
 			input.data("autocomplete").fnClickOnBtn(id:id,elm:e,fromInput:true)
 		)
-
-		#input.data("autocomplete").originalSelect=input.data("autocomplete").select
-		# input.data("autocomplete").menu.options.selected=(event,ui,originalSelect)->			
-			# if $(event.srcElement).hasClass("ui-menu-icon")#buvo paspaudimas ant controlsu
-				# alert "my select"
-				# false
-			# else				
-				# input.data("autocomplete").selectOriginal.apply(this,arguments)
-				#input.data("autocomplete").originalSelect.apply(this,arguments)
-		#@addButton
-		#	title: "Pridėti naują"
-		#	icon: "img18-plus"
-		#	fn: ->
-		#		fnEditItem 0
-		#	NoCorners: false
-		#, input
 	unless opt.ListType is "None"
 		@addButton
 			title: "Parodyti visus"
@@ -267,7 +174,6 @@ _create: ->
 			NoCorners: ((if (opt.Editable.Add) then true else false))
 		, input
 	
-	#input.focus(function() { input.autocomplete("search", ""); return false; }); //ant input focuso atidarom autocomplete
 	if opt.ListType is "List"
 		input.attr "readonly", true
 		input.click ->
@@ -282,8 +188,6 @@ _create: ->
 		input.click ->
 			@select()
 addButton: (p, input) ->
-	#this.button = $("<button style='margin:0 0 0 -3px;height:" + input.outerHeight(true) + "px;'>&nbsp;</button>").attr("tabIndex", -1).attr("title", p.title).insertAfter(input)
-	#.width(22)	//.css("vertical-align", "bottom")
 	@button = $("<button style='margin:0 0 0 -2.2em;height:" + input.outerHeight() + "px;'>&nbsp;</button>").attr("tabIndex", -1).attr("title", p.title).insertAfter(input).button( #.attr("style", "margin-left:0.1em;left:0;");
 		icons: {primary: p.icon}
 		text: false
@@ -296,12 +200,44 @@ addButton: (p, input) ->
 	#else if ($.browser.msie) { }
 	#if (!$.browser.chrome) { this.button.css("margin", "0"); }
 	#@button.css "margin", "0"	if $.browser.mozilla
-
-#var btnWidth = this.button.parent().outerWidth(); //31
-#var w = input.outerWidth() - btnWidth + 2; //223
-#input.css("width",w);
 destroy: ->
-	#input.remove();
-	#if(typeof this.button!='undefined') this.button.remove(); //Reikia uncomentinti norint buttono
-	#this.element.show();
 	$.Widget::destroy.call this
+	
+#=======================================================================================
+# $($0).data("newval") $(this).data("newvalRefID", ui.item.refID)
+#categoryOpts:{editList:true,driver:{iD:87,name:"Vairuotojo Albinas Palubinskas dokumentai"},vehicles:[{iD:14,title:"TP BBB, Volvo __ dokumentai"},{iD:7,title:"BRU643, Volvo, FH12"}]}
+$.widget "ui.ComboBoxCategory", $.ui.ComboBox, 
+	_create:() ->
+		#me=@  #vietoj opt.Source reikia naudot this.option("Source") nes prieš create dar nėra opt 
+		opts=@options;categoryOpts=opts.categoryOpts
+		emCategories=oDATA.GET("tblDocGroup").emData
+		emTypes=oDATA.GET("tblDocType").emData
+		data=$.map.call(this, emTypes, (a) ->
+			id: a[opts.iVal]#DocTypeID
+			label: a.MapArrToString(opts.iText,opts.mapWithNoCommas)
+			categoryID: a["docGroupID"]
+		)
+		$.extend(true, @options, data:data)
+		
+		@_super();	
+		renderGroup=(me,ul,myCategory,docTypes,categoryID) -> 
+			currentTypes = docTypes.filter((type) -> type.categoryID==categoryID)
+			myCategory.forEach((category) ->
+				ul.append("<li class='ui-autocomplete-category'>" + category.title + "</li>")		
+				currentTypes.setEach("refID",category.iD)
+				currentTypes.forEach((type,i) -> me._renderItemData(ul, type))# bėgam per šios kategorijos tipus	
+			)			
+		@element.data("autocomplete")._renderMenu = (ul, docTypes) ->
+			me = @; currentCategoryID = "";
+			emCategories.forEach((catItem,i) -> # bėgam per kategorijas
+				#Ref 1-Nuotraukos,2-Įvykio dok, 3-Vairuotojo dok, 4-TP dok, 0-Nepriskirti
+				if (catItem.iD==0) then return
+				else if (catItem.iD==1) then me._renderItemData(ul,{id:0,label:"Nuotrauka",value:"Nuotrauka",categoryID:1,refID:categoryOpts.accident.iD});
+				else if (catItem.iD==3 and categoryOpts.driver) then renderGroup(me,ul,[categoryOpts.driver],docTypes,3)
+				else if (catItem.iD==4 and categoryOpts.vehicles) then renderGroup(me,ul,categoryOpts.vehicles,docTypes,4)
+				else if (catItem.iD==2 and categoryOpts.accident) then renderGroup(me,ul,[categoryOpts.accident],docTypes,2)
+			)
+			if categoryOpts.editList
+				#$( "<li class='ui-autocomplete-category editCategories'><a >Redaguoti sąrašą</a></li>" ).appendTo(ul)
+				me._renderItemData(ul, {id:(()->alert("Redaguoti")),label:"Redaguoti sarašą",value:"Redaguoti sarašą"})
+				ul.find("li:last a").addClass("actionLink")

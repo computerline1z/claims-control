@@ -15,10 +15,10 @@ namespace CC.Services.Interfaces
         IQueryable<tblDocGroup> GetTblDocGroups();
         IQueryable<tblDocType> GetTblDocTypes(int? accountID, int? docGroupID);
 
-        bool StoreFile(string account, string userName, string fileName, byte[] content);
-        void UpdateFileName(tblDoc record, string fileName, out string errorMessage);
-        tblDoc StoreTblDocs(FileDescriptor descriptor, out string errorMessage);
-        string GetIndividualDirectory(string account, string userName, bool uploadDirectory);
-        string GetIndividualVirtualDirectory(string account, string userName, bool uploadDirectory);
+        bool StoreFile(string account, string fileName, byte[] content);
+        //void UpdateFileName(tblDoc record, string fileName, out string errorMessage);
+		  tblDoc StoreTblDocs(FileDescriptor descriptor, out tblDocsInAccident _tblDocsInAccidents, out string errorMessage);
+        string GetIndividualDirectory(string account, bool uploadDirectory);
+        string GetIndividualVirtualDirectory(string account, bool uploadDirectory);
     }
 }

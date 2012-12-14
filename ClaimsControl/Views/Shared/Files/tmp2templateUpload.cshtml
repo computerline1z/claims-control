@@ -1,0 +1,47 @@
+﻿{% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-upload fade">
+
+       @* <td class="preview"><span class="fade"></span></td>*@
+		{% if (file.type==="image/bmp"||file.type==="image/x-icon") { %}
+				<td class="preview"><span><i class="img32-doc_img"></i></span></td>
+		{% } else if (file.type2==="image") { %}
+				<td class="preview"><span class="fade"></span></td>
+		{% } else { %}
+				<td class="preview">
+@*				{%=file.type%}</br>{%=file.type2%}</br>{%=file.extension%}
+*@				<span><i class="img32-doc_{%=file.extension%}"></i></span></td>			
+		{% } %}
+        <td class="name"><span>{%=file.name%}</span></td>
+        <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
+		  {% if (file.paramName==="docs[]") { %}
+				<td><div class="ExtendIt"><input type="text" placeholder="Pasirinkite.." name="category[]" data-ctrl='{"ListType":"List","Source":"tblDocType","iVal":"iD","iText":["name"]}'></div></td>
+		  {% } else { %}
+				<td><span>Nuotrauka</span></td>
+		  {% } %}
+
+		  <td style="width:35%;"><textarea rows="2" style="width:100%;font-size:10px;" name="description[]"></textarea></td>
+        {% if (file.error) { %}
+            <td class="error" colspan="2"><span class="label label-important">Error</span> {%=file.error%}</td>
+        {% } else if (o.files.valid && !i) { %}
+            <td>
+                <div class="progress progress-success progress-striped active hidden" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar" style="width:0%;"></div></div>
+            </td>
+
+            <td class="start hidden">{% if (!o.options.autoUpload) { %}
+                <button class="btn btn-primary">
+                    <i class="icon-upload icon-white"></i>
+                    <span>Start</span>
+                </button>
+            {% } %}</td>
+
+        {% } else { %}
+            <td colspan="2"></td>
+        {% } %}
+        <td class="cancel">{% if (!i) { %}
+				<button class="btn btn-warning btn-small" title="Atšaukti">
+					 <i class="icon-ban-circle icon-white"></i>
+					 @*<span></span>*@
+				</button>
+        {% } %}</td>
+    </tr>
+{% } %}

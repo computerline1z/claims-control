@@ -6,70 +6,102 @@ using CC.Classes;
 
 namespace CC.Models {
 
-   public class clsAccident {
-		
-		public clsAccident(int? id) {
-         Repositories_Main AccRep = new Repositories_Main();
-         Accident = AccRep.Get_tblAccident((id == null) ? 0 : id.Value);
-         if (Accident == null) {
-            Accident = new tblAccident {
-               ID = 0,
-               //Accident.AccountID=
-               DriverID = 1,
-               No = 0,
-               Date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0),
-               IsNotOurFault = false,
-               IsOtherParticipants = false,
-               ShortNote = "",
-               LocationCountry = "",
-               LocationAddress = "",
-               LocationDistrict = "",
-               Lat = 0,
-               Lng = 0,
-               GMT = 0
+	public class clsAccident {
+
+		public clsAccident(int? No) {
+			Repositories_Main AccRep = new Repositories_Main();
+			Accident = AccRep.Get_tblAccident((No == null) ? 0 : No.Value);
+			if (Accident == null) {
+				Accident = new tblAccident {
+					ID = 0,
+					DriverID = 1,
+					No = 0,
+					Date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0),
+					IsNotOurFault = false,
+					IsOtherParticipants = false,
+					ShortNote = "",
+					LocationCountry = "",
+					LocationAddress = "",
+					LocationDistrict = "",
+					Lat = 0,
+					Lng = 0,
+					GMT = 0
+				};
+				NewRec = 1;
+				Vehicles = null;
+			}
+			else {
+				NewRec = 0; 
+				Vehicles = AccRep.Get_Vehicles(Accident.ID);
+			}
+			
+			//var s = AccRep.Get_tblAccident_Types();????????
+			//AccTypes = s.ToSelectListItem(1, i => i.ID, i => i.Name, i => i.ID.ToString());
+		}
+
+		public tblAccident Accident { get; set; }
+
+		public int NewRec { get; set; }
+
+		public IQueryable<AccidentVehicles> Vehicles { get; set; }
+	
+							//v.ID,
+							//v.Plate,
+							//v.tblVehicleMake.Name,
+							//v.Model
+
+		//public IEnumerable<SelectListItem> AccTypes { get; set; }
+		//public IEnumerable<SelectListItem> Drivers { get; set; }
+	}
+	public class AccidentVehicles {
+		public int ID { get; set; }
+		public string Title { get; set; }
+	}
+
+	public interface IAccidents {
+
+		jsonArrays GetJSON_tblAccidents();
+
+		jsonArrays GetJSON_proc_Accidents();
+
+		jsonArrays GetJSON_tblAccident1(int id);
+
+		jsonArrays GetJSON_proc_Drivers();
+
+		jsonArrays GetJSON_tblAccidentTypes();
+
+		jsonArrays GetJSON_tblClaimTypes();
+
+		jsonArrays GetJSON_proc_Vehicles();
+
+		jsonArrays GetJSON_proc_InsPolicies();
+
+		jsonArrays GetJSON_tblInsurers();
+
+		jsonArrays GetJSON_tblVehicleMakes();
+	}
+
+	public class Repositories_Main {
+		private dbDataContext dc;
+
+		public Repositories_Main() { dc = new dbDataContext(ConfigurationManager.ConnectionStrings["ClaimsControlConnectionString"].ConnectionString); }
+		public jsonArrays GetJSON_tblDocsInAccidents() {
+			jsonArrays JSON = new jsonArrays();
+			JSON.Data = from d in dc.tblDocsInAccidents join  a in dc.tblAccidents on d.AccidentID equals a.ID
+							where a.IsDeleted == false && a.AccountID == UserData.AccountID
+							select new object[] {
+            d.ID,//0
+            d.DocID,//1
+            d.AccidentID,//2
             };
-            NewRec = 1;
-         }
-         else { NewRec = 0; }
-         var s = AccRep.Get_tblAccident_Types();
-         //AccTypes = s.ToSelectListItem(1, i => i.ID, i => i.Name, i => i.ID.ToString());
-      }
-
-      public tblAccident Accident { get; set; }
-
-      public int NewRec { get; set; }
-
-      //public IEnumerable<SelectListItem> AccTypes { get; set; }
-      //public IEnumerable<SelectListItem> Drivers { get; set; }
-   }
-
-   public interface IAccidents {
-
-      jsonArrays GetJSON_tblAccidents();
-
-      jsonArrays GetJSON_proc_Accidents();
-
-      jsonArrays GetJSON_tblAccident1(int id);
-
-      jsonArrays GetJSON_proc_Drivers();
-
-      jsonArrays GetJSON_tblAccidentTypes();
-
-      jsonArrays GetJSON_tblClaimTypes();
-
-      jsonArrays GetJSON_proc_Vehicles();
-
-      jsonArrays GetJSON_proc_InsPolicies();
-
-      jsonArrays GetJSON_tblInsurers();
-
-      jsonArrays GetJSON_tblVehicleMakes();
-   }
-
-   public class Repositories_Main {
-      private dbDataContext dc;
-
-      public Repositories_Main() { dc = new dbDataContext(ConfigurationManager.ConnectionStrings["ClaimsControlConnectionString"].ConnectionString); }
+			object[] Cols ={
+            new { FName = "ID"},//0
+            new { FName = "DocID"},//1
+            new { FName = "AccidentID"}//2
+            }; JSON.Cols = Cols;
+			JSON.Config = new { Controler = "Lists", tblUpdate = "tblDocs" };
+			return JSON;
+		}
 		public jsonArrays GetJSON_tblDocs() {
 			jsonArrays JSON = new jsonArrays();
 			JSON.Data = from d in dc.tblDocs
@@ -77,14 +109,16 @@ namespace CC.Models {
 							select new object[] {
             d.ID,//0
             d.DocName,//1
-            d.FileName,//2
+            //d.FileName,//2
             d.FileType,//3
             d.FileDate,//4
             d.FileSize,//5
             d.UserID,//6
             d.DocTypeID,//7
             d.RefID,//8
-            d.SortNo//9
+            d.SortNo,//9
+				d.GroupID,
+				d.Description
             };
 			object[] Cols ={
             new { FName = "ID"},//0
@@ -96,8 +130,10 @@ namespace CC.Models {
             new { FName = "UserID"},//6
             new { FName = "DocTypeID"},//7
             new { FName = "RefID"},//8
-            new { FName = "SortNo",Type="Integer"}//9
-            }; JSON.Cols = Cols;
+            new { FName = "SortNo",Type="Integer"},//9
+            new { FName = "GroupID"},//8
+				new { FName = "Description"}//8
+								}; JSON.Cols = Cols;
 			JSON.Config = new { Controler = "Lists", tblUpdate = "tblDocs" };
 			//         JSON.Grid = new {
 			//            aoColumns = new object[]{
@@ -115,9 +151,9 @@ namespace CC.Models {
 			//         };
 			return JSON;
 		}
-		public jsonArrays GetJSON_tblDocType() {
+		public jsonArrays GetJSON_tblDocType() {//orderby d.DocGroupID reikalingas sukabinant su GetJSON_tblDocGroup
 			jsonArrays JSON = new jsonArrays();
-			JSON.Data = from d in dc.tblDocTypes where d.IsDeleted == false && d.AccountID == UserData.AccountID
+			JSON.Data = from d in dc.tblDocTypes orderby d.DocGroupID where d.IsDeleted == false && d.AccountID == UserData.AccountID
 							select new object[] {
          d.ID,//0
          d.Name,//1
@@ -138,34 +174,57 @@ namespace CC.Models {
 			};
 			return JSON;
 		}
+		//public jsonArrays GetJSON_tblDocGroup() {
+		//   jsonArrays JSON = new jsonArrays();
+		//   //JSON.Data = from c in dc.proc_Clients(LoginData.LoginID, null)
+		//   //join a in dc.tblAccidents on d.AccidentID equals a.ID
+		//   //
+		//   JSON.Data = from d in dc.tblDocGroups
+		//               join t in dc.tblDocTypes on d.ID equals t.DocGroupID
+		//               where d.IsDeleted == false && t.AccountID == UserData.AccountID
+		//               select new object[] {
+		//   d.ID,//0
+		//   d.Name//1
+		//   };
+		//   object[] Cols ={
+		//      new { FName = "ID"},//0
+		//      new { FName = "Name",Type="string", LenMax=100,Validity="require().nonHtml().maxLength(100)"}//1
+		//   }; JSON.Cols = Cols;
+		//   JSON.Config = new {
+		//      Controler = "Lists", tblUpdate = "tblDocGroup"
+		//   };
+		//   JSON.Grid = new {
+		//      aoColumns = new object[]{
+		//      new {bVisible=false,bSearchable=false},//0//ID////DefaultUpdate=0
+		//      new {sTitle="Vardas"}//1//Name//
+		//      }
+		//   };
+		//   return JSON;
+		//}
 		public jsonArrays GetJSON_tblDocGroup() {
 			jsonArrays JSON = new jsonArrays();
-			//JSON.Data = from c in dc.proc_Clients(LoginData.LoginID, null)
-			//join a in dc.tblAccidents on d.AccidentID equals a.ID
-			//
-			JSON.Data = from d in dc.tblDocGroups
-							join t in dc.tblDocTypes on d.ID equals t.DocGroupID
-							where d.IsDeleted == false && t.AccountID == UserData.AccountID
+			//var tblDocType = (from d in dc.tblDocTypes where d.IsDeleted == false && d.AccountID == UserData.AccountID select d.DocGroupID).ToArray();
+			//JSON.Data = from d in dc.tblDocGroups where d.IsDeleted == false && tblDocType.Contains(d.ID)
+			JSON.Data = from d in dc.tblDocGroups orderby d.ID where d.IsDeleted == false && d.AccountID == UserData.AccountID
 							select new object[] {
-         d.ID,//0
-         d.Name//1
-         };
+								d.ID,//0
+								d.Name//1
+							};
 			object[] Cols ={
-            new { FName = "ID"},//0
-            new { FName = "Name",Type="string", LenMax=100,Validity="require().nonHtml().maxLength(100)"}//1
-         }; JSON.Cols = Cols;
+				new { FName = "ID"},//0
+				new { FName = "Name",Type="string", LenMax=100,Validity="require().nonHtml().maxLength(100)"}//1
+			}; JSON.Cols = Cols;
 			JSON.Config = new {
 				Controler = "Lists", tblUpdate = "tblDocGroup"
 			};
 			JSON.Grid = new {
 				aoColumns = new object[]{
-            new {bVisible=false,bSearchable=false},//0//ID////DefaultUpdate=0
-            new {sTitle="Vardas"}//1//Name//
-            }
+	   new {bVisible=false,bSearchable=false},//0//ID////DefaultUpdate=0
+	   new {sTitle="Vardas"}//1//Name//
+	   }
 			};
 			return JSON;
 		}
-		
 		public jsonArrays GetJSON_tblAccount() {
 			jsonArrays JSON = new jsonArrays();
 			JSON.Data = from p in dc.tblAccounts where p.ID == UserData.AccountID
@@ -260,29 +319,29 @@ namespace CC.Models {
 			return JSON;
 		}
 
-      public jsonArrays GetJSON_tblAccidents() {
-         jsonArrays JSON = new jsonArrays();
-         //            JSON.Data = JSON.Data = from d in dc.tblAccidents
-         //                                    orderby d.Date
-         //                                    select new object[] {
-         //d.ID,//0
-         //d.AccidentTypeID,//1
-         //d.AccountID,//2
-         //d.DriverID,//3
-         //d.No,//4
-         //d.Date,//5
-         //d.IsNotOurFault,//6
-         //d.IsOtherParticipants,//7
-         //d.ShortNote,//8
-         //d.LongNote,//9
-         //d.LocationCountry,//10
-         //d.LocationAddress,//11
-         //d.LocationDistrict,//12
-         //d.Lat,//13
-         //d.Lng,//14
-         //d.GMT//15
-         //};
-         object[] Cols ={//NotEditable=true // Unique=true// LenMax/LenEqual/LenMin:10
+		public jsonArrays GetJSON_tblAccidents() {
+			jsonArrays JSON = new jsonArrays();
+			//            JSON.Data = JSON.Data = from d in dc.tblAccidents
+			//                                    orderby d.Date
+			//                                    select new object[] {
+			//d.ID,//0
+			//d.AccidentTypeID,//1
+			//d.AccountID,//2
+			//d.DriverID,//3
+			//d.No,//4
+			//d.Date,//5
+			//d.IsNotOurFault,//6
+			//d.IsOtherParticipants,//7
+			//d.ShortNote,//8
+			//d.LongNote,//9
+			//d.LocationCountry,//10
+			//d.LocationAddress,//11
+			//d.LocationDistrict,//12
+			//d.Lat,//13
+			//d.Lng,//14
+			//d.GMT//15
+			//};
+			object[] Cols ={//NotEditable=true // Unique=true// LenMax/LenEqual/LenMin:10
 				//Date,DateLess,DateNoLess,Time,String
 				new { FName = "ID"},//0
 				//new { FName = "AccidentTypeID", Tip="Pasirinkite iš sąrašo..",List=new{Source="tblAccidentsTypes",iVal="iD",iText=new object[]{1},Editable=0,ListType="List"}},//1
@@ -302,9 +361,9 @@ namespace CC.Models {
 				new { FName = "Lng",Type="Decimal", LenEqual=10,Validity="require().match('number')"},//14
 				new { FName = "GMT",Type="Integer",Validity="require().match('integer')"}//15
 			}; JSON.Cols = Cols;
-         JSON.Config = new { Controler = "Accidents", tblUpdate = "tblAccidents" };
-         JSON.Grid = new {
-            aoColumns = new object[]{
+			JSON.Config = new { Controler = "Accidents", tblUpdate = "tblAccidents" };
+			JSON.Grid = new {
+				aoColumns = new object[]{
 					new {bVisible=false},//0//ID////DefaultUpdate=0
 					new {sTitle="Įvykio tipas"},//1//AccidentTypeID////DefaultUpdate=0
 					//new {bVisible=false},//2//AccountID////DefaultUpdate=0
@@ -322,15 +381,15 @@ namespace CC.Models {
 					new {sTitle="Lng"},//14//Lng//
 					new {sTitle="GMT"}//15//GMT//
 				},
-            aaSorting = new object[] { new object[] { 4, "asc" } },
-         };
-         return JSON;
-      }
+				aaSorting = new object[] { new object[] { 4, "asc" } },
+			};
+			return JSON;
+		}
 
-      public jsonArrays GetJSON_proc_Accidents() {
-         jsonArrays JSON = new jsonArrays();
-         JSON.Data = from d in dc.proc_Accidents(UserData.AccountID, null)
-                     select new object[] {
+		public jsonArrays GetJSON_proc_Accidents() {
+			jsonArrays JSON = new jsonArrays();
+			JSON.Data = from d in dc.proc_Accidents(UserData.AccountID, null)
+							select new object[] {
 				d.ID,//0
 				d.No,//1
 				d.Date,//2
@@ -350,7 +409,7 @@ namespace CC.Models {
 				d.DocNo,
 				d.Claims_TypeID
 			};
-         object[] Cols ={//NotEditable=true // Unique=true// LenMax/LenEqual/LenMin:10
+			object[] Cols ={//NotEditable=true // Unique=true// LenMax/LenEqual/LenMin:10
 				//Date,DateLess,DateNoLess,Time,String
 				new { FName = "ID"},//0
 				new { FName = "No"},//1
@@ -371,26 +430,26 @@ namespace CC.Models {
 				new { FName = "DocNo"},//15
 				new { FName = "Claims_TypeID"},//15
 			}; JSON.Cols = Cols;
-         JSON.Config = new { Controler = "Accidents", tblUpdate = "" };
-         JSON.Grid = new {
-            //                aoColumns = new object[]{
-            //new {bVisible=false},//0//ID//
-            //new {sTitle="Nr"},//1//No
-            //new {sTitle="Data"},//2//Date
-            //new {sTitle="Vieta"},//3//Place
-            //new {sTitle="Tipas"},//4//AccType
-            //new {sTitle="Visos"},//5//CNo_All
-            //new {sTitle="Atviros"},//6//CNo_NotF
-            //new {sTitle="Žalos suma"},//7//LossSum
-            //new {sTitle="Visa žalos suma?",bVisible=false},//8//AmountIsConfirmed
-            //new {sTitle="Kas atsitiko"},//9//ShortNote//
-            //new {sTitle="Pastabos",bVisible=false,sClass="smallFont"},//10//LongNote//
-            //new {sTitle="Vairuotojas",bVisible=false},//11//Driver
-            //new {sTitle="Kas įvedė",bVisible=false},//12//UserName
-            //new {sTitle="Žalos",bVisible=false},//13//Claims_C
-            //new {sTitle="Žalos2",bVisible=false},//14//Claims_C2
-            //new {bSortable=false}//14//Claims_C
-            aoColumns = new object[]{
+			JSON.Config = new { Controler = "Accidents", tblUpdate = "" };
+			JSON.Grid = new {
+				//                aoColumns = new object[]{
+				//new {bVisible=false},//0//ID//
+				//new {sTitle="Nr"},//1//No
+				//new {sTitle="Data"},//2//Date
+				//new {sTitle="Vieta"},//3//Place
+				//new {sTitle="Tipas"},//4//AccType
+				//new {sTitle="Visos"},//5//CNo_All
+				//new {sTitle="Atviros"},//6//CNo_NotF
+				//new {sTitle="Žalos suma"},//7//LossSum
+				//new {sTitle="Visa žalos suma?",bVisible=false},//8//AmountIsConfirmed
+				//new {sTitle="Kas atsitiko"},//9//ShortNote//
+				//new {sTitle="Pastabos",bVisible=false,sClass="smallFont"},//10//LongNote//
+				//new {sTitle="Vairuotojas",bVisible=false},//11//Driver
+				//new {sTitle="Kas įvedė",bVisible=false},//12//UserName
+				//new {sTitle="Žalos",bVisible=false},//13//Claims_C
+				//new {sTitle="Žalos2",bVisible=false},//14//Claims_C2
+				//new {bSortable=false}//14//Claims_C
+				aoColumns = new object[]{
 					new {bVisible=false},//0//ID//
 					new {sTitle="Nr"},//1//No
 					new {sTitle="Data"},//2//Date
@@ -411,17 +470,17 @@ namespace CC.Models {
 					new {sTitle="Žalų tipai"}//14//Claims_C2
 					//new {bSortable=false,fnRender=function(){return <span class='ui-icon ui-icon-mail-closed'></span><span class='ui-icon ui-icon-mail-closed'></span>;}} //"function(oObj){return oObj.aData[0];}"}
 				}
-            //aaSorting = new object[] { new object[] { 2, "desc" } },
-         };
-         return JSON;
-      }
+				//aaSorting = new object[] { new object[] { 2, "desc" } },
+			};
+			return JSON;
+		}
 
-      public jsonArrays GetJSON_proc_Drivers(bool? OnlyTop) {
-         jsonArrays JSON = new jsonArrays();
-         //JSON.Data = from d in dc.tblDrivers
-         // where d.IsDeleted == false && d.AccountID == UserData.AccountID
-         JSON.Data = from d in dc.proc_Drivers(UserData.AccountID, OnlyTop)
-                     select new object[] {
+		public jsonArrays GetJSON_proc_Drivers(bool? OnlyTop) {
+			jsonArrays JSON = new jsonArrays();
+			//JSON.Data = from d in dc.tblDrivers
+			// where d.IsDeleted == false && d.AccountID == UserData.AccountID
+			JSON.Data = from d in dc.proc_Drivers(UserData.AccountID, OnlyTop)
+							select new object[] {
 				d.ID,//0
 				d.FirstName,//1
 				d.LastName,//2
@@ -431,7 +490,7 @@ namespace CC.Models {
 				d.Docs,//6
 				d.EndDate,//7
 			};
-         object[] Cols ={
+			object[] Cols ={
 				new { FName = "ID"},//0
 				new { FName = "FirstName",Type="String", LenMax=100,IsUnique=new object[]{1,2},Validity="require().nonHtml().maxLength(100)"},//1
 				new { FName = "LastName",Type="String", LenMax=100,Validity="require().nonHtml().maxLength(100)"},//2
@@ -441,9 +500,9 @@ namespace CC.Models {
 				new { FName = "Docs",Type="String", NotEditable=1},//6
 				new { FName = "EndDate",Type="DateLess", Default="",Validity="match('date').lessThanOrEqualTo(new Date())", Plugin = new {datepicker = new {minDate="-25y", maxDate=0}}},//7
 			}; JSON.Cols = Cols;
-         JSON.Config = new { Controler = "Drivers", tblUpdate = "tblDrivers",titleFields=new object []{"firstName","lastName"},Msg = new { AddNew = "Pridėti naują vairuotoją", Edit = "Vairuotojo duomenų redagavimas", Delete = "Ištrinti vairuotoją", GenName = "Vairuotojas", GenNameWhat = "vairuotoją", ListName = "Vairuotojų sąrašas" } };
-         JSON.Grid = new {
-            aoColumns = new object[]{
+			JSON.Config = new { Controler = "Drivers", tblUpdate = "tblDrivers", titleFields = new object[] { "firstName", "lastName" }, Msg = new { AddNew = "Pridėti naują vairuotoją", Edit = "Vairuotojo duomenų redagavimas", Delete = "Ištrinti vairuotoją", GenName = "Vairuotojas", GenNameWhat = "vairuotoją", ListName = "Vairuotojų sąrašas" } };
+			JSON.Grid = new {
+				aoColumns = new object[]{
 					new {bVisible=false},//0//ID////DefaultUpdate=0
 					new {sTitle="Vardas",sClass="smallFont"},//1//FirstName//
 					new {sTitle="Pavardė",sClass="smallFont"},//2//LastName//
@@ -453,70 +512,70 @@ namespace CC.Models {
 					new {sTitle="Dokumentai"},//6//Docs//
 					new {sTitle="Darbo pabaiga",bVisible=false},//7//EndDate//
 				}, //aaSorting = new object[] { new object[] { 2, "asc" } },//???
-         };
-         return JSON;
-      }
-
-      public jsonArrays GetJSON_tblAccidentTypes() {
-         jsonArrays JSON = new jsonArrays();
-         //JSON.Data = from c in dc.proc_Clients(LoginData.LoginID, null)
-         JSON.Data = from d in dc.tblAccidentsTypes
-                     select new object[] {
-				d.ID,//0
-				d.Name//1
 			};
-         object[] Cols ={//NotEditable=true // Unique=true// LenMax/LenEqual/LenMin:10
-				//Date,DateLess,DateNoLess,Time,String
-				new { FName = "ID"},//0
-				new { FName = "Name",Type="String", LenMax=30,Validity="require().nonHtml().maxLength(30)"}//1
-			}; JSON.Cols = Cols;
-         JSON.Config = new { Controler = "AccidentsTypes", tblUpdate = "tblAccidentsTypes" };
-         JSON.Grid = new {
-            aoColumns = new object[]{
-					new {bVisible=false},//0//ID////DefaultUpdate=0
-					new {sTitle="Name",sClass="smallFont"}//1//Name//
-				},
-            aaSorting = new object[] { new object[] { 1, "asc" } },//???
-         };
-         return JSON;
-      }
-		        // JSON.Data = from d in dc.tblAccidents
-              //       where d.No == No && d.IsDeleted == false
-      public jsonArrays GetJSON_tblClaimTypes() {
-         jsonArrays JSON = new jsonArrays();
-         //JSON.Data = from c in dc.proc_Clients(LoginData.LoginID, null)
-         JSON.Data = from d in dc.tblClaimTypes //where d.ID>0 //orderby d.Name
-                     select new object[] {
-				d.ID,//0
-				d.Name//1
-			};
-         object[] Cols ={//NotEditable=true // Unique=true// LenMax/LenEqual/LenMin:10
-				//Date,DateLess,DateNoLess,Time,String
-				new { FName = "ID"},//0
-				new { FName = "Name",Type="String", LenMax=30,Validity="require().nonHtml().maxLength(30)"}//1
-			}; JSON.Cols = Cols;
-         JSON.Config = new { Controler = "ClaimTypes", tblUpdate = "tblClaimTypes" };
-         JSON.Grid = new {
-            aoColumns = new object[]{
-					new {bVisible=false},//0//ID////DefaultUpdate=0
-					new {sTitle="Name"}//1//Name//
-				}//,
-            //aaSorting = new object[] { new object[] { 1, "asc" } },//???
-         };
-         return JSON;
-      }
-		public jsonArrays GetJSON_proc_Years() {
-			jsonArrays JSON = new jsonArrays();
-			JSON.Data = from d in dc.proc_AccidentsYears(UserData.AccountID)
-							select new object[] {d.years};
-			object[] Cols ={new { FName = "Year"}}; JSON.Cols = Cols;
 			return JSON;
 		}
 
-      public jsonArrays GetJSON_proc_Vehicles(bool? OnlyTop) {
-         jsonArrays JSON = new jsonArrays();
-         JSON.Data = from d in dc.proc_Vehicles(UserData.AccountID, OnlyTop)
-                     select new object[] {
+		public jsonArrays GetJSON_tblAccidentTypes() {
+			jsonArrays JSON = new jsonArrays();
+			//JSON.Data = from c in dc.proc_Clients(LoginData.LoginID, null)
+			JSON.Data = from d in dc.tblAccidentsTypes
+							select new object[] {
+				d.ID,//0
+				d.Name//1
+			};
+			object[] Cols ={//NotEditable=true // Unique=true// LenMax/LenEqual/LenMin:10
+				//Date,DateLess,DateNoLess,Time,String
+				new { FName = "ID"},//0
+				new { FName = "Name",Type="String", LenMax=30,Validity="require().nonHtml().maxLength(30)"}//1
+			}; JSON.Cols = Cols;
+			JSON.Config = new { Controler = "AccidentsTypes", tblUpdate = "tblAccidentsTypes" };
+			JSON.Grid = new {
+				aoColumns = new object[]{
+					new {bVisible=false},//0//ID////DefaultUpdate=0
+					new {sTitle="Name",sClass="smallFont"}//1//Name//
+				},
+				aaSorting = new object[] { new object[] { 1, "asc" } },//???
+			};
+			return JSON;
+		}
+		// JSON.Data = from d in dc.tblAccidents
+		//       where d.No == No && d.IsDeleted == false
+		public jsonArrays GetJSON_tblClaimTypes() {
+			jsonArrays JSON = new jsonArrays();
+			//JSON.Data = from c in dc.proc_Clients(LoginData.LoginID, null)
+			JSON.Data = from d in dc.tblClaimTypes //where d.ID>0 //orderby d.Name
+							select new object[] {
+				d.ID,//0
+				d.Name//1
+			};
+			object[] Cols ={//NotEditable=true // Unique=true// LenMax/LenEqual/LenMin:10
+				//Date,DateLess,DateNoLess,Time,String
+				new { FName = "ID"},//0
+				new { FName = "Name",Type="String", LenMax=30,Validity="require().nonHtml().maxLength(30)"}//1
+			}; JSON.Cols = Cols;
+			JSON.Config = new { Controler = "ClaimTypes", tblUpdate = "tblClaimTypes" };
+			JSON.Grid = new {
+				aoColumns = new object[]{
+					new {bVisible=false},//0//ID////DefaultUpdate=0
+					new {sTitle="Name"}//1//Name//
+				}//,
+				//aaSorting = new object[] { new object[] { 1, "asc" } },//???
+			};
+			return JSON;
+		}
+		public jsonArrays GetJSON_proc_Years() {
+			jsonArrays JSON = new jsonArrays();
+			JSON.Data = from d in dc.proc_AccidentsYears(UserData.AccountID)
+							select new object[] { d.years };
+			object[] Cols = { new { FName = "Year" } }; JSON.Cols = Cols;
+			return JSON;
+		}
+
+		public jsonArrays GetJSON_proc_Vehicles(bool? OnlyTop) {
+			jsonArrays JSON = new jsonArrays();
+			JSON.Data = from d in dc.proc_Vehicles(UserData.AccountID, OnlyTop)
+							select new object[] {
 				d.ID,//0
 				d.Plate,//2
 				d.Type,//1
@@ -528,7 +587,7 @@ namespace CC.Models {
 				d.TypeID,//8
 				d.MakeID//9
 				};
-         object[] Cols ={
+			object[] Cols ={
 				new { FName = "ID"},//0
 				new { FName = "Plate",Type="String", LenMax=10,IsUnique=new object[]{2},Validity="require().nonHtml().maxLength(10)"},//2
 				new { FName = "Type",Type="String",IdField="typeID"},//1
@@ -540,9 +599,9 @@ namespace CC.Models {
 				new { FName = "TypeID",List=new{Source="tblVehicleTypes",Editable=0,ListType="List", iVal="iD",iText=new object []{"name"}}},//8
 				new { FName = "MakeID",List=new{Source="tblVehicleMakes",Editable=1,ListType="List", iVal="iD",iText=new object []{"name"}}}//9
 			}; JSON.Cols = Cols;
-         JSON.Config = new { Controler = "Vehicles", tblUpdate = "tblVehicles",titleFields=new object []{"plate","make"}, Msg = new { AddNew = "Naujos transporto priemonės sukūrimas", Edit = "Transporto priemonių redagavimas", Delete = "Ištrinti transporoto priemonę", GenName = "Transporto priemonė", GenNameWhat = "transporto priemonę", ListName = "Transporto priemonių sąrašas" } };
-         JSON.Grid = new {
-            aoColumns = new object[]{
+			JSON.Config = new { Controler = "Vehicles", tblUpdate = "tblVehicles", titleFields = new object[] { "plate", "make" }, Msg = new { AddNew = "Naujos transporto priemonės sukūrimas", Edit = "Transporto priemonių redagavimas", Delete = "Ištrinti transporoto priemonę", GenName = "Transporto priemonė", GenNameWhat = "transporto priemonę", ListName = "Transporto priemonių sąrašas" } };
+			JSON.Grid = new {
+				aoColumns = new object[]{
 					new {bVisible=false},//0//ID
 					new {sTitle="Valst.Nr."},//2//Plate//
 					new {sTitle="Tipas"},//1//Type//
@@ -554,14 +613,14 @@ namespace CC.Models {
 					new {bVisible=false,sTitle="Tipas"},//8//TypeID//
 					new {bVisible=false,sTitle="Markė"}//9//MakeID//
 				},
-            //aaSorting = new object[] { new object[] { 1, "asc" } },//???
-         };
-         return JSON;
-      }
+				//aaSorting = new object[] { new object[] { 1, "asc" } },//???
+			};
+			return JSON;
+		}
 
 		public jsonArrays GetJSON_tblUsers() {
 			jsonArrays JSON = new jsonArrays();
-			JSON.Data = from d in dc.tblUsers where d.AccountID== UserData.AccountID && d.IsDeleted==false
+			JSON.Data = from d in dc.tblUsers where d.AccountID == UserData.AccountID && d.IsDeleted == false
 							select new object[] {
 				d.ID,//0
 				d.FirstName,//2
@@ -593,10 +652,10 @@ namespace CC.Models {
 			return JSON;
 		}
 
-      public jsonArrays GetJSON_proc_InsPolicies(bool? OnlyTop) {
-         jsonArrays JSON = new jsonArrays();
-         JSON.Data = from p in dc.proc_InsPolicies(UserData.AccountID, OnlyTop)
-                     select new object[] {
+		public jsonArrays GetJSON_proc_InsPolicies(bool? OnlyTop) {
+			jsonArrays JSON = new jsonArrays();
+			JSON.Data = from p in dc.proc_InsPolicies(UserData.AccountID, OnlyTop)
+							select new object[] {
 				p.ID,//0
 				p.ClaimType,//1
 				p.InsurerName,//2
@@ -611,7 +670,7 @@ namespace CC.Models {
 				p.InsurerID,//11
 				p.MailsAddresses
 			};
-         object[] Cols ={//NotEditable=true // Unique=true// LenMax/LenEqual/LenMin:10
+			object[] Cols ={//NotEditable=true // Unique=true// LenMax/LenEqual/LenMin:10
 				//Date,DateLess,DateNoLess,Time,String
 				new { FName = "ID"},//0
 				new { FName = "ClaimType",IdField="claimTypeID"},//2
@@ -629,9 +688,9 @@ namespace CC.Models {
 				new { FName = "InsurerID",List=new{Source="tblInsurers",Editable=1,ListType="List", iVal="iD",iText=new object []{"name"}}},//11
 				new { FName = "MailsAddresses",Type="String", Tip="Įveskite vieną ar kelis draudiko ar brokerio el. pašto adresus (atskirti kableliu ar kabletaškiu)", LenMax=250,Validity="nonHtml().maxLength(250)"},//5
 								}; JSON.Cols = Cols;
-			JSON.Config = new { Controler = "InsPolicy", tblUpdate = "tblInsPolicies", titleFields = new object[] {"policyNumber","insurerName"}, Msg = new { AddNew = "Naujo draudimo poliso sukūrimas", Edit = "Draudimo poliso redagavimas", Delete = "Ištrinti draudimo polisą", GenName = "Draudimo polisas", GenNameWhat = "draudimo polisą", ListName = "Draudimo polisų sąrašas" } };
-         JSON.Grid = new {
-            aoColumns = new object[]{
+			JSON.Config = new { Controler = "InsPolicy", tblUpdate = "tblInsPolicies", titleFields = new object[] { "policyNumber", "insurerName" }, Msg = new { AddNew = "Naujo draudimo poliso sukūrimas", Edit = "Draudimo poliso redagavimas", Delete = "Ištrinti draudimo polisą", GenName = "Draudimo polisas", GenNameWhat = "draudimo polisą", ListName = "Draudimo polisų sąrašas" } };
+			JSON.Grid = new {
+				aoColumns = new object[]{
 					new {bVisible=false},//0//ID////DefaultUpdate=0
 					new {sTitle="Draudimo rūšis"},//1//ClaimType//
 					new {sTitle="Draudimo kompanija"},//2//InsurerName//
@@ -648,16 +707,16 @@ namespace CC.Models {
 					new {bVisible=false,sTitle="Draudikas"},//11//InsurerID////
 					new {bVisible=false,sTitle="Pranešimą apie žalą siųsti:"}//11//InsurerID////
 				}
-            // aaSorting = new object[] { new object[] { 3, "asc" } },//???
-         };
-         return JSON;
-      }
+				// aaSorting = new object[] { new object[] { 3, "asc" } },//???
+			};
+			return JSON;
+		}
 
-      public jsonArrays GetJSON_tblAccident1(int No) {
-         jsonArrays JSON = new jsonArrays();
-         JSON.Data = from d in dc.tblAccidents
-                     where d.No == No && d.IsDeleted == false
-                     select new object[] {
+		public jsonArrays GetJSON_tblAccident1(int No) {
+			jsonArrays JSON = new jsonArrays();
+			JSON.Data = from d in dc.tblAccidents
+							where d.No == No && d.IsDeleted == false
+							select new object[] {
 				d.ID,//0
 				d.AccidentTypeID,//1
 				d.AccountID,//2
@@ -678,7 +737,7 @@ namespace CC.Models {
 				//d.IsDeleted//16
 			};
 
-         object[] Cols ={//NotEditable=true // Unique=true// LenMax/LenEqual/LenMin:10
+			object[] Cols ={//NotEditable=true // Unique=true// LenMax/LenEqual/LenMin:10
 				//Date,DateLess,DateNoLess,Time,String
 				new { FName = "ID"},//0
 				new { FName = "AccidentTypeID",Tip="Pasirinkite iš sąrašo.."},//1
@@ -698,9 +757,9 @@ namespace CC.Models {
 				new { FName = "GMT",Type="Integer",Validity="require().match('integer').maxLength(13).greaterThanOrEqualTo(0)"},//15
 				//new { FName = "IsDeleted",Type="Boolean"}}//16
 			}; JSON.Cols = Cols;
-         JSON.Config = new { Controler = "Accidents", tblUpdate = "tblAccidents" };
-         JSON.Grid = new {
-            aoColumns = new object[]{
+			JSON.Config = new { Controler = "Accidents", tblUpdate = "tblAccidents" };
+			JSON.Grid = new {
+				aoColumns = new object[]{
 					new {bVisible=false},//0//ID////DefaultUpdate=0
 					new {bVisible=false},//1//AccidentTypeID////DefaultUpdate=0
 					new {bVisible=false},//2//AccountID////DefaultUpdate=0
@@ -719,98 +778,106 @@ namespace CC.Models {
 					new {sTitle="GMT"},//15//GMT//
 					//new {sTitle="IsDeleted"}//16//IsDeleted//
 				}
-         };
-         return JSON;
-      }
+			};
+			return JSON;
+		}
 
-      public tblAccident Get_tblAccident(int No) {
-         return (from d in dc.tblAccidents
-                 where d.No == No && d.IsDeleted == false
-                 select d).SingleOrDefault() ?? null;
-      }
+		public tblAccident Get_tblAccident(int No) {
+			return (from d in dc.tblAccidents
+					  where d.No == No && d.IsDeleted == false
+					  select d).SingleOrDefault() ?? null;
+		}
+		public IQueryable<AccidentVehicles> Get_Vehicles(int accidentID) {
+		return (from c in dc.tblClaims join v in dc.tblVehicles on c.VehicleID equals v.ID
+				  where c.AccidentID == accidentID && c.IsDeleted == false
+					  select new AccidentVehicles {
+							ID = v.ID,
+							Title = v.Plate + "," + v.tblVehicleMake.Name + "," + v.Model + " dokumentai"
+					  });
+		}
 
-      public jsonArrays GetJSON_tblInsurers() {
-         jsonArrays JSON = new jsonArrays();
-         JSON.Data = from d in dc.tblInsurers
-                     where d.IsDeleted == false && d.AccountID == UserData.AccountID
-                     select new object[] {
+		public jsonArrays GetJSON_tblInsurers() {
+			jsonArrays JSON = new jsonArrays();
+			JSON.Data = from d in dc.tblInsurers
+							where d.IsDeleted == false && d.AccountID == UserData.AccountID
+							select new object[] {
 				d.ID,//0
 				d.Name,//1
 				d.CountryID,//2
 				d.CountryDefault,//3
 			};
-         object[] Cols ={//NotEditable=true // Unique=true// LenMax/LenEqual/LenMin:10
+			object[] Cols ={//NotEditable=true // Unique=true// LenMax/LenEqual/LenMin:10
 				//Date,DateLess,DateNoLess,Time,String
 				new { FName = "ID"},//0
 				new { FName = "Name",Type="String", LenMax=50,IsUnique=new object[]{1},Validity="require().nonHtml().maxLength(50)"},//1
 				new { FName = "CountryID"},//2
 				new { FName = "CountryDefault",Type="Integer",Validity="require().match('integer').maxLength(13).greaterThanOrEqualTo(0)"},//3
 			}; JSON.Cols = Cols;
-         JSON.Config = new { Controler = "Insurers", tblUpdate = "tblInsurers", Msg = new { AddNew = "Naujo draudiko sukūrimas", Edit = "Draudiko redagavimas", Delete = "Ištrinti draudiką", GenName = "Draudikas", GenNameWhat = "draudiką", ListName = "Draudikų sąrašas" } };
+			JSON.Config = new { Controler = "Insurers", tblUpdate = "tblInsurers", Msg = new { AddNew = "Naujo draudiko sukūrimas", Edit = "Draudiko redagavimas", Delete = "Ištrinti draudiką", GenName = "Draudikas", GenNameWhat = "draudiką", ListName = "Draudikų sąrašas" } };
 
-         JSON.Grid = new {
-            aoColumns = new object[]{
+			JSON.Grid = new {
+				aoColumns = new object[]{
 					new {bVisible=false},//0//ID////DefaultUpdate=0
 					new {sTitle="Name",sClass="smallFont"},//1//Name//
 					new {bVisible=false},//2//CountryID////DefaultUpdate=0
 					new {sTitle="CountryDefault"},//3//CountryDefault//
 				}, aaSorting = new object[] { new object[] { 3, "asc" } },//???
-         };
-         return JSON;
-      }
+			};
+			return JSON;
+		}
 
-      public jsonArrays GetJSON_tblVehicleMakes() {
-         jsonArrays JSON = new jsonArrays();
-         //JSON.Data = from c in dc.proc_Clients(LoginData.LoginID, null)
-         JSON.Data = from d in dc.tblVehicleMakes
-                     where d.IsDeleted == false && d.AccountID == UserData.AccountID
-                     select new object[] {
+		public jsonArrays GetJSON_tblVehicleMakes() {
+			jsonArrays JSON = new jsonArrays();
+			//JSON.Data = from c in dc.proc_Clients(LoginData.LoginID, null)
+			JSON.Data = from d in dc.tblVehicleMakes
+							where d.IsDeleted == false && d.AccountID == UserData.AccountID
+							select new object[] {
 				d.ID,//0
 				d.Name,//1
 			};
-         object[] Cols ={//NotEditable=true // Unique=true// LenMax/LenEqual/LenMin:10
+			object[] Cols ={//NotEditable=true // Unique=true// LenMax/LenEqual/LenMin:10
 				//Date,DateLess,DateNoLess,Time,String
 				new { FName = "ID"},//0
 				new { FName = "Name",Type="String", LenMax=50,IsUnique=new object[]{1},Validity="require().nonHtml().maxLength(50)"},//1
 			}; JSON.Cols = Cols;
-         JSON.Config = new { Controler = "VehicleMakes", tblUpdate = "tblVehicleMakes", Msg = new { AddNew = "Naujos tr. priemonių markės sukūrimas", Edit = "Tr. priemonių markės redagavimas", Delete = "Ištrinti tr. priemonių markę", GenName = "Tr. priemonės markė", GenNameWhat = "transporto priemonę", ListName = "Tr. priemonių sąrašas" } };
-         JSON.Grid = new {
-            aoColumns = new object[]{
+			JSON.Config = new { Controler = "VehicleMakes", tblUpdate = "tblVehicleMakes", Msg = new { AddNew = "Naujos tr. priemonių markės sukūrimas", Edit = "Tr. priemonių markės redagavimas", Delete = "Ištrinti tr. priemonių markę", GenName = "Tr. priemonės markė", GenNameWhat = "transporto priemonę", ListName = "Tr. priemonių sąrašas" } };
+			JSON.Grid = new {
+				aoColumns = new object[]{
 					new {bVisible=false,sTitle="Markė1"},//0//ID////DefaultUpdate=0
 					new {sTitle="Name",sClass="smallFont"}//1//Name//
 				}//, aaSorting = new object[] { new object[] { 3, "asc" } },//???
-         };
-         return JSON;
-      }
+			};
+			return JSON;
+		}
 
-      public jsonArrays GetJSON_tblVehicleTypes() {
-         jsonArrays JSON = new jsonArrays();
-         //JSON.Data = from c in dc.proc_Clients(LoginData.LoginID, null)
-         JSON.Data = from d in dc.tblVehicleTypes
-                     select new object[] {
+		public jsonArrays GetJSON_tblVehicleTypes() {
+			jsonArrays JSON = new jsonArrays();
+			//JSON.Data = from c in dc.proc_Clients(LoginData.LoginID, null)
+			JSON.Data = from d in dc.tblVehicleTypes
+							select new object[] {
 				d.ID,//0
 				d.Name,//1
 			};
-         object[] Cols ={//NotEditable=true // Unique=true// LenMax/LenEqual/LenMin:10
+			object[] Cols ={//NotEditable=true // Unique=true// LenMax/LenEqual/LenMin:10
 				//Date,DateLess,DateNoLess,Time,String
 				new { FName = "ID"},//0
 				new { FName = "Name",Type="String", LenMax=50,IsUnique=new object[]{1},Validity="require().nonHtml().maxLength(50)"},//1
 			}; JSON.Cols = Cols;
-         //JSON.Config = new { Controler = "VehicleMakes", tblUpdate = "tblVehicleMakes", Msg = new { AddNew = "Naujos tr. priemonių markės sukūrimas", Edit = "Tr. priemonių markės redagavimas", Delete = "Ištrinti tr. priemonių markę", GenName = "Tr. priemonės markė", GenNameWhat = "transporto priemonę", ListName = "Tr. priemonių sąrašas" } };
-         JSON.Grid = new {
-            aoColumns = new object[]{
+			//JSON.Config = new { Controler = "VehicleMakes", tblUpdate = "tblVehicleMakes", Msg = new { AddNew = "Naujos tr. priemonių markės sukūrimas", Edit = "Tr. priemonių markės redagavimas", Delete = "Ištrinti tr. priemonių markę", GenName = "Tr. priemonės markė", GenNameWhat = "transporto priemonę", ListName = "Tr. priemonių sąrašas" } };
+			JSON.Grid = new {
+				aoColumns = new object[]{
 					new {bVisible=false},//0//ID////DefaultUpdate=0
 					new {sTitle="Name",sClass="smallFont"},//1//Name//
 				}//, aaSorting = new object[] { new object[] { 3, "asc" } },//???
-         };
-         return JSON;
-      }
+			};
+			return JSON;
+		}
 
-      public jsonArrays GetJSON_tblClaims() {
-         jsonArrays JSON = new jsonArrays();
-         JSON.Data = from d in dc.tblClaims join a in dc.tblAccidents on d.AccidentID equals a.ID
-                     where d.IsDeleted == false && a.AccountID == UserData.AccountID
-                     select new object[] {
+		public jsonArrays GetJSON_tblClaims() {
+			jsonArrays JSON = new jsonArrays();
+			JSON.Data = from d in dc.tblClaims join a in dc.tblAccidents on d.AccidentID equals a.ID
+							where d.IsDeleted == false && a.AccountID == UserData.AccountID
+							select new object[] {
 				d.ID,//0
 				d.ClaimTypeID,//1
 				d.AccidentID,//2
@@ -827,18 +894,18 @@ namespace CC.Models {
 				d.Days,//13
 				d.PerDay//14
 				};
-         //Datepicker ir plugin on blur
-         //Markup.Type:Date,Date,DateNotLess,DateLess,Year,YearLess,YearNotLess,Integer,Decimal
-         //NotImplemented:String,String,NotEditable=true,LenMax/LenEqual/LenMin:10
+			//Datepicker ir plugin on blur
+			//Markup.Type:Date,Date,DateNotLess,DateLess,Year,YearLess,YearNotLess,Integer,Decimal
+			//NotImplemented:String,String,NotEditable=true,LenMax/LenEqual/LenMin:10
 
-         //GenerateHTML
-         //Markup.Type:Boolean(checkbox),substring(0,4)==="Date"(Date),LenMax>100(textarea)
-         //else if Cols[i].List(List)else text
-         //Markup:IsUnique=new object[]{1,2}
-         //Markup:Default=Today
-         //Tip="Pradėkite vesti.."
-         //List=new{Source="tblVehicleMakes",iVal="iD",iText=new object []{1}}
-         object[] Cols ={
+			//GenerateHTML
+			//Markup.Type:Boolean(checkbox),substring(0,4)==="Date"(Date),LenMax>100(textarea)
+			//else if Cols[i].List(List)else text
+			//Markup:IsUnique=new object[]{1,2}
+			//Markup:Default=Today
+			//Tip="Pradėkite vesti.."
+			//List=new{Source="tblVehicleMakes",iVal="iD",iText=new object []{1}}
+			object[] Cols ={
 				new { FName = "ID"},//0
 				new { FName = "ClaimTypeID",Tip="Pasirinkite žalos tipą..", List=new{Source="tblClaimTypes",iVal="iD",iText=new object[]{"name"},Editable=0,ListType="List"}},//1
 				new { FName = "AccidentID"},//2
@@ -855,11 +922,11 @@ namespace CC.Models {
 				new { FName = "Days",Type="Integer", LenMax=10,Validity="require().match('integer').maxLength(10).greaterThanOrEqualTo(0)"},//13
 				new { FName = "PerDay",Type="Decimal", LenEqual=10,Validity="require().match('number').greaterThanOrEqualTo(0)"}//14
 				}; JSON.Cols = Cols;
-         JSON.Config = new {
-            Controler = "Claims", tblUpdate = "tblClaims", Msg = new { AddNew = "Naujos žalos pridėjimas", Edit = "Žalos redagavimas", Delete = "Ištrinti žalą", GenName = "Žala" }
-         };
-         JSON.Grid = new {
-            aoColumns = new object[]{
+			JSON.Config = new {
+				Controler = "Claims", tblUpdate = "tblClaims", Msg = new { AddNew = "Naujos žalos pridėjimas", Edit = "Žalos redagavimas", Delete = "Ištrinti žalą", GenName = "Žala" }
+			};
+			JSON.Grid = new {
+				aoColumns = new object[]{
 				new {bVisible=false},//0//ID////DefaultUpdate=0
 				new {sTitle="Žalos tipas"},//1//ClaimTypeID////DefaultUpdate=0
 				new {bVisible=false},//2//AccidentID////DefaultUpdate=0
@@ -876,14 +943,14 @@ namespace CC.Models {
 				new {sTitle="Prastova dienomis"},//13//Days//
 				new {sTitle="Prastovos kaina per dieną"}//14//PerDay//
 				}
-         };
-         return JSON;
-      }
+			};
+			return JSON;
+		}
 
-      public IEnumerable<tblAccidentsType> Get_tblAccident_Types() {
-         return (from d in dc.tblAccidentsTypes
-                 //where d.No == No && d.IsDeleted == false
-                 select d).AsEnumerable();
-      }
-   }
+		public IEnumerable<tblAccidentsType> Get_tblAccident_Types() {
+			return (from d in dc.tblAccidentsTypes
+					  //where d.No == No && d.IsDeleted == false
+					  select d).AsEnumerable();
+		}
+	}
 }

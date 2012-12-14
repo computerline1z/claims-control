@@ -4,6 +4,16 @@
 
   var panelFilterIsActive, textFilterIsActive;
 
+  App.tabAccidentsView = App.mainMenuView.extend({
+    content: null,
+    viewIx: 0,
+    templateName: 'tmpAccidentsMain',
+    didInsertElement: function() {
+      this._super();
+      return console.log("I loaded all tabAccidents");
+    }
+  });
+
   App.AccidentView = Em.View.extend({
     templateName: 'tmpAccidentRow',
     tagName: ""
@@ -290,6 +300,7 @@
   });
 
   App.accidentsController = Em.ResourceController.create({
+    url: "Accident/AccidentsList",
     tableName: "proc_Accidents",
     fields: {},
     removeClaims: function(AddWr) {
@@ -357,8 +368,8 @@
     },
     openAccident: function(AccNo) {
       var ctrlEdit;
-      $('#tabtabAccidents').removeClass("colmask");
-      $('#divtabAccidentsList').hide();
+      $('#tabAccidents').removeClass("colmask");
+      $('#divAccidentsList').hide();
       ctrlEdit = $('#divAccidentEdit').show();
       ctrlEdit.spinner({
         position: 'center',

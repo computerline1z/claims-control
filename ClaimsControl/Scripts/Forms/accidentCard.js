@@ -6,7 +6,28 @@ oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 
 	LoadScript = function () {
 		$("#btnMapTown").button({ disabled: true }).click(function () { oGLOBAL.mapFn.GetMapFromTown(); return false; });
-
+		
+		$( "#accidentTab" ).on("tabsload",function( event, ui ) {
+				console.log(event.target);console.log(event);console.log(ui);
+		} );
+		$( "#accidentTab" ).on( "tabsbeforeactivate", function( event, ui ) {
+				console.log(event.target);console.log(event);console.log(ui);
+				//ui.newTab.index()
+		} );
+		$( "#accidentTab" ).on( "tabsactivate", function( event, ui ) {
+			if (ui.newTab.index()===1){//Jei pereinam į įvykio dokumentus
+				var accidentForm=ui.oldPanel,docsForm=ui.newPanel,uploadForm=$('#uploadDocsToAccident2');
+				if  (uploadForm.html()!==""){
+					if (accidentForm.data("ctrl").id!== docsForm.data("ctrl").id) {//Jei kazkas buvo ir ne toks koks dabar ištuštinam
+						uploadForm.empty();$("#dynamicTree,#docViewForTree").empty();
+					}
+				}
+				if  (uploadForm.html()===""){
+					App.docsAccident({accidentForm:accidentForm, docsForm:docsForm, uploadForm:uploadForm});
+					docsForm.data("ctrl").id=accidentForm.data("ctrl").id;
+				}		
+			}
+		} );
 		//$("#LongNote").autoResize();
 		$("#LongNote").bind("keyup", function () {
 			//$(this).autoResizeTextAreaQ({ "max_rows": 8 });
@@ -98,8 +119,8 @@ oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 		//$(".ui-tabs-nav li:last").after("<span class='RightSpanInTab'>"+eNr+"</span>");
 		//#divlogindisplay
 		//#ulMainMenu	
-		var tabHeight = $(document).height() - $('#divlogindisplay').outerHeight(true) - $('#ulMainMenu').outerHeight(true);
-		$('#divAccidentEdit').height(tabHeight);
+		/////var tabHeight = $(document).height() - $('#divlogindisplay').outerHeight(true) - $('#ulMainMenu').outerHeight(true);
+		/////$('#divAccidentEdit').height(tabHeight);
 		var Dif = $('#divAccidentEdit').height() - $('h2').outerHeight(true) - $('#ulWhiteMenu').outerHeight(true) - $('#AccidentForm').outerHeight(true);
 		if (Dif > 0) { $('div.HalfDivleft1').height($('div.HalfDivleft1').height() + Dif); }
 		var MapHeight = $('#AccidentForm').outerHeight(false) - $('#divMapHead').outerHeight(false);

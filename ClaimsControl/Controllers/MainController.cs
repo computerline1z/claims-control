@@ -22,7 +22,7 @@ namespace ClaimsControl.Controllers {
 		[HttpPost]
 		public JsonResult tabLists(string ver, bool tmp, bool obj) {
 			Repositories_Main acc = new Repositories_Main();
-			string currentVer = "3"; if (ver != currentVer) tmp = true; ver = currentVer;
+			string currentVer = "4"; if (ver != currentVer) tmp = true; ver = currentVer;
 			System.Diagnostics.Debug.Print("ver - " + ver + "; obj - " + obj.ToString());
 			return Json(
 				new {
@@ -61,11 +61,13 @@ namespace ClaimsControl.Controllers {
 		}
 
 		[HttpPost]
-		public JsonResult tabAccidents() {
+		public JsonResult tabAccidents(string ver, bool tmp, bool obj) {
 			Repositories_Main acc = new Repositories_Main();
+			string currentVer = "1"; if (ver != currentVer) tmp = true; ver = currentVer;
+			System.Diagnostics.Debug.Print("ver - " + ver + "; obj - " + obj.ToString());
 			return Json(
 				new {
-					ver = "No ver",//kol kas šitas be versijų
+					ver = ver,
 					jsonObj = new {
 						//proc_Accidents = acc.GetJSON_proc_Accidents(),
 						tblAccidents = acc.GetJSON_tblAccidents(),
@@ -80,25 +82,22 @@ namespace ClaimsControl.Controllers {
 						tblVehicleTypes = acc.GetJSON_tblVehicleTypes(),
 						tblClaims = acc.GetJSON_tblClaims(),
 						tblUsers = acc.GetJSON_tblUsers(),
-						//tblAccount = acc.GetJSON_tblAccount(),
-						//tblCurrencies = acc.GetJSON_tblCurrencies(),
-						//tblCountries = acc.GetJSON_tblCountries(),
-						//tblTimeZones = acc.GetJSON_tblTimeZones()
+						tblDocs = acc.GetJSON_tblDocs(),
+						tblDocsInAccidents = acc.GetJSON_tblDocsInAccidents(),
+						tblDocType = acc.GetJSON_tblDocType(),
+						tblDocGroup = acc.GetJSON_tblDocGroup()
 					},
 					templates = new {
-						tmpClaimEdit = RenderPartialViewToString("Accidents/tmpClaimEdit")//,
-						//tmpDriverRow = RenderPartialViewToString("Lists/tmpDriverRow"),
-						//tmpVehicleRow = RenderPartialViewToString("Lists/tmpVehicleRow"),
-						//tmpInsPolicyRow = RenderPartialViewToString("Lists/tmpInsPolicyRow"),
-						//tmpAllDrivers = RenderPartialViewToString("Lists/tmpAllDrivers"),
-						//tmpAllVehicles = RenderPartialViewToString("Lists/tmpAllVehicles"),
-						//tmpAllInsPolicies = RenderPartialViewToString("Lists/tmpAllInsPolicies"),
-						//tmpListsTop = RenderPartialViewToString("Lists/tmpListsTop"),
-						//tmp_Drivers = RenderPartialViewToString("Lists/tmp_Drivers"),
-						//tmp_InsPolicies = RenderPartialViewToString("Lists/tmp_InsPolicies"),
-						//tmp_Vehicles = RenderPartialViewToString("Lists/tmp_Vehicles"),
-						//tmpAdminMain = RenderPartialViewToString("Admin/tmpAdminMain"),
-						//tmpUserRow = RenderPartialViewToString("Admin/tmpUserRow")
+						tmpClaimEdit = RenderPartialViewToString("Accidents/tmpClaimEdit"),
+						tmpUploadForm = RenderPartialViewToString("Files/tmpUploadForm"),
+						tmp2templateDownload = RenderPartialViewToString("Files/tmp2templateDownload"),
+						tmp2templateUpload = RenderPartialViewToString("Files/tmp2templateUpload"),
+
+						tmpDocsCategory = RenderPartialViewToString("Files/tmpDocsCategory"),
+						tmpDocsDocs = RenderPartialViewToString("Files/tmpDocsDocs"),
+						tmpDocsPhoto = RenderPartialViewToString("Files/tmpDocsPhoto"),
+						tmpDocsNodes = RenderPartialViewToString("Files/tmpDocsNodes"),
+						tmpDocsTree = RenderPartialViewToString("Files/tmpDocsTree")
 						}
 				}
 

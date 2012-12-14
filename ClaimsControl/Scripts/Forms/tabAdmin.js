@@ -80,7 +80,7 @@
           surname = $(inputs[1]);
           mail = $(inputs[2]);
           if (opt.Action === "Add" || mail.data("ctrl").Value !== mail.val) {
-            msg = "Vartotojui '<b>" + name.val() + " " + surname.val() + "</b>' bus išsiųstas pranešimas susikurti prisijungimo prie sistemos slaptažodį e-paštu <b>" + mail.val() + "</b>. Bet kuriuo metu galite pakeisti e-paštą, tokiu atveju bus siunčiamas naujas pranešimas, o prieš tai buvęs nustos galioti.";
+            msg = "Vartotojui '<b>" + name.val() + " " + surname.val() + "</b>' bus išsiųstas pranešimas susikurti prisijungimo prie sistemos slaptažodį e-paštu <b>" + mail.val() + "</b>. Bet kuriuo metu galite pakeisti e-paštą, tokiu atveju bus siunčiamas naujas pranešimas, o prieš tai buvęs slaptažodis nustos galioti.";
             title = opt.Action === "Add" ? "Sukurtas naujas vartotojas" : "Pakeistas e-paštas";
             return oCONTROLS.dialog.Alert({
               title: title,

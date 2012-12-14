@@ -1,0 +1,25 @@
+﻿{{#each controller.docs}}
+<li class="ui-widget-content ui-corner-tr" {{bindAttr data-doc-id="docId"}}>
+	<img {{bindAttr src="photoUrl" alt="name"}}/>
+		<a {{bindAttr href="photoUrl"}}>{{name}}</a>
+		<p>{{desc}}</p>
+</li>
+{{/each}}
+@*
+		{{#each controller.photos}}
+		  <li class="span3">
+                <div class="thumbnail">
+                  <img {{bindAttr src="url" alt="photoName"}}>
+                  <div class="caption">
+                    <p><strong>{{name}}</strong></p>
+					<a href="#">{{photoName}}</a>
+                    <p>{{desc}}<br/>
+					{{alternateDesc}}</p>
+                    <p>
+						<a class="btn btn-small" {{bindAttr href="editLink" }}><i class="icon-custom-edit"></i></a>
+						<a class="btn btn-small" {{bindAttr href="deleteLink" }}><i class="icon-custom-delete"></i></a>
+					</p>
+                  </div>
+                </div>
+              </li>
+		{{/each}}*@
