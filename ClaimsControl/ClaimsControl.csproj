@@ -163,7 +163,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\Implementation\FileManager.cs" />
+    <Compile Include="Services\Implementation\UserManager.cs" />
     <Compile Include="Services\Interfaces\IFileManager.cs" />
+    <Compile Include="Services\Interfaces\IUserManager.cs" />
     <Compile Include="Services\Ninject\NinjectControllerFactory.cs" />
   </ItemGroup>
   <ItemGroup>

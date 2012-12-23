@@ -8,15 +8,22 @@ using System.Web.Security;
 using CC.Models;
 //using CC.Views.Account;
 using DataModels.DataSources;
+using Ninject;
+using CC.Services.Interfaces;
 
 namespace ClaimsControl.Controllers {
 
    public class AccountController : Controller {
       private string currentUserIdKey = "{799B06C7-CD4C-4F52-B39C-6E573A3A2626}";
+      private IUserManager _userManager;
 
       public IFormsAuthenticationService FormsService { get; set; }
 
-      //public CCMemProvider MembershipService { get; set; }
+      [Inject]
+      public AccountController(IUserManager userManager)
+      {
+          this._userManager = userManager;
+      }
 
       protected override void Initialize(RequestContext requestContext) {
          if (FormsService == null) { FormsService = new FormsAuthenticationService(); }
@@ -128,25 +135,7 @@ namespace ClaimsControl.Controllers {
       // **************************************
 
       public ActionResult Register() {
-         using (dbDataContext db = new dbDataContext(ConfigurationManager.ConnectionStrings["ClaimsControlConnectionString"].ConnectionString)) {
-            var languages =
-                from lng in db.tblLanguages
-                select new {
-                   Value = lng.ID,
-                   Text = lng.Language
-                };
-            var ddListItems = new List<SelectListItem>();
-            foreach (var lngItem in languages) {
-               var newItem = new SelectListItem() {
-                  Value = lngItem.Value.ToString(),
-                  Text = lngItem.Text,
-                  Selected = String.Compare("Lietuvių", lngItem.Text, true) == 0
-               };
-               ddListItems.Add(newItem);
-            }
-            ViewBag.LanguageId = ddListItems;
-         }
-
+         ViewBag.LanguageId = this._userManager.GetLanguages();
          return View("Register");
       }
 
@@ -158,13 +147,27 @@ namespace ClaimsControl.Controllers {
       /// <returns>RegisterOK view or existsing view with an error message</returns>
       [HttpPost]
       public ActionResult Register(RegisterModel model) {
+          Action<string> showError = delegate(string errorMessage)
+          {
+              ModelState.AddModelError("", errorMessage);
+              int languageId;
+              if (!Int32.TryParse(model.LanguageId, out languageId))
+                  languageId = 0;
+              ViewBag.LanguageId = this._userManager.GetLanguages(languageId);
+          };
+
          if (!model.Accept) {
-            ModelState.AddModelError("", "Patvirtinkite, kad sutinkate su paslaugos teikimo sutarties sąlygomis");
-            return View(model);
+            showError("Patvirtinkite, kad sutinkate su paslaugos teikimo sutarties sąlygomis");
+            return View("Register");
          }
          if (!ModelState.IsValid) {
-            ModelState.AddModelError("", "Užpildykite būtinus laukus.");
-            return View(model);
+            showError("Užpildykite būtinus laukus.");
+            return View("Register");
+         }
+         if (Membership.GetUserNameByEmail(model.Email) != null)
+         {
+             showError(String.Format("{0} jau užregistruotas sistemoje."));
+             return View("Register");
          }
 
          string passwd = Membership.GeneratePassword(8, 2);
@@ -172,28 +175,13 @@ namespace ClaimsControl.Controllers {
          MembershipCreateStatus status;
          MembershipUser aUser = Membership.CreateUser(model.Email, passwd, model.Email, null, null, false, out status);
          if (status != MembershipCreateStatus.Success) {
-            ModelState.AddModelError("", GetErrorMessage(status, model));
-            return View(model);
+             showError(GetErrorMessage(status, model));
+             return View("Register");
          }
          else {
             aUser.Comment = model.UserName;
             Membership.UpdateUser(aUser);
-            using (dbDataContext db = new dbDataContext(ConfigurationManager.ConnectionStrings["ClaimsControlConnectionString"].ConnectionString)) {
-               var accountId = (
-                   from acc in db.tblAccounts
-                   select acc.ID
-                   ).FirstOrDefault();
-               int languageId;
-               if (!Int32.TryParse(model.LanguageId, out languageId)) {
-                  languageId = (
-                      from acc in db.tblLanguages
-                      select acc.ID
-                      ).FirstOrDefault();
-               }
-
-               int? recId = 0;
-               int rzlt = db.proc_Update_Edit_tblUsers(ref recId, model.Name, model.Surname, model.Email, accountId, languageId, "Client");
-            }
+            this._userManager.UpdateClientInUsersTable(model.Name, model.Surname, model.Email, model.LanguageId);
             SendConfirmationMail(model, (Guid)aUser.ProviderUserKey);
          }
          this.TempData[currentUserIdKey] = aUser.ProviderUserKey.ToString();
