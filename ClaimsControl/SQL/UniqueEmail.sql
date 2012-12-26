@@ -1,6 +1,4 @@
 USE [ClaimsControl]
-GO
-
 /****** Object:  Index [IX_tblUsers_Email]    Script Date: 12/26/2012 15:28:05 ******/
 IF  EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[tblUsers]') AND name = N'IX_tblUsers_Email')
 DROP INDEX [IX_tblUsers_Email] ON [dbo].[tblUsers] WITH ( ONLINE = OFF );
@@ -18,8 +16,6 @@ DROP INDEX [IX_tblVehicles_Plate] ON [dbo].[tblVehicles] WITH ( ONLINE = OFF )
 GO
 
 USE [ClaimsControl]
-GO
-
 /****** Object:  Index [IX_tblUsers_Email]    Script Date: 12/26/2012 15:28:05 ******/
 CREATE UNIQUE NONCLUSTERED INDEX [IX_tblUsers_Email] ON [dbo].[tblUsers] ([Email] ASC)
 WHERE [IsDeleted] = 0
@@ -50,4 +46,12 @@ WHERE [IsDeleted] = 0
 WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 GO
 
-
+/* ************ Add column "Description" to [dbo].[tblDocs] ************ */
+USE [ClaimsControl]
+IF NOT EXISTS (
+	SELECT * FROM INFORMATION_SCHEMA.COLUMNS
+	WHERE TABLE_NAME = 'tblDocs' AND COLUMN_NAME = 'Description'
+)
+BEGIN
+	ALTER TABLE dbo.tblDocs ADD Description NVARCHAR(MAX);
+END
