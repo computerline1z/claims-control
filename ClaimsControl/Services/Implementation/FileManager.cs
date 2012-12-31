@@ -75,7 +75,7 @@ namespace CC.Services.Implementation {
 			return rzlt;
 		}
 
-		public tblDoc StoreTblDocs(FileDescriptor descriptor, out tblDocsInAccident _tblDocsInAccident, out string errorMessage) {
+		public tblDoc StoreTblDocs(FileDescriptor descriptor, out tblDocsInAccident _tblDocsInAccident, out string errorMessage, byte[] buffer) {
 			tblDoc record; _tblDocsInAccident = null;
 
 			try {
@@ -98,8 +98,17 @@ namespace CC.Services.Implementation {
 					GroupID = descriptor.GroupID,
 					Description = descriptor.Description//((descriptor.Description.HasValue) ? descriptor.Description.Value : null)
 				};
+
 				_dc.tblDocs.InsertOnSubmit(record);
 				_dc.SubmitChanges();
+				//----------------------------------------------------------------------------
+				//pabandom išsaugot thumbą
+				string fileName = record.ID+"."+record.FileType;
+				bool HasThumb = StoreFile(UserData.Account, fileName, buffer);
+				if (HasThumb) { record.HasThumb = HasThumb; }
+				_dc.SubmitChanges();
+				//----------------------------------------------------------------------------
+
 				if (descriptor.AccidentID.HasValue) {//Ikišam dokumento priklausymo Accidentui ryšį į lentelę
 					_tblDocsInAccident = new tblDocsInAccident() {
 						DocID = record.ID, AccidentID = descriptor.AccidentID.Value

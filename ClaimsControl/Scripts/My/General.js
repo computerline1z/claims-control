@@ -116,6 +116,18 @@ String.prototype.firstSmall=function (){
 String.prototype.firstBig=function (){
 	return this.slice(0, 1).toUpperCase() +this.slice(1);
 }
+Array.prototype.filterByTbl = function (p) {//filterTbl,joinField,filterField,filterValue --Em objektų masyvams
+	fTbl=[];me=this;
+	if (!me.length) return fTbl;
+	if (!me[0].iD) console.error("No iD for filter");
+	var filterTbl=p.filterTbl.filter(function(item){return item[p.filterField]===p.filterValue;})
+	filterTbl.forEach(function(filterItem){
+		for (var i = 0; i < me.length; i++) {
+			if (me[i].iD===filterItem[p.joinField]){fTbl[fTbl.length]=me[i];break;}
+		}
+	})
+	return fTbl;
+}
 Em.Object.prototype.MapArrToString = function (arrNames, mapWithNoCommas) {
 	var arrRet = [], e;
 	for (var i = 0; i < arrNames.length; i++) {

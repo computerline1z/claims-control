@@ -11,21 +11,6 @@ $(window).load(function () {
 	$("body").spinner('remove');
 });
 $(oGLOBAL.logFromStart("DOM ready."));
-
-//function AddScript(url, object) {
-//	if (object != null) {
-//		// add script
-//		var script = document.createElement("script");
-//		script.type = "text/javascript";
-//		script.src = "path/to/your/javascript.js";
-//		document.body.appendChild(script);
-//		// remove from the dom
-//		document.body.removeChild(document.body.lastChild);
-//		return true;
-//	} else {
-//		return false;
-//	};
-//};
 var oDATA = Ember.Object.create({
 	me: this,
 	Obj: {},
@@ -365,54 +350,60 @@ Ember.ResourceController = Ember.ArrayController.extend(Ember.ResourceAdapter, {
 
 var SERVER = {
 	update2: function (p) {
-		//nereikia callbacko, updatina jsonObj, todÄ—l papildomai reikia "source"(oDATA pavadinimas) ir "row" //oDATA.GET("proc_Vehicles").emData
+		//nereikia callbacko, updatina jsonObj, todėl papildomai reikia "source"(oDATA pavadinimas) ir "row" //oDATA.GET("proc_Vehicles").emData
 		//SERVER.update2({"Action":Action,DataToSave:{},"Ctrl":Ctrl,"source":source,"row":row
-		if (!p.DataToSave) return false;
+		if (!p.DataToSave) return false; var me=this;
 		var CallBack = { Success: function (resp, updData) {
-			var Adding = (p.Action === "Add") ? true : false, Row = (Adding) ? Em.Object.create({}) : p.row;
-			if (!Row) throw new Error("p.Row is empty");
-			var oData = oDATA.GET(p.source), Cols = oData.Cols;
-			if (!oData) throw new Error("p.oData is empty");
-			if (Adding) { Row.iD = resp.ResponseMsg.ID; }
+			if (updData.Action==="Delete"){	
+				src=oDATA.GET(p.source).emData
+				obj=src.findProperty("iD", p.DataToSave.id)
+				src.removeObject(obj)				
+			}else{
+				var Adding = (p.Action === "Add") ? true : false, Row = (Adding) ? Em.Object.create({}) : p.row;
+				if (!Row) throw new Error("p.Row is empty");
+				var oData = oDATA.GET(p.source), Cols = oData.Cols;
+				if (!oData) throw new Error("p.oData is empty");
+				if (Adding) { Row.iD = resp.ResponseMsg.ID; }
 
-			Cols.forEach(function (col, i) {//Eina per esamus laukus
-				var ok = false, fieldName = col.FName.firstSmall();  //f=col.FName, f.slice(0, 1).toLowerCase() +f.slice(1);
-				updData.DataToSave.Fields.forEach(function (updateField, i2) {//Randam ar yra col tarp updatinamu
-					if (col.FName == updateField) {
-						var newVal = updData.DataToSave.Data[i2];
-						Row.set(fieldName, newVal); ok = true;
-						if (col.List) {//Jeigu List, updatinam ir teksto lauka
-							var updateCol = Cols.findObjectByProperty("IdField", fieldName);
-							if (updateCol) {
-								var field = updateCol.FName.firstSmall(), newVal1 = oDATA.GET(col.List.Source).emData.findObjectByProperty("iD", newVal).MapArrToString(col.List.iText, true);
-								Row.set(field, newVal1);
-							} else { console.warn("List field '" + updateField + "' without IdField"); }
+				Cols.forEach(function (col, i) {//Eina per esamus laukus
+					var ok = false, fieldName = col.FName.firstSmall();  //f=col.FName, f.slice(0, 1).toLowerCase() +f.slice(1);
+					updData.DataToSave.Fields.forEach(function (updateField, i2) {//Randam ar yra col tarp updatinamu
+						if (col.FName == updateField) {
+							var newVal = updData.DataToSave.Data[i2];
+							Row.set(fieldName, newVal); ok = true;
+							if (col.List) {//Jeigu List, updatinam ir teksto lauka
+								var updateCol = Cols.findObjectByProperty("IdField", fieldName);
+								if (updateCol) {
+									var field = updateCol.FName.firstSmall(), newVal1 = oDATA.GET(col.List.Source).emData.findObjectByProperty("iD", newVal).MapArrToString(col.List.iText, true);
+									Row.set(field, newVal1);
+								} else { console.warn("List field '" + updateField + "' without IdField"); }
+							}
 						}
+					});
+					if (!ok && (Adding && fieldName !== "iD")) {//Jeigu naujos pridejimas ir nerado, ikisam ka nors
+						//if (col.IdField){								
+						//	var infoRow=Cols[col.IdField];
+						//	var source=infoRow.List.Source;
+						//	var Field=infoRow.FName;
+						//	var id=oGLOBAL.helper.getData_fromDataToSave(updData.DataToSave,Field);							
+						//	Row.set(fieldName,oData.emData.findProperty("iD", id).MapArrToString(infoRow.List.iText, false));
+						//}else
+						if (col.Default)
+							if (col.Default === "Today") { Row.set(fieldName, oGLOBAL.date.getTodayString()); }
+							else if (col.Default === "UserName") { Row.set(fieldName, UserData.Name()); }
+							else if (col.Default === "UserId") { Row.set(fieldName, UserData.Id()); }
+							else Row.set(fieldName, col.Default);
+						else { Row.set(fieldName, ""); }
 					}
-				});
-				if (!ok && (Adding && fieldName !== "iD")) {//Jeigu naujos pridejimas ir nerado, ikisam ka nors
-					//if (col.IdField){								
-					//	var infoRow=Cols[col.IdField];
-					//	var source=infoRow.List.Source;
-					//	var Field=infoRow.FName;
-					//	var id=oGLOBAL.helper.getData_fromDataToSave(updData.DataToSave,Field);							
-					//	Row.set(fieldName,oData.emData.findProperty("iD", id).MapArrToString(infoRow.List.iText, false));
-					//}else
-					if (col.Default)
-						if (col.Default === "Today") { Row.set(fieldName, oGLOBAL.date.getTodayString()); }
-						else if (col.Default === "UserName") { Row.set(fieldName, UserData.Name()); }
-						else if (col.Default === "UserId") { Row.set(fieldName, UserData.Id()); }
-						else Row.set(fieldName, col.Default);
-					else { Row.set(fieldName, ""); }
+					console.log("col: " + col.FName + ", ok: " + ok + ", fieldValue:" + Row[fieldName])
+				})
+				if (Adding) { Row.set("visible", true); oData.emData.pushObject(Row); }
+				else { oData.emData.findProperty("iD", Row.iD).updateTo(Row); }
+				var controller = updData.controller, emObject = (updData.emObject) ? updData.emObject : "content";
+				if (controller) {//Updatinam ir į pagrindinį kontrolerį tik insertinant (kiti updatinasi
+					if (Adding) { App[controller][emObject].pushObject(Row); }
+					//else{App[controller][emObject].findProperty("iD",Row.iD).updateTo(Row);}				
 				}
-				console.log("col: " + col.FName + ", ok: " + ok + ", fieldValue:" + Row[fieldName])
-			})
-			if (Adding) { Row.set("visible", true); oData.emData.pushObject(Row); }
-			else { oData.emData.findProperty("iD", Row.iD).updateTo(Row); }
-			var controller = updData.controller, emObject = (updData.emObject) ? updData.emObject : "content";
-			if (controller) {//Updatinam ir į pagrindinį kontrolerį tik insertinant (kiti updatinasi
-				if (Adding) { App[controller][emObject].pushObject(Row); }
-				//else{App[controller][emObject].findProperty("iD",Row.iD).updateTo(Row);}				
 			}
 			Em.run.next(function () { $("img.spinner").remove(); });
 			if (p.CallBackAfter) { p.CallBackAfter(Row); }
@@ -477,7 +468,8 @@ var SERVER = {
 				CallFunc(d, updData);
 			},
 			complete: function (jqXHR, textStatus) {
-				$("div.content:first").spinner('remove');
+				//$("div.content:first").spinner('remove');
+				$("img.spinner").remove();
 			}
 		});
 	},
@@ -501,7 +493,8 @@ var SERVER = {
 		if (resp.ErrorMsg) { Type = "Error", Sign = "img32-warning", notExpires = true; }
 		else { Type = "Success", Sign = "img32-check", notExpires = false; }
 
-		Msg = updData.Msg[Type] || DefMsg[Type][updData.Action];
+		//Msg = updData.Msg[Type] || DefMsg[Type][updData.Action];
+		Msg = (updData.Msg)?updData.Msg[Type]:DefMsg[Type][updData.Action];
 		if (Type === "Error") { Msg += " Klaida:\n" + resp.ErrorMsg; }
 		if (updData.CallBack) {
 			if (typeof updData.CallBack[Type] === 'function') { updData.CallBack[Type](resp, updData); }

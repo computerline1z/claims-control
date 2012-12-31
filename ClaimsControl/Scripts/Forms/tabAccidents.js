@@ -8,10 +8,7 @@
     content: null,
     viewIx: 0,
     templateName: 'tmpAccidentsMain',
-    didInsertElement: function() {
-      this._super();
-      return console.log("I loaded all tabAccidents");
-    }
+    didInsertElement: function() {}
   });
 
   App.AccidentView = Em.View.extend({
@@ -376,6 +373,7 @@
         img: 'spinnerBig.gif'
       });
       oGLOBAL.LoadAccident_Card(AccNo);
+      $("body").spinner('remove');
       return false;
     },
     filterDidChange: (function(thisObj, filterName) {

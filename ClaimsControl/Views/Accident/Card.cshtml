@@ -1,8 +1,10 @@
 ﻿@model CC.Models.clsAccident
 @{string vehicles="";
-  foreach (CC.Models.AccidentVehicles vehicle in Model.Vehicles) { vehicles += "{\"iD\":" + vehicle.ID + ",\"title\":\""+ vehicle.Title + "\"},"; }
-  vehicles = vehicles.TrimEnd(',');
-	}
+  if (Model.Vehicles!=null){
+	  foreach (CC.Models.AccidentVehicles vehicle in Model.Vehicles) { vehicles += "{\"iD\":" + vehicle.ID + ",\"title\":\""+ vehicle.Title + "\"},"; }
+	  vehicles = vehicles.TrimEnd(',');  
+  }
+ }
 @if (@Model.NewRec == 1) { <h2 style="margin: 15px; display: inline-block">Naujo įvykio registravimas</h2>}
 else {<h2 style="margin: 15px; display: inline-block">Įvykis Nr.:@Model.Accident.No</h2>}
 <a id="btnReturnToAccidents" href="javascript:void(0);return false;">(Atgal į Įvykių sąrašą)</a>
@@ -83,11 +85,13 @@ else {<h2 style="margin: 15px; display: inline-block">Įvykis Nr.:@Model.Acciden
 	</div>
 </div>
 <div id="AccDocs" class="whiteTab"  data-ctrl='{"id":0}'>
-<div  class="cont" id="uploadDocsToAccident2"  style="width:80%; margin:0 auto;"></div>@* height:80px;*@
+	<div id="uploadDocsToAccident" class="well" style="width:80%; margin:0 auto;"></div>
+	<div class="cont" style="background:#ffffff;border:1px solid #ddd;width:100%;"></div>
+@*<div  class="cont" id="uploadDocsToAccident2"  style="width:80%; margin:0 auto;"></div>
 
 <div class="cont" style="background:#ffffff;border:1px solid #ddd;width:100%;height:500px">
 	<div id="dynamicTree" style="float: left;border-right: 1px solid #ddd; width: 20%">
 	</div>
 	<div id="docViewForTree" style="float:left; padding:10px;width:70%;"></div>	
-</div>
+</div>*@
 </div>

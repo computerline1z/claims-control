@@ -126,7 +126,7 @@ div.selectedAccident i.img32-mono_edit {background-image: url('images/Sprite32-w
 div.dividers {background-color: @grayLighter; height:12px; display:none;}
 /*------------------------------Selected claim in accident----------------------*/
 .whiteBorders(){border-color:white;border-style:solid none solid none; border-width: 5px;}
-.ClaimsRow(){.whiteBorders(); line-height:32px;cursor:pointer;}
+.ClaimsRow(){.whiteBorders(); cursor:pointer; padding:6px;}//line-height:32px;height:32px; iškraipo pieštukus
 
 #tblClaims{
 	width:100%;
@@ -163,7 +163,7 @@ span.dialog-form-label { margin: 10px; font-size: @basefont; /*color: #666666;*/
 div.dialog-form-label { font-size: @basefont; /*color: #666666;*/ top: 2px; margin-bottom: 2px; }
 
 /*label { font-size: @basefont; color: 666; cursor: pointer; }*/
- .ExtendIt label  { padding-left: 0px; margin-left: 0px; cursor: pointer; /* ideta: */ font-size: @smallfont; }
+ .ExtendIt label  { padding-left: 0px; margin-left: 0px; cursor: pointer; /*ideta: */ font-size: @smallfont; }
 
 label.toplabel > span { display: block; font-size: @basefont; /*color: #666666;*/ cursor: pointer; margin-bottom: 5px; 
     &.ui-icon { 
@@ -387,13 +387,17 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 /*Autocomplete li a su veiksmais*/
 .actionLink {font-weight:bold !important;color:#09C !important;text-decoration:underline !important; cursor:pointer !important;}
 /*------------------------Dokumentų medis--------------------------------*/
-.gallery li {float: left;width: 150px;padding: 0.4em;margin: 10px;border:1px solid #dddddd;}
-.gallery li img {width: 100%;cursor: move;}
+.gallery li.photo {float: left;width: 140px;padding: 10px;margin: 10px;border:1px solid #dddddd;cursor: move; }
+.gallery li.photo div {width: 120px; height:120px; overflow:hidden;}
+.gallery li.docs {cursor: move;display:block; width:100%;}
+.gallery li p {font-size:10px !important; line-height:12px !important;}
+.gallery li a {font-size:10px !important; line-height:20px !important;}
+.gallery li img {width: 100%;}
 #dynamicTree ul {list-style: none;margin-left:10px;}/*padding-left: 10px;*/
-.expandImage, .spacerImage {margin-right: 2px;height: 16px;width: 16px;}
+.expandImage, .spacerImage {margin-bottom: -3px;height: 16px;width: 16px;}
 .textHolder {height: 16px;line-height: 16px;padding:0 3px;}
 .treeItem {list-style: none;margin:0;}
-.treeItemHover{font-weight:bold;}
+.treeItemHover{font-weight:bold;color:red;}
 /*------------------------photo/ docs view--------------------------------*/
 .icon-custom-edit {background-image: url("../images/Sprite32-hover.png");background-position: -64px -64px;height: 32px;line-height: 32px;width: 32px;}
 .icon-custom-delete {background-image: url("../images/Sprite32-hover.png");background-position: -32px -64px;height: 32px;line-height: 32px;width: 32px;}

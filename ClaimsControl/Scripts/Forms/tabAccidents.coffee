@@ -8,14 +8,16 @@ App.tabAccidentsView = App.mainMenuView.extend(
 		# @_super()
 		# console.log("accidentInit")
 	didInsertElement: -> 
-		@_super()
-		console.log("I loaded all tabAccidents")
-		# oDATA.execWhenLoaded(["tmpUploadForm"], ()-> $('#uploadDocsToAccident').UploadFiles(
-		# 	categoryOpts:
-		# 		accident:{iD:24,title:"Įvykio dokumentai"}
-		# 		driver:{iD:87,title:"Vairuotojo Albinas Palubinskas dokumentai"},
-		# 		vehicles:[{iD:14,title:"TP BBB, Volvo __ dokumentai"},{iD:7,title:"BRU643, Volvo, FH12"}]	
-		# ))	
+		# @_super()
+		# settings=categoryOpts:
+				# accident:{iD:24,title:"Įvykio dokumentai"}
+				# driver:{iD:87,title:"Vairuotojo Albinas Palubinskas dokumentai"},
+				# vehicles:[{iD:14,title:"TP BBB, Volvo __ dokumentai"},{iD:7,title:"BRU643, Volvo, FH12"}]
+		# oDATA.execWhenLoaded(["tmpUploadForm","tmpDocsTree"], ()-> 
+			# $('#uploadDocsToAccident2').UploadFiles(settings)
+			# $('#uploadDocsToAccident2').next().Tree(categoryOpts:settings.categoryOpts)
+		# )	
+		
 		
 	#contentObserver: (->
 	#	@rerender()
@@ -255,6 +257,7 @@ App.accidentsController = Em.ResourceController.create(
 		ctrlEdit=$('#divAccidentEdit').show()
 		ctrlEdit.spinner({ position: 'center', img: 'spinnerBig.gif' })
 		oGLOBAL.LoadAccident_Card(AccNo)
+		$("body").spinner('remove');
 		false
 	# filterWillChange: ((thisobj, keyName)->
 		# if (not thisobj[keyName] or keyName=='filterValue') then @filterFromVisible=true else @filterFromVisible=false ##jei pirmas paspaudimas arba filtruojama pagal filterValue galim filtruot tik matomus

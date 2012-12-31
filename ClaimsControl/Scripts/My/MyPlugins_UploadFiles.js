@@ -7,6 +7,7 @@
       uploadTemplateId: "tmp2templateUpload",
       downloadTemplateId: "tmp2templateDownload",
       formTemplate: "tmpUploadForm",
+      docsController: "TreeDocController",
       url: "Files/Start",
       fileuploaddone: function() {
         return console.log("opa");
@@ -53,13 +54,15 @@
           f = data.files[0];
           optsAccident = data.form.data("opts").categoryOpts.accident;
           catInput = tr.find("input[name='category[]']");
+          GroupID;
+
           RefID = catInput.data("refID");
           RefID = RefID ? RefID : null;
-          GroupID = catInput.data("categoryID");
-          GroupID = GroupID ? GroupID : null;
-          if (typeof catInput.data("newval") !== "number") {
-            oGLOBAL.notify.withIcon("Ne visi dokumentai išsaugoti", "Dokumentas '" + data.files[0].name + "'  neturi priskirtos kategorijos..", "img32-warning", true);
-            return false;
+          if (catInput.length) {
+            GroupID = catInput.data("categoryID");
+            GroupID = GroupID ? GroupID : 5;
+          } else {
+            GroupID = 1;
           }
           return data.formData = {
             FileName: f.name,
@@ -71,12 +74,19 @@
             AccidentID: optsAccident ? optsAccident.iD : null
           };
         }).bind("fileuploaddone", function(e, data) {
+          var docsContr, newDoc, newDocInAccident;
           if (data.result.success) {
             console.log("Upload result for file '" + data.files[0].name + "':");
             console.log(data.result);
+            newDoc = Em.Object.create(data.result.tblDoc);
+            newDocInAccident = Em.Object.create(data.result.tblDocsInAccidents);
+            oDATA.GET("tblDocs").emData.pushObject(newDoc);
+            oDATA.GET("tblDocsInAccidents").emData.pushObject(newDocInAccident);
             data.context.remove();
-            if (data.form.find("table tbody tr").length === 0) {
-              return data.form.find(".submitButtons, table").addClass("hidden");
+            if (!data.form.find("table tbody tr").length) {
+              data.form.find(".submitButtons, table").addClass("hidden");
+              docsContr = data.form.data("opts").docsController;
+              return App[docsContr].refreshDocs();
             }
           } else {
             return console.log("erroras");

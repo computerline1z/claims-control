@@ -26,10 +26,11 @@ namespace CC.Controllers {
          //}
          return Json(new {
             //Render - pirmas, ExecFn - paskutinis
-				Render = new { divAccidentEdit = View }, //tabAccidents
+				Render = new { divAccidentEdit = View } //tabAccidents
 				//tblAccidentsTypes = AccRep.GetJSON_tblAccidentTypes(),
 				//proc_Drivers = AccRep.GetJSON_proc_Drivers(false),
-				ExecFn = new { accidentTab = "tabs" } //tabAccidents // accidentTab = "tabs" 
+				//Vietoj apationio $("#accidentTab").tabs() darom LoadScript'e accidentCard.js 
+				//ExecFn = new { accidentTab = "tabs" } //tabAccidents // accidentTab = "tabs" 
          });
       }
 

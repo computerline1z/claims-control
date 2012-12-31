@@ -85,6 +85,19 @@ namespace CC.Models {
 		private dbDataContext dc;
 
 		public Repositories_Main() { dc = new dbDataContext(ConfigurationManager.ConnectionStrings["ClaimsControlConnectionString"].ConnectionString); }
+		public jsonArrays GetJSON_userData() {
+			jsonArrays JSON = new jsonArrays();
+			JSON.Data = new object[]{ new object[] {//Turi būt masyvų masyvas
+            UserData.Account,//0
+            UserData.AccountID//1
+            }};
+			object[] Cols ={
+            new { FName = "Account"},//0
+            new { FName = "AccountID"},//1
+            }; JSON.Cols = Cols;
+			//JSON.Config = new { Controler = "Main", tblUpdate = "tblDocsInAccidents" };
+			return JSON;
+		}
 		public jsonArrays GetJSON_tblDocsInAccidents() {
 			jsonArrays JSON = new jsonArrays();
 			JSON.Data = from d in dc.tblDocsInAccidents join  a in dc.tblAccidents on d.AccidentID equals a.ID
@@ -99,7 +112,7 @@ namespace CC.Models {
             new { FName = "DocID"},//1
             new { FName = "AccidentID"}//2
             }; JSON.Cols = Cols;
-			JSON.Config = new { Controler = "Lists", tblUpdate = "tblDocs" };
+			JSON.Config = new { Controler = "Main", tblUpdate = "tblDocsInAccidents" };
 			return JSON;
 		}
 		public jsonArrays GetJSON_tblDocs() {
@@ -111,19 +124,20 @@ namespace CC.Models {
             d.DocName,//1
             //d.FileName,//2
             d.FileType,//3
-            d.FileDate,//4
+            UserData.GetStringDate(d.FileDate),//4
             d.FileSize,//5
             d.UserID,//6
             d.DocTypeID,//7
             d.RefID,//8
             d.SortNo,//9
 				d.GroupID,
-				d.Description
+				d.Description,
+				d.HasThumb
             };
 			object[] Cols ={
             new { FName = "ID"},//0
             new { FName = "DocName",Type="string"},//1
-            new { FName = "FileName",Type="string"},//2
+            //new { FName = "FileName",Type="string"},//2
             new { FName = "FileType",Type="string"},//3
             new { FName = "FileDate",Type="Date"},//4
             new { FName = "FileSize",Type="Integer"},//5
@@ -132,7 +146,8 @@ namespace CC.Models {
             new { FName = "RefID"},//8
             new { FName = "SortNo",Type="Integer"},//9
             new { FName = "GroupID"},//8
-				new { FName = "Description"}//8
+				new { FName = "Description"},//8
+				new { FName = "HasThumb"}
 								}; JSON.Cols = Cols;
 			JSON.Config = new { Controler = "Lists", tblUpdate = "tblDocs" };
 			//         JSON.Grid = new {

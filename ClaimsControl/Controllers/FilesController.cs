@@ -69,7 +69,7 @@ namespace CC.Controllers {
 			//public int? GroupID { get; set; }
 			//public string Description { get; set; }
 			//public int? AccidentID { get; set; }
-			string errorMessage; tblDocsInAccident _tblDocsInAccidents = null; tblDoc _tblDocs = null; bool withThumb = false; string url = "";
+			string errorMessage; tblDocsInAccident _tblDocsInAccidents = null; tblDoc _tblDocs = null;
 			try {
 				var stream = Request.Files[0].InputStream;  // Request.InputStream;
 				if (model.FileSize != stream.Length)
@@ -80,29 +80,29 @@ namespace CC.Controllers {
 				if (buffer.Length > 0) {
 					stream.Read(buffer, 0, buffer.Length);
 					FileDescriptor descriptor = FileDescriptor.CreateFileDescriptor(model, buffer.Length, UserData.UserID);
-					_tblDocs = this._flManager.StoreTblDocs(descriptor, out _tblDocsInAccidents, out errorMessage);
+					_tblDocs = this._flManager.StoreTblDocs(descriptor, out _tblDocsInAccidents, out errorMessage, buffer);
 					//recordId = _tblDocs.ID;
-					if (String.IsNullOrEmpty(errorMessage)) {
-						string fileName = String.Format(_fileNameFormat, _tblDocs.ID) + "." + _tblDocs.FileType;
-						withThumb = _flManager.StoreFile(UserData.Account, fileName, buffer);
-						url = String.Format("{0}/{1}", this._flManager.GetIndividualVirtualDirectory(UserData.Account, true), fileName);
+					//if (String.IsNullOrEmpty(errorMessage)) {
+					//   string fileName = String.Format(_fileNameFormat, _tblDocs.ID) + "." + _tblDocs.FileType;
+					//   withThumb = _flManager.StoreFile(UserData.Account, fileName, buffer);
+						//url = String.Format("{0}/{1}", this._flManager.GetIndividualVirtualDirectory(UserData.Account, true), fileName);
 						//this._flManager.UpdateFileName(_tblDocs, relativeUri, out errorMessage);
 						//if (!String.IsNullOrEmpty(errorMessage))
 						//   throw new Exception(errorMessage);
-					}
-					else
-						throw new Exception(errorMessage);
+					//}
+					//else
+					//   throw new Exception(errorMessage);
 				}
 				return Json(
 					new {
-						success = true, withThumb = withThumb, url = url,
-						tblDocs = new {
-							ID = _tblDocs.ID, DocName = _tblDocs.DocName,
-							FileType = _tblDocs.FileType, FileDate = UserData.GetStringDate(_tblDocs.FileDate), FileSize = _tblDocs.FileSize,
-							UserID = _tblDocs.UserID, DocTypeID = _tblDocs.DocTypeID, RefID = _tblDocs.RefID, //SortNo = _tblDocs.SortNo,
-							GroupID = _tblDocs.GroupID, Description = _tblDocs.Description,
+						success = true,
+						tblDoc = new {
+							iD = _tblDocs.ID, docName = _tblDocs.DocName,
+							fileType = _tblDocs.FileType, fileDate = UserData.GetStringDate(_tblDocs.FileDate), fileSize = _tblDocs.FileSize,
+							userID = _tblDocs.UserID, docTypeID = _tblDocs.DocTypeID, refID = _tblDocs.RefID, sortNo = _tblDocs.SortNo,
+							groupID = _tblDocs.GroupID, description = _tblDocs.Description, hasThumb=_tblDocs.HasThumb, visible=true
 						},
-						tblDocsInAccidents = new { ID = _tblDocsInAccidents.ID, DocID = _tblDocsInAccidents.DocID, AccidentID = _tblDocsInAccidents.AccidentID }
+						tblDocsInAccidents = new { iD = _tblDocsInAccidents.ID, docID = _tblDocsInAccidents.DocID, accidentID = _tblDocsInAccidents.AccidentID }
 					});
 
 			}
