@@ -26,6 +26,7 @@
       }
       fnEditItem = function(id, newVals) {
         var Action, pars;
+        id = parseInt(id, 10);
         Action = id ? "Edit" : "Add";
         pars = {
           source: opt.Source,
@@ -180,7 +181,7 @@
       if (opt.Editable.Add) {
         id = $(this).data("newval");
         id = (id ? id : 0);
-        opt.appendToList = "<span style='margin:-32px 2px auto auto;' title='redaguoti..' class='ui-icon ui-icon-pencil ui-menu-icon'>&nbsp;</span>";
+        opt.appendToList = "<span title='redaguoti..' class='ui-icon ui-icon-pencil ui-menu-icon'>&nbsp;</span>";
         input.after(opt.appendToList);
         input.data("autocomplete").fnClickOnBtn = function(p) {
           var Action, c, msg, oData;

@@ -1,0 +1,57 @@
+﻿{{#if controller.isPhoto}}
+	{{#each controller.docs}}
+		@*{{log this}}*@
+		<li class="ui-widget-content ui-corner-tr photo" {{bindAttr data-doc-id="docID" }}>
+			<div>
+			{{#if hasThumb}}
+				<img {{bindAttr src="urlThumb" alt="thumb"}}/>
+			{{else}}
+				<i class="img32-doc_unknown"></i>
+			{{/if}}
+			</div>
+					<a {{bindAttr href="urlDoc" }} target="_blank">{{fileName}}</a>
+					<p>{{userName}}&nbsp;{{fileDate}}</p>
+		</li>
+	{{/each}}
+{{else}}
+		{{#each controller.docs}}<li class="docs" {{bindAttr data-doc-id="docID" }}>
+		<div class="tr">
+		<div class="td w40px" style="padding:5px;">
+				{{#if hasThumb}}
+					<img {{bindAttr src="urlThumb"}} alt="thumb"/>
+				{{else}}
+					<i {{bindAttr class="fileIcon" }} ></i>
+				{{/if}}
+		</div><div class="td w25pr">
+				{{docType}}<br/>
+				<a {{bindAttr href="urlDoc"}} target="_blank" >{{fileName}}</a>		
+		</div><div class="td w45pr">
+				{{description}}</br><p style="color:Gray">{{docDetails}}</p>
+		</div><div class="td w100px">
+				<i class="img32-mono_edit"></i>
+				<i class="img32-mono_delete clickable" {{action deleteDoc this}}></i>
+		</div>
+		</div>
+		</li>{{/each}}
+@*	<table class="not-striped"><tbody>
+	{{#each controller.docs}}
+	<tr>
+		<td>
+			{{#if hasThumb}}
+				<img {{bindAttr src="urlThumb" alt="thumb"}}/>
+			{{else}}
+				<i {{bindAttr class="fileIcon" }} ></i>
+			{{/if}}
+		</td><td>
+			{{docType}}<br/>
+			<a {{bindAttr href="urlDoc"}} target="_blank" >{{fileName}}</a>
+		</td>
+		<td>{{description}}</br><p style="color:Gray">{{docDetails}}</p></td>
+		<td style="width:98px;"> 
+			<i class="img32-mono_edit"></i>
+			<i class="img32-mono_delete"></i>
+		</td>
+	</tr>
+	{{/each}}
+	</tbody></table>*@
+{{/if}}

@@ -135,7 +135,7 @@ namespace CC.Models
     #endregion
 		
 		public dbDataContext() : 
-				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["ClaimsControlConnectionString2"].ConnectionString, mappingSource)
+				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["ClaimsControlConnectionString"].ConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
@@ -8746,6 +8746,8 @@ namespace CC.Models
 		
 		private string _Description;
 		
+		private System.Nullable<bool> _HasThumb;
+		
 		private EntitySet<tblDocsInAccident> _tblDocsInAccidents;
 		
 		private EntityRef<tblDocGroup> _tblDocGroup;
@@ -8784,6 +8786,8 @@ namespace CC.Models
     partial void OnGroupIDChanged();
     partial void OnDescriptionChanging(string value);
     partial void OnDescriptionChanged();
+    partial void OnHasThumbChanging(System.Nullable<bool> value);
+    partial void OnHasThumbChanged();
     #endregion
 		
 		public tblDoc()
@@ -9063,6 +9067,26 @@ namespace CC.Models
 					this._Description = value;
 					this.SendPropertyChanged("Description");
 					this.OnDescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HasThumb", DbType="Bit")]
+		public System.Nullable<bool> HasThumb
+		{
+			get
+			{
+				return this._HasThumb;
+			}
+			set
+			{
+				if ((this._HasThumb != value))
+				{
+					this.OnHasThumbChanging(value);
+					this.SendPropertyChanging();
+					this._HasThumb = value;
+					this.SendPropertyChanged("HasThumb");
+					this.OnHasThumbChanged();
 				}
 			}
 		}

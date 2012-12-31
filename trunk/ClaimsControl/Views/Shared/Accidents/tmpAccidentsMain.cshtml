@@ -1,10 +1,18 @@
-﻿<div class="cont">
+﻿
+@*------------uploadDocsToAccident - uploadai, sekantis medžiui
+<div id="uploadDocsToAccident2" class="well" style="width:80%; margin:0 auto;"></div>
+<div class="cont" style="background:#ffffff;border:1px solid #ddd;width:100%;"></div> 
+----------------------------------------------------------------------*@
+@*height:500px - be aukščio nusistato kiek reikia*@
+
+
+<div class="cont">
 	<div class="left big w35pr">
 		<div id="container">{{view App.SearchField controller="accidentsController"}} </div>@*context="accidents"*@
 	</div>
 	<div class="right big"><button class="btn large" {{action addNewAccident target="App.accidentsController"}}><i class="img32-plus"></i>Registruoti naują įvykį</button></div>
 </div>
-@*<div id="uploadDocsToAccident" class="well" style="width:80%; margin:0 auto;"></div>*@
+
 <div class="table zebra-striped selectable tall" id="accidentsTable">
 {{#each "App.accidentsController.content"}}@*{{#each person in people}}*@
 @*{{log this}}*@

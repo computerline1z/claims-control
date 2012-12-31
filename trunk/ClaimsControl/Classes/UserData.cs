@@ -38,8 +38,9 @@ namespace CC.Classes {
 		public static DateTime GetUserTime() { 
 			using (dbDataContext db = new dbDataContext(ConfigurationManager.ConnectionStrings["ClaimsControlConnectionString"].ConnectionString)) {
 				int? TimeZoneID = (from aa in db.tblAccounts where aa.ID == UserData.AccountID select aa.TimeZoneID).Single();
-				int addHours = (TimeZoneID.Value==null) ? TimeZoneID.Value - 1 : 2;//ID=1 reiškia GMT+0, 2 - GMT+1 ir t.t.
-				return DateTime.Now.AddHours(addHours);
+				int addHours = (TimeZoneID==null) ? TimeZoneID.Value - 1 : 2;//ID=1 reiškia GMT+0, 2 - GMT+1 ir t.t.
+				return DateTime.Now;
+				//return DateTime.Now.AddHours(addHours);//pridedam valandas jai mūsų serve nustatyta GMT laikas
 			}		
 		}
 		public static string GetStringDate(DateTime date) {

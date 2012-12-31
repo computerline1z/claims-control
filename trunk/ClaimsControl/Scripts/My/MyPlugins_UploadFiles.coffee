@@ -3,7 +3,8 @@
 $.widget "ui.UploadFiles",  
 options:
 	#fileupload opcijos
-	uploadTemplateId:"tmp2templateUpload", downloadTemplateId:"tmp2templateDownload", formTemplate:"tmpUploadForm"
+	uploadTemplateId:"tmp2templateUpload", downloadTemplateId:"tmp2templateDownload", formTemplate:"tmpUploadForm",
+	docsController:"TreeDocController" #gavus dokus reikia žinot kokį kontrolerį refrešint
 	url: "Files/Start",fileuploaddone: ->
 		console.log("opa")	
 	#kitos opcijos
@@ -37,12 +38,15 @@ _create: ->
 			if (ext=="xls" or ext=="doc" or ext=="pdf") then data.files[0].extension=ext else data.files[0].extension="unknown"
 			data.files[0].type2=data.files[0].type.split("/")[0]
 		).bind("fileuploadsubmit", (e, data) ->
-			tr=data.context;f=data.files[0];optsAccident=data.form.data("opts").categoryOpts.accident;catInput=tr.find("input[name='category[]']")			
+			tr=data.context;f=data.files[0];optsAccident=data.form.data("opts").categoryOpts.accident;catInput=tr.find("input[name='category[]']");GroupID			
 			#FileName, FileSize, DocTypeID, RefID, GroupID, Description
 			RefID=catInput.data("refID");RefID=if RefID then RefID else null
-			GroupID=catInput.data("categoryID");GroupID=if GroupID then GroupID else null
 			
-			if (typeof catInput.data("newval")!="number") then oGLOBAL.notify.withIcon("Ne visi dokumentai išsaugoti", "Dokumentas '"+data.files[0].name+"'  neturi priskirtos kategorijos..", "img32-warning", true); return false
+			if catInput.length#uploadinami dokumentai
+				GroupID=catInput.data("categoryID");GroupID=if GroupID then GroupID else 5 #Nepriskirto kodas 5
+			else GroupID=1#Nuotraukų grupė		
+			#if (typeof catInput.data("newval")!="number") then oGLOBAL.notify.withIcon("Ne visi dokumentai išsaugoti", "Dokumentas '"+data.files[0].name+"'  neturi priskirtos kategorijos..", "img32-warning", true); return false
+			
 			data.formData=FileName:f.name, FileSize:f.size, DocTypeID:catInput.data("newval"), RefID:RefID,
 			GroupID:GroupID, Description:tr.find("textarea[name='description[]']").val(),
 			AccidentID: if optsAccident then optsAccident.iD else null
@@ -51,9 +55,17 @@ _create: ->
 			if (data.result.success)
 				console.log("Upload result for file '"+data.files[0].name+"':")
 				console.log(data.result)
-			 
+				#-----------------------------------------
+				newDoc=Em.Object.create(data.result.tblDoc)
+				newDocInAccident=Em.Object.create(data.result.tblDocsInAccidents)
+				oDATA.GET("tblDocs").emData.pushObject(newDoc);
+				oDATA.GET("tblDocsInAccidents").emData.pushObject(newDocInAccident);
+				#-----------------------------------------
 				data.context.remove()
-				if (data.form.find("table tbody tr").length==0) then (data.form.find(".submitButtons, table").addClass("hidden"))
+				if not data.form.find("table tbody tr").length
+					data.form.find(".submitButtons, table").addClass("hidden")
+					docsContr=data.form.data("opts").docsController
+					App[docsContr].refreshDocs()
 			else
 				console.log("erroras")
 		).find(".fileinput-button").on("click", ->

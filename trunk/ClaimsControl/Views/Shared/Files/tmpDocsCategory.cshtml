@@ -1,47 +1,32 @@
-﻿@*		{{#if items}}
-<li class="treeItem" {{bindAttr data-category-id="categoryId" }}>
-			<img class="expandImage" {{action expandCollapse}} src="Content/less/images/bullet_toggle_minus.png">
-				<span class="textHolder" ><strong>{{title}}</strong></span>
-				<ul>{{view App.DocTreeView}}</ul>	
-		{{else}}
-<li class="treeItem clickable" {{bindAttr data-category-id="categoryId"}} {{action getDocs}} >
-				<img class="spacerImage" src="Content/less/images/spacer.gif">
-				<span class="textHolder">{{title}}</span>
-		{{/if}} 		
-</li>*@
-@*		{{log this}}
-		{{#if isSelectable}}
-		
-<li class="treeItem clickable" {{bindAttr data-category-id="categoryId" }} {{action getDocs}}>
-			<img class="expandImage" {{action expandCollapse}} src="Content/less/images/bullet_toggle_minus.png">
-				<span class="textHolder" ><strong>{{title}}</strong></span>
-				<ul>{{view App.DocTreeView}}</ul>	
-		{{else}}
-<li class="treeItem" {{bindAttr data-category-id="categoryId"}}>
-				<img class="spacerImage" src="Content/less/images/spacer.gif">
-				<span class="textHolder">{{title}}</span>
-		{{/if}} 		
-</li>*@
-{{log this}}
-{{#if isSelectable}}
+﻿{{log this}}
+@*{{#if isSelectable}}
 <li class="treeItem clickable" {{bindAttr data-category-id="categoryId" }} {{action getDocs}}>			
 		{{#if isTree}}
-			<img class="expandImage" {{action expandCollapse}} src="Content/less/images/bullet_toggle_minus.png">
+			<img class="expandImage" {{action expandCollapse}} src="Content/less/images/toggle_minus.png">
 			<span class="textHolder" ><strong>{{title}}</strong></span>
 			<ul>{{view App.DocTreeView}}</ul>
 		{{else}}
 			<img class="spacerImage" src="Content/less/images/spacer.gif">
 			<span class="textHolder"><strong>{{title}}</strong></span>
 		{{/if}}		
+{{else}}{{/if}} {{bindAttr data-node="this" }} *@
+@*{{#if isGroup}}
+	<li class="treeItem clickable isGroup" {{unbound data-ref-id="refID"}} {{action getDocs}} {{bindAttr data-category-id="categoryId" }}>
 {{else}}
-<li class="treeItem" {{bindAttr data-category-id="categoryId"}}>
+	<li class="treeItem clickable" {{unbound data-ref-id="refID"}} {{action getDocs}} {{bindAttr data-category-id="categoryId" }}>
+{{/if}}*@
+
+<li data-ref-id="{{unbound refID}}" data-category-id="{{unbound categoryId}}" class="treeItem clickable {{unbound isGroup}} {{unbound isTree}}" {{action getDocs}}>
 		{{#if isTree}}
-				<img class="expandImage" {{action expandCollapse}} src="Content/less/images/bullet_toggle_minus.png">
+				<img class="expandImage" {{action expandCollapse}} src="Content/less/images/toggle_minus.png">
 				<span class="textHolder"><strong>{{title}}</strong></span>
 				<ul>{{view App.DocTreeView}}</ul>
 		{{else}}
 				<img class="spacerImage" src="Content/less/images/spacer.gif">
-				<span class="textHolder">{{title}}</span>		
+				{{#if isGroup}}
+					<span class="textHolder"><strong>{{unbound title}}</strong></span>
+				{{else}}
+					<span class="textHolder">{{unbound title}}</span>								
+				{{/if}}
 		{{/if}}		
-{{/if}} 		
 </li>

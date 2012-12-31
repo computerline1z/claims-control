@@ -6,28 +6,23 @@ oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 
 	LoadScript = function () {
 		$("#btnMapTown").button({ disabled: true }).click(function () { oGLOBAL.mapFn.GetMapFromTown(); return false; });
-		
-		$( "#accidentTab" ).on("tabsload",function( event, ui ) {
-				console.log(event.target);console.log(event);console.log(ui);
-		} );
-		$( "#accidentTab" ).on( "tabsbeforeactivate", function( event, ui ) {
-				console.log(event.target);console.log(event);console.log(ui);
-				//ui.newTab.index()
-		} );
-		$( "#accidentTab" ).on( "tabsactivate", function( event, ui ) {
+		var frmOpts=$("#AccidentForm").data("ctrl");	//NewRec, Source, id, vehicles
+		var tabOpts={}; if (frmOpts.NewRec){tabOpts.disabled=[ 1];}
+		$("#accidentTab").tabs(tabOpts).on( "tabsactivate", function( event, ui ) {
 			if (ui.newTab.index()===1){//Jei pereinam į įvykio dokumentus
-				var accidentForm=ui.oldPanel,docsForm=ui.newPanel,uploadForm=$('#uploadDocsToAccident2');
+				var accidentForm=ui.oldPanel,docsForm=ui.newPanel,uploadForm=$('#uploadDocsToAccident');
 				if  (uploadForm.html()!==""){
 					if (accidentForm.data("ctrl").id!== docsForm.data("ctrl").id) {//Jei kazkas buvo ir ne toks koks dabar ištuštinam
-						uploadForm.empty();$("#dynamicTree,#docViewForTree").empty();
+						uploadForm.empty();//$("#dynamicTree,#docViewForTree").empty();
 					}
 				}
 				if  (uploadForm.html()===""){
 					App.docsAccident({accidentForm:accidentForm, docsForm:docsForm, uploadForm:uploadForm});
 					docsForm.data("ctrl").id=accidentForm.data("ctrl").id;
 				}		
-			}
+			}				
 		} );
+		
 		//$("#LongNote").autoResize();
 		$("#LongNote").bind("keyup", function () {
 			//$(this).autoResizeTextAreaQ({ "max_rows": 8 });

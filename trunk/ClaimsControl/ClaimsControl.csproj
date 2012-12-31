@@ -183,8 +183,6 @@
     <None Include="Content\less\fileUploader.less" />
     <None Include="Content\less\bootstrap-image-gallery.less" />
     <Content Include="Content\less\images\alert.png" />
-    <Content Include="Content\less\images\bullet_toggle_minus.png" />
-    <Content Include="Content\less\images\bullet_toggle_plus.png" />
     <Content Include="Content\less\images\DropDown-Arrow-Big.png" />
     <Content Include="Content\less\images\DropDown-Arrow-hover-Big.png" />
     <Content Include="Content\less\images\DropDown-Arrow-hover.png" />
@@ -193,6 +191,8 @@
     <Content Include="Content\less\images\plus-green.png" />
     <Content Include="Content\less\images\spacer.gif" />
     <Content Include="Content\less\images\Sprite16.png" />
+    <Content Include="Content\less\images\toggle_minus.png" />
+    <Content Include="Content\less\images\toggle_plus.png" />
     <Content Include="Content\less\images\X_orange.png" />
     <Content Include="Content\less\images\Zvaigzde.png" />
     <Content Include="Content\less\images_ui\CC-separator-blue.png" />
@@ -332,7 +332,6 @@
     <Content Include="Scripts\Files\canvas-to-blob.min.js" />
     <Content Include="Scripts\Files\bootstrap.min.js" />
     <Content Include="Scripts\Files\bootstrap-image-gallery.min.js" />
-    <Content Include="Scripts\Files\docsTree.js" />
     <Content Include="Scripts\Files\jquery.fileupload-fp.js" />
     <Content Include="Scripts\Files\jquery.fileupload-ui.js" />
     <Content Include="Scripts\Files\jquery.fileupload.js" />
@@ -346,6 +345,7 @@
     <Content Include="Scripts\Main\jquery-1.8.0.combined2.min.js" />
     <Content Include="Scripts\My\clsEditableForm.js" />
     <Content Include="Scripts\My\General.js" />
+    <Content Include="Scripts\My\MyPlugins_Tree.js" />
     <Content Include="Scripts\My\MyPlugins_UploadFiles.js" />
     <Content Include="Scripts\My\oCONTROLS .js" />
     <Content Include="Scripts\My\ui-checkbox.js" />
@@ -382,6 +382,7 @@
     <Content Include="Uploads\high_tatras4.jpg" />
     <Content Include="Uploads\high_tatras4_min.jpg" />
     <Content Include="Uploads\high_tatras_min.jpg" />
+    <Content Include="Views\Main\MyPlugins_Tree.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -493,6 +494,7 @@
     <None Include="Scripts\Forms\tabAdmin.coffee" />
     <None Include="Scripts\Forms\tabLists.coffee" />
     <None Include="Scripts\My\clsEditableForm.coffee" />
+    <None Include="Scripts\My\MyPlugins_Tree.coffee" />
     <None Include="Scripts\My\Copy of MyPlugins_ComboBox.coffee" />
     <None Include="Scripts\My\MyPlugins_UploadFiles.coffee" />
     <None Include="Scripts\My\view_FileUploader.coffee" />
@@ -515,7 +517,7 @@
     <Content Include="Views\Shared\Files\tmpUploadForm.cshtml" />
     <Content Include="Views\Shared\Files\tmpDocsPhoto.cshtml" />
     <Content Include="Views\Shared\Files\tmpDocsTree.cshtml" />
-    <Content Include="Views\Shared\Files\tmpDocsDocs.cshtml" />
+    <Content Include="Views\Shared\Files\tmpDocsView.cshtml" />
     <Content Include="Views\Shared\Files\tmpDocsCategory.cshtml" />
     <Content Include="Views\Shared\Files\tmpDocsNodes.cshtml" />
     <None Include="Views\Shared\LayOut_Main_Debug.cshtml" />

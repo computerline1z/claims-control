@@ -39,10 +39,10 @@ namespace ClaimsControl.Controllers {
 						tmpAllDrivers = RenderPartialViewToString("Lists/tmpAllDrivers"),
 						tmpAllVehicles = RenderPartialViewToString("Lists/tmpAllVehicles"),
 						tmpAllInsPolicies = RenderPartialViewToString("Lists/tmpAllInsPolicies"),
-						tmpListsTop = RenderPartialViewToString("Lists/tmpListsTop"),
-						tmp_Drivers = RenderPartialViewToString("Lists/tmp_Drivers"),
-						tmp_InsPolicies = RenderPartialViewToString("Lists/tmp_InsPolicies"),
-						tmp_Vehicles = RenderPartialViewToString("Lists/tmp_Vehicles")
+						tmpListsTop = RenderPartialViewToString("Lists/tmpListsTop")
+						//tmp_Drivers = RenderPartialViewToString("Lists/tmp_Drivers"),//tabAccidents siunčiam
+						//tmp_InsPolicies = RenderPartialViewToString("Lists/tmp_InsPolicies"),
+						//tmp_Vehicles = RenderPartialViewToString("Lists/tmp_Vehicles")
 					} : new {
 						tmpDriverRow = "",
 						tmpVehicleRow = "",
@@ -50,12 +50,12 @@ namespace ClaimsControl.Controllers {
 						tmpAllDrivers = "",
 						tmpAllVehicles = "",
 						tmpAllInsPolicies = "",
-						tmpListsTop = "",
-						tmp_Drivers = "",
-						tmp_InsPolicies = "",
-						tmp_Vehicles = ""
-					},
-					Script = new { File = "/Scripts/Forms/tabLists.js?ver="+ver, Pars = "" }
+						tmpListsTop = ""
+						//tmp_Drivers = "",
+						//tmp_InsPolicies = "",
+						//tmp_Vehicles = ""
+					}//,
+					//Script = new { File = "/Scripts/Forms/tabLists.js?ver="+ver, Pars = "" } listus siunčiu su visais nes jų reikia
 				}
 			);
 		}
@@ -85,7 +85,8 @@ namespace ClaimsControl.Controllers {
 						tblDocs = acc.GetJSON_tblDocs(),
 						tblDocsInAccidents = acc.GetJSON_tblDocsInAccidents(),
 						tblDocType = acc.GetJSON_tblDocType(),
-						tblDocGroup = acc.GetJSON_tblDocGroup()
+						tblDocGroup = acc.GetJSON_tblDocGroup(),
+						userData = acc.GetJSON_userData()
 					},
 					templates = new {
 						tmpClaimEdit = RenderPartialViewToString("Accidents/tmpClaimEdit"),
@@ -94,11 +95,14 @@ namespace ClaimsControl.Controllers {
 						tmp2templateUpload = RenderPartialViewToString("Files/tmp2templateUpload"),
 
 						tmpDocsCategory = RenderPartialViewToString("Files/tmpDocsCategory"),
-						tmpDocsDocs = RenderPartialViewToString("Files/tmpDocsDocs"),
-						tmpDocsPhoto = RenderPartialViewToString("Files/tmpDocsPhoto"),
+						tmpDocsView = RenderPartialViewToString("Files/tmpDocsView"),
 						tmpDocsNodes = RenderPartialViewToString("Files/tmpDocsNodes"),
-						tmpDocsTree = RenderPartialViewToString("Files/tmpDocsTree")
-						}
+						tmpDocsTree = RenderPartialViewToString("Files/tmpDocsTree"),
+
+						tmp_Drivers = RenderPartialViewToString("Lists/tmp_Drivers"),
+						tmp_InsPolicies = RenderPartialViewToString("Lists/tmp_InsPolicies"),
+						tmp_Vehicles = RenderPartialViewToString("Lists/tmp_Vehicles")
+					}
 				}
 
 			);

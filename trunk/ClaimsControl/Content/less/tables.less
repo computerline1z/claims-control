@@ -68,3 +68,11 @@ table.zebra-striped
 	th.clickable:hover { background-color: darken(@systemBlueLight, 10%); color:@white; }
 	th.clickable:hover span.ui-tblHead-icon { background-image: url(images_ui/ui-icons_2e83ff_256x240.png) !important; }
 }
+table.not-striped
+{
+	width: 100%;
+	thead.centered tr th { text-align:center;}
+	tr th {font-weight: bold; border-bottom: 1px dotted @grayLighter; padding: 8px 8px 7px; text-align:left;}
+	tr td {border-bottom: 1px dotted @grayLighter; padding: 8px 8px 7px;}
+	tbody tr:hover { background-color: @grayLight; color:@white; }
+}
