@@ -29,7 +29,7 @@ _create: ->
 	
 	#if(opt.Type==="List") { //Jei Type==List mapinam pagal opt.iText kitu atveju pagal Field
 	OptVal = parseInt(opt.Value, 10)
-	if opt.data then data = opt.data else
+	if opt.data then data = opt.data() else
 		data = $.map(oDATA.GET(opt.Source).emData, (a) -> 
 			#for(var i=0; i<opt.iText.length; i++) { { ret.push(a[opt.iText[i]]); } }
 			input.val a.MapArrToString(opt.iText,opt.mapWithNoCommas) if a.iD is OptVal #Idedam verte i textboxa
@@ -207,18 +207,95 @@ destroy: ->
 #=======================================================================================
 # $($0).data("newval") $(this).data("newvalRefID", ui.item.refID)
 #categoryOpts:{editList:true,driver:{iD:87,name:"Vairuotojo Albinas Palubinskas dokumentai"},vehicles:[{iD:14,title:"TP BBB, Volvo __ dokumentai"},{iD:7,title:"BRU643, Volvo, FH12"}]}
+# App.DocsController = Em.ResourceController.create(
+	# docTypes: oDATA.GET("tblDocTypes").emData
+	# # filterFn: ((groupId)->
+		# # ()-> @docTypes.filter((type)->type.docGroupID==groupId);
+	# # ).property('@each')
+	# # docTypes_Driver: @filterFn(3)
+	
+	# # docTypes_Driver:(-> 
+	# # console.log(@docTypes);
+	# # docTypes=@docTypes.filter((type)->type.docGroupID==3);
+	# # console.log(docTypes);
+	# # return docTypes
+	# # ).property('docTypes')
+# )
+
+
+		
+	  # duration: function() {
+    # var duration = this.get('content.duration'),
+         # minutes = Math.floor(duration / 60),
+         # seconds = duration % 60;
+
+    # return [minutes, seconds].join(':');
+  # }.property('content.duration')
+
 $.widget "ui.ComboBoxCategory", $.ui.ComboBox, 
 	_create:() ->
 		#me=@  #vietoj opt.Source reikia naudot this.option("Source") nes prieš create dar nėra opt 
-		opts=@options;categoryOpts=opts.categoryOpts
-		emCategories=oDATA.GET("tblDocGroup").emData
-		emTypes=oDATA.GET("tblDocType").emData
-		data=$.map.call(this, emTypes, (a) ->
-			id: a[opts.iVal]#DocTypeID
-			label: a.MapArrToString(opts.iText,opts.mapWithNoCommas)
-			categoryID: a["docGroupID"]
-		)
-		$.extend(true, @options, data:data)
+		opts=@options;opts.element=@element;categoryOpts=opts.categoryOpts
+		emCategories=oDATA.GET("tblDocGroup").emData		
+		fnGetData=()->
+			emTypes=oDATA.GET("tblDocTypes").emData;
+			$.map.call(this, emTypes, (a) ->
+				id: a[opts.iVal]#DocTypeID
+				label: a.MapArrToString(opts.iText,opts.mapWithNoCommas)
+				categoryID: a["docGroupID"]
+			)
+		editList=(opts)-> #formTemplate: "tmpUploadForm", disabled: false, docsController: "TreeDocController", Source: "tblDocTypes"
+			#categoryOpts:{accident:{iD:70,title:"Įvykio dokumentai"},driver:{iD:80,title:"Vairuotojo 'Pranas Patv' dokai"},editList:{},vehicles:[{iD,title},{iD,title}]},
+			#data:[{categoryID,id,label},{categoryID,id,label},{categoryID,id,label},{categoryID,id,label}]		
+			#console.log(opts)
+			MY.dialog=JQ.Dialog.create( #MY.dialog needed to destroyElement in ui-ember.js						
+				title:"Dokumentų tipai (visi)"
+				title2: "Dokumentų tipai"	
+				saveData:(p)->#Msg,DataToSave,Action,row
+					Source=App.docsTypesController.docTypes; docGroupID=p.row.docGroupID 
+					# if docGroupID==2 then Source=@docTypes_accident
+					# else if docGroupID==3 then Source=@docTypes_driver
+					# else Source=@docTypes_vehicle					
+					$.extend(p,"Ctrl":$("#openItemDialog"),"source":"tblDocTypes", 
+					CallBackAfter:(Row)->
+						# if p.Action=="Delete" then obj=Source.findProperty("iD", Row.iD); Source.removeObject(obj)
+						# else if p.Action=="Add" then Source.pushObject(Em.Object.create(Row))
+						# else Source.findProperty("iD", Row.iD).set("name",Row.name).set("edit",false) #redagavimas
+						if p.Action=="Edit" then Source.findProperty("iD", Row.iD).set("edit",false) #redagavimas
+						if p.Action=="Add" then MY.dialog.set(("addNewType"+Row.docGroupID),false)
+						App.docsTypesController.init()#refreshinam medį
+						opts.element.closest("table").find("input").autocomplete('option','source',opts.data())#updatinam autocompleto source'a
+						console.log("New Row")
+						console.log(Row)
+					)	
+					SERVER.update2(p);false
+				editDocType: (e)-> e.context.set("edit",e.context.name) 
+				cancelDocType: (e)-> e.context.set("edit",false)
+				saveDocType: (e)->
+					type=e.context.name;input=$(e.target).prev();val=input.val();row=e.context;row.name=val
+					if type.length>2						
+						Msg={Title:@title2,Success:"Dokumento tipas '"+type+"' pakeistas.",Error:"Nepavyko pakeisti tipo '"+type+"'."}
+						@saveData({DataToSave:{"id":row.iD,"Data":[row.name],"Fields":["Name"],"DataTable":"tblDocTypes"},Msg:Msg,row:row,Action:"Edit"})
+					else 
+						e.context.set("name",e.context.edit).set("edit",false)
+				deleteDocType: (e)->
+					type=e.context.name; me=@
+					oCONTROLS.dialog.Confirm(title:@title2,msg:"Ištrinti tipą '"+type+"'?", ()->					
+						Msg={Title:me.title2,Success:"Dokumento tipas '"+type+"' ištrintas.",Error:"Nepavyko ištrinti tipo '"+type+"'."}; row=e.context				
+						me.saveData({DataToSave:{"id":row.iD,"DataTable":"tblDocTypes"},Msg:Msg,row:row,Action:"Delete"})
+					)
+				addNewDocType: (e)-> @.set(("addNewType"+$(e.target).data("category-id")),true)
+				cancelNewDocType: (e)-> @.set(("addNewType"+$(e.target).data("category-id")),false)				
+				saveNewDocType: (e)-> 
+					input=$(e.target).prev();val=input.val();docGroupID=input.data("category-id")
+					Msg=Title:@title2,Success:"Dokumento tipas '"+val+"' pridėtas.",Error:"Nepavyko pridėt tipo '"+val+"'"
+					@saveData({DataToSave:{"Data":[val,docGroupID],"Fields":["Name","DocGroupID"],"DataTable":"tblDocTypes"},Msg:Msg,row:[val,docGroupID],Action:"Add"})
+				closeDialog: (e)-> $("#openItemDialog").dialog("close"); false
+				width:600
+				templateName: 'tmpDocTypes'	
+			).append();
+		$.extend(true, @options, data:fnGetData, editList:editList)
+		
 		
 		@_super();	
 		renderGroup=(me,ul,myCategory,docTypes,categoryID) -> 
@@ -227,7 +304,8 @@ $.widget "ui.ComboBoxCategory", $.ui.ComboBox,
 				ul.append("<li class='ui-autocomplete-category'>" + category.title + "</li>")		
 				currentTypes.setEach("refID",category.iD)
 				currentTypes.forEach((type,i) -> me._renderItemData(ul, type))# bėgam per šios kategorijos tipus	
-			)			
+			)	
+		widget=@
 		@element.data("autocomplete")._renderMenu = (ul, docTypes) ->
 			me = @; currentCategoryID = "";
 			emCategories.forEach((catItem,i) -> # bėgam per kategorijas
@@ -240,5 +318,7 @@ $.widget "ui.ComboBoxCategory", $.ui.ComboBox,
 			)
 			if categoryOpts.editList
 				#$( "<li class='ui-autocomplete-category editCategories'><a >Redaguoti sąrašą</a></li>" ).appendTo(ul)
-				me._renderItemData(ul, {id:(()->alert("Redaguoti")),label:"Redaguoti sarašą",value:"Redaguoti sarašą"})
+				me._renderItemData(ul, {
+				id:(target)-> widget.options.editList(widget.options),
+				label:"Redaguoti sarašą",value:"Redaguoti sarašą"})
 				ul.find("li:last a").addClass("actionLink")

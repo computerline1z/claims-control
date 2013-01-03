@@ -16,7 +16,7 @@
         editList: true
       },
       ListType: "List",
-      Source: "tblDocType",
+      Source: "tblDocTypes",
       iVal: "iD",
       iText: ["name"]
     },

@@ -12,7 +12,7 @@ options:
 	#accident:{iD:16,title:"Įvykio dokumentai"}
 	#driver:{iD:87,title:"Vairuotojo Albinas Palubinskas dokumentai"}
 	#vehicles:[{iD:14,title:"TP BBB, Volvo __ dokumentai"},{iD:7,title:"BRU643, Volvo, FH12"}]	
-	ListType:"List",Source:"tblDocType",iVal:"iD",iText:["name"]#Kitos opcijos
+	ListType:"List",Source:"tblDocTypes",iVal:"iD",iText:["name"]#Kitos opcijos
 
 _create: ->	
 	Em.View.create(templateName:@options.formTemplate).appendTo(@.element)	
@@ -29,7 +29,7 @@ _create: ->
 						# accident:{iD:16,title:"Įvykio dokumentai"}
 						# driver:{iD:87,title:"Vairuotojo Albinas Palubinskas dokumentai"},
 						# vehicles:[{iD:14,title:"TP BBB, Volvo __ dokumentai"},{iD:7,title:"BRU643, Volvo, FH12"}]	
-					# ListType:"List",Source:"tblDocType",iVal:"iD",iText:["name"]#Kitos opcijos
+					# ListType:"List",Source:"tblDocTypes",iVal:"iD",iText:["name"]#Kitos opcijos
 			else
 				console.log("paveikslai")
 		).bind("fileuploadadd", (e, data) ->

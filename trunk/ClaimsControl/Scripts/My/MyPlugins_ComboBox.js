@@ -48,7 +48,7 @@
       data = void 0;
       OptVal = parseInt(opt.Value, 10);
       if (opt.data) {
-        data = opt.data;
+        data = opt.data();
       } else {
         data = $.map(oDATA.GET(opt.Source).emData, function(a) {
           if (a.iD === OptVal) {
@@ -287,20 +287,147 @@
 
   $.widget("ui.ComboBoxCategory", $.ui.ComboBox, {
     _create: function() {
-      var categoryOpts, data, emCategories, emTypes, opts, renderGroup;
+      var categoryOpts, editList, emCategories, fnGetData, opts, renderGroup, widget;
       opts = this.options;
+      opts.element = this.element;
       categoryOpts = opts.categoryOpts;
       emCategories = oDATA.GET("tblDocGroup").emData;
-      emTypes = oDATA.GET("tblDocType").emData;
-      data = $.map.call(this, emTypes, function(a) {
-        return {
-          id: a[opts.iVal],
-          label: a.MapArrToString(opts.iText, opts.mapWithNoCommas),
-          categoryID: a["docGroupID"]
-        };
-      });
+      fnGetData = function() {
+        var emTypes;
+        emTypes = oDATA.GET("tblDocTypes").emData;
+        return $.map.call(this, emTypes, function(a) {
+          return {
+            id: a[opts.iVal],
+            label: a.MapArrToString(opts.iText, opts.mapWithNoCommas),
+            categoryID: a["docGroupID"]
+          };
+        });
+      };
+      editList = function(opts) {
+        return MY.dialog = JQ.Dialog.create({
+          title: "Dokumentų tipai (visi)",
+          title2: "Dokumentų tipai",
+          saveData: function(p) {
+            var Source, docGroupID;
+            Source = App.docsTypesController.docTypes;
+            docGroupID = p.row.docGroupID;
+            $.extend(p, {
+              "Ctrl": $("#openItemDialog"),
+              "source": "tblDocTypes",
+              CallBackAfter: function(Row) {
+                if (p.Action === "Edit") {
+                  Source.findProperty("iD", Row.iD).set("edit", false);
+                }
+                if (p.Action === "Add") {
+                  MY.dialog.set("addNewType" + Row.docGroupID, false);
+                }
+                App.docsTypesController.init();
+                opts.element.closest("table").find("input").autocomplete('option', 'source', opts.data());
+                console.log("New Row");
+                return console.log(Row);
+              }
+            });
+            SERVER.update2(p);
+            return false;
+          },
+          editDocType: function(e) {
+            return e.context.set("edit", e.context.name);
+          },
+          cancelDocType: function(e) {
+            return e.context.set("edit", false);
+          },
+          saveDocType: function(e) {
+            var Msg, input, row, type, val;
+            type = e.context.name;
+            input = $(e.target).prev();
+            val = input.val();
+            row = e.context;
+            row.name = val;
+            if (type.length > 2) {
+              Msg = {
+                Title: this.title2,
+                Success: "Dokumento tipas '" + type + "' pakeistas.",
+                Error: "Nepavyko pakeisti tipo '" + type + "'."
+              };
+              return this.saveData({
+                DataToSave: {
+                  "id": row.iD,
+                  "Data": [row.name],
+                  "Fields": ["Name"],
+                  "DataTable": "tblDocTypes"
+                },
+                Msg: Msg,
+                row: row,
+                Action: "Edit"
+              });
+            } else {
+              return e.context.set("name", e.context.edit).set("edit", false);
+            }
+          },
+          deleteDocType: function(e) {
+            var me, type;
+            type = e.context.name;
+            me = this;
+            return oCONTROLS.dialog.Confirm({
+              title: this.title2,
+              msg: "Ištrinti tipą '" + type + "'?"
+            }, function() {
+              var Msg, row;
+              Msg = {
+                Title: me.title2,
+                Success: "Dokumento tipas '" + type + "' ištrintas.",
+                Error: "Nepavyko ištrinti tipo '" + type + "'."
+              };
+              row = e.context;
+              return me.saveData({
+                DataToSave: {
+                  "id": row.iD,
+                  "DataTable": "tblDocTypes"
+                },
+                Msg: Msg,
+                row: row,
+                Action: "Delete"
+              });
+            });
+          },
+          addNewDocType: function(e) {
+            return this.set("addNewType" + $(e.target).data("category-id"), true);
+          },
+          cancelNewDocType: function(e) {
+            return this.set("addNewType" + $(e.target).data("category-id"), false);
+          },
+          saveNewDocType: function(e) {
+            var Msg, docGroupID, input, val;
+            input = $(e.target).prev();
+            val = input.val();
+            docGroupID = input.data("category-id");
+            Msg = {
+              Title: this.title2,
+              Success: "Dokumento tipas '" + val + "' pridėtas.",
+              Error: "Nepavyko pridėt tipo '" + val + "'"
+            };
+            return this.saveData({
+              DataToSave: {
+                "Data": [val, docGroupID],
+                "Fields": ["Name", "DocGroupID"],
+                "DataTable": "tblDocTypes"
+              },
+              Msg: Msg,
+              row: [val, docGroupID],
+              Action: "Add"
+            });
+          },
+          closeDialog: function(e) {
+            $("#openItemDialog").dialog("close");
+            return false;
+          },
+          width: 600,
+          templateName: 'tmpDocTypes'
+        }).append();
+      };
       $.extend(true, this.options, {
-        data: data
+        data: fnGetData,
+        editList: editList
       });
       this._super();
       renderGroup = function(me, ul, myCategory, docTypes, categoryID) {
@@ -316,6 +443,7 @@
           });
         });
       };
+      widget = this;
       return this.element.data("autocomplete")._renderMenu = function(ul, docTypes) {
         var currentCategoryID, me;
         me = this;
@@ -341,9 +469,9 @@
         });
         if (categoryOpts.editList) {
           me._renderItemData(ul, {
-            id: (function() {
-              return alert("Redaguoti");
-            }),
+            id: function(target) {
+              return widget.options.editList(widget.options);
+            },
             label: "Redaguoti sarašą",
             value: "Redaguoti sarašą"
           });

@@ -9,13 +9,13 @@
       formTemplate: "tmpUploadForm",
       docsUpdateCallBack: null,
       categoryOpts: {},
-      DocsTypesController: "DocsTypesController",
+      docsTypesController: "docsTypesController",
       TreeDocController: "TreeDocController"
     },
     _create: function() {
       $('<table width="100%;"><tr style="vertical-align:top"><td style="width:28em"><div id="' + this.options.treeId + '" style="border-right: 1px solid #ddd;"></div></td>' + '<td style="vertical-align:top;padding:10px;"><div id="' + this.options.docViewForTreeId + '"></div></td></tr></table>').appendTo(this.element);
-      this.DocsTypesControllerOpt.categoryOpts = this.options.categoryOpts;
-      App[this.options.DocsTypesController] = Em.ResourceController.create(this.DocsTypesControllerOpt);
+      this.docsTypesControllerOpt.categoryOpts = this.options.categoryOpts;
+      App[this.options.docsTypesController] = Em.ResourceController.create(this.docsTypesControllerOpt);
       App.DocTreeView = Em.View.extend(this.DocTreeViewOpt);
       this.TreeViewOpts.opts = this.options;
       this.TreeDocControllerOpts.opts = this.options;
@@ -29,15 +29,16 @@
       this.docViewForTreeOpts.opts = this.options;
       return Em.View.create(this.docViewForTreeOpts).appendTo("#" + this.options.docViewForTreeId);
     },
-    DocsTypesControllerOpt: {
+    docsTypesControllerOpt: {
       init: function() {
         var c, catOpts, cats, docTypes, me;
         this._super();
         me = this;
         catOpts = me.categoryOpts;
         cats = oDATA.GET("tblDocGroup").emData;
-        docTypes = oDATA.GET("tblDocType").emData;
+        docTypes = oDATA.GET("tblDocTypes").emData;
         c = [];
+        this.set("docTypes", docTypes);
         if (catOpts.driver) {
           cats.findProperty("iD", 3).set("name", catOpts.driver.title);
         }
@@ -103,7 +104,16 @@
           return type.docGroupID === groupID;
         }).map(fnMap);
       },
-      content: []
+      content: [],
+      docTypes: [],
+      filterTypes: (function() {
+        var dt;
+        console.log("Start filterTypes fn");
+        dt = this.get("docTypes");
+        this.set("docTypes_accident", dt.filterProperty("docGroupID", 2));
+        this.set("docTypes_driver", dt.filterProperty("docGroupID", 3));
+        return this.set("docTypes_vehicle", dt.filterProperty("docGroupID", 4));
+      }).observes("docTypes.length")
     },
     DocTreeViewOpt: {
       templateName: "tmpDocsNodes",
@@ -193,7 +203,7 @@
         account = oDATA.GET("userData").emData[0].account;
         url = "Uploads/" + account;
         users = oDATA.GET("tblUsers").emData;
-        docTypes = oDATA.GET("tblDocType").emData;
+        docTypes = oDATA.GET("tblDocTypes").emData;
         fnGetIcon = function(ext) {
           ext = ext.slice(0, 3);
           return "img32-doc_" + (ext === "xls" || ext === "doc" || ext === "pdf" ? ext : "unknown");
@@ -304,7 +314,7 @@
         isGroup = sN.hasClass("isGroup");
         docID = docElement.data("doc-id");
         newdocTypeID = $(selectedNode).data("category-id");
-        docType = oDATA.GET("tblDocType").emData.find(function(types) {
+        docType = oDATA.GET("tblDocTypes").emData.find(function(types) {
           return types.iD === newdocTypeID;
         });
         newGroupID = docType.docGroupID;
