@@ -179,7 +179,7 @@ namespace CC.Models {
          new { FName = "Name",Type="string", LenMax=100,Validity="require().nonHtml().maxLength(100)"},//1
          new { FName = "DocGroupID",List=new{Source="tblDocGroup",iVal=0,iText=new object[]{1}}}//2
          }; JSON.Cols = Cols;
-			JSON.Config = new { Controler = "Lists", tblUpdate = "tblDocType" };
+			JSON.Config = new { Controler = "Lists", tblUpdate = "tblDocTypes" };
 			JSON.Grid = new {
 				aoColumns = new object[]{
             new {bVisible=false,bSearchable=false},//0//ID////DefaultUpdate=0
@@ -218,8 +218,8 @@ namespace CC.Models {
 		//}
 		public jsonArrays GetJSON_tblDocGroup() {
 			jsonArrays JSON = new jsonArrays();
-			//var tblDocType = (from d in dc.tblDocTypes where d.IsDeleted == false && d.AccountID == UserData.AccountID select d.DocGroupID).ToArray();
-			//JSON.Data = from d in dc.tblDocGroups where d.IsDeleted == false && tblDocType.Contains(d.ID)
+			//var tblDocTypes = (from d in dc.tblDocTypes where d.IsDeleted == false && d.AccountID == UserData.AccountID select d.DocGroupID).ToArray();
+			//JSON.Data = from d in dc.tblDocGroups where d.IsDeleted == false && tblDocTypes.Contains(d.ID)
 			JSON.Data = from d in dc.tblDocGroups orderby d.ID where d.IsDeleted == false && d.AccountID == UserData.AccountID
 							select new object[] {
 								d.ID,//0

@@ -7,7 +7,7 @@ $.widget "ui.Tree",
 options:
 	treeId:"dynamicTree", docViewForTreeId:"docViewForTree", formTemplate:"tmpUploadForm", docsUpdateCallBack: null,
 	categoryOpts: {}, # <- kategorijos
-	DocsTypesController:"DocsTypesController",#-jame(content) sudedamos grupės ir tipai, pagal jį paišomas medis
+	docsTypesController:"docsTypesController",#-jame(content) sudedamos grupės ir tipai, pagal jį paišomas medis
 	TreeDocController:"TreeDocController"#-jame(docs) pagal dokumentus paišomi dokumentai
 _create: ->	
 	# $('<div id="'+@options.treeId+'" style="float: left;border-right: 1px solid #ddd; width: 20%"></div>'+
@@ -16,9 +16,10 @@ _create: ->
 	'<td style="vertical-align:top;padding:10px;"><div id="'+@options.docViewForTreeId+'"></div></td></tr></table>').appendTo(@.element)
 	
 	#App.DocInfo = Em.Object.extend(docId: null, categoryId: null) if not App.DocInfo
-	@DocsTypesControllerOpt.categoryOpts=@options.categoryOpts
+	@docsTypesControllerOpt.categoryOpts=@options.categoryOpts
 	
-	App[@options.DocsTypesController] = Em.ResourceController.create(@DocsTypesControllerOpt)
+	App[@options.docsTypesController] = Em.ResourceController.create(@docsTypesControllerOpt)
+	
 	App.DocTreeView = Em.View.extend(@DocTreeViewOpt) #Paišo medžio šakas
 	@TreeViewOpts.opts=@options
 	@TreeDocControllerOpts.opts=@options
@@ -29,10 +30,10 @@ _create: ->
 	@docViewForTreeOpts.controller = App[@options.TreeDocController]
 	@docViewForTreeOpts.opts = @options
 	Em.View.create(@docViewForTreeOpts).appendTo "#"+@options.docViewForTreeId
-DocsTypesControllerOpt:
+docsTypesControllerOpt:
 	init: -> 
 		@_super(); me = this; catOpts=me.categoryOpts
-		cats = oDATA.GET("tblDocGroup").emData; docTypes = oDATA.GET("tblDocType").emData;	c = [];
+		cats = oDATA.GET("tblDocGroup").emData; docTypes = oDATA.GET("tblDocTypes").emData; c = []; @.set("docTypes",docTypes)
 		if catOpts.driver then cats.findProperty("iD",3).set("name",catOpts.driver.title)
 		cats.forEach (catItem, i) ->
 			newItem =
@@ -59,8 +60,26 @@ DocsTypesControllerOpt:
 		if (refID) then fnMap=(item) -> (categoryId: item.iD, title: item.name, refID: refID) #atskiriam pagal refID
 		else fnMap=(item) -> (categoryId: item.iD, title: item.name)
 		docTypes.filter((type) -> type.docGroupID is groupID).map(fnMap)
-	content: []
+	###################### dokumentų tipai ( naudojami redagavimui) App.docsTypesController #####################
+	content:[],docTypes:[]
+	filterTypes:(->
+		console.log("Start filterTypes fn")
+		dt=@.get("docTypes")
+		@set("docTypes_accident",dt.filterProperty("docGroupID",2);)
+		@set("docTypes_driver",dt.filterProperty("docGroupID",3);)
+		@set("docTypes_vehicle",dt.filterProperty("docGroupID",4);)
+	#).observes("docTypes.@each")
+	).observes("docTypes.length")
+
 	
+	  # duration: function() {
+    # var duration = this.get('content.duration'),
+         # minutes = Math.floor(duration / 60),
+         # seconds = duration % 60;
+
+    # return [minutes, seconds].join(':');
+  # }.property('content.duration')
+  
 DocTreeViewOpt:
 	templateName: "tmpDocsNodes", tagName: "", opts: null,
 	didInsertElement: ->
@@ -119,7 +138,7 @@ TreeViewOpts :
 		currentDocs=App[@opts.TreeDocController].AllDocs.filter(fnFilter)	
 		#currentDocs=@docs.filter(fnFilter)	
 		currentDocs.forEach (doc) -> console.log "iD: " + doc.iD + ", docName: " + doc.docName + ", docTypeID:" + doc.docTypeID + ", groupID:" + doc.groupID	
-		account=oDATA.GET("userData").emData[0].account; url="Uploads/"+account; users=oDATA.GET("tblUsers").emData; docTypes=oDATA.GET("tblDocType").emData
+		account=oDATA.GET("userData").emData[0].account; url="Uploads/"+account; users=oDATA.GET("tblUsers").emData; docTypes=oDATA.GET("tblDocTypes").emData
 		
 		fnGetIcon=(ext) -> ext=ext.slice(0,3); return "img32-doc_" + (if ext=="xls"||ext=="doc"||ext=="pdf" then ext else "unknown" )
 		fnGetUser=((userID) -> u=users.find((user)->user.iD==userID); u.firstName+" "+u.surname;)		
@@ -179,7 +198,7 @@ TreeDocControllerOpts:
 		docID=docElement.data("doc-id")
 		newdocTypeID=$(selectedNode).data("category-id")
 		
-		docType=oDATA.GET("tblDocType").emData.find((types)->types.iD==newdocTypeID)
+		docType=oDATA.GET("tblDocTypes").emData.find((types)->types.iD==newdocTypeID)
 		newGroupID=docType.docGroupID	
 		newTypeName=docType.name	
 		

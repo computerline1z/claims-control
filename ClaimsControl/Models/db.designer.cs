@@ -87,9 +87,6 @@ namespace CC.Models
     partial void InserttblVehicle(tblVehicle instance);
     partial void UpdatetblVehicle(tblVehicle instance);
     partial void DeletetblVehicle(tblVehicle instance);
-    partial void InserttblDocType(tblDocType instance);
-    partial void UpdatetblDocType(tblDocType instance);
-    partial void DeletetblDocType(tblDocType instance);
     partial void InserttblInsPolicyDoc(tblInsPolicyDoc instance);
     partial void UpdatetblInsPolicyDoc(tblInsPolicyDoc instance);
     partial void DeletetblInsPolicyDoc(tblInsPolicyDoc instance);
@@ -132,10 +129,13 @@ namespace CC.Models
     partial void InserttblDoc(tblDoc instance);
     partial void UpdatetblDoc(tblDoc instance);
     partial void DeletetblDoc(tblDoc instance);
+    partial void InserttblDocType(tblDocType instance);
+    partial void UpdatetblDocType(tblDocType instance);
+    partial void DeletetblDocType(tblDocType instance);
     #endregion
 		
 		public dbDataContext() : 
-				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["ClaimsControlConnectionString"].ConnectionString, mappingSource)
+				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["ClaimsControlConnectionString3"].ConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
@@ -316,14 +316,6 @@ namespace CC.Models
 			}
 		}
 		
-		public System.Data.Linq.Table<tblDocType> tblDocTypes
-		{
-			get
-			{
-				return this.GetTable<tblDocType>();
-			}
-		}
-		
 		public System.Data.Linq.Table<tblInsPolicyDoc> tblInsPolicyDocs
 		{
 			get
@@ -433,6 +425,14 @@ namespace CC.Models
 			get
 			{
 				return this.GetTable<tblDoc>();
+			}
+		}
+		
+		public System.Data.Linq.Table<tblDocType> tblDocTypes
+		{
+			get
+			{
+				return this.GetTable<tblDocType>();
 			}
 		}
 		
@@ -4655,261 +4655,6 @@ namespace CC.Models
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tblDocTypes")]
-	public partial class tblDocType : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _ID;
-		
-		private string _Name;
-		
-		private int _DocGroupID;
-		
-		private int _AccountID;
-		
-		private bool _IsDeleted;
-		
-		private EntitySet<tblInsPolicyDoc> _tblInsPolicyDocs;
-		
-		private EntitySet<tblDoc> _tblDocs;
-		
-		private EntityRef<tblDocGroup> _tblDocGroup;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIDChanging(int value);
-    partial void OnIDChanged();
-    partial void OnNameChanging(string value);
-    partial void OnNameChanged();
-    partial void OnDocGroupIDChanging(int value);
-    partial void OnDocGroupIDChanged();
-    partial void OnAccountIDChanging(int value);
-    partial void OnAccountIDChanged();
-    partial void OnIsDeletedChanging(bool value);
-    partial void OnIsDeletedChanged();
-    #endregion
-		
-		public tblDocType()
-		{
-			this._tblInsPolicyDocs = new EntitySet<tblInsPolicyDoc>(new Action<tblInsPolicyDoc>(this.attach_tblInsPolicyDocs), new Action<tblInsPolicyDoc>(this.detach_tblInsPolicyDocs));
-			this._tblDocs = new EntitySet<tblDoc>(new Action<tblDoc>(this.attach_tblDocs), new Action<tblDoc>(this.detach_tblDocs));
-			this._tblDocGroup = default(EntityRef<tblDocGroup>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int ID
-		{
-			get
-			{
-				return this._ID;
-			}
-			set
-			{
-				if ((this._ID != value))
-				{
-					this.OnIDChanging(value);
-					this.SendPropertyChanging();
-					this._ID = value;
-					this.SendPropertyChanged("ID");
-					this.OnIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
-		public string Name
-		{
-			get
-			{
-				return this._Name;
-			}
-			set
-			{
-				if ((this._Name != value))
-				{
-					this.OnNameChanging(value);
-					this.SendPropertyChanging();
-					this._Name = value;
-					this.SendPropertyChanged("Name");
-					this.OnNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DocGroupID", DbType="Int NOT NULL")]
-		public int DocGroupID
-		{
-			get
-			{
-				return this._DocGroupID;
-			}
-			set
-			{
-				if ((this._DocGroupID != value))
-				{
-					if (this._tblDocGroup.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnDocGroupIDChanging(value);
-					this.SendPropertyChanging();
-					this._DocGroupID = value;
-					this.SendPropertyChanged("DocGroupID");
-					this.OnDocGroupIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AccountID", DbType="Int NOT NULL")]
-		public int AccountID
-		{
-			get
-			{
-				return this._AccountID;
-			}
-			set
-			{
-				if ((this._AccountID != value))
-				{
-					this.OnAccountIDChanging(value);
-					this.SendPropertyChanging();
-					this._AccountID = value;
-					this.SendPropertyChanged("AccountID");
-					this.OnAccountIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsDeleted", DbType="Bit NOT NULL")]
-		public bool IsDeleted
-		{
-			get
-			{
-				return this._IsDeleted;
-			}
-			set
-			{
-				if ((this._IsDeleted != value))
-				{
-					this.OnIsDeletedChanging(value);
-					this.SendPropertyChanging();
-					this._IsDeleted = value;
-					this.SendPropertyChanged("IsDeleted");
-					this.OnIsDeletedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblDocType_tblInsPolicyDoc", Storage="_tblInsPolicyDocs", ThisKey="ID", OtherKey="DocTypeID")]
-		public EntitySet<tblInsPolicyDoc> tblInsPolicyDocs
-		{
-			get
-			{
-				return this._tblInsPolicyDocs;
-			}
-			set
-			{
-				this._tblInsPolicyDocs.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblDocType_tblDoc", Storage="_tblDocs", ThisKey="ID", OtherKey="DocTypeID")]
-		public EntitySet<tblDoc> tblDocs
-		{
-			get
-			{
-				return this._tblDocs;
-			}
-			set
-			{
-				this._tblDocs.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblDocGroup_tblDocType", Storage="_tblDocGroup", ThisKey="DocGroupID", OtherKey="ID", IsForeignKey=true)]
-		public tblDocGroup tblDocGroup
-		{
-			get
-			{
-				return this._tblDocGroup.Entity;
-			}
-			set
-			{
-				tblDocGroup previousValue = this._tblDocGroup.Entity;
-				if (((previousValue != value) 
-							|| (this._tblDocGroup.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._tblDocGroup.Entity = null;
-						previousValue.tblDocTypes.Remove(this);
-					}
-					this._tblDocGroup.Entity = value;
-					if ((value != null))
-					{
-						value.tblDocTypes.Add(this);
-						this._DocGroupID = value.ID;
-					}
-					else
-					{
-						this._DocGroupID = default(int);
-					}
-					this.SendPropertyChanged("tblDocGroup");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_tblInsPolicyDocs(tblInsPolicyDoc entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblDocType = this;
-		}
-		
-		private void detach_tblInsPolicyDocs(tblInsPolicyDoc entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblDocType = null;
-		}
-		
-		private void attach_tblDocs(tblDoc entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblDocType = this;
-		}
-		
-		private void detach_tblDocs(tblDoc entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblDocType = null;
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tblInsPolicyDocs")]
 	public partial class tblInsPolicyDoc : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -4922,9 +4667,9 @@ namespace CC.Models
 		
 		private int _DocTypeID;
 		
-		private EntityRef<tblDocType> _tblDocType;
-		
 		private EntityRef<tblInsPolicy> _tblInsPolicy;
+		
+		private EntityRef<tblDocType> _tblDocType;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -4940,8 +4685,8 @@ namespace CC.Models
 		
 		public tblInsPolicyDoc()
 		{
-			this._tblDocType = default(EntityRef<tblDocType>);
 			this._tblInsPolicy = default(EntityRef<tblInsPolicy>);
+			this._tblDocType = default(EntityRef<tblDocType>);
 			OnCreated();
 		}
 		
@@ -5013,40 +4758,6 @@ namespace CC.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblDocType_tblInsPolicyDoc", Storage="_tblDocType", ThisKey="DocTypeID", OtherKey="ID", IsForeignKey=true)]
-		public tblDocType tblDocType
-		{
-			get
-			{
-				return this._tblDocType.Entity;
-			}
-			set
-			{
-				tblDocType previousValue = this._tblDocType.Entity;
-				if (((previousValue != value) 
-							|| (this._tblDocType.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._tblDocType.Entity = null;
-						previousValue.tblInsPolicyDocs.Remove(this);
-					}
-					this._tblDocType.Entity = value;
-					if ((value != null))
-					{
-						value.tblInsPolicyDocs.Add(this);
-						this._DocTypeID = value.ID;
-					}
-					else
-					{
-						this._DocTypeID = default(int);
-					}
-					this.SendPropertyChanged("tblDocType");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblInsPolicy_tblInsPolicyDoc", Storage="_tblInsPolicy", ThisKey="InsPolicyID", OtherKey="ID", IsForeignKey=true)]
 		public tblInsPolicy tblInsPolicy
 		{
@@ -5077,6 +4788,40 @@ namespace CC.Models
 						this._InsPolicyID = default(int);
 					}
 					this.SendPropertyChanged("tblInsPolicy");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblDocType_tblInsPolicyDoc", Storage="_tblDocType", ThisKey="DocTypeID", OtherKey="ID", IsForeignKey=true)]
+		public tblDocType tblDocType
+		{
+			get
+			{
+				return this._tblDocType.Entity;
+			}
+			set
+			{
+				tblDocType previousValue = this._tblDocType.Entity;
+				if (((previousValue != value) 
+							|| (this._tblDocType.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._tblDocType.Entity = null;
+						previousValue.tblInsPolicyDocs.Remove(this);
+					}
+					this._tblDocType.Entity = value;
+					if ((value != null))
+					{
+						value.tblInsPolicyDocs.Add(this);
+						this._DocTypeID = value.ID;
+					}
+					else
+					{
+						this._DocTypeID = default(int);
+					}
+					this.SendPropertyChanged("tblDocType");
 				}
 			}
 		}
@@ -7721,9 +7466,9 @@ namespace CC.Models
 		
 		private int _AccountID;
 		
-		private EntitySet<tblDocType> _tblDocTypes;
-		
 		private EntitySet<tblDoc> _tblDocs;
+		
+		private EntitySet<tblDocType> _tblDocTypes;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -7741,8 +7486,8 @@ namespace CC.Models
 		
 		public tblDocGroup()
 		{
-			this._tblDocTypes = new EntitySet<tblDocType>(new Action<tblDocType>(this.attach_tblDocTypes), new Action<tblDocType>(this.detach_tblDocTypes));
 			this._tblDocs = new EntitySet<tblDoc>(new Action<tblDoc>(this.attach_tblDocs), new Action<tblDoc>(this.detach_tblDocs));
+			this._tblDocTypes = new EntitySet<tblDocType>(new Action<tblDocType>(this.attach_tblDocTypes), new Action<tblDocType>(this.detach_tblDocTypes));
 			OnCreated();
 		}
 		
@@ -7826,19 +7571,6 @@ namespace CC.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblDocGroup_tblDocType", Storage="_tblDocTypes", ThisKey="ID", OtherKey="DocGroupID")]
-		public EntitySet<tblDocType> tblDocTypes
-		{
-			get
-			{
-				return this._tblDocTypes;
-			}
-			set
-			{
-				this._tblDocTypes.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblDocGroup_tblDoc", Storage="_tblDocs", ThisKey="ID", OtherKey="GroupID")]
 		public EntitySet<tblDoc> tblDocs
 		{
@@ -7849,6 +7581,19 @@ namespace CC.Models
 			set
 			{
 				this._tblDocs.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblDocGroup_tblDocType", Storage="_tblDocTypes", ThisKey="ID", OtherKey="DocGroupID")]
+		public EntitySet<tblDocType> tblDocTypes
+		{
+			get
+			{
+				return this._tblDocTypes;
+			}
+			set
+			{
+				this._tblDocTypes.Assign(value);
 			}
 		}
 		
@@ -7872,18 +7617,6 @@ namespace CC.Models
 			}
 		}
 		
-		private void attach_tblDocTypes(tblDocType entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblDocGroup = this;
-		}
-		
-		private void detach_tblDocTypes(tblDocType entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblDocGroup = null;
-		}
-		
 		private void attach_tblDocs(tblDoc entity)
 		{
 			this.SendPropertyChanging();
@@ -7891,6 +7624,18 @@ namespace CC.Models
 		}
 		
 		private void detach_tblDocs(tblDoc entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblDocGroup = null;
+		}
+		
+		private void attach_tblDocTypes(tblDocType entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblDocGroup = this;
+		}
+		
+		private void detach_tblDocTypes(tblDocType entity)
 		{
 			this.SendPropertyChanging();
 			entity.tblDocGroup = null;
@@ -8752,9 +8497,9 @@ namespace CC.Models
 		
 		private EntityRef<tblDocGroup> _tblDocGroup;
 		
-		private EntityRef<tblDocType> _tblDocType;
-		
 		private EntityRef<tblUser> _tblUser;
+		
+		private EntityRef<tblDocType> _tblDocType;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -8794,8 +8539,8 @@ namespace CC.Models
 		{
 			this._tblDocsInAccidents = new EntitySet<tblDocsInAccident>(new Action<tblDocsInAccident>(this.attach_tblDocsInAccidents), new Action<tblDocsInAccident>(this.detach_tblDocsInAccidents));
 			this._tblDocGroup = default(EntityRef<tblDocGroup>);
-			this._tblDocType = default(EntityRef<tblDocType>);
 			this._tblUser = default(EntityRef<tblUser>);
+			this._tblDocType = default(EntityRef<tblDocType>);
 			OnCreated();
 		}
 		
@@ -9138,40 +8883,6 @@ namespace CC.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblDocType_tblDoc", Storage="_tblDocType", ThisKey="DocTypeID", OtherKey="ID", IsForeignKey=true)]
-		public tblDocType tblDocType
-		{
-			get
-			{
-				return this._tblDocType.Entity;
-			}
-			set
-			{
-				tblDocType previousValue = this._tblDocType.Entity;
-				if (((previousValue != value) 
-							|| (this._tblDocType.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._tblDocType.Entity = null;
-						previousValue.tblDocs.Remove(this);
-					}
-					this._tblDocType.Entity = value;
-					if ((value != null))
-					{
-						value.tblDocs.Add(this);
-						this._DocTypeID = value.ID;
-					}
-					else
-					{
-						this._DocTypeID = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("tblDocType");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblUser_tblDoc", Storage="_tblUser", ThisKey="UserID", OtherKey="ID", IsForeignKey=true)]
 		public tblUser tblUser
 		{
@@ -9206,6 +8917,40 @@ namespace CC.Models
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblDocType_tblDoc", Storage="_tblDocType", ThisKey="DocTypeID", OtherKey="ID", IsForeignKey=true)]
+		public tblDocType tblDocType
+		{
+			get
+			{
+				return this._tblDocType.Entity;
+			}
+			set
+			{
+				tblDocType previousValue = this._tblDocType.Entity;
+				if (((previousValue != value) 
+							|| (this._tblDocType.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._tblDocType.Entity = null;
+						previousValue.tblDocs.Remove(this);
+					}
+					this._tblDocType.Entity = value;
+					if ((value != null))
+					{
+						value.tblDocs.Add(this);
+						this._DocTypeID = value.ID;
+					}
+					else
+					{
+						this._DocTypeID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("tblDocType");
+				}
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -9236,6 +8981,261 @@ namespace CC.Models
 		{
 			this.SendPropertyChanging();
 			entity.tblDoc = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tblDocTypes")]
+	public partial class tblDocType : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _Name;
+		
+		private int _DocGroupID;
+		
+		private int _AccountID;
+		
+		private bool _IsDeleted;
+		
+		private EntitySet<tblInsPolicyDoc> _tblInsPolicyDocs;
+		
+		private EntitySet<tblDoc> _tblDocs;
+		
+		private EntityRef<tblDocGroup> _tblDocGroup;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnDocGroupIDChanging(int value);
+    partial void OnDocGroupIDChanged();
+    partial void OnAccountIDChanging(int value);
+    partial void OnAccountIDChanged();
+    partial void OnIsDeletedChanging(bool value);
+    partial void OnIsDeletedChanged();
+    #endregion
+		
+		public tblDocType()
+		{
+			this._tblInsPolicyDocs = new EntitySet<tblInsPolicyDoc>(new Action<tblInsPolicyDoc>(this.attach_tblInsPolicyDocs), new Action<tblInsPolicyDoc>(this.detach_tblInsPolicyDocs));
+			this._tblDocs = new EntitySet<tblDoc>(new Action<tblDoc>(this.attach_tblDocs), new Action<tblDoc>(this.detach_tblDocs));
+			this._tblDocGroup = default(EntityRef<tblDocGroup>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DocGroupID", DbType="Int NOT NULL")]
+		public int DocGroupID
+		{
+			get
+			{
+				return this._DocGroupID;
+			}
+			set
+			{
+				if ((this._DocGroupID != value))
+				{
+					if (this._tblDocGroup.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnDocGroupIDChanging(value);
+					this.SendPropertyChanging();
+					this._DocGroupID = value;
+					this.SendPropertyChanged("DocGroupID");
+					this.OnDocGroupIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AccountID", DbType="Int NOT NULL")]
+		public int AccountID
+		{
+			get
+			{
+				return this._AccountID;
+			}
+			set
+			{
+				if ((this._AccountID != value))
+				{
+					this.OnAccountIDChanging(value);
+					this.SendPropertyChanging();
+					this._AccountID = value;
+					this.SendPropertyChanged("AccountID");
+					this.OnAccountIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsDeleted", DbType="Bit NOT NULL")]
+		public bool IsDeleted
+		{
+			get
+			{
+				return this._IsDeleted;
+			}
+			set
+			{
+				if ((this._IsDeleted != value))
+				{
+					this.OnIsDeletedChanging(value);
+					this.SendPropertyChanging();
+					this._IsDeleted = value;
+					this.SendPropertyChanged("IsDeleted");
+					this.OnIsDeletedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblDocType_tblInsPolicyDoc", Storage="_tblInsPolicyDocs", ThisKey="ID", OtherKey="DocTypeID")]
+		public EntitySet<tblInsPolicyDoc> tblInsPolicyDocs
+		{
+			get
+			{
+				return this._tblInsPolicyDocs;
+			}
+			set
+			{
+				this._tblInsPolicyDocs.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblDocType_tblDoc", Storage="_tblDocs", ThisKey="ID", OtherKey="DocTypeID")]
+		public EntitySet<tblDoc> tblDocs
+		{
+			get
+			{
+				return this._tblDocs;
+			}
+			set
+			{
+				this._tblDocs.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblDocGroup_tblDocType", Storage="_tblDocGroup", ThisKey="DocGroupID", OtherKey="ID", IsForeignKey=true)]
+		public tblDocGroup tblDocGroup
+		{
+			get
+			{
+				return this._tblDocGroup.Entity;
+			}
+			set
+			{
+				tblDocGroup previousValue = this._tblDocGroup.Entity;
+				if (((previousValue != value) 
+							|| (this._tblDocGroup.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._tblDocGroup.Entity = null;
+						previousValue.tblDocTypes.Remove(this);
+					}
+					this._tblDocGroup.Entity = value;
+					if ((value != null))
+					{
+						value.tblDocTypes.Add(this);
+						this._DocGroupID = value.ID;
+					}
+					else
+					{
+						this._DocGroupID = default(int);
+					}
+					this.SendPropertyChanged("tblDocGroup");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_tblInsPolicyDocs(tblInsPolicyDoc entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblDocType = this;
+		}
+		
+		private void detach_tblInsPolicyDocs(tblInsPolicyDoc entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblDocType = null;
+		}
+		
+		private void attach_tblDocs(tblDoc entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblDocType = this;
+		}
+		
+		private void detach_tblDocs(tblDoc entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblDocType = null;
 		}
 	}
 	

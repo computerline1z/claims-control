@@ -22,7 +22,7 @@ namespace ClaimsControl.Controllers {
 		[HttpPost]
 		public JsonResult tabLists(string ver, bool tmp, bool obj) {
 			Repositories_Main acc = new Repositories_Main();
-			string currentVer = "4"; if (ver != currentVer) tmp = true; ver = currentVer;
+			string currentVer = "5"; if (ver != currentVer) tmp = true; ver = currentVer;
 			System.Diagnostics.Debug.Print("ver - " + ver + "; obj - " + obj.ToString());
 			return Json(
 				new {
@@ -63,7 +63,7 @@ namespace ClaimsControl.Controllers {
 		[HttpPost]
 		public JsonResult tabAccidents(string ver, bool tmp, bool obj) {
 			Repositories_Main acc = new Repositories_Main();
-			string currentVer = "1"; if (ver != currentVer) tmp = true; ver = currentVer;
+			string currentVer = "5"; if (ver != currentVer) tmp = true; ver = currentVer;
 			System.Diagnostics.Debug.Print("ver - " + ver + "; obj - " + obj.ToString());
 			return Json(
 				new {
@@ -84,11 +84,11 @@ namespace ClaimsControl.Controllers {
 						tblUsers = acc.GetJSON_tblUsers(),
 						tblDocs = acc.GetJSON_tblDocs(),
 						tblDocsInAccidents = acc.GetJSON_tblDocsInAccidents(),
-						tblDocType = acc.GetJSON_tblDocType(),
+						tblDocTypes = acc.GetJSON_tblDocType(),
 						tblDocGroup = acc.GetJSON_tblDocGroup(),
 						userData = acc.GetJSON_userData()
 					},
-					templates = new {
+					templates = (tmp) ? new {
 						tmpClaimEdit = RenderPartialViewToString("Accidents/tmpClaimEdit"),
 						tmpUploadForm = RenderPartialViewToString("Files/tmpUploadForm"),
 						tmp2templateDownload = RenderPartialViewToString("Files/tmp2templateDownload"),
@@ -99,9 +99,25 @@ namespace ClaimsControl.Controllers {
 						tmpDocsNodes = RenderPartialViewToString("Files/tmpDocsNodes"),
 						tmpDocsTree = RenderPartialViewToString("Files/tmpDocsTree"),
 
+						tmpDocTypes = RenderPartialViewToString("Files/tmpDocTypes"),
 						tmp_Drivers = RenderPartialViewToString("Lists/tmp_Drivers"),
 						tmp_InsPolicies = RenderPartialViewToString("Lists/tmp_InsPolicies"),
 						tmp_Vehicles = RenderPartialViewToString("Lists/tmp_Vehicles")
+					} : new {
+						tmpClaimEdit = "",
+						tmpUploadForm = "",
+						tmp2templateDownload = "",
+						tmp2templateUpload = "",
+
+						tmpDocsCategory = "",
+						tmpDocsView = "",
+						tmpDocsNodes = "",
+						tmpDocsTree = "",
+
+						tmpDocTypes = "",
+						tmp_Drivers = "",
+						tmp_InsPolicies = "",
+						tmp_Vehicles = ""
 					}
 				}
 

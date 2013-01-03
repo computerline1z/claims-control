@@ -47,7 +47,7 @@ namespace CC.Controllers {
 		//        AccidentID = accidentID.HasValue && accidentID.Value > 0 ? accidentID.Value.ToString() : String.Empty
 		//    };
 		//    bool selected = true;
-		//    foreach (tblDocType docType in this._flManager.GetTblDocTypes(accountId, docGroupId))
+		//    foreach (tblDocTypes docType in this._flManager.GetTblDocTypes(accountId, docGroupId))
 		//    {
 		//        model.DocTypes.Add(new SelectListItem() { Text = docType.Name, Value = docType.ID.ToString(), Selected = selected });
 		//        selected &= false;

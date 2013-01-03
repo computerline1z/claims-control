@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="ClaimsControl" Class="dbDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=SAULIUS-PC\LOCALHOST;Initial Catalog=ClaimsControl;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="ClaimsControlConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="WebSettings" ConnectionString="Data Source=SAULIUS-PC\LOCALHOST;Initial Catalog=ClaimsControl;Persist Security Info=True;User ID=sa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="ClaimsControlConnectionString3" Provider="System.Data.SqlClient" />
   <Table Name="dbo.tblAccidentsTypes" Member="tblAccidentsTypes">
     <Type Name="tblAccidentsType">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -205,25 +205,13 @@
       <Association Name="tblAccount_tblVehicle" Member="tblAccount" ThisKey="AccountID" OtherKey="ID" Type="tblAccount" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.tblDocTypes" Member="tblDocTypes">
-    <Type Name="tblDocType">
-      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Name" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
-      <Column Name="DocGroupID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="AccountID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Association Name="tblDocType_tblInsPolicyDoc" Member="tblInsPolicyDocs" ThisKey="ID" OtherKey="DocTypeID" Type="tblInsPolicyDoc" />
-      <Association Name="tblDocType_tblDoc" Member="tblDocs" ThisKey="ID" OtherKey="DocTypeID" Type="tblDoc" />
-      <Association Name="tblDocGroup_tblDocType" Member="tblDocGroup" ThisKey="DocGroupID" OtherKey="ID" Type="tblDocGroup" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.tblInsPolicyDocs" Member="tblInsPolicyDocs">
     <Type Name="tblInsPolicyDoc">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="InsPolicyID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="DocTypeID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="tblDocType_tblInsPolicyDoc" Member="tblDocType" ThisKey="DocTypeID" OtherKey="ID" Type="tblDocType" IsForeignKey="true" />
       <Association Name="tblInsPolicy_tblInsPolicyDoc" Member="tblInsPolicy" ThisKey="InsPolicyID" OtherKey="ID" Type="tblInsPolicy" IsForeignKey="true" />
+      <Association Name="tblDocType_tblInsPolicyDoc" Member="tblDocType" ThisKey="DocTypeID" OtherKey="ID" Type="tblDocType" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.tblWarningEvents" Member="tblWarningEvents">
@@ -352,8 +340,8 @@
       <Column Name="Name" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
       <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="AccountID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="tblDocGroup_tblDocType" Member="tblDocTypes" ThisKey="ID" OtherKey="DocGroupID" Type="tblDocType" />
       <Association Name="tblDocGroup_tblDoc" Member="tblDocs" ThisKey="ID" OtherKey="GroupID" Type="tblDoc" />
+      <Association Name="tblDocGroup_tblDocType" Member="tblDocTypes" ThisKey="ID" OtherKey="DocGroupID" Type="tblDocType" />
     </Type>
   </Table>
   <Table Name="dbo.tblDocsInAccident" Member="tblDocsInAccidents">
@@ -409,8 +397,20 @@
       <Column Name="HasThumb" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Association Name="tblDoc_tblDocsInAccident" Member="tblDocsInAccidents" ThisKey="ID" OtherKey="DocID" Type="tblDocsInAccident" />
       <Association Name="tblDocGroup_tblDoc" Member="tblDocGroup" ThisKey="GroupID" OtherKey="ID" Type="tblDocGroup" IsForeignKey="true" />
-      <Association Name="tblDocType_tblDoc" Member="tblDocType" ThisKey="DocTypeID" OtherKey="ID" Type="tblDocType" IsForeignKey="true" />
       <Association Name="tblUser_tblDoc" Member="tblUser" ThisKey="UserID" OtherKey="ID" Type="tblUser" IsForeignKey="true" />
+      <Association Name="tblDocType_tblDoc" Member="tblDocType" ThisKey="DocTypeID" OtherKey="ID" Type="tblDocType" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tblDocTypes" Member="tblDocTypes">
+    <Type Name="tblDocType">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="DocGroupID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AccountID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="tblDocType_tblInsPolicyDoc" Member="tblInsPolicyDocs" ThisKey="ID" OtherKey="DocTypeID" Type="tblInsPolicyDoc" />
+      <Association Name="tblDocType_tblDoc" Member="tblDocs" ThisKey="ID" OtherKey="DocTypeID" Type="tblDoc" />
+      <Association Name="tblDocGroup_tblDocType" Member="tblDocGroup" ThisKey="DocGroupID" OtherKey="ID" Type="tblDocGroup" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="dbo.proc_Vehicles" Method="proc_Vehicles">

@@ -190,7 +190,7 @@ var oDATA = Ember.Object.create({
 
 		var start = new Date().getTime(), setter = this.get("SET"), emBuilder = this.get("emBuilder"), me = this, obj;
 		var finished = function (start, msg) { 
-			console.warn("Started '" + p.url + "'. " + msg + ". Time,ms:" + (new Date().getTime() - start)); 
+			console.warn("fnLoad2 started '" + p.url + "'. " + msg + ". Time,ms:" + (new Date().getTime() - start)); 
 			if (p.callBack) p.callBack();
 		}
 
@@ -217,7 +217,7 @@ var oDATA = Ember.Object.create({
 							console.log("New template:" + objName);
 							if (!value) { value = localStorage[objName]; } //Jei nėra imam iš localStorage					
 							else { localStorage[objName] = value; }
-							if (!value) log.error("No template" + objName);
+							if (!value) console.error("No template " + objName);
 							if (objName.slice(0,4)==="tmp2") {//tmpl template naudojama file uploads
 								$("body").append('<script id="'+objName+'" type="text/x-tmpl">'+value+'</script>');
 							} else {
