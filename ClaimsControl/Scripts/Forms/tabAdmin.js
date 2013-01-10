@@ -69,40 +69,7 @@
 
   App.usersController = Em.ArrayController.create({
     tableName: "tblUsers",
-    content: [],
-    modifyUsers: function(pars) {
-      pars = $.extend(pars, {
-        objData: "tblUsers",
-        CallBackAfter: (function(RowData, opt) {
-          var inputs, mail, msg, name, surname, title;
-          inputs = $("#divDialogForm").find("div.ExtendIt input");
-          name = $(inputs[0]);
-          surname = $(inputs[1]);
-          mail = $(inputs[2]);
-          if (opt.Action === "Add" || mail.data("ctrl").Value !== mail.val) {
-            msg = "Vartotojui '<b>" + name.val() + " " + surname.val() + "</b>' bus išsiųstas pranešimas susikurti prisijungimo prie sistemos slaptažodį e-paštu <b>" + mail.val() + "</b>. Bet kuriuo metu galite pakeisti e-paštą, tokiu atveju bus siunčiamas naujas pranešimas, o prieš tai buvęs slaptažodis nustos galioti.";
-            title = opt.Action === "Add" ? "Sukurtas naujas vartotojas" : "Pakeistas e-paštas";
-            return oCONTROLS.dialog.Alert({
-              title: title,
-              msg: msg
-            });
-          }
-        })
-      });
-      return new oGLOBAL.clsEditableForm(pars);
-    },
-    addNewUser: function(e) {
-      return this.modifyUsers({
-        Action: "Add",
-        aRowData: 0
-      });
-    },
-    editUser: function(e) {
-      return this.modifyUsers({
-        Action: "Edit",
-        aRowData: e.view._context
-      });
-    }
+    content: []
   });
 
   MY.tabAdmin = {};

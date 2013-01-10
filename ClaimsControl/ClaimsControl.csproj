@@ -342,6 +342,7 @@
     <Content Include="Scripts\Forms\tabAccidents.js" />
     <Content Include="Scripts\Forms\tabAdmin.js" />
     <Content Include="Scripts\Forms\tabLists.js" />
+    <Content Include="Scripts\Forms\userCard.js" />
     <Content Include="Scripts\Main\jquery-1.8.0.combined2.min.js" />
     <Content Include="Scripts\My\clsEditableForm.js" />
     <Content Include="Scripts\My\General.js" />
@@ -472,6 +473,7 @@
     <None Include="packages\Ninject.Web.Common.3.0.0.7\Ninject.Web.Common.3.0.0.7.nupkg" />
     <Content Include="packages\repositories.config" />
     <None Include="packages\WebActivator.1.5.1\WebActivator.1.5.1.nupkg" />
+    <None Include="Scripts\Forms\userCard.coffee" />
     <None Include="Scripts\Forms\docsAccident.coffee" />
     <None Include="Scripts\Forms\tabAccidents.coffee" />
     <Content Include="Scripts\Forms\accidentCard.js" />
@@ -514,6 +516,8 @@
     <Content Include="Views\Shared\Files\tmpDocsCategory.cshtml" />
     <Content Include="Views\Shared\Files\tmpDocsNodes.cshtml" />
     <Content Include="Views\Shared\Files\tmpDocTypes.cshtml" />
+    <Content Include="Views\Shared\Admin\tmpUserCard.cshtml" />
+    <Content Include="Views\Shared\Admin\tmpChangeUsrPass.cshtml" />
     <None Include="Views\Shared\LayOut_Main_Debug.cshtml" />
     <Content Include="Views\Main\Start.cshtml" />
   </ItemGroup>

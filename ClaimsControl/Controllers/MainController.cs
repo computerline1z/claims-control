@@ -63,7 +63,7 @@ namespace ClaimsControl.Controllers {
 		[HttpPost]
 		public JsonResult tabAccidents(string ver, bool tmp, bool obj) {
 			Repositories_Main acc = new Repositories_Main();
-			string currentVer = "6"; if (ver != currentVer) tmp = true; ver = currentVer;
+			string currentVer = "7"; if (ver != currentVer) tmp = true; ver = currentVer;
 			System.Diagnostics.Debug.Print("ver - " + ver + "; obj - " + obj.ToString());
 			return Json(
 				new {
@@ -82,6 +82,7 @@ namespace ClaimsControl.Controllers {
 						tblVehicleTypes = acc.GetJSON_tblVehicleTypes(),
 						tblClaims = acc.GetJSON_tblClaims(),
 						tblUsers = acc.GetJSON_tblUsers(),
+						tblCountries = acc.GetJSON_tblCountries(),
 						tblDocs = acc.GetJSON_tblDocs(),
 						tblDocsInAccidents = acc.GetJSON_tblDocsInAccidents(),
 						tblDocTypes = acc.GetJSON_tblDocType(),
@@ -102,7 +103,9 @@ namespace ClaimsControl.Controllers {
 						tmpDocTypes = RenderPartialViewToString("Files/tmpDocTypes"),
 						tmp_Drivers = RenderPartialViewToString("Lists/tmp_Drivers"),
 						tmp_InsPolicies = RenderPartialViewToString("Lists/tmp_InsPolicies"),
-						tmp_Vehicles = RenderPartialViewToString("Lists/tmp_Vehicles")
+						tmp_Vehicles = RenderPartialViewToString("Lists/tmp_Vehicles"),
+						tmpUserCard = RenderPartialViewToString("Admin/tmpUserCard"),
+						tmpChangeUsrPass = RenderPartialViewToString("Admin/tmpChangeUsrPass")						
 					} : new {
 						tmpClaimEdit = "",
 						tmpUploadForm = "",
@@ -117,7 +120,9 @@ namespace ClaimsControl.Controllers {
 						tmpDocTypes = "",
 						tmp_Drivers = "",
 						tmp_InsPolicies = "",
-						tmp_Vehicles = ""
+						tmp_Vehicles = "",
+						tmpUserCard = "",
+						tmpChangeUsrPass = RenderPartialViewToString("Admin/tmpChangeUsrPass")
 					}
 				}
 
@@ -127,7 +132,7 @@ namespace ClaimsControl.Controllers {
 		[HttpPost]
 		public JsonResult tabAdmin(string ver, bool tmp, bool obj) {
 			Repositories_Main acc = new Repositories_Main();
-			string currentVer = "3";if (ver != currentVer) tmp = true; ver = currentVer;
+			string currentVer = "5";if (ver != currentVer) tmp = true; ver = currentVer;
 			System.Diagnostics.Debug.Print("ver - " + ver + "; obj - " + obj.ToString());
 			return Json(
 				new {

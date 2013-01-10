@@ -9,7 +9,8 @@
 
 body {
   background-color: @grayLighter;
-  margin: 0;
+  margin: 0 auto !important;
+  max-width: 1100px !important;
   
 //  font-family: 'Asap', 'AsapRegular', "Arial" Arial, "Helvetica Neue", Helvetica,sans-serif;
   #font > .regular();
@@ -54,8 +55,17 @@ a {
   &:hover {
     color: @linkColorHover;
     text-decoration: underline;
-  }
-  
+  }  
+}
+.whiteLink {
+  color: #C8CCD9;
+  text-decoration: underline;
+  line-height: inherit;
+  font-weight: inherit;
+  &:hover {
+    color: @linkColor;
+    text-decoration: underline;
+  }  
 }
 
 // Quick floats

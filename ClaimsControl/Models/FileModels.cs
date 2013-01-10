@@ -42,13 +42,11 @@ namespace CC.Models {
 
 		/// <summary>
 		/// <code>[FileDate] [date] NOT NULL</code>
-		/// TODO: patikrinti, ar tikrai reikia
 		/// </summary>
 		public DateTime? FileDate { get; set; }
 
 		/// <summary>
 		/// <code>[FileSize] [int] NOT NULL</code>
-		/// TODO: patikrinti, ar tikrai reikia
 		/// </summary>
 		public int? FileSize { get; set; }
 

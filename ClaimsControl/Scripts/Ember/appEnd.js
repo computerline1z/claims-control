@@ -52,11 +52,6 @@ App.Router = Em.Router.extend({
 			route: '/tabLists',
 			connectOutlets: function (router, context) {
 				MY.NavbarController.fnSetNewTab(router.currentState.name, 4);
-				//App.listsStart();
-				//oDATA.execWhenLoaded(["tmpAllVehicles"], function (){
-				//	router.get('applicationController').connectOutlet('listsOutlet','topLists');
-				//});
-				//oDATA.fnLoad({url: "Main/Proba", callBack: function (){ console.log("baigiau downloadint");}});
 				oDATA.fnLoad2({ url: "Main/tabLists", checkFn: "App.listsStart", callBack: function () {
 						App.listsStart();
 						router.get('applicationController').connectOutlet('listsOutlet','topLists');
@@ -84,7 +79,37 @@ App.Router = Em.Router.extend({
 					}
 				});			
 			}
-		})
+		}),
+		tabUserCard: Em.Route.extend({
+			route: '/tabUserCard',
+			connectOutlets: function (router, context) {	
+				var ix=(App.userCardController.myInfo)?-1:5;
+				MY.NavbarController.fnSetNewTab(router.currentState.name, ix,'tabAdmin');
+				router.get('applicationController').connectOutlet('adminOutlet', 'tabUserCard');							
+			}
+		}),
+		tabChangePass: Em.Route.extend({
+			route: '/changePass',
+			connectOutlets: function (router, context) {			
+				MY.NavbarController.fnSetNewTab(router.currentState.name, -1,'tabEmpty');
+				router.get('applicationController').connectOutlet('emptyOutlet', 'changeUserPass');						
+			}
+		}) 
 	})
 });
 App.initialize();
+
+$(function() {
+	$("#userLink").on("click",function(e) {
+		App.userCardController.setUser({myInfo:true});
+		App.router.transitionTo('tabUserCard')
+		return false;
+	});
+	Em.run.next(function(){
+		$("#tabAccidents,#tabClaims,#tabReports,#tabLists,#tabAdmin").on('focus', 'input:text,textarea', function(e){
+			$(e.target).addClass("activeField");
+		}).on('blur','input:text,textarea',function(e) {
+			$(e.target).removeClass("activeField");
+		});
+	});
+});
