@@ -300,6 +300,16 @@
     url: "Accident/AccidentsList",
     tableName: "proc_Accidents",
     fields: {},
+    animationSpeed: 400,
+    setAnimationSpeed: function(e) {
+      var n;
+      n = parseInt($(e.target).val(), 10);
+      if ($.isNumeric(n)) {
+        return this.set("animationSpeed", n);
+      } else {
+        return alert("turi būti skaičius");
+      }
+    },
     removeClaims: function(AddWr) {
       AddWr.parent().find("div.dividers").remove();
       if (AddWr.length > 0) {
@@ -338,7 +348,7 @@
         });
       } else {
         Em.run.next(function() {
-          return $("#AccDetailsContent, div.dividers").slideDown();
+          return $("#AccDetailsContent, div.dividers").slideDown(App.accidentsController.animationSpeed);
         });
       }
       return false;

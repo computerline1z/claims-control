@@ -89,11 +89,15 @@ namespace CC.Models {
 			jsonArrays JSON = new jsonArrays();
 			JSON.Data = new object[]{ new object[] {//Turi būt masyvų masyvas
             UserData.Account,//0
-            UserData.AccountID//1
+            UserData.AccountID,//1
+				UserData.UserID,
+				UserData.UserName
             }};
 			object[] Cols ={
             new { FName = "Account"},//0
             new { FName = "AccountID"},//1
+            new { FName = "UserID"},//1
+            new { FName = "UserName"}//1
             }; JSON.Cols = Cols;
 			//JSON.Config = new { Controler = "Main", tblUpdate = "tblDocsInAccidents" };
 			return JSON;
@@ -642,15 +646,28 @@ namespace CC.Models {
 				d.Surname,//1
 				d.Email,//3
 				d.IsAdmin,
-				d.IsActive
+				d.IsActive,
+				d.LanguageID,
+				d.Position,
+				d.Phone,
+				d.MobPhone,
+				d.EMailForIns
 				};
+
+			//	new { FName = "CountryID",List=new{Source="tblCountries",ListType="List", iVal="iD",iText=new object []{"name"}}},//3
+
 			object[] Cols ={
 				new { FName = "ID"},//0
 				new { FName = "FirstName",Type="String",Validity="require().nonHtml().maxLength(50)"},//2
 				new { FName = "Surname",Type="String",Validity="require().nonHtml().maxLength(50)"},//1
 				new { FName = "Email",Type="Email",Validity="require().nonHtml().match(\"email\").maxLength(35)"},//3 'email'
 				new { FName = "IsAdmin",Type="Boolean"},//3
-				new { FName = "IsActive",Type="Boolean"}//3
+				new { FName = "IsActive",Type="Boolean"},//3
+				new { FName = "LanguageID",List=new{Source="tblCountries",ListType="List", iVal="iD",iText=new object []{"name"}}},
+				new { FName = "Position",Type="String"},
+				new { FName = "Phone",Type="String"},
+				new { FName = "MobPhone",Type="String"},
+				new { FName = "EMailForIns",Type="Email",Validity="require().nonHtml().match(\"email\").maxLength(35)"}
 			}; JSON.Cols = Cols;
 			JSON.Config = new { tblUpdate = "tblUsers", Msg = new { AddNew = "Naujo vartotojo sukūrimas", Edit = "Vartotojo redagavimas", Delete = "Ištrinti vartotoją", GenName = "Vartotojas", GenNameWhat = "Vartotoją", ListName = "Vartotojų sąrašas" } };
 			JSON.Grid = new {
@@ -658,9 +675,14 @@ namespace CC.Models {
 					new {bVisible=false},//0//ID
 					new {sTitle="Vardas"},
 					new {sTitle="Pavardė"},
-					new {sTitle="E-paštas"},
+					new {sTitle="El. paštas"},
 					new {sTitle="Yra administratorius"},
-					new {sTitle="Yra aktyvus"}
+					new {sTitle="Yra aktyvus"},
+					new {sTitle="Sąsajos kalba"},
+					new {sTitle="Pareigos"},
+					new {sTitle="Telefonas"},
+					new {sTitle="Mobilus"},
+					new {sTitle="El. paštas"},
 				},
 				//aaSorting = new object[] { new object[] { 1, "asc" } },//???
 			};

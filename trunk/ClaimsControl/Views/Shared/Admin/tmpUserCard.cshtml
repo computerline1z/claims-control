@@ -1,0 +1,79 @@
+﻿{{log this}}
+<h2 style="margin: 15px; display: inline-block">
+	{{#if this.myInfo}}Mano informacija</h2>
+	{{else}}Naudotojo informacija{{#compare this.content.length "==" "0"}}(naujas vartotojas){{/compare}}</h2><a {{action goToAdminTab}} href="#">(atgal į Administravimą)</a>
+	{{/if}}
+
+
+<div id="userInfoTab">
+	<ul class='ulWhiteMenu'>
+		<li><a href="#userInfoData"><span>Duomenys</span></a></li>		
+		<li><a href="#userInfoRights"><span>Teisės</span></a></li>	
+	</ul>
+
+	<div id="userInfoData">
+		<div id="InfoDataForm" class="inputForm whiteTab container" data-ctrl='{"NewRec":0,"Source":"tblUsers","id":0}'>	
+		{{#if this.content}}	
+			<div class="row">
+				{{updatableField Field="firstName" classes="w25pr" labelType="Top"}}
+				{{updatableField Field="surname" classes="w25pr" labelType="Top"}}
+				{{updatableField Field="languageID" classes="w25pr" style="float:right" labelType="Top"}}
+			</div></br>
+			</br><h4>Kontaktiniai duomenys, kuriuos reikia nurodyti pranešimuose draudikui apie žalą</h4>
+			<div>
+				{{updatableField Field="position" classes="w25pr" labelType="Left"}}
+				{{updatableField Field="phone" classes="w25pr" labelType="Left"}}			
+			</div><div>
+				{{updatableField Field="eMailForIns" classes="w25pr" labelType="Left"}}
+				{{updatableField Field="mobPhone" classes="w25pr" labelType="Left"}}
+			</div>
+			</br><h4>Prisijungimo duomenys</h4>
+			<div>
+				{{updatableField Field="email" classes="w48pr" labelType="Left"}}				
+				{{#if this.myInfo}}
+					<a class="medium" style="line-height:40px;" {{action changeMyPassword}} href="#">Pakeisti slaptažodį</a>
+				{{else}}
+					{{#if this.passwordReset}}
+						<div class="well cont" style="margin:15px;display:inline-block">
+						<p>Slaptažodžio atstatymas vyksta išsiunčiant naudotojui el. laišką su patvirtinimo nuoroda.</p>
+						<button class="btn" style="float:left;margin:10px" {{action sendUserPassword}}>Siųsti</button>
+						<button class="btn" style="float:left;margin:10px" {{action emailText}}>Laiško tekstas</button>
+						<a style="float:left;line-height:40px;margin:10px" {{action cancelSendUserPassword}} href="#">Atšaukti</a>
+						</div>
+					{{else}}
+						<a class="medium" style="line-height:40px;" {{action sendUserPasswordForm}} href="#">Atstatyti slaptažodį</a>
+					{{/if}}		
+					<p id="savePasswordNote" style="color:#B94A48;display:inline-block"></p>			
+				{{/if}}
+				{{updatableField Field="isActive" classes="w48pr" labelType="Left"}}
+			</div>
+		{{else}}
+				<div class="row">
+					<div class="ExtendIt w25pr" data-ctrl='{"Value":"","Field":"FirstName","classes":"UpdateField","labelType":"Top"}'></div>
+					<div class="ExtendIt w25pr" data-ctrl='{"Value":"","Field":"Surname","classes":"UpdateField","labelType":"Top"}'></div>
+					<div class="ExtendIt w25pr" style="float:right" data-ctrl='{"Value":1,"Field":"LanguageID","classes":"UpdateField","labelType":"Top"}'></div>
+				</div><br>
+				<br><h4>Kontaktiniai duomenys, kuriuos reikia nurodyti pranešimuose draudikui apie žalą</h4>
+				<div>
+					<div class="ExtendIt w25pr" data-ctrl='{"Value":"","Field":"Position","classes":"UpdateField","labelType":"Left"}'></div>
+					<div class="ExtendIt w25pr" data-ctrl='{"Value":"","Field":"Phone","classes":"UpdateField","labelType":"Left"}'></div>			
+				</div><div>
+					<div class="ExtendIt w25pr" data-ctrl='{"Value":"","Field":"EMailForIns","classes":"UpdateField","labelType":"Left"}'></div>
+					<div class="ExtendIt w25pr" data-ctrl='{"Value":"","Field":"MobPhone","classes":"UpdateField","labelType":"Left"}'></div>
+			</div>
+			<br><h4>Prisijungimo duomenys</h4>
+			<div>
+				<div class="ExtendIt w48pr" data-ctrl='{"Value":"","Field":"Email","classes":"UpdateField","labelType":"Left"}'></div>
+				<div class="ExtendIt w48pr" data-ctrl='{"Value":true,"Field":"IsActive","classes":"UpdateField","labelType":"Left"}'></div>
+			</div>
+		{{/if}}		
+		</div>
+		<button class="btn" style="float:right;margin:40px" {{action saveUserCard}}>Išsaugoti</button></br>
+	</div>
+
+	<div id="userInfoRights">
+		<span>Vartotojų teisės</span>
+		<button class="btn" style="float:right;margin:40px" {{action saveUserRights}}>Išsaugoti</button></br>
+	</div>
+
+</div>

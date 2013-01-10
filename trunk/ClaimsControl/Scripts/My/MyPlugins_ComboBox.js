@@ -134,9 +134,6 @@
         },
         open: function() {
           var acData, termTemplate;
-          if (!(opt.ListType !== "List" ? input.hasClass("activeField") : void 0)) {
-            input.addClass("activeField");
-          }
           if (opt.ListType === "None" || opt.ListType === "Combo") {
             acData = $(this).data("autocomplete");
             termTemplate = "<span style=\"color:red\">%s</span>";

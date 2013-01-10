@@ -82,7 +82,7 @@ _create: ->
 			opt.fnValueChanged input.data("newval"), input.val()	if opt.fnValueChanged and input.data("newval") #NewVal,NewText
 
 		open: ->
-			input.addClass "activeField"	unless input.hasClass("activeField")	if opt.ListType isnt "List"
+			#input.addClass "activeField"	unless input.hasClass("activeField")	if opt.ListType isnt "List"
 			if opt.ListType is "None" or opt.ListType is "Combo"
 				acData = $(this).data("autocomplete")
 				termTemplate = "<span style=\"color:red\">%s</span>"

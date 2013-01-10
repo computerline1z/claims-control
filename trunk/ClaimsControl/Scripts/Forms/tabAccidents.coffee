@@ -212,7 +212,12 @@ App.SelectedClaimView = Em.View.extend(
 App.accidentsController = Em.ResourceController.create(
 	url: "Accident/AccidentsList",#jei yra atsisiunčiam
 	tableName: "proc_Accidents",#jei yra, turinį į content
-	fields: {},
+	fields: {}
+	animationSpeed: 400
+	setAnimationSpeed:(e)->
+		n=parseInt($(e.target).val(),10)
+		if $.isNumeric(n) then @.set("animationSpeed",n)
+		else alert "turi būti skaičius"
 	removeClaims: (AddWr) ->
 		#return;
 		AddWr.parent().find("div.dividers").remove()
@@ -238,7 +243,7 @@ App.accidentsController = Em.ResourceController.create(
 		if e.isTrigger
 			Em.run.next(-> $("#AccDetailsContent, div.dividers").show())
 		else
-			Em.run.next(-> $("#AccDetailsContent, div.dividers").slideDown())
+			Em.run.next(-> $("#AccDetailsContent, div.dividers").slideDown(App.accidentsController.animationSpeed))
 		false
 	setfilteredPolicies: (accidentDate) ->
 		thisAccidentPolicies=$.map(oDATA.GET("proc_InsPolicies").Data, (i)-> if (oGLOBAL.date.firstBigger(i[4],accidentDate)) then return [i] else return null)

@@ -349,6 +349,10 @@ Ember.ResourceController = Ember.ArrayController.extend(Ember.ResourceAdapter, {
 });
 
 var SERVER = {
+	update3: function(p){//paprasta fn tik gražinanti atsakymą - p={pars:{},CallBack(JsonResp:{ErrorMsg,ResponseMsg},pars):fn),url:'/Account/NewPassword'}
+		updData=(p.ctrl)?($.extend({},p.pars,p.ctrl)):p.pars
+		this.send(p.pars, p.CallBack, updData, p.url);
+	},
 	update2: function (p) {
 		//nereikia callbacko, updatina jsonObj, todėl papildomai reikia "source"(oDATA pavadinimas) ir "row" //oDATA.GET("proc_Vehicles").emData
 		//SERVER.update2({"Action":Action,DataToSave:{},"Ctrl":Ctrl,"source":source,"row":row
@@ -406,7 +410,7 @@ var SERVER = {
 				}
 			}
 			Em.run.next(function () { $("img.spinner").remove(); });
-			if (p.CallBackAfter) { p.CallBackAfter(Row); }
+			if (p.CallBackAfter) { p.CallBackAfter(Row,updData.Action); }
 		}
 		};
 		$.extend(p, { CallBack: CallBack });
@@ -423,7 +427,7 @@ var SERVER = {
 		var url = "/Update/" + p.Action, updData = p; //{ "Action": p.Action, "DataToSave": p.DataToSave, "CallBack": p.CallBack, "Msg": p.Msg, "Ctrl":Ctrl};
 		//url=(p.url)?p.url:("/Update/"+p.Action); //Add/Edit.Delete
 		//log('<p style="color:green"><div>CallServer. Action:'+p.Action+'</div><div>DataToServer:'+JSON.stringify(p.DataToSave)+'</div> url:'+url+'</p>');
-		SERVER.send(JSON.stringify(p.DataToSave), this.fnUpdated, updData, url, "json");
+		SERVER.send(p.DataToSave, this.fnUpdated, updData, url);
 		////CallServer(JSON.stringify({ id: id, DataObject: _SD.Config.tblUpdate }), obj.fnResponse_DeleteUser, anSelected, '/'+_SD.Config.Controler+'/Delete', 'json');
 	},
 	send: function (JSONarg, CallFunc, updData, url, dataType) {
@@ -434,6 +438,8 @@ var SERVER = {
 		///<param name="url">example '/[Controler]Tab/GetTab[Action]'</param>
 		///<param name="dataType">JSONarg datatype 'json'|'html'|'texc'</param>
 		///<returns type="calls_CallFunc(Response,updData)"/>
+		if (!dataType){dataType='json';}
+		if  (typeof  JSONarg!=="string"){JSONarg=JSON.stringify(JSONarg);}
 		if (updData.Ctrl) { $(updData.Ctrl).spinner({ position: 'center', img: 'spinnerBig.gif' }); }
 		else $("div.content:first").spinner({ position: 'center', img: 'spinnerBig.gif' });
 		if (!dataType) {
