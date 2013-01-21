@@ -3,18 +3,17 @@
    @*<noscript><input type="hidden" name="redirect" value="http://blueimp.github.com/jQuery-File-Upload/"></noscript>*@
    <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
    <div class="row fileupload-buttonbar">
-      <div class="span7">
+	{{#if showPhoto}}
+      <div class="span7" style="margin-left:30%;">
             <span class="btn btn-success fileinput-button">
                @*<i class="icon-plus icon-white"></i>*@
 					<i class="img32-attach"></i>
                <span>Prisegti nuotraukas</span>
                <input type="file" name="pictures[]" multiple>
             </span>
-@*				<span class="btn btn-success fileinput-button">
-					<i class="img32-attach"></i>
-               <span>Prisegti dokumentus</span>
-               <input type="file" name="files22[]" multiple>
-            </span>*@
+	{{else}}
+      <div class="span7" style="margin-left:40%;">
+	{{/if}}
 				<a href="#" class="fileinput-button">
 					<i class="img32-attach"></i>
                <span>Prisegti dokumentus</span>

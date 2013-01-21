@@ -2,83 +2,59 @@
 (function() {
   var w=window,$ = w.jQuery, App=w.App, Em=w.Em;
 
-  $.widget("ui.Tree", {
-    options: {
-      treeId: "dynamicTree",
-      docViewForTreeId: "docViewForTree",
-      formTemplate: "tmpUploadForm",
-      docsUpdateCallBack: null,
-      categoryOpts: {},
-      docsTypesController: "docsTypesController",
-      TreeDocController: "TreeDocController"
-    },
-    _create: function() {
-      $('<table width="100%;"><tr style="vertical-align:top"><td style="width:28em"><div id="' + this.options.treeId + '" style="border-right: 1px solid #ddd;"></div></td>' + '<td style="vertical-align:top;padding:10px;"><div id="' + this.options.docViewForTreeId + '"></div></td></tr></table>').appendTo(this.element);
-      this.docsTypesControllerOpt.categoryOpts = this.options.categoryOpts;
-      App[this.options.docsTypesController] = Em.ResourceController.create(this.docsTypesControllerOpt);
-      App.DocTreeView = Em.View.extend(this.DocTreeViewOpt);
-      this.TreeViewOpts.opts = this.options;
-      this.TreeDocControllerOpts.opts = this.options;
-      this.DocTreeViewOpt.opts = this.options;
-      App.TreeView = Em.View.extend(this.TreeViewOpts);
-      App[this.options.TreeDocController] = Em.Object.create(this.TreeDocControllerOpts);
-      Em.View.create({
-        templateName: "tmpDocsTree"
-      }).appendTo("#" + this.options.treeId);
-      this.docViewForTreeOpts.controller = App[this.options.TreeDocController];
-      this.docViewForTreeOpts.opts = this.options;
-      return Em.View.create(this.docViewForTreeOpts).appendTo("#" + this.options.docViewForTreeId);
-    },
-    docsTypesControllerOpt: {
+  App.create_docsTypesController = function(categoryOpts) {
+    return App.docsTypesController = Em.ResourceController.create({
       init: function() {
         var c, catOpts, cats, docTypes, me;
         this._super();
         me = this;
-        catOpts = me.categoryOpts;
-        cats = oDATA.GET("tblDocGroup").emData;
         docTypes = oDATA.GET("tblDocTypes").emData;
         c = [];
         this.set("docTypes", docTypes);
-        if (catOpts.driver) {
-          cats.findProperty("iD", 3).set("name", catOpts.driver.title);
+        categoryOpts = categoryOpts ? categoryOpts : this.categoryOpts;
+        if (categoryOpts) {
+          this.set("categoryOpts", categoryOpts);
+          catOpts = categoryOpts;
+          cats = oDATA.GET("tblDocGroup").emData;
+          if (catOpts.driver) {
+            cats.findProperty("iD", 3).set("name", catOpts.driver.title);
+          }
+          cats.forEach(function(catItem, i) {
+            var newItem;
+            newItem = {
+              categoryId: catItem.iD,
+              title: catItem.name
+            };
+            i = catItem.iD;
+            console.log("catItem.iD: " + i + ", catItem.name: " + catItem.name);
+            if (i !== 1 && i !== 5) {
+              newItem.isTree = "isTree";
+            }
+            newItem.isGroup = "isGroup";
+            if (i !== 4) {
+              newItem.isSelectable = true;
+            }
+            if (i === 4) {
+              newItem.items = catOpts.vehicles.map(function(item) {
+                return {
+                  isGroup: "isGroup",
+                  refID: item.iD,
+                  categoryId: 4,
+                  title: item.title,
+                  isTree: "isTree",
+                  isSelectable: true
+                };
+              });
+              newItem.items.forEach(function(vehicle) {
+                return vehicle.items = me.setDocTypes(docTypes, catItem.iD, vehicle.refID);
+              });
+            } else {
+              newItem.items = me.setDocTypes(docTypes, catItem.iD);
+            }
+            return c[c.length] = newItem;
+          });
+          return this.set("content", c);
         }
-        cats.forEach(function(catItem, i) {
-          var newItem;
-          newItem = {
-            categoryId: catItem.iD,
-            title: catItem.name
-          };
-          i = catItem.iD;
-          console.log("catItem.iD: " + i + ", catItem.name: " + catItem.name);
-          if (i !== 1 && i !== 5) {
-            newItem.isTree = "isTree";
-          }
-          newItem.isGroup = "isGroup";
-          if (i !== 4) {
-            newItem.isSelectable = true;
-          }
-          if (i === 4) {
-            newItem.items = catOpts.vehicles.map(function(item) {
-              return {
-                isGroup: "isGroup",
-                refID: item.iD,
-                categoryId: 4,
-                title: item.title,
-                isTree: "isTree",
-                isSelectable: true
-              };
-            });
-            newItem.items.forEach(function(vehicle) {
-              return vehicle.items = me.setDocTypes(docTypes, catItem.iD, vehicle.refID);
-            });
-          } else {
-            newItem.items = me.setDocTypes(docTypes, catItem.iD);
-          }
-          return c[c.length] = newItem;
-        });
-        this.set("content", c);
-        console.log("new content:");
-        return console.log(c);
       },
       setDocTypes: function(docTypes, groupID, refID) {
         fnMap;
@@ -114,6 +90,40 @@
         this.set("docTypes_driver", dt.filterProperty("docGroupID", 3));
         return this.set("docTypes_vehicle", dt.filterProperty("docGroupID", 4));
       }).observes("docTypes.length")
+    });
+  };
+
+  $.widget("ui.Tree", {
+    options: {
+      treeId: "dynamicTree",
+      docViewForTreeId: "docViewForTree",
+      formTemplate: "tmpUploadForm",
+      docsUpdateCallBack: null,
+      categoryOpts: {},
+      docsTypesController: "docsTypesController",
+      TreeDocController: "treeDocController"
+    },
+    _create: function() {
+      $('<table width="100%;"><tr style="vertical-align:top"><td style="width:28em"><div id="' + this.options.treeId + '" style="border-right: 1px solid #ddd;"></div></td>' + '<td style="vertical-align:top;padding:10px;"><div id="' + this.options.docViewForTreeId + '"></div></td></tr></table>').appendTo(this.element);
+      if (App.docsTypesController) {
+        if (!App.docsTypesController.content.length) {
+          App.docsTypesController.set("categoryOpts", this.options.categoryOpts).init();
+        }
+      } else {
+        App.create_docsTypesController(this.options.categoryOpts);
+      }
+      App.DocTreeView = Em.View.extend(this.DocTreeViewOpt);
+      this.TreeViewOpts.opts = this.options;
+      this.TreeDocControllerOpts.opts = this.options;
+      this.DocTreeViewOpt.opts = this.options;
+      App.TreeView = Em.View.extend(this.TreeViewOpts);
+      App[this.options.TreeDocController] = Em.Object.create(this.TreeDocControllerOpts);
+      Em.View.create({
+        templateName: "tmpDocsTree"
+      }).appendTo("#" + this.options.treeId);
+      this.docViewForTreeOpts.controller = App[this.options.TreeDocController];
+      this.docViewForTreeOpts.opts = this.options;
+      return Em.View.create(this.docViewForTreeOpts).appendTo("#" + this.options.docViewForTreeId);
     },
     DocTreeViewOpt: {
       templateName: "tmpDocsNodes",
@@ -164,7 +174,7 @@
       classNames: [],
       getDocs: function(event) {
         var account, ctx, currentDocs, docTypes, fnFilter, fnGetDocType, fnGetIcon, fnGetUser, isPhoto, showDocs, t, url, users;
-        App.TreeDocController.set("selectedCategoryId", event.view.bindingContext.categoryId);
+        App.treeDocController.set("selectedCategoryId", event.view.bindingContext.categoryId);
         $("#" + this.opts.treeId).find("span").removeClass("ui-state-highlight");
         t = $(event.target);
         (t.is("li") ? t.find("span:first") : t.closest("span")).addClass("ui-state-highlight");
@@ -223,9 +233,7 @@
         isPhoto = ctx.isGroup && ctx.categoryId === 1 ? true : false;
         showDocs = currentDocs.map(function(doc) {
           var file, user;
-          user = fnGetUser(doc.userID);
-          file = "/" + doc.iD + "." + doc.fileType;
-          return {
+          return Em.Object.create(user = fnGetUser(doc.userID), file = "/" + doc.iD + "." + doc.fileType, {
             docID: doc.iD,
             hasThumb: doc.hasThumb,
             urlThumb: url + "/Thumbs" + file,
@@ -238,7 +246,7 @@
             fileName: doc.docName + "." + doc.fileType,
             fileIcon: !doc.hasThumb ? fnGetIcon(doc.fileType) : "img32-doc_unknown",
             docDetails: isPhoto ? "" : "Įkėlė " + user + " " + doc.fileDate + ", dydis - " + Math.ceil(doc.fileSize / 10000) / 100 + "Mb"
-          };
+          });
         });
         App[this.opts.TreeDocController].set("isPhoto", isPhoto);
         console.log("showDocs:");
@@ -372,38 +380,6 @@
           refreshPositions: true
         });
         return this.$().disableSelection();
-      },
-      deleteDoc: function(e) {
-        var c, controller, li, opts;
-        c = e.context;
-        controller = e.view.controller;
-        opts = controller.opts;
-        li = $(e.target).closest("li");
-        return oCONTROLS.dialog.Confirm({
-          title: "Dokumento pašalinimas",
-          msg: "Ištrinti dokumentą '" + e.context.docName + "'?"
-        }, function() {
-          return SERVER.update2({
-            "Action": "Delete",
-            "Ctrl": $("#" + opts.docViewForTreeId),
-            "source": "tblDocs",
-            DataToSave: {
-              "id": c.docID,
-              "DataTable": "tblDocs"
-            },
-            Msg: {
-              Title: "Duokumento pašalinimas",
-              Success: "Dokumentas '" + c.docName + "' pašalintas.",
-              Error: "Nepavyko pašalinti dokumento '" + c.docName + "'."
-            },
-            CallBackAfter: function(Row) {
-              var obj;
-              obj = controller.AllDocs.findProperty("iD", c.docID);
-              controller.AllDocs.removeObject(obj);
-              return li.fadeOut();
-            }
-          });
-        });
       }
     }
   });

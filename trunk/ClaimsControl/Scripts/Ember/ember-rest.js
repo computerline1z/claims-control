@@ -372,14 +372,14 @@ var SERVER = {
 				Cols.forEach(function (col, i) {//Eina per esamus laukus
 					var ok = false, fieldName = col.FName.firstSmall();  //f=col.FName, f.slice(0, 1).toLowerCase() +f.slice(1);
 					updData.DataToSave.Fields.forEach(function (updateField, i2) {//Randam ar yra col tarp updatinamu
-						if (col.FName == updateField) {
+						if (fieldName == updateField.firstSmall()) {
 							var newVal = updData.DataToSave.Data[i2];
 							Row.set(fieldName, newVal); ok = true;
 							if (col.List) {//Jeigu List, updatinam ir teksto lauka
 								var updateCol = Cols.findObjectByProperty("IdField", fieldName);
 								if (updateCol) {
-									var field = updateCol.FName.firstSmall(), newVal1 = oDATA.GET(col.List.Source).emData.findObjectByProperty("iD", newVal).MapArrToString(col.List.iText, true);
-									Row.set(field, newVal1);
+									var newVal1 = oDATA.GET(col.List.Source).emData.findObjectByProperty("iD", newVal).MapArrToString(col.List.iText, true);
+									Row.set(fieldName, newVal1);
 								} else { console.warn("List field '" + updateField + "' without IdField"); }
 							}
 						}
@@ -399,7 +399,7 @@ var SERVER = {
 							else Row.set(fieldName, col.Default);
 						else { Row.set(fieldName, ""); }
 					}
-					console.log("col: " + col.FName + ", ok: " + ok + ", fieldValue:" + Row[fieldName])
+					console.log("col: " + fieldName + ", ok: " + ok + ", fieldValue:" + Row[fieldName])
 				})
 				if (Adding) { Row.set("visible", true); oData.emData.pushObject(Row); }
 				else { oData.emData.findProperty("iD", Row.iD).updateTo(Row); }

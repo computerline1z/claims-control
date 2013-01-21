@@ -339,6 +339,7 @@
     <Content Include="Scripts\Files\load-image.min.js" />
     <Content Include="Scripts\Files\tmpl.min.js" />
     <Content Include="Scripts\Final\combined.min.js" />
+    <Content Include="Scripts\Forms\docsAccident.js" />
     <Content Include="Scripts\Forms\tabAccidents.js" />
     <Content Include="Scripts\Forms\tabAdmin.js" />
     <Content Include="Scripts\Forms\tabLists.js" />
@@ -348,7 +349,7 @@
     <Content Include="Scripts\My\General.js" />
     <Content Include="Scripts\My\MyPlugins_Tree.js" />
     <Content Include="Scripts\My\MyPlugins_UploadFiles.js" />
-    <Content Include="Scripts\My\oCONTROLS .js" />
+    <Content Include="Scripts\My\oCONTROLS.js" />
     <Content Include="Scripts\My\ui-checkbox.js" />
     <Content Include="Scripts\My\MyPlugins_Checkbox.js" />
     <Content Include="Scripts\My\MyPlugins_ComboBox.js" />
@@ -496,7 +497,6 @@
     <None Include="Scripts\Forms\tabLists.coffee" />
     <None Include="Scripts\My\clsEditableForm.coffee" />
     <None Include="Scripts\My\MyPlugins_Tree.coffee" />
-    <None Include="Scripts\My\Copy of MyPlugins_ComboBox.coffee" />
     <None Include="Scripts\My\MyPlugins_UploadFiles.coffee" />
     <None Include="Scripts\My\view_FileUploader.coffee" />
     <None Include="Scripts\My\MyPlugins_ComboBox.coffee" />

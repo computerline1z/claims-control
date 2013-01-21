@@ -2,6 +2,8 @@
 (function() {
   var w=window, App=w.App, Em=w.Em, oGLOBAL=w.oGLOBAL, oDATA=w.oDATA, oCONTROLS=w.oCONTROLS, MY=w.MY;
 
+  var docsViewOpts;
+
   App.listsStart = function() {
     App.topNewController.vehicles.clear();
     App.topNewController.drivers.clear();
@@ -44,102 +46,183 @@
     endDate: "",
     editItem: "",
     filterValue: "",
+    addMakeMode: "",
     valueDidChange: (function() {
       return this.filterItems();
     }).observes('filterValue'),
     openItem: function(pars) {
       var config, title;
+      this.set("dateIsEdited", false);
+      if (!App.docsTypesController) {
+        App.create_docsTypesController();
+      }
       config = oDATA.GET(pars.source).Config;
       title = pars.row ? config.Msg.GenName + " " + pars.row.MapArrToString(config.titleFields, true) : config.Msg.AddNew;
       if (!pars.row && pars.newVals) {
         pars.row = pars.newVals.vals.toRowObject(pars.newVals.cols);
       }
-      return MY.dialog = JQ.Dialog.create({
-        controller: pars.me,
-        pars: pars,
-        init: function() {
-          this._super();
-          this.templateName = pars.template;
-          return this.title = title;
-        },
-        didInsertElement: function() {
-          var dialogContent, dialogFrm, me;
-          this._super();
-          dialogFrm = $("#openItemDialog");
-          dialogContent = $("#dialogContent");
-          me = this;
-          $("#dialogEndDateInput").datepicker({
-            "minDate": "-3y",
-            "maxDate": "0"
-          }).trigger("blur");
-          this.$().on("click", 'a.inLine', function(e) {
-            var endDate, input, isInput, newDate, obj, parentDiv, t;
-            t = $(e.target);
-            pars = me.pars;
-            endDate = pars.me.endDate;
-            parentDiv = t.parent().parent();
-            input = parentDiv.find("input");
-            isInput = input ? input.length : 0;
-            if (!isInput) {
-              parentDiv.css("background-color", "").css("color", "").find("span.inLine").replaceWith('<input type="text" style="width:100%;" placeholder="Nebedirba nuo.."/>').end().find("input").val(endDate).datepicker({
-                "minDate": "-3y",
-                "maxDate": "0"
-              }).end().find("a.inLine").css("color", "").html("Išsaugoti");
-            } else {
-              newDate = oGLOBAL.date.isDate(input.val()) ? input.val() : "";
-              if (newDate) {
-                parentDiv.css("background-color", "red").css("color", "White").find("input").replaceWith('<span class="inLine">Nebedirba nuo ' + newDate + '</span>').end().find("a.inLine").css("color", "White").html("Keisti");
-              }
-              obj = dialogContent.data("ctrl");
+      console.log("JQ.Dialog.create");
+      console.log(MY.dialog);
+      if (MY.dialog) {
+        MY.dialog.remove();
+      }
+      if (MY.dialog) {
+        MY.dialog.remove();
+      }
+      return Em.run.next(this, function() {
+        return MY.dialog = JQ.Dialog.create({
+          controllerBinding: "App.listAllController",
+          controller: pars.me,
+          pars: pars,
+          init: function() {
+            this._super();
+            console.log("init");
+            this.templateName = pars.template;
+            return this.title = title;
+          },
+          cancelAddNewMake: function() {
+            return App.listAllController.set("addMakeMode", false);
+          },
+          saveAddNewMake: function(e) {
+            var autoComplete, ctrl, div, newVal;
+            div = $(e.target).parent();
+            newVal = div.prev().find("input").val();
+            ctrl = $(e.target).parent().parent();
+            autoComplete = div.next().next().find("input");
+            if (newVal) {
               SERVER.update2({
-                "Action": "Edit",
-                "Ctrl": dialogFrm,
-                "source": obj.Source,
-                "row": pars.row,
+                "Action": "Add",
+                "Ctrl": ctrl,
+                "source": "tblVehicleMakes",
+                "row": "",
                 DataToSave: {
-                  "id": obj.id,
-                  "Data": [newDate],
-                  "Fields": ["EndDate"],
-                  "DataTable": obj.tblUpdate
+                  "Data": [newVal],
+                  "Fields": ["Name"],
+                  "DataTable": "tblVehicleMakes"
                 },
                 CallBackAfter: function(Row) {
-                  return $("#tabLists").find("div.ui-tabs").find("li.ui-tabs-selected a").trigger("click");
+                  autoComplete.autocomplete("option").fnRefresh();
+                  return console.log(Row);
                 }
               });
-              console.log("išsaugoti " + newDate);
-              pars.me.endDate = newDate;
             }
-            return false;
-          });
-          $("#btnSaveItem").on("click", function() {
-            var DataToSave;
-            DataToSave = oCONTROLS.ValidateForm(dialogContent);
-            $.extend(pars, {
-              DataToSave: DataToSave,
-              Ctrl: $("#tabLists"),
+            return App.listAllController.set("addMakeMode", false);
+          },
+          goToEditDate: function() {
+            App.listAllController.set("dateIsEdited", true);
+            return Em.run.next(this, function() {
+              return $("#dialogEndDateInput").datepicker({
+                "minDate": "-3y",
+                "maxDate": "0"
+              }).trigger("focus");
+            });
+          },
+          saveDate: function() {
+            var newDate, obj;
+            newDate = $(event.target).parent().parent().find("input").val();
+            if (!oGLOBAL.date.isDate(newDate)) {
+              newDate = "";
+            }
+            obj = $("#dialogContent").data("ctrl");
+            SERVER.update2({
+              "Action": "Edit",
+              "Ctrl": $("#openItemDialog"),
+              "source": obj.Source,
+              "row": this.pars.row,
+              DataToSave: {
+                "id": obj.id,
+                "Data": [newDate],
+                "Fields": ["EndDate"],
+                "DataTable": obj.tblUpdate
+              },
               CallBackAfter: function(Row) {
-                dialogFrm.dialog("close");
-                if (Row.iD) {
-                  App[pars.controller][pars.emObject].findProperty("iD", Row.iD).set("docs", "(0)");
-                  return $("#tabLists").find("div.ui-tabs").find("li.ui-tabs-selected a").trigger("click");
-                }
+                return $("#tabLists").find("div.ui-tabs").find("li.ui-tabs-selected a").trigger("click");
               }
             });
-            SERVER.update2(pars);
-            return false;
-          });
-          $("#aCancelItem").on("click", function() {
-            dialogFrm.dialog("close");
-            return false;
-          });
-          if (this.templateName === "tmp_InsPolicies") {
-            this.$().tabs().css("margin", "-5px 1px 0 1px").find("ul").css("background-color", "#505860");
-          }
-          return oCONTROLS.UpdatableForm(dialogContent, pars.row);
-        },
-        width: 800,
-        templateName: 'dialog-content'
-      }).append();
+            console.log("išsaugoti " + newDate);
+            this.pars.me.endDate = newDate;
+            return App.listAllController.set("dateIsEdited", false).set("endDate", newDate);
+          },
+          didInsertElement: function() {
+            var categoryOpts, dialogContent, dialogFrm, groupID, me, name, refID;
+            categoryOpts = false;
+            this._super();
+            dialogFrm = $("#openItemDialog");
+            dialogContent = $("#dialogContent");
+            me = this;
+            if (pars.emObject === "vehicles" || pars.source === "proc_Vehicles") {
+              name = "TP " + pars.row.make + ", " + pars.row.model + ", " + pars.row.plate + " dokumentai";
+              categoryOpts = {
+                showCategories: [
+                  {
+                    iD: 4,
+                    name: name
+                  }
+                ],
+                vehicles: [
+                  {
+                    iD: pars.row.iD,
+                    title: name
+                  }
+                ]
+              };
+            }
+            if (pars.emObject === "drivers" || pars.source === "proc_Drivers") {
+              name = "Vairuotojo '" + pars.row.firstName + " " + pars.row.lastName + "' dokumentai";
+              categoryOpts = {
+                showCategories: [
+                  {
+                    iD: 3,
+                    name: name
+                  }
+                ],
+                driver: {
+                  iD: pars.row.iD,
+                  title: name
+                }
+              };
+            }
+            if (categoryOpts) {
+              dialogFrm.find("div.uploadDocsContainer").UploadFiles({
+                categoryOpts: categoryOpts,
+                showPhoto: false,
+                docsController: "dialogDocController"
+              });
+              refID = pars.row.iD;
+              groupID = pars.emObject === "vehicles" ? 4 : 3;
+              App.dialogDocController.setDocs(refID, groupID);
+              this.removeOnCloseView = Em.View.create(docsViewOpts).appendTo("#dialoguploadDocsContainer");
+            }
+            $("#btnSaveItem").on("click", function() {
+              var DataToSave;
+              DataToSave = oCONTROLS.ValidateForm(dialogContent);
+              $.extend(pars, {
+                DataToSave: DataToSave,
+                Ctrl: $("#tabLists"),
+                CallBackAfter: function(Row) {
+                  dialogFrm.dialog("close");
+                  if (Row.iD) {
+                    App[pars.controller][pars.emObject].findProperty("iD", Row.iD).set("docs", "(0)");
+                    return $("#tabLists").find("div.ui-tabs").find("li.ui-tabs-selected a").trigger("click");
+                  }
+                }
+              });
+              SERVER.update2(pars);
+              return false;
+            });
+            $("#aCancelItem").on("click", function() {
+              dialogFrm.dialog("close");
+              return false;
+            });
+            if (this.templateName === "tmp_InsPolicies") {
+              this.$().tabs().css("margin", "-5px 1px 0 1px").find("ul").css("background-color", "#505860");
+            }
+            return oCONTROLS.UpdatableForm(dialogContent, pars.row);
+          },
+          width: 700,
+          templateName: 'dialog-content'
+        }).append();
+      });
     },
     addNew: function(e) {
       var pars;
@@ -158,6 +241,9 @@
     },
     edit: function(e) {
       var context, endDate, pars;
+      console.log("edit");
+      console.log(e.target);
+      console.log(e.view._context);
       context = e.view._context;
       pars = $(e.target).closest("table").next().data("ctrl");
       pars = pars ? pars : this.current;
@@ -166,9 +252,10 @@
         Action: "Edit",
         me: this
       });
-      endDate = pars.emObject === "drivers" ? pars.row.endDate : pars.row.endDate;
+      endDate = pars.row.endDate ? pars.row.endDate : "";
       this.set("endDate", endDate);
       this.set("editItem", true);
+      console.log("going to open items");
       return this.openItem(pars);
     },
     filterByField: function() {
@@ -290,9 +377,77 @@
     }
   });
 
-  MY.tabLists = {};
+  App.dialogDocController = Em.ResourceController.create({
+    refID: null,
+    groupID: null,
+    docs: [],
+    refreshDocs: function() {
+      return this.setDocs(this.refID, this.groupID);
+    },
+    setDocs: function(refID, groupID) {
+      var account, docTypes, docs, fnGetDocType, fnGetIcon, fnGetUser, url, users;
+      if (refID) {
+        this.refID = refID;
+        this.groupID = groupID;
+      } else {
+        refID = this.refID;
+        groupID = this.groupID;
+      }
+      account = oDATA.GET("userData").emData[0].account;
+      url = "Uploads/" + account;
+      users = oDATA.GET("tblUsers").emData;
+      docTypes = oDATA.GET("tblDocTypes").emData;
+      fnGetIcon = function(ext) {
+        ext = ext.slice(0, 3);
+        return "img32-doc_" + (ext === "xls" || ext === "doc" || ext === "pdf" ? ext : "unknown");
+      };
+      fnGetUser = (function(userID) {
+        var u;
+        u = users.find(function(user) {
+          return user.iD === userID;
+        });
+        return u.firstName + " " + u.surname;
+      });
+      fnGetDocType = function(typeID) {
+        return docTypes.find(function(type) {
+          return type.iD === typeID;
+        }).name;
+      };
+      docs = oDATA.GET("tblDocs").emData.filter(function(doc) {
+        return doc.refID === refID && doc.groupID === groupID;
+      }).map(function(doc) {
+        var file, user;
+        user = fnGetUser(doc.userID);
+        file = "/" + doc.iD + "." + doc.fileType;
+        return Em.Object.create({
+          docID: doc.iD,
+          hasThumb: doc.hasThumb,
+          urlThumb: url + "/Thumbs" + file,
+          urlDoc: url + file,
+          docType: fnGetDocType(doc.docTypeID),
+          description: doc.description,
+          docName: doc.docName,
+          userName: user,
+          fileDate: doc.fileDate,
+          fileName: doc.docName + "." + doc.fileType,
+          fileIcon: !doc.hasThumb ? fnGetIcon(doc.fileType) : "img32-doc_unknown",
+          docDetails: "Įkėlė " + user + " " + doc.fileDate + ", dydis - " + Math.ceil(doc.fileSize / 10000) / 100 + "Mb"
+        });
+      });
+      return this.set("docs", docs);
+    }
+  });
 
-  //@ sourceURL= /Forms/tabLists.js;
-
+  docsViewOpts = {
+    opts: null,
+    templateName: "tmpDocsView",
+    tagName: "ul",
+    classNames: ["gallery", "ui-helper-reset", "ui-helper-clearfix"],
+    controller: App.dialogDocController,
+    didInsertElement: function() {
+      this._super();
+      return this.$().data("opts", this.opts);
+    }
+  };
 
 }).call(this);
