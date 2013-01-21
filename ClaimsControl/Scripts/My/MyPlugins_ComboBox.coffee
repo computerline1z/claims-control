@@ -15,40 +15,51 @@ _create: ->
 	fnEditItem = (id,newVals) ->
 		id= parseInt(id,10)
 		Action= if (id) then "Edit" else "Add"
+		template=if (opt.Source=="proc_InsPolicies_forThisAccident") then "tmp_InsPolicies" else opt.Source.replace("proc_","tmp_")
 		pars=
-			source: opt.Source, template: opt.Source.replace("proc_","tmp_")#controllerio ir emObject reikia tik iš listAll (dėl updatinimo)
-			row: if (id) then oDATA.GET("proc_Vehicles").emData.findProperty("iD",id) else 0
+			source: opt.Source, template: template #controllerio ir emObject reikia tik iš listAll (dėl updatinimo)
+			row: if (id) then oDATA.GET(opt.Source).emData.findProperty("iD",id) else 0
 			Action: (if (id) then "Edit" else "Add")
 			newVals: if newVals then {vals:newVals,cols:opt.iText} else null#?
 			CallBackAfter:(Row)->
 				dialogFrm.dialog("close");
-				alert "fnEditItem finished!"		
+				#alert "fnEditItem finished!"		
 		App.listAllController.openItem(pars)			
-	Editable = (if (opt.Editable.Add or opt.Editable.Edit) then true else false)
+	# Editable = (if (opt.Editable.Add or opt.Editable.Edit) then true else false)
 	data = undefined
 	
 	#if(opt.Type==="List") { //Jei Type==List mapinam pagal opt.iText kitu atveju pagal Field
 	OptVal = parseInt(opt.Value, 10)
-	if opt.data then data = opt.data() else
-		data = $.map(oDATA.GET(opt.Source).emData, (a) -> 
-			#for(var i=0; i<opt.iText.length; i++) { { ret.push(a[opt.iText[i]]); } }
-			input.val a.MapArrToString(opt.iText,opt.mapWithNoCommas) if a.iD is OptVal #Idedam verte i textboxa
-			#return { id: a[0], value: a.MapArrToString(opt.iText), label: a[opt.iText[0]] };
-			id: a[opt.iVal]
-			label: a.MapArrToString(opt.iText,opt.mapWithNoCommas)
-		)
-	data[data.length] = opt.Append	if typeof opt.Append isnt "undefined" #Pridedam prie listo pvz: {Value:0, Text:"Neapdrausta"}
+	fnSetData=() -> #Gali būt naudojamas Refreshinant per fnRefresh
+		if opt.data then data = opt.data() else
+			data = $.map(oDATA.GET(opt.Source).emData, (a) -> 
+				#for(var i=0; i<opt.iText.length; i++) { { ret.push(a[opt.iText[i]]); } }
+				input.val a.MapArrToString(opt.iText,opt.mapWithNoCommas) if a.iD is OptVal #Idedam verte i textboxa
+				#return { id: a[0], value: a.MapArrToString(opt.iText), label: a[opt.iText[0]] };
+				id: a[opt.iVal]
+				label: a.MapArrToString(opt.iText,opt.mapWithNoCommas)
+			)
+		#data[data.length] = opt.Append	if typeof opt.Append isnt "undefined" #Pridedam prie listo pvz: {Value:0, Text:"Neapdrausta"}
+		if opt.Editable.Add then data[data.length]=id:-1,value:"Pridėti naują",label:"Pridėti naują"
+	fnSetData()
 	$(input).on('keyup',->$(this).parent().find("span.ui-menu-icon").remove()
 	).data("newval", opt.Value).autocomplete
 		selectFirst: opt.selectFirst
 		delay: 0
 		minLength: ((if (@options.ListType is "None") then 2 else 0))
 		autoFocus: true
+		fnRefresh: ()-> fnSetData()
 		source: (request, response) ->
 			response $.ui.autocomplete.filter(data, request.term)
 
 		select: (event, ui) ->
 			if typeof ui.item.id=="function" then ui.item.id(); return false#jei id yra funkcija executinam ir iseinam
+			
+			if ui.item.id==-1
+				if $(event.target).data("ctrl").Source=="tblVehicleMakes" then App.listAllController.set("addMakeMode",true) #modelio pridėjimas
+				else fnEditItem(0)
+				return false #čia tipo naujo itemso pridėjimas
+			
 			if $(event.srcElement).hasClass("ui-menu-icon")#paspaudimas ant controlu
 				input.data("autocomplete").fnClickOnBtn(id:ui.item.id,elm:$(event.srcElement),fromInput:false)
 				#event.stopPropagation()#event.preventDefault()				
@@ -57,7 +68,8 @@ _create: ->
 				if (!$(event.target).parent().find("span.ui-menu-icon").length&&opt.appendToList)#pridedu redagavimo controlsus jei nebuvo
 					$(event.target).parent().append(opt.appendToList)
 				if ui.item.id isnt $(this).data("newval")
-					$(this).data("newval", ui.item.id).val (if ($(this).data("ctrl").Type is "List") then ui.item.value else ui.item.label) #jeigu ne List tipo kisam viska priesingu atveju tik pirma lauka
+					#$(this).data("newval", ui.item.id).val (if ($(this).data("ctrl").Type is "List") then ui.item.value else ui.item.label) #jeigu ne List tipo kisam viska priesingu atveju tik pirma lauka
+					$(this).data("newval", ui.item.id).val (ui.item.value)
 					MY.execByName opt.fnChangeCallBack, MY, this, ui.item	if opt.fnChangeCallBack
 				if ui.item.refID #Su kategorijom naudojamas
 					$(this).data("refID", ui.item.refID)
@@ -76,13 +88,16 @@ _create: ->
 				return false
 		close: (event, ui) ->
 			return false
-			if opt.Editable.Edit #linko pridėjimas
-				t = input # (t.data("newval"))?t.data("newval").replace("0", ""):"";
-				newVal = t.data("newval")
-			opt.fnValueChanged input.data("newval"), input.val()	if opt.fnValueChanged and input.data("newval") #NewVal,NewText
+			#if opt.Editable.Edit #linko pridėjimas
+				# t = input # (t.data("newval"))?t.data("newval").replace("0", ""):"";
+				# newVal = t.data("newval")
+			# opt.fnValueChanged input.data("newval"), input.val()	if opt.fnValueChanged and input.data("newval") #NewVal,NewText
 
 		open: ->
 			#input.addClass "activeField"	unless input.hasClass("activeField")	if opt.ListType isnt "List"
+			if opt.Editable.Add
+				$('ul.ui-autocomplete:visible').find("a:last").addClass("actionLink") #Ten bus pridėti naują su id=-1
+				#$('<li class="actionLink" data-action="Add"><a href="#">Pridėti naują</a></li>').appendTo('ul.ui-autocomplete');
 			if opt.ListType is "None" or opt.ListType is "Combo"
 				acData = $(this).data("autocomplete")
 				termTemplate = "<span style=\"color:red\">%s</span>"
@@ -91,7 +106,7 @@ _create: ->
 					regex = new RegExp(acData.term, "gi")
 					me.html me.text().replace(regex, (matched) -> termTemplate.replace "%s", matched)
 		blur: ->
-			alert "nu ble"
+			alert "nu blur"
 	#-----Inicializavimas pagal parametrus-------------------------------------------------------------------------------------
 	if (opt.addNewIfNotExists)
 		input.on("blur", ->
@@ -119,14 +134,16 @@ _create: ->
 			# that._renderItemData( ul, item );
 		# )
 	
-	$(input).data("autocomplete")._renderItem = (ul, item) ->
+	# $(input).data("autocomplete")._renderItem = (ul, item) ->
 		# if opt.Editable.Add
-			# toAdd="<a "+("data-id="+item.id)+">"+item.value+opt.appendToList+"</a>"
+			# toAdd="<a data-action='Add'>Pridėti naują</a>"
+			# toAdd=	
+			# $("<li></li>").data("item.autocomplete", item).append("<a>Pridėti naują</a>").appendTo ul
 		# else
-		toAdd="<a> " + item.value + "</a>"	
-		$("<li></li>").data("item.autocomplete", item).append(toAdd).appendTo ul
+			# toAdd="<a> " + item.value + "</a>"	
+			# $("<li></li>").data("item.autocomplete", item).append(toAdd).appendTo ul
 
-	if opt.Editable.Add
+	if opt.Editable.Edit
 		id = $(this).data("newval")
 		id = (if (id) then id else 0)#onclick='alert(\"opa\"); return false;'
 		opt.appendToList="<span title='redaguoti..' class='ui-icon ui-icon-pencil ui-menu-icon'>&nbsp;</span>"
@@ -236,7 +253,8 @@ $.widget "ui.ComboBoxCategory", $.ui.ComboBox,
 	_create:() ->
 		#me=@  #vietoj opt.Source reikia naudot this.option("Source") nes prieš create dar nėra opt 
 		opts=@options;opts.element=@element;categoryOpts=opts.categoryOpts
-		emCategories=oDATA.GET("tblDocGroup").emData		
+		if categoryOpts.showCategories then emCategories=categoryOpts.showCategories
+		else emCategories=oDATA.GET("tblDocGroup").emData
 		fnGetData=()->
 			emTypes=oDATA.GET("tblDocTypes").emData;
 			$.map.call(this, emTypes, (a) ->
@@ -248,15 +266,17 @@ $.widget "ui.ComboBoxCategory", $.ui.ComboBox,
 			#categoryOpts:{accident:{iD:70,title:"Įvykio dokumentai"},driver:{iD:80,title:"Vairuotojo 'Pranas Patv' dokai"},editList:{},vehicles:[{iD,title},{iD,title}]},
 			#data:[{categoryID,id,label},{categoryID,id,label},{categoryID,id,label},{categoryID,id,label}]		
 			#console.log(opts)
-			MY.dialog=JQ.Dialog.create( #MY.dialog needed to destroyElement in ui-ember.js						
+			dialogID="dialog"+(+new Date)#kad nesipjautų dialogai
+			MY[dialogID]=JQ.Dialog.create( #MY.dialog needed to destroyElement in ui-ember.js	
+				dialogID: dialogID
 				title:"Dokumentų tipai (visi)"
-				title2: "Dokumentų tipai"	
+				title2: "Dokumentų tipai"				
 				saveData:(p)->#Msg,DataToSave,Action,row
 					Source=App.docsTypesController.docTypes; docGroupID=p.row.docGroupID 
 					# if docGroupID==2 then Source=@docTypes_accident
 					# else if docGroupID==3 then Source=@docTypes_driver
 					# else Source=@docTypes_vehicle					
-					$.extend(p,"Ctrl":$("#openItemDialog"),"source":"tblDocTypes", 
+					$.extend(p,"Ctrl":$("#"+@dialogID),"source":"tblDocTypes", 
 					CallBackAfter:(Row)->
 						# if p.Action=="Delete" then obj=Source.findProperty("iD", Row.iD); Source.removeObject(obj)
 						# else if p.Action=="Add" then Source.pushObject(Em.Object.create(Row))
@@ -290,7 +310,7 @@ $.widget "ui.ComboBoxCategory", $.ui.ComboBox,
 					input=$(e.target).prev();val=input.val();docGroupID=input.data("category-id")
 					Msg=Title:@title2,Success:"Dokumento tipas '"+val+"' pridėtas.",Error:"Nepavyko pridėt tipo '"+val+"'"
 					@saveData({DataToSave:{"Data":[val,docGroupID],"Fields":["Name","DocGroupID"],"DataTable":"tblDocTypes"},Msg:Msg,row:[val,docGroupID],Action:"Add"})
-				closeDialog: (e)-> $("#openItemDialog").dialog("close"); false
+				closeDialog: (e)-> $("#"+@dialogID).dialog("close"); false
 				width:600
 				templateName: 'tmpDocTypes'	
 			).append();

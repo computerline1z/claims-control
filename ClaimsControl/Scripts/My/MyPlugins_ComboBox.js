@@ -15,7 +15,7 @@
       addNewIfNotExists: false
     },
     _create: function() {
-      var Editable, OptVal, data, fnEditItem, id, input, opt, val;
+      var OptVal, data, fnEditItem, fnSetData, id, input, opt, val;
       input = $(this.element[0]);
       if (input.length === 0) {
         console.error("Input not found for ComboBox!");
@@ -25,44 +25,50 @@
         opt.mapWithNoCommas = true;
       }
       fnEditItem = function(id, newVals) {
-        var Action, pars;
+        var Action, pars, template;
         id = parseInt(id, 10);
         Action = id ? "Edit" : "Add";
+        template = opt.Source === "proc_InsPolicies_forThisAccident" ? "tmp_InsPolicies" : opt.Source.replace("proc_", "tmp_");
         pars = {
           source: opt.Source,
-          template: opt.Source.replace("proc_", "tmp_"),
-          row: id ? oDATA.GET("proc_Vehicles").emData.findProperty("iD", id) : 0,
+          template: template,
+          row: id ? oDATA.GET(opt.Source).emData.findProperty("iD", id) : 0,
           Action: (id ? "Edit" : "Add"),
           newVals: newVals ? {
             vals: newVals,
             cols: opt.iText
           } : null,
           CallBackAfter: function(Row) {
-            dialogFrm.dialog("close");
-            return alert("fnEditItem finished!");
+            return dialogFrm.dialog("close");
           }
         };
         return App.listAllController.openItem(pars);
       };
-      Editable = (opt.Editable.Add || opt.Editable.Edit ? true : false);
       data = void 0;
       OptVal = parseInt(opt.Value, 10);
-      if (opt.data) {
-        data = opt.data();
-      } else {
-        data = $.map(oDATA.GET(opt.Source).emData, function(a) {
-          if (a.iD === OptVal) {
-            input.val(a.MapArrToString(opt.iText, opt.mapWithNoCommas));
-          }
-          return {
-            id: a[opt.iVal],
-            label: a.MapArrToString(opt.iText, opt.mapWithNoCommas)
+      fnSetData = function() {
+        if (opt.data) {
+          data = opt.data();
+        } else {
+          data = $.map(oDATA.GET(opt.Source).emData, function(a) {
+            if (a.iD === OptVal) {
+              input.val(a.MapArrToString(opt.iText, opt.mapWithNoCommas));
+            }
+            return {
+              id: a[opt.iVal],
+              label: a.MapArrToString(opt.iText, opt.mapWithNoCommas)
+            };
+          });
+        }
+        if (opt.Editable.Add) {
+          return data[data.length] = {
+            id: -1,
+            value: "Pridėti naują",
+            label: "Pridėti naują"
           };
-        });
-      }
-      if (typeof opt.Append !== "undefined") {
-        data[data.length] = opt.Append;
-      }
+        }
+      };
+      fnSetData();
       $(input).on('keyup', function() {
         return $(this).parent().find("span.ui-menu-icon").remove();
       }).data("newval", opt.Value).autocomplete({
@@ -70,12 +76,23 @@
         delay: 0,
         minLength: (this.options.ListType === "None" ? 2 : 0),
         autoFocus: true,
+        fnRefresh: function() {
+          return fnSetData();
+        },
         source: function(request, response) {
           return response($.ui.autocomplete.filter(data, request.term));
         },
         select: function(event, ui) {
           if (typeof ui.item.id === "function") {
             ui.item.id();
+            return false;
+          }
+          if (ui.item.id === -1) {
+            if ($(event.target).data("ctrl").Source === "tblVehicleMakes") {
+              App.listAllController.set("addMakeMode", true);
+            } else {
+              fnEditItem(0);
+            }
             return false;
           }
           if ($(event.srcElement).hasClass("ui-menu-icon")) {
@@ -91,7 +108,7 @@
               $(event.target).parent().append(opt.appendToList);
             }
             if (ui.item.id !== $(this).data("newval")) {
-              $(this).data("newval", ui.item.id).val(($(this).data("ctrl").Type === "List" ? ui.item.value : ui.item.label));
+              $(this).data("newval", ui.item.id).val(ui.item.value);
               if (opt.fnChangeCallBack) {
                 MY.execByName(opt.fnChangeCallBack, MY, this, ui.item);
               }
@@ -122,18 +139,13 @@
           }
         },
         close: function(event, ui) {
-          var newVal, t;
           return false;
-          if (opt.Editable.Edit) {
-            t = input;
-            newVal = t.data("newval");
-          }
-          if (opt.fnValueChanged && input.data("newval")) {
-            return opt.fnValueChanged(input.data("newval"), input.val());
-          }
         },
         open: function() {
           var acData, termTemplate;
+          if (opt.Editable.Add) {
+            $('ul.ui-autocomplete:visible').find("a:last").addClass("actionLink");
+          }
           if (opt.ListType === "None" || opt.ListType === "Combo") {
             acData = $(this).data("autocomplete");
             termTemplate = "<span style=\"color:red\">%s</span>";
@@ -148,7 +160,7 @@
           }
         },
         blur: function() {
-          return alert("nu ble");
+          return alert("nu blur");
         }
       });
       if (opt.addNewIfNotExists) {
@@ -170,12 +182,7 @@
           type: "mouseenter"
         }), menu.element.children().first());
       });
-      $(input).data("autocomplete")._renderItem = function(ul, item) {
-        var toAdd;
-        toAdd = "<a> " + item.value + "</a>";
-        return $("<li></li>").data("item.autocomplete", item).append(toAdd).appendTo(ul);
-      };
-      if (opt.Editable.Add) {
+      if (opt.Editable.Edit) {
         id = $(this).data("newval");
         id = (id ? id : 0);
         opt.appendToList = "<span title='redaguoti..' class='ui-icon ui-icon-pencil ui-menu-icon'>&nbsp;</span>";
@@ -288,7 +295,11 @@
       opts = this.options;
       opts.element = this.element;
       categoryOpts = opts.categoryOpts;
-      emCategories = oDATA.GET("tblDocGroup").emData;
+      if (categoryOpts.showCategories) {
+        emCategories = categoryOpts.showCategories;
+      } else {
+        emCategories = oDATA.GET("tblDocGroup").emData;
+      }
       fnGetData = function() {
         var emTypes;
         emTypes = oDATA.GET("tblDocTypes").emData;
@@ -301,7 +312,10 @@
         });
       };
       editList = function(opts) {
-        return MY.dialog = JQ.Dialog.create({
+        var dialogID;
+        dialogID = "dialog" + (+(new Date));
+        return MY[dialogID] = JQ.Dialog.create({
+          dialogID: dialogID,
           title: "Dokumentų tipai (visi)",
           title2: "Dokumentų tipai",
           saveData: function(p) {
@@ -309,7 +323,7 @@
             Source = App.docsTypesController.docTypes;
             docGroupID = p.row.docGroupID;
             $.extend(p, {
-              "Ctrl": $("#openItemDialog"),
+              "Ctrl": $("#" + this.dialogID),
               "source": "tblDocTypes",
               CallBackAfter: function(Row) {
                 if (p.Action === "Edit") {
@@ -415,7 +429,7 @@
             });
           },
           closeDialog: function(e) {
-            $("#openItemDialog").dialog("close");
+            $("#" + this.dialogID).dialog("close");
             return false;
           },
           width: 600,

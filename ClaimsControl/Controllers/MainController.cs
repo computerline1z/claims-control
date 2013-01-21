@@ -22,7 +22,8 @@ namespace ClaimsControl.Controllers {
 		[HttpPost]
 		public JsonResult tabLists(string ver, bool tmp, bool obj) {
 			Repositories_Main acc = new Repositories_Main();
-			string currentVer = "5"; if (ver != currentVer) tmp = true; ver = currentVer;
+			string currentVer = "6"; if (ver != currentVer) tmp = true; ver = currentVer;
+			//tmp = true;
 			System.Diagnostics.Debug.Print("ver - " + ver + "; obj - " + obj.ToString());
 			return Json(
 				new {
@@ -63,7 +64,8 @@ namespace ClaimsControl.Controllers {
 		[HttpPost]
 		public JsonResult tabAccidents(string ver, bool tmp, bool obj) {
 			Repositories_Main acc = new Repositories_Main();
-			string currentVer = "7"; if (ver != currentVer) tmp = true; ver = currentVer;
+			string currentVer = "8"; if (ver != currentVer) tmp = true; ver = currentVer;
+			//tmp = true;
 			System.Diagnostics.Debug.Print("ver - " + ver + "; obj - " + obj.ToString());
 			return Json(
 				new {

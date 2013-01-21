@@ -22,10 +22,11 @@ App.Router = Em.Router.extend({
 			route: '/',
 			connectOutlets: function (router, context) {
 				MY.NavbarController.fnSetNewTab(router.currentState.name, 0);
-			},
-			uploadFiles:function (e){
-				oCONTROLS.fnStartUploader({title:"mano titulas"});
-			}
+				$("#divAccidentsList").find("div.col2").css("top","0");//Pataisyt šoninį stulpelį, kad būtų lygiai su viršum
+			}//,
+			//uploadFiles:function (e){
+			//	oCONTROLS.fnStartUploader({title:"mano titulas"});
+			//}
 		}),
 		tabClaims: Em.Route.extend({
 			route: '/claims',

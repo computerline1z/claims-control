@@ -93,6 +93,7 @@ namespace CC.Controllers {
 					//else
 					//   throw new Exception(errorMessage);
 				}
+
 				return Json(
 					new {
 						success = true,
@@ -102,7 +103,8 @@ namespace CC.Controllers {
 							userID = _tblDocs.UserID, docTypeID = _tblDocs.DocTypeID, refID = _tblDocs.RefID, sortNo = _tblDocs.SortNo,
 							groupID = _tblDocs.GroupID, description = _tblDocs.Description, hasThumb=_tblDocs.HasThumb, visible=true
 						},
-						tblDocsInAccidents = new { iD = _tblDocsInAccidents.ID, docID = _tblDocsInAccidents.DocID, accidentID = _tblDocsInAccidents.AccidentID }
+						tblDocsInAccidents=(_tblDocsInAccidents==null)?null:
+						new { iD = _tblDocsInAccidents.ID, docID = _tblDocsInAccidents.DocID, accidentID = _tblDocsInAccidents.AccidentID }
 					});
 
 			}

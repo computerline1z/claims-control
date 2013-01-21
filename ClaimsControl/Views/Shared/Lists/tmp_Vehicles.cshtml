@@ -1,31 +1,46 @@
-﻿<div id="dialogContent" class="inputForm container w95pr centerBlock"
+﻿@*{{log this}}
+*@<div id="dialogContent" class="inputForm container w95pr centerBlock"
 data-ctrl='{"NewRec":1,"Source":"proc_Vehicles","tblUpdate":"tblVehicles"}'>
      <div class='left w45pr'>
          <div class='ExtendIt' data-ctrl='{"Field":"TypeID","classes":"UpdateField","id":"lstTypeID","labelType":"Left"}'></div>
+				{{#if addMakeMode}}
+					<div class="ExtendIt"><label class="leftlabel"><span>Nauja markė:</span><input type="text" placeholder="Įveskite naują TP markę.."/></label></div>
+					<div style="float:right;"><button class="btn small" {{action saveAddNewMake}}>Išsaugoti</button><a href="#" class="small" {{action cancelAddNewMake}}>Atšaukti</a></div>
+				{{/if}}
          <div class='ExtendIt' data-ctrl='{"Field":"MakeID","classes":"UpdateField","id":"lstMakeID","labelType":"Left"}'></div>
          <div class='ExtendIt' data-ctrl='{"Field":"Year","classes":"UpdateField","id":"Year","labelType":"Left"}'></div>
       </div>
       <div class='right w45pr'>
          <div class='ExtendIt' data-ctrl='{"Field":"Plate","classes":"UpdateField","id":"Plate","labelType":"Left"}'></div>
          <div class='ExtendIt' data-ctrl='{"Field":"Model","classes":"UpdateField","id":"Model","labelType":"Left"}'></div>
-		{{#if this.editItem}}	
-		{{#if App.listAllController.endDate}}
-					<div style="background-color:#f74343; font-weight:bolder;" class="@*ui-corner-all*@ tr @*borderGroove*@">
-						<div class="td w70pr" style="padding:2%;color:White; font-weight:bolder;"><span class="inLine">Nebenaudojama nuo {{App.listAllController.endDate}}</span></div>
-						<div class="td w25pr" style="text-align:center;padding:2%;"><a href="#" class="inLine" style="color:White; border:none;">Keisti</a></div>
-					</div>
-		{{else}}
-					<div class="@*ui-corner-all*@ tr @*borderGroove*@">
-						<div class="td w70pr" style="padding:2%;"><input type="text" id="dialogEndDateInput" style="width:100%;" placeholder="Nebedirba nuo.."/></div>
-						<div class="td w25pr" style="text-align:center;padding:2%;"><a href="#" class="inLine">Išsaugoti</a></div>
-					</div>
+		@*ui-corner-all borderGroove*@
+
+		{{#if editItem}}
+			{{#if dateIsEdited}}
+				<div class="tr borderGroove">
+					<div class="td w70pr" style="padding:2%;"><input type="text" id="dialogEndDateInput" {{bindAttr value="endDate"}} style="width:100%;" placeholder="Nebenaudojama nuo.."/></div>
+					<div class="td w25pr" style="text-align:center;padding:2%;"><a {{action saveDate}} href="#" class="inLine">Išsaugoti</a></div>
+				</div>
+			{{else}}
+				{{#if endDate}}
+						<div style="background-color:#f74343; font-weight:bolder;" class="tr">
+							<div class="td w70pr" style="padding:2%;color:White; font-weight:bolder;"><span class="inLine">Nebenaudojama nuo {{endDate}}</span></div>
+							<div class="td w25pr" style="text-align:center;padding:2%;"><a href="#" {{action goToEditDate}} class="inLine" style="color:White; border:none;">Keisti</a></div>
+						</div>
+				{{else}}
+						<div class="tr borderGroove">
+							<a href="#" class="inLine" {{action goToEditDate}} style="margin:0;width:100%;text-align:center;">Pažymėkite jei transporto priemonė nebenaudojama</a>
+						</div>
+				{{/if}}
+			{{/if}}
 		{{/if}}
-		{{/if}}      
+
 		</div>
 </div>
 <center style="margin: 2em 0;"><button id="btnSaveItem" class="btn">Išsaugoti</button><a style="margin-left: 2%;" id="aCancelItem" href="#">Atšaukti</a></center>
-<div class="DocsRow">
+@*<div class="DocsRow">
     <strong>Dokumentai:</strong>
     <img src='@Url.Content("~/Content/images/grapke.png")' alt="" style="margin: auto 0.5em auto 3em" />
     <a id="#AttachListDocs" href="#">Prisegti naują dokumentą</a>
-</div>
+</div>*@
+<div class="uploadDocsContainer" id="dialoguploadDocsContainer"></div>

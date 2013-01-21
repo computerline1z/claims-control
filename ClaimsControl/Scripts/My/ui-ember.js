@@ -99,16 +99,31 @@ JQ.Widget = Ember.Mixin.create({
 	}
 });
 JQ.Dialog = Ember.View.extend(JQ.Widget, {
+	//dialogo originalumui palaikyti sukuriam id kuris naudojamas ir kaip id ir MY[id]:
+	//dialogID="dialog"+(+new Date)#kad nesipjautų dialogai
+	//MY[dialogID]=JQ.Dialog.create( #MY.dialog needed to destroyElement in ui-ember.js	
+		//dialogID: dialogID
+	init: function() {
+		this._super(); if (this.dialogID) {this.elementId=this.dialogID}//dialogID reikalingas kad nesipjautų ir naudojamas tiek su MY tiek elementId
+	},
 	elementId: 'openItemDialog',
 	uiType: 'dialog',
+	didInsertElement: function() {
+		this._super(); 
+		this.$().parent().css("top","10%");
+	},
 	//uiOptions: 'autoOpen height width close title buttons'.w(), //attributes have to be declared there
-	uiOptions: 'autoOpen height width close title resizable modal buttons'.w(), //attributes have to be declared there
-	autoOpen: true, width: 400, resizable: false, modal:true,
+	uiOptions: 'autoOpen width close title resizable modal position buttons'.w(), //attributes have to be declared there
+	autoOpen: true, width: 400, resizable: false, modal:true, position: 'top',
 	close: function () {
 		//this.get('ui').dialog('destroy'); // has no method getS
 		$(this).dialog('destroy');
-		$(this).remove();
-		if (MY.dialog)MY.dialog.remove();
+		$(this).remove(); var id=$(this).attr("id")
+		var removeDialog =(id!== 'openItemDialog') ?MY[id]:MY.dialog;
+		if (removeDialog){
+			if(removeDialog.removeOnCloseView){removeDialog.removeOnCloseView.remove();}
+			removeDialog.remove();
+		}
 	},			
 	open: function () {
 		//this.get('ui').dialog('open'); //Object [object Object] has no method 'dialog' 

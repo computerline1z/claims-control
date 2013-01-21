@@ -2,24 +2,79 @@
 `var w=window,$ = w.jQuery, App=w.App, Em=w.Em`
 
 #`var $ = window.jQuery, App=w.App, Em=w.Em, oGLOBAL=w.oGLOBAL, oDATA=w.oDATA, oCONTROLS=w.oCONTROLS, MY=w.MY`
+App.create_docsTypesController=(categoryOpts)->(
+	App.docsTypesController = Em.ResourceController.create(	
+		#docsTypesControllerOpt:
+		init: ()-> 
+			@_super(); me = this; docTypes = oDATA.GET("tblDocTypes").emData; c = []; @.set("docTypes",docTypes) #docTypes naudojam sarašųredagavimui
+			categoryOpts=if categoryOpts then categoryOpts else @categoryOpts 
+			if categoryOpts #šito tik dokumentų medžiui reikia (content)
+				@set("categoryOpts",categoryOpts); catOpts=categoryOpts; cats = oDATA.GET("tblDocGroup").emData;
+				if catOpts.driver then cats.findProperty("iD",3).set("name",catOpts.driver.title)
+				cats.forEach (catItem, i) ->
+					newItem =
+						categoryId: catItem.iD, title: catItem.name
+					i = catItem.iD
+					console.log "catItem.iD: " + i + ", catItem.name: " + catItem.name
+					newItem.isTree = "isTree" if i isnt 1 and i isnt 5 #Nuotraukom ir nepriskirtom nedarom medzio
+					newItem.isGroup = "isGroup"
+					newItem.isSelectable = true	if i isnt 4 #masinom bus uz masinas medis, tai negalim pasirinkt
+					if i is 4
+						newItem.items = catOpts.vehicles.map((item) ->
+							isGroup: "isGroup", refID: item.iD, categoryId: 4, title: item.title, isTree: "isTree", isSelectable: true
+						)
+						newItem.items.forEach (vehicle) ->
+							vehicle.items = me.setDocTypes(docTypes, catItem.iD, vehicle.refID)#automobiliam atskiriam pagal refID
+					else
+						newItem.items = me.setDocTypes(docTypes, catItem.iD)
+					c[c.length] = newItem
+				@set "content", c
+
+		setDocTypes: (docTypes, groupID, refID) ->
+			fnMap
+			if (refID) then fnMap=(item) -> (categoryId: item.iD, title: item.name, refID: refID) #atskiriam pagal refID
+			else fnMap=(item) -> (categoryId: item.iD, title: item.name)
+			docTypes.filter((type) -> type.docGroupID is groupID).map(fnMap)
+		###################### dokumentų tipai ( naudojami redagavimui) App.docsTypesController #####################
+		content:[],docTypes:[]
+		filterTypes:(->
+			console.log("Start filterTypes fn")
+			dt=@.get("docTypes")
+			@set("docTypes_accident",dt.filterProperty("docGroupID",2);)
+			@set("docTypes_driver",dt.filterProperty("docGroupID",3);)
+			@set("docTypes_vehicle",dt.filterProperty("docGroupID",4);)
+		#).observes("docTypes.@each")
+		).observes("docTypes.length")
+
+		  # duration: function() {
+		# var duration = this.get('content.duration'),
+			 # minutes = Math.floor(duration / 60),
+			 # seconds = duration % 60;
+
+		# return [minutes, seconds].join(':');
+		# }.property('content.duration')	
+	)
+)
+
 
 $.widget "ui.Tree",	
 options:
 	treeId:"dynamicTree", docViewForTreeId:"docViewForTree", formTemplate:"tmpUploadForm", docsUpdateCallBack: null,
 	categoryOpts: {}, # <- kategorijos
 	docsTypesController:"docsTypesController",#-jame(content) sudedamos grupės ir tipai, pagal jį paišomas medis
-	TreeDocController:"TreeDocController"#-jame(docs) pagal dokumentus paišomi dokumentai
+	TreeDocController:"treeDocController"#-jame(docs) pagal dokumentus paišomi dokumentai
 _create: ->	
 	# $('<div id="'+@options.treeId+'" style="float: left;border-right: 1px solid #ddd; width: 20%"></div>'+
 	# '<div id="'+@options.docViewForTree+'" style="float:left; padding:10px;width:70%;"></div>').appendTo(@.element)
 	$('<table width="100%;"><tr style="vertical-align:top"><td style="width:28em"><div id="'+@options.treeId+'" style="border-right: 1px solid #ddd;"></div></td>'+
 	'<td style="vertical-align:top;padding:10px;"><div id="'+@options.docViewForTreeId+'"></div></td></tr></table>').appendTo(@.element)
 	
-	#App.DocInfo = Em.Object.extend(docId: null, categoryId: null) if not App.DocInfo
-	@docsTypesControllerOpt.categoryOpts=@options.categoryOpts
-	
-	App[@options.docsTypesController] = Em.ResourceController.create(@docsTypesControllerOpt)
-	
+	# @docsTypesControllerOpt.categoryOpts=@options.categoryOpts	
+	# App[@options.docsTypesController] = Em.ResourceController.create(@docsTypesControllerOpt)
+	#Kontrolerio, kuris turi dokumentų tipus medziui ir dokumentų redagavimui sukūrimas
+	if App.docsTypesController then if not App.docsTypesController.content.length then App.docsTypesController.set("categoryOpts",@options.categoryOpts).init()#atnaujinam content, kuris naudojamas medžiui
+	else App.create_docsTypesController(@options.categoryOpts)
+		
 	App.DocTreeView = Em.View.extend(@DocTreeViewOpt) #Paišo medžio šakas
 	@TreeViewOpts.opts=@options
 	@TreeDocControllerOpts.opts=@options
@@ -30,55 +85,6 @@ _create: ->
 	@docViewForTreeOpts.controller = App[@options.TreeDocController]
 	@docViewForTreeOpts.opts = @options
 	Em.View.create(@docViewForTreeOpts).appendTo "#"+@options.docViewForTreeId
-docsTypesControllerOpt:
-	init: -> 
-		@_super(); me = this; catOpts=me.categoryOpts
-		cats = oDATA.GET("tblDocGroup").emData; docTypes = oDATA.GET("tblDocTypes").emData; c = []; @.set("docTypes",docTypes)
-		if catOpts.driver then cats.findProperty("iD",3).set("name",catOpts.driver.title)
-		cats.forEach (catItem, i) ->
-			newItem =
-				categoryId: catItem.iD, title: catItem.name
-			i = catItem.iD
-			console.log "catItem.iD: " + i + ", catItem.name: " + catItem.name
-			newItem.isTree = "isTree" if i isnt 1 and i isnt 5 #Nuotraukom ir nepriskirtom nedarom medzio
-			newItem.isGroup = "isGroup"
-			newItem.isSelectable = true	if i isnt 4 #masinom bus uz masinas medis, tai negalim pasirinkt
-			if i is 4
-				newItem.items = catOpts.vehicles.map((item) ->
-					isGroup: "isGroup", refID: item.iD, categoryId: 4, title: item.title, isTree: "isTree", isSelectable: true
-				)
-				newItem.items.forEach (vehicle) ->
-					vehicle.items = me.setDocTypes(docTypes, catItem.iD, vehicle.refID)#automobiliam atskiriam pagal refID
-			else
-				newItem.items = me.setDocTypes(docTypes, catItem.iD)
-			c[c.length] = newItem
-		@set "content", c
-		console.log("new content:")
-		console.log(c)
-	setDocTypes: (docTypes, groupID, refID) ->
-		fnMap
-		if (refID) then fnMap=(item) -> (categoryId: item.iD, title: item.name, refID: refID) #atskiriam pagal refID
-		else fnMap=(item) -> (categoryId: item.iD, title: item.name)
-		docTypes.filter((type) -> type.docGroupID is groupID).map(fnMap)
-	###################### dokumentų tipai ( naudojami redagavimui) App.docsTypesController #####################
-	content:[],docTypes:[]
-	filterTypes:(->
-		console.log("Start filterTypes fn")
-		dt=@.get("docTypes")
-		@set("docTypes_accident",dt.filterProperty("docGroupID",2);)
-		@set("docTypes_driver",dt.filterProperty("docGroupID",3);)
-		@set("docTypes_vehicle",dt.filterProperty("docGroupID",4);)
-	#).observes("docTypes.@each")
-	).observes("docTypes.length")
-
-	
-	  # duration: function() {
-    # var duration = this.get('content.duration'),
-         # minutes = Math.floor(duration / 60),
-         # seconds = duration % 60;
-
-    # return [minutes, seconds].join(':');
-  # }.property('content.duration')
   
 DocTreeViewOpt:
 	templateName: "tmpDocsNodes", tagName: "", opts: null,
@@ -117,7 +123,7 @@ TreeViewOpts :
 	tagName: ""
 	classNames: []
 	getDocs: (event) ->		
-		App.TreeDocController.set "selectedCategoryId", event.view.bindingContext.categoryId
+		App.treeDocController.set "selectedCategoryId", event.view.bindingContext.categoryId
 		$("#"+@opts.treeId).find("span").removeClass "ui-state-highlight"
 		#dynamicTree @_context={categoryId,isSelectable,isTree,items,title} ir t.p. bindingContext
 		t = $(event.target); (if t.is("li") then t.find("span:first") else t.closest("span")).addClass("ui-state-highlight");
@@ -147,12 +153,14 @@ TreeViewOpts :
 		isPhoto=if (ctx.isGroup and ctx.categoryId==1) then true else false 
 			
 		showDocs=currentDocs.map((doc)-> 
-			user=fnGetUser(doc.userID);file="/"+doc.iD+"."+doc.fileType
-			docID:doc.iD,
-			hasThumb:doc.hasThumb, urlThumb:url+"/Thumbs"+file, urlDoc:url+file,docType:fnGetDocType(doc.docTypeID),description:doc.description,
-			docName:doc.docName,userName:user,fileDate:doc.fileDate,fileName:doc.docName+"."+doc.fileType
-			fileIcon: if not doc.hasThumb then fnGetIcon(doc.fileType) else "img32-doc_unknown"
-			docDetails: if isPhoto then "" else "Įkėlė "+user+" "+doc.fileDate+", dydis - "+Math.ceil(doc.fileSize/10000)/100+"Mb"
+			Em.Object.create(
+				user=fnGetUser(doc.userID);file="/"+doc.iD+"."+doc.fileType
+				docID:doc.iD,
+				hasThumb:doc.hasThumb, urlThumb:url+"/Thumbs"+file, urlDoc:url+file,docType:fnGetDocType(doc.docTypeID),description:doc.description,
+				docName:doc.docName,userName:user,fileDate:doc.fileDate,fileName:doc.docName+"."+doc.fileType
+				fileIcon: if not doc.hasThumb then fnGetIcon(doc.fileType) else "img32-doc_unknown"
+				docDetails: if isPhoto then "" else "Įkėlė "+user+" "+doc.fileDate+", dydis - "+Math.ceil(doc.fileSize/10000)/100+"Mb"
+			)
 		)
 		
 		App[@opts.TreeDocController].set("isPhoto", isPhoto)
@@ -248,21 +256,3 @@ docViewForTreeOpts:
 				# alert "Updated order for CategoryId " + App[opts.TreeDocController].get("selectedCategoryId") + " is =\n" + order.join("\n")
 		#$("#gallery").disableSelection()	
 		this.$().disableSelection()
-	deleteDoc: (e)->
-		c=e.context; controller=e.view.controller; opts=controller.opts; li=$(e.target).closest("li")
-		oCONTROLS.dialog.Confirm({title:"Dokumento pašalinimas",msg:"Ištrinti dokumentą '"+e.context.docName+"'?"}, ()-> 
-			SERVER.update2("Action":"Delete","Ctrl":$("#"+opts.docViewForTreeId),"source":"tblDocs",#"row":doc,
-			DataToSave:{"id":c.docID, "DataTable":"tblDocs"},
-			Msg: { Title: "Duokumento pašalinimas", Success: "Dokumentas '"+c.docName+"' pašalintas.", Error: "Nepavyko pašalinti dokumento '"+c.docName+"'." },
-			CallBackAfter:(Row)->
-				obj=controller.AllDocs.findProperty("iD", c.docID)
-				controller.AllDocs.removeObject(obj)
-				li.fadeOut()
-				#doc.set("docTypeID", newdocTypeID).set("groupID", newGroupID) nereikia
-				# if opts.categoryOpts.accident
-					# accidentID=opts.categoryOpts.accident.iD
-					# oDATA.GET("tblDocsInAccidents").emData.filter((item)->(item.docID==docID and item.accidentID==opts.categoryOpts.accident))
-				#docElement.fadeOut() reiktu ant erroro atstatyt bus ko gero CallBack:{Error:function(){}}
-			)		
-		)
-		

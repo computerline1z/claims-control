@@ -76,6 +76,7 @@ var oCONTROLS = {
 		//      }
 		$(frm).find('div.ExtendIt, span.ExtendIt').each(function () {
 			var e = $(this), eOpt = e.data('ctrl'), eHTML = '', ix = -1, data_ctrl = {};
+			if (!eOpt) {return true;}
 			//log("-------------------------------");
 			//log("Elementas:"+e[0].tagName+"; id:"+e.attr("id")+"; klase:"+e.attr("class")+"; e.data('ctrl'):"+typeof e.data("ctrl"));
 			if (typeof eOpt.Control !== "undefined") {

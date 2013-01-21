@@ -574,7 +574,13 @@
     didInsertElement: function() {
       this._super();
       return Em.run.next(function() {
-        $("#sidePanel").closest("div.col2").scrollelement();
+        var c;
+        c = $("#sidePanel").closest("div.col2");
+        if ($.browser.msie) {
+          c.scrollelement();
+        } else {
+          c.jScroll();
+        }
         $("#chkOpen").buttonset().on("click", function(e) {
           var chk, newVal;
           chk = $(e.target).closest("label").prev();

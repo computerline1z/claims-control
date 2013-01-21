@@ -400,7 +400,8 @@ App.SidePanelView = Em.View.extend(
 	didInsertElement: ()->
 		@_super(); 	
 		Em.run.next(()->
-			$("#sidePanel").closest("div.col2").scrollelement()			
+			#$("#sidePanel").closest("div.col2").scrollelement()
+			c=$("#sidePanel").closest("div.col2");if $.browser.msie then c.scrollelement() else c.jScroll()
 			$("#chkOpen").buttonset().on("click",(e)->
 				chk=$(e.target).closest("label").prev();
 				newVal=if (chk.next().hasClass("ui-state-active")) then chk.attr("id") else null #Jei aktyvus priskiriam
