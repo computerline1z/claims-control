@@ -64,7 +64,7 @@ namespace ClaimsControl.Controllers {
 		[HttpPost]
 		public JsonResult tabAccidents(string ver, bool tmp, bool obj) {
 			Repositories_Main acc = new Repositories_Main();
-			string currentVer = "8"; if (ver != currentVer) tmp = true; ver = currentVer;
+			string currentVer = "11"; if (ver != currentVer) tmp = true; ver = currentVer;
 			//tmp = true;
 			System.Diagnostics.Debug.Print("ver - " + ver + "; obj - " + obj.ToString());
 			return Json(

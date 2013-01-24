@@ -233,7 +233,9 @@
         isPhoto = ctx.isGroup && ctx.categoryId === 1 ? true : false;
         showDocs = currentDocs.map(function(doc) {
           var file, user;
-          return Em.Object.create(user = fnGetUser(doc.userID), file = "/" + doc.iD + "." + doc.fileType, {
+          user = fnGetUser(doc.userID);
+          file = "/" + doc.iD + "." + doc.fileType;
+          return Em.Object.create({
             docID: doc.iD,
             hasThumb: doc.hasThumb,
             urlThumb: url + "/Thumbs" + file,

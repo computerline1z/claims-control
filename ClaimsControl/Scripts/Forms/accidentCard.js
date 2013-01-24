@@ -202,8 +202,10 @@ oGLOBAL.mapFn = {
 										oGLOBAL.map.addOverlay(marker);
 										oGLOBAL.mapFn.SetAddress(latlng);  //Ikisa i oGlobal.map.SetAddress
 										var M = GEvent.addListener(marker, "click", function () { oGLOBAL.map.openInfoWindow(latlng, oGLOBAL.map.SetAddress); }); //ignore jslint
-										$('#btnEditMap').attr('title', 'Keisti įvykio vietą').html('Keisti').data("Caption", "Change");
+										$('#btnEditMap').attr('title', 'Keisti įvykio vietą').html('Keisti').data("caption", "Change");
 										$('#ConfirmNewMapData').remove();
+										var newRow = resp.ResponseMsg.Ext.replace(/#\|#\|/g,":::").split("|#|"); newRow[13]=newRow[13].replace(/:::/g,"#|#|") //atkeičiam atgal
+										App.accidentsController.get("setNewVal").call(App.accidentsController, {newVal:newRow,toAppend:false,fieldsToInt:[0, 1, 5, 6, 7, 8]})[0] //kuriuos reikia paverst integeriais
 									}
 									}, Msg: { Title: "Įvykio vietos keitimas", Success: "Įvykio vieta pakeista.", Error: "Nepavyko pakeist įvykio vietos." }
 								});
@@ -258,13 +260,13 @@ oGLOBAL.mapFn = {
 				var M = GEvent.addListener(marker, "click", function () { oGLOBAL.map.openInfoWindow(latlng, oGLOBAL.map.SetAddress); });
 				$('#btnEditMap').click(function () {
 					var t = $(this);
-					if (t.data("Caption") === "Change") {
+					if (t.data("caption") === "Change") {
 						EditMap();
-						t.attr('title', 'Atšaukti įvykio vietos keitimą').html('Atšaukti').data("Caption", "Cancel");
+						t.attr('title', 'Atšaukti įvykio vietos keitimą').html('Atšaukti').data("caption", "Cancel");
 					}
 					else {
-						GEvent.removeListener(oGLOBAL.map.EventMapclicked);
-						t.attr('title', 'Keisti įvykio vietą').html('Keisti').data("Caption", "Change");
+						if(oGLOBAL.map.EventMapclicked){ GEvent.removeListener(oGLOBAL.map.EventMapclicked);}
+						t.attr('title', 'Keisti įvykio vietą').html('Keisti').data("caption", "Change");
 						$('#txtPlace').val(oGLOBAL.map.SetAddress);
 						if ($('#ConfirmNewMapData').length) { $('#ConfirmNewMapData').remove(); }
 						oGLOBAL.map.openInfoWindow(latlng, oGLOBAL.map.SetAddress);

@@ -1,19 +1,24 @@
 ﻿@*{{log this}}*@
 {{#if controller.isPhoto}}
+	<div id="gallery" data-toggle="modal-gallery" data-target="#modal-gallery">
 	{{#each controller.docs}}
-
+		{{log this}}
 		<li class="ui-widget-content ui-corner-tr photo" {{bindAttr data-doc-id="docID" }}>
 			<div>
 			{{#if hasThumb}}
-				<img {{bindAttr src="urlThumb" alt="thumb"}}/>
+				<a data-gallery="gallery" {{bindAttr href="urlDoc" }}>
+				<img {{bindAttr src="urlThumb"}}  alt="thumb"/>
+				</a>
 			{{else}}
-				<i class="img32-doc_unknown"></i>
+				@*<i class="img32-doc_unknown"></i>*@
+				<i {{bindAttr class="fileIcon" }} ></i>
 			{{/if}}
 			</div>
 					<a {{bindAttr href="urlDoc" }} target="_blank">{{fileName}}</a>
 					<p>{{userName}}&nbsp;{{fileDate}}</p>
 		</li>
 	{{/each}}
+	</div>
 {{else}}
 		{{#each controller.docs}}<li class="docs" {{bindAttr data-doc-id="docID" }}>
 		{{log this}}
