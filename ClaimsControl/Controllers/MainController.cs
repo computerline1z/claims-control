@@ -64,7 +64,7 @@ namespace ClaimsControl.Controllers {
 		[HttpPost]
 		public JsonResult tabAccidents(string ver, bool tmp, bool obj) {
 			Repositories_Main acc = new Repositories_Main();
-			string currentVer = "11"; if (ver != currentVer) tmp = true; ver = currentVer;
+			string currentVer = "12"; if (ver != currentVer) tmp = true; ver = currentVer;
 			//tmp = true;
 			System.Diagnostics.Debug.Print("ver - " + ver + "; obj - " + obj.ToString());
 			return Json(
@@ -89,7 +89,8 @@ namespace ClaimsControl.Controllers {
 						tblDocsInAccidents = acc.GetJSON_tblDocsInAccidents(),
 						tblDocTypes = acc.GetJSON_tblDocType(),
 						tblDocGroup = acc.GetJSON_tblDocGroup(),
-						userData = acc.GetJSON_userData()
+						userData = acc.GetJSON_userData(),
+						tblLanguages = acc.GetJSON_tblLanguages()
 					},
 					templates = (tmp) ? new {
 						tmpClaimEdit = RenderPartialViewToString("Accidents/tmpClaimEdit"),

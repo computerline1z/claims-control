@@ -133,7 +133,7 @@ namespace ClaimsControl.Controllers {
 			string messageBody = MailHelper.BuildMailMessage(this.HttpContext, "lt", userName, email, String.Empty,
 																			 url, "template");
 
-			MailHelper.SendMailMessage(email, String.Empty, String.Empty, "Slaptažodio keitimas Žalų valdymo sistemoje", messageBody);
+			MailHelper.SendMailMessage(email, String.Empty, String.Empty, "ClaimsControl slaptažodžio atnaujinimas", messageBody);
 		}
 
 		// **************************************

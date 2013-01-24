@@ -29,7 +29,7 @@ namespace CC.Services.Implementation
                 from lng in _dc.tblLanguages
                 select new {
                    Value = lng.ID,
-                   Text = lng.Language
+                   Text = lng.Name
                 };
             foreach (var lngItem in languages)
             {
@@ -59,7 +59,7 @@ namespace CC.Services.Implementation
             {
                 iLanguageId = (
                     from acc in _dc.tblLanguages
-                    where acc.Language == this._defaultLanguage
+                    where acc.Name == this._defaultLanguage
                     select acc.ID
                     ).FirstOrDefault();
             }
