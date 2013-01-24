@@ -30,6 +30,7 @@ namespace DataModels.DataSources {
             Body = body,
             IsBodyHtml = true,
             Priority = MailPriority.Normal,
+				From = new MailAddress("do-not-replay@claimscontrol.com", "ClaimsControl")
          };
 
          mMailMessage.To.Add(new MailAddress(to));

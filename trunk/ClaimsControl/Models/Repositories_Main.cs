@@ -663,11 +663,11 @@ namespace CC.Models {
 				new { FName = "Email",Type="Email",Validity="require().nonHtml().match(\"email\").maxLength(35)"},//3 'email'
 				new { FName = "IsAdmin",Type="Boolean"},//3
 				new { FName = "IsActive",Type="Boolean"},//3
-				new { FName = "LanguageID",List=new{Source="tblCountries",ListType="List", iVal="iD",iText=new object []{"name"}}},
+				new { FName = "LanguageID",List=new{Source="tblLanguages",ListType="List", iVal="iD",iText=new object []{"name"}}},
 				new { FName = "Position",Type="String"},
 				new { FName = "Phone",Type="String"},
 				new { FName = "MobPhone",Type="String"},
-				new { FName = "EMailForIns",Type="Email",Validity="require().nonHtml().match(\"email\").maxLength(35)"}
+				new { FName = "EMailForIns",Type="Email",Validity="nonHtml().match(\"email\").maxLength(35)"}
 			}; JSON.Cols = Cols;
 			JSON.Config = new { tblUpdate = "tblUsers", Msg = new { AddNew = "Naujo vartotojo sukūrimas", Edit = "Vartotojo redagavimas", Delete = "Ištrinti vartotoją", GenName = "Vartotojas", GenNameWhat = "Vartotoją", ListName = "Vartotojų sąrašas" } };
 			JSON.Grid = new {
@@ -909,7 +909,28 @@ namespace CC.Models {
 			};
 			return JSON;
 		}
-
+		public jsonArrays GetJSON_tblLanguages() {
+			jsonArrays JSON = new jsonArrays();
+			//JSON.Data = from c in dc.proc_Clients(LoginData.LoginID, null)
+			JSON.Data = from d in dc.tblLanguages
+							select new object[] {
+				d.ID,//0
+				d.Name//1
+			};
+			object[] Cols ={//NotEditable=true // Unique=true// LenMax/LenEqual/LenMin:10
+				//Date,DateLess,DateNoLess,Time,String
+				new { FName = "ID"},//0
+				new { FName = "Name",Type="String", LenMax=50,IsUnique=new object[]{1},Validity="require().nonHtml().maxLength(50)"}
+			}; JSON.Cols = Cols;
+			//JSON.Config = new { Controler = "VehicleMakes", tblUpdate = "tblVehicleMakes", Msg = new { AddNew = "Naujos tr. priemonių markės sukūrimas", Edit = "Tr. priemonių markės redagavimas", Delete = "Ištrinti tr. priemonių markę", GenName = "Tr. priemonės markė", GenNameWhat = "transporto priemonę", ListName = "Tr. priemonių sąrašas" } };
+			JSON.Grid = new {
+				aoColumns = new object[]{
+					new {bVisible=false},//0//ID////DefaultUpdate=0
+					new {sTitle="Name"}
+				}//, aaSorting = new object[] { new object[] { 3, "asc" } },//???
+			};
+			return JSON;
+		}
 		public jsonArrays GetJSON_tblClaims() {
 			jsonArrays JSON = new jsonArrays();
 			JSON.Data = from d in dc.tblClaims join a in dc.tblAccidents on d.AccidentID equals a.ID
@@ -964,6 +985,7 @@ namespace CC.Models {
 			};
 			JSON.Grid = new {
 				aoColumns = new object[]{
+				new {bVisible=false},//0
 				new {sTitle="Žalos tipas"},//1//ClaimTypeID////DefaultUpdate=0
 				new {bVisible=false},//2//AccidentID////DefaultUpdate=0
 				new {sTitle="Polisas"},//3//InsPolicyID////DefaultUpdate=0
