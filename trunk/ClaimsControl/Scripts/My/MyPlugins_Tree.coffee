@@ -153,8 +153,8 @@ TreeViewOpts :
 		isPhoto=if (ctx.isGroup and ctx.categoryId==1) then true else false 
 			
 		showDocs=currentDocs.map((doc)-> 
-			Em.Object.create(
-				user=fnGetUser(doc.userID);file="/"+doc.iD+"."+doc.fileType
+			user=fnGetUser(doc.userID);file="/"+doc.iD+"."+doc.fileType
+			Em.Object.create(				
 				docID:doc.iD,
 				hasThumb:doc.hasThumb, urlThumb:url+"/Thumbs"+file, urlDoc:url+file,docType:fnGetDocType(doc.docTypeID),description:doc.description,
 				docName:doc.docName,userName:user,fileDate:doc.fileDate,fileName:doc.docName+"."+doc.fileType

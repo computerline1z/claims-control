@@ -164,17 +164,7 @@ App.SelectedClaimView = Em.View.extend(
 				CallBack:
 					Success: (resp) ->
 						newRow = resp.ResponseMsg.Ext.replace(/#\|#\|/g,":::").split("|#|"); newRow[13]=newRow[13].replace(/:::/g,"#|#|") #atkeičiam atgal
-						#newRow = (resp.ResponseMsg.Ext).split("|#|")
-						#if newRow.length==18
-						#	claims_c=newRow.slice(13,17).join("|#|"); claims_c2=newRow[17]; newRow=newRow.slice(0,13)
-						#	newRow[13]=claims_c; newRow[14]=claims_c2
-						#setNewVal: function ({newVal:??,toAppend:true/false, fieldsToInt:??}) {
-						#toAppend:false - nes net ir žalos pridėjimas tai tik accidento pakeitimas (jos visos ten susirašo
 						App.accidentsController.get("setNewVal").call(App.accidentsController, {newVal:newRow,toAppend:false,fieldsToInt:[0, 1, 5, 6, 7, 8]})[0] #kuriuos reikia paverst integeriais
-						#var newContext = App.accidentsController.findProperty("iD",parseInt(newRow[0], 10))
-						#var newView = App.AccidentView.create({
-						#    content:newContext,
-						#    templateName: "tmpAccidentRow"
 						tr = $("#tabAccidentsTable").find("div.selectedAccident") #.empty()
 						#newView.appendTo(tr)
 						#Em.View.create({
