@@ -113,12 +113,12 @@
           false;
           return {
             fnCancel: function() {
-              return $("#tabAccidentsTable").find("div.selectedAccident").trigger("click");
+              return $("#accidentsTable").find("div.selectedAccident").trigger("click");
             }
           };
         },
         fnCancel: function() {
-          return $("#tabAccidentsTable").find("div.selectedAccident").trigger("click");
+          return $("#accidentsTable").find("div.selectedAccident").trigger("click");
         }
       };
       oCONTROLS.Set_Updatable_HTML.mega_select_list(d);
@@ -243,7 +243,7 @@
                 toAppend: false,
                 fieldsToInt: [0, 1, 5, 6, 7, 8]
               })[0];
-              tr = $("#tabAccidentsTable").find("div.selectedAccident");
+              tr = $("#accidentsTable").find("div.selectedAccident");
               return tr.trigger("click");
             }
           },
@@ -253,7 +253,7 @@
       }
     },
     CancelSaveClaim: function(e) {
-      return $("#tabAccidentsTable").find("div.selectedAccident").trigger("click");
+      return $("#accidentsTable").find("div.selectedAccident").trigger("click");
     },
     DeleteClaim: function(e) {
       var context, oData;
@@ -287,7 +287,7 @@
                 fieldsToInt: [0, 1, 5, 6, 7, 8]
               })[0];
               oData.Data.removeRowByID(parseInt(updData.DataToSave.id, 10));
-              return $("#tabAccidentsTable").find("div.selectedAccident").trigger("click");
+              return $("#accidentsTable").find("div.selectedAccident").trigger("click");
             }
           }
         });
@@ -399,7 +399,7 @@
       this.filterItems(filterName, filterValue, thisObj);
       return Em.run.next(function() {
         var tbl;
-        tbl = $('#tabAccidentsTable');
+        tbl = $('#accidentsTable');
         if (!tbl.find('div.selectedAccident').length) {
           return tbl.find('div.dividers').remove();
         }

@@ -123,6 +123,7 @@ oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 		oGLOBAL.AccidentForm = $("#AccidentForm").data("ctrl"); //NewRec id Lat Lng
 		//oGLOBAL.mapFn.loadGoogleMapScript(oGLOBAL.mapFn.loadGMap);
 		oGLOBAL.mapFn.loadGMap();
+		 oGLOBAL.mapFn.fnSetAddress($('#txtPlace').html());
 	};
 	return false;
 	//*****************************************************************************************************************************************
@@ -165,6 +166,11 @@ oGLOBAL.mapFn = {
 		}
 		return ((oGLOBAL.AccidentForm.Address) ? (oGLOBAL.AccidentForm.Address + ', ') : "") + oGLOBAL.AccidentForm.District + ', ' + oGLOBAL.AccidentForm.Country;
 	},
+	fnSetAddress: function(place){
+		var p=oGLOBAL.AccidentForm; place="<a target='_blank' href='https://maps.google.com/maps?q="+p.Lat+","+p.Lng+"("+place+")'>"+place+"<a>"
+		$('#txtPlace').html(place);
+		$("#divSearchMap").css("display","none");
+	},
 	Mapclicked: function (overlay, latlng) {
 		"use strict";
 		if (latlng) {
@@ -176,8 +182,7 @@ oGLOBAL.mapFn = {
 				} else {
 					var place = oGLOBAL.mapFn.fnGetAddress(addresses.Placemark);
 					oGLOBAL.map.openInfoWindow(latlng, place);
-					$('#txtPlace').html(place);
-
+					oGLOBAL.mapFn.fnSetAddress(place);
 					if (!oGLOBAL.AccidentForm.NewRec) {//.css('display', 'inline')
 						if (!$('#ConfirmNewMapData').length) {
 							//btn=$('#btnEditMap').clone(); //.attr("display", "inline-block");
@@ -244,7 +249,8 @@ oGLOBAL.mapFn = {
 	loadGMap: function () {
 		var EditMap = function () {
 			oGLOBAL.map.EventMapclicked = GEvent.addListener(oGLOBAL.map, "click", oGLOBAL.mapFn.Mapclicked);
-			oGLOBAL.map.openInfoWindow(oGLOBAL.map.getCenter(), "Spragtelėkit žemėlapyje pažymėti įvykio vietą!");
+			var latlng=oGLOBAL.map.getCenter(); latlng.y=latlng.y-0.3;latlng.Xd=latlng.y;//Dėl atsiradusio paieškos lauko paslenkam žemiau
+			oGLOBAL.map.openInfoWindow(latlng, "Suraskite ir pažymėkite įvykio vietą žemėlapyje");//"Spragtelėkit žemėlapyje pažymėti įvykio vietą!");
 		};
 		if (GBrowserIsCompatible()) {
 			//alert(oGLOBAL.AccidentForm.NewRec); alert(oGLOBAL.AccidentForm.Lat); alert(oGLOBAL.AccidentForm.Lng);
@@ -259,7 +265,8 @@ oGLOBAL.mapFn = {
 				oGLOBAL.mapFn.SetAddress(latlng);  //Ikisa i oGlobal.map.SetAddress
 				var M = GEvent.addListener(marker, "click", function () { oGLOBAL.map.openInfoWindow(latlng, oGLOBAL.map.SetAddress); });
 				$('#btnEditMap').click(function () {
-					var t = $(this);
+					var t = $(this); $("#divSearchMap").toggle();
+					//$("#divSearchMap").css("display","block");		
 					if (t.data("caption") === "Change") {
 						EditMap();
 						t.attr('title', 'Atšaukti įvykio vietos keitimą').html('Atšaukti').data("caption", "Cancel");
@@ -267,7 +274,8 @@ oGLOBAL.mapFn = {
 					else {
 						if(oGLOBAL.map.EventMapclicked){ GEvent.removeListener(oGLOBAL.map.EventMapclicked);}
 						t.attr('title', 'Keisti įvykio vietą').html('Keisti').data("caption", "Change");
-						$('#txtPlace').val(oGLOBAL.map.SetAddress);
+						//$('#txtPlace').val(oGLOBAL.map.SetAddress);
+						oGLOBAL.mapFn.fnSetAddress(oGLOBAL.map.SetAddress);
 						if ($('#ConfirmNewMapData').length) { $('#ConfirmNewMapData').remove(); }
 						oGLOBAL.map.openInfoWindow(latlng, oGLOBAL.map.SetAddress);
 					}

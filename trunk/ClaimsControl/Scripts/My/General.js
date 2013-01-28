@@ -15,6 +15,10 @@
 					return;
 				}
 			}
+			if ($this.is("body")){
+				if  ($this.height()<$(document).height()) {$this.height($(document).height());}
+			}
+			
 			if (opts.img === "spinnerBig.gif") { opts.height = 66; opts.width = 66; }
 
 			var pos = $this.offset();
@@ -31,8 +35,9 @@
 				l = pos.left + w + 10 + 'px';
 			} else if (opts.position == 'left') {
 				l = pos.left - opts.width - 10 + 'px';
-			} else {
-				l = pos.left + Math.round(.5 * w) - Math.round(.5 * opts.width) + 'px';
+			} else {//center
+				var add=0; if ($this.is("body")){var lmargin=$("body").css("margin-left");add=parseInt(lmargin.replace("px",""),10);}
+				l = add+pos.left + Math.round(.5 * w) - Math.round(.5 * opts.width) + 'px';
 			}
 			// call start callback
 			opts.onStart.call(this);

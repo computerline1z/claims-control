@@ -96,8 +96,8 @@ App.SelectedAccidentView = Em.View.extend(
 				MY.tabAccidents.NewClaimView.appendTo("#divNewClaimCard")
 				Em.run.next(() -> $("#newClaimDetailsContent").slideDown() )
 				false
-				fnCancel: () -> $("#tabAccidentsTable").find("div.selectedAccident").trigger("click")# $(nTr).find('td').html(CancelNewClaimHtml)
-			fnCancel: () -> $("#tabAccidentsTable").find("div.selectedAccident").trigger("click") #$(nTr).find('td').html(CancelNewClaimHtml)
+				fnCancel: () -> $("#accidentsTable").find("div.selectedAccident").trigger("click")# $(nTr).find('td').html(CancelNewClaimHtml)
+			fnCancel: () -> $("#accidentsTable").find("div.selectedAccident").trigger("click") #$(nTr).find('td').html(CancelNewClaimHtml)
 		oCONTROLS.Set_Updatable_HTML.mega_select_list(d)
 		false
 	elementId: "AccDetailsContent"
@@ -165,7 +165,7 @@ App.SelectedClaimView = Em.View.extend(
 					Success: (resp) ->
 						newRow = resp.ResponseMsg.Ext.replace(/#\|#\|/g,":::").split("|#|"); newRow[13]=newRow[13].replace(/:::/g,"#|#|") #atkeičiam atgal
 						App.accidentsController.get("setNewVal").call(App.accidentsController, {newVal:newRow,toAppend:false,fieldsToInt:[0, 1, 5, 6, 7, 8]})[0] #kuriuos reikia paverst integeriais
-						tr = $("#tabAccidentsTable").find("div.selectedAccident") #.empty()
+						tr = $("#accidentsTable").find("div.selectedAccident") #.empty()
 						#newView.appendTo(tr)
 						#Em.View.create({
 						#    personName: 'Dr. Tobias Fünke',
@@ -176,7 +176,7 @@ App.SelectedClaimView = Em.View.extend(
 			SERVER.update(opt)
 	CancelSaveClaim: (e) ->
 		#oCONTROLS.UpdatableForm_reset("#divClaimCard")
-		$("#tabAccidentsTable").find("div.selectedAccident").trigger("click")
+		$("#accidentsTable").find("div.selectedAccident").trigger("click")
 	DeleteClaim: (e) ->
 		oData=oDATA.GET("tblClaims"); context=e.context.rowContext;
 		console.log("Žalos ID: "+context.Claims2[0])
@@ -192,7 +192,7 @@ App.SelectedClaimView = Em.View.extend(
 					App.accidentsController.get("setNewVal").call(App.accidentsController, {newVal:newRow,toAppend:false,fieldsToInt:[0, 1, 5, 6, 7, 8]})[0] #kuriuos reikia paverst integeriais
 					oData.Data.removeRowByID(parseInt(updData.DataToSave.id,10)) #ištrinam ir iš tblClaims jau ištrintą žalą					
 					#oData.Data.removeRowByID(p.id) data.removeRowByProperty("id",p.id)
-					$("#tabAccidentsTable").find("div.selectedAccident").trigger("click")
+					$("#accidentsTable").find("div.selectedAccident").trigger("click")
 			)
 	templateName: 'tmpClaimEdit'
 	#elementId: "ClaimDetailsContent",
@@ -268,7 +268,7 @@ App.accidentsController = Em.ResourceController.create(
 			@panelFilterIsActive=if (@chkDocs||@chkOpen||@chkData||@chkClaim) then true else false
 			@filterByPanel=@get_filterByPanel() #generate new function
 		@filterItems(filterName,filterValue,thisObj);		
-		Em.run.next(-> tbl=$('#tabAccidentsTable'); if (not tbl.find('div.selectedAccident').length) then tbl.find('div.dividers').remove())
+		Em.run.next(-> tbl=$('#accidentsTable'); if (not tbl.find('div.selectedAccident').length) then tbl.find('div.dividers').remove())
 	).observes('chkDocs','chkOpen','chkData','chkClaim','filterValue')
 	#claims_C: "0#|47-1#|TP valdytojų civilinė atsakomybė#|BRU641#|Ergo Lietuva#|1520{{TGH-152 Man 160 Jonas Jonaitis}}"
 	#claims_C2: "175#|4#|2#|500#|'bb10'#|0#|1#|0#|0"

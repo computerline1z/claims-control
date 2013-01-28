@@ -1,7 +1,14 @@
 ﻿{{log this}}
 <h2 style="margin: 15px; display: inline-block">
 	{{#if this.myInfo}}Mano informacija</h2>
-	{{else}}Naudotojo informacija{{#compare this.content.length "==" "0"}}(naujas vartotojas){{/compare}}</h2><a {{action goToAdminTab}} href="#">(atgal į Administravimą)</a>
+	{{else}}
+		{{#compare this.content.length "==" "0"}}
+			Naujas naudotojas
+		{{else}}
+			{{#each this.content}}@*tik tas vienas realiai*@
+				{{firstName}}&nbsp;{{surname}}
+			{{/each}}
+		{{/compare}}</h2><a {{action goToAdminTab}} href="#">(atgal į Administravimą)</a>
 	{{/if}}
 
 
@@ -43,9 +50,10 @@
 					{{else}}
 						<a class="medium" style="line-height:40px;" {{action sendUserPasswordForm}} href="#">Atstatyti slaptažodį</a>
 					{{/if}}		
-					<p id="savePasswordNote" style="color:#B94A48;display:inline-block"></p>			
+					<p id="savePasswordNote" style="color:#B94A48;display:inline-block"></p>	
+					{{updatableField Field="isActive" classes="w48pr" labelType="Left"}}		
 				{{/if}}
-				{{updatableField Field="isActive" classes="w48pr" labelType="Left"}}
+				
 			</div>
 		{{else}}
 				<div class="row">
