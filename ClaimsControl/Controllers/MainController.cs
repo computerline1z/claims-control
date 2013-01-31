@@ -64,7 +64,7 @@ namespace ClaimsControl.Controllers {
 		[HttpPost]
 		public JsonResult tabAccidents(string ver, bool tmp, bool obj) {
 			Repositories_Main acc = new Repositories_Main();
-			string currentVer = "13"; if (ver != currentVer) tmp = true; ver = currentVer;
+			string currentVer = "14"; if (ver != currentVer) tmp = true; ver = currentVer;
 			//tmp = true;
 			System.Diagnostics.Debug.Print("ver - " + ver + "; obj - " + obj.ToString());
 			return Json(
@@ -107,6 +107,7 @@ namespace ClaimsControl.Controllers {
 						tmp_Drivers = RenderPartialViewToString("Lists/tmp_Drivers"),
 						tmp_InsPolicies = RenderPartialViewToString("Lists/tmp_InsPolicies"),
 						tmp_Vehicles = RenderPartialViewToString("Lists/tmp_Vehicles"),
+						tmpVehicleMakes = RenderPartialViewToString("Lists/tmpVehicleMakes"),
 						tmpUserCard = RenderPartialViewToString("Admin/tmpUserCard"),
 						tmpChangeUsrPass = RenderPartialViewToString("Admin/tmpChangeUsrPass")						
 					} : new {
@@ -124,6 +125,7 @@ namespace ClaimsControl.Controllers {
 						tmp_Drivers = "",
 						tmp_InsPolicies = "",
 						tmp_Vehicles = "",
+						tmpVehicleMakes = "",
 						tmpUserCard = "",
 						tmpChangeUsrPass = RenderPartialViewToString("Admin/tmpChangeUsrPass")
 					}

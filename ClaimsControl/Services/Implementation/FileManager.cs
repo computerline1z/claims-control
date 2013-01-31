@@ -19,6 +19,8 @@ namespace CC.Services.Implementation {
 		//public string VirtualThumbnailDirectory { get; private set; }
 		public int ThumbnailSize { get; private set; }
 
+		public string storedFileName="";//debuginimui
+
 		[Inject]
 		public FileManager(dbDataContext dc, string virtualUploadDirectory, string uploadDirectory,
 			//string virtualThumbnailDirectory, string thumbnailDirectory, 
@@ -40,9 +42,10 @@ namespace CC.Services.Implementation {
 			return rzlt;
 		}
 
-		public bool StoreFile(string account, string fileName, byte[] content) {
+		public bool StoreFile(string fileName, byte[] content) {
 			Func<bool, string> createDirectory = delegate(bool upload) {
-				string aDirectory = GetIndividualDirectory(account, upload);
+
+				string aDirectory = GetIndividualDirectory(upload);
 				return Path.Combine(aDirectory, fileName);
 			};
 
@@ -76,7 +79,7 @@ namespace CC.Services.Implementation {
 		}
 
 		public tblDoc StoreTblDocs(FileDescriptor descriptor, out tblDocsInAccident _tblDocsInAccident, out string errorMessage, byte[] buffer) {
-			tblDoc record; _tblDocsInAccident = null;
+			tblDoc record; _tblDocsInAccident = null; int Row = 0; string fileName="";
 
 			try {
 				// Tranzakcija būtina tam, kad niekas nepakeistų SortNo, kol operacija neužbaigta.
@@ -101,14 +104,33 @@ namespace CC.Services.Implementation {
 
 				_dc.tblDocs.InsertOnSubmit(record);
 				_dc.SubmitChanges();
+			}
+			catch (Exception e) {
+				_dc.Transaction.Rollback();
+				_tblDocsInAccident = null;
+				errorMessage = e.Message + " (StoreTblDocs1)";
+				record = null;
+				return record;
+			}
+			try {
+
 				//----------------------------------------------------------------------------
 				//pabandom išsaugot thumbą
-				string fileName = record.ID+"."+record.FileType;
-				bool HasThumb = StoreFile(UserData.Account, fileName, buffer);
+				fileName = record.ID + "." + record.FileType; Row++;
+				MyEventLog.AddEvent("fileName: " + fileName, "StoreTblDocs", 999);
+				bool HasThumb = StoreFile(fileName, buffer); Row++;
 				if (HasThumb) { record.HasThumb = HasThumb; }
 				_dc.SubmitChanges();
 				//----------------------------------------------------------------------------
-
+			}
+			catch (Exception e) {
+				_dc.Transaction.Rollback();
+				_tblDocsInAccident = null;
+				errorMessage = e.Message + " (StoreTblDocs2), fileName:" + ((fileName == null) ? fileName : "-") + ", Row:" + Row + ", storedFileName:" + storedFileName;
+				record = null;
+				return record;
+			}
+			try {
 				if (descriptor.AccidentID.HasValue) {//Ikišam dokumento priklausymo Accidentui ryšį į lentelę
 					_tblDocsInAccident = new tblDocsInAccident() {
 						DocID = record.ID, AccidentID = descriptor.AccidentID.Value
@@ -122,8 +144,9 @@ namespace CC.Services.Implementation {
 			catch (Exception e) {
 				_dc.Transaction.Rollback();
 				_tblDocsInAccident = null;
-				errorMessage = e.Message;
+				errorMessage = e.Message + " (StoreTblDocs3)";
 				record = null;
+				return record;
 			}
 			finally {
 				_dc.Transaction = null;
@@ -155,18 +178,23 @@ namespace CC.Services.Implementation {
 		//    }
 		//}
 
-		public string GetIndividualDirectory(string account, bool uploadDirectory) {
+		public string GetIndividualDirectory(bool uploadDirectory) {
 			//string rzlt = Path.Combine(uploadDirectory ? this.UploadDirectory : this.ThumbnailDirectory, account);
-			string rzlt = Path.Combine(this.UploadDirectory, account);
+			MyEventLog.AddEvent("this.UploadDirectory: " + this.UploadDirectory, "GetIndividualDirectory3", 999);
+
+			string rzlt = Path.Combine(this.UploadDirectory, UserData.DocsPath);
+
+			MyEventLog.AddEvent("rzlt: " + rzlt, "GetIndividualDirectory4", 999);
 			if (!Directory.Exists(rzlt)) Directory.CreateDirectory(rzlt);
 			if (!uploadDirectory) { rzlt += "\\Thumbs"; }
 			if (!Directory.Exists(rzlt)) Directory.CreateDirectory(rzlt);
+			MyEventLog.AddEvent("final rzlt: " + rzlt, "GetIndividualDirectory5", 999);
 			return rzlt;
 		}
 
-		public string GetIndividualVirtualDirectory(string account, bool uploadDirectory) {
+		public string GetIndividualVirtualDirectory(bool uploadDirectory) {
 			//string rzlt = String.Format("{0}/{1}/{2}", uploadDirectory ? this.VirtualUploadDirectory : this.VirtualThumbnailDirectory, account, userName);
-			return String.Format("{0}/{1}{2}", this.VirtualUploadDirectory, account, (uploadDirectory) ? "" : "/Thumbs");
+			return String.Format("{0}/{1}{2}", this.VirtualUploadDirectory, UserData.DocsPath, (uploadDirectory) ? "" : "/Thumbs");
 		}
 
 		#endregion

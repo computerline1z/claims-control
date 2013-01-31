@@ -40,7 +40,7 @@ _create: ->
 				label: a.MapArrToString(opt.iText,opt.mapWithNoCommas)
 			)
 		#data[data.length] = opt.Append	if typeof opt.Append isnt "undefined" #Pridedam prie listo pvz: {Value:0, Text:"Neapdrausta"}
-		if opt.Editable.Add then data[data.length]=id:-1,value:"Pridėti naują",label:"Pridėti naują"
+		if opt.Editable.Add then data[data.length]=id:-1,value:"Redaguoti sąrašą",label:"Redaguoti sąrašą"
 	fnSetData()
 	$(input).on('keyup',->$(this).parent().find("span.ui-menu-icon").remove()
 	).data("newval", opt.Value).autocomplete
@@ -56,7 +56,7 @@ _create: ->
 			if typeof ui.item.id=="function" then ui.item.id(); return false#jei id yra funkcija executinam ir iseinam
 			
 			if ui.item.id==-1
-				if $(event.target).data("ctrl").Source=="tblVehicleMakes" then App.listAllController.set("addMakeMode",true) #modelio pridėjimas
+				if $(event.target).data("ctrl").Source=="tblVehicleMakes" then App.listAllController.addVehicleMake(input, event) #App.listAllController.set("addMakeMode",true) #modelio pridėjimas
 				else fnEditItem(0)
 				return false #čia tipo naujo itemso pridėjimas
 			

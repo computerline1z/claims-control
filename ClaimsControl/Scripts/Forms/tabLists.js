@@ -47,9 +47,143 @@
     editItem: "",
     filterValue: "",
     addMakeMode: "",
+    VehicleMakes: [],
+    editVehicleMake: false,
     valueDidChange: (function() {
       return this.filterItems();
     }).observes('filterValue'),
+    addVehicleMake: function(input, e) {
+      var dialogID;
+      if (this.VehicleMakes.length === 0) {
+        this.set("VehicleMakes", oDATA.GET("tblVehicleMakes").emData);
+      }
+      dialogID = "dialog" + (+(new Date));
+      return MY[dialogID] = JQ.Dialog.create({
+        input: input,
+        dialogID: dialogID,
+        title: "Transporto priemonių markės",
+        saveData: function(p) {
+          var Source, me;
+          Source = App.listAllController.VehicleMakes;
+          me = this;
+          $.extend(p, {
+            "Ctrl": $("#" + this.dialogID),
+            "source": "tblVehicleMakes",
+            CallBackAfter: function(Row) {
+              if (p.Action === "Edit") {
+                Source.findProperty("iD", Row.iD).set("edit", false);
+              }
+              if (p.Action === "Add") {
+                MY[me.dialogID].set("addVehicleMake", false);
+              }
+              /* opts ???????? čia reikia isimint elementa kurį mes updatinsim
+              */
+
+              me.input.autocomplete("option").fnRefresh();
+              console.log("New Row");
+              return console.log(Row);
+            }
+          });
+          SERVER.update2(p);
+          return false;
+        },
+        editVehicleMake: function(e) {
+          return e.context.set("edit", e.context.name);
+        },
+        cancelVehicleMake: function(e) {
+          return e.context.set("edit", false);
+        },
+        saveVehicleMake: function(e) {
+          /* reikia žiūrėt
+          */
+
+          var Msg, make, row, val;
+          make = e.context.name;
+          input = $(e.target).prev();
+          val = input.val();
+          row = e.context;
+          row.name = val;
+          if (make.length > 0) {
+            Msg = {
+              Title: this.title,
+              Success: "TP markė '" + make + "' pakeista.",
+              Error: "Nepavyko pakeisti '" + make + "' markės."
+            };
+            return this.saveData({
+              DataToSave: {
+                "id": row.iD,
+                "Data": [row.name],
+                "Fields": ["Name"],
+                "DataTable": "tblVehicleMakes"
+              },
+              Msg: Msg,
+              row: row,
+              Action: "Edit"
+            });
+          } else {
+            return e.context.set("name", e.context.edit).set("edit", false);
+          }
+        },
+        deleteVehicleMake: function(e) {
+          var make, me;
+          make = e.context.name;
+          me = this;
+          return oCONTROLS.dialog.Confirm({
+            title: this.title,
+            msg: "Ištrinti markę '" + make + "'?"
+          }, function() {
+            var Msg, row;
+            Msg = {
+              Title: me.title,
+              Success: "TP markė '" + make + "' ištrinta.",
+              Error: "Nepavyko ištrinti markės '" + make + "'."
+            };
+            row = e.context;
+            return me.saveData({
+              DataToSave: {
+                "id": row.iD,
+                "DataTable": "tblVehicleMakes"
+              },
+              Msg: Msg,
+              row: row,
+              Action: "Delete"
+            });
+          });
+        },
+        addNewVehicleMake: function(e) {
+          return this.set("addVehicleMake", true);
+        },
+        cancelNewVehicleMake: function(e) {
+          return this.set("addVehicleMake", false);
+        },
+        saveNewVehicleMake: function(e) {
+          var Msg, val;
+          input = $(e.target).prev();
+          val = input.val();
+          Msg = {
+            Title: this.title2,
+            Success: "Dokumento tipas '" + val + "' pridėtas.",
+            Error: "Nepavyko pridėt tipo '" + val + "'"
+          };
+          return this.saveData({
+            DataToSave: {
+              "Data": [val],
+              "Fields": ["Name"],
+              "DataTable": "tblVehicleMakes"
+            },
+            Msg: Msg,
+            row: [val],
+            Action: "Add"
+          });
+        },
+        closeDialog: function(e) {
+          $("#" + this.dialogID).dialog("close");
+          return false;
+        },
+        width: 600,
+        templateName: 'tmpVehicleMakes'
+      }).append();
+    },
     openItem: function(pars) {
       var config, title;
       this.set("dateIsEdited", false);
@@ -76,7 +210,6 @@
           pars: pars,
           init: function() {
             this._super();
-            console.log("init");
             this.templateName = pars.template;
             return this.title = title;
           },
@@ -385,7 +518,7 @@
       return this.setDocs(this.refID, this.groupID);
     },
     setDocs: function(refID, groupID) {
-      var account, docTypes, docs, fnGetDocType, fnGetIcon, fnGetUser, url, users;
+    	var docsPath, docTypes, docs, fnGetDocType, fnGetIcon, fnGetUser, url, users;
       if (refID) {
         this.refID = refID;
         this.groupID = groupID;
@@ -393,8 +526,8 @@
         refID = this.refID;
         groupID = this.groupID;
       }
-      account = oDATA.GET("userData").emData[0].account;
-      url = "Uploads/" + account;
+       docsPath = oDATA.GET("userData").emData[0].docsPath;
+       url = "Uploads/" + docsPath;
       users = oDATA.GET("tblUsers").emData;
       docTypes = oDATA.GET("tblDocTypes").emData;
       fnGetIcon = function(ext) {

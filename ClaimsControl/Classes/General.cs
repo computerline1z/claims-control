@@ -4,8 +4,35 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
+using System.Diagnostics;
+using System.Security;
 
 namespace CC.Classes {
+	public class MyEventLog {
+		private static void CreateSource(string src, EventLog ELog) {
+			try {
+				if (!EventLog.SourceExists(src)) { EventLog.CreateEventSource(src, "ClaimsControl"); }
+				ELog.Source = src;
+			}
+			catch (SecurityException) { }
+
+		}
+		public static void AddEvent(string Message, string src, int eventID) {
+			EventLog EL = new EventLog(); CreateSource(src, EL);
+			if (EL.Source.Length > 0) {
+				EL.WriteEntry(Message, EventLogEntryType.Information, eventID);
+			}
+		}
+
+		public static void AddException(string Message, string src, int eventID) {
+			EventLog EL = new EventLog(); CreateSource(src, EL);
+			EL.WriteEntry(Message, EventLogEntryType.Error, eventID);
+		}
+		public static void AddWarning(string Message, string src, int eventID) {
+			EventLog EL = new EventLog(); CreateSource(src, EL);
+			EL.WriteEntry(Message, EventLogEntryType.Warning, eventID);
+		}
+	}
 
    public abstract class ToStringController : Controller {
 

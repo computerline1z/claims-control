@@ -144,7 +144,7 @@ TreeViewOpts :
 		currentDocs=App[@opts.TreeDocController].AllDocs.filter(fnFilter)	
 		#currentDocs=@docs.filter(fnFilter)	
 		currentDocs.forEach (doc) -> console.log "iD: " + doc.iD + ", docName: " + doc.docName + ", docTypeID:" + doc.docTypeID + ", groupID:" + doc.groupID	
-		account=oDATA.GET("userData").emData[0].account; url="Uploads/"+account; users=oDATA.GET("tblUsers").emData; docTypes=oDATA.GET("tblDocTypes").emData
+		docsPath=oDATA.GET("userData").emData[0].docsPath; url="Uploads/"+docsPath; users=oDATA.GET("tblUsers").emData; docTypes=oDATA.GET("tblDocTypes").emData
 		
 		fnGetIcon=(ext) -> ext=ext.slice(0,3); return "img32-doc_" + (if ext=="xls"||ext=="doc"||ext=="pdf" then ext else "unknown" )
 		fnGetUser=((userID) -> u=users.find((user)->user.iD==userID); u.firstName+" "+u.surname;)		
@@ -237,6 +237,10 @@ docViewForTreeOpts:
 	opts: null #opcijos
 	templateName: "tmpDocsView"
 	tagName: "ul"
+	attributeBindings: ["data-toggle","data-target"]
+	"data-toggle": "modal-gallery"
+	"data-target": "#modal-gallery"
+	#data-toggle="modal-gallery" data-target="#modal-gallery"
 	#elementId: "gallery"
 	classNames: ["gallery", "ui-helper-reset", "ui-helper-clearfix"]
 	#controller: App[@opts.TreeDocController]

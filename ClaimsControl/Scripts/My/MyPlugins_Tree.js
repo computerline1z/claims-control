@@ -210,8 +210,8 @@
         currentDocs.forEach(function(doc) {
           return console.log("iD: " + doc.iD + ", docName: " + doc.docName + ", docTypeID:" + doc.docTypeID + ", groupID:" + doc.groupID);
         });
-        account = oDATA.GET("userData").emData[0].account;
-        url = "Uploads/" + account;
+         docsPath = oDATA.GET("userData").emData[0].docsPath;
+         url = "Uploads/" + docsPath;
         users = oDATA.GET("tblUsers").emData;
         docTypes = oDATA.GET("tblDocTypes").emData;
         fnGetIcon = function(ext) {
@@ -373,6 +373,9 @@
       opts: null,
       templateName: "tmpDocsView",
       tagName: "ul",
+      attributeBindings: ["data-toggle", "data-target"],
+      "data-toggle": "modal-gallery",
+      "data-target": "#modal-gallery",
       classNames: ["gallery", "ui-helper-reset", "ui-helper-clearfix"],
       didInsertElement: function() {
         this.$().data("opts", this.opts);
