@@ -82,16 +82,8 @@ namespace CC.Controllers {
 					FileDescriptor descriptor = FileDescriptor.CreateFileDescriptor(model, buffer.Length, UserData.UserID);
 					_tblDocs = this._flManager.StoreTblDocs(descriptor, out _tblDocsInAccidents, out errorMessage, buffer);
 					//recordId = _tblDocs.ID;
-					//if (String.IsNullOrEmpty(errorMessage)) {
-					//   string fileName = String.Format(_fileNameFormat, _tblDocs.ID) + "." + _tblDocs.FileType;
-					//   withThumb = _flManager.StoreFile(UserData.Account, fileName, buffer);
-						//url = String.Format("{0}/{1}", this._flManager.GetIndividualVirtualDirectory(UserData.Account, true), fileName);
-						//this._flManager.UpdateFileName(_tblDocs, relativeUri, out errorMessage);
-						//if (!String.IsNullOrEmpty(errorMessage))
-						//   throw new Exception(errorMessage);
-					//}
-					//else
-					//   throw new Exception(errorMessage);
+					if (!String.IsNullOrEmpty(errorMessage)) { throw new Exception(errorMessage); }
+						
 				}
 
 				return Json(

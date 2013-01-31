@@ -91,13 +91,15 @@ namespace CC.Models {
             UserData.Account,//0
             UserData.AccountID,//1
 				UserData.UserID,
-				UserData.UserName
+				UserData.UserName,
+				UserData.DocsPath
             }};
 			object[] Cols ={
             new { FName = "Account"},//0
             new { FName = "AccountID"},//1
             new { FName = "UserID"},//1
-            new { FName = "UserName"}//1
+            new { FName = "UserName"},//1
+				new { FName = "DocsPath"},//1
             }; JSON.Cols = Cols;
 			//JSON.Config = new { Controler = "Main", tblUpdate = "tblDocsInAccidents" };
 			return JSON;

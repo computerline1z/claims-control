@@ -300,25 +300,59 @@
     url: "Accident/AccidentsList",
     tableName: "proc_Accidents",
     fields: {},
-    animationSpeed: 400,
+    animationSpeedEnd: 400,
+    animationSpeedStart: 400,
     setAnimationSpeed: function(e) {
-      var n;
+      var n, onSpeed;
       n = parseInt($(e.target).val(), 10);
+      onSpeed = $(e.target).data("action") === "start" ? "animationSpeedStart" : "animationSpeedEnd";
       if ($.isNumeric(n)) {
-        return this.set("animationSpeed", n);
+        return this.set(onSpeed, n);
       } else {
         return alert("turi būti skaičius");
       }
     },
-    removeClaims: function(AddWr) {
-      AddWr.parent().find("div.dividers").remove();
+    removeClaims: function(AddWr, e, tr, parent) {
+      var dividers, me;
+      dividers = AddWr.parent().find("div.dividers");
+      dividers.slideUp(App.accidentsController.animationSpeedEnd, function() {
+        return dividers.remove();
+      });
       if (AddWr.length > 0) {
         MY.tabAccidents.AcccidentdetailsView.remove();
-        return AddWr.remove();
+        me = this;
+        return AddWr.slideUp(App.accidentsController.animationSpeedEnd, function() {
+          if (tr.hasClass("selectedAccident")) {
+            return tr.removeClass("selectedAccident");
+          } else {
+            parent.find("div.selectedAccident").removeClass("selectedAccident");
+            AddWr.remove();
+            return me.addClaim(e, tr);
+          }
+        });
       } else if (MY.tabAccidents.AcccidentdetailsView) {
         MY.tabAccidents.AcccidentdetailsView.destroy();
         MY.tabAccidents.AcccidentdetailsView = null;
         return $('div.dividers').remove();
+      } else {
+        return this.addClaim(e, tr);
+      }
+    },
+    addClaim: function(e, tr) {
+      if (!tr.hasClass("selectedAccident")) {
+        tr.addClass("selectedAccident");
+      }
+      MY.tabAccidents.AcccidentdetailsView = App.SelectedAccidentView.create(e.context);
+      tr.after("<div id='AccDetailsWraper'></div><div class='dividers'></div>").prev().before("<div class='dividers'></div>");
+      MY.tabAccidents.AcccidentdetailsView.appendTo("#AccDetailsWraper");
+      if (e.isTrigger) {
+        return Em.run.next(function() {
+          return $("#AccDetailsContent, div.dividers").show();
+        });
+      } else {
+        return Em.run.next(function() {
+          return $("#AccDetailsContent, div.dividers").slideDown(App.accidentsController.animationSpeedStart);
+        });
       }
     },
     tbodyClick: function(e) {
@@ -329,27 +363,12 @@
       parent = tr.parent();
       if (tr.hasClass("selectedAccident") && !e.isTrigger) {
         if (parent.find("div.dividers").length) {
-          this.removeClaims(AddWr);
+          this.removeClaims(AddWr, e, tr, parent);
           return false;
+          parent.find("div.selectedAccident").removeClass("selectedAccident");
         }
       } else {
-        parent.find("div.selectedAccident").removeClass("selectedAccident");
-        this.removeClaims(AddWr);
-      }
-      if (!tr.hasClass("selectedAccident")) {
-        tr.addClass("selectedAccident");
-      }
-      MY.tabAccidents.AcccidentdetailsView = App.SelectedAccidentView.create(e.context);
-      tr.after("<div id='AccDetailsWraper'></div><div class='dividers'></div>").prev().before("<div class='dividers'></div>");
-      MY.tabAccidents.AcccidentdetailsView.appendTo("#AccDetailsWraper");
-      if (e.isTrigger) {
-        Em.run.next(function() {
-          return $("#AccDetailsContent, div.dividers").show();
-        });
-      } else {
-        Em.run.next(function() {
-          return $("#AccDetailsContent, div.dividers").slideDown(App.accidentsController.animationSpeed);
-        });
+        this.removeClaims(AddWr, e, tr, parent);
       }
       return false;
     },

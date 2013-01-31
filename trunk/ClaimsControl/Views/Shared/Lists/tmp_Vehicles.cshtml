@@ -3,10 +3,10 @@
 data-ctrl='{"NewRec":1,"Source":"proc_Vehicles","tblUpdate":"tblVehicles"}'>
      <div class='left w45pr'>
          <div class='ExtendIt' data-ctrl='{"Field":"TypeID","classes":"UpdateField","id":"lstTypeID","labelType":"Left"}'></div>
-				{{#if addMakeMode}}
+@*				{{#if addMakeMode}}
 					<div class="ExtendIt"><label class="leftlabel"><span>Nauja markė:</span><input type="text" placeholder="Įveskite naują TP markę.."/></label></div>
 					<div style="float:right;"><button class="btn small" {{action saveAddNewMake}}>Išsaugoti</button><a href="#" class="small" {{action cancelAddNewMake}}>Atšaukti</a></div>
-				{{/if}}
+				{{/if}}*@
          <div class='ExtendIt' data-ctrl='{"Field":"MakeID","classes":"UpdateField","id":"lstMakeID","labelType":"Left"}'></div>
          <div class='ExtendIt' data-ctrl='{"Field":"Year","classes":"UpdateField","id":"Year","labelType":"Left"}'></div>
       </div>
@@ -38,9 +38,4 @@ data-ctrl='{"NewRec":1,"Source":"proc_Vehicles","tblUpdate":"tblVehicles"}'>
 		</div>
 </div>
 <center style="margin: 2em 0;"><button id="btnSaveItem" class="btn">Išsaugoti</button><a style="margin-left: 2%;" id="aCancelItem" href="#">Atšaukti</a></center>
-@*<div class="DocsRow">
-    <strong>Dokumentai:</strong>
-    <img src='@Url.Content("~/Content/images/grapke.png")' alt="" style="margin: auto 0.5em auto 3em" />
-    <a id="#AttachListDocs" href="#">Prisegti naują dokumentą</a>
-</div>*@
 <div class="uploadDocsContainer" id="dialoguploadDocsContainer"></div>

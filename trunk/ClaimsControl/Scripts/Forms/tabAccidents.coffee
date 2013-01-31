@@ -17,8 +17,6 @@ App.tabAccidentsView = App.mainMenuView.extend(
 			# $('#uploadDocsToAccident2').UploadFiles(settings)
 			# $('#uploadDocsToAccident2').next().Tree(categoryOpts:settings.categoryOpts)
 		# )	
-		
-		
 	#contentObserver: (->
 	#	@rerender()
 	#	alert("App.tabAccidentsssssView has changed!")
@@ -203,29 +201,24 @@ App.accidentsController = Em.ResourceController.create(
 	url: "Accident/AccidentsList",#jei yra atsisiunčiam
 	tableName: "proc_Accidents",#jei yra, turinį į content
 	fields: {}
-	animationSpeed: 400
+	animationSpeedEnd: 400
+	animationSpeedStart: 400
 	setAnimationSpeed:(e)->
 		n=parseInt($(e.target).val(),10)
-		if $.isNumeric(n) then @.set("animationSpeed",n)
+		onSpeed=if $(e.target).data("action")=="start" then "animationSpeedStart" else "animationSpeedEnd"
+		if $.isNumeric(n) then @.set(onSpeed,n)
 		else alert "turi būti skaičius"
-	removeClaims: (AddWr) ->
-		#return;
-		AddWr.parent().find("div.dividers").remove()
+	removeClaims: (AddWr,e,tr,parent) ->
+		dividers=AddWr.parent().find("div.dividers"); dividers.slideUp(App.accidentsController.animationSpeedEnd, () -> dividers.remove())
 		if (AddWr.length > 0)
-			MY.tabAccidents.AcccidentdetailsView.remove(); AddWr.remove(); # AddWr.hide('slow', () -> AddWr.remove();) 
+			MY.tabAccidents.AcccidentdetailsView.remove(); me=@
+			# AddWr.remove(); 
+			AddWr.slideUp(App.accidentsController.animationSpeedEnd, () -> if tr.hasClass("selectedAccident") then tr.removeClass("selectedAccident") else parent.find("div.selectedAccident").removeClass("selectedAccident"); AddWr.remove(); me.addClaim(e,tr);) 
 		else if MY.tabAccidents.AcccidentdetailsView #jei filtruojant pakavojom ir spaudziam kitur panaikinam jį
 			MY.tabAccidents.AcccidentdetailsView.destroy();MY.tabAccidents.AcccidentdetailsView=null;$('div.dividers').remove()
-	tbodyClick: (e) ->
-		tr = $(e.target).closest("div.tr")
-		@setfilteredPolicies(e.context.date)#Filtruojam polisus		
-		AddWr = $("#AccDetailsWraper"); parent=tr.parent()		
-		if tr.hasClass("selectedAccident") and not e.isTrigger
-			if parent.find("div.dividers").length
-				this.removeClaims(AddWr); return false; #Ištrinam ir išeinam
-			#atidarom
-		else
-			parent.find("div.selectedAccident").removeClass("selectedAccident"); this.removeClaims(AddWr) #priešingu atveju ištrinam ir pridedam
-			
+		else #pirmas kartas tik pridedam
+			@addClaim(e,tr);
+	addClaim:(e,tr)->
 		tr.addClass("selectedAccident")	if not tr.hasClass("selectedAccident")
 		MY.tabAccidents.AcccidentdetailsView = App.SelectedAccidentView.create(e.context)
 		tr.after("<div id='AccDetailsWraper'></div><div class='dividers'></div>").prev().before("<div class='dividers'></div>")
@@ -233,7 +226,22 @@ App.accidentsController = Em.ResourceController.create(
 		if e.isTrigger
 			Em.run.next(-> $("#AccDetailsContent, div.dividers").show())
 		else
-			Em.run.next(-> $("#AccDetailsContent, div.dividers").slideDown(App.accidentsController.animationSpeed))
+			Em.run.next(-> $("#AccDetailsContent, div.dividers").slideDown(App.accidentsController.animationSpeedStart))	
+		
+	tbodyClick: (e) ->
+		tr = $(e.target).closest("div.tr")
+		@setfilteredPolicies(e.context.date)#Filtruojam polisus		
+		AddWr = $("#AccDetailsWraper"); parent=tr.parent()		
+		if tr.hasClass("selectedAccident") and not e.isTrigger
+			if parent.find("div.dividers").length
+				this.removeClaims(AddWr,e,tr,parent); return false; #Ištrinam ir išeinam
+				parent.find("div.selectedAccident").removeClass("selectedAccident");
+		#atidarom
+		else
+			#parent.find("div.selectedAccident").removeClass("selectedAccident"); this.removeClaims(AddWr) #priešingu atveju ištrinam ir pridedam
+			this.removeClaims(AddWr,e,tr,parent) #priešingu atveju ištrinam ir pridedam	
+			
+
 		false
 	setfilteredPolicies: (accidentDate) ->
 		thisAccidentPolicies=$.map(oDATA.GET("proc_InsPolicies").Data, (i)-> if (oGLOBAL.date.firstBigger(i[4],accidentDate)) then return [i] else return null)

@@ -39,7 +39,7 @@ App.InsPolicyView = Em.View.extend(
 )
 App.listAllController = Em.ResourceController.create(
 	current:"",#{emObject:drivers/vehicles/insPolicies, filterCols:["fsf","fss"]}
-	clicked:"", endDate:"", editItem:"", filterValue: "", addMakeMode:""
+	clicked:"", endDate:"", editItem:"", filterValue: "", addMakeMode:"", VehicleMakes:[],editVehicleMake:false
 	valueDidChange: (()->		
 		@filterItems()
 	).observes('filterValue')
@@ -49,6 +49,59 @@ App.listAllController = Em.ResourceController.create(
 		# App.listAllController.set("drivers",oDATA.GET("proc_Drivers").emData)
 		# App.listAllController.set("insPolicies",oDATA.GET("proc_InsPolicies").emData)
 	# ))	
+	addVehicleMake:(input, e)-> #formTemplate: "tmpUploadForm", disabled: false, docsController: "TreeDocController", Source: "tblDocTypes"
+		#categoryOpts:{accident:{iD:70,title:"Įvykio dokumentai"},driver:{iD:80,title:"Vairuotojo 'Pranas Patv' dokai"},editList:{},vehicles:[{iD,title},{iD,title}]},
+		#data:[{categoryID,id,label},{categoryID,id,label},{categoryID,id,label},{categoryID,id,label}]		
+		if @VehicleMakes.length==0 then @.set("VehicleMakes",oDATA.GET("tblVehicleMakes").emData)  
+		
+		
+		dialogID="dialog"+(+new Date)#kad nesipjautų dialogai
+		MY[dialogID]=JQ.Dialog.create( #MY.dialog needed to destroyElement in ui-ember.js	
+			input: input
+			dialogID: dialogID
+			title:"Transporto priemonių markės"
+			saveData:(p)->#Msg,DataToSave,Action,row
+				Source=App.listAllController.VehicleMakes; me=@
+				$.extend(p,"Ctrl":$("#"+@dialogID),"source":"tblVehicleMakes", 
+				CallBackAfter:(Row)->
+					# if p.Action=="Delete" then obj=Source.findProperty("iD", Row.iD); Source.removeObject(obj)
+					# else if p.Action=="Add" then Source.pushObject(Em.Object.create(Row))
+					# else Source.findProperty("iD", Row.iD).set("name",Row.name).set("edit",false) #redagavimas
+					if p.Action=="Edit" then Source.findProperty("iD", Row.iD).set("edit",false) #redagavimas
+					if p.Action=="Add" then MY[me.dialogID].set(("addVehicleMake"),false)
+					### opts ???????? čia reikia isimint elementa kurį mes updatinsim ###
+					me.input.autocomplete("option").fnRefresh()
+					#opts.element.closest("table").find("input").autocomplete('option','source',opts.data())#updatinam autocompleto source'a
+					console.log("New Row")
+					console.log(Row)
+				)	
+				SERVER.update2(p);false
+			editVehicleMake: (e)-> e.context.set("edit",e.context.name) 
+			cancelVehicleMake: (e)-> e.context.set("edit",false)
+			saveVehicleMake: (e)->
+				### reikia žiūrėt ###
+				make=e.context.name;input=$(e.target).prev();val=input.val();row=e.context;row.name=val
+				if make.length>0						
+					Msg={Title:@title,Success:"TP markė '"+make+"' pakeista.",Error:"Nepavyko pakeisti '"+make+"' markės."}
+					@saveData({DataToSave:{"id":row.iD,"Data":[row.name],"Fields":["Name"],"DataTable":"tblVehicleMakes"},Msg:Msg,row:row,Action:"Edit"})
+				else 
+					e.context.set("name",e.context.edit).set("edit",false)
+			deleteVehicleMake: (e)->
+				make=e.context.name; me=@
+				oCONTROLS.dialog.Confirm(title:@title,msg:"Ištrinti markę '"+make+"'?", ()->					
+					Msg={Title:me.title,Success:"TP markė '"+make+"' ištrinta.",Error:"Nepavyko ištrinti markės '"+make+"'."}; row=e.context				
+					me.saveData({DataToSave:{"id":row.iD,"DataTable":"tblVehicleMakes"},Msg:Msg,row:row,Action:"Delete"})
+				)
+			addNewVehicleMake: (e)-> @.set("addVehicleMake",true)
+			cancelNewVehicleMake: (e)-> @.set("addVehicleMake",false)				
+			saveNewVehicleMake: (e)-> 
+				input=$(e.target).prev();val=input.val();
+				Msg=Title:@title2,Success:"Dokumento tipas '"+val+"' pridėtas.",Error:"Nepavyko pridėt tipo '"+val+"'"
+				@saveData({DataToSave:{"Data":[val],"Fields":["Name"],"DataTable":"tblVehicleMakes"},Msg:Msg,row:[val],Action:"Add"})
+			closeDialog: (e)-> $("#"+@dialogID).dialog("close"); false
+			width:600
+			templateName: 'tmpVehicleMakes'
+		).append();
 	openItem:(pars)->#source,template,row
 		@.set("dateIsEdited",false) #nuresetinam datų redagavimą, kad nerodytų	
 		if not App.docsTypesController then App.create_docsTypesController() #reikalingas sarašam parodyt ir redaguot
@@ -63,7 +116,7 @@ App.listAllController = Em.ResourceController.create(
 		Em.run.next(@, -> MY.dialog=JQ.Dialog.create( #MY.dialog needed to destroyElement in ui-ember.js
 			controllerBinding: "App.listAllController"
 			controller: pars.me, pars: pars
-			init: -> @_super(); console.log "init"; @templateName=pars.template; @title=title
+			init: -> @_super(); @templateName=pars.template; @title=title
 			cancelAddNewMake:()-> App.listAllController.set("addMakeMode",false)
 			saveAddNewMake:(e)-> 
 				div=$(e.target).parent(); newVal=div.prev().find("input").val(); ctrl=$(e.target).parent().parent()
@@ -245,7 +298,7 @@ App.dialogDocController = Em.ResourceController.create(
 		#currentDocs.forEach (doc) -> console.log "iD: " + doc.iD + ", docName: " + doc.docName + ", docTypeID:" + doc.docTypeID + ", groupID:" + doc.groupID	
 		if refID then @refID=refID; @groupID=groupID else refID=@refID; groupID=@groupID
 		
-		account=oDATA.GET("userData").emData[0].account; url="Uploads/"+account; users=oDATA.GET("tblUsers").emData; docTypes=oDATA.GET("tblDocTypes").emData	
+		docsPath=oDATA.GET("userData").emData[0].docsPath; url="Uploads/"+docsPath; users=oDATA.GET("tblUsers").emData; docTypes=oDATA.GET("tblDocTypes").emData	
 		fnGetIcon=(ext) -> ext=ext.slice(0,3); return "img32-doc_" + (if ext=="xls"||ext=="doc"||ext=="pdf" then ext else "unknown" )
 		fnGetUser=((userID) -> u=users.find((user)->user.iD==userID); u.firstName+" "+u.surname;)		
 		fnGetDocType = (typeID)-> docTypes.find((type)->type.iD==typeID).name			

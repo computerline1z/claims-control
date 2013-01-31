@@ -33,6 +33,7 @@ namespace CC.Classes {
 			Email = U.Email;
 			Account = account.Name.ToString();
 			AccountID = U.AccountID;
+			DocsPath = account.DocsPath;
 		}
 
 		public static DateTime GetUserTime() { 
@@ -81,6 +82,10 @@ namespace CC.Classes {
 		public static string Email {
 			get { CheckIt(); return (string)HttpContext.Current.Session["UserData_Email"]; }
 			set { HttpContext.Current.Session["UserData_Email"] = value; }
+		}
+		public static string DocsPath {
+			get { CheckIt(); return (string)HttpContext.Current.Session["DocsPath"]; }
+			set { HttpContext.Current.Session["DocsPath"] = value; }
 		}
 	}
 }

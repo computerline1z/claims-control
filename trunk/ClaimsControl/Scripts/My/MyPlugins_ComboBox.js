@@ -63,8 +63,8 @@
         if (opt.Editable.Add) {
           return data[data.length] = {
             id: -1,
-            value: "Pridėti naują",
-            label: "Pridėti naują"
+            value: "Redaguoti sąrašą",
+            label: "Redaguoti sąrašą"
           };
         }
       };
@@ -89,7 +89,7 @@
           }
           if (ui.item.id === -1) {
             if ($(event.target).data("ctrl").Source === "tblVehicleMakes") {
-              App.listAllController.set("addMakeMode", true);
+              App.listAllController.addVehicleMake(input, event);
             } else {
               fnEditItem(0);
             }

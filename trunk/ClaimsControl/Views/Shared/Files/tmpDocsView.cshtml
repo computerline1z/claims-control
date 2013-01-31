@@ -1,28 +1,23 @@
 ﻿@*{{log this}}*@
 {{#if controller.isPhoto}}
-	<div id="gallery" data-toggle="modal-gallery" data-target="#modal-gallery">
 	{{#each controller.docs}}
-		{{log this}}
-		<li class="ui-widget-content ui-corner-tr photo" {{bindAttr data-doc-id="docID" }}>
-			<div>
-			{{#if hasThumb}}
-				<a data-gallery="gallery" {{bindAttr href="urlDoc" }}>
-				<img {{bindAttr src="urlThumb"}}  alt="thumb"/>
-				</a>
-			{{else}}
-				@*<i class="img32-doc_unknown"></i>*@
-				<i {{bindAttr class="fileIcon" }} ></i>
-			{{/if}}
-			</div>
-					<a {{bindAttr href="urlDoc" }} target="_blank">{{fileName}}</a>
-					<p>{{userName}}&nbsp;{{fileDate}}</p>
-		</li>
+	<li class="ui-widget-content ui-corner-tr photo" {{bindAttr data-doc-id="docID" }}>
+		<div>
+		{{#if hasThumb}}
+			<a data-gallery="gallery" {{bindAttr href="urlDoc" }}>
+			<img {{bindAttr src="urlThumb"}}  alt="thumb"/>
+			</a>
+		{{else}}
+			<i {{bindAttr class="fileIcon" }} ></i>
+		{{/if}}
+		</div>
+				<a {{bindAttr href="urlDoc" }} target="_blank">{{fileName}}</a>
+				<p>{{userName}}&nbsp;{{fileDate}}</p>
+	</li>
 	{{/each}}
-	</div>
 {{else}}
-		{{#each controller.docs}}<li class="docs" {{bindAttr data-doc-id="docID" }}>
-		{{log this}}
-
+	{{#each controller.docs}}
+	<li class="docs" {{bindAttr data-doc-id="docID" }}>
 		<div class="tr">
 		<div class="td w40px" style="padding:5px;">
 				{{#if hasThumb}}
@@ -31,7 +26,6 @@
 					<i {{bindAttr class="fileIcon" }} ></i>
 				{{/if}}
 		</div>
-
 		{{#if this.editMode}}
 				<div class="td w25pr ExtendIt" style="margin:0">
 						<input class="docType" type="text" {{bindAttr value="docType"}}/><br/>
@@ -54,27 +48,5 @@
 				</div>
 		{{/if}}
 		</div>
-
-		</li>{{/each}}
-@*	<table class="not-striped"><tbody>
-	{{#each controller.docs}}
-	<tr>
-		<td>
-			{{#if hasThumb}}
-				<img {{bindAttr src="urlThumb" alt="thumb"}}/>
-			{{else}}
-				<i {{bindAttr class="fileIcon" }} ></i>
-			{{/if}}
-		</td><td>
-			{{docType}}<br/>
-			<a {{bindAttr href="urlDoc"}} target="_blank" >{{fileName}}</a>
-		</td>
-		<td>{{description}}</br><p style="color:Gray">{{docDetails}}</p></td>
-		<td style="width:98px;"> 
-			<i class="img32-mono_edit"></i>
-			<i class="img32-mono_delete"></i>
-		</td>
-	</tr>
-	{{/each}}
-	</tbody></table>*@
+	</li>{{/each}}
 {{/if}}
