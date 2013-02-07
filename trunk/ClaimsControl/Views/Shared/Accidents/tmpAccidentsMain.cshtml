@@ -5,26 +5,26 @@
 ----------------------------------------------------------------------*@
 @*height:500px - be aukščio nusistato kiek reikia*@
 
-
-<div class="container">
-	<div class="left big w35pr">
-		<div id="container">{{view App.SearchField controller="accidentsController"}} </div>@*context="accidents"*@
+<div class="container--main">
+	<div class="container">
+		<div class="form__row--half mt15">{{view App.SearchField controller="accidentsController"}}</div>@*context="accidents"*@
+		<div class="right big"><button class="btn btn--large" {{action addNewAccident target="App.accidentsController"}}><i class="img32-plus"></i>Registruoti naują įvykį</button></div>
 	</div>
-	<div class="right big"><button class="btn large" {{action addNewAccident target="App.accidentsController"}}><i class="img32-plus"></i>Registruoti naują įvykį</button></div>
-</div>
-{{log this}}
-{{log App.accidentsController.content.length}}
-{{#if App.accidentsController.content.length}}
-	<div class="table zebra-striped selectable tall" id="accidentsTable">
-	{{#each "App.accidentsController.content"}}@*{{#each person in people}}*@
-	@*{{log this}}*@
-	{{#if this.visible}}
-	<div {{action tbodyClick  this target="App.accidentsController"}} class="tr accident">
-		{{view App.AccidentView}}
-	</div>
+	{{log this}}
+	{{log App.accidentsController.content.length}}
+	{{#if App.accidentsController.content.length}}
+		<h2 class="title--bordered">Pakutiniai</h2>
+		<div class="table zebra-striped selectable tall" id="accidentsTable">
+		{{#each "App.accidentsController.content"}}@*{{#each person in people}}*@
+		@*{{log this}}*@
+		{{#if this.visible}}
+		<div {{action tbodyClick  this target="App.accidentsController"}} class="tr accident">
+			{{view App.AccidentView}}
+		</div>
+		{{/if}}
+		{{/each}}
+		</div>
+	{{else}}
+		<h4>Nėra įvesta įvykių..</h4>
 	{{/if}}
-	{{/each}}
-	</div>
-{{else}}
-	<h4>Nėra įvesta įvykių..</h4>
-{{/if}}
+</div>

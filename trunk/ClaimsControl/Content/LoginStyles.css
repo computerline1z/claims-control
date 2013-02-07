@@ -28,7 +28,7 @@ h2
 .buttonAsLink_hover { color: #2b7bcb; background-color: transparent;  border-width: 0; cursor: pointer; font-size: 100%; text-decoration: underline; }
 /*----------------------------------------------------------*/
 /* Input design */
-.input { width: 250px; background: #ffc; /*border: 1px inset;*/ border-width:1px; border-style:solid; border-color: #b3b38c #e9e9b6 #e9e9b6 #b3b38c; font-size: 10pt; height: 1.5em; padding-left: 5px; }
+.input { width: 250px; background: #ffc; border: 1px inset; font-size: 10pt; height: 1.5em; padding-left: 5px; }
 .input_Long { width: 27em; background: #ffc; border: 1px inset; font-size: 10pt; height: 1.5em; padding-left: 5px; }
 .input_Long_Disabled { width: 27em; background: #EBEBE4; border: 1px inset; font-size: 10pt; height: 1.5em; padding-left: 5px; }
 .button { width: 90px; font-size: 8pt; height: 2.5em; cursor: pointer;}
