@@ -7,7 +7,7 @@
 	<div id='divClaimCardDetails' >
 {{/unless}}
 {{#compare "this.TypeID" "==" "6"}} 
-	<div class='left w45pr'>
+	<div class='left w35pr mr12'>
 	{{updatableField c Field="Days" id="inputDays" labelType="Top" event="keyUp_shallChangeLossAmount"}}
 	{{updatableField c Field="PerDay" id="inputPerDay" labelType="Top" event="keyUp_shallChangeLossAmount"}}
 	{{updatableField c Field="LossAmount" id="inputSum" attr="DISABLED" labelType="Top"}}@*(Math.round((Claim.Days*Claim.PerDay*100))/100)*@
@@ -15,11 +15,11 @@
 	{{updatableField c Field="VehicleID" id="lstVehicles" labelType="Top"}}
 	</div>
 {{else}}
-	<div class='left w45pr'>
+	<div class='left w35pr mr12'>
 	{{updatableField c Field="VehicleID" id="lstVehicles" labelType="Top" Editable="{\"Add\":true,\"Edit\":true}"}}
 	{{updatableField c Field="InsPolicyID" id="lstInsPolicies" labelType="Top" List="{\"Source\":\"proc_InsPolicies_forThisAccident\"}"}}
 	{{updatableField c Field="InsurerClaimID" labelType="Top"}}
-	</div><div class='right w45pr'>
+	</div><div class='left w35pr'>
 	{{updatableField c Field="LossAmount" id="LossAmount" labelType="Top"}} @*"classes\":\"LossAmount*@
 	{{#compare "this.TypeID" "==" "1"}} 
 		{{updatableField c Field="IsTotalLoss" labelType="Top"}}
@@ -38,7 +38,7 @@
 	{{#unless c.newClaim}}
 	<div class="left small"><button class="btn"><i style="margin-top:0" class="img32-bin" title="Ištrinti žalą" {{action "DeleteClaim" this}}></i></button></div>
 	{{/unless}}
-	<div class="right medium" style="margin-top:10px;">
+	<div class="right medium" style="margin-top:10px; padding-right: 20%; ">
 		<button class="btn success small {{#if c.newClaim}}NewClaim{{/if}}" {{action "SaveClaim"}}></i>IŠSAUGOTI</button>
 		<a href="#" title="Atšaukti pakeitimus" style="margin:10px;" {{action "CancelSaveClaim"}}>Atšaukti</a>
 	</div>
