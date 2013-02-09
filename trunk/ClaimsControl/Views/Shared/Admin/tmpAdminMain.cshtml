@@ -1,46 +1,31 @@
-﻿
-<div class="container--main">
-	<h2>Administravimas</h2>
-	
-	<h3>Bendrieji paskyros nustatymai</h3>
-	{{#with App.accountController}}
-	@*	Negaliu įrašyt iD nes pasikraunant jo dar nėra
-	*@	<div id="AccountForm" class="inputForm container container--well" data-ctrl='{"id":"","NewRec":0,"Source":"tblAccount","tblUpdate":"tblAccounts"}'>
-		<div class='form__row--half'>
-				{{updatableField c Field="name" labelType="Top"}}
-				<div class="input-row">
-					<div class="input--half">
-						{{updatableField c Field="currencyID" labelType="Top" List="{\"Source\":\"tblCurrencies\"}"}}
-					</div>
-					<div class="input--half">
-						{{updatableField c Field="countryID" labelType="Top" List="{\"Source\":\"tblCountries\"}"}}
-					</div>
-				</div>
-			</div>
-			<div class='form__row--half'>
-				<div class="input--long">
-					{{updatableField c Field="email" labelType="Top"}}<span class="input__append">claimscontrol.com</span>
-				</div>
-				<div class="input--half">
-					{{updatableField c Field="timeZoneID" labelType="Top" List="{\"Source\":\"tblTimeZones\"}"}}
-					<button class="btn right" {{action SaveChanges target="App.accountController"}}>Išsaugoti</button>
-				</div>
-			</div>
-		</div>  
-	{{/with}}
-</div>
-
-<div class="container--main detached">
-	<h3>Naudotojų administravimas</h3>
-	<div class="container" id="usersList">
-		<table class="zebra-striped">
-		<thead><tr><th>El.paštas</th><th class="cell--long">Vardas Pavardė</th><th>Yra administratorius</th><th>Yra aktyvus</th></tr></thead><tbody>
-		{{#each "App.usersController.content"}}
-			{{view App.UsersRowView}}
-		{{/each}}
-		</tbody></table>
-	<div><button class="btn right btn--table" {{action addNewUser target="App.userCardController"}}>Pridėti naują</button></div>
+﻿<h2 style="margin: 15px; display: block">Administravimas</h2>
+<hr />
+<h3>Bendrieji paskyros nustatymai</h3>
+{{#with App.accountController}}
+@*	Negaliu įrašyt iD nes pasikraunant jo dar nėra
+*@	<div id="AccountForm" class="inputForm container" data-ctrl='{"id":"","NewRec":0,"Source":"tblAccount","tblUpdate":"tblAccounts"}'>
+	<div class='left w47pr_mp'>
+			{{updatableField c Field="name" labelType="Top"}}
+			{{updatableField c Field="currencyID" labelType="Top" List="{\"Source\":\"tblCurrencies\"}"}}
+			{{updatableField c Field="countryID" labelType="Top" List="{\"Source\":\"tblCountries\"}"}}
+		</div>
+		<div class='right w47pr_mp'>
+			{{updatableField c Field="email" labelType="Top"}}<span>claimscontrol.com</span>
+			{{updatableField c Field="timeZoneID" labelType="Top" List="{\"Source\":\"tblTimeZones\"}"}}
+			<button class="btn" {{action SaveChanges target="App.accountController"}}>Išsaugoti</button>
+		</div>
 	</div>
-	
-	@*<a class="medium" {{action deleteAccount target="App.accountController"}} href="#">Panaikinti paskyrą</a>*@
+{{/with}}
+<hr />
+<h3>Naudotojų administravimas</h3>
+<div class="container" id="usersList">
+	<table class="zebra-striped">
+	<thead><tr><th>El.paštas</th><th>Vardas Pavardė</th><th>Yra administratorius</th><th>Yra aktyvus</th></tr></thead><tbody>
+	{{#each "App.usersController.content"}}
+		{{view App.UsersRowView}}
+	{{/each}}
+	</tbody></table>
+<div><button class="btn" {{action addNewUser target="App.userCardController"}}>Pridėti naują</button></div>
 </div>
+<hr />
+@*<a class="medium" {{action deleteAccount target="App.accountController"}} href="#">Panaikinti paskyrą</a>*@

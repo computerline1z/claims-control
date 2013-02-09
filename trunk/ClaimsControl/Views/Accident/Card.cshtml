@@ -5,8 +5,8 @@
 	  vehicles = vehicles.TrimEnd(',');  
   }
  }
-@if (@Model.NewRec == 1) { <h2>Naujo įvykio registravimas</h2>}
-else {<h2>Įvykis Nr.:@Model.Accident.No</h2>}
+@if (@Model.NewRec == 1) { <h2 style="margin: 15px; display: inline-block">Naujo įvykio registravimas</h2>}
+else {<h2 style="margin: 15px; display: inline-block">Įvykis Nr.:@Model.Accident.No</h2>}
 <a id="btnReturnToAccidents" href="javascript:void(0);return false;">(atgal į Įvykių sąrašą)</a>
 <div id="accidentTab">
 <ul id='ulWhiteMenu' class='ulWhiteMenu'>

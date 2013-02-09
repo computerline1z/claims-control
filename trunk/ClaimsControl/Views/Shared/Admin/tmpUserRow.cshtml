@@ -2,12 +2,11 @@
 checkOut this Field="Days" id="inputDays" labelType="Top"}}
 <div class="td w03pr">{{unbound no}}</div>*@
 <tr class="clickable" {{action editUser target="App.userCardController"}}>
-	<td><a href="">{{email}}</a></td>
-	<td class="cell--long">{{firstName}}&nbsp;{{surname}}</td>
+	<td>{{email}}</td><td>{{firstName}}&nbsp;{{surname}}</td>
 
-	{{#if isAdmin}}<td class="tac"><i class="img32-check"></i></td>
-	{{else}}<td class="tac">&nbsp; </td>{{/if}}
+	{{#if isAdmin}}<td><i class="img32-check"></i></td>
+	{{else}}<td>&nbsp; </td>{{/if}}
 	
-	{{#if isActive}}<td class="tac"><i class="img32-check"></i></td>
+	{{#if isActive}}<td><i class="img32-check"></i></td>
 	{{else}}<td>&nbsp; </td>{{/if}} 
 </tr>

@@ -4,18 +4,16 @@
  * ------------------------------------------------------------------------------------------- */
 
 
-// STRUCTURAL LAYOUT 
+// STRUCTURAL LAYOUT
 // -----------------
 
 body {
-  //background-color: @grayLighter;
-  background: url(../images/bg-pattern.png) repeat;
+  background-color: @grayLighter;
   margin: 0 auto !important;
-  //max-width: 1100px !important;
+  max-width: 1100px !important;
   
 //  font-family: 'Asap', 'AsapRegular', "Arial" Arial, "Helvetica Neue", Helvetica,sans-serif;
-  //#font > .regular();
-  font: 12px 'Open Sans', 'Arial', sans-serif;
+  #font > .regular();
   
 
 }
@@ -24,9 +22,6 @@ body {
 .container {
   .fixed-container();
 }
-
-
-
 
 // Fluid layouts (left aligned, with sidebar, min- & max-width content)
 .container-fluid {
@@ -54,13 +49,12 @@ body {
 // Links
 a {
   color: @linkColor;
-  text-decoration: none;
+  text-decoration: underline;
   line-height: inherit;
-  font-weight: bold;
-  font-size: 11px;
+  font-weight: inherit;
   &:hover {
     color: @linkColorHover;
-    text-decoration: none;
+    text-decoration: underline;
   }  
 }
 .whiteLink {

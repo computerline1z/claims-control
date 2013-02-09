@@ -11,10 +11,10 @@ checkOut this Field="Days" id="inputDays" labelType="Top"}}*@
 	<div>{{lossSum}}</div> 
 </div>
 <div class="td w15pr">
-	<div>Visos žalos: <strong>{{cNo_All}}</strong></div> 
-	<div>Atviros: <strong class="text-warning">{{cNo_NotF}}</strong></div>
+	<div>Visos žalos:{{cNo_All}}</div> 
+	<div>Atviros:{{cNo_NotF}} </div>
 </div>
 
-<div class="td w03pr"><span {{action editAccident this target="App.accidentsController"}}><i class="img32-examine"></i></span>
+<div class="td w03pr"><a href="#" {{action editAccident this target="App.accidentsController"}}><i class="img32-mono_edit"></i></a>
 </div>
 @*<div class="hidden">{{longNote}}{{driver}}{{userName}}{{claims_C}}{{claims_C2}}</div>*@
