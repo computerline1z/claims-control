@@ -4,18 +4,19 @@
    <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
    <div class="row fileupload-buttonbar">
 	{{#if showPhoto}}
-      <div class="span7" style="margin-left:30%;">
+      <div class="span7">
             <span class="btn btn-success fileinput-button">
                @*<i class="icon-plus icon-white"></i>*@
-					<i class="img32-attach"></i>
+					<i class="img16-attach"></i>
                <span>Prisegti nuotraukas</span>
                <input type="file" name="pictures[]" multiple>
             </span>
 	{{else}}
-      <div class="span7" style="margin-left:40%;">
+      <div class="span7">
 	{{/if}}
-				<a href="#" class="fileinput-button">
-					<i class="img32-attach"></i>
+		<span class="filedocument-label">Dokumentai:</span>
+		<a href="#" class="fileinput-button">
+					<i class="img16-attach"></i>
                <span>Prisegti dokumentus</span>
                <input type="file" name="docs[]" multiple>
             </a>

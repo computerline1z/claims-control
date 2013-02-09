@@ -5,7 +5,7 @@
    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css"/>
    <link href="@Url.Content("~/Content/dataTables.css")" rel="stylesheet" type="text/css"/>
    <link href="@Url.Content("~/Content/jquery-ui-1.8.10.custom.css")" rel="stylesheet" type="text/css"/>
-   <link rel="shortcut icon" href="../../Content/images/favicon.ico" type="image/x-icon" />
+   <link rel="shortcut icon" href='@Url.Content("~/Content/images/favicon.ico")' type="image/x-icon" />
    <style type="text/css">
 @*      #tabAccidents { background: #999; height: 100%; margin: 0 auto; width: 100%; max-width: 900px; min-width: 700px; _width: 700px; /* min-width for IE6 */ }
       .pane { display: none; /* will appear when layout inits */ }
@@ -77,26 +77,26 @@
 <script src="@Url.Content("~/Scripts/JSForm/Tab_Lists.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/JSForm/Form_Accident_Card.js")" type="text/javascript"></script>
 <script type="text/javascript">
-   $(document).ready(function() {
-      $.blockUI();
-      window.onresize=function() { window.setTimeout("oGLOBAL.Start.MakeSizes()", 100); }
-      oGLOBAL.Start.MakeSizes();
-      var $tabs=$("#divMainTabMenu").tabs({
-         select: function(e, ui) {
-            var thistab=ui.index;
-            $("#tab"+thistab).html(thistab);
-            if(/^(\s*)$/.test($("#"+ui.panel.id).html())) {  //Ar tuscias?
-               setTimeout($(ui.tab).data("ctrl").CallFunc, 0);
+    $(document).ready(function () {
+        $.blockUI();
+        window.onresize = function () { window.setTimeout("oGLOBAL.Start.MakeSizes()", 100); }
+        oGLOBAL.Start.MakeSizes();
+        var $tabs = $("#divMainTabMenu").tabs({
+            select: function (e, ui) {
+                var thistab = ui.index;
+                $("#tab" + thistab).html(thistab);
+                if (/^(\s*)$/.test($("#" + ui.panel.id).html())) {  //Ar tuscias?
+                    setTimeout($(ui.tab).data("ctrl").CallFunc, 0);
+                }
             }
-         }
-         //ui.tab     // anchor element of the selected (clicked) tab
-         //ui.panel   // element, that contains the selected/clicked tab contents
-         //ui.index   // zero-based index of the selected (clicked) tab
-      }).removeClass('ui-corner-all').find('ul,li').removeClass('ui-corner-all ui-corner-top'); //; ui-widget-content
-      //.removeClass('ui-corner-all ui-widget-header ui-widget-content ui-state-active ui-widget-header');
+            //ui.tab     // anchor element of the selected (clicked) tab
+            //ui.panel   // element, that contains the selected/clicked tab contents
+            //ui.index   // zero-based index of the selected (clicked) tab
+        }).removeClass('ui-corner-all').find('ul,li').removeClass('ui-corner-all ui-corner-top'); //; ui-widget-content
+        //.removeClass('ui-corner-all ui-widget-header ui-widget-content ui-state-active ui-widget-header');
 
-      CallServer("", oGLOBAL.Start.SetNewData, "tabAccidents", "/Main/tabAccidents", "json"); //Sudedam duomenis i pirma taba
-      //$tabs.tabs('select', 0);
-   });
+        CallServer("", oGLOBAL.Start.SetNewData, "tabAccidents", "/Main/tabAccidents", "json"); //Sudedam duomenis i pirma taba
+        //$tabs.tabs('select', 0);
+    });
 </script>
 </html>

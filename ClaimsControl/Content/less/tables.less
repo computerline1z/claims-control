@@ -5,8 +5,7 @@
 //div.fixed { table-layout:fixed; }
 //div.tr {display:table-row;}
 //div.td {display:table-cell;}
-div.table {
-	margin: 0 -18px;
+div.table {width:100%;
 	.tall div.tr {height:40px;}
 }
 div.tr {.clearfix();}
@@ -42,32 +41,34 @@ div.bordered-table {
 
 div.zebra-striped
 {
-	.tr {border-top: 1px solid #999; padding: 12px; &:last-of-type { border-bottom: 1px solid #999; } }
-    .tr:nth-child(odd) { background: #f0f5f7; }	 
-    > .tr:hover { .gradient--main; color: white !important; }
-	.tr:hover { cursor: pointer; }
-
+	> div.tr {/*border-bottom: 4px solid @grayLighter;*/ border-bottom: 1px solid @grayLighter; padding: 8px 8px 7px;}// div.td
+    > div.tr:nth-child(odd) {background-color: @grayUltraLight;}
+    //> div.tr:hover { background-color: @grayLight; color:@white; }
+    > div.tr:hover { background-color:  #e6e6e6;}
+	> div.tr:hover { cursor: pointer; }// div.td 
+    //div.tr:hover div.td { background-color: @grayLighter !important; } su langeliais
+    //div.tr:hover { background-color: @grayLight !important;}vaiksto tik ne ant spalvotu
+	//div.tr div.td:hover { background-color: @grayLight !important;} tik po viena td vaiksto
+	//div.tr:nth-child(odd) div.td {background-color: #f9f9f9;}
 }
 
 div.selectable > div.tr { cursor: pointer; }
 div.notSelectable > div { cursor: default; }
 div.table {
     //> div.tr:hover { background-color: @grayLight; color:@white; }
-    //.tr:hover { background-color:  #e6e6e6; }
+    > div.tr:hover { background-color:  #e6e6e6; }
 }
 
 table.zebra-striped
 {
 	width: 100%;
 	thead.centered tr th { text-align:center;}
-	tr th {font-weight: bold; background: #f0f5f7; border-bottom: 2px solid #d6dcdf; padding: 12px 20px; text-align:left;}
-	tr td {/*border-bottom: 4px solid @grayLighter;*/ border-bottom: 1px dotted @grayLighter; padding: 5px 20px; }
-	tr { background: white; }
-	tr:nth-child(even) { background: #faf9f2; }	 
+	tr th {font-weight: bold; background-color: @systemBlueLight;/*border-bottom: 4px solid @grayLighter;*/ border-bottom: 1px dotted @grayLighter; padding: 8px 8px 7px; text-align:left;}
+	tr td {/*border-bottom: 4px solid @grayLighter;*/ border-bottom: 1px dotted @grayLighter; padding: 8px 8px 7px;}
+	tr:nth-child(odd) {background-color: @grayUltraLight;}		
 	tbody tr:hover { background-color: @grayLight; color:@white; }
 	th.clickable:hover { background-color: darken(@systemBlueLight, 10%); color:@white; }
 	th.clickable:hover span.ui-tblHead-icon { background-image: url(images_ui/ui-icons_2e83ff_256x240.png) !important; }
-
 }
 table.not-striped
 {
@@ -77,5 +78,3 @@ table.not-striped
 	tr td {border-bottom: 1px dotted @grayLighter; padding: 8px 8px 7px;}
 	tbody tr:hover { background-color: @grayLight; color:@white; }
 }
-
-.cell--long { width: 45%; }
