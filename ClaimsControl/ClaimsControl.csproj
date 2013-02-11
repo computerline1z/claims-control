@@ -123,7 +123,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Areas\Scripts\ScriptsAreaRegistration.cs" />
+    <Compile Include="Areas_trinti\Scripts\ScriptsAreaRegistration_trinti.cs" />
     <Compile Include="Classes\Converters.cs" />
     <Compile Include="Classes\FileDescriptorDTO.cs" />
     <Compile Include="Classes\General.cs" />
@@ -227,8 +227,6 @@
     <Content Include="Content\images\navi_bg_divider.png" />
     <Content Include="Content\less\images_ui\ui-icons_white.png" />
     <Content Include="Content\less\site_ua.less" />
-    <Content Include="Content\SiteOld.css" />
-    <Content Include="Content\dataTables.css" />
     <Content Include="Content\images\ajax-loader-bar.gif" />
     <Content Include="Content\images\ajax-loader-circle-blue.gif" />
     <Content Include="Content\images\ajax-loader.gif" />
@@ -242,32 +240,7 @@
     <Content Include="Content\images\Question.png" />
     <Content Include="Content\images\WaitBar.gif" />
     <Content Include="Content\images\Zvaigzde.png" />
-    <Content Include="Content\images_dataTables\back_disabled.jpg" />
-    <Content Include="Content\images_dataTables\back_enabled.jpg" />
-    <Content Include="Content\images_dataTables\forward_disabled.jpg" />
-    <Content Include="Content\images_dataTables\forward_enabled.jpg" />
-    <Content Include="Content\images_dataTables\sort_asc.png" />
-    <Content Include="Content\images_dataTables\sort_asc_disabled.png" />
-    <Content Include="Content\images_dataTables\sort_both.png" />
-    <Content Include="Content\images_dataTables\sort_desc.png" />
-    <Content Include="Content\images_dataTables\sort_desc_disabled.png" />
-    <Content Include="Content\images_ui_seni\ui-bg_flat_0_aaaaaa_40x100.png" />
-    <Content Include="Content\images_ui_seni\ui-bg_flat_55_fbec88_40x100.png" />
-    <Content Include="Content\images_ui_seni\ui-bg_glass_75_d0e5f5_1x400.png" />
-    <Content Include="Content\images_ui_seni\ui-bg_glass_85_dfeffc_1x400.png" />
-    <Content Include="Content\images_ui_seni\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="Content\images_ui_seni\ui-bg_gloss-wave_55_5c9ccc_500x100.png" />
-    <Content Include="Content\images_ui_seni\ui-bg_inset-hard_100_f5f8f9_1x100.png" />
-    <Content Include="Content\images_ui_seni\ui-bg_inset-hard_100_fcfdfd_1x100.png" />
-    <Content Include="Content\images_ui_seni\ui-icons_217bc0_256x240.png" />
-    <Content Include="Content\images_ui_seni\ui-icons_2e83ff_256x240.png" />
-    <Content Include="Content\images_ui_seni\ui-icons_469bdd_256x240.png" />
-    <Content Include="Content\images_ui_seni\ui-icons_6da8d5_256x240.png" />
-    <Content Include="Content\images_ui_seni\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Content\images_ui_seni\ui-icons_d8e7f3_256x240.png" />
-    <Content Include="Content\images_ui_seni\ui-icons_f9bd01_256x240.png" />
     <Content Include="Content\Site.css" />
-    <Content Include="Content\SwitchBrowser.htm" />
     <Content Include="Global.asax" />
     <Content Include="Library\compiler.jar" />
     <Content Include="Library\dotless.Compiler.exe" />
@@ -404,20 +377,19 @@
     <Content Include="Views\Shared\Lists\tmpAllDrivers.cshtml" />
     <Content Include="Views\Shared\Lists\tmpAllInsPolicies.cshtml" />
     <Content Include="Views\Shared\Lists\tmpAllVehicles.cshtml" />
-    <Content Include="Views\Shared\Lists\tmpVehicleMakes_trinti.cshtml" />
     <Content Include="Views\Shared\Lists\tmpEditItems.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Uploads\" />
-    <Folder Include="Areas\Scripts\Controllers\" />
-    <Folder Include="Areas\Scripts\Models\" />
-    <Folder Include="Areas\Scripts\Views\Shared\" />
+    <Folder Include="Areas_trinti\Scripts\Controllers\" />
+    <Folder Include="Areas_trinti\Scripts\Models\" />
+    <Folder Include="Areas_trinti\Scripts\Views\Shared\" />
     <Folder Include="SQL\Procedures\" />
     <Folder Include="Uploads\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Code\MyHelper.cshtml" />
-    <Content Include="Areas\Scripts\Views\Web.config" />
+    <Content Include="Areas_trinti\Scripts\Views\Web.config" />
     <None Include="Content\less\main.less" />
     <None Include="Content\less\forms.less" />
     <None Include="Content\less\mixins.less" />
@@ -428,7 +400,6 @@
     <None Include="Content\less\type.less" />
     <None Include="Content\less\variables.less" />
     <None Include="Content\less\jquery-ui-1.8.16.custom.less" />
-    <None Include="Content\images_dataTables\Sorting icons.psd" />
     <Content Include="Views\Account\LogOn_Layout.cshtml" />
     <None Include="Models\db.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
