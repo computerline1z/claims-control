@@ -373,31 +373,35 @@ var SERVER = {
 					var ok = false, fieldName = col.FName.firstSmall();  //f=col.FName, f.slice(0, 1).toLowerCase() +f.slice(1);
 					updData.DataToSave.Fields.forEach(function (updateField, i2) {//Randam ar yra col tarp updatinamu
 						if (fieldName == updateField.firstSmall()) {
+							//debugger;
 							var newVal = updData.DataToSave.Data[i2];
 							Row.set(fieldName, newVal); ok = true;
 							if (col.List) {//Jeigu List, updatinam ir teksto lauka
 								var updateCol = Cols.findObjectByProperty("IdField", fieldName);
 								if (updateCol) {
 									var newVal1 = oDATA.GET(col.List.Source).emData.findObjectByProperty("iD", newVal).MapArrToString(col.List.iText, true);
-									Row.set(fieldName, newVal1);
+									Row.set(updateCol.FName.firstSmall(), newVal1);
 								} else { console.warn("List field '" + updateField + "' without IdField"); }
 							}
 						}
 					});
 					if (!ok && (Adding && fieldName !== "iD")) {//Jeigu naujos pridejimas ir nerado, ikisam ka nors
-						//if (col.IdField){								
-						//	var infoRow=Cols[col.IdField];
-						//	var source=infoRow.List.Source;
-						//	var Field=infoRow.FName;
-						//	var id=oGLOBAL.helper.getData_fromDataToSave(updData.DataToSave,Field);							
-						//	Row.set(fieldName,oData.emData.findProperty("iD", id).MapArrToString(infoRow.List.iText, false));
-						//}else
 						if (col.Default)
 							if (col.Default === "Today") { Row.set(fieldName, oGLOBAL.date.getTodayString()); }
 							else if (col.Default === "UserName") { Row.set(fieldName, UserData.Name()); }
 							else if (col.Default === "UserId") { Row.set(fieldName, UserData.Id()); }
 							else Row.set(fieldName, col.Default);
-						else { Row.set(fieldName, ""); }
+						else { 
+							//debugger;
+							// if  (col.IdField) {		
+								// var infoRow=Cols.getColByFName (col.IdField), source=infoRow.List.Source,Field=infoRow.FName;
+								// var i=updData.DataToSave.Fields.findIndexByVal(Field,true),iDVal=updData.DataToSave.Data[i];
+								// Row.set(fieldName,oDATA.GET(source).emData.findProperty("iD", iDVal).MapArrToString(infoRow.List.iText, false));
+							// }else 
+							if(fieldName=="docs"){
+								Row.set("docs", "(0)");
+							}else {Row.set(fieldName, "");} 
+						}
 					}
 					console.log("col: " + fieldName + ", ok: " + ok + ", fieldValue:" + Row[fieldName])
 				})

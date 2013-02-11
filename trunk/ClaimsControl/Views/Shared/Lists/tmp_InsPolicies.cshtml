@@ -1,5 +1,5 @@
 ﻿<div id="dialogContent" class="inputForm container centerBlock"
-data-ctrl='{"NewRec":1,"Source":"proc_InsPolicies","tblUpdate":"proc_InsPolicies"}'>@*@((Model.NewRec == 1) ? "" : ",\"id\":" + Model.Vehicle.ID)*@
+data-ctrl='{"NewRec":1,"Source":"proc_InsPolicies","tblUpdate":"tblInsPolicies"}'>@*@((Model.NewRec == 1) ? "" : ",\"id\":" + Model.Vehicle.ID)*@
    <ul class="Tabs">
       <li><a href="#tabs-policy">Polisas ir draudėjas</a></li>
       <li><a href="#tabs-warnings">Įspėjimai</a></li>
@@ -9,7 +9,7 @@ data-ctrl='{"NewRec":1,"Source":"proc_InsPolicies","tblUpdate":"proc_InsPolicies
 @*      @{if (Model.NewRec == 1) { 
 *@		<fieldset><legend>Draudimo poliso duomenys</legend>
          <div class='left w45pr'>
-            <div class='ExtendIt' data-ctrl='{"Field":"ClaimTypeID","classes":"UpdateField","id":"lstClaimTypeID","labelType":"Left"}'></div>
+            <div class='ExtendIt' data-ctrl='{"Field":"ClaimTypeID","classes":"UpdateField","id":"lstClaimTypeID","labelType":"Left","List":{"excludeFromList":[0,6]}}'></div>
             <div class='ExtendIt' data-ctrl='{"Field":"PolicyNumber","classes":"UpdateField","id":"PolicyNo","labelType":"Left"}'></div>
          </div>
          <div class='right w45pr'>

@@ -31,8 +31,10 @@ App.TabUserCardView = Em.View.extend( #App.mainMenuView.extend(
 	
 	sendUserPasswordForm:()->
 		App.userCardController.set("passwordReset",true)
-	sendUserPassword:(e)->
-		SERVER.update3(pars:{email:App.userCardController.content[0].email},ctrl:$(e.target).parent(),CallBack:((resp)->
+	sendUserPassword:(e,mailTmpl)->
+		ctrl=if e then $(e.target).parent() else null;
+		tmpl=if mailTmpl then mailTmpl else "ResetUserPsw"
+		SERVER.update3(pars:{email:App.userCardController.content[0].email,mailTmpl:tmpl},ctrl:ctrl,CallBack:((resp)->
 			if (resp.ErrorMsg) then $("#savePasswordNote").html("Nepavyko išsiųsti, klaida: "+resp.ErrorMsg).show().delay(2000).fadeOut();
 			else $("#savePasswordNote").html(resp.ResponseMsg).show().delay(2000).fadeOut(); 
 			App.userCardController.set("passwordReset",false)
@@ -41,7 +43,7 @@ App.TabUserCardView = Em.View.extend( #App.mainMenuView.extend(
 		alert "Laiško tekstas"
 	cancelSendUserPassword:()->
 		App.userCardController.set("passwordReset",false)
-	saveUserCard:()-> 
+	saveUserCard:()-> #Čia po kortelės išsaugojimo jei pakeistas paštas turėtų updatint ir siūst laiškus (reikia pabaigt)
 		frm=$("#InfoDataForm"); DataToSave = oCONTROLS.ValidateForm(frm);
 		#Msg= Title: "Mano informacijos redagavimas", Success: "Duomenys pakeisti.", Error: "Nepavyko pakeisti duomenų."
 		Action=if frm.data("ctrl").NewRec then "Add" else "Edit"
@@ -49,7 +51,9 @@ App.TabUserCardView = Em.View.extend( #App.mainMenuView.extend(
 			opt = Action: Action, DataToSave: DataToSave, row:App.userCardController.content[0],source:"tblUsers",Ctrl:frm#,Msg: Msg,
 			CallBackAfter:(Row,Action)->
 				name=Row.firstName+" "+Row.surname; if name!=oDATA.GET("userData").emData[0].userName then oDATA.GET("userData").emData[0].userName=name; $("#userLink").html(name)
-				if Action=="Add" then @.setUser(myInfo:false,User:Row); App.router.transitionTo('tabUserCard');
+				if Action=="Add"
+					@sendUserPassword(null,"NewUserPsw")
+				@setUser(myInfo:false,User:Row); App.router.transitionTo('tabAdmin ');#tabUserCard
 			SERVER.update2(opt)
 	saveUserRights:()-> alert("saveUserRights")
 	goToAdminTab: ()->
@@ -86,7 +90,7 @@ App.ChangeUserPassView = Em.View.extend(
 		if $.validity.end().valid
 			SERVER.update3(pars:{OldPassword:oldPsw,NewPassword:newPsw,UserId:0},CallBack:((resp)->
 				if (resp.ErrorMsg) then $("#changePaswordError").html(resp.ErrorMsg) 
-				else App.userCardController.set("SaveOk",resp.ResponseMsg); App.router.transitionTo('tabUserCard'); false
+				else App.userCardController.set("SaveOk",resp.ResponseMsg); App.router.transitionTo('tabUserCard'); false #tabUserCard
 				console.log(resp)
 			),url:'/Account/NewPassword2')
 	cancelNewPass: ->

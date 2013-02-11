@@ -1,0 +1,25 @@
+﻿<fieldset class="ui-corner-all fieldSetBorder w70pr centerBlock" style="padding:0 20px;">
+	<legend>{{this.title}}</legend>
+	{{log this}}
+	{{#each App.listAllController.listItems}}
+		{{#if this.edit}} 
+		<div class="docType"><input {{bindAttr value="name" }} type="text"><button class="btn small" {{action saveItem this}}>Išsaugoti</button><a class="btn small" {{action cancelItem this}}>Atšaukti</a></div>
+		{{else}}
+			<div class="docType">
+				<div style="float:left">{{name}}</div>		
+				<div style="float:right">
+					<a href="#" {{action editItem this}}><i class="img18-pencil"></i></a>
+					<a href="#" {{action deleteItem this}}><i class="img18-delete"></i></a>
+				</div>
+			</div>
+		{{/if}}
+	{{/each}}
+	{{#if this.addItem}} 
+		<div style="line-height:30px;"><input Placeholder="Įveskite naują markę" type="text"/><button class="btn small" {{action saveNewItem}}>Išsaugoti</button></div><div><button class="btn small" {{action cancelNewItem}}>Atšaukti</button></div>
+	{{else}}
+		<a style="line-height:30px;" {{action addNewItem}} href="#">Pridėti naują {{this.addNewMsg}}</a>
+	{{/if}}
+</fieldset>
+</br>
+
+<div style="text-align:center;margin:20px;"><button class="btn" {{action closeDialog}}>Uždaryti</button></div>

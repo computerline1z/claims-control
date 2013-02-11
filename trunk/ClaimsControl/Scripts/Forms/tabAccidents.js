@@ -140,7 +140,7 @@
       frm = c.NewClaim ? "#divNewClaimCard" : '#divClaimCard';
       oCONTROLS.UpdatableForm(frm);
       if (c.TypeID === 2) {
-        IClaim = $("#InsuranceClaimAmount").parent();
+        IClaim = $("#InsuranceClaimAmount").parent().parent();
         IClaim.find("span").html("Planuojama žalos suma asmeniui");
         $("#LossAmount").parent().find("span").html("Planuojama žalos suma turtui");
         fnCheckIsInjured = function() {
@@ -185,7 +185,7 @@
         TypeID = $("#divNewClaimCard").data("ctrl").ClaimTypeID;
         Claim = {
           ID: 0,
-          VehicleID: 0,
+          VehicleID: "",
           InsPolicyID: "",
           InsuranceClaimAmount: 0,
           InsurerClaimID: "",
@@ -314,6 +314,7 @@
     },
     removeClaims: function(AddWr, e, tr, parent) {
       var dividers, me;
+      $("div.validity-tooltip").remove();
       dividers = AddWr.parent().find("div.dividers");
       dividers.slideUp(App.accidentsController.animationSpeedEnd, function() {
         return dividers.remove();
@@ -343,7 +344,7 @@
         tr.addClass("selectedAccident");
       }
       MY.tabAccidents.AcccidentdetailsView = App.SelectedAccidentView.create(e.context);
-      tr.after("<div id='AccDetailsWraper'></div><div class='dividers'></div>").prev().before("<div class='dividers'></div>");
+      tr.after("<div id='AccDetailsWraper'></div><div class='dividers'></div>");
       MY.tabAccidents.AcccidentdetailsView.appendTo("#AccDetailsWraper");
       if (e.isTrigger) {
         return Em.run.next(function() {

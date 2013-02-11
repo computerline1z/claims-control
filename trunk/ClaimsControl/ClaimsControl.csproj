@@ -169,7 +169,9 @@
     <Compile Include="Services\Ninject\NinjectControllerFactory.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\Mail.template.lt.htm" />
+    <Content Include="App_Data\MailTmpl\LT\ChangedMail.htm" />
+    <Content Include="App_Data\MailTmpl\LT\NewUserPsw.htm" />
+    <Content Include="App_Data\MailTmpl\LT\ResetUserPsw.htm" />
     <None Include="Content\less\notify.less" />
     <None Include="Content\less\jquery.validity.less" />
     <None Include="Content\less\my.less" />
@@ -376,14 +378,6 @@
     <Content Include="Content\LoginStyles.css" />
     <Content Include="SQL\sql10_15.sql" />
     <Content Include="SwitchBrowser.htm" />
-    <Content Include="Uploads\high_tatras.jpg" />
-    <Content Include="Uploads\high_tatras2.jpg" />
-    <Content Include="Uploads\high_tatras2_min.jpg" />
-    <Content Include="Uploads\high_tatras3.jpg" />
-    <Content Include="Uploads\high_tatras3_min.jpg" />
-    <Content Include="Uploads\high_tatras4.jpg" />
-    <Content Include="Uploads\high_tatras4_min.jpg" />
-    <Content Include="Uploads\high_tatras_min.jpg" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -410,7 +404,8 @@
     <Content Include="Views\Shared\Lists\tmpAllDrivers.cshtml" />
     <Content Include="Views\Shared\Lists\tmpAllInsPolicies.cshtml" />
     <Content Include="Views\Shared\Lists\tmpAllVehicles.cshtml" />
-    <Content Include="Views\Shared\Lists\tmpVehicleMakes.cshtml" />
+    <Content Include="Views\Shared\Lists\tmpVehicleMakes_trinti.cshtml" />
+    <Content Include="Views\Shared\Lists\tmpEditItems.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Uploads\" />
@@ -418,6 +413,7 @@
     <Folder Include="Areas\Scripts\Models\" />
     <Folder Include="Areas\Scripts\Views\Shared\" />
     <Folder Include="SQL\Procedures\" />
+    <Folder Include="Uploads\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Code\MyHelper.cshtml" />

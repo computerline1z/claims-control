@@ -105,16 +105,10 @@ App.SelectedAccidentView = Em.View.extend(
 App.SelectedClaimView = Em.View.extend(
 	didInsertElement: ->
 		c=this.content[0]
-			# $("#IsInjuredPersons").attr("checked")
-			# if (c.IsInjuredPersons)
-				# console.log("dsf")
-			# else 
-				# console.log("dsf")
-			
 		frm=if c.NewClaim then "#divNewClaimCard" else '#divClaimCard'
 		oCONTROLS.UpdatableForm(frm)
 		if c.TypeID==2
-			IClaim=$("#InsuranceClaimAmount").parent(); IClaim.find("span").html("Planuojama žalos suma asmeniui")
+			IClaim=$("#InsuranceClaimAmount").parent().parent(); IClaim.find("span").html("Planuojama žalos suma asmeniui")
 			$("#LossAmount").parent().find("span").html("Planuojama žalos suma turtui");
 			fnCheckIsInjured =() ->
 				if this.attr("checked") then IClaim.css("display","block").find("input").data("ctrl").Validity=IClaim.find("input").data("ctrl").Validity.replace("require().","")
@@ -137,7 +131,7 @@ App.SelectedClaimView = Em.View.extend(
 		else #newClaim
 			TypeID = $("#divNewClaimCard").data("ctrl").ClaimTypeID
 			Claim =
-				ID: 0,VehicleID: 0,InsPolicyID: "",InsuranceClaimAmount: 0,InsurerClaimID: ""
+				ID: 0,VehicleID: "",InsPolicyID: "",InsuranceClaimAmount: 0,InsurerClaimID: ""
 				IsTotalLoss: 0,IsInjuredPersons: 0,Days: 5,PerDay: 500,LossAmount: (if TypeID==6 then 2500 else 0)
 				NewClaim: true,TypeID: TypeID
 			App.newClaimController.set("content", [Claim]) #butinai masyvas view'e su each	
@@ -209,6 +203,8 @@ App.accidentsController = Em.ResourceController.create(
 		if $.isNumeric(n) then @.set(onSpeed,n)
 		else alert "turi būti skaičius"
 	removeClaims: (AddWr,e,tr,parent) ->
+		#$("#divAccidentsList").find("div.validity-tooltip").remove()
+		$("div.validity-tooltip").remove()
 		dividers=AddWr.parent().find("div.dividers"); dividers.slideUp(App.accidentsController.animationSpeedEnd, () -> dividers.remove())
 		if (AddWr.length > 0)
 			MY.tabAccidents.AcccidentdetailsView.remove(); me=@
@@ -221,7 +217,8 @@ App.accidentsController = Em.ResourceController.create(
 	addClaim:(e,tr)->
 		tr.addClass("selectedAccident")	if not tr.hasClass("selectedAccident")
 		MY.tabAccidents.AcccidentdetailsView = App.SelectedAccidentView.create(e.context)
-		tr.after("<div id='AccDetailsWraper'></div><div class='dividers'></div>").prev().before("<div class='dividers'></div>")
+		#tr.after("<div id='AccDetailsWraper'></div><div class='dividers'></div>").prev().before("<div class='dividers'></div>")
+		tr.after("<div id='AccDetailsWraper'></div><div class='dividers'></div>") #.prev().before("<div class='dividers'></div>")
 		MY.tabAccidents.AcccidentdetailsView.appendTo("#AccDetailsWraper")
 		if e.isTrigger
 			Em.run.next(-> $("#AccDetailsContent, div.dividers").show())

@@ -72,7 +72,10 @@
 			<br><h4>Prisijungimo duomenys</h4>
 			<div>
 				<div class="ExtendIt w48pr" data-ctrl='{"Value":"","Field":"Email","classes":"UpdateField","labelType":"Left"}'></div>
-				<div class="ExtendIt w48pr" data-ctrl='{"Value":true,"Field":"IsActive","classes":"UpdateField","labelType":"Left"}'></div>
+				{{#compare this.content.length "==" "0"}}
+				<span style="color:Red;line-height:40px">Išsaugojus, šiuo adresu bus išsiųstas laiškas su nuoroda slaptažodžio sukūrimui.</span>
+				{{/compare}}
+				<div style="display:block;" class="ExtendIt w48pr" data-ctrl='{"Value":true,"Field":"IsActive","classes":"UpdateField","labelType":"Left"}'></div>
 			</div>
 		{{/if}}		
 		</div>

@@ -21,6 +21,7 @@ _create: ->
 			row: if (id) then oDATA.GET(opt.Source).emData.findProperty("iD",id) else 0
 			Action: (if (id) then "Edit" else "Add")
 			newVals: if newVals then {vals:newVals,cols:opt.iText} else null#?
+			input: $(@event.target)
 			CallBackAfter:(Row)->
 				dialogFrm.dialog("close");
 				#alert "fnEditItem finished!"		
@@ -32,13 +33,11 @@ _create: ->
 	OptVal = parseInt(opt.Value, 10)
 	fnSetData=() -> #Gali būt naudojamas Refreshinant per fnRefresh
 		if opt.data then data = opt.data() else
-			data = $.map(oDATA.GET(opt.Source).emData, (a) -> 
-				#for(var i=0; i<opt.iText.length; i++) { { ret.push(a[opt.iText[i]]); } }
+			fn=(a) -> 
+				if opt.excludeFromList then if opt.excludeFromList.ValueInMe(a.iD) then return null #ko nepridedam į sąrašus
 				input.val a.MapArrToString(opt.iText,opt.mapWithNoCommas) if a.iD is OptVal #Idedam verte i textboxa
-				#return { id: a[0], value: a.MapArrToString(opt.iText), label: a[opt.iText[0]] };
-				id: a[opt.iVal]
-				label: a.MapArrToString(opt.iText,opt.mapWithNoCommas)
-			)
+				return id: a[opt.iVal], label: a.MapArrToString(opt.iText,opt.mapWithNoCommas)				
+			data = $.map(oDATA.GET(opt.Source).emData, (a) -> fn(a))
 		#data[data.length] = opt.Append	if typeof opt.Append isnt "undefined" #Pridedam prie listo pvz: {Value:0, Text:"Neapdrausta"}
 		if opt.Editable.Add then data[data.length]=id:-1,value:"Redaguoti sąrašą",label:"Redaguoti sąrašą"
 	fnSetData()
@@ -53,13 +52,14 @@ _create: ->
 			response $.ui.autocomplete.filter(data, request.term)
 
 		select: (event, ui) ->
-			if typeof ui.item.id=="function" then ui.item.id(); return false#jei id yra funkcija executinam ir iseinam
-			
-			if ui.item.id==-1
-				if $(event.target).data("ctrl").Source=="tblVehicleMakes" then App.listAllController.addVehicleMake(input, event) #App.listAllController.set("addMakeMode",true) #modelio pridėjimas
-				else fnEditItem(0)
-				return false #čia tipo naujo itemso pridėjimas
-			
+			if typeof ui.item.id=="function" then ui.item.id(); return false#jei id yra funkcija executinam ir iseinam	
+			if ui.item.id==-1 #taip žymim redagavimą
+				App.listAllController.editListItems(input, event)
+				# Source=$(event.target).data("ctrl").Source				
+				# if Source=="tblVehicleMakes" then App.listAllController.addVehicleMake(input, event) #App.listAllController.set("addMakeMode",true) #modelio pridėjimas
+				# else if Source=="tblInsurers" then App.listAllController.addInsurers
+				# else fnEditItem(0)
+				return false #čia tipo naujo itemso pridėjimas		
 			if $(event.srcElement).hasClass("ui-menu-icon")#paspaudimas ant controlu
 				input.data("autocomplete").fnClickOnBtn(id:ui.item.id,elm:$(event.srcElement),fromInput:false)
 				#event.stopPropagation()#event.preventDefault()				
