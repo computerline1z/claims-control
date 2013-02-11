@@ -8,9 +8,9 @@
     App.topNewController.vehicles.clear();
     App.topNewController.drivers.clear();
     App.topNewController.insPolicies.clear();
-    App.topNewController.drivers.pushObjects(oDATA.GET("proc_topDrivers").emData.slice(0, 3));
-    App.topNewController.vehicles.pushObjects(oDATA.GET("proc_topVehicles").emData.slice(0, 3));
-    App.topNewController.insPolicies.pushObjects(oDATA.GET("proc_topInsPolicies").emData.slice(0, 3));
+    App.topNewController.drivers.pushObjects(oDATA.GET("proc_topDrivers").emData);
+    App.topNewController.vehicles.pushObjects(oDATA.GET("proc_topVehicles").emData);
+    App.topNewController.insPolicies.pushObjects(oDATA.GET("proc_topInsPolicies").emData);
     return oDATA.execWhenLoaded(["proc_Vehicles", "proc_Drivers", "proc_InsPolicies"], function() {
       App.listAllController.set("vehicles", oDATA.GET("proc_Vehicles").emData);
       App.listAllController.set("drivers", oDATA.GET("proc_Drivers").emData);
@@ -76,12 +76,7 @@
               if (p.Action === "Add") {
                 MY[me.dialogID].set("addVehicleMake", false);
               }
-              /* opts ???????? čia reikia isimint elementa kurį mes updatinsim
-              */
-
-              me.input.autocomplete("option").fnRefresh();
-              console.log("New Row");
-              return console.log(Row);
+              return me.input.autocomplete("option").fnRefresh();
             }
           });
           SERVER.update2(p);
@@ -94,9 +89,6 @@
           return e.context.set("edit", false);
         },
         saveVehicleMake: function(e) {
-          /* reikia žiūrėt
-          */
-
           var Msg, make, row, val;
           make = e.context.name;
           input = $(e.target).prev();
@@ -151,10 +143,10 @@
           });
         },
         addNewVehicleMake: function(e) {
-          return this.set("addVehicleMake", true);
+          return this.set("addItem", true);
         },
         cancelNewVehicleMake: function(e) {
-          return this.set("addVehicleMake", false);
+          return this.set("addItem", false);
         },
         saveNewVehicleMake: function(e) {
           var Msg, val;
@@ -182,6 +174,135 @@
         },
         width: 600,
         templateName: 'tmpVehicleMakes'
+      }).append();
+    },
+    editListItems: function(input, e) {
+      var dialogID, source, sourceName;
+      sourceName = input.data("ctrl").Source;
+      source = oDATA.GET(sourceName);
+      this.set("listItems", source.emData);
+      dialogID = "dialog" + (+(new Date));
+      return MY[dialogID] = JQ.Dialog.create({
+        input: input,
+        dialogID: dialogID,
+        title: source.Config.Msg.ListName,
+        msg: source.Config.Msg,
+        addNewMsg: "Pridėti naują " + source.Config.Msg.GenNameWhat.firstSmall(),
+        saveData: function(p) {
+          var Source, me;
+          Source = App.listAllController.listItems;
+          me = this;
+          $.extend(p, {
+            "Ctrl": $("#" + this.dialogID),
+            "source": sourceName,
+            CallBackAfter: function(Row) {
+              if (p.Action === "Edit") {
+                Source.findProperty("iD", Row.iD).set("edit", false);
+              }
+              if (p.Action === "Add") {
+                MY[me.dialogID].set("addItem", false);
+              }
+              return me.input.autocomplete("option").fnRefresh();
+            }
+          });
+          SERVER.update2(p);
+          return false;
+        },
+        editItem: function(e) {
+          return e.context.set("edit", e.context.name);
+        },
+        cancelItem: function(e) {
+          return e.context.set("edit", false);
+        },
+        saveItem: function(e) {
+          /* reikia žiūrėt
+          */
+
+          var Msg, item, row, val;
+          item = e.context.name;
+          input = $(e.target).prev();
+          val = input.val();
+          row = e.context;
+          row.name = val;
+          if (item.length > 0) {
+            Msg = {
+              Title: this.title,
+              Success: this.msg.GenName + " '" + item + "' pakeista(s).",
+              Error: this.msg.GenNameWhat + " '" + item + "' nepavyko pakeisti.."
+            };
+            return this.saveData({
+              DataToSave: {
+                "id": row.iD,
+                "Data": [row.name],
+                "Fields": ["Name"],
+                "DataTable": sourceName
+              },
+              Msg: Msg,
+              row: row,
+              Action: "Edit"
+            });
+          } else {
+            return e.context.set("name", e.context.edit).set("edit", false);
+          }
+        },
+        deleteItem: function(e) {
+          var item, me;
+          item = e.context.name;
+          me = this;
+          return oCONTROLS.dialog.Confirm({
+            title: this.title,
+            msg: me.msg.Delete + " '" + item + "'?"
+          }, function() {
+            var Msg, row;
+            Msg = {
+              Title: me.title,
+              Success: me.msg.GenName + " '" + item + "' ištrinta(s).",
+              Error: me.msg.GenNameWhat + " '" + item + "' nepavyko ištrinti."
+            };
+            row = e.context;
+            return me.saveData({
+              DataToSave: {
+                "id": row.iD,
+                "DataTable": sourceName
+              },
+              Msg: Msg,
+              row: row,
+              Action: "Delete"
+            });
+          });
+        },
+        addNewItem: function(e) {
+          return this.set("addItem", true);
+        },
+        cancelNewItem: function(e) {
+          return this.set("addItem", false);
+        },
+        saveNewItem: function(e) {
+          var Msg, val;
+          input = $(e.target).prev();
+          val = input.val();
+          Msg = {
+            Title: this.title,
+            Success: this.msg.GenName + " '" + val + "' pridėtas.",
+            Error: this.msg.GenNameWhat + " '" + val + "' nepavyko pridėti."
+          };
+          return this.saveData({
+            DataToSave: {
+              "Data": [val],
+              "Fields": ["Name"],
+              "DataTable": sourceName
+            },
+            Msg: Msg,
+            row: [val],
+            Action: "Add"
+          });
+        },
+        closeDialog: function(e) {
+          $("#" + this.dialogID).dialog("close");
+          return false;
+        },
+        width: 600,
+        templateName: 'tmpEditItems'
       }).append();
     },
     openItem: function(pars) {
@@ -335,8 +456,12 @@
                 CallBackAfter: function(Row) {
                   dialogFrm.dialog("close");
                   if (Row.iD) {
-                    App[pars.controller][pars.emObject].findProperty("iD", Row.iD).set("docs", "(0)");
-                    return $("#tabLists").find("div.ui-tabs").find("li.ui-tabs-selected a").trigger("click");
+                    if (pars.input) {
+                      pars.input.data("newval", Row.iD);
+                      return pars.input.val(Row.MapArrToString(pars.input.data("ctrl").iText));
+                    } else {
+                      return $("#tabLists").find("div.ui-tabs").find("li.ui-tabs-selected a").trigger("click");
+                    }
                   }
                 }
               });
@@ -518,7 +643,7 @@
       return this.setDocs(this.refID, this.groupID);
     },
     setDocs: function(refID, groupID) {
-    	var docsPath, docTypes, docs, fnGetDocType, fnGetIcon, fnGetUser, url, users;
+      var docTypes, docs, docsPath, fnGetDocType, fnGetIcon, fnGetUser, url, users;
       if (refID) {
         this.refID = refID;
         this.groupID = groupID;
@@ -526,8 +651,8 @@
         refID = this.refID;
         groupID = this.groupID;
       }
-       docsPath = oDATA.GET("userData").emData[0].docsPath;
-       url = "Uploads/" + docsPath;
+      docsPath = oDATA.GET("userData").emData[0].docsPath;
+      url = "Uploads/" + docsPath;
       users = oDATA.GET("tblUsers").emData;
       docTypes = oDATA.GET("tblDocTypes").emData;
       fnGetIcon = function(ext) {

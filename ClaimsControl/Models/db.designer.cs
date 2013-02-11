@@ -126,12 +126,12 @@ namespace CC.Models
     partial void InserttblUser(tblUser instance);
     partial void UpdatetblUser(tblUser instance);
     partial void DeletetblUser(tblUser instance);
-    partial void InserttblLanguage(tblLanguage instance);
-    partial void UpdatetblLanguage(tblLanguage instance);
-    partial void DeletetblLanguage(tblLanguage instance);
     partial void InserttblAccount(tblAccount instance);
     partial void UpdatetblAccount(tblAccount instance);
     partial void DeletetblAccount(tblAccount instance);
+    partial void InserttblLanguage(tblLanguage instance);
+    partial void UpdatetblLanguage(tblLanguage instance);
+    partial void DeletetblLanguage(tblLanguage instance);
     #endregion
 		
 		public dbDataContext() : 
@@ -420,19 +420,19 @@ namespace CC.Models
 			}
 		}
 		
-		public System.Data.Linq.Table<tblLanguage> tblLanguages
-		{
-			get
-			{
-				return this.GetTable<tblLanguage>();
-			}
-		}
-		
 		public System.Data.Linq.Table<tblAccount> tblAccounts
 		{
 			get
 			{
 				return this.GetTable<tblAccount>();
+			}
+		}
+		
+		public System.Data.Linq.Table<tblLanguage> tblLanguages
+		{
+			get
+			{
+				return this.GetTable<tblLanguage>();
 			}
 		}
 		
@@ -8063,9 +8063,9 @@ namespace CC.Models
 		
 		private EntityRef<tblUsers_RolesGroup> _tblUsers_RolesGroup;
 		
-		private EntityRef<tblLanguage> _tblLanguage;
-		
 		private EntityRef<tblAccount> _tblAccount;
+		
+		private EntityRef<tblLanguage> _tblLanguage;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -8125,8 +8125,8 @@ namespace CC.Models
 			this._tblInsPolicies = new EntitySet<tblInsPolicy>(new Action<tblInsPolicy>(this.attach_tblInsPolicies), new Action<tblInsPolicy>(this.detach_tblInsPolicies));
 			this._tblDocs = new EntitySet<tblDoc>(new Action<tblDoc>(this.attach_tblDocs), new Action<tblDoc>(this.detach_tblDocs));
 			this._tblUsers_RolesGroup = default(EntityRef<tblUsers_RolesGroup>);
-			this._tblLanguage = default(EntityRef<tblLanguage>);
 			this._tblAccount = default(EntityRef<tblAccount>);
+			this._tblLanguage = default(EntityRef<tblLanguage>);
 			OnCreated();
 		}
 		
@@ -8675,40 +8675,6 @@ namespace CC.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblLanguage_tblUser", Storage="_tblLanguage", ThisKey="LanguageID", OtherKey="ID", IsForeignKey=true)]
-		public tblLanguage tblLanguage
-		{
-			get
-			{
-				return this._tblLanguage.Entity;
-			}
-			set
-			{
-				tblLanguage previousValue = this._tblLanguage.Entity;
-				if (((previousValue != value) 
-							|| (this._tblLanguage.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._tblLanguage.Entity = null;
-						previousValue.tblUsers.Remove(this);
-					}
-					this._tblLanguage.Entity = value;
-					if ((value != null))
-					{
-						value.tblUsers.Add(this);
-						this._LanguageID = value.ID;
-					}
-					else
-					{
-						this._LanguageID = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("tblLanguage");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblAccount_tblUser", Storage="_tblAccount", ThisKey="AccountID", OtherKey="ID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
 		public tblAccount tblAccount
 		{
@@ -8739,6 +8705,40 @@ namespace CC.Models
 						this._AccountID = default(int);
 					}
 					this.SendPropertyChanged("tblAccount");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblLanguage_tblUser", Storage="_tblLanguage", ThisKey="LanguageID", OtherKey="ID", IsForeignKey=true)]
+		public tblLanguage tblLanguage
+		{
+			get
+			{
+				return this._tblLanguage.Entity;
+			}
+			set
+			{
+				tblLanguage previousValue = this._tblLanguage.Entity;
+				if (((previousValue != value) 
+							|| (this._tblLanguage.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._tblLanguage.Entity = null;
+						previousValue.tblUsers.Remove(this);
+					}
+					this._tblLanguage.Entity = value;
+					if ((value != null))
+					{
+						value.tblUsers.Add(this);
+						this._LanguageID = value.ID;
+					}
+					else
+					{
+						this._LanguageID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("tblLanguage");
 				}
 			}
 		}
@@ -8797,120 +8797,6 @@ namespace CC.Models
 		{
 			this.SendPropertyChanging();
 			entity.tblUser = null;
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tblLanguage")]
-	public partial class tblLanguage : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _ID;
-		
-		private string _Name;
-		
-		private EntitySet<tblUser> _tblUsers;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIDChanging(int value);
-    partial void OnIDChanged();
-    partial void OnNameChanging(string value);
-    partial void OnNameChanged();
-    #endregion
-		
-		public tblLanguage()
-		{
-			this._tblUsers = new EntitySet<tblUser>(new Action<tblUser>(this.attach_tblUsers), new Action<tblUser>(this.detach_tblUsers));
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int ID
-		{
-			get
-			{
-				return this._ID;
-			}
-			set
-			{
-				if ((this._ID != value))
-				{
-					this.OnIDChanging(value);
-					this.SendPropertyChanging();
-					this._ID = value;
-					this.SendPropertyChanged("ID");
-					this.OnIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-		public string Name
-		{
-			get
-			{
-				return this._Name;
-			}
-			set
-			{
-				if ((this._Name != value))
-				{
-					this.OnNameChanging(value);
-					this.SendPropertyChanging();
-					this._Name = value;
-					this.SendPropertyChanged("Name");
-					this.OnNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblLanguage_tblUser", Storage="_tblUsers", ThisKey="ID", OtherKey="LanguageID")]
-		public EntitySet<tblUser> tblUsers
-		{
-			get
-			{
-				return this._tblUsers;
-			}
-			set
-			{
-				this._tblUsers.Assign(value);
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_tblUsers(tblUser entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblLanguage = this;
-		}
-		
-		private void detach_tblUsers(tblUser entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblLanguage = null;
 		}
 	}
 	
@@ -9380,6 +9266,144 @@ namespace CC.Models
 		{
 			this.SendPropertyChanging();
 			entity.tblAccount = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tblLanguage")]
+	public partial class tblLanguage : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _Name;
+		
+		private string _ShortName;
+		
+		private EntitySet<tblUser> _tblUsers;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnShortNameChanging(string value);
+    partial void OnShortNameChanged();
+    #endregion
+		
+		public tblLanguage()
+		{
+			this._tblUsers = new EntitySet<tblUser>(new Action<tblUser>(this.attach_tblUsers), new Action<tblUser>(this.detach_tblUsers));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ShortName", DbType="Char(2) NOT NULL", CanBeNull=false)]
+		public string ShortName
+		{
+			get
+			{
+				return this._ShortName;
+			}
+			set
+			{
+				if ((this._ShortName != value))
+				{
+					this.OnShortNameChanging(value);
+					this.SendPropertyChanging();
+					this._ShortName = value;
+					this.SendPropertyChanged("ShortName");
+					this.OnShortNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblLanguage_tblUser", Storage="_tblUsers", ThisKey="ID", OtherKey="LanguageID")]
+		public EntitySet<tblUser> tblUsers
+		{
+			get
+			{
+				return this._tblUsers;
+			}
+			set
+			{
+				this._tblUsers.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_tblUsers(tblUser entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblLanguage = this;
+		}
+		
+		private void detach_tblUsers(tblUser entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblLanguage = null;
 		}
 	}
 	

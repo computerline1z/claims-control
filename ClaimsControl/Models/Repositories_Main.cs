@@ -620,7 +620,7 @@ namespace CC.Models {
 				new { FName = "TypeID",List=new{Source="tblVehicleTypes",Editable=0,ListType="List", iVal="iD",iText=new object []{"name"}}},//8
 				new { FName = "MakeID",List=new{Source="tblVehicleMakes",Editable=new{Add=true},ListType="List", iVal="iD",iText=new object []{"name"}}}//9
 			}; JSON.Cols = Cols;
-			JSON.Config = new { Controler = "Vehicles", tblUpdate = "tblVehicles", titleFields = new object[] { "plate", "make" }, Msg = new { AddNew = "Naujos transporto priemonės sukūrimas", Edit = "Transporto priemonių redagavimas", Delete = "Ištrinti transporoto priemonę", GenName = "Transporto priemonė", GenNameWhat = "transporto priemonę", ListName = "Transporto priemonių sąrašas" } };
+			JSON.Config = new { Controler = "Vehicles", tblUpdate = "tblVehicles", titleFields = new object[] { "plate", "make" }, Msg = new { AddNew = "Naujos transporto priemonės sukūrimas", Edit = "Transporto priemonių redagavimas", Delete = "Ištrinti transporoto priemonę", GenName = "Transporto priemonė", GenNameWhat = "Transporto priemonę", ListName = "Transporto priemonių sąrašas" } };
 			JSON.Grid = new {
 				aoColumns = new object[]{
 					new {bVisible=false},//0//ID
@@ -679,7 +679,7 @@ namespace CC.Models {
 					new {sTitle="Pavardė"},
 					new {sTitle="El. paštas"},
 					new {sTitle="Yra administratorius"},
-					new {sTitle="Yra aktyvus"},
+					new {sTitle="Prisijungti leidžiama"},
 					new {sTitle="Sąsajos kalba"},
 					new {sTitle="Pareigos"},
 					new {sTitle="Telefonas"},
@@ -722,12 +722,14 @@ namespace CC.Models {
 
 				new { FName = "InsuredAddress",Type="String", LenMax=100,Validity="require().nonHtml().maxLength(100)"},//7
 				new { FName = "InsuredContactName",Type="String"},//8
-				new { FName = "InsuredContactID",List=new{Source="tblUsers",Editable=1,ListType="List", iVal="iD",iText=new object []{"firstName","surName"}}},//9
+				new { FName = "InsuredContactID",List=new{Source="tblUsers",Editable=1,ListType="List", iVal="iD",iText=new object []{"firstName","surname"},mapWithNoCommas=1}},//9
 				new { FName = "ClaimTypeID",List=new{Source="tblClaimTypes",Editable=0,ListType="List", iVal="iD",iText=new object []{"name"}}},//10
-				new { FName = "InsurerID",List=new{Source="tblInsurers",Editable=1,ListType="List", iVal="iD",iText=new object []{"name"}}},//11
+				//new { FName = "MakeID",List=new{Source="tblVehicleMakes",Editable=new{Add=true},ListType="List", iVal="iD",iText=new object []{"name"}}}//9
+
+				new { FName = "InsurerID",List=new{Source="tblInsurers",Editable=new{Add=true},ListType="List", iVal="iD",iText=new object []{"name"}}},//11
 				new { FName = "MailsAddresses",Type="String", Tip="Įveskite vieną ar kelis draudiko ar brokerio el. pašto adresus (atskirti kableliu ar kabletaškiu)", LenMax=250,Validity="nonHtml().maxLength(250)"},//5
 								}; JSON.Cols = Cols;
-			JSON.Config = new { Controler = "InsPolicy", tblUpdate = "tblInsPolicies", titleFields = new object[] { "policyNumber", "insurerName" }, Msg = new { AddNew = "Naujo draudimo poliso sukūrimas", Edit = "Draudimo poliso redagavimas", Delete = "Ištrinti draudimo polisą", GenName = "Draudimo polisas", GenNameWhat = "draudimo polisą", ListName = "Draudimo polisų sąrašas" } };
+			JSON.Config = new { Controler = "InsPolicy", tblUpdate = "tblInsPolicies", titleFields = new object[] { "policyNumber", "insurerName" }, Msg = new { AddNew = "Naujos draudimo sutarties sukūrimas", Edit = "Draudimo sutarties redagavimas", Delete = "Ištrinti draudimo sutartį", GenName = "Draudimo sutartis", GenNameWhat = "draudimo polisą", ListName = "Draudimo sutarčių sąrašas" } };
 			JSON.Grid = new {
 				aoColumns = new object[]{
 					new {bVisible=false},//0//ID////DefaultUpdate=0
@@ -740,8 +742,8 @@ namespace CC.Models {
 					new {sTitle="Draudėjas"},//5//InsuredName////DefaultUpdate=0
 					new {sTitle="Draudėjo kodas",bVisible=false},//6//InsuredName//
 					new {sTitle="Draudėjo adresas",bVisible=false},//7//InsuredCode//
-					new {sTitle="Draudėjo kontaktas",bVisible=false},//8//InsuredContact//
-					new {bVisible=false,sTitle="Draudėjo kontaktas"},//9//InsuredContactID////UserID
+					new {sTitle="Kontaktinis asmuo",bVisible=false},//8//InsuredContact//
+					new {bVisible=false,sTitle="Kontaktinis asmuo"},//9//InsuredContactID////UserID
 					new {bVisible=false,sTitle="Žalos tipas"},//10//ClaimTypeID////DefaultUpdate=0
 					new {bVisible=false,sTitle="Draudikas"},//11//InsurerID////
 					new {bVisible=false,sTitle="Pranešimą apie žalą siųsti(atskirti kabliataškiu):"}//11//InsurerID////
@@ -823,7 +825,7 @@ namespace CC.Models {
 
 		public tblAccident Get_tblAccident(int No) {
 			return (from d in dc.tblAccidents
-					  where d.No == No && d.IsDeleted == false
+					  where d.No == No && d.IsDeleted == false && d.AccountID==UserData.AccountID
 					  select d).SingleOrDefault() ?? null;
 		}
 		public IQueryable<AccidentVehicles> Get_Vehicles(int accidentID) {
@@ -852,7 +854,7 @@ namespace CC.Models {
 				new { FName = "CountryID"},//2
 				new { FName = "CountryDefault",Type="Integer",Validity="require().match('integer').maxLength(13).greaterThanOrEqualTo(0)"},//3
 			}; JSON.Cols = Cols;
-			JSON.Config = new { Controler = "Insurers", tblUpdate = "tblInsurers", Msg = new { AddNew = "Naujo draudiko sukūrimas", Edit = "Draudiko redagavimas", Delete = "Ištrinti draudiką", GenName = "Draudikas", GenNameWhat = "draudiką", ListName = "Draudikų sąrašas" } };
+			JSON.Config = new { Controler = "Insurers", tblUpdate = "tblInsurers", Msg = new { AddNew = "Naujo draudiko sukūrimas", Edit = "Draudiko redagavimas", Delete = "Ištrinti draudiką", GenName = "Draudikas", GenNameWhat = "Draudiką", ListName = "Draudikų sąrašas" } };
 
 			JSON.Grid = new {
 				aoColumns = new object[]{
@@ -879,7 +881,7 @@ namespace CC.Models {
 				new { FName = "ID"},//0
 				new { FName = "Name",Type="String", LenMax=50,IsUnique=new object[]{1},Validity="require().nonHtml().maxLength(50)"},//1
 			}; JSON.Cols = Cols;
-			JSON.Config = new { Controler = "VehicleMakes", tblUpdate = "tblVehicleMakes", titleFields = new object[] { "name" }, Msg = new { AddNew = "Naujos tr. priemonių markės sukūrimas", Edit = "Tr. priemonių markės redagavimas", Delete = "Ištrinti tr. priemonių markę", GenName = "Tr. priemonės markė", GenNameWhat = "transporto priemonę", ListName = "Tr. priemonių sąrašas" } };
+			JSON.Config = new { Controler = "VehicleMakes", tblUpdate = "tblVehicleMakes", titleFields = new object[] { "name" }, Msg = new { AddNew = "Naujos tr. priemonių markės sukūrimas", Edit = "Tr. priemonių markės redagavimas", Delete = "Ištrinti tr. priemonių markę", GenName = "Tr. priemonės markė", GenNameWhat = "transporto priemonę", ListName = "Tr. priemonių markių sąrašas" } };
 			JSON.Grid = new {
 				aoColumns = new object[]{
 					new {bVisible=false,sTitle="Markė"},//0//ID////DefaultUpdate=0

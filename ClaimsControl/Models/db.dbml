@@ -389,15 +389,8 @@
       <Association Name="tblUser_tblInsPolicy" Member="tblInsPolicies" ThisKey="ID" OtherKey="InsuredContactID" Type="tblInsPolicy" />
       <Association Name="tblUser_tblDoc" Member="tblDocs" ThisKey="ID" OtherKey="UserID" Type="tblDoc" />
       <Association Name="tblUsers_RolesGroup_tblUser" Member="tblUsers_RolesGroup" ThisKey="RoleGroupID" OtherKey="ID" Type="tblUsers_RolesGroup" IsForeignKey="true" />
-      <Association Name="tblLanguage_tblUser" Member="tblLanguage" ThisKey="LanguageID" OtherKey="ID" Type="tblLanguage" IsForeignKey="true" />
       <Association Name="tblAccount_tblUser" Member="tblAccount" ThisKey="AccountID" OtherKey="ID" Type="tblAccount" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.tblLanguage" Member="tblLanguages">
-    <Type Name="tblLanguage">
-      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Association Name="tblLanguage_tblUser" Member="tblUsers" ThisKey="ID" OtherKey="LanguageID" Type="tblUser" />
+      <Association Name="tblLanguage_tblUser" Member="tblLanguage" ThisKey="LanguageID" OtherKey="ID" Type="tblLanguage" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.tblAccounts" Member="tblAccounts">
@@ -417,6 +410,14 @@
       <Association Name="tblCountry_tblAccount" Member="tblCountry" ThisKey="CountryID" OtherKey="ID" Type="tblCountry" IsForeignKey="true" />
       <Association Name="tblCurrency_tblAccount" Member="tblCurrency" ThisKey="CurrencyID" OtherKey="ID" Type="tblCurrency" IsForeignKey="true" />
       <Association Name="tblTimeZone_tblAccount" Member="tblTimeZone" ThisKey="TimeZoneID" OtherKey="ID" Type="tblTimeZone" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tblLanguage" Member="tblLanguages">
+    <Type Name="tblLanguage">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ShortName" Type="System.String" DbType="Char(2) NOT NULL" CanBeNull="false" />
+      <Association Name="tblLanguage_tblUser" Member="tblUsers" ThisKey="ID" OtherKey="LanguageID" Type="tblUser" />
     </Type>
   </Table>
   <Function Name="dbo.proc_Vehicles" Method="proc_Vehicles">

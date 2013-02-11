@@ -104,14 +104,15 @@ App.editDocsController= Em.Object.create(
 	SaveEditedDoc: (e)-> 
 		t=$(e.target).parent().parent(); desc=t.find("input.description").val(); docTypeID=t.find("input.docType").data("newval");
 		controller=App[@getOpts(t).docsController]; docTypeVal=t.find("input.docType").val()	
-		docID=e.context.docID; doc=oDATA.GET("tblDocs").emData.findProperty("iD",docID); 
+		cont=e.context;
+		docID=cont.docID; doc=oDATA.GET("tblDocs").emData.findProperty("iD",docID); 
 		docTypeID = if docTypeID then docTypeID else doc.docTypeID
-		e.context.set("description",desc).set("docType",docTypeVal) # reiktų po išsaugojimo update2 išsaugot		
-		cont=e.context		
+		groupID=oDATA.GET("tblDocTypes").emData.findProperty("iD",docTypeID).docGroupID #Pakeitus tipą reikia pakeist ir grupę
 		SERVER.update2("Action":"Edit","Ctrl":t,"source":"tblDocs","row":doc,
-		DataToSave:{"id":docID,"Data":[docTypeID,desc],"Fields":["docTypeID","description"],"DataTable":"tblDocs"},
+		DataToSave:{"id":docID,"Data":[groupID,docTypeID,desc],"Fields":["groupID","docTypeID","description"],"DataTable":"tblDocs"},
 		#Msg: { Title: "Duokumento tipo priskyrimas", Success: "Dokumentas '"+doc.docName+"' priskirtas tipui '"+newTypeName+"'.", Error: "Nepavyko pakeisti dokumento '"+doc.docName+"' tipo." },
-		CallBackAfter:(Row)-> 
+		CallBackAfter:(Row)-> 			
+			#cont.set("description",desc).set("docType",docTypeVal) # reiktų po išsaugojimo update2 išsaugot	
 			controller.refreshDocs()
 			#cont.set("editMode",false).set("description",desc).set("docType",docTypeVal)
 		)	

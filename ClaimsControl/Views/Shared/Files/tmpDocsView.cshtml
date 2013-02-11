@@ -11,12 +11,26 @@
 			<i {{bindAttr class="fileIcon" }} ></i>
 		{{/if}}
 		</div>
-				<a {{bindAttr href="urlDoc" }} target="_blank">{{fileName}}</a>
-				<p>{{userName}}&nbsp;{{fileDate}}</p>
-		<div class="td w100px">
-						<i class="img32-mono_edit clickable"></i>
-						<i class="img32-mono_delete clickable"></i>
-		</div>
+				
+				{{#if this.editMode}}
+					<div class="ExtendIt" style="margin:0">
+						<input class="description" type="text" {{bindAttr value="description"}} style="width:100%"/>
+						<input class="docType" type="text" {{bindAttr value="docType"}}/>
+						<div>
+							<a href="#" {{action cancelSaveDoc this target="App.editDocsController"}}>Atšaukti</a>
+							<button {{action SaveEditedDoc this target="App.editDocsController"}} class="btn small">Išsaugoti</button>
+						</div>
+					</div>
+				{{else}}
+					<div>{{description}}</div>
+					<a {{bindAttr href="urlDoc" }} target="_blank">{{fileName}}</a></br>
+					<p>{{userName}}&nbsp;{{fileDate}}</p>
+					<div class="w100px">
+						<i class="img32-mono_edit clickable" {{action editDoc this target="App.editDocsController"}}></i>
+						<i class="img32-mono_delete clickable" {{action deleteDoc this target="App.editDocsController"}}></i>
+					</div>
+				{{/if}}
+
 	</li>
 	{{/each}}
 {{else}}

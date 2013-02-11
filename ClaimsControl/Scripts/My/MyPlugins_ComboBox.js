@@ -38,6 +38,7 @@
             vals: newVals,
             cols: opt.iText
           } : null,
+          input: $(this.event.target),
           CallBackAfter: function(Row) {
             return dialogFrm.dialog("close");
           }
@@ -47,10 +48,16 @@
       data = void 0;
       OptVal = parseInt(opt.Value, 10);
       fnSetData = function() {
+        var fn;
         if (opt.data) {
           data = opt.data();
         } else {
-          data = $.map(oDATA.GET(opt.Source).emData, function(a) {
+          fn = function(a) {
+            if (opt.excludeFromList) {
+              if (opt.excludeFromList.ValueInMe(a.iD)) {
+                return null;
+              }
+            }
             if (a.iD === OptVal) {
               input.val(a.MapArrToString(opt.iText, opt.mapWithNoCommas));
             }
@@ -58,6 +65,9 @@
               id: a[opt.iVal],
               label: a.MapArrToString(opt.iText, opt.mapWithNoCommas)
             };
+          };
+          data = $.map(oDATA.GET(opt.Source).emData, function(a) {
+            return fn(a);
           });
         }
         if (opt.Editable.Add) {
@@ -88,11 +98,7 @@
             return false;
           }
           if (ui.item.id === -1) {
-            if ($(event.target).data("ctrl").Source === "tblVehicleMakes") {
-              App.listAllController.addVehicleMake(input, event);
-            } else {
-              fnEditItem(0);
-            }
+            App.listAllController.editListItems(input, event);
             return false;
           }
           if ($(event.srcElement).hasClass("ui-menu-icon")) {

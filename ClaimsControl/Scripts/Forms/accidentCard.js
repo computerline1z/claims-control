@@ -167,7 +167,9 @@ oGLOBAL.mapFn = {
 		return ((oGLOBAL.AccidentForm.Address) ? (oGLOBAL.AccidentForm.Address + ', ') : "") + oGLOBAL.AccidentForm.District + ', ' + oGLOBAL.AccidentForm.Country;
 	},
 	fnSetAddress: function(place){
-		var p=oGLOBAL.AccidentForm; place="<a target='_blank' href='https://maps.google.com/maps?q="+p.Lat+","+p.Lng+"("+place+")'>"+place+"<a>"
+		var p=oGLOBAL.AccidentForm;
+		//place="<a target='_blank' href='https://maps.google.com/maps?q="+p.Lat+","+p.Lng+"("+place+")'>"+place+"<a>"
+		$("#linkToGoogle").attr("href","https://maps.google.com/maps?q="+p.Lat+","+p.Lng+"("+place+")")
 		$('#txtPlace').html(place);
 		$("#divSearchMap").css("display","none");
 	},

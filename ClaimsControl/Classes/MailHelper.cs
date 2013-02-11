@@ -2,6 +2,8 @@
 using System.IO;
 using System.Net.Mail;
 using System.Web;
+using CC.Classes;
+using System.Web.Security;
 
 //using msOutlook =  Microsoft.Office.Interop.Outlook;
 
@@ -30,7 +32,7 @@ namespace DataModels.DataSources {
             Body = body,
             IsBodyHtml = true,
             Priority = MailPriority.Normal,
-				From = new MailAddress("do-not-replay@claimscontrol.com", "ClaimsControl")
+				From = new MailAddress("support@claimscontrol.com", "ClaimsControl")
          };
 
          mMailMessage.To.Add(new MailAddress(to));
@@ -44,29 +46,19 @@ namespace DataModels.DataSources {
 
 			try { mSmtpClient.Send(mMailMessage); }
 			catch (Exception e) {
-				//MyEventLog.AddException(e);
-				
+				MyEventLog.AddException(e.Message,"Err in SendMailMessage",69);
 				//mSmtpClient.Send(mMailMessage);
 			}
 
       }
 
-      public static string BuildMailMessage(HttpContextBase context, string language,
-                                            string paskyra, string email, string password,
-                                            string homeUrl, string bodyName) {
-         string relativePath = String.Format("~/App_Data/Mail.{0}.{1}.htm", bodyName, language);
-         string absolutePath = context.Server.MapPath(relativePath);
-         if (!File.Exists(absolutePath))
-            throw new Exception(String.Format("WEP applikacija neturi failo '{0}'.", relativePath));
-
-         string template = File.ReadAllText(absolutePath);
-
-         template = template.Replace("/*paskyra*/", paskyra);
-         template = template.Replace("/*email*/", email);
-         template = template.Replace("/*homeUrl*/", homeUrl);
-
-         template = template.Replace("/*date*/", DateTime.Now.ToString("yyyy.MM.dd"));
-         return template;
+		//public static string BuildMailMessage(HttpContextBase context, string language,
+		//                                      string paskyra, string email, string password,
+		//                                      string homeUrl, string bodyName) {
+		public static void SendMail_SetUrl(string email, string tmplName, string title) {
+			string body = UserData.GetMailBody_SetUrl(email, tmplName);
+			if (body != null) { SendMailMessage(email, String.Empty, String.Empty, title, body); }
+			else MyEventLog.AddException(String.Format("Nepavyko suformuot laiško paštui '{0}'.", email), "Err in MailHelper.SendMail", 69);
       }
    }
 }

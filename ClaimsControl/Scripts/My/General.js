@@ -151,23 +151,30 @@ Em.Object.prototype.updateTo = function (newObject) {//very ew very good, very c
 		}
 	}
 }
+Array.prototype.getColByFName = function (FNameVal) {
+	var ctr = "";
+	for (var i = 0; i < this.length; i++) {
+		if (this[i].FName.toLowerCase() == FNameVal.toLowerCase()) {
+			return this[i];
+		}
+	}
+	return ctr;
+};
 Array.prototype.FNameIndex = function (FNameVal) {
 	var ctr = "";
 	for (var i = 0; i < this.length; i++) {
-		// use ===to check for Matches. ie., identical (===), ;
-		if (this[i].FName == FNameVal) {
+		if (this[i].FName.toLowerCase() == FNameVal.toLowerCase()) {
 			return i;
 		}
 	}
 	return ctr;
 };
-Array.prototype.findIndexByVal = function (value) {
-	var ctr = "";
+Array.prototype.findIndexByVal = function (value,normallize) {
+	var ctr = "";if (normallize){value=value.toLowerCase();}
 	for (var i = 0; i < this.length; i++) {
 		// use ===to check for Matches. ie., identical (===), ;
-		if (this[i] == value) {
-			return i;
-		}
+		if (normallize){if (this[i].toLowerCase() == value) {return i;}}
+		if (this[i] == value) {return i;}
 	}
 	return ctr;
 };

@@ -245,7 +245,7 @@ var oCONTROLS = {
 			Fields: [],
 			DataTable: DataTable
 		};
-		$.each(frm.find(".UpdateField"), function (i, v) {
+		$.each(frm.find(".UpdateField:visible"), function (i, v) {
 			var e = $(v);
 			var elDesc = e[0].tagName + ", id-" + e.attr("id"), Value, UpdateField = (e.data("ctrl").UpdateField) ? e.data("ctrl").UpdateField : false;
 			if (e.data("ctrl") === undefined) {
@@ -384,7 +384,7 @@ var oCONTROLS = {
 		return this.appendLabel(p, "<textarea cols='100' rows='4' " + this.basic(p) + ">" + ((p.Value) ? p.Value : "") + "</textarea>");
 	},
 	chk: function (p) {
-		if (typeof p.Value === "string") { p.Value = ((p.Value.search(/false/i) > -1 || p.Value === "") ? 0 : 1); }
+		if (typeof p.Value === "string") { p.Value = ((p.Value.toLowerCase().search(/false/i) > -1 || p.Value === ""|| p.Value == 0) ? 0 : 1); }//==kad tiktu 0 ir "0"
 		return "<label " + ((p.label.classes) ? " class='" + p.label.classes + "'" : "") + ((p.attr) ? p.attr + " " : "") + "><input type='checkbox' " + this.basic(p) + ((p.Value) ? "checked='checked'" : "") + "/>" + ((p.label.txt) ? p.label.txt : "") + "</label>";
 	},
 	//{src:??,alt:??,onclickfn:??}

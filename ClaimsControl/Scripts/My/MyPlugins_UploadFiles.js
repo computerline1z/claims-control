@@ -135,17 +135,17 @@
       return e.context.set("editMode", false);
     },
     SaveEditedDoc: function(e) {
-      var cont, controller, desc, doc, docID, docTypeID, docTypeVal, t;
+      var cont, controller, desc, doc, docID, docTypeID, docTypeVal, groupID, t;
       t = $(e.target).parent().parent();
       desc = t.find("input.description").val();
       docTypeID = t.find("input.docType").data("newval");
       controller = App[this.getOpts(t).docsController];
       docTypeVal = t.find("input.docType").val();
-      docID = e.context.docID;
+      cont = e.context;
+      docID = cont.docID;
       doc = oDATA.GET("tblDocs").emData.findProperty("iD", docID);
       docTypeID = docTypeID ? docTypeID : doc.docTypeID;
-      e.context.set("description", desc).set("docType", docTypeVal);
-      cont = e.context;
+      groupID = oDATA.GET("tblDocTypes").emData.findProperty("iD", docTypeID).docGroupID;
       return SERVER.update2({
         "Action": "Edit",
         "Ctrl": t,
@@ -153,8 +153,8 @@
         "row": doc,
         DataToSave: {
           "id": docID,
-          "Data": [docTypeID, desc],
-          "Fields": ["docTypeID", "description"],
+          "Data": [groupID, docTypeID, desc],
+          "Fields": ["groupID", "docTypeID", "description"],
           "DataTable": "tblDocs"
         },
         CallBackAfter: function(Row) {

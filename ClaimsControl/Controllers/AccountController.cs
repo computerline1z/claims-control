@@ -10,6 +10,7 @@ using CC.Models;
 using DataModels.DataSources;
 using Ninject;
 using CC.Services.Interfaces;
+using CC.Classes;
 
 namespace ClaimsControl.Controllers {
 
@@ -99,9 +100,9 @@ namespace ClaimsControl.Controllers {
 					ModelState.AddModelError("EMail", String.Format("{0} - Neteisingas pašto addresas.", model.Email));
 					return View(model);
 				}
-				MembershipUser aUser = Membership.GetUser(currentUserName);
-
-				SendPasswordChangedMail(aUser.UserName, model.Email, (Guid)aUser.ProviderUserKey);
+				//MembershipUser aUser = Membership.GetUser(currentUserName);
+				MailHelper.SendMail_SetUrl(model.Email, "ResetUserPsw", "ClaimsControl sistemos slaptažodžio atnaujinimas");
+				//SendPasswordChangedMail(aUser.UserName, model.Email, (Guid)aUser.ProviderUserKey);
 				ModelState.AddModelError("", "Laiškas iškeliavo!");
 				return View(model);
 			}
@@ -109,7 +110,7 @@ namespace ClaimsControl.Controllers {
 			return View(model);
 		}
 		[HttpPost]
-		public JsonResult RecoverPassword2(string email) {
+		public JsonResult RecoverPassword2(string email, string mailTmpl) {//mailTmpl = "ResetUserPsw", "NewUserPsw"
 			jsonResponse JsonResp = new jsonResponse { ErrorMsg = "Kita klaida siunčiant slaptažodžio keitimo laišką.", ResponseMsg = "" };
 			if (ModelState.IsValid) {
 				string UserName = Membership.GetUserNameByEmail(email);
@@ -117,8 +118,9 @@ namespace ClaimsControl.Controllers {
 					JsonResp.ErrorMsg = String.Format("Pašto adresas {0} nerastas.", email);
 				}
 				else {
-					MembershipUser aUser = Membership.GetUser(UserName);
-					SendPasswordChangedMail(aUser.UserName, email, (Guid)aUser.ProviderUserKey);
+					//MembershipUser aUser = Membership.GetUser(UserName);
+					//SendPasswordChangedMail(aUser.UserName, email, (Guid)aUser.ProviderUserKey);
+					MailHelper.SendMail_SetUrl(email, "ResetUserPsw", "ClaimsControl sistemos slaptažodžio atnaujinimas");
 					JsonResp.ResponseMsg = "Slaptažodžio pakeitimo laiškas išsiųstas."; JsonResp.ErrorMsg = "";
 				}
 			}
@@ -127,14 +129,17 @@ namespace ClaimsControl.Controllers {
 			}
 			return Json(JsonResp);
 		}
-		private void SendPasswordChangedMail(string userName, string email, Guid UserId) {
-			var x = this.HttpContext.Request;
-			string url = x.Url.Scheme + @"://" + x.Url.Authority + "/Account/NewPassword/" + UserId.ToString();
-			string messageBody = MailHelper.BuildMailMessage(this.HttpContext, "lt", userName, email, String.Empty,
-																			 url, "template");
+		//private void SendPasswordChangedMail(string userName, string email, Guid UserId) {
+		//   var x = this.HttpContext.Request;
+		//   var k=HttpContext.Request;
+		//   string url = x.Url.Scheme + @"://" + x.Url.Authority + "/Account/NewPassword/" + UserId.ToString();
+		//   string messageBody = MailHelper.BuildMailMessage(this.HttpContext, "lt", userName, email, String.Empty,
+		//                                                    url, "template");
 
-			MailHelper.SendMailMessage(email, String.Empty, String.Empty, "ClaimsControl slaptažodžio atnaujinimas", messageBody);
-		}
+		//   MailHelper.SendMailMessage(email, String.Empty, String.Empty, "ClaimsControl slaptažodžio atnaujinimas", messageBody);
+		//   MailHelper.SendMail_SetUrl(email, string tmplName, "ClaimsControl slaptažodžio atnaujinimas");
+
+		//}
 
 		// **************************************
 		// URL: /Account/LogOff
@@ -197,20 +202,21 @@ namespace ClaimsControl.Controllers {
 				aUser.Comment = model.UserName;
 				Membership.UpdateUser(aUser);
 				this._userManager.UpdateClientInUsersTable(model.Name, model.Surname, model.Email, model.LanguageId);
-				SendConfirmationMail(model, (Guid)aUser.ProviderUserKey);
+				//SendConfirmationMail(model, (Guid)aUser.ProviderUserKey);
+				MailHelper.SendMail_SetUrl(model.Email, "NewUserPsw", "Registracija Žalų valdymo sistemoje");
 			}
 			this.TempData[currentUserIdKey] = aUser.ProviderUserKey.ToString();
 			return RedirectToAction("RegisterOK", "Account");
 		}
 
-		private void SendConfirmationMail(RegisterModel model, Guid UserId) {
-			var x = this.HttpContext.Request;
-			string url = x.Url.Scheme + @"://" + x.Url.Authority + "/Account/NewPasswordComfirm/" + UserId.ToString();
+		//private void SendConfirmationMail(RegisterModel model, Guid UserId) {
+		//   var x = this.HttpContext.Request;
+		//   string url = x.Url.Scheme + @"://" + x.Url.Authority + "/Account/NewPassword/" + UserId.ToString();
 
-			string messageBody = MailHelper.BuildMailMessage(this.HttpContext, "lt", model.UserName,
-																			 model.Email, String.Empty, url, "template");
-			MailHelper.SendMailMessage(model.Email, String.Empty, String.Empty, "Registracija Žalų valdymo sistemoje", messageBody);
-		}
+		//   string messageBody = MailHelper.BuildMailMessage(this.HttpContext, "lt", model.UserName,
+		//                                                    model.Email, String.Empty, url, "template");
+		//   MailHelper.SendMailMessage(model.Email, String.Empty, String.Empty, "Registracija Žalų valdymo sistemoje", messageBody);
+		//}
 
 		/// <summary>
 		/// Return lithuanian error messages.
@@ -268,17 +274,14 @@ namespace ClaimsControl.Controllers {
 			Guid userId = Guid.Parse(id);
 			MembershipUser aUser = Membership.GetUser(userId);
 
-			var model = new RegisterOKModel() {
-				UserId = userId,
-				Email = aUser.Email,
-				UserName = aUser.Comment,
-			};
+			var model = new RegisterOKModel() { UserId = userId, Email = aUser.Email, UserName = aUser.Comment };
 
-			var x = this.HttpContext.Request;
-			string url = x.Url.Scheme + @"://" + x.Url.Authority + "/Account/NewPasswordComfirm/" + id;
-			string messageBody = MailHelper.BuildMailMessage(this.HttpContext, "lt", model.UserName,
-																			 model.Email, String.Empty, url, "template");
-			MailHelper.SendMailMessage(model.Email, String.Empty, String.Empty, "Registracija Žalų valdymo sistemoje", messageBody);
+			//var x = this.HttpContext.Request;
+			//string url = x.Url.Scheme + @"://" + x.Url.Authority + "/Account/NewPassword/" + id;
+			//string messageBody = MailHelper.BuildMailMessage(this.HttpContext, "lt", model.UserName,
+			//                                                 model.Email, String.Empty, url, "template");
+			MailHelper.SendMail_SetUrl(model.Email, "NewUserPsw", "Registracija Žalų valdymo sistemoje");
+			//MailHelper.SendMailMessage(model.Email, String.Empty, String.Empty, "Registracija Žalų valdymo sistemoje", messageBody);
 
 			TempData[currentUserIdKey] = userId.ToString();
 			return View("RegisterOK", model);
@@ -337,18 +340,18 @@ namespace ClaimsControl.Controllers {
 		/// <returns>RegisterOK view or existsing view with an error message</returns>
 		[HttpPost]
 		public ActionResult NewPassword(NewPasswordModel model) {
-			Guid? userId = null;
+			//Guid? userId = HttpContext.Request.RequestContext.RouteData.Values["id"];
+			Guid? TempUi = Guid.Parse((string)HttpContext.Request.RequestContext.RouteData.Values["id"]);
 			try {
-				if (TempData[currentUserIdKey] == null)
+				if (TempUi == null)
 					throw new Exception("Paspauskite nuorodą laiške, kuris buvo atsiųstas į jūsų el. pašto dėžutę.");
-				userId = Guid.Parse((string)TempData[currentUserIdKey]);
-				MembershipUser currentUser = Membership.GetUser(userId);
+				//userId = Guid.Parse((string)TempData[currentUserIdKey]);
+				MembershipUser currentUser = UserData.GetUserIdFromTempUi(TempUi);
 
 				if (ModelState.IsValid) {
 					string tmpPasswd = currentUser.ResetPassword();
 					currentUser.ChangePassword(tmpPasswd, model.Password);
 					Membership.UpdateUser(currentUser);
-
 					return RedirectToAction("LogOn");
 				}
 			}
@@ -356,8 +359,8 @@ namespace ClaimsControl.Controllers {
 				ModelState.AddModelError("", ex.Message);
 			}
 			// If we got this far, something failed, redisplay form
-			if (userId.HasValue)
-				TempData[currentUserIdKey] = userId.Value.ToString();
+			//if (TempUi.HasValue)
+				//TempData[currentUserIdKey] = userId.Value.ToString();
 			return View("NewPassword");
 		}
 		[HttpPost]
@@ -381,40 +384,40 @@ namespace ClaimsControl.Controllers {
 
 			return Json(JsonResp);
 		}
-		public ActionResult NewPasswordComfirm(string Id) {
-			TempData[currentUserIdKey] = Id;
-			return View("NewPassword");
-		}
+		//public ActionResult NewPasswordComfirm(string Id) {
+		//   TempData[currentUserIdKey] = Id;
+		//   return View("NewPassword");
+		//}
 
-		[HttpPost]
-		public ActionResult NewPasswordComfirm(NewPasswordModel model) {
-			Guid? userId = null;
-			try {
-				if (TempData[currentUserIdKey] == null)
-					throw new Exception("Paspauskite nuorodą laiške, kuris buvo atsiųstas į jūsų el. pašto dėžutę.");
-				userId = Guid.Parse((string)TempData[currentUserIdKey]);
-				MembershipUser currentUser = Membership.GetUser(userId);
-				if (currentUser == null)
-					throw new Exception("Laikinas prisijungimas nebegalioja. Bandykite registruotis iš naujo.");
+		//[HttpPost]
+		//public ActionResult NewPasswordComfirm(NewPasswordModel model) {
+		//   Guid? userId = null;
+		//   try {
+		//      if (TempData[currentUserIdKey] == null)
+		//         throw new Exception("Paspauskite nuorodą laiške, kuris buvo atsiųstas į jūsų el. pašto dėžutę.");
+		//      userId = Guid.Parse((string)TempData[currentUserIdKey]);
+		//      MembershipUser currentUser = Membership.GetUser(userId);
+		//      if (currentUser == null)
+		//         throw new Exception("Laikinas prisijungimas nebegalioja. Bandykite registruotis iš naujo.");
 
-				if (ModelState.IsValid) {
-					string tmpPasswd = currentUser.ResetPassword();
-					currentUser.ChangePassword(tmpPasswd, model.Password);
-					currentUser.IsApproved = true;
-					Membership.UpdateUser(currentUser);
+		//      if (ModelState.IsValid) {
+		//         string tmpPasswd = currentUser.ResetPassword();
+		//         currentUser.ChangePassword(tmpPasswd, model.Password);
+		//         currentUser.IsApproved = true;
+		//         Membership.UpdateUser(currentUser);
 
-					return RedirectToAction("LogOn");
-				}
-			}
-			catch (Exception ex) {
-				ModelState.AddModelError("", ex.Message);
-			}
-			// If we got this far, something failed, redisplay form
+		//         return RedirectToAction("LogOn");
+		//      }
+		//   }
+		//   catch (Exception ex) {
+		//      ModelState.AddModelError("", ex.Message);
+		//   }
+		//   // If we got this far, something failed, redisplay form
 
-			if (userId.HasValue)
-				TempData[currentUserIdKey] = userId.Value.ToString();
-			return View("NewPassword");
-		}
+		//   if (userId.HasValue)
+		//      TempData[currentUserIdKey] = userId.Value.ToString();
+		//   return View("NewPassword");
+		//}
 
 		//[Authorize]
 		//public ActionResult ChangePassword() {
