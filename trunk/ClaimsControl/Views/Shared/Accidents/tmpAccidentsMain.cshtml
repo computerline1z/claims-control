@@ -15,6 +15,7 @@
 {{log this}}
 {{log App.accidentsController.content.length}}
 {{#if App.accidentsController.content.length}}
+	<h4>Paskutiniai įvykiai:</h4>
 	<div class="table zebra-striped selectable tall" id="accidentsTable">
 	{{#each "App.accidentsController.content"}}@*{{#each person in people}}*@
 	@*{{log this}}*@
