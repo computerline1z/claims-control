@@ -79,7 +79,7 @@
 /* div container containing the form  */
 /* Style the search input field. */
 //<form>
-//@Html.Raw("{{view App.SearchField_accidents placeholder=\"Ieškoti..\" id=\"srcField\" name=\"field\"}}")
+//@Html.Raw("{{view App.SearchField_accidents placeholder=\"Ie�koti..\" id=\"srcField\" name=\"field\"}}")
 //<div id="srcDelete">
 //<span id="x">x</span></div>
 //</form>
@@ -123,7 +123,7 @@ div.selectedAccident i.img32-mono_edit {background-image: url('images/Sprite32-w
 div.dividers { background: url(../images/bg-pattern.png) repeat; height: 6px; display:none; position: relative; border-bottom: 1px solid white; bottom: -2px }
 /*------------------------------Selected claim in accident----------------------*/
 .whiteBorders(){border-color:white;border-style:solid none solid none; border-width: 5px;}
-.ClaimsRow(){.whiteBorders(); cursor:pointer; padding:6px;}//line-height:32px;height:32px; iškraipo pieštukus
+.ClaimsRow(){.whiteBorders(); cursor:pointer; padding:6px;}//line-height:32px;height:32px; i�kraipo pie�tukus
 
 #tblClaims{
 	width:100%;
@@ -145,16 +145,16 @@ div.newClaimContent {background-color: @systemYellow3; .clearfix();}
 .inputForm .ExtendIt { margin: 10px 3px 10px 0px; display: inline-block; vertical-align: top; }
 .ExtendIt { width: 100%; margin:15px auto 15px auto;text-align:left;}
 .ExtendIt button.ui-button-icon-only {height: @baseline;
-// ĮDĖTA:
+// IDETA:
     //.border-radius(0);
-    border-style: none; //solid solid solid none; iš inputo pasiima (kitaip kartais nepataiko ant inputo borderiu)
+    border-style: none; //solid solid solid none; i� inputo pasiima (kitaip kartais nepataiko ant inputo borderiu)
     //border-color: @borderGreen;
     background: url('images/DropDown-Arrow.png') no-repeat center;
     &:hover, &:active { background: url('images/DropDown-Arrow-hover.png') no-repeat center; }
 
 }/*comboboxo buttonas*/
 .ExtendIt input[type="text"], .ExtendIt textarea, .ExtendIt input[type="password"] {vertical-align:top;margin-top:0; width: 100%; .border-radius(0); border-color: @borderGreen;}
-.ExtendIt button {vertical-align:top;margin-top:0;}/*comboboxo išlyginimui*/
+.ExtendIt button {vertical-align:top;margin-top:0;}/*comboboxo i�lyginimui*/
 
 span.dialog-form-label { margin: 10px; font-size: @basefont; /*color: #666666;*/ display: inline-block; }
 div.dialog-form-label { font-size: @basefont; /*color: #666666;*/ top: 2px; margin-bottom: 2px; }
@@ -289,7 +289,7 @@ label.toplabel > span { display: block; font-size: @smallfont; /*color: #666666;
 /*
 label.toplabel input[type=text], label.top textarea {
 	 width: 100%; font-size: @smallfont; margin: 0; 
-     // ĮDĖTA:
+     // IDETA:
      /*
      .border-radius(0);
      border: 1px solid @borderGreen;
@@ -300,7 +300,7 @@ label.toplabel input[type=text], label.top textarea {
 }
 input[type=text].date {width:7em !important;}
 input[type=text].time {width:4em !important;
-     // ĮDĖTA:/*
+     // IDETA:/*
      .border-radius(0);
      border: 1px solid @borderGreen;
      //line-height: 17px;
@@ -311,7 +311,7 @@ label.leftlabel > span { width: 30%; font-size: @smallfont; margin: 0; padding: 
 /*
 label.leftlabel input[type=text], label.left textarea { 
 	width: 70%; font-size: @basefont; margin: 0; 
-    // ĮDĖTA:
+    // IDETA:
     .border-radius(0);
     height: @inputHeight;
 }
@@ -327,7 +327,7 @@ label {
         > span { display: block; font-size: @smallfont; /*color: #666666;*/ cursor: pointer; }
          input[type=text], label.top textarea {
              width: 100%; font-size: @smallfont; margin: 0; 
-             // ĮDĖTA:
+             // IDETA:
              .border-radius(0);
              border: 1px solid @borderGreen;
              //line-height:17px;
@@ -338,14 +338,14 @@ label {
         > span { width: 30%; font-size: @smallfont; margin: 0; padding: 0; /*color: #666666;*/ cursor: pointer; display: inline-block; }
         input[type=text], label.left textarea { 
             width: 70%; font-size: @basefont; margin: 0; 
-            // ĮDĖTA:
+            // IDETA:
             .border-radius(0);
         }
     }
 }
 input[type=text].date {width:7em !important;}
 input[type=text].time {width:4em !important;
-     // ĮDĖTA:
+     // IDETA:
      .border-radius(0);
      border: 1px solid @borderGreen;
      //line-height: 17px;
@@ -384,17 +384,17 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 #log li span.cancel { position: absolute; top: 5px; right: 5px; width: 20px; height: 20px; background: url('/Content/Images/cancel.png') no-repeat; cursor: pointer; }
 ---------------------------------------------------*/
 .submitButtons {height:50px;}//uploado buttonai
-.uploadDocsContainer {padding:10px;}//uploadas dialoge
+.uploadDocsContainer {padding:10px; border-top:1px solid #B2B2B2;}//uploadas dialoge
 /*Redagavimo dialogai*/
-#openItemDialog { padding: 0; background-color:#f8f7f2;}
+#openItemDialog { padding: 0; }
 //#openItemDialog ul a { color:#505860; background-color:#C3C5C3;}
-#openItemDialog ul li.ui-tabs-active a { color:#505860; background-color:#f8f7f2; border-bottom-color: #f8f7f2;}
+#openItemDialog ul li.ui-tabs-active a { color:#505860;}
 /*Autocomplete li a su veiksmais*/
 .actionLink {font-weight:bold !important;color:#09C !important;text-decoration:underline !important; cursor:pointer !important;}
-/*------------------------Dokumentų medis--------------------------------*/
+/*------------------------Dokumentu medis--------------------------------*/
 .gallery li.photo {float: left;width: 30%;padding: 10px;margin: 10px;border:1px solid #dddddd;cursor: move; height: 230px; }
 .gallery li.photo div {width: 120px; height:120px; overflow:hidden; margin: auto; }
-.gallery li.docs {cursor: move;display:block; width:100%;}
+.gallery li.docs {cursor: move;display:block; width:100%;height:80px;border-bottom:1px dotted; }
 .gallery li p {font-size:10px !important; line-height:12px !important;}
 .gallery li a {font-size:10px !important; line-height:20px !important;}
 .gallery li img {width: 100%;}
@@ -412,3 +412,32 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 .docType{height:25px;width:100%;border-bottom:1px solid #E0E0E0;}
 .docType div{line-height:25px;}
 /*---------------------------------------------------------------------------*/
+
+/*------apurav new rules-----*/
+
+#tabs-policy fieldset legend {
+    color: #186B95;
+}
+[class^="img16"], [class*=" img16"] {
+    background-image:  url('images/Sprite16.png');
+    background-position: 16px 16px;
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 16px;
+    line-height: 16px;
+    vertical-align: middle;
+    width: 16px;
+}
+
+.img16-attach {
+    background-position: 0 0;
+}
+.filedocument-label{
+	float: left;
+	font-weight: bold;
+	margin-right: 5px;
+}
+.fileinput-button span{
+	text-decoration: underline;
+}
+/*----apurav new rules end -----*/
