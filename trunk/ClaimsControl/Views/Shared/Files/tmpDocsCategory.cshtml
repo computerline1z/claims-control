@@ -2,12 +2,16 @@
 @*{{#if isSelectable}}
 <li class="treeItem clickable" {{bindAttr data-category-id="categoryId" }} {{action getDocs}}>			
 		{{#if isTree}}
+			<div class="treeContent">
 			<img class="expandImage" {{action expandCollapse}} src="Content/less/images/toggle_minus.png">
 			<span class="textHolder" ><strong>{{title}}</strong></span>
+			</div>
 			<ul>{{view App.DocTreeView}}</ul>
 		{{else}}
+			<div class="treeContent">
 			<img class="spacerImage" src="Content/less/images/spacer.gif">
 			<span class="textHolder"><strong>{{title}}</strong></span>
+			</div>
 		{{/if}}		
 {{else}}{{/if}} {{bindAttr data-node="this" }} *@
 @*{{#if isGroup}}
@@ -18,15 +22,19 @@
 
 <li data-ref-id="{{unbound refID}}" data-category-id="{{unbound categoryId}}" class="treeItem clickable {{unbound isGroup}} {{unbound isTree}}" {{action getDocs}}>
 		{{#if isTree}}
+				<div class="treeContent">
 				<img class="expandImage" {{action expandCollapse}} src="Content/less/images/toggle_minus.png">
 				<span class="textHolder"><strong>{{title}}</strong></span>
+				</div>
 				<ul>{{view App.DocTreeView}}</ul>
 		{{else}}
+				<div class="treeContent">
 				<img class="spacerImage" src="Content/less/images/spacer.gif">
 				{{#if isGroup}}
 					<span class="textHolder"><strong>{{unbound title}}</strong></span>
 				{{else}}
 					<span class="textHolder">{{unbound title}}</span>								
 				{{/if}}
+				</div>
 		{{/if}}		
 </li>

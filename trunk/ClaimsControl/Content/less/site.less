@@ -398,11 +398,59 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 .gallery li p {font-size:10px !important; line-height:12px !important;}
 .gallery li a {font-size:10px !important; line-height:20px !important;}
 .gallery li img {width: 100%;}
-#dynamicTree ul {list-style: none;margin-left:10px;}/*padding-left: 10px;*/
-.expandImage, .spacerImage {margin-bottom: -3px;height: 16px;width: 16px;}
-.textHolder {height: 16px;line-height: 16px;padding:0 3px;}
-.treeItem {list-style: none;margin:0;}
-.treeItemHover{font-weight:bold;color:red;}
+#dynamicTree {
+      position: absolute;
+      width: 20%;
+	  background:#F9F9F9;
+
+    }
+	#dynamicTree ul {
+		list-style: none;
+		margin-left:0;
+	}
+	.expandImage, .spacerImage {
+		margin-right: 2px;
+		height: 16px;
+		width: 16px;
+	}
+    .treeContent {
+      border-bottom: thin dotted black;
+      border-right: #999 solid thin;
+	  color:#000000;
+    }
+    .treeContent:hover {
+      cursor: pointer;
+      background-color:  #186B95 !important;
+	  color:#ffffff !important;
+    }
+    .treeContent.selected {
+      border-right: white solid thin;
+      border-top: solid #999 thin;
+      border-bottom: solid #999 thin;
+      position: relative;
+      top: -1px;
+      margin-bottom: -1px;
+	  background:#ffffff;
+    }
+	.textHolder {
+		height: 16px;
+		line-height: 16px;
+		padding:0 3px;
+		
+	}
+	.treeItem {
+		list-style: none;
+		margin:0;
+	}
+	.treeItemHover{
+		font-weight:bold;
+	}
+    #docViewWrapper {
+      width: 80%;
+      float: right;
+      height: 700px;
+      border-left: solid thin #999;
+    }
 /*------------------------photo/ docs view--------------------------------*/
 .icon-custom-edit {background-image: url("../images/Sprite32-hover.png");background-position: -64px -64px;height: 32px;line-height: 32px;width: 32px;}
 .icon-custom-delete {background-image: url("../images/Sprite32-hover.png");background-position: -32px -64px;height: 32px;line-height: 32px;width: 32px;}
