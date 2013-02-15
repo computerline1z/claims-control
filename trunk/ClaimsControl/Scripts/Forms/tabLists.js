@@ -473,7 +473,7 @@
               return false;
             });
             if (this.templateName === "tmp_InsPolicies") {
-              this.$().tabs().css("margin", "-5px 1px 0 1px").find("ul").css("background-color", "#505860");
+              this.$().tabs().css("margin", "-5px 1px 0 1px");
             }
             return oCONTROLS.UpdatableForm(dialogContent, pars.row);
           },
