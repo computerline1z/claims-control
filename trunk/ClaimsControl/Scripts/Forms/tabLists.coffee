@@ -94,8 +94,10 @@ App.listAllController = Em.ResourceController.create(
 	editListItems:(input, e)-> #formTemplate: "tmpUploadForm", disabled: false, docsController: "TreeDocController", Source: "tblDocTypes"
 		#categoryOpts:{accident:{iD:70,title:"Įvykio dokumentai"},driver:{iD:80,title:"Vairuotojo 'Pranas Patv' dokai"},editList:{},vehicles:[{iD,title},{iD,title}]},
 		#data:[{categoryID,id,label},{categoryID,id,label},{categoryID,id,label},{categoryID,id,label}]		
-		sourceName=input.data("ctrl").Source; source=oDATA.GET(sourceName)
-		@.set("listItems",source.emData)  		
+		sourceName=input.data("ctrl").Source
+		tblUpdate=if input.data("ctrl").tblUpdate then input.data("ctrl").tblUpdate else sourceName
+		source=oDATA.GET(sourceName)
+		@.set("listItems",source.emData.removeObject(source.emData.findProperty("iD",0)))  		
 		dialogID="dialog"+(+new Date)#kad nesipjautų dialogai
 		MY[dialogID]=JQ.Dialog.create( #MY.dialog needed to destroyElement in ui-ember.js	
 			input: input
@@ -119,21 +121,21 @@ App.listAllController = Em.ResourceController.create(
 				item=e.context.name;input=$(e.target).prev();val=input.val();row=e.context;row.name=val
 				if item.length>0						
 					Msg={Title:@title,Success:@msg.GenName+" '"+item+"' pakeista(s).",Error: @msg.GenNameWhat + " '"+item+"' nepavyko pakeisti.."}	
-					@saveData({DataToSave:{"id":row.iD,"Data":[row.name],"Fields":["Name"],"DataTable":sourceName},Msg:Msg,row:row,Action:"Edit"})
+					@saveData({DataToSave:{"id":row.iD,"Data":[row.name],"Fields":["Name"],"DataTable":tblUpdate},Msg:Msg,row:row,Action:"Edit"})
 				else 
 					e.context.set("name",e.context.edit).set("edit",false)
 			deleteItem: (e)->
 				item=e.context.name; me=@
 				oCONTROLS.dialog.Confirm(title:@title,msg:me.msg.Delete+" '"+item+"'?", ()->					
 					Msg=Title:me.title, Success:me.msg.GenName+" '"+item+"' ištrinta(s).", Error:me.msg.GenNameWhat+" '"+item+"' nepavyko ištrinti."; row=e.context
-					me.saveData({DataToSave:{"id":row.iD,"DataTable":sourceName},Msg:Msg,row:row,Action:"Delete"})
+					me.saveData({DataToSave:{"id":row.iD,"DataTable":tblUpdate},Msg:Msg,row:row,Action:"Delete"})
 				)
 			addNewItem: (e)-> @.set("addItem",true)
 			cancelNewItem: (e)-> @.set("addItem",false)				
 			saveNewItem: (e)-> 
 				input=$(e.target).prev();val=input.val()
 				Msg=Title:@title,Success:@msg.GenName+" '"+val+"' pridėtas.",Error:@msg.GenNameWhat+" '"+val+"' nepavyko pridėti." 
-				@saveData({DataToSave:{"Data":[val],"Fields":["Name"],"DataTable":sourceName},Msg:Msg,row:[val],Action:"Add"})
+				@saveData({DataToSave:{"Data":[val],"Fields":["Name"],"DataTable":tblUpdate},Msg:Msg,row:[val],Action:"Add"})
 			closeDialog: (e)-> $("#"+@dialogID).dialog("close"); false
 			width:600
 			templateName: 'tmpEditItems'
@@ -145,26 +147,24 @@ App.listAllController = Em.ResourceController.create(
 		config=oDATA.GET(pars.source).Config
 		title=if pars.row then config.Msg.GenName+" "+pars.row.MapArrToString(config.titleFields,true) else config.Msg.AddNew
 		if not pars.row and pars.newVals then pars.row=pars.newVals.vals.toRowObject(pars.newVals.cols) #ivedimo forma užpildom jau užpildytais iš langelio 
-		console.log "JQ.Dialog.create"
-		console.log MY.dialog
-		if MY.dialog then MY.dialog.remove()
 		if MY.dialog then MY.dialog.remove()
 		Em.run.next(@, -> MY.dialog=JQ.Dialog.create( #MY.dialog needed to destroyElement in ui-ember.js
 			controllerBinding: "App.listAllController"
 			controller: pars.me, pars: pars
-			init: -> @_super(); @templateName=pars.template; @title=title
-			cancelAddNewMake:()-> App.listAllController.set("addMakeMode",false)
-			saveAddNewMake:(e)-> 
-				div=$(e.target).parent(); newVal=div.prev().find("input").val(); ctrl=$(e.target).parent().parent()
-				autoComplete=div.next().next().find("input")
-				if newVal
-					SERVER.update2("Action":"Add","Ctrl":ctrl,"source":"tblVehicleMakes","row":"",#įvedant naują markę nereikia row (nes jos ir nėra)
-					DataToSave:{"Data":[newVal],"Fields":["Name"],"DataTable":"tblVehicleMakes"},
-					CallBackAfter:(Row)-> 
-						autoComplete.autocomplete("option").fnRefresh()
-						console.log Row #$("#tabLists").find("div.ui-tabs").find("li.ui-tabs-selected a").trigger("click")#trigerinam, kad pagal tabus uzdėtų visible	
-					)	
-				App.listAllController.set("addMakeMode",false)
+			init: -> 
+				@_super(); @templateName=pars.template; @title=title; @pars=pars# pars inputas reikalingas - pagal jį aukštį nusistatom
+			# cancelAddNewMake:()-> App.listAllController.set("addMakeMode",false)
+			# saveAddNewMake:(e)-> 
+				# div=$(e.target).parent(); newVal=div.prev().find("input").val(); ctrl=$(e.target).parent().parent()
+				# autoComplete=div.next().next().find("input")
+				# if newVal
+					# SERVER.update2("Action":"Add","Ctrl":ctrl,"source":"tblVehicleMakes","row":"",#įvedant naują markę nereikia row (nes jos ir nėra)
+					# DataToSave:{"Data":[newVal],"Fields":["Name"],"DataTable":"tblVehicleMakes"},
+					# CallBackAfter:(Row)-> 
+						# autoComplete.autocomplete("option").fnRefresh()
+						# console.log Row #$("#tabLists").find("div.ui-tabs").find("li.ui-tabs-selected a").trigger("click")#trigerinam, kad pagal tabus uzdėtų visible	
+					# )	
+				# App.listAllController.set("addMakeMode",false)
 			goToEditDate:()->
 				App.listAllController.set("dateIsEdited",true); 
 				Em.run.next(@,->$("#dialogEndDateInput").datepicker({"minDate":"-3y","maxDate":"0"}).trigger("focus"))
@@ -181,28 +181,31 @@ App.listAllController = Em.ResourceController.create(
 				App.listAllController.set("dateIsEdited",false).set("endDate",newDate)
 				#Jei išsaugom data ja įrašom i endDate
 			didInsertElement: ()->
-				categoryOpts=false
-				@_super(); dialogFrm=$("#openItemDialog");dialogContent=$("#dialogContent");me=@
-				if pars.emObject=="vehicles" or pars.source=="proc_Vehicles"
-					name="TP "+pars.row.make+", "+pars.row.model+", "+pars.row.plate+" dokumentai"
-					categoryOpts={showCategories:[iD:4,name:name],vehicles:[{iD:pars.row.iD,title:name}]}
-				if pars.emObject=="drivers" or pars.source=="proc_Drivers"
-					name="Vairuotojo '"+pars.row.firstName+" "+pars.row.lastName+"' dokumentai"
-					categoryOpts={showCategories:[iD:3,name:name],driver:{iD:pars.row.iD,title:name}}#Įrašom kurias kategorijas rodyt ir tos kategorijos duomenis
-				if categoryOpts
-					#Ref 1-Nuotraukos,2-Įvykio dok, 3-Vairuotojo dok, 4-TP dok, 0-Nepriskirti
-					dialogFrm.find("div.uploadDocsContainer").UploadFiles(categoryOpts: categoryOpts,showPhoto:false,docsController:"dialogDocController")
-					#Atrenkam dokumentus kuriuos reiks parodyti
-					refID=pars.row.iD
-					groupID=if pars.emObject=="vehicles" then 4 else 3
-					App.dialogDocController.setDocs(refID,groupID)
-					this.removeOnCloseView=Em.View.create(docsViewOpts).appendTo "#dialoguploadDocsContainer" #docsViewOpts	#Pridedam dokumentų uploadinimo view'ą					
+				@_super();dialogFrm=$("#openItemDialog");dialogContent=$("#dialogContent")
+				if (pars.row)
+					categoryOpts=false;docGroups=oDATA.GET("tblDocGroup").emData;me=@
+					ref=if pars.emObject=="vehicles" then 4 else 3
+					groupID=docGroups.findProperty("ref",ref).iD
+					if pars.emObject=="vehicles" or pars.source=="proc_Vehicles"
+						name="TP "+pars.row.make+", "+pars.row.model+", "+pars.row.plate+" dokumentai"
+						categoryOpts=showCategories:[iD:groupID,ref:ref,name:name],vehicles:[{iD:pars.row.iD,title:name}]
+					if pars.emObject=="drivers" or pars.source=="proc_Drivers"
+						name="Vairuotojo '"+pars.row.firstName+" "+pars.row.lastName+"' dokumentai"
+						categoryOpts={showCategories:[iD:groupID,ref:ref,name:name],driver:{iD:pars.row.iD,title:name}}#Įrašom kurias kategorijas rodyt ir tos kategorijos duomenis
+					if categoryOpts
+						#Ref 1-Nuotraukos,2-Įvykio dok, 3-Vairuotojo dok, 4-TP dok, 0-Nepriskirti
+						dialogFrm.find("div.uploadDocsContainer").UploadFiles(categoryOpts: categoryOpts,showPhoto:false,docsController:"dialogDocController",requireCategory:true)
+						#Atrenkam dokumentus kuriuos reiks parodyti
+						refID=pars.row.iD					
+						App.dialogDocController.setDocs(refID,groupID)
+						this.removeOnCloseView=Em.View.create(docsViewOpts).appendTo "#dialoguploadDocsContainer" #docsViewOpts	#Pridedam dokumentų uploadinimo view'ą					
 				$("#btnSaveItem").on("click",()->
 					DataToSave=oCONTROLS.ValidateForm(dialogContent)
 					$.extend(pars,DataToSave:DataToSave,Ctrl:$("#tabLists"),CallBackAfter:(Row)->
 						dialogFrm.dialog("close");
 						if Row.iD
-							if (pars.input) then pars.input.data("newval",Row.iD); pars.input.val(Row.MapArrToString(pars.input.data("ctrl").iText))
+							if (pars.input) then pars.input.data("newval",Row.iD).autocomplete("option").fnRefresh()							
+							#pars.input.val(Row.MapArrToString(pars.input.data("ctrl").iText))
 							#App[pars.controller][pars.emObject].findProperty("iD",Row.iD).set("docs","(0)")#Dokumentų skaičius priklausis nuo uploadintų doku						
 							else $("#tabLists").find("div.ui-tabs").find("li.ui-tabs-selected a").trigger("click")#trigerinam, kad pagal tabus uzdėtų visible						
 					)

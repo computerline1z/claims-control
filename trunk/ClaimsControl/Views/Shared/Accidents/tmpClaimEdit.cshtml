@@ -16,8 +16,8 @@
 	</div>
 {{else}}
 	<div class='left w45pr'>
-	{{updatableField c Field="VehicleID" id="lstVehicles" labelType="Top" Editable="{\"Add\":true,\"Edit\":true}"}}
-	{{updatableField c Field="InsPolicyID" id="lstInsPolicies" labelType="Top" List="{\"Source\":\"proc_InsPolicies_forThisAccident\"}"}}
+	{{updatableField c Field="VehicleID" id="lstVehicles" labelType="Top" Editable="{\"EditThis\":true}" }}
+	{{updatableField c Field="InsPolicyID" id="lstInsPolicies" labelType="Top" List="{\"Source\":\"proc_InsPolicies_forThisAccident\",\"tblUpdate\":\"tblInsPolicies\"}"}}
 	{{updatableField c Field="InsurerClaimID" labelType="Top"}}
 	</div><div class='right w45pr'>
 	{{updatableField c Field="LossAmount" id="LossAmount" labelType="Top"}} @*"classes\":\"LossAmount*@

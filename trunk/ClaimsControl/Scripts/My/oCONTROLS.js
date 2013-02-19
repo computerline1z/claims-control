@@ -67,7 +67,7 @@ var oCONTROLS = {
 	UpdatableForm: function (frm,row) {
 		//frm data-ctrl:: labelType:Top/Left/undefined,
 		var sTitle = "", frmOpt = $(frm).data('ctrl'), me=this; 
-		if (row){frmOpt.NewRec=0;frmOpt.id=row.iD;}//Jeigu yra row tai redagavimas
+		if (row){if (row.iD) {frmOpt.NewRec=0;frmOpt.id=row.iD;}}//Jeigu yra row.iD tai redagavimas
 		var data = (frmOpt.Source === 'NoData') ? "NoData" : oDATA.GET(frmOpt.Source);
 		//if(typeof data==='undefined') { alert('Source undefined in UpdatableForm(objFunc:79)!'); }
 		//log('<div>==========UpdatableForm========</div>');
@@ -145,7 +145,7 @@ var oCONTROLS = {
 				data_ctrl = data_ctrl.replace("match('integer')", "match(integer)").replace("match('number')", "match(number)");
 			}
 			else if (Type.search("Date") !== -1) {
-				data_ctrl = data_ctrl.replace("match('date')", "match(date)");
+				data_ctrl = data_ctrl.replace("match('date')", "match(date)").replace("lessThanOrEqualTo(new Date())","lessThanOrEqualTo(new Date(),\\&quot;Data negali būti didesnė už šiandieną.\\&quot;)");
 			}
 			$.extend(col, {
 				data_ctrl: data_ctrl
@@ -281,9 +281,10 @@ var oCONTROLS = {
 						if ($.isNumeric(e.data("newval"))) {
 							val = e.data("newval");
 						} //log("ui, val:"+(val)?"":val);
-						else {
+						else if (e.hasClass("notRequired")) {e.val("");}
+						else {							
 							e.val("");
-							e.require("Reikalinga parinkti reikšmę iš sarašo..");
+							e.require("Parinkite reikšmę iš sąrašo.");
 						}
 					} else {
 						if (Type === "Decimal" || Type === "Integer") {
@@ -372,16 +373,16 @@ var oCONTROLS = {
 	//appendLabel: function(p, t) { if(typeof p.label==='undefined') { return t; } else { return (p.label.type==="Top")?"<label><div"+((p.label.classes)?" class='"+p.label.classes+"'":"")+">"+p.label.txt+"</div>"+t+"</label>":"<label"+((p.label.classes)?" class='"+p.label.classes+"'":"")+">"+p.label.txt+t+"</label>"; } },
 	//kaip basic + p.text
 	txt: function (p) {
-		return this.appendLabel(p, "<input type='text' " + this.basic(p) + ((p.Value) ? 'value="' + $.trim(p.Value) + '" ' : '') + "/>");
+		return this.appendLabel(p, "<input type='text' " + this.basic(p) + ((p.Value) ? 'value="' + $.trim(p.Value).replace(/"/g, '&quot;') + '" ' : '') + "/>");
 	},
 	hidden: function (p) {
-		return this.appendLabel(p, "<input type='hidden' " + this.basic(p) + ((p.Value) ? 'value="' + $.trim(p.Value) + '" ' : '') + "/>");
+		return this.appendLabel(p, "<input type='hidden' " + this.basic(p) + ((p.Value) ? 'value="' + $.trim(p.Value).replace(/"/g, '&quot;') + '" ' : '') + "/>");
 	},
 	a: function (p) {
-		return "<a " + this.basic(p) + " href='javascript:void(0);return false;'>" + $.trim(p.Value) + "</a>";
+		return "<a " + this.basic(p) + " href='javascript:void(0);return false;'>" + $.trim(p.Value).replace(/"/g, '&quot;')+ "</a>";
 	},
 	txtarea: function (p) {
-		return this.appendLabel(p, "<textarea cols='100' rows='4' " + this.basic(p) + ">" + ((p.Value) ? p.Value : "") + "</textarea>");
+		return this.appendLabel(p, "<textarea cols='100' rows='4' " + this.basic(p) + ">" + ((p.Value) ? p.Value.replace(/"/g, '&quot;') : "") + "</textarea>");
 	},
 	chk: function (p) {
 		if (typeof p.Value === "string") { p.Value = ((p.Value.toLowerCase().search(/false/i) > -1 || p.Value === ""|| p.Value == 0) ? 0 : 1); }//==kad tiktu 0 ir "0"

@@ -55,20 +55,27 @@
           }
           return data.files[0].type2 = data.files[0].type.split("/")[0];
         }).bind("fileuploadsubmit", function(e, data) {
-          var GroupID, RefID, catInput, f, optsAccident, tr;
+          var AccidentID, GroupID, RefID, catInput, f, optsAccident, tr;
           tr = data.context;
           f = data.files[0];
           optsAccident = data.form.data("opts").categoryOpts.accident;
           catInput = tr.find("input[name='category[]']");
           GroupID;
 
+          AccidentID = optsAccident ? optsAccident.iD : null;
           RefID = catInput.data("refID");
-          RefID = RefID ? RefID : null;
+          RefID = RefID ? RefID : AccidentID;
           if (catInput.length) {
             GroupID = catInput.data("categoryID");
             GroupID = GroupID ? GroupID : 5;
           } else {
             GroupID = 1;
+          }
+          if (data.form.data("opts").requireCategory) {
+            if (typeof catInput.data("newval") !== "number") {
+              oGLOBAL.notify.withIcon("Ne visi dokumentai išsaugoti", "Dokumentas '" + data.files[0].name + "'  neturi priskirtos kategorijos..", "img32-warning", true);
+              return false;
+            }
           }
           return data.formData = {
             FileName: f.name,
@@ -77,19 +84,15 @@
             RefID: RefID,
             GroupID: GroupID,
             Description: tr.find("textarea[name='description[]']").val(),
-            AccidentID: optsAccident ? optsAccident.iD : null
+            AccidentID: AccidentID
           };
         }).bind("fileuploaddone", function(e, data) {
-          var docsContr, newDoc, newDocInAccident;
+          var docsContr, newDoc;
           if (data.result.success) {
             console.log("Upload result for file '" + data.files[0].name + "':");
             console.log(data.result);
             newDoc = Em.Object.create(data.result.tblDoc);
             oDATA.GET("tblDocs").emData.pushObject(newDoc);
-            if (data.result.tblDocsInAccidents) {
-              newDocInAccident = Em.Object.create(data.result.tblDocsInAccidents);
-              oDATA.GET("tblDocsInAccidents").emData.pushObject(newDocInAccident);
-            }
             data.context.remove();
             if (!data.form.find("table tbody tr").length) {
               data.form.find(".submitButtons, table").addClass("hidden");

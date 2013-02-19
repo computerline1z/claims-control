@@ -123,7 +123,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Areas_trinti\Scripts\ScriptsAreaRegistration_trinti.cs" />
     <Compile Include="Classes\Converters.cs" />
     <Compile Include="Classes\FileDescriptorDTO.cs" />
     <Compile Include="Classes\General.cs" />
@@ -350,7 +349,6 @@
     <Content Include="Scripts\Plugins scripts\TimePicker.js" />
     <Content Include="Content\LoginStyles.css" />
     <Content Include="SQL\sql10_15.sql" />
-    <Content Include="SwitchBrowser.htm" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -381,15 +379,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Uploads\" />
-    <Folder Include="Areas_trinti\Scripts\Controllers\" />
-    <Folder Include="Areas_trinti\Scripts\Models\" />
-    <Folder Include="Areas_trinti\Scripts\Views\Shared\" />
     <Folder Include="SQL\Procedures\" />
     <Folder Include="Uploads\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Code\MyHelper.cshtml" />
-    <Content Include="Areas_trinti\Scripts\Views\Web.config" />
     <None Include="Content\less\main.less" />
     <None Include="Content\less\forms.less" />
     <None Include="Content\less\mixins.less" />

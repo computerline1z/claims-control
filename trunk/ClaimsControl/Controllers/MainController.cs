@@ -62,7 +62,7 @@ namespace ClaimsControl.Controllers {
 		}
 
 		[HttpPost]
-		public JsonResult tabAccidents(string ver, bool tmp, bool obj) {
+		public JsonResult tabMain(string ver, bool tmp, bool obj) {
 			Repositories_Main acc = new Repositories_Main();
 			string currentVer = "14"; if (ver != currentVer) tmp = true; ver = currentVer;
 			tmp = true;
@@ -86,7 +86,7 @@ namespace ClaimsControl.Controllers {
 						tblUsers = acc.GetJSON_tblUsers(),
 						tblCountries = acc.GetJSON_tblCountries(),
 						tblDocs = acc.GetJSON_tblDocs(),
-						tblDocsInAccidents = acc.GetJSON_tblDocsInAccidents(),
+						//tblDocsInAccidents = acc.GetJSON_tblDocsInAccidents(),
 						tblDocTypes = acc.GetJSON_tblDocType(),
 						tblDocGroup = acc.GetJSON_tblDocGroup(),
 						userData = acc.GetJSON_userData(),
@@ -133,6 +133,7 @@ namespace ClaimsControl.Controllers {
 				}
 
 			);
+			
 		}
 
 		[HttpPost]

@@ -153,8 +153,8 @@
       <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Association Name="tblClaimType_tblClaim" Member="tblClaimType" ThisKey="ClaimTypeID" OtherKey="ID" Type="tblClaimType" IsForeignKey="true" />
       <Association Name="tblVehicle_tblClaim" Member="tblVehicle" ThisKey="VehicleID" OtherKey="ID" Type="tblVehicle" IsForeignKey="true" />
-      <Association Name="tblInsPolicy_tblClaim" Member="tblInsPolicy" ThisKey="InsPolicyID" OtherKey="ID" Type="tblInsPolicy" IsForeignKey="true" />
       <Association Name="tblAccident_tblClaim" Member="tblAccident" ThisKey="AccidentID" OtherKey="ID" Type="tblAccident" IsForeignKey="true" />
+      <Association Name="tblInsPolicy_tblClaim" Member="tblInsPolicy" ThisKey="InsPolicyID" OtherKey="ID" Type="tblInsPolicy" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.tblDrivers" Member="tblDrivers">
@@ -210,8 +210,8 @@
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="InsPolicyID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="DocTypeID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="tblInsPolicy_tblInsPolicyDoc" Member="tblInsPolicy" ThisKey="InsPolicyID" OtherKey="ID" Type="tblInsPolicy" IsForeignKey="true" />
       <Association Name="tblDocType_tblInsPolicyDoc" Member="tblDocType" ThisKey="DocTypeID" OtherKey="ID" Type="tblDocType" IsForeignKey="true" />
+      <Association Name="tblInsPolicy_tblInsPolicyDoc" Member="tblInsPolicy" ThisKey="InsPolicyID" OtherKey="ID" Type="tblInsPolicy" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.tblWarningEvents" Member="tblWarningEvents">
@@ -231,31 +231,6 @@
       <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Association Name="tblWarningEvent_tblWarning" Member="tblWarningEvent" ThisKey="WarningEventID" OtherKey="ID" Type="tblWarningEvent" IsForeignKey="true" />
       <Association Name="tblInsPolicy_tblWarning" Member="tblInsPolicy" ThisKey="InsPolicyID" OtherKey="ID" Type="tblInsPolicy" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.tblInsPolicies" Member="tblInsPolicies">
-    <Type Name="tblInsPolicy">
-      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="PolicyNumber" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="InsurerID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="ClaimTypeID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="EndDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
-      <Column Name="MailsAddresses" Type="System.String" DbType="VarChar(250)" CanBeNull="true" />
-      <Column Name="InsuredName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="InsuredCode" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="InsuredContactID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="InsuredAddress" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
-      <Column Name="Warn_InfoAfterAcc" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Warn_PaymentAfterPapers" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Warn_SystemOfAccTerm" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Warn_SystemOfPayTerm" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Association Name="tblInsPolicy_tblClaim" Member="tblClaims" ThisKey="ID" OtherKey="InsPolicyID" Type="tblClaim" />
-      <Association Name="tblInsPolicy_tblInsPolicyDoc" Member="tblInsPolicyDocs" ThisKey="ID" OtherKey="InsPolicyID" Type="tblInsPolicyDoc" />
-      <Association Name="tblInsPolicy_tblWarning" Member="tblWarnings" ThisKey="ID" OtherKey="InsPolicyID" Type="tblWarning" />
-      <Association Name="tblClaimType_tblInsPolicy" Member="tblClaimType" ThisKey="ClaimTypeID" OtherKey="ID" Type="tblClaimType" IsForeignKey="true" />
-      <Association Name="tblInsurer_tblInsPolicy" Member="tblInsurer" ThisKey="InsurerID" OtherKey="ID" Type="tblInsurer" IsForeignKey="true" />
-      <Association Name="tblUser_tblInsPolicy" Member="tblUser" ThisKey="InsuredContactID" OtherKey="ID" Type="tblUser" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.tblAction_Tabs" Member="tblAction_Tabs">
@@ -279,16 +254,6 @@
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
       <Association Name="tblTimeZone_tblAccount" Member="tblAccounts" ThisKey="ID" OtherKey="TimeZoneID" Type="tblAccount" />
-    </Type>
-  </Table>
-  <Table Name="dbo.tblDocGroups" Member="tblDocGroups">
-    <Type Name="tblDocGroup">
-      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Name" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
-      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="AccountID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="tblDocGroup_tblDoc" Member="tblDocs" ThisKey="ID" OtherKey="GroupID" Type="tblDoc" />
-      <Association Name="tblDocGroup_tblDocType" Member="tblDocTypes" ThisKey="ID" OtherKey="DocGroupID" Type="tblDocType" />
     </Type>
   </Table>
   <Table Name="dbo.tblDocsInAccident" Member="tblDocsInAccidents">
@@ -343,9 +308,9 @@
       <Column Name="Description" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
       <Column Name="HasThumb" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Association Name="tblDoc_tblDocsInAccident" Member="tblDocsInAccidents" ThisKey="ID" OtherKey="DocID" Type="tblDocsInAccident" />
-      <Association Name="tblDocGroup_tblDoc" Member="tblDocGroup" ThisKey="GroupID" OtherKey="ID" Type="tblDocGroup" IsForeignKey="true" />
       <Association Name="tblDocType_tblDoc" Member="tblDocType" ThisKey="DocTypeID" OtherKey="ID" Type="tblDocType" IsForeignKey="true" />
       <Association Name="tblUser_tblDoc" Member="tblUser" ThisKey="UserID" OtherKey="ID" Type="tblUser" IsForeignKey="true" />
+      <Association Name="tblDocGroup_tblDoc" Member="tblDocGroup" ThisKey="GroupID" OtherKey="ID" Type="tblDocGroup" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.tblDocTypes" Member="tblDocTypes">
@@ -386,8 +351,8 @@
       <Column Name="EMailForIns" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
       <Column Name="tempUI" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
       <Association Name="tblUser_tblUsersActivities_Update" Member="tblUsersActivities_Updates" ThisKey="ID" OtherKey="UserID" Type="tblUsersActivities_Update" />
-      <Association Name="tblUser_tblInsPolicy" Member="tblInsPolicies" ThisKey="ID" OtherKey="InsuredContactID" Type="tblInsPolicy" />
       <Association Name="tblUser_tblDoc" Member="tblDocs" ThisKey="ID" OtherKey="UserID" Type="tblDoc" />
+      <Association Name="tblUser_tblInsPolicy" Member="tblInsPolicies" ThisKey="ID" OtherKey="InsuredContactID" Type="tblInsPolicy" />
       <Association Name="tblUsers_RolesGroup_tblUser" Member="tblUsers_RolesGroup" ThisKey="RoleGroupID" OtherKey="ID" Type="tblUsers_RolesGroup" IsForeignKey="true" />
       <Association Name="tblAccount_tblUser" Member="tblAccount" ThisKey="AccountID" OtherKey="ID" Type="tblAccount" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="tblLanguage_tblUser" Member="tblLanguage" ThisKey="LanguageID" OtherKey="ID" Type="tblLanguage" IsForeignKey="true" />
@@ -418,6 +383,42 @@
       <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="ShortName" Type="System.String" DbType="Char(2) NOT NULL" CanBeNull="false" />
       <Association Name="tblLanguage_tblUser" Member="tblUsers" ThisKey="ID" OtherKey="LanguageID" Type="tblUser" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tblDocGroups" Member="tblDocGroups">
+    <Type Name="tblDocGroup">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="AccountID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Ref" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="tblDocGroup_tblDoc" Member="tblDocs" ThisKey="ID" OtherKey="GroupID" Type="tblDoc" />
+      <Association Name="tblDocGroup_tblDocType" Member="tblDocTypes" ThisKey="ID" OtherKey="DocGroupID" Type="tblDocType" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tblInsPolicies" Member="tblInsPolicies">
+    <Type Name="tblInsPolicy">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PolicyNumber" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="InsurerID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ClaimTypeID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="EndDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="MailsAddresses" Type="System.String" DbType="VarChar(250)" CanBeNull="true" />
+      <Column Name="InsuredName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="InsuredCode" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="InsuredContactID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="InsuredAddress" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="Warn_InfoAfterAcc" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Warn_PaymentAfterPapers" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Warn_SystemOfAccTerm" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Warn_SystemOfPayTerm" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="tblInsPolicy_tblClaim" Member="tblClaims" ThisKey="ID" OtherKey="InsPolicyID" Type="tblClaim" />
+      <Association Name="tblInsPolicy_tblInsPolicyDoc" Member="tblInsPolicyDocs" ThisKey="ID" OtherKey="InsPolicyID" Type="tblInsPolicyDoc" />
+      <Association Name="tblInsPolicy_tblWarning" Member="tblWarnings" ThisKey="ID" OtherKey="InsPolicyID" Type="tblWarning" />
+      <Association Name="tblInsurer_tblInsPolicy" Member="tblInsurer" ThisKey="InsurerID" OtherKey="ID" Type="tblInsurer" IsForeignKey="true" />
+      <Association Name="tblClaimType_tblInsPolicy" Member="tblClaimType" ThisKey="ClaimTypeID" OtherKey="ID" Type="tblClaimType" IsForeignKey="true" />
+      <Association Name="tblUser_tblInsPolicy" Member="tblUser" ThisKey="InsuredContactID" OtherKey="ID" Type="tblUser" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="dbo.proc_Vehicles" Method="proc_Vehicles">
@@ -497,13 +498,13 @@
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="ClaimType" Type="System.String" DbType="VarChar(45) NOT NULL" CanBeNull="false" />
       <Column Name="InsurerName" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="InsuredCode" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="InsuredCode" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="MailsAddresses" Type="System.String" DbType="VarChar(250) NOT NULL" CanBeNull="false" />
       <Column Name="InsuredAddress" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
       <Column Name="PolicyNumber" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="EndDate" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
-      <Column Name="InsuredName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="InsuredContactName" Type="System.String" DbType="NVarChar(101) NOT NULL" CanBeNull="false" />
+      <Column Name="InsuredName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="InsuredContactName" Type="System.String" DbType="NVarChar(101)" CanBeNull="true" />
       <Column Name="InsuredContactID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="ClaimTypeID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="InsurerID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />

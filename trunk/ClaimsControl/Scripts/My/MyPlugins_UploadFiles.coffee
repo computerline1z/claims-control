@@ -45,24 +45,25 @@ _create: ->
 		).bind("fileuploadsubmit", (e, data) ->
 			tr=data.context;f=data.files[0];optsAccident=data.form.data("opts").categoryOpts.accident;catInput=tr.find("input[name='category[]']");GroupID			
 			#FileName, FileSize, DocTypeID, RefID, GroupID, Description
-			RefID=catInput.data("refID");RefID=if RefID then RefID else null
+			AccidentID=if optsAccident then optsAccident.iD else null
+			RefID=catInput.data("refID");RefID=if RefID then RefID else AccidentID
 			
 			if catInput.length#uploadinami dokumentai
 				GroupID=catInput.data("categoryID");GroupID=if GroupID then GroupID else 5 #Nepriskirto kodas 5
 			else GroupID=1#Nuotraukų grupė		
-			#if (typeof catInput.data("newval")!="number") then oGLOBAL.notify.withIcon("Ne visi dokumentai išsaugoti", "Dokumentas '"+data.files[0].name+"'  neturi priskirtos kategorijos..", "img32-warning", true); return false
+			if data.form.data("opts").requireCategory
+				if (typeof catInput.data("newval")!="number") then oGLOBAL.notify.withIcon("Ne visi dokumentai išsaugoti", "Dokumentas '"+data.files[0].name+"'  neturi priskirtos kategorijos..", "img32-warning", true); return false
 			
 			data.formData=FileName:f.name, FileSize:f.size, DocTypeID:catInput.data("newval"), RefID:RefID,
-			GroupID:GroupID, Description:tr.find("textarea[name='description[]']").val(),
-			AccidentID: if optsAccident then optsAccident.iD else null
+			GroupID:GroupID, Description:tr.find("textarea[name='description[]']").val(), AccidentID: AccidentID
 			#console.log(data)
 		).bind("fileuploaddone", (e, data) -> 
 			if (data.result.success)
 				console.log("Upload result for file '"+data.files[0].name+"':");	console.log(data.result)
 				#---------------------------------------------------------------------------
 				newDoc=Em.Object.create(data.result.tblDoc); oDATA.GET("tblDocs").emData.pushObject(newDoc);
-				if data.result.tblDocsInAccidents 
-					newDocInAccident=Em.Object.create(data.result.tblDocsInAccidents); oDATA.GET("tblDocsInAccidents").emData.pushObject(newDocInAccident);
+				#if data.result.tblDocsInAccidents 
+				#	newDocInAccident=Em.Object.create(data.result.tblDocsInAccidents); oDATA.GET("tblDocsInAccidents").emData.pushObject(newDocInAccident);
 				#---------------------------------------------------------------------------
 				data.context.remove()
 				if not data.form.find("table tbody tr").length

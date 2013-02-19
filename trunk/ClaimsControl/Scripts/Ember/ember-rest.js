@@ -1,11 +1,11 @@
 /// <reference path="../Main/jquery-1.7.2-vsdoc.js" />
-$(function () {
-	Em.run.next(function () {
-		oGLOBAL.logFromStart("Ember finished.");
-		oDATA.fnLoadNext();
-		//oDATA.fnWriteVersions();
-	});
-});
+// $(function () {
+	// Em.run.next(function () {
+		// oGLOBAL.logFromStart("Ember finished.");
+		// oDATA.fnLoadNext();
+		// //oDATA.fnWriteVersions();
+	// });
+// });
 $(window).load(function () {
 	oGLOBAL.logFromStart("All finished.");
 	$("body").spinner('remove');
@@ -15,21 +15,7 @@ var oDATA = Ember.Object.create({
 	me: this,
 	Obj: {},
 	objNames:[],
-	//1-reiškia, kad atsisiusta po sistemos užsikrovimo per 'fnLoadNext'
-	// listUrl: {
-		// proc_Accidents: "Accident/AccidentsList",
-		// tblAccidents: 1,
-		// proc_Drivers: 1,
-		// tblAccidentsTypes: 1,
-		// tblClaimTypes: 1,
-		// proc_Vehicles: 1,
-		// proc_InsPolicies: 1,
-		// tblInsurers: 1,
-		// tblVehicleMakes: 1,
-		// tblClaims: 1
-	// },
 	listTemplates: {},
-	
 	SET: function (objName, oINST) {
 		this.Obj[objName] = oINST; if (!this.objNames.contains(objName)){this.objNames.push(objName);}
 	},
@@ -148,10 +134,10 @@ var oDATA = Ember.Object.create({
 			throw new Error("No object '" + objName + "' in oDATA.listUrl;");
 		}
 	},
-	fnLoadNext: function () {
-		oGLOBAL.logFromStart("Pradedu apdorot fnLoadNext");
-		this.fnLoad2({ url: "Main/tabAccidents" });
-		oGLOBAL.logFromStart("Baigiau apdorot fnLoadNext");
+	fnLoadMain: function () {
+		//oGLOBAL.logFromStart("Pradedu apdorot fnLoadNext");
+		this.fnLoad2({ url: "Main/tabMain" });
+		//oGLOBAL.logFromStart("Baigiau apdorot fnLoadNext");
 	},
 	// fnLoad: function (p) {//url:url, callBack:callBack
 		// var start = new Date().getTime(), setter = this.get("SET"), emBuilder = this.get("emBuilder"), me = this, obj;
@@ -194,7 +180,7 @@ var oDATA = Ember.Object.create({
 			if (p.callBack) p.callBack();
 		}
 
-		if (this.executed[p.url]) {//jei jau buvo klikinta, nieko siųst nereikia
+		if (this.executed[p.url]&&!p.runAllways) {//jei jau buvo klikinta, nieko siųst nereikia(nebent reikia)
 			finished(start, "Second click no need to load.");
 		} else {
 			var url = p.url, dataPars = {
@@ -484,8 +470,10 @@ var SERVER = {
 		});
 	},
 	fnUpdated: function (resp, updData) {  //updData["Action"]
-		var titleFields = (updData.source) ? oDATA.GET(updData.source).Config.titleFields : false, Title;
-		if (titleFields) { Title = (updData.row) ? updData.row.MapArrToString(titleFields, true) : "Duomenų keitimas." }
+		var titleFields = (updData.source) ? oDATA.GET(updData.source).Config.titleFields : false, Title = "Duomenų keitimas.";
+		if (titleFields) {
+			if (updData.row){Title = (updData.row.iD) ? updData.row.MapArrToString(titleFields, true) : "Duomenų keitimas.";}
+		}
 		DefMsg = {
 			Title: (Title || updData.Title || "Duomenų keitimas"),
 			Error: {

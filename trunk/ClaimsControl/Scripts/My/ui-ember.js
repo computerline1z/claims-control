@@ -110,7 +110,13 @@ JQ.Dialog = Ember.View.extend(JQ.Widget, {
 	uiType: 'dialog',
 	didInsertElement: function() {
 		this._super(); 
-		this.$().parent().css("top","10%");
+		if (this.pars){
+			if (this.pars.input){
+				//console.log($(this.input).offset().top);
+				t=this.pars.input.offset().top-200+"px"
+				this.$().parent().css("top",t);
+			}
+		}// else{this.$().parent().css("top","10%");}	
 	},
 	//uiOptions: 'autoOpen height width close title buttons'.w(), //attributes have to be declared there
 	uiOptions: 'autoOpen width close title resizable modal position buttons'.w(), //attributes have to be declared there

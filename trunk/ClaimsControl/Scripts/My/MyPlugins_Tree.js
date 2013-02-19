@@ -6,56 +6,67 @@ var initTreePadding = false;
   App.create_docsTypesController = function(categoryOpts) {
     return App.docsTypesController = Em.ResourceController.create({
       init: function() {
-        var c, catOpts, cats, docTypes, me;
+        var docTypes, me;
         this._super();
         me = this;
         docTypes = oDATA.GET("tblDocTypes").emData;
-        c = [];
         this.set("docTypes", docTypes);
-        categoryOpts = categoryOpts ? categoryOpts : this.categoryOpts;
         if (categoryOpts) {
-          this.set("categoryOpts", categoryOpts);
-          catOpts = categoryOpts;
-          cats = oDATA.GET("tblDocGroup").emData;
-          if (catOpts.driver) {
-            cats.findProperty("iD", 3).set("name", catOpts.driver.title);
-          }
-          cats.forEach(function(catItem, i) {
-            var newItem;
-            newItem = {
-              categoryId: catItem.iD,
-              title: catItem.name
-            };
-            i = catItem.iD;
-            console.log("catItem.iD: " + i + ", catItem.name: " + catItem.name);
-            if (i !== 1 && i !== 5) {
-              newItem.isTree = "isTree";
-            }
-            newItem.isGroup = "isGroup";
-            if (i !== 4) {
-              newItem.isSelectable = true;
-            }
-            if (i === 4) {
-              newItem.items = catOpts.vehicles.map(function(item) {
-                return {
-                  isGroup: "isGroup",
-                  refID: item.iD,
-                  categoryId: 4,
-                  title: item.title,
-                  isTree: "isTree",
-                  isSelectable: true
-                };
-              });
-              newItem.items.forEach(function(vehicle) {
-                return vehicle.items = me.setDocTypes(docTypes, catItem.iD, vehicle.refID);
-              });
-            } else {
-              newItem.items = me.setDocTypes(docTypes, catItem.iD);
-            }
-            return c[c.length] = newItem;
-          });
-          return this.set("content", c);
+          return this.refreshTree(categoryOpts);
         }
+      },
+      refreshTree: function(categoryOpts) {
+        var c, catOpts, cats, me, newItem_Nepriskirti;
+        oGLOBAL.logFromStart("Started refreshTree");
+        this.set("categoryOpts", categoryOpts);
+        catOpts = categoryOpts;
+        cats = oDATA.GET("tblDocGroup").emData;
+        c = [];
+        me = this;
+        newItem_Nepriskirti = "";
+        if (catOpts.driver) {
+          cats.findProperty("ref", 3).set("name", catOpts.driver.title);
+        }
+        cats.forEach(function(catItem, i) {
+          var newItem, ref;
+          newItem = {
+            categoryId: catItem.iD,
+            title: catItem.name
+          };
+          ref = catItem.ref;
+          if (ref !== 1 && ref !== 5) {
+            newItem.isTree = "isTree";
+          }
+          newItem.isGroup = "isGroup";
+          if (ref !== 4) {
+            newItem.isSelectable = true;
+          }
+          if (ref === 4) {
+            newItem.items = catOpts.vehicles.map(function(item) {
+              return {
+                isGroup: "isGroup",
+                refID: item.iD,
+                categoryId: catItem.iD,
+                title: item.title,
+                isTree: "isTree",
+                isSelectable: true
+              };
+            });
+            newItem.items.forEach(function(vehicle) {
+              return vehicle.items = me.setDocTypes(me.docTypes, catItem.iD, vehicle.refID);
+            });
+          } else {
+            newItem.items = me.setDocTypes(me.docTypes, catItem.iD);
+          }
+          if (ref === 5) {
+            return newItem_Nepriskirti = newItem;
+          } else {
+            return c[c.length] = newItem;
+          }
+        });
+        c[c.length] = newItem_Nepriskirti;
+        this.set("content", c);
+        return oGLOBAL.logFromStart("Finished refreshTree");
       },
       setDocTypes: function(docTypes, groupID, refID) {
         fnMap;
@@ -84,12 +95,13 @@ var initTreePadding = false;
       content: [],
       docTypes: [],
       filterTypes: (function() {
-        var dt;
+        var dg, dt;
         console.log("Start filterTypes fn");
         dt = this.get("docTypes");
-        this.set("docTypes_accident", dt.filterProperty("docGroupID", 2));
-        this.set("docTypes_driver", dt.filterProperty("docGroupID", 3));
-        return this.set("docTypes_vehicle", dt.filterProperty("docGroupID", 4));
+        dg = oDATA.GET("tblDocGroup").emData;
+        this.set("docTypes_accident", dt.filterProperty("docGroupID", dg.findProperty("ref", 2).iD));
+        this.set("docTypes_driver", dt.filterProperty("docGroupID", dg.findProperty("ref", 3).iD));
+        return this.set("docTypes_vehicle", dt.filterProperty("docGroupID", dg.findProperty("ref", 4).iD));
       }).observes("docTypes.length")
     });
   };
@@ -107,9 +119,7 @@ var initTreePadding = false;
     _create: function() {
       $('<table width="100%;"><tr style="vertical-align:top"><td style="width:28em"><div id="' + this.options.treeId + '" style="border-right: 1px solid #ddd;"></div></td>' + '<td style="vertical-align:top;padding:10px;"><div id="' + this.options.docViewForTreeId + '"></div></td></tr></table>').appendTo(this.element);
       if (App.docsTypesController) {
-        if (!App.docsTypesController.content.length) {
-          App.docsTypesController.set("categoryOpts", this.options.categoryOpts).init();
-        }
+        App.docsTypesController.refreshTree(this.options.categoryOpts);
       } else {
         App.create_docsTypesController(this.options.categoryOpts);
       }
@@ -119,12 +129,12 @@ var initTreePadding = false;
       this.DocTreeViewOpt.opts = this.options;
       App.TreeView = Em.View.extend(this.TreeViewOpts);
       App[this.options.TreeDocController] = Em.Object.create(this.TreeDocControllerOpts);
-      Em.View.create({
+      MY.accidentCard.TreeView = Em.View.create({
         templateName: "tmpDocsTree"
       }).appendTo("#" + this.options.treeId);
       this.docViewForTreeOpts.controller = App[this.options.TreeDocController];
       this.docViewForTreeOpts.opts = this.options;
-      return Em.View.create(this.docViewForTreeOpts).appendTo("#" + this.options.docViewForTreeId);
+      return MY.accidentCard.DocsView = Em.View.create(this.docViewForTreeOpts).appendTo("#" + this.options.docViewForTreeId);
     },
     DocTreeViewOpt: {
       templateName: "tmpDocsNodes",
@@ -181,7 +191,7 @@ var initTreePadding = false;
       tagName: "",
       classNames: [],
       getDocs: function(event) {
-        var account, ctx, currentDocs, docTypes, fnFilter, fnGetDocType, fnGetIcon, fnGetUser, isPhoto, showDocs, t, url, users;
+        var ctx, currentDocs, docTypes, docsPath, fnFilter, fnGetDocType, fnGetIcon, fnGetUser, isPhoto, showDocs, t, url, users;
         App.treeDocController.set("selectedCategoryId", event.view.bindingContext.categoryId);
        // $("#" + this.opts.treeId).find("span").removeClass("ui-state-highlight");
 	   $('div.treeContent').removeClass("selected selectNeighbor");
@@ -220,8 +230,8 @@ var initTreePadding = false;
         currentDocs.forEach(function(doc) {
           return console.log("iD: " + doc.iD + ", docName: " + doc.docName + ", docTypeID:" + doc.docTypeID + ", groupID:" + doc.groupID);
         });
-         docsPath = oDATA.GET("userData").emData[0].docsPath;
-         url = "Uploads/" + docsPath;
+        docsPath = oDATA.GET("userData").emData[0].docsPath;
+        url = "Uploads/" + docsPath;
         users = oDATA.GET("tblUsers").emData;
         docTypes = oDATA.GET("tblDocTypes").emData;
         fnGetIcon = function(ext) {
@@ -293,19 +303,39 @@ var initTreePadding = false;
         return this.refreshDocs();
       },
       refreshDocs: function() {
-        var cats, docs;
+        var accidentID, cats, docGroups, docs, driverGroupID, driverID, vehicleGroupID, vehicles;
+        oGLOBAL.logFromStart("Started refreshDocs");
         docs = oDATA.GET("tblDocs").emData;
         cats = this.opts.categoryOpts;
+        docGroups = oDATA.GET("tblDocGroup").emData;
         if (cats.accident) {
-          this.AllDocs = docs.filterByTbl({
-            filterTbl: oDATA.GET("tblDocsInAccidents").emData,
-            joinField: "docID",
-            filterField: "accidentID",
-            filterValue: cats.accident.iD
+          accidentID = cats.accident.iD;
+          vehicles = cats.vehicles;
+          driverID = cats.driver.iD;
+          driverGroupID = docGroups.findProperty("ref", 3).iD;
+          vehicleGroupID = docGroups.findProperty("ref", 4).iD;
+          this.AllDocs = docs.filter(function(doc) {
+            var groupID, refID;
+            refID = doc.refID;
+            groupID = doc.groupID;
+            if (groupID === driverGroupID) {
+              if (refID === driverID) {
+                return true;
+              }
+            } else if (groupID === vehicleGroupID) {
+              if (vehicles.findProperty("iD", refID)) {
+                return true;
+              }
+            } else if (refID === accidentID) {
+              return true;
+            } else {
+              return false;
+            }
           });
         } else {
           this.AllDocs = docs;
         }
+        oGLOBAL.logFromStart("Finished refreshDocs");
         return Em.run.next(this, function() {
           var selected, t;
           if (this.AllDocs.filter(function(doc) {
@@ -398,5 +428,7 @@ var initTreePadding = false;
       }
     }
   });
+
+  MY.accidentCard = {};
 
 }).call(this);

@@ -4,7 +4,12 @@ App.docsAccident=(p)-> #({accidentForm, docsForm, uploadForm})
 	frmObj=p.accidentForm.data("ctrl"); isNew=if frmObj.NewRec==1 then true else false	
 	accidentID=(if isNew then null else frmObj.id)
 	driver=$("#lstDrivers"); driverID=(if isNew then null else driver.data("ctrl").Value); driverTitle="Vairuotojo '"+driver.val()+"' dokumentai";
-	vehicles = if isNew then null else frmObj.vehicles
+	vehicles=[]
+	if not isNew
+		frmObj.vehicles.forEach((item)-> #Paliekam tik unikalius TP (nes jie gali kartotis)
+			if not vehicles.findProperty("iD",item.iD) then vehicles.addObject(item)
+		)
+	#vehicles = if isNew then null else frmObj.vehicles
 	settings=categoryOpts:
 		accident:{iD:accidentID,title:"Įvykio dokumentai"} #accident:{iD:24,title:"Įvykio dokumentai"}
 		driver:{iD:driverID,title:driverTitle},#driver:{iD:87,title:"Vairuotojo Albinas Palubinskas dokumentai"},
@@ -18,5 +23,7 @@ App.docsAccident=(p)-> #({accidentForm, docsForm, uploadForm})
 	# )	
 	oDATA.execWhenLoaded(["tmpUploadForm","tmpDocsTree"], ()-> 
 		$('#uploadDocsToAccident').UploadFiles(settings)
+		# if $("#AccDocs").data("ctrl").Saved then App.docsTypesController.refreshTree(settings.categoryOpts); $("#AccDocs").data("ctrl").Saved=false
+		# else 
 		$('#uploadDocsToAccident').next().Tree(categoryOpts:settings.categoryOpts)
 	)

@@ -6,7 +6,11 @@
 		<div class="docType"><input {{bindAttr value="name" }} type="text"><button class="btn small" {{action saveItem this}}>Išsaugoti</button><a class="btn small" {{action cancelItem this}}>Atšaukti</a></div>
 		{{else}}
 			<div class="docType">
-				<div style="float:left">{{name}}</div>		
+				{{#if name}}
+					<div style="float:left">{{name}}</div>	
+				{{else}}
+					<div style="float:left">{{insurerName}}</div>	
+				{{/if}}	
 				<div style="float:right">
 					<a href="#" {{action editItem this}}><i class="img18-pencil"></i></a>
 					<a href="#" {{action deleteItem this}}><i class="img18-delete"></i></a>
@@ -15,9 +19,9 @@
 		{{/if}}
 	{{/each}}
 	{{#if this.addItem}} 
-		<div style="line-height:30px;"><input Placeholder="Įveskite naują markę" type="text"/><button class="btn small" {{action saveNewItem}}>Išsaugoti</button></div><div><button class="btn small" {{action cancelNewItem}}>Atšaukti</button></div>
+		<div style="line-height:30px;"><input Placeholder="Įveskite naują pavadinimą.." type="text"/><button class="btn small" {{action saveNewItem}}>Išsaugoti</button></div><div><button class="btn small" {{action cancelNewItem}}>Atšaukti</button></div>
 	{{else}}
-		<a style="line-height:30px;" {{action addNewItem}} href="#">Pridėti naują {{this.addNewMsg}}</a>
+		<a style="line-height:30px;" {{action addNewItem}} href="#">{{this.addNewMsg}}</a>
 	{{/if}}
 </fieldset>
 </br>

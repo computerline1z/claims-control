@@ -6,8 +6,8 @@
     options: {
       ListType: "List",
       Editable: {
-        Add: false,
-        Edit: false
+        EditThis: false,
+        EditList: false
       },
       selectFirst: false,
       Value: "",
@@ -15,7 +15,7 @@
       addNewIfNotExists: false
     },
     _create: function() {
-      var OptVal, data, fnEditItem, fnSetData, id, input, opt, val;
+      var data, fnEditItem, fnSetData, id, input, opt;
       input = $(this.element[0]);
       if (input.length === 0) {
         console.error("Input not found for ComboBox!");
@@ -24,7 +24,7 @@
       if (opt.Source === "proc_Drivers") {
         opt.mapWithNoCommas = true;
       }
-      fnEditItem = function(id, newVals) {
+      fnEditItem = function(id, newVals, e) {
         var Action, pars, template;
         id = parseInt(id, 10);
         Action = id ? "Edit" : "Add";
@@ -38,7 +38,7 @@
             vals: newVals,
             cols: opt.iText
           } : null,
-          input: $(this.event.target),
+          input: e ? $(e.target) : null,
           CallBackAfter: function(Row) {
             return dialogFrm.dialog("close");
           }
@@ -46,9 +46,9 @@
         return App.listAllController.openItem(pars);
       };
       data = void 0;
-      OptVal = parseInt(opt.Value, 10);
       fnSetData = function() {
-        var fn;
+        var OptVal, fn;
+        OptVal = parseInt(opt.Value, 10);
         if (opt.data) {
           data = opt.data();
         } else {
@@ -70,7 +70,7 @@
             return fn(a);
           });
         }
-        if (opt.Editable.Add) {
+        if (opt.Editable.EditList) {
           return data[data.length] = {
             id: -1,
             value: "Redaguoti sąrašą",
@@ -87,7 +87,13 @@
         minLength: (this.options.ListType === "None" ? 2 : 0),
         autoFocus: true,
         fnRefresh: function() {
-          return fnSetData();
+          if (input.data("newval")) {
+            opt.Value = input.data("newval");
+          }
+          fnSetData();
+          if (opt.Editable.EditThis && input.data("newval")) {
+            return input.after("<span title='redaguoti..' class='ui-icon ui-icon-pencil ui-menu-icon'>&nbsp;</span>");
+          }
         },
         source: function(request, response) {
           return response($.ui.autocomplete.filter(data, request.term));
@@ -129,7 +135,7 @@
         change: function(event, ui) {
           var t;
           if (!ui.item) {
-            fnEditItem(0, input.val());
+            fnEditItem(0, input.val(), event);
             if (opt.fnChangeCallBack) {
               MY.execByName(opt.fnChangeCallBack, MY, this, null);
             }
@@ -149,7 +155,7 @@
         },
         open: function() {
           var acData, termTemplate;
-          if (opt.Editable.Add) {
+          if (opt.Editable.EditList) {
             $('ul.ui-autocomplete:visible').find("a:last").addClass("actionLink");
           }
           if (opt.ListType === "None" || opt.ListType === "Combo") {
@@ -169,14 +175,6 @@
           return alert("nu blur");
         }
       });
-      if (opt.addNewIfNotExists) {
-        input.on("blur", function() {
-          return alert("opa");
-        });
-      }
-      if (opt.Editable.Edit) {
-        val = input.data("newval");
-      }
       $(".ui-autocomplete-input").live("autocompleteopen", function() {
         var autocomplete, menu;
         autocomplete = $(this).data("autocomplete");
@@ -188,13 +186,13 @@
           type: "mouseenter"
         }), menu.element.children().first());
       });
-      if (opt.Editable.Edit) {
+      if (opt.Editable.EditThis) {
         id = $(this).data("newval");
         id = (id ? id : 0);
         opt.appendToList = "<span title='redaguoti..' class='ui-icon ui-icon-pencil ui-menu-icon'>&nbsp;</span>";
         input.after(opt.appendToList);
         input.data("autocomplete").fnClickOnBtn = function(p) {
-          var Action, c, msg, oData;
+          var Action, c, msg, oData, val;
           Action = p.elm.hasClass("ui-icon-pencil") ? "Edit" : "Delete";
           oData = oDATA.GET(opt.Source);
           if (p.elm.hasClass("ui-icon-pencil")) {
@@ -255,8 +253,7 @@
             input.autocomplete("search", "");
             input.focus();
             return false;
-          },
-          NoCorners: (opt.Editable.Add ? true : false)
+          }
         }, input);
       }
       if (opt.ListType === "List") {
@@ -466,9 +463,9 @@
         me = this;
         currentCategoryID = "";
         emCategories.forEach(function(catItem, i) {
-          if (catItem.iD === 0) {
+          if (catItem.ref === 0) {
 
-          } else if (catItem.iD === 1) {
+          } else if (catItem.ref === 1) {
             return me._renderItemData(ul, {
               id: 0,
               label: "Nuotrauka",
@@ -476,12 +473,12 @@
               categoryID: 1,
               refID: categoryOpts.accident.iD
             });
-          } else if (catItem.iD === 3 && categoryOpts.driver) {
-            return renderGroup(me, ul, [categoryOpts.driver], docTypes, 3);
-          } else if (catItem.iD === 4 && categoryOpts.vehicles) {
-            return renderGroup(me, ul, categoryOpts.vehicles, docTypes, 4);
-          } else if (catItem.iD === 2 && categoryOpts.accident) {
-            return renderGroup(me, ul, [categoryOpts.accident], docTypes, 2);
+          } else if (catItem.ref === 3 && categoryOpts.driver) {
+            return renderGroup(me, ul, [categoryOpts.driver], docTypes, catItem.iD);
+          } else if (catItem.ref === 4 && categoryOpts.vehicles) {
+            return renderGroup(me, ul, categoryOpts.vehicles, docTypes, catItem.iD);
+          } else if (catItem.ref === 2 && categoryOpts.accident) {
+            return renderGroup(me, ul, [categoryOpts.accident], docTypes, catItem.iD);
           }
         });
         if (categoryOpts.editList) {

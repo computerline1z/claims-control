@@ -299,7 +299,7 @@
   App.accidentsController = Em.ResourceController.create({
     url: "Accident/AccidentsList",
     tableName: "proc_Accidents",
-    fields: {},
+    currency: 'LTL',
     animationSpeedEnd: 400,
     animationSpeedStart: 400,
     setAnimationSpeed: function(e) {
