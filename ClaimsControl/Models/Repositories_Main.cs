@@ -104,27 +104,27 @@ namespace CC.Models {
 			//JSON.Config = new { Controler = "Main", tblUpdate = "tblDocsInAccidents" };
 			return JSON;
 		}
-		public jsonArrays GetJSON_tblDocsInAccidents() {
-			jsonArrays JSON = new jsonArrays();
-			JSON.Data = from d in dc.tblDocsInAccidents join  a in dc.tblAccidents on d.AccidentID equals a.ID
-							where a.IsDeleted == false && a.AccountID == UserData.AccountID
-							select new object[] {
-            d.ID,//0
-            d.DocID,//1
-            d.AccidentID,//2
-            };
-			object[] Cols ={
-            new { FName = "ID"},//0
-            new { FName = "DocID"},//1
-            new { FName = "AccidentID"}//2
-            }; JSON.Cols = Cols;
-			JSON.Config = new { Controler = "Main", tblUpdate = "tblDocsInAccidents" };
-			return JSON;
-		}
+		//public jsonArrays GetJSON_tblDocsInAccidents() {
+		//   jsonArrays JSON = new jsonArrays();
+		//   JSON.Data = from d in dc.tblDocsInAccidents join  a in dc.tblAccidents on d.AccidentID equals a.ID
+		//               where a.IsDeleted == false && a.AccountID == UserData.AccountID
+		//               select new object[] {
+		//      d.ID,//0
+		//      d.DocID,//1
+		//      d.AccidentID,//2
+		//      };
+		//   object[] Cols ={
+		//      new { FName = "ID"},//0
+		//      new { FName = "DocID"},//1
+		//      new { FName = "AccidentID"}//2
+		//      }; JSON.Cols = Cols;
+		//   JSON.Config = new { Controler = "Main", tblUpdate = "tblDocsInAccidents" };
+		//   return JSON;
+		//}
 		public jsonArrays GetJSON_tblDocs() {
 			jsonArrays JSON = new jsonArrays();
 			JSON.Data = from d in dc.tblDocs
-							where d.IsDeleted == false && d.tblDocType.AccountID == UserData.AccountID
+							where d.IsDeleted == false && d.tblDocType.AccountID == UserData.AccountID || d.tblDocType.AccountID==0
 							select new object[] {
             d.ID,//0
             d.DocName,//1
@@ -174,12 +174,12 @@ namespace CC.Models {
 		}
 		public jsonArrays GetJSON_tblDocType() {//orderby d.DocGroupID reikalingas sukabinant su GetJSON_tblDocGroup
 			jsonArrays JSON = new jsonArrays();
-			JSON.Data = from d in dc.tblDocTypes orderby d.DocGroupID where d.IsDeleted == false && d.AccountID == UserData.AccountID
+			JSON.Data = from d in dc.tblDocTypes orderby d.DocGroupID where d.IsDeleted == false && (d.AccountID == UserData.AccountID||d.AccountID == 0)
 							select new object[] {
-         d.ID,//0
-         d.Name,//1
-         d.DocGroupID//2
-         };
+							d.ID,//0
+							d.Name,//1
+							d.DocGroupID//2
+							};
 			object[] Cols ={
          new { FName = "ID"},//0
          new { FName = "Name",Type="string", LenMax=100,Validity="require().nonHtml().maxLength(100)"},//1
@@ -226,14 +226,16 @@ namespace CC.Models {
 			jsonArrays JSON = new jsonArrays();
 			//var tblDocTypes = (from d in dc.tblDocTypes where d.IsDeleted == false && d.AccountID == UserData.AccountID select d.DocGroupID).ToArray();
 			//JSON.Data = from d in dc.tblDocGroups where d.IsDeleted == false && tblDocTypes.Contains(d.ID)
-			JSON.Data = from d in dc.tblDocGroups orderby d.ID where d.IsDeleted == false && d.AccountID == UserData.AccountID
-							select new object[] {
+			JSON.Data = from d in dc.tblDocGroups orderby d.ID where d.IsDeleted == false && (d.AccountID == UserData.AccountID || d.AccountID == 0) //Visiems vienodos grupės
+							  select new object[] {
 								d.ID,//0
-								d.Name//1
+								d.Name,//1
+								d.Ref//Naudojamas tik medžiui paišyt
 							};
 			object[] Cols ={
 				new { FName = "ID"},//0
-				new { FName = "Name",Type="string", LenMax=100,Validity="require().nonHtml().maxLength(100)"}//1
+				new { FName = "Name",Type="string", LenMax=100,Validity="require().nonHtml().maxLength(100)"},//1
+				new { FName = "Ref"}//0
 			}; JSON.Cols = Cols;
 			JSON.Config = new {
 				Controler = "Lists", tblUpdate = "tblDocGroup"
@@ -241,7 +243,8 @@ namespace CC.Models {
 			JSON.Grid = new {
 				aoColumns = new object[]{
 	   new {bVisible=false,bSearchable=false},//0//ID////DefaultUpdate=0
-	   new {sTitle="Vardas"}//1//Name//
+	   new {sTitle="Vardas"},//1//Name//
+		new {bVisible=false}//0//ID////DefaultUpdate=0
 	   }
 			};
 			return JSON;
@@ -365,10 +368,8 @@ namespace CC.Models {
 			object[] Cols ={//NotEditable=true // Unique=true// LenMax/LenEqual/LenMin:10
 				//Date,DateLess,DateNoLess,Time,String
 				new { FName = "ID"},//0
-				//new { FName = "AccidentTypeID", Tip="Pasirinkite iš sąrašo..",List=new{Source="tblAccidentsTypes",iVal="iD",iText=new object[]{1},Editable=0,ListType="List"}},//1
-				//new { FName = "DriverID",Tip="Pradėkite vesti..", List=new{Source="proc_Drivers",iVal="iD",iText=new object[]{1,2},Editable=1,ListType="Combo"}},//3
-				new { FName = "AccidentTypeID", Tip="Pasirinkite iš sąrašo..",List=new{Source="tblAccidentsTypes",iVal="iD",iText=new object[]{"name"},Editable=0,ListType="List"}},//1
-				new { FName = "DriverID",Tip="Pradėkite vesti..", List=new{Source="proc_Drivers",iVal="iD",iText=new object[]{"firstName","lastName"},Editable=1,ListType="Combo"}},//3
+				new { FName = "AccidentTypeID", Tip="Pasirinkite iš sąrašo..",List=new{Source="tblAccidentsTypes",iVal="iD",iText=new object[]{"name"},ListType="List"}},//1
+				new { FName = "DriverID",Tip="Pradėkite vesti..", List=new{Source="proc_Drivers",iVal="iD",iText=new object[]{"firstName","lastName"},Editable=new{EditThis=true},ListType="Combo"}},//3
 				new { FName = "No",Type="Integer",Validity="require().match('integer')"},//4
 				new { FName = "Date",Type="Date", Default="Today",Validity="require().match('date').lessThanOrEqualTo(new Date())"},//5
 				new { FName = "IsNotOurFault",Type="Boolean"},//6
@@ -617,8 +618,8 @@ namespace CC.Models {
 				new { FName = "Year",Type="Integer", LenEqual=4,Validity="require()"},//5
 				new { FName = "Docs",Type="String",NotEditable=1},//6
 				new { FName = "EndDate",Type="Date", LenMax=30,Validity="match('date').lessThanOrEqualTo(new Date())"},//7
-				new { FName = "TypeID",List=new{Source="tblVehicleTypes",Editable=0,ListType="List", iVal="iD",iText=new object []{"name"}}},//8
-				new { FName = "MakeID",List=new{Source="tblVehicleMakes",Editable=new{Add=true},ListType="List", iVal="iD",iText=new object []{"name"}}}//9
+				new { FName = "TypeID",List=new{Source="tblVehicleTypes",ListType="List", iVal="iD",iText=new object []{"name"}}},//8
+				new { FName = "MakeID",List=new{Source="tblVehicleMakes",Editable=new{EditList=true},ListType="List", iVal="iD",iText=new object []{"name"}}}//9
 			}; JSON.Cols = Cols;
 			JSON.Config = new { Controler = "Vehicles", tblUpdate = "tblVehicles", titleFields = new object[] { "plate", "make" }, Msg = new { AddNew = "Naujos transporto priemonės sukūrimas", Edit = "Transporto priemonių redagavimas", Delete = "Ištrinti transporoto priemonę", GenName = "Transporto priemonė", GenNameWhat = "Transporto priemonę", ListName = "Transporto priemonių sąrašas" } };
 			JSON.Grid = new {
@@ -716,17 +717,15 @@ namespace CC.Models {
 				new { FName = "InsurerName",IdField="insurerID"},//3
 				new { FName = "PolicyNumber",Type="String", LenMax=50,Validity="require().nonHtml().maxLength(50)"},//3
 
-				new { FName = "EndDate",Type="DateMore", Default="Today",Validity="require().match('date').greaterThanOrEqualTo(new Date())"},//4
-				new { FName = "InsuredName",Type="String", LenMax=50,Validity="require().nonHtml().maxLength(50)"},//5
-				new { FName = "InsuredCode",Type="String", LenMax=50,Validity="require().nonHtml().maxLength(50)"},//6
+				new { FName = "EndDate",Type="DateMore", Default="Today",Validity="require().match('date')"},//.greaterThanOrEqualTo(new Date()) 4
+				new { FName = "InsuredName",Type="String", LenMax=50,Validity="nonHtml().maxLength(50)"},//5
+				new { FName = "InsuredCode",Type="String", LenMax=50,Validity="nonHtml().maxLength(50)"},//6
 
-				new { FName = "InsuredAddress",Type="String", LenMax=100,Validity="require().nonHtml().maxLength(100)"},//7
+				new { FName = "InsuredAddress",Type="String", LenMax=100,Validity="nonHtml().maxLength(100)"},//7
 				new { FName = "InsuredContactName",Type="String"},//8
-				new { FName = "InsuredContactID",List=new{Source="tblUsers",Editable=1,ListType="List", iVal="iD",iText=new object []{"firstName","surname"},mapWithNoCommas=1}},//9
-				new { FName = "ClaimTypeID",List=new{Source="tblClaimTypes",Editable=0,ListType="List", iVal="iD",iText=new object []{"name"}}},//10
-				//new { FName = "MakeID",List=new{Source="tblVehicleMakes",Editable=new{Add=true},ListType="List", iVal="iD",iText=new object []{"name"}}}//9
-
-				new { FName = "InsurerID",List=new{Source="tblInsurers",Editable=new{Add=true},ListType="List", iVal="iD",iText=new object []{"name"}}},//11
+				new { FName = "InsuredContactID",List=new{Source="tblUsers",ListType="List", iVal="iD",iText=new object []{"firstName","surname"},mapWithNoCommas=1}},//9
+				new { FName = "ClaimTypeID",List=new{Source="tblClaimTypes",ListType="List", iVal="iD",iText=new object []{"name"}}},//10
+				new { FName = "InsurerID",List=new{Source="tblInsurers",Editable=new{EditList=true},ListType="List", iVal="iD",iText=new object []{"name"}}},//11
 				new { FName = "MailsAddresses",Type="String", Tip="Įveskite vieną ar kelis draudiko ar brokerio el. pašto adresus (atskirti kableliu ar kabletaškiu)", LenMax=250,Validity="nonHtml().maxLength(250)"},//5
 								}; JSON.Cols = Cols;
 			JSON.Config = new { Controler = "InsPolicy", tblUpdate = "tblInsPolicies", titleFields = new object[] { "policyNumber", "insurerName" }, Msg = new { AddNew = "Naujos draudimo sutarties sukūrimas", Edit = "Draudimo sutarties redagavimas", Delete = "Ištrinti draudimo sutartį", GenName = "Draudimo sutartis", GenNameWhat = "draudimo polisą", ListName = "Draudimo sutarčių sąrašas" } };
@@ -969,10 +968,10 @@ namespace CC.Models {
 			//List=new{Source="tblVehicleMakes",iVal="iD",iText=new object []{1}}
 			object[] Cols ={
 				new { FName = "ID"},//0
-				new { FName = "ClaimTypeID",Tip="Pasirinkite žalos tipą..", List=new{Source="tblClaimTypes",iVal="iD",iText=new object[]{"name"},Editable=0,ListType="List"}},//1
+				new { FName = "ClaimTypeID",Tip="Pasirinkite žalos tipą..", List=new{Source="tblClaimTypes",iVal="iD",iText=new object[]{"name"},ListType="List"}},//1
 				new { FName = "AccidentID"},//2
-				new { FName = "InsPolicyID",Tip="Pasirinkite iš sąrašo..", List=new{Source="proc_InsPolicies",iVal="iD",iText=new object[]{"claimType","insurerName"},Editable=new{Add=true},ListType="List"}},//3 ,Append=new{id=0,value="Neapdrausta"}
-				new { FName = "VehicleID",Tip="Valst.Nr.", List=new{Source="proc_Vehicles",iVal="iD",iText=new object[]{"plate","type","make","model"},Editable=new{Edit=true},ListType="None"}},//4
+				new { FName = "InsPolicyID",Tip="Pasirinkite iš sąrašo..", List=new{Source="proc_InsPolicies",iVal="iD",iText=new object[]{"claimType","insurerName"},ListType="List"}},//Editable=new{EditList=true}3 ,Append=new{id=0,value="Neapdrausta"}
+				new { FName = "VehicleID",Tip="Valst.Nr.", List=new{Source="proc_Vehicles",iVal="iD",iText=new object[]{"plate","type","make","model"},ListType="None"}},//4
 				new { FName = "No",Type="Integer", LenMax=10,Validity="require().match('integer').maxLength(13).greaterThanOrEqualTo(0)"},//5
 				new { FName = "IsTotalLoss",Type="Boolean"},//6
 				new { FName = "LossAmount",Type="Decimal", LenMax=15,Validity="require().match('number').greaterThanOrEqualTo(0)"},//7

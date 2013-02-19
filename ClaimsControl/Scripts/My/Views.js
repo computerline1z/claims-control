@@ -2,12 +2,18 @@ Handlebars.registerHelper('highlight', function (prop, options) {
 	var value = Ember.getPath(this, prop);
 	return new Handlebars.SafeString('<span class="highlight">' + value + '</span>');
 });
-Handlebars.registerHelper('checkOut', function (prop, options) {
+Handlebars.registerHelper('checkOut_trinti', function (prop, options) {
 	var value = Ember.getPath(this, prop);
         console.log("opa");
 	return new Handlebars.SafeString('<span class="highlight">' + value + '</span>');
 });
-
+Handlebars.registerHelper('currency', function (prop, options) {
+	var value = Ember.getPath(this, prop)+'';
+	var i=value.length-3;
+	if (i>0){value=value.slice(0, i) + '.' + value.slice(i);}
+	value+= ' '+App.accidentsController.currency;	
+	return new Handlebars.SafeString(value);
+});
 Handlebars.registerHelper('updatableField', function (prop, options) {
 	if  (this.content.length===0) return false;
 	var err = "updatableField helper ",h=(prop.hash)?prop.hash:options.hash;
@@ -18,7 +24,7 @@ Handlebars.registerHelper('updatableField', function (prop, options) {
 	if (!f) throw new Error(err + "did not found value for Field" + f);
 
 	//v = (typeof (v) === "string") ? v.replace(/'/g, "\"") : v;
-	if (typeof (v) === "string"){v="\""+v.replace(/'/g,"")+"\"";}
+	if (typeof (v) === "string"){v=v.replace(/'/g, "\'").replace(/"/g, '\\"');}
 	
 	var cl = (h.classes)? h.classes : "";//UpdateField
 	var st =  (h.style)? ("style='"+h.style+"'") : "";
@@ -27,9 +33,8 @@ Handlebars.registerHelper('updatableField', function (prop, options) {
 	var attr = h.attr; attr = (attr) ? "\"attr\":\"" + attr + "\"," : "";
 	var List = h.List; List = (List) ? "\"List\":" + List + "," : ""; //List yra objektas ir jam kabuciu nereikia
 	var Editable = h.Editable; Editable = (Editable) ? "\"Editable\":" + Editable + "," : ""; //Editable yra objektas ir jam kabuciu nereikia
-	
-	//var retString = " class='ExtendIt' data-ctrl='{\"Value\":" + (v===""?"\"\"":v) + ",\"Field\":\"" + f.firstBig() + "\",\"classes\":\"" + cl + "\"," + id + lblT + attr+List+Editable;
-	var retString = " class='ExtendIt "+((h.classes)?h.classes:"")+"' "+st+" data-ctrl='{\"Value\":" + (v===""?"\"\"":v) + ",\"Field\":\"" + f.firstBig() + "\",\"classes\":\"UpdateField\"," + id + lblT + attr+List+Editable;
+	//var retString = " class='ExtendIt "+((h.classes)?h.classes:"")+"' "+st+" data-ctrl='{\"Value\":" + (v===""?"\"\"":v) + ",\"Field\":\"" + f.firstBig() + "\",\"classes\":\"UpdateField\"," + id + lblT + attr+List+Editable;
+	var retString = " class='ExtendIt "+((h.classes)?h.classes:"")+"' "+st+" data-ctrl='{\"Value\":\"" + v + "\",\"Field\":\"" + f.firstBig() + "\",\"classes\":\"UpdateField\"," + id + lblT + attr+List+Editable;
 
 	if (retString.charAt(retString.length - 1) === ",") {retString = retString.slice(0, -1); } //iškertam paskutini kalbeli jei yra
 	if (h.tag) {retString="<"+h.tag+ retString + "}'></"+h.tag+">";} else  {retString="<div"+ retString + "}'></div>";}

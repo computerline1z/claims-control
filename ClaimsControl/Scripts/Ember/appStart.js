@@ -12,6 +12,9 @@ App.NavbarController = Em.Controller.extend({
 			$("body").find("div.validity-tooltip").remove(); //validičio tooltipus removinam
 			//$('#' + controller.get("currentOutlet")).empty();
 		} else { controller.set("currentOutlet", "tabAccidents"); }
+		if (!oDATA.GET("userData")){
+			oDATA.fnLoadMain();
+		}
 		Em.run.next(function () {
 			$('#' + controller.get("currentOutlet")).addClass("hidden"); //Paslepiam aktyvų taba .empty()
 			if (viewIx>-1){

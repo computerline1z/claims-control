@@ -10,7 +10,14 @@
     driver = $("#lstDrivers");
     driverID = (isNew ? null : driver.data("ctrl").Value);
     driverTitle = "Vairuotojo '" + driver.val() + "' dokumentai";
-    vehicles = isNew ? null : frmObj.vehicles;
+    vehicles = [];
+    if (!isNew) {
+      frmObj.vehicles.forEach(function(item) {
+        if (!vehicles.findProperty("iD", item.iD)) {
+          return vehicles.addObject(item);
+        }
+      });
+    }
     settings = {
       categoryOpts: {
         accident: {

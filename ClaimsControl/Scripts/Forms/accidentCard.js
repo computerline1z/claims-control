@@ -11,15 +11,27 @@ oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 		$("#accidentTab").tabs(tabOpts).on( "tabsactivate", function( event, ui ) {
 			if (ui.newTab.index()===1){//Jei pereinam į įvykio dokumentus
 				var accidentForm=ui.oldPanel,docsForm=ui.newPanel,uploadForm=$('#uploadDocsToAccident');
-				if  (uploadForm.html()!==""){
-					if (accidentForm.data("ctrl").id!== docsForm.data("ctrl").id) {//Jei kazkas buvo ir ne toks koks dabar ištuštinam
-						uploadForm.empty();//$("#dynamicTree,#docViewForTree").empty();
+				// if  (uploadForm.html()!==""){
+					// if (accidentForm.data("ctrl").id!== docsForm.data("ctrl").id) {//Jei kazkas buvo ir ne toks koks dabar ištuštinam
+						// uploadForm.empty();//$("#dynamicTree,#docViewForTree").empty();
+					// }
+				// }
+				// if  (uploadForm.html()===""){
+					// App.docsAccident({accidentForm:accidentForm, docsForm:docsForm, uploadForm:uploadForm});
+					// docsForm.data("ctrl").id=accidentForm.data("ctrl").id;
+				// }		
+				if  (docsForm.data("ctrl").id!==accidentForm.data("ctrl").id||$("#AccDocs").data("ctrl").Saved) {
+					if (MY.accidentCard.TreeView) {
+						MY.accidentCard.TreeView.remove();MY.accidentCard.DocsView.remove();
+						if($('#uploadDocsToAccident').next().data("Tree")) $('#uploadDocsToAccident').next().Tree("destroy");
 					}
-				}
-				if  (uploadForm.html()===""){
+					if  ($("#AccDocs").data("ctrl").Saved){App.treeDocController.refreshDocs();$("#AccDocs").data("ctrl").Saved=false;}
+					oGLOBAL .appStart= new Date().getTime();
+					oGLOBAL.logFromStart("Started docsAccident");
 					App.docsAccident({accidentForm:accidentForm, docsForm:docsForm, uploadForm:uploadForm});
 					docsForm.data("ctrl").id=accidentForm.data("ctrl").id;
-				}		
+					oGLOBAL.logFromStart("Finished docsAccident");
+				}
 			}				
 		} );
 		
@@ -53,17 +65,11 @@ oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 
 				SERVER.update({ Action: Action, DataToSave: DataToSave,
 					CallBack: { Success: function (resp) {
-						//SERVER.send("", oGLOBAL.Start.fnSetNewData, {}, "/Accident/AccidentsList", "json"); //Atsisiunciam atnaujinta lista
-						//if (oGLOBAL.AccidentForm.NewRec) { $('#divAccidentEdit').empty(); LoadAccident_Card(resp.ResponseMsg.Ext); return false; }						
 						var newRow = resp.ResponseMsg.Ext.replace(/#\|#\|/g, ":::").split("|#|"); newRow[13] = newRow[13].replace(/:::/g, "#|#|"); //atkeičiam atgal
 						var no = parseInt(newRow[1], 10), toAppend = (Action === "Edit") ? false : { "sort": "desc", "col": "date" };
 						App.accidentsController.get("setNewVal").call(App.accidentsController, { newVal: newRow, toAppend: toAppend, fieldsToInt: [0, 1, 5, 6, 7, 8] })[0]; //kuriuos reikia paverst integeriais
-
-						//var newContext = App.accidentsController.findProperty("iD",parseInt(newRow[0], 10));
-						//var newView = App.AccidentView.create({
-						//	content:newContext,
-						//	templateName: "tmpAccidentRow"
-						//});						
+						$("#AccDocs").data("ctrl").Saved=true;//Po išsaugojimo, kad atsinaujintų dokai 23 eilutė
+			
 						if (oGLOBAL.AccidentForm.NewRec) {//naujam Accidentui nukeliu useri i lista ir scroolinu, senam nieko nereikia
 							//var tbl = $("#accidentsTable");
 							//tbl.find("div.accident div.td:contains("+no+")").							

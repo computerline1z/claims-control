@@ -53,7 +53,7 @@ App.Router = Em.Router.extend({
 			route: '/tabLists',
 			connectOutlets: function (router, context) {
 				MY.NavbarController.fnSetNewTab(router.currentState.name, 4);
-				oDATA.fnLoad2({ url: "Main/tabLists", checkFn: "App.listsStart", callBack: function () {
+				oDATA.fnLoad2({ url: "Main/tabLists", checkFn: "App.listsStart", runAllways:true, callBack: function () {
 						App.listsStart();
 						router.get('applicationController').connectOutlet('listsOutlet','topLists');
 					}

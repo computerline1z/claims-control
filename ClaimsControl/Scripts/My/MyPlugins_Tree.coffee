@@ -6,30 +6,54 @@ App.create_docsTypesController=(categoryOpts)->(
 	App.docsTypesController = Em.ResourceController.create(	
 		#docsTypesControllerOpt:
 		init: ()-> 
-			@_super(); me = this; docTypes = oDATA.GET("tblDocTypes").emData; c = []; @.set("docTypes",docTypes) #docTypes naudojam sarašųredagavimui
-			categoryOpts=if categoryOpts then categoryOpts else @categoryOpts 
-			if categoryOpts #šito tik dokumentų medžiui reikia (content)
-				@set("categoryOpts",categoryOpts); catOpts=categoryOpts; cats = oDATA.GET("tblDocGroup").emData;
-				if catOpts.driver then cats.findProperty("iD",3).set("name",catOpts.driver.title)
-				cats.forEach (catItem, i) ->
-					newItem =
-						categoryId: catItem.iD, title: catItem.name
-					i = catItem.iD
-					console.log "catItem.iD: " + i + ", catItem.name: " + catItem.name
-					newItem.isTree = "isTree" if i isnt 1 and i isnt 5 #Nuotraukom ir nepriskirtom nedarom medzio
-					newItem.isGroup = "isGroup"
-					newItem.isSelectable = true	if i isnt 4 #masinom bus uz masinas medis, tai negalim pasirinkt
-					if i is 4
-						newItem.items = catOpts.vehicles.map((item) ->
-							isGroup: "isGroup", refID: item.iD, categoryId: 4, title: item.title, isTree: "isTree", isSelectable: true
-						)
-						newItem.items.forEach (vehicle) ->
-							vehicle.items = me.setDocTypes(docTypes, catItem.iD, vehicle.refID)#automobiliam atskiriam pagal refID
-					else
-						newItem.items = me.setDocTypes(docTypes, catItem.iD)
-					c[c.length] = newItem
-				@set "content", c
-
+			@_super(); me = this; docTypes = oDATA.GET("tblDocTypes").emData; @.set("docTypes",docTypes) #docTypes naudojam sarašųredagavimui
+			if categoryOpts then @refreshTree(categoryOpts)
+			#categoryOpts=if categoryOpts then categoryOpts else @categoryOpts 
+			# if categoryOpts #šito tik dokumentų medžiui reikia (content)
+				# @set("categoryOpts",categoryOpts); catOpts=categoryOpts; cats = oDATA.GET("tblDocGroup").emData;
+				# if catOpts.driver then cats.findProperty("ref",3).set("name",catOpts.driver.title)
+				# cats.forEach (catItem, i) ->
+					# newItem =
+						# categoryId: catItem.iD, title: catItem.name
+					# ref = catItem.ref
+					# #console.log "catItem.iD: " + i + ", catItem.name: " + catItem.name
+					# newItem.isTree = "isTree" if ref isnt 1 and ref isnt 5 #Nuotraukom ir nepriskirtom nedarom medzio
+					# newItem.isGroup = "isGroup"
+					# newItem.isSelectable = true	if ref isnt 4 #masinom bus uz masinas medis, tai negalim pasirinkt
+					# if ref is 4
+						# newItem.items = catOpts.vehicles.map((item) ->
+							# isGroup: "isGroup", refID: item.iD, categoryId: 4, title: item.title, isTree: "isTree", isSelectable: true
+						# )
+						# newItem.items.forEach (vehicle) ->
+							# vehicle.items = me.setDocTypes(docTypes, catItem.iD, vehicle.refID)#automobiliam atskiriam pagal refID
+					# else
+						# newItem.items = me.setDocTypes(docTypes, catItem.iD)
+					# c[c.length] = newItem
+				# @set "content", c
+		refreshTree: (categoryOpts)->
+			oGLOBAL.logFromStart("Started refreshTree");
+			@set("categoryOpts",categoryOpts); catOpts=categoryOpts; cats = oDATA.GET("tblDocGroup").emData; c = []; me=@; newItem_Nepriskirti=""
+			if catOpts.driver then cats.findProperty("ref",3).set("name",catOpts.driver.title)
+			cats.forEach (catItem, i) ->
+				newItem =
+					categoryId: catItem.iD, title: catItem.name
+				ref = catItem.ref
+				#console.log "catItem.iD: " + i + ", catItem.name: " + catItem.name
+				newItem.isTree = "isTree" if ref isnt 1 and ref isnt 5 #Nuotraukom ir nepriskirtom nedarom medzio
+				newItem.isGroup = "isGroup"
+				newItem.isSelectable = true	if ref isnt 4 #masinom bus uz masinas medis, tai negalim pasirinkt
+				if ref is 4
+					newItem.items = catOpts.vehicles.map((item) ->
+						isGroup: "isGroup", refID: item.iD, categoryId: catItem.iD, title: item.title, isTree: "isTree", isSelectable: true
+					)
+					newItem.items.forEach (vehicle) ->
+						vehicle.items = me.setDocTypes(me.docTypes, catItem.iD, vehicle.refID)#automobiliam atskiriam pagal refID
+				else
+					newItem.items = me.setDocTypes(me.docTypes, catItem.iD)
+				if ref==5 then newItem_Nepriskirti=newItem else c[c.length] = newItem #Paciam gale priskiriam
+			c[c.length] = newItem_Nepriskirti	
+			@set "content", c
+			oGLOBAL.logFromStart("Finished refreshTree");
 		setDocTypes: (docTypes, groupID, refID) ->
 			fnMap
 			if (refID) then fnMap=(item) -> (categoryId: item.iD, title: item.name, refID: refID) #atskiriam pagal refID
@@ -39,10 +63,10 @@ App.create_docsTypesController=(categoryOpts)->(
 		content:[],docTypes:[]
 		filterTypes:(->
 			console.log("Start filterTypes fn")
-			dt=@.get("docTypes")
-			@set("docTypes_accident",dt.filterProperty("docGroupID",2);)
-			@set("docTypes_driver",dt.filterProperty("docGroupID",3);)
-			@set("docTypes_vehicle",dt.filterProperty("docGroupID",4);)
+			dt=@.get("docTypes");dg=oDATA.GET("tblDocGroup").emData
+			@set("docTypes_accident",dt.filterProperty("docGroupID",dg.findProperty("ref",2).iD);)
+			@set("docTypes_driver",dt.filterProperty("docGroupID",dg.findProperty("ref",3).iD);)
+			@set("docTypes_vehicle",dt.filterProperty("docGroupID",dg.findProperty("ref",4).iD);)
 		#).observes("docTypes.@each")
 		).observes("docTypes.length")
 
@@ -69,10 +93,9 @@ _create: ->
 	$('<table width="100%;"><tr style="vertical-align:top"><td style="width:28em"><div id="'+@options.treeId+'" style="border-right: 1px solid #ddd;"></div></td>'+
 	'<td style="vertical-align:top;padding:10px;"><div id="'+@options.docViewForTreeId+'"></div></td></tr></table>').appendTo(@.element)
 	
-	# @docsTypesControllerOpt.categoryOpts=@options.categoryOpts	
-	# App[@options.docsTypesController] = Em.ResourceController.create(@docsTypesControllerOpt)
 	#Kontrolerio, kuris turi dokumentų tipus medziui ir dokumentų redagavimui sukūrimas
-	if App.docsTypesController then if not App.docsTypesController.content.length then App.docsTypesController.set("categoryOpts",@options.categoryOpts).init()#atnaujinam content, kuris naudojamas medžiui
+	if App.docsTypesController then App.docsTypesController.refreshTree(@options.categoryOpts)#atnaujinam content, kuris naudojamas medžiui
+		#if App.docsTypesController.content.length then App.docsTypesController.refreshTree(@options.categoryOpts)#atnaujinam content, kuris naudojamas medžiui		
 	else App.create_docsTypesController(@options.categoryOpts)
 		
 	App.DocTreeView = Em.View.extend(@DocTreeViewOpt) #Paišo medžio šakas
@@ -81,10 +104,11 @@ _create: ->
 	@DocTreeViewOpt.opts=@options
 	App.TreeView = Em.View.extend(@TreeViewOpts) #Jame inicializuojasi dokai	
 	App[@options.TreeDocController]  = Em.Object.create(@TreeDocControllerOpts)
-	Em.View.create(templateName: "tmpDocsTree").appendTo "#"+@options.treeId
+	MY.accidentCard.TreeView=Em.View.create(templateName: "tmpDocsTree").appendTo "#"+@options.treeId
 	@docViewForTreeOpts.controller = App[@options.TreeDocController]
 	@docViewForTreeOpts.opts = @options
-	Em.View.create(@docViewForTreeOpts).appendTo "#"+@options.docViewForTreeId
+	
+	MY.accidentCard.DocsView=Em.View.create(@docViewForTreeOpts).appendTo "#"+@options.docViewForTreeId
   
 DocTreeViewOpt:
 	templateName: "tmpDocsNodes", tagName: "", opts: null,
@@ -185,10 +209,23 @@ TreeViewOpts :
 TreeDocControllerOpts:
 	init: () -> @_super(); @refreshDocs()
 	refreshDocs: () ->
-		docs=oDATA.GET("tblDocs").emData; cats=@opts.categoryOpts
+		oGLOBAL.logFromStart("Started refreshDocs");
+		docs=oDATA.GET("tblDocs").emData; cats=@opts.categoryOpts; docGroups=oDATA.GET("tblDocGroup").emData
 		if cats.accident
-			@AllDocs=docs.filterByTbl(filterTbl:oDATA.GET("tblDocsInAccidents").emData,joinField:"docID",filterField:"accidentID",filterValue:cats.accident.iD)
+			#@AllDocs=docs.filterByTbl(filterTbl:oDATA.GET("tblDocsInAccidents").emData,joinField:"docID",filterField:"accidentID",filterValue:cats.accident.iD)
+			accidentID=cats.accident.iD; vehicles=cats.vehicles; driverID=cats.driver.iD
+			driverGroupID=docGroups.findProperty("ref",3).iD;vehicleGroupID=docGroups.findProperty("ref",4).iD
+			@AllDocs=docs.filter((doc)->
+				refID=doc.refID;groupID=doc.groupID
+				if groupID==driverGroupID
+					if refID==driverID then return true
+				else if groupID==vehicleGroupID
+					if vehicles.findProperty("iD",refID) then return true
+				else if refID==accidentID then return true
+				else return false
+			)
 		else @AllDocs=docs
+		oGLOBAL.logFromStart("Finished refreshDocs");
 		Em.run.next(@,->
 			if @AllDocs.filter((doc)-> doc.groupID==5).length #Jei yra nepriskirtų keliam ten
 				$("#"+@opts.treeId).find("ul>li:last").trigger("click")
@@ -260,3 +297,4 @@ docViewForTreeOpts:
 				# alert "Updated order for CategoryId " + App[opts.TreeDocController].get("selectedCategoryId") + " is =\n" + order.join("\n")
 		#$("#gallery").disableSelection()	
 		this.$().disableSelection()
+MY.accidentCard={}

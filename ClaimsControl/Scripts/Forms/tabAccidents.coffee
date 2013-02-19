@@ -194,7 +194,8 @@ App.SelectedClaimView = Em.View.extend(
 App.accidentsController = Em.ResourceController.create(
 	url: "Accident/AccidentsList",#jei yra atsisiunčiam
 	tableName: "proc_Accidents",#jei yra, turinį į content
-	fields: {}
+	currency: 'LTL'
+	#fields: {}
 	animationSpeedEnd: 400
 	animationSpeedStart: 400
 	setAnimationSpeed:(e)->

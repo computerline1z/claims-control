@@ -180,7 +180,7 @@
       var dialogID, source, sourceName;
       sourceName = input.data("ctrl").Source;
       source = oDATA.GET(sourceName);
-      this.set("listItems", source.emData);
+      this.set("listItems", source.emData.removeObject(source.emData.findProperty("iD", 0)));
       dialogID = "dialog" + (+(new Date));
       return MY[dialogID] = JQ.Dialog.create({
         input: input,
@@ -316,11 +316,6 @@
       if (!pars.row && pars.newVals) {
         pars.row = pars.newVals.vals.toRowObject(pars.newVals.cols);
       }
-      console.log("JQ.Dialog.create");
-      console.log(MY.dialog);
-      if (MY.dialog) {
-        MY.dialog.remove();
-      }
       if (MY.dialog) {
         MY.dialog.remove();
       }
@@ -332,35 +327,8 @@
           init: function() {
             this._super();
             this.templateName = pars.template;
-            return this.title = title;
-          },
-          cancelAddNewMake: function() {
-            return App.listAllController.set("addMakeMode", false);
-          },
-          saveAddNewMake: function(e) {
-            var autoComplete, ctrl, div, newVal;
-            div = $(e.target).parent();
-            newVal = div.prev().find("input").val();
-            ctrl = $(e.target).parent().parent();
-            autoComplete = div.next().next().find("input");
-            if (newVal) {
-              SERVER.update2({
-                "Action": "Add",
-                "Ctrl": ctrl,
-                "source": "tblVehicleMakes",
-                "row": "",
-                DataToSave: {
-                  "Data": [newVal],
-                  "Fields": ["Name"],
-                  "DataTable": "tblVehicleMakes"
-                },
-                CallBackAfter: function(Row) {
-                  autoComplete.autocomplete("option").fnRefresh();
-                  return console.log(Row);
-                }
-              });
-            }
-            return App.listAllController.set("addMakeMode", false);
+            this.title = title;
+            return this.pars = pars;
           },
           goToEditDate: function() {
             App.listAllController.set("dateIsEdited", true);
@@ -398,54 +366,61 @@
             return App.listAllController.set("dateIsEdited", false).set("endDate", newDate);
           },
           didInsertElement: function() {
-            var categoryOpts, dialogContent, dialogFrm, groupID, me, name, refID;
-            categoryOpts = false;
+            var categoryOpts, dialogContent, dialogFrm, docGroups, groupID, me, name, ref, refID;
             this._super();
             dialogFrm = $("#openItemDialog");
             dialogContent = $("#dialogContent");
-            me = this;
-            if (pars.emObject === "vehicles" || pars.source === "proc_Vehicles") {
-              name = "TP " + pars.row.make + ", " + pars.row.model + ", " + pars.row.plate + " dokumentai";
-              categoryOpts = {
-                showCategories: [
-                  {
-                    iD: 4,
-                    name: name
-                  }
-                ],
-                vehicles: [
-                  {
+            if (pars.row) {
+              categoryOpts = false;
+              docGroups = oDATA.GET("tblDocGroup").emData;
+              me = this;
+              ref = pars.emObject === "vehicles" ? 4 : 3;
+              groupID = docGroups.findProperty("ref", ref).iD;
+              if (pars.emObject === "vehicles" || pars.source === "proc_Vehicles") {
+                name = "TP " + pars.row.make + ", " + pars.row.model + ", " + pars.row.plate + " dokumentai";
+                categoryOpts = {
+                  showCategories: [
+                    {
+                      iD: groupID,
+                      ref: ref,
+                      name: name
+                    }
+                  ],
+                  vehicles: [
+                    {
+                      iD: pars.row.iD,
+                      title: name
+                    }
+                  ]
+                };
+              }
+              if (pars.emObject === "drivers" || pars.source === "proc_Drivers") {
+                name = "Vairuotojo '" + pars.row.firstName + " " + pars.row.lastName + "' dokumentai";
+                categoryOpts = {
+                  showCategories: [
+                    {
+                      iD: groupID,
+                      ref: ref,
+                      name: name
+                    }
+                  ],
+                  driver: {
                     iD: pars.row.iD,
                     title: name
                   }
-                ]
-              };
-            }
-            if (pars.emObject === "drivers" || pars.source === "proc_Drivers") {
-              name = "Vairuotojo '" + pars.row.firstName + " " + pars.row.lastName + "' dokumentai";
-              categoryOpts = {
-                showCategories: [
-                  {
-                    iD: 3,
-                    name: name
-                  }
-                ],
-                driver: {
-                  iD: pars.row.iD,
-                  title: name
-                }
-              };
-            }
-            if (categoryOpts) {
-              dialogFrm.find("div.uploadDocsContainer").UploadFiles({
-                categoryOpts: categoryOpts,
-                showPhoto: false,
-                docsController: "dialogDocController"
-              });
-              refID = pars.row.iD;
-              groupID = pars.emObject === "vehicles" ? 4 : 3;
-              App.dialogDocController.setDocs(refID, groupID);
-              this.removeOnCloseView = Em.View.create(docsViewOpts).appendTo("#dialoguploadDocsContainer");
+                };
+              }
+              if (categoryOpts) {
+                dialogFrm.find("div.uploadDocsContainer").UploadFiles({
+                  categoryOpts: categoryOpts,
+                  showPhoto: false,
+                  docsController: "dialogDocController",
+                  requireCategory: true
+                });
+                refID = pars.row.iD;
+                App.dialogDocController.setDocs(refID, groupID);
+                this.removeOnCloseView = Em.View.create(docsViewOpts).appendTo("#dialoguploadDocsContainer");
+              }
             }
             $("#btnSaveItem").on("click", function() {
               var DataToSave;
@@ -457,8 +432,7 @@
                   dialogFrm.dialog("close");
                   if (Row.iD) {
                     if (pars.input) {
-                      pars.input.data("newval", Row.iD);
-                      return pars.input.val(Row.MapArrToString(pars.input.data("ctrl").iText));
+                      return pars.input.data("newval", Row.iD).autocomplete("option").fnRefresh();
                     } else {
                       return $("#tabLists").find("div.ui-tabs").find("li.ui-tabs-selected a").trigger("click");
                     }
