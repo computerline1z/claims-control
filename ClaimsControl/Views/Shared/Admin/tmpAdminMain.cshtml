@@ -1,6 +1,6 @@
 ﻿<h2 style="margin: 15px; display: block">Administravimas</h2>
 <hr />
-<h3>Bendrieji paskyros nustatymai</h3>
+<h3 style="margin: 15px">Bendrieji paskyros nustatymai</h3>
 {{#with App.accountController}}
 @*	Negaliu įrašyt iD nes pasikraunant jo dar nėra
 *@	<div id="AccountForm" class="inputForm container" data-ctrl='{"id":"","NewRec":0,"Source":"tblAccount","tblUpdate":"tblAccounts"}'>
@@ -17,7 +17,7 @@
 	</div>
 {{/with}}
 <hr />
-<h3>Naudotojų administravimas</h3>
+<h3 style="margin: 15px">Naudotoju administravimas</h3>
 <div class="container" id="usersList">
 	<table class="zebra-striped">
 	<thead><tr><th>El.paštas</th><th>Vardas Pavardė</th><th>Yra administratorius</th><th>Yra aktyvus</th></tr></thead><tbody>
@@ -25,7 +25,7 @@
 		{{view App.UsersRowView}}
 	{{/each}}
 	</tbody></table>
-<div><button class="btn" {{action addNewUser target="App.userCardController"}}>Pridėti naują</button></div>
+<div style="margin: 15px"><button class="btn" {{action addNewUser target="App.userCardController"}}>Prideti nauja</button></div>
 </div>
 <hr />
 @*<a class="medium" {{action deleteAccount target="App.accountController"}} href="#">Panaikinti paskyrą</a>*@

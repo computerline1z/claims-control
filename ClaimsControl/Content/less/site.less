@@ -149,7 +149,7 @@ div.newClaimContent {background-color: @systemYellow3; .clearfix();}
     //.border-radius(0);
     border-style: none; //solid solid solid none; iš inputo pasiima (kitaip kartais nepataiko ant inputo borderiu)
     //border-color: @borderGreen;
-    background: url('images/DropDown-Arrow.png') no-repeat center;
+    background: url('images/DropDown-Arrow.png') no-repeat center !important;
     &:hover, &:active { background: url('images/DropDown-Arrow-hover.png') no-repeat center; }
 
 }/*comboboxo buttonas*/
@@ -392,16 +392,15 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 /*Autocomplete li a su veiksmais*/
 .actionLink {font-weight:bold !important;color:#09C !important;text-decoration:underline !important; cursor:pointer !important;}
 /*------------------------Dokumentu medis--------------------------------*/
-.gallery li.photo {float: left;width: 30%;padding: 10px;margin: 10px;border:1px solid #dddddd;cursor: move; height: 230px; }
-.gallery li.photo div {width: 120px; height:120px; overflow:hidden; margin: auto; }
+.gallery li.photo {float: left;width: 30%;padding: 10px;margin: 10px;border:1px solid #dddddd;cursor: move; height: 250px; }
+.gallery li.photo div.photo-image {width: 100%; height:120px; overflow:hidden; margin: auto auto 10px auto; }
 .gallery li.docs {cursor: move;display:block; width:100%;height:80px;border-bottom:1px dotted; }
+.docs-selected{border:2px solid #186892 !important} 
 .gallery li p {font-size:10px !important; line-height:12px !important;}
 .gallery li a {font-size:10px !important; line-height:20px !important;}
 .gallery li img {width: 100%;}
 #dynamicTree {
-      position: absolute;
-      width: 20%;
-	  background:#F9F9F9;
+      background:#F9F9F9;
 
     }
 	#dynamicTree ul {
@@ -409,7 +408,7 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 		margin-left:0;
 	}
 	.expandImage, .spacerImage {
-		margin-right: 2px;
+		margin:4px 2px 0 0;
 		height: 16px;
 		width: 16px;
 	}
@@ -487,5 +486,11 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 }
 .fileinput-button span{
 	text-decoration: underline;
+}
+.cont{
+border: 1px 1px 0 1px !important;
+border-color:#ddd !important;
+border-style:solid !important;
+
 }
 /*----apurav new rules end -----*/

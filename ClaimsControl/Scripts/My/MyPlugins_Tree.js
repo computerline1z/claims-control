@@ -117,7 +117,7 @@ var initTreePadding = false;
       TreeDocController: "treeDocController"
     },
     _create: function() {
-      $('<table width="100%;"><tr style="vertical-align:top"><td style="width:28em"><div id="' + this.options.treeId + '" style="border-right: 1px solid #ddd;"></div></td>' + '<td style="vertical-align:top;padding:10px;"><div id="' + this.options.docViewForTreeId + '"></div></td></tr></table>').appendTo(this.element);
+      $('<table width="100%;"><tr style="vertical-align:top"><td style="width:28em"><div id="' + this.options.treeId + '" ></div></td>' + '<td style="vertical-align:top;padding:10px;"><div id="' + this.options.docViewForTreeId + '"></div></td></tr></table>').appendTo(this.element);
       if (App.docsTypesController) {
         App.docsTypesController.refreshTree(this.options.categoryOpts);
       } else {
@@ -195,9 +195,11 @@ var initTreePadding = false;
         App.treeDocController.set("selectedCategoryId", event.view.bindingContext.categoryId);
        // $("#" + this.opts.treeId).find("span").removeClass("ui-state-highlight");
 	   $('div.treeContent').removeClass("selected selectNeighbor");
+       
         t = $(event.target);
-       // (t.is("li") ? t.find("span:first") : t.closest("span")).addClass("ui-state-highlight");
-	   $(event.target).parent().addClass("selected");
+        (t.is("li") ? t.find("div:first") : t.closest("div")).addClass("selected");
+		//$(event.target).parent().addClass("selected");
+       
         console.log("categoryId: " + event.view.bindingContext.categoryId);
         console.log("context: ");
         console.log(this._context);

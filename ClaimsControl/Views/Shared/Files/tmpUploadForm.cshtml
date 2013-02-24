@@ -5,16 +5,16 @@
    <div class="row fileupload-buttonbar">
 	{{#if showPhoto}}
       <div class="span7">
-            <span class="btn btn-success fileinput-button">
-               @*<i class="icon-plus icon-white"></i>*@
+	    <a class="fileinput-button" href="#">
 					<i class="img16-attach"></i>
                <span>Prisegti nuotraukas</span>
                <input type="file" name="pictures[]" multiple>
-            </span>
+            </a>
+          
 	{{else}}
       <div class="span7">
 	{{/if}}
-		<span class="filedocument-label">Dokumentai:</span>
+		
 		<a href="#" class="fileinput-button">
 					<i class="img16-attach"></i>
                <span>Prisegti dokumentus</span>

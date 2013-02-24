@@ -274,7 +274,7 @@
       }
     },
     addButton: function(p, input) {
-      this.button = $("<button style='margin:0 0 0 -2.2em;height:" + input.outerHeight() + "px;'>&nbsp;</button>").attr("tabIndex", -1).attr("title", p.title).insertAfter(input).button({
+      this.button = $("<button style='margin:1px 0px 0px -27px;width:25px;'>&nbsp;</button>").attr("tabIndex", -1).attr("title", p.title).insertAfter(input).button({
         icons: {
           primary: p.icon
         },
