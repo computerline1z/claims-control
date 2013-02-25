@@ -141,8 +141,8 @@
       oCONTROLS.UpdatableForm(frm);
       if (c.TypeID === 2) {
         IClaim = $("#InsuranceClaimAmount").parent().parent();
-        IClaim.find("span").html("Planuojama žalos suma asmeniui");
-        $("#LossAmount").parent().find("span").html("Planuojama žalos suma turtui");
+        IClaim.find("span").html("Žalos suma asmeniui");
+        $("#LossAmount").parent().find("span").html("Žalos suma turtui");
         fnCheckIsInjured = function() {
           if (this.attr("checked")) {
             return IClaim.css("display", "block").find("input").data("ctrl").Validity = IClaim.find("input").data("ctrl").Validity.replace("require().", "");
@@ -594,13 +594,7 @@
     didInsertElement: function() {
       this._super();
       return Em.run.next(function() {
-        var c;
-        c = $("#sidePanel").closest("div.col2");
-        if ($.browser.msie) {
-          c.scrollelement();
-        } else {
-          c.jScroll();
-        }
+        $("#sidePanel").closest("div.col2").scrollelement();
         $("#chkOpen").buttonset().on("click", function(e) {
           var chk, newVal;
           chk = $(e.target).closest("label").prev();

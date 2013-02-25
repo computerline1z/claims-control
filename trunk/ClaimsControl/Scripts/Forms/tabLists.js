@@ -177,8 +177,9 @@
       }).append();
     },
     editListItems: function(input, e) {
-      var dialogID, source, sourceName;
+      var dialogID, source, sourceName, tblUpdate;
       sourceName = input.data("ctrl").Source;
+      tblUpdate = input.data("ctrl").tblUpdate ? input.data("ctrl").tblUpdate : sourceName;
       source = oDATA.GET(sourceName);
       this.set("listItems", source.emData.removeObject(source.emData.findProperty("iD", 0)));
       dialogID = "dialog" + (+(new Date));
@@ -235,7 +236,7 @@
                 "id": row.iD,
                 "Data": [row.name],
                 "Fields": ["Name"],
-                "DataTable": sourceName
+                "DataTable": tblUpdate
               },
               Msg: Msg,
               row: row,
@@ -263,7 +264,7 @@
             return me.saveData({
               DataToSave: {
                 "id": row.iD,
-                "DataTable": sourceName
+                "DataTable": tblUpdate
               },
               Msg: Msg,
               row: row,
@@ -290,7 +291,7 @@
             DataToSave: {
               "Data": [val],
               "Fields": ["Name"],
-              "DataTable": sourceName
+              "DataTable": tblUpdate
             },
             Msg: Msg,
             row: [val],
@@ -312,7 +313,7 @@
         App.create_docsTypesController();
       }
       config = oDATA.GET(pars.source).Config;
-      title = pars.row ? config.Msg.GenName + " " + pars.row.MapArrToString(config.titleFields, true) : config.Msg.AddNew;
+      title = pars.row ? config.Msg.GenName + ": " + pars.row.MapArrToString(config.titleFields, (pars.template === "tmp_Drivers" ? true : false)) : config.Msg.AddNew;
       if (!pars.row && pars.newVals) {
         pars.row = pars.newVals.vals.toRowObject(pars.newVals.cols);
       }
@@ -374,43 +375,48 @@
               categoryOpts = false;
               docGroups = oDATA.GET("tblDocGroup").emData;
               me = this;
-              ref = pars.emObject === "vehicles" ? 4 : 3;
-              groupID = docGroups.findProperty("ref", ref).iD;
+              ref = 0;
               if (pars.emObject === "vehicles" || pars.source === "proc_Vehicles") {
-                name = "TP " + pars.row.make + ", " + pars.row.model + ", " + pars.row.plate + " dokumentai";
-                categoryOpts = {
-                  showCategories: [
-                    {
-                      iD: groupID,
-                      ref: ref,
-                      name: name
-                    }
-                  ],
-                  vehicles: [
-                    {
+                ref = 4;
+              } else if (pars.emObject === "drivers" || pars.source === "proc_Drivers") {
+                ref = 3;
+              }
+              if (ref) {
+                groupID = docGroups.findProperty("ref", ref).iD;
+                if (ref === 4) {
+                  name = "TP " + pars.row.make + ", " + pars.row.model + ", " + pars.row.plate + " dokumentai";
+                  categoryOpts = {
+                    showCategories: [
+                      {
+                        iD: groupID,
+                        ref: ref,
+                        name: name
+                      }
+                    ],
+                    vehicles: [
+                      {
+                        iD: pars.row.iD,
+                        title: name
+                      }
+                    ]
+                  };
+                }
+                if (ref === 3) {
+                  name = "Vairuotojo '" + pars.row.firstName + " " + pars.row.lastName + "' dokumentai";
+                  categoryOpts = {
+                    showCategories: [
+                      {
+                        iD: groupID,
+                        ref: ref,
+                        name: name
+                      }
+                    ],
+                    driver: {
                       iD: pars.row.iD,
                       title: name
                     }
-                  ]
-                };
-              }
-              if (pars.emObject === "drivers" || pars.source === "proc_Drivers") {
-                name = "Vairuotojo '" + pars.row.firstName + " " + pars.row.lastName + "' dokumentai";
-                categoryOpts = {
-                  showCategories: [
-                    {
-                      iD: groupID,
-                      ref: ref,
-                      name: name
-                    }
-                  ],
-                  driver: {
-                    iD: pars.row.iD,
-                    title: name
-                  }
-                };
-              }
-              if (categoryOpts) {
+                  };
+                }
                 dialogFrm.find("div.uploadDocsContainer").UploadFiles({
                   categoryOpts: categoryOpts,
                   showPhoto: false,
@@ -447,7 +453,7 @@
               return false;
             });
             if (this.templateName === "tmp_InsPolicies") {
-              this.$().tabs().css("margin", "-5px 1px 0 1px");
+              this.$().tabs().css("margin", "-5px 1px 0 1px").find("ul").css("background-color", "#505860");
             }
             return oCONTROLS.UpdatableForm(dialogContent, pars.row);
           },

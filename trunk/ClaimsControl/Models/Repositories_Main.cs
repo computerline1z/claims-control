@@ -375,7 +375,7 @@ namespace CC.Models {
 				new { FName = "IsNotOurFault",Type="Boolean"},//6
 				new { FName = "IsOtherParticipants",Type="Boolean"},//7
 				new { FName = "ShortNote", Tip="Vienu sakiniu..",Type="String", LenMax=100,Validity="require().nonHtml().maxLength(100)"},//8
-				new { FName = "LongNote",Tip="Papildoma informacija, pastabos, užrašai ir pan.",Type="String", LenMax=800,Validity="nonHtml().maxLength(800)"},//9
+				new { FName = "LongNote",Type="String", LenMax=800,Validity="nonHtml().maxLength(800)"},//9
 				new { FName = "LocationCountry",Type="String", LenMax=100,Validity="require().nonHtml().maxLength(100)"},//10
 				new { FName = "LocationAddress",Type="String", LenMax=400,Validity="require().nonHtml().maxLength(400)"},//11
 				new { FName = "LocationDistrict",Type="String", LenMax=80,Validity="require().nonHtml().maxLength(80)"},//12
@@ -391,11 +391,11 @@ namespace CC.Models {
 					//new {bVisible=false},//2//AccountID////DefaultUpdate=0
 					new {sTitle="Atsakingas vairuotojas",bVisible=false},//3//DriverID////DefaultUpdate=0
 					new {sTitle="Nr"},//4//No//
-					new {sTitle="Įvykio data ir laikas (vietos laiku)"},//5//Date//
-					new {sTitle="Kaltininkas trečia šalis"},//6//IsOurFault//
-					new {sTitle="Daugiau nei vienas kaltininkas"},//7//IsOtherParticipants//
+					new {sTitle="Įvykio data ir laikas (įvykio vietos laiku)"},//5//Date//
+					new {sTitle="Kaltininkas - trečia šalis"},//6//IsOurFault//
+					new {sTitle="Yra daugiau nei vienas kaltininkas"},//7//IsOtherParticipants//
 					new {sTitle="Įvykio apibūdinimas",sClass="smallFont"},//8//ShortNote//
-					new {sTitle="Pastabos",sClass="smallFont"},//9//LongNote//
+					new {sTitle="Įvykio aplinkybės",sClass="smallFont"},//9//LongNote//
 					new {sTitle="Šalis",sClass="smallFont"},//10//LocationCountry//
 					new {sTitle="Adresas",sClass="smallFont"},//11//LocationAddress//
 					new {sTitle="Rajonas",sClass="smallFont"},//12//LocationDistrict//
@@ -528,9 +528,9 @@ namespace CC.Models {
 					new {bVisible=false},//0//ID////DefaultUpdate=0
 					new {sTitle="Vardas",sClass="smallFont"},//1//FirstName//
 					new {sTitle="Pavardė",sClass="smallFont"},//2//LastName//
-					new {sTitle="Darbo stažas nuo"},//3//DateExpierence//
+					new {sTitle="Vairuotojo pažymėjimo išdavimo data"},//3//DateExpierence//
 					new {sTitle="Vairavimo kategorijos"},//4//DrivingCategory//
-					new {sTitle="Telefonas"},//5//Phone//
+					new {sTitle="Mobilus telefonas"},//5//Phone//
 					new {sTitle="Dokumentai"},//6//Docs//
 					new {sTitle="Darbo pabaiga",bVisible=false},//7//EndDate//
 				}, //aaSorting = new object[] { new object[] { 2, "asc" } },//???
@@ -629,7 +629,7 @@ namespace CC.Models {
 					new {sTitle="Tipas"},//1//Type//
 					new {sTitle="Markė"},//3//Make
 					new {sTitle="Modelis"},//4//Model//
-					new {sTitle="Metai"},//5//Year//
+					new {sTitle="Pagaminimo metai"},//5//Year//
 					new {sTitle="Dokumentai"},//6//Docs//
 					new {bVisible=false,sTitle="Naudojimo pabaigos data"},//7//EndDate//
 					new {bVisible=false,sTitle="Tipas"},//8//TypeID//
@@ -726,7 +726,7 @@ namespace CC.Models {
 				new { FName = "InsuredContactID",List=new{Source="tblUsers",ListType="List", iVal="iD",iText=new object []{"firstName","surname"},mapWithNoCommas=1}},//9
 				new { FName = "ClaimTypeID",List=new{Source="tblClaimTypes",ListType="List", iVal="iD",iText=new object []{"name"}}},//10
 				new { FName = "InsurerID",List=new{Source="tblInsurers",Editable=new{EditList=true},ListType="List", iVal="iD",iText=new object []{"name"}}},//11
-				new { FName = "MailsAddresses",Type="String", Tip="Įveskite vieną ar kelis draudiko ar brokerio el. pašto adresus (atskirti kableliu ar kabletaškiu)", LenMax=250,Validity="nonHtml().maxLength(250)"},//5
+				new { FName = "MailsAddresses",Type="String", Tip="Įveskite draudiko ar kitus el. pašto adresus (atskirdami juos kableliu ar kabliataškiu)", LenMax=250,Validity="nonHtml().maxLength(250)"},//5
 								}; JSON.Cols = Cols;
 			JSON.Config = new { Controler = "InsPolicy", tblUpdate = "tblInsPolicies", titleFields = new object[] { "policyNumber", "insurerName" }, Msg = new { AddNew = "Naujos draudimo sutarties sukūrimas", Edit = "Draudimo sutarties redagavimas", Delete = "Ištrinti draudimo sutartį", GenName = "Draudimo sutartis", GenNameWhat = "draudimo polisą", ListName = "Draudimo sutarčių sąrašas" } };
 			JSON.Grid = new {
@@ -734,18 +734,18 @@ namespace CC.Models {
 					new {bVisible=false},//0//ID////DefaultUpdate=0
 					new {sTitle="Draudimo rūšis"},//1//ClaimType//
 					new {sTitle="Draudimo kompanija"},//2//InsurerName//
-					new {sTitle="Poliso Nr."},//3//PolicyNumber//
+					new {sTitle="Poliso numeris"},//3//PolicyNumber//
 
-					new {sTitle="Galiojimo data"},//4//EndDate//
+					new {sTitle="Poliso pabaigos data"},//4//EndDate//
 
 					new {sTitle="Draudėjas"},//5//InsuredName////DefaultUpdate=0
 					new {sTitle="Draudėjo kodas",bVisible=false},//6//InsuredName//
 					new {sTitle="Draudėjo adresas",bVisible=false},//7//InsuredCode//
 					new {sTitle="Kontaktinis asmuo",bVisible=false},//8//InsuredContact//
 					new {bVisible=false,sTitle="Kontaktinis asmuo"},//9//InsuredContactID////UserID
-					new {bVisible=false,sTitle="Žalos tipas"},//10//ClaimTypeID////DefaultUpdate=0
-					new {bVisible=false,sTitle="Draudikas"},//11//InsurerID////
-					new {bVisible=false,sTitle="Pranešimą apie žalą siųsti(atskirti kabliataškiu):"}//11//InsurerID////
+					new {bVisible=false,sTitle="Draudimo rūšis"},//10//ClaimTypeID////DefaultUpdate=0
+					new {bVisible=false,sTitle="Draudimo kompanija"},//11//InsurerID////
+					new {bVisible=false,sTitle="Pranešimą apie žalą siųsti į:"}//11//InsurerID////
 				}
 				// aaSorting = new object[] { new object[] { 3, "asc" } },//???
 			};
@@ -788,7 +788,7 @@ namespace CC.Models {
 				new { FName = "IsNotOurFault",Type="Boolean",Validity="require()"},//6
 				new { FName = "IsOtherParticipants",Type="Boolean",Validity="require()"},//7
 				new { FName = "ShortNote",Tip="Vienu sakiniu..",Type="String", LenMax=50,Validity="require().nonHtml().maxLength(50)"},//8
-				new { FName = "LongNote",Tip="Papildoma informacija, pastabos, užrašai ir pan.",Type="String", LenMax=400,Validity="nonHtml().maxLength(400)"},//9
+				new { FName = "LongNote",Type="String", LenMax=400,Validity="nonHtml().maxLength(400)"},//9
 				new { FName = "LocationCountry",Type="String", LenMax=50,Validity="require().nonHtml().maxLength(50)"},//10
 				new { FName = "LocationAddress",Type="String", LenMax=200,Validity="require().nonHtml().maxLength(200)"},//11
 				new { FName = "LocationDistrict",Type="String", LenMax=80,Validity="require().nonHtml().maxLength(80)"},//12
@@ -805,11 +805,11 @@ namespace CC.Models {
 					new {bVisible=false},//2//AccountID////DefaultUpdate=0
 					new {bVisible=false},//3//DriverID////DefaultUpdate=0
 					new {sTitle="Nr"},//4//No//
-					new {sTitle="Įvykio data ir laikas (vietos laiku)"},//5//Date//
-					new {sTitle="Kaltininkas trečia šalis"},//6//IsNotOurFault//
-					new {sTitle="Daugiau nei vienas kaltininkas"},//7//IsOtherParticipants//
+					new {sTitle="Įvykio data ir laikas (įvykio vietos laiku)"},//5//Date//
+					new {sTitle="Kaltininkas - trečia šalis"},//6//IsNotOurFault//
+					new {sTitle="Yra daugiau nei vienas kaltininkas"},//7//IsOtherParticipants//
 					new {sTitle="Kas atsitiko",sClass="smallFont"},//8//ShortNote//
-					new {sTitle="Pastabos",sClass="smallFont"},//9//LongNote//
+					new {sTitle="Įvykio aplinkybės",sClass="smallFont"},//9//LongNote//
 					new {sTitle="LocationCountry",sClass="smallFont"},//10//LocationCountry//
 					new {sTitle="Adresas",sClass="smallFont"},//11//LocationAddress//
 					new {sTitle="LocationDistrict",sClass="smallFont"},//12//LocationDistrict//
@@ -989,9 +989,9 @@ namespace CC.Models {
 			JSON.Grid = new {
 				aoColumns = new object[]{
 				new {bVisible=false},//0
-				new {sTitle="Žalos tipas"},//1//ClaimTypeID////DefaultUpdate=0
+				new {sTitle="Draudimo rūšis"},//1//ClaimTypeID////DefaultUpdate=0
 				new {bVisible=false},//2//AccidentID////DefaultUpdate=0
-				new {sTitle="Polisas"},//3//InsPolicyID////DefaultUpdate=0
+				new {sTitle="Draudimo sutartis"},//3//InsPolicyID////DefaultUpdate=0
 				new {sTitle="Transporto priemonė"},//4//VehicleID////DefaultUpdate=0
 				new {sTitle="Nr"},//5//No//
 				new {sTitle="Visiškas praradimas"},//6//IsTotalLoss//
@@ -1001,8 +1001,8 @@ namespace CC.Models {
 				new {sTitle="Žalos nr. draudiko sistemoje"},//10//InsurerClaimID////DefaultUpdate=0
 				new {sTitle="Žalos būklė"},//11//ClaimStatus//
 				new {sTitle="Žalos suma patvirtinta"},//12//AmountIsConfirmed//
-				new {sTitle="Prastova dienomis"},//13//Days//
-				new {sTitle="Prastovos kaina per dieną"}//14//PerDay//
+				new {sTitle="Prastovų skaičius dienomis"},//13//Days//
+				new {sTitle="Vienos dienos prastovos kaina"}//14//PerDay//
 				}
 			};
 			return JSON;

@@ -15,7 +15,7 @@
 <h3>Transporto priemonės</h3>
 <div class="container" id="topNewVehicles">
 	<table class="zebra-striped">
-	<thead><tr><th>Registracijos Nr.</th><th>Tipas</th><th>Markė</th><th>Modelis</th><th>Metai</th><th>Dokumentai</th></tr></thead><tbody>
+	<thead><tr><th>Tipas</th><th>Valst. Nr.</th><th>Markė</th><th>Modelis</th><th>Pagaminimo metai</th><th>Dokumentai</th></tr></thead><tbody>
 	{{#each "App.topNewController.vehicles"}}
 		{{view App.VehicleView}}
 	{{/each}}
@@ -27,7 +27,7 @@
 <h3  style="margin: 15px;">Draudimo sutartys</h3>
 <div class="container" id="topNewInsPolicies">
 	<table class="zebra-striped">
-	<thead><tr><th>Draudimo rūšis</th><th>Draudimo kompanija</th><th>Sutarties Nr</th><th>Pabaigos data</th><th>Draudėjas</th></tr></thead><tbody>
+	<thead><tr><th>Draudimo rūšis</th><th>Draudimo kompanija</th><th>Poliso numeris</th><th>Pabaigos data</th><th>Draudėjas</th></tr></thead><tbody>
 	{{#each "App.topNewController.insPolicies"}}
 	{{#if this.iD}}
 		{{view App.InsPolicyView}}

@@ -8,16 +8,14 @@
 App.TabUserCardView = Em.View.extend( #App.mainMenuView.extend(
 # App.TabUserCardView = App.mainMenuView.extend(
 	# init:()->
-		# @_super(); ctrl=App.userCardController
-		# ctrl.id=if ctrl.myInfo then oDATA.GET("userData").emData[0].userID else "iš konteksto????????????"
-		# ctrl.content.pushObject(oDATA.GET("tblUsers").emData.findProperty("iD",ctrl.id))
+		# @_super(); SaveOk=""
 	didInsertElement: ->
 		@_super(); $("#userInfoTab").tabs(); frm=$("#InfoDataForm"); ctrl=App.userCardController;
 		if ctrl.content.length then frm.data("ctrl",{NewRec:0,id:ctrl.content[0].iD,Source:"tblUsers"}) else frm.data("ctrl",{NewRec:1,id:0,Source:"tblUsers"})#Updatinant to reikia
 		oCONTROLS.UpdatableForm(frm)
 		#if App.userCardController.SaveOk then me=$("#savePasswordNote"); me.html("Naujas slaptažodis išsaugotas"); setTimeout((->me.html("")),2000); App.userCardController.SaveOk=null
 		SaveOk=App.userCardController.SaveOk 
-		if SaveOk then $("#savePasswordNote").html(SaveOk).show().delay(2000).fadeOut(); SaveOk=null
+		if SaveOk then $("#savePasswordNote").html(SaveOk).show().delay(2000).fadeOut(); App.userCardController.set("SaveOk",null)
 
 	templateName: 'tmpUserCard'#, viewIx: -1
 	#controller: App.userCardController
@@ -64,8 +62,8 @@ App.userCardController = Em.ArrayController.create(
 		console.log("init")
 	setUser:(p)->
 		@.set("myInfo",(if p.myInfo then true else false)).set("passwordReset",false)
+		if p.myInfo then id=oDATA.GET("userData").emData[0].userID; p.User=oDATA.GET("tblUsers").emData.findProperty("iD",id) #Mano kortelė
 		if @content.length then @content.removeAt(0)
-		if p.myInfo then id=p.User=oDATA.GET("userData").emData[0].userID; p.User=oDATA.GET("tblUsers").emData.findProperty("iD",id) #Mano kortelė
 		if p.User then @content.pushObject(p.User)
 	myInfo: true #Jei bus useris prieitas per Admin tai false
 	passwordReset:false
@@ -90,11 +88,11 @@ App.ChangeUserPassView = Em.View.extend(
 		if $.validity.end().valid
 			SERVER.update3(pars:{OldPassword:oldPsw,NewPassword:newPsw,UserId:0},CallBack:((resp)->
 				if (resp.ErrorMsg) then $("#changePaswordError").html(resp.ErrorMsg) 
-				else App.userCardController.set("SaveOk",resp.ResponseMsg); App.router.transitionTo('tabUserCard'); false #tabUserCard
+				else App.userCardController.set("SaveOk",resp.ResponseMsg); App.router.transitionTo(if(App.userCardController.myInfo)then'tabMyCard'else'tabUserCard'); false #tabUserCard
 				console.log(resp)
 			),url:'/Account/NewPassword2')
 	cancelNewPass: ->
-		App.router.transitionTo('tabUserCard'); false
+		App.router.transitionTo(if(App.userCardController.myInfo)then'tabMyCard'else'tabUserCard'); false
 	templateName: 'tmpChangeUsrPass'
 )
 

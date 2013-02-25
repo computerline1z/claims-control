@@ -462,6 +462,7 @@
     <None Include="Scripts\My\MyPlugins_UploadFiles.coffee" />
     <None Include="Scripts\My\view_FileUploader.coffee" />
     <None Include="Scripts\My\MyPlugins_ComboBox.coffee" />
+    <Content Include="Views\Main\StartOld.cshtml" />
     <None Include="Views\Shared\Accidents\tmpClaimEdit.cshtml" />
     <Content Include="Views\Shared\Accidents\tmpAccidentsMain.cshtml" />
     <Content Include="Views\Shared\Accidents\tmpAccidentRow.cshtml" />

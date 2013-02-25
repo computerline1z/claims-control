@@ -88,9 +88,8 @@ options:
 	docsTypesController:"docsTypesController",#-jame(content) sudedamos grupės ir tipai, pagal jį paišomas medis
 	TreeDocController:"treeDocController"#-jame(docs) pagal dokumentus paišomi dokumentai
 _create: ->	
-	# $('<div id="'+@options.treeId+'" style="float: left;border-right: 1px solid #ddd; width: 20%"></div>'+
-	# '<div id="'+@options.docViewForTree+'" style="float:left; padding:10px;width:70%;"></div>').appendTo(@.element)
-	$('<table width="100%;"><tr style="vertical-align:top"><td style="width:28em"><div id="'+@options.treeId+'" style="border-right: 1px solid #ddd;"></div></td>'+
+	#Changed to Apurav v. $('<table width="100%;"><tr style="vertical-align:top"><td style="width:28em"><div id="'+@options.treeId+'" style="border-right: 1px solid #ddd;"></div></td>'+
+	$('<table width="100%;"><tr style="vertical-align:top"><td style="width:28em"><div id="'+@options.treeId+'" ></div></td>'+
 	'<td style="vertical-align:top;padding:10px;"><div id="'+@options.docViewForTreeId+'"></div></td></tr></table>').appendTo(@.element)
 	
 	#Kontrolerio, kuris turi dokumentų tipus medziui ir dokumentų redagavimui sukūrimas
@@ -148,10 +147,15 @@ TreeViewOpts :
 	classNames: []
 	getDocs: (event) ->		
 		App.treeDocController.set "selectedCategoryId", event.view.bindingContext.categoryId
-		$("#"+@opts.treeId).find("span").removeClass "ui-state-highlight"
+		#$("#"+@opts.treeId).find("span").removeClass "ui-state-highlight"
+		$('div.treeContent').removeClass("selected selectNeighbor")
+		
 		#dynamicTree @_context={categoryId,isSelectable,isTree,items,title} ir t.p. bindingContext
-		t = $(event.target); (if t.is("li") then t.find("span:first") else t.closest("span")).addClass("ui-state-highlight");
-
+		t = $(event.target); 
+		#(if t.is("li") then t.find("span:first") else t.closest("span")).addClass("ui-state-highlight");
+		#Apurav changes:
+		(if t.is("li") then t.find("div:first") else t.closest("div")).addClass("selected");
+		
 		console.log "categoryId: " + event.view.bindingContext.categoryId
 		console.log "context: "
 		console.log @_context
@@ -230,8 +234,10 @@ TreeDocControllerOpts:
 			if @AllDocs.filter((doc)-> doc.groupID==5).length #Jei yra nepriskirtų keliam ten
 				$("#"+@opts.treeId).find("ul>li:last").trigger("click")
 			else
-				t=$("#"+@opts.treeId); selected=t.find("span.ui-state-highlight")
-				if selected.length then selected.trigger("click") else t.find("li:first span").trigger("click") #refreshinam
+				#t=$("#"+@opts.treeId); selected=t.find("span.ui-state-highlight")
+				#if selected.length then selected.trigger("click") else t.find("li:first span").trigger("click") #refreshinam
+				t=$("#"+@opts.treeId); selected=t.find("div.selected")
+				if selected.length then selected.trigger("click") else t.find("li:first div").trigger("click") #refreshinam
 		)
 	docs: [], opts: null, AllDocs: [] #šito konteksto visi dokai
 	selectedCategoryId: null

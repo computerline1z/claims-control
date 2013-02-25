@@ -207,7 +207,8 @@ _create: ->
 		input.click ->
 			@select()
 addButton: (p, input) ->
-	@button = $("<button style='margin:0 0 0 -2.2em;height:" + input.outerHeight() + "px;'>&nbsp;</button>").attr("tabIndex", -1).attr("title", p.title).insertAfter(input).button( #.attr("style", "margin-left:0.1em;left:0;");
+	# @button = $("<button style='margin:0 0 0 -2.2em;height:" + input.outerHeight() + "px;' class='drop-down'>&nbsp;</button>").attr("tabIndex", -1).attr("title", p.title).insertAfter(input).button( #.attr("style", "margin-left:0.1em;left:0;");
+	@button = $("<button style='height:" + input.outerHeight() + "px;' class='drop-down'>&nbsp;</button>").attr("tabIndex", -1).attr("title", p.title).insertAfter(input).button( #.attr("style", "margin-left:0.1em;left:0;");
 		icons: {primary: p.icon}
 		text: false
 	).click(->

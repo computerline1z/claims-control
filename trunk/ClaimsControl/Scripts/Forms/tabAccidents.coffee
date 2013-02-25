@@ -108,8 +108,8 @@ App.SelectedClaimView = Em.View.extend(
 		frm=if c.NewClaim then "#divNewClaimCard" else '#divClaimCard'
 		oCONTROLS.UpdatableForm(frm)
 		if c.TypeID==2
-			IClaim=$("#InsuranceClaimAmount").parent().parent(); IClaim.find("span").html("Planuojama žalos suma asmeniui")
-			$("#LossAmount").parent().find("span").html("Planuojama žalos suma turtui");
+			IClaim=$("#InsuranceClaimAmount").parent().parent(); IClaim.find("span").html("Žalos suma asmeniui")
+			$("#LossAmount").parent().find("span").html("Žalos suma turtui");
 			fnCheckIsInjured =() ->
 				if this.attr("checked") then IClaim.css("display","block").find("input").data("ctrl").Validity=IClaim.find("input").data("ctrl").Validity.replace("require().","")
 				else IClaim.css("display","none").find("input").val("").data("ctrl").Validity="require()."+IClaim.find("input").data("ctrl").Validity				
@@ -396,8 +396,8 @@ App.SidePanelView = Em.View.extend(
 	didInsertElement: ()->
 		@_super(); 	
 		Em.run.next(()->
-			#$("#sidePanel").closest("div.col2").scrollelement()
-			c=$("#sidePanel").closest("div.col2");if $.browser.msie then c.scrollelement() else c.jScroll()
+			$("#sidePanel").closest("div.col2").scrollelement()
+			#c=$("#sidePanel").closest("div.col2");if $.browser.msie then c.scrollelement() else c.jScroll()
 			$("#chkOpen").buttonset().on("click",(e)->
 				chk=$(e.target).closest("label").prev();
 				newVal=if (chk.next().hasClass("ui-state-active")) then chk.attr("id") else null #Jei aktyvus priskiriam

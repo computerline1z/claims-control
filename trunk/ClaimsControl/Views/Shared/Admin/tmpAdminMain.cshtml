@@ -10,7 +10,7 @@
 			{{updatableField c Field="countryID" labelType="Top" List="{\"Source\":\"tblCountries\"}"}}
 		</div>
 		<div class='right w47pr_mp'>
-			{{updatableField c Field="email" labelType="Top"}}<span>claimscontrol.com</span>
+			{{updatableField c Field="email" labelType="Top"}}<span>@@claimscontrol.com</span>
 			{{updatableField c Field="timeZoneID" labelType="Top" List="{\"Source\":\"tblTimeZones\"}"}}
 			<button class="btn" {{action SaveChanges target="App.accountController"}}>Išsaugoti</button>
 		</div>
@@ -20,7 +20,7 @@
 <h3 style="margin: 15px">Naudotoju administravimas</h3>
 <div class="container" id="usersList">
 	<table class="zebra-striped">
-	<thead><tr><th>El.paštas</th><th>Vardas Pavardė</th><th>Yra administratorius</th><th>Yra aktyvus</th></tr></thead><tbody>
+	<thead><tr><th>El. paštas</th><th>Vardas, pavardė</th><th>Yra administratorius</th><th>Prisijungti leidžiama</th></tr></thead><tbody>
 	{{#each "App.usersController.content"}}
 		{{view App.UsersRowView}}
 	{{/each}}
