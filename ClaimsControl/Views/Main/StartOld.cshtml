@@ -1,67 +1,62 @@
-﻿<!-- v 1.003 -->
-<?xml version="1.0" encoding="UTF-8">
+﻿<?xml version="1.0" encoding="UTF-8">
 <!DOCTYPE html>
 <html lang="lt-LT">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
-	<title>Žalu valdymo sistema</title>
-	<link href='@Url.Content("~/Content/less/main.css")' rel="stylesheet" type="text/css"/> 
-	<!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans&subset=latin,cyrillic-ext' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet/less" type="text/css" href="@Url.Content("~/Content/less/main.less")" />
-	<script src="@Url.Content("~/Content/less/less.js")" type="text/javascript"></script>-->
+	<title>Žalų valdymo sistema</title>
+	<link href='@Url.Content("~/Content/less/main.css")' rel="stylesheet" type="text/css"/>
 	<link rel="shortcut icon" href='@Url.Content("~/Content/images/favicon.ico")' type="image/x-icon"/>
 </head>
 <body>
-	<div class="header-top">			
-			<div class="container--header">
-				<div id="divlogindisplay">
-					@Html.Partial("_LogOnPartial")
-				</div>
-				@Html.Partial("NotifyViews")
-				<script type="text/x-handlebars" data-template-name="tmpAccidentRow">
-					@Html.Partial("Accidents/tmpAccidentRow")
-				</script>
-				<script type="text/x-handlebars" data-template-name="tmpAccident_Claims">
-					  @Html.Partial("Accidents/tmpAccident_Claims")
-				</script>
-				<script type="text/x-handlebars" data-template-name="tmpSidePanel">
-					  @Html.Partial("Accidents/tmpSidePanel")
-				</script>
-				<script type="text/x-handlebars" data-template-name="tmpAccidentsMain">
-					  @Html.Partial("Accidents/tmpAccidentsMain")
-				</script>
+	<div class="header-top">
+		<div class="container--header">
+			<div id="divlogindisplay">
+				@Html.Partial("_LogOnPartial")
 			</div>
-				<script type="text/x-handlebars" data-template-name="tmpNavbar">
-					<div class="header-nav">
-						<div class="container--header">
-							  <ul id="ulMainMenu">
-								 <li><a class="notactive" {{action viewAccidents}}>IVYKIAI</a></li>
-								 <li><a class="notactive" {{action viewClaims}}>ŽALU REGULIAVIMAS</a></li>
-								 <li><a class="notactive" {{action viewMap}}>ŽEMELAPIS</a></li>
-								 <li><a class="notactive" {{action viewReports}}>ATASKAITOS</a></li>
-								 <li><a class="notactive" {{action viewLists}}>SARAŠAI</a></li>
-								 <li style="float:right;"><a class="notactive" {{action viewAdmin}}>ADMINISTRAVIMAS</a></li>					 
-							  </ul>
-						  </div>
-					  </div>
-				</script>
-				<script type="text/x-handlebars" data-template-name="tmpApplication">
-					  {{view App.NavbarView controllerBinding="controller.controllers.navbarController"}}	 
-					<div class="colmask hidden" id="tabAccidents">
-						
-						<div class="colleft" id="divAccidentsList">
-							<div class="col1 content">{{view App.tabAccidentsView}}</div>
-							<div class="col2 content">{{view App.SidePanelView}}</div>
-						</div>
-						<div class="content hidden container--main" style="height:750px;" id="divAccidentEdit">divAccidentEdit</div> 
-					</div>
-					<div class="content hidden colmask" id="tabClaims">tmpClaims!</div>
-					<div class="content hidden colmask" id="tabMap">tmpMap!</div>
-					<div class="content hidden colmask" id="tabReports">tmpReports!</div>
-					<div class="content hidden colmask" id="tabLists">{{outlet listsOutlet}}</div>
-					<div class="content hidden colmask" id="tabAdmin">{{outlet adminOutlet}}</div>
-					<div class="hidden" id="tabEmpty">{{outlet emptyOutlet}}</div>
-				</script>		
+			@Html.Partial("NotifyViews")
+			<script type="text/x-handlebars" data-template-name="tmpAccidentRow">
+				@Html.Partial("Accidents/tmpAccidentRow")
+			</script>
+			<script type="text/x-handlebars" data-template-name="tmpAccident_Claims">
+				  @Html.Partial("Accidents/tmpAccident_Claims")
+			</script>
+			<script type="text/x-handlebars" data-template-name="tmpSidePanel">
+				  @Html.Partial("Accidents/tmpSidePanel")
+			</script>
+			<script type="text/x-handlebars" data-template-name="tmpAccidentsMain">
+				  @Html.Partial("Accidents/tmpAccidentsMain")
+			</script>
+		</div>
+		<script type="text/x-handlebars" data-template-name="tmpNavbar">
+			<div class="header-nav">
+				<div class="container--header">
+					<ul id="ulMainMenu">
+						 <li><a class="notactive" {{action viewAccidents}}>ĮVYKIAI</a></li>
+						 <li><a class="notactive" {{action viewClaims}}>ŽALŲ REGULIAVIMAS</a></li>
+						 <li><a class="notactive" {{action viewMap}}>ŽEMĖLAPIS</a></li>
+						 <li><a class="notactive" {{action viewReports}}>ATASKAITOS</a></li>
+						 <li><a class="notactive" {{action viewLists}}>SĄRAŠAI</a></li>
+						 <li style="float:right;"><a class="notactive" {{action viewAdmin}}>ADMINISTRAVIMAS</a></li>
+					</ul>		
+				</div>
+			</div>
+		</script>
+		<script type="text/x-handlebars" data-template-name="tmpApplication">
+			  {{view App.NavbarView controllerBinding="controller.controllers.navbarController"}}	 
+			<div class="colmask hidden" id="tabAccidents">
+				<div class="colleft" id="divAccidentsList">
+					<div class="col1 content">{{view App.tabAccidentsView}}</div>
+					<div class="col2 content">{{view App.SidePanelView}}</div>
+				</div>
+				<div class="content hidden container--main" style="height:750px;" id="divAccidentEdit">divAccidentEdit</div>
+			</div>
+			<div class="content hidden" id="tabClaims">tmpClaims!</div>
+			<div class="content hidden" id="tabMap">tmpMap!</div>
+			<div class="content hidden" id="tabReports">tmpReports!</div>
+			<div class="content hidden" id="tabLists">{{outlet listsOutlet}}</div>
+			<div class="content hidden" id="tabAdmin">{{outlet adminOutlet}}</div>
+			<div class="hidden" id="tabEmpty">{{outlet emptyOutlet}}</div>
+		</script>
 	</div>
 <script>
 	var oGLOBAL = { appStart: new Date().getTime(), logFromStart: function (msg) { console.warn("logFromStart. " + msg + " Time from start:" + (new Date().getTime() - oGLOBAL.appStart)); } }; 
@@ -69,9 +64,8 @@
 
 <script src='http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=true&amp;key=AIzaSyBmiyz9zmTD_hY7qT7Degr0o7tqAzjKQos' type='text/javascript'></script>
 <script src="@Url.Content("~/Scripts/Main/jquery-1.8.0.combined2.min.js")" type="text/javascript" charset="utf-8"></script>
-<script src="@Url.Content("~/Scripts/Final/combined.min.js")" type="text/javascript"></script>
 
-@*<script src="@Url.Content("~/Scripts/My/ui-ember.js")" type="text/javascript"  charset="utf-8"></script>
+@**@<script src="@Url.Content("~/Scripts/My/ui-ember.js")" type="text/javascript"  charset="utf-8"></script>
 <script src="@Url.Content("~/Scripts/My/General.js")" type="text/javascript"  charset="utf-8"></script>
 <script src="@Url.Content("~/Scripts/My/oCONTROLS.js")" type="text/javascript"  charset="utf-8"></script>
 <script src="@Url.Content("~/Scripts/Ember/ember-rest.js")" type="text/javascript"  charset="utf-8"></script>
@@ -106,7 +100,11 @@
 
 <script src="@Url.Content("~/Scripts/Forms/docsAccident.js")" type="text/javascript"  charset="utf-8"></script>
 <script src="@Url.Content("~/Scripts/Ember/appEnd.js")" type="text/javascript"  charset="utf-8"></script>
-*@
 
+@*<script src="@Url.Content("~/Scripts/Files/bootstrap.min.js")" type="text/javascript"></script> yra combined *@
+@*<script src="@Url.Content("~/Scripts/My/ui-checkbox.js")" type="text/javascript"  charset="utf-8"></script>*@
+
+@*<script src="@Url.Content("~/Scripts/Forms/tabAdmin.js")" type="text/javascript"  charset="utf-8"></script>
+<script src="@Url.Content("~/Scripts/Final/combined.min.js")" type="text/javascript"></script>*@
 </body>
 </html>

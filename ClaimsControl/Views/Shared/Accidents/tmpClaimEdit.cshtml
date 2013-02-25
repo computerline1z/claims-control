@@ -8,19 +8,19 @@
 {{/unless}}
 {{#compare "this.TypeID" "==" "6"}} 
 	<div class='left w45pr'>
+	{{updatableField c Field="VehicleID" id="lstVehicles" labelType="Top"}}
 	{{updatableField c Field="Days" id="inputDays" labelType="Top" event="keyUp_shallChangeLossAmount"}}
 	{{updatableField c Field="PerDay" id="inputPerDay" labelType="Top" event="keyUp_shallChangeLossAmount"}}
-	{{updatableField c Field="LossAmount" id="inputSum" attr="DISABLED" labelType="Top"}}@*(Math.round((Claim.Days*Claim.PerDay*100))/100)*@
 	</div><div class='right w45pr'>
-	{{updatableField c Field="VehicleID" id="lstVehicles" labelType="Top"}}
+	{{updatableField c Field="LossAmount" id="inputSum" attr="DISABLED" labelType="Top" sTitle="Prastovos nuostolio suma"}}@*(Math.round((Claim.Days*Claim.PerDay*100))/100)*@	
 	</div>
 {{else}}
 	<div class='left w45pr'>
 	{{updatableField c Field="VehicleID" id="lstVehicles" labelType="Top" Editable="{\"EditThis\":true}" }}
-	{{updatableField c Field="InsPolicyID" id="lstInsPolicies" labelType="Top" List="{\"Source\":\"proc_InsPolicies_forThisAccident\",\"tblUpdate\":\"tblInsPolicies\"}"}}
-	{{updatableField c Field="InsurerClaimID" labelType="Top"}}
-	</div><div class='right w45pr'>
 	{{updatableField c Field="LossAmount" id="LossAmount" labelType="Top"}} @*"classes\":\"LossAmount*@
+	{{updatableField c Field="InsPolicyID" id="lstInsPolicies" labelType="Top" List="{\"Source\":\"proc_InsPolicies_forThisAccident\",\"tblUpdate\":\"tblInsPolicies\"}"}}
+
+	</div><div class='right w45pr'>
 	{{#compare "this.TypeID" "==" "1"}} 
 		{{updatableField c Field="IsTotalLoss" labelType="Top"}}
 	{{/compare}}
@@ -28,7 +28,7 @@
 		{{updatableField c Field="IsInjuredPersons" id="IsInjuredPersons" labelType="Top"}}
 	{{/compare}}
 	{{updatableField c Field="InsuranceClaimAmount" id="InsuranceClaimAmount" labelType="Top"}} @*"classes\":\"InsuranceClaimAmount*@	
-	
+	{{updatableField c Field="InsurerClaimID" labelType="Top"}}
 	</div>
 {{/compare}}
 </div>
@@ -36,7 +36,7 @@
 
 <div class="frmbottom container">
 	{{#unless c.newClaim}}
-	<div class="left small"><button class="btn"><i style="margin-top:0" class="img32-bin" title="Ištrinti žalą" {{action "DeleteClaim" this}}></i></button></div>
+	<div class="left mini"><button class="btn"><i style="margin:0 auto;" class="img32-bin" title="Ištrinti žalą" {{action "DeleteClaim" this}}></i></button></div>
 	{{/unless}}
 	<div class="right medium" style="margin-top:10px;">
 		<button class="btn success small {{#if c.newClaim}}NewClaim{{/if}}" {{action "SaveClaim"}}></i>IŠSAUGOTI</button>

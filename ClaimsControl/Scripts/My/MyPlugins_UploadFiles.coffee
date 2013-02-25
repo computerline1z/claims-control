@@ -96,10 +96,16 @@ App.editDocsController= Em.Object.create(
 		if not form.length then form=t.closest("ul").closest("table").parent().parent().find("form:first")
 		form.data("opts")
 	editDoc: (e)->
-		t=$(e.target).parent().parent(); e.context.set("editMode",true)
+		t=$(e.target).parent().parent();
+		#Apurav added
+		t.addClass('docs-selected'); 
+		e.context.set("editMode",true)
 		Em.run.next(@,-> t.find("input.docType").ComboBoxCategory(@getOpts(t)))
-	cancelSaveDoc: (e)->
+	cancelSaveDoc: (e)->	
 		input=$(e.target).parent().parent().find("input.docType")
+		#Apurav added
+		$('.docs-selected').removeClass("docs-selected");
+		
 		input.autocomplete("destroy").removeData('autocomplete');
 		e.context.set("editMode",false)
 	SaveEditedDoc: (e)-> 
@@ -115,6 +121,7 @@ App.editDocsController= Em.Object.create(
 		CallBackAfter:(Row)-> 			
 			#cont.set("description",desc).set("docType",docTypeVal) # reiktų po išsaugojimo update2 išsaugot	
 			controller.refreshDocs()
+			$('.docs-selected').removeClass("docs-selected");#Apurav
 			#cont.set("editMode",false).set("description",desc).set("docType",docTypeVal)
 		)	
 	deleteDoc: (e)->
@@ -127,6 +134,7 @@ App.editDocsController= Em.Object.create(
 				#doc=oDATA.GET("tblDocs").emData.findProperty("iD", c.docID)
 				#oDATA.GET("tblDocs").emData.removeObject(doc)
 				controller.refreshDocs()
+				$('.docs-selected').removeClass("docs-selected");#Apurav
 				#controller.docs.removeObject(e.context)
 			)		
 		)

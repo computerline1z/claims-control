@@ -60,9 +60,11 @@ App.Router = Em.Router.extend({
 				});
 			},
 			toListAll: function (router, context) {
-				d=$(context.target).parent().data("ctrl");
-				 App.listAllController.set("current",d);
-				router.get('applicationController').connectOutlet('listsOutlet',d.goTo);
+				if (MY.NavbarController.fnSetNewTab(router.currentState.name, 4,'tabLists')) {
+					d=$(context.target).parent().data("ctrl");
+					App.listAllController.set("current",d);			
+					router.get('applicationController').connectOutlet('listsOutlet', d.goTo);
+				}
 			},
 			toTop: function (router, context){
 				App.listsStart();//Atnaujinam, jai buvo keista
@@ -85,15 +87,25 @@ App.Router = Em.Router.extend({
 			route: '/tabUserCard',
 			connectOutlets: function (router, context) {	
 				var ix=(App.userCardController.myInfo)?-1:5;
-				MY.NavbarController.fnSetNewTab(router.currentState.name, ix,'tabAdmin');
-				router.get('applicationController').connectOutlet('adminOutlet', 'tabUserCard');							
+				if (MY.NavbarController.fnSetNewTab(router.currentState.name, ix,'tabAdmin')){//Jeigu false jis permes i route tabAdmin, todel sito nevykdysim
+					router.get('applicationController').connectOutlet('adminOutlet', 'tabUserCard');		
+				}				
 			}
 		}),
+		tabMyCard: Em.Route.extend({
+			route: '/tabMyCard',
+			connectOutlets: function (router, context) {	
+				if (MY.NavbarController.fnSetNewTab(router.currentState.name, -1,'tabAdmin')){//Jeigu false jis permes i route tabAdmin, todel sito nevykdysim
+					router.get('applicationController').connectOutlet('adminOutlet', 'tabUserCard');		
+				}				
+			}
+		}),		
 		tabChangePass: Em.Route.extend({
 			route: '/changePass',
 			connectOutlets: function (router, context) {			
-				MY.NavbarController.fnSetNewTab(router.currentState.name, -1,'tabEmpty');
-				router.get('applicationController').connectOutlet('emptyOutlet', 'changeUserPass');						
+				if (MY.NavbarController.fnSetNewTab(router.currentState.name, -1,'tabEmpty')){
+					router.get('applicationController').connectOutlet('emptyOutlet', 'changeUserPass');	//'tabAdmin';			
+				}				
 			}
 		}) 
 	})
@@ -103,7 +115,7 @@ App.initialize();
 $(function() {
 	$("#userLink").on("click",function(e) {
 		App.userCardController.setUser({myInfo:true});
-		App.router.transitionTo('tabUserCard')
+		App.router.transitionTo('tabMyCard')
 		return false;
 	});
 	Em.run.next(function(){

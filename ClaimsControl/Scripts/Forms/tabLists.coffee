@@ -145,7 +145,7 @@ App.listAllController = Em.ResourceController.create(
 		if not App.docsTypesController then App.create_docsTypesController() #reikalingas sarašam parodyt ir redaguot
 
 		config=oDATA.GET(pars.source).Config
-		title=if pars.row then config.Msg.GenName+" "+pars.row.MapArrToString(config.titleFields,true) else config.Msg.AddNew
+		title=if pars.row then config.Msg.GenName+": "+pars.row.MapArrToString(config.titleFields,(if pars.template=="tmp_Drivers" then true else false)) else config.Msg.AddNew
 		if not pars.row and pars.newVals then pars.row=pars.newVals.vals.toRowObject(pars.newVals.cols) #ivedimo forma užpildom jau užpildytais iš langelio 
 		if MY.dialog then MY.dialog.remove()
 		Em.run.next(@, -> MY.dialog=JQ.Dialog.create( #MY.dialog needed to destroyElement in ui-ember.js
@@ -183,16 +183,17 @@ App.listAllController = Em.ResourceController.create(
 			didInsertElement: ()->
 				@_super();dialogFrm=$("#openItemDialog");dialogContent=$("#dialogContent")
 				if (pars.row)
-					categoryOpts=false;docGroups=oDATA.GET("tblDocGroup").emData;me=@
-					ref=if pars.emObject=="vehicles" then 4 else 3
-					groupID=docGroups.findProperty("ref",ref).iD
-					if pars.emObject=="vehicles" or pars.source=="proc_Vehicles"
-						name="TP "+pars.row.make+", "+pars.row.model+", "+pars.row.plate+" dokumentai"
-						categoryOpts=showCategories:[iD:groupID,ref:ref,name:name],vehicles:[{iD:pars.row.iD,title:name}]
-					if pars.emObject=="drivers" or pars.source=="proc_Drivers"
-						name="Vairuotojo '"+pars.row.firstName+" "+pars.row.lastName+"' dokumentai"
-						categoryOpts={showCategories:[iD:groupID,ref:ref,name:name],driver:{iD:pars.row.iD,title:name}}#Įrašom kurias kategorijas rodyt ir tos kategorijos duomenis
-					if categoryOpts
+					categoryOpts=false;docGroups=oDATA.GET("tblDocGroup").emData;me=@; ref=0			
+					if pars.emObject=="vehicles" or pars.source=="proc_Vehicles" then ref=4
+					else if pars.emObject=="drivers" or pars.source=="proc_Drivers" then ref=3
+					if ref
+						groupID=docGroups.findProperty("ref",ref).iD					
+						if ref==4
+							name="TP "+pars.row.make+", "+pars.row.model+", "+pars.row.plate+" dokumentai"
+							categoryOpts=showCategories:[iD:groupID,ref:ref,name:name],vehicles:[{iD:pars.row.iD,title:name}]
+						if ref==3
+							name="Vairuotojo '"+pars.row.firstName+" "+pars.row.lastName+"' dokumentai"
+							categoryOpts={showCategories:[iD:groupID,ref:ref,name:name],driver:{iD:pars.row.iD,title:name}}#Įrašom kurias kategorijas rodyt ir tos kategorijos duomenis
 						#Ref 1-Nuotraukos,2-Įvykio dok, 3-Vairuotojo dok, 4-TP dok, 0-Nepriskirti
 						dialogFrm.find("div.uploadDocsContainer").UploadFiles(categoryOpts: categoryOpts,showPhoto:false,docsController:"dialogDocController",requireCategory:true)
 						#Atrenkam dokumentus kuriuos reiks parodyti

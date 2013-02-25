@@ -126,7 +126,7 @@
     editDoc: function(e) {
       var t;
       t = $(e.target).parent().parent();
-	  t.addClass('docs-selected');
+      t.addClass('docs-selected');
       e.context.set("editMode", true);
       return Em.run.next(this, function() {
         return t.find("input.docType").ComboBoxCategory(this.getOpts(t));
@@ -134,10 +134,8 @@
     },
     cancelSaveDoc: function(e) {
       var input;
-	  var t;
-      t = $(e.target).parent().parent();
+      input = $(e.target).parent().parent().find("input.docType");
       $('.docs-selected').removeClass("docs-selected");
-      input = t.find("input.docType");
       input.autocomplete("destroy").removeData('autocomplete');
       return e.context.set("editMode", false);
     },
@@ -165,8 +163,8 @@
           "DataTable": "tblDocs"
         },
         CallBackAfter: function(Row) {
-			$('.docs-selected').removeClass("docs-selected");
-          return controller.refreshDocs();
+          controller.refreshDocs();
+          return $('.docs-selected').removeClass("docs-selected");
         }
       });
     },
@@ -193,8 +191,8 @@
             Error: "Nepavyko pašalinti dokumento '" + c.docName + "'."
           },
           CallBackAfter: function(Row) {
-			  $('.docs-selected').removeClass("docs-selected");
-            return controller.refreshDocs();
+            controller.refreshDocs();
+            return $('.docs-selected').removeClass("docs-selected");
           }
         });
       });

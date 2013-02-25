@@ -26,7 +26,7 @@
       SaveOk = App.userCardController.SaveOk;
       if (SaveOk) {
         $("#savePasswordNote").html(SaveOk).show().delay(2000).fadeOut();
-        return SaveOk = null;
+        return App.userCardController.set("SaveOk", null);
       }
     },
     templateName: 'tmpUserCard',
@@ -37,12 +37,16 @@
     sendUserPasswordForm: function() {
       return App.userCardController.set("passwordReset", true);
     },
-    sendUserPassword: function(e) {
+    sendUserPassword: function(e, mailTmpl) {
+      var ctrl, tmpl;
+      ctrl = e ? $(e.target).parent() : null;
+      tmpl = mailTmpl ? mailTmpl : "ResetUserPsw";
       return SERVER.update3({
         pars: {
-          email: App.userCardController.content[0].email
+          email: App.userCardController.content[0].email,
+          mailTmpl: tmpl
         },
-        ctrl: $(e.target).parent(),
+        ctrl: ctrl,
         CallBack: (function(resp) {
           if (resp.ErrorMsg) {
             $("#savePasswordNote").html("Nepavyko išsiųsti, klaida: " + resp.ErrorMsg).show().delay(2000).fadeOut();
@@ -82,12 +86,13 @@
               $("#userLink").html(name);
             }
             if (Action === "Add") {
-              this.setUser({
-                myInfo: false,
-                User: Row
-              });
-              return App.router.transitionTo('tabUserCard');
+              this.sendUserPassword(null, "NewUserPsw");
             }
+            this.setUser({
+              myInfo: false,
+              User: Row
+            });
+            return App.router.transitionTo('tabAdmin ');
           }
         });
         return SERVER.update2(opt);
@@ -109,12 +114,12 @@
     setUser: function(p) {
       var id;
       this.set("myInfo", (p.myInfo ? true : false)).set("passwordReset", false);
+      if (p.myInfo) {
+        id = oDATA.GET("userData").emData[0].userID;
+        p.User = oDATA.GET("tblUsers").emData.findProperty("iD", id);
+      }
       if (this.content.length) {
         this.content.removeAt(0);
-      }
-      if (p.myInfo) {
-        id = p.User = oDATA.GET("userData").emData[0].userID;
-        p.User = oDATA.GET("tblUsers").emData.findProperty("iD", id);
       }
       if (p.User) {
         return this.content.pushObject(p.User);
@@ -168,7 +173,7 @@
               $("#changePaswordError").html(resp.ErrorMsg);
             } else {
               App.userCardController.set("SaveOk", resp.ResponseMsg);
-              App.router.transitionTo('tabUserCard');
+              App.router.transitionTo(App.userCardController.myInfo ? 'tabMyCard' : 'tabUserCard');
               false;
             }
             return console.log(resp);
@@ -178,7 +183,7 @@
       }
     },
     cancelNewPass: function() {
-      App.router.transitionTo('tabUserCard');
+      App.router.transitionTo(App.userCardController.myInfo ? 'tabMyCard' : 'tabUserCard');
       return false;
     },
     templateName: 'tmpChangeUsrPass'

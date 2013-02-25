@@ -19,22 +19,23 @@ Handlebars.registerHelper('updatableField', function (prop, options) {
 	var err = "updatableField helper ",h=(prop.hash)?prop.hash:options.hash;
 	var f = h.Field;
 	if (!f) throw new Error(err + "did not found Field");
-	var v = this.content[0][f]; //Em.getPath(this.content[0], prop)
+	var v = (this.content[0][f])?this.content[0][f]:""; //Em.getPath(this.content[0], prop)
 	if (typeof(v)==="undefined") console.error("Field "+f+" has no value in updatableField helper");
 	if (!f) throw new Error(err + "did not found value for Field" + f);
 
 	//v = (typeof (v) === "string") ? v.replace(/'/g, "\"") : v;
-	if (typeof (v) === "string"){v=v.replace(/'/g, "\'").replace(/"/g, '\\"');}
+	if (typeof (v) === "string"){v=v.replace(/'/g, "\\&quot;").replace(/"/g, '\\&quot;');}
 	
 	var cl = (h.classes)? h.classes : "";//UpdateField
 	var st =  (h.style)? ("style='"+h.style+"'") : "";
 	var id = h.id; id = (id) ? "\"id\":\"" + id + "\"," : "";
 	var lblT = h.labelType; lblT = (lblT) ? "\"labelType\":\"" + lblT + "\"," : "";
+	var sTitle = h.sTitle; sTitle = (sTitle) ? "\"sTitle\":\"" + sTitle + "\"," : "";
 	var attr = h.attr; attr = (attr) ? "\"attr\":\"" + attr + "\"," : "";
 	var List = h.List; List = (List) ? "\"List\":" + List + "," : ""; //List yra objektas ir jam kabuciu nereikia
 	var Editable = h.Editable; Editable = (Editable) ? "\"Editable\":" + Editable + "," : ""; //Editable yra objektas ir jam kabuciu nereikia
 	//var retString = " class='ExtendIt "+((h.classes)?h.classes:"")+"' "+st+" data-ctrl='{\"Value\":" + (v===""?"\"\"":v) + ",\"Field\":\"" + f.firstBig() + "\",\"classes\":\"UpdateField\"," + id + lblT + attr+List+Editable;
-	var retString = " class='ExtendIt "+((h.classes)?h.classes:"")+"' "+st+" data-ctrl='{\"Value\":\"" + v + "\",\"Field\":\"" + f.firstBig() + "\",\"classes\":\"UpdateField\"," + id + lblT + attr+List+Editable;
+	var retString = " class='ExtendIt "+((h.classes)?h.classes:"")+"' "+st+" data-ctrl='{\"Value\":\"" + v + "\",\"Field\":\"" + f.firstBig() + "\",\"classes\":\"UpdateField\"," + id + lblT+sTitle + attr+List+Editable;
 
 	if (retString.charAt(retString.length - 1) === ",") {retString = retString.slice(0, -1); } //iškertam paskutini kalbeli jei yra
 	if (h.tag) {retString="<"+h.tag+ retString + "}'></"+h.tag+">";} else  {retString="<div"+ retString + "}'></div>";}

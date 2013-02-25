@@ -14,13 +14,13 @@ data-ctrl='{"NewRec":1,"Source":"proc_InsPolicies","tblUpdate":"tblInsPolicies"}
          </div>
          <div class='right w45pr'>
             <div class='ExtendIt' data-ctrl='{"Field":"InsurerID","classes":"UpdateField","id":"InsurerID","labelType":"Left"}'></div>
-            <div class='ExtendIt' data-ctrl='{"Field":"EndDate","classes":"UpdateField","id":"EndDate","labelType":"Left"}'></div>
+            <div class='ExtendIt' data-ctrl='{"Field":"EndDate","classes":"UpdateField","id":"EndDate","labelType":"Left","Plugin":{"datepicker":{}}}'></div>
          </div>
          <center>
             <div class='ExtendIt' data-ctrl='{"Field":"MailsAddresses","classes":"UpdateField","id":"MailsAddresses","labelType":"Top"}'></div>
          </center>
       </fieldset>
-         <fieldset><legend>Draudėjo duomenys</legend>
+         <fieldset><legend>Draudėjo duomenys (bus nurodyti pranešime draudikui apie žalą)</legend>
             <div class='left w45pr'>
                <div class='ExtendIt' data-ctrl='{"Field":"InsuredName","classes":"UpdateField","id":"InsuredName","labelType":"Left"}'></div>
                <div class='ExtendIt' data-ctrl='{"Field":"InsuredAddress","classes":"UpdateField","id":"InsuredAddress","labelType":"Left"}'></div>
@@ -30,44 +30,12 @@ data-ctrl='{"NewRec":1,"Source":"proc_InsPolicies","tblUpdate":"tblInsPolicies"}
                <div class='ExtendIt' data-ctrl='{"Field":"InsuredContactID","classes":"UpdateField notRequired","id":"InsuredContactID","labelType":"Left"}'></div>
             </div>
          </fieldset>
-@*        }
-        else { <fieldset><legend>Draudimo poliso duomenys</legend>
-           <div class='HalfDivleft'>
-              <div class='ExtendIt' data-ctrl='{"Value":@Model.InsPolicy.ClaimTypeID,"Field":"ClaimTypeID","classes":"UpdateField","id":"lstClaimTypeID","labelType":"Left"}'></div>
-              <div class='ExtendIt' data-ctrl='{"Value":"@Model.InsPolicy.PolicyNumber","Field":"PolicyNumber","classes":"UpdateField","id":"PolicyNo","labelType":"Left"}'></div>
-           </div>
-           <div class='HalfDivright'>
-              <div class='ExtendIt' data-ctrl='{"Value":@Model.InsPolicy.InsurerID,"Field":"InsurerID","classes":"UpdateField","id":"InsurerID","labelType":"Left"}'></div>
-              <div class='ExtendIt' data-ctrl='{"Value":"@Model.InsPolicy.EndDate","Field":"EndDate","classes":"UpdateField","id":"EndDate","labelType":"Left"}'></div>
-           </div>
-           <div class='clearfix'></div>
-           <center>
-              <div class='ExtendIt' data-ctrl='{"Value":"@Model.InsPolicy.MailsAddresses","Field":"MailsAddresses","classes":"UpdateField","id":"MailsAddresses","labelType":"Top"}'></div>
-           </center>
-        </fieldset>
-         <fieldset><legend>Draudėjo duomenys</legend>
-            <div class='HalfDivleft'>
-               <div class='ExtendIt' data-ctrl='{"Value":@Model.InsPolicy.InsuredName,"Field":"InsuredName","classes":"UpdateField","id":"InsuredName","labelType":"Left"}'></div>
-               <div class='ExtendIt' data-ctrl='{"Value":@Model.InsPolicy.InsuredAddress,"Field":"InsuredAddress","classes":"UpdateField","id":"InsuredAddress","labelType":"Left"}'></div>
-            </div>
-            <div class='HalfDivright'>
-               <div class='ExtendIt' data-ctrl='{"Value":@Model.InsPolicy.InsuredCode,"Field":"InsuredCode","classes":"UpdateField","id":"InsuredCode","labelType":"Left"}'></div>
-               <div class='ExtendIt' data-ctrl='{"Value":@Model.InsPolicy.InsuredContactID,"Field":"InsuredContactID","classes":"UpdateField","id":"InsuredContactID","labelType":"Left"}'></div>
-            </div>
-         </fieldset>
-        }}*@
    </div>
    <!------------------------------------------------------------------------------->
    <!------------------------------------------------------------------------------->
    <div id="tabs-warnings">tabs-warnings</div>
    <!------------------------------------------------------------------------------->
    <!------------------------------------------------------------------------------->
-   <div id="tabs-docs">@*<strong>Dokumentai kuriuos reikia pateikti reguliuojant žalą</strong>
-      <div class='HalfDivleft'>
-         <fieldset><legend>Įvykio dokumentai</legend><a style="margin-top: 2%;" href="#">Pridėti</a></fieldset>
-         <div class='HalfDivright'>
-            <fieldset><legend>Transporto priemonės dokumentai</legend><a style="margin-top: 2%;" href="#">Pridėti</a></fieldset>
-            <fieldset><legend>Vairuotojo dokumentai</legend><a style="margin-top: 2%;" href="#">Pridėti</a></fieldset>
-         </div></div>*@ </div>
+   <div id="tabs-docs"></div>
 </div>
 <center style="margin: 2em 0;"><button id="btnSaveItem" class="btn">Išsaugoti</button><a style="margin-left: 2%;" id="aCancelItem" href="#">Atšaukti</a></center>
