@@ -47,7 +47,7 @@
 				</script>
 				<script type="text/x-handlebars" data-template-name="tmpApplication">
 					  {{view App.NavbarView controllerBinding="controller.controllers.navbarController"}}	 
-					<div class="colmask hidden" id="tabAccidents">
+					<div class="colmask colmask-extended hidden" id="tabAccidents">
 						
 						<div class="colleft" id="divAccidentsList">
 							<div class="col1 content">{{view App.tabAccidentsView}}</div>
@@ -61,7 +61,7 @@
 					<div class="content hidden colmask" id="tabLists">{{outlet listsOutlet}}</div>
 					<div class="content hidden colmask" id="tabAdmin">{{outlet adminOutlet}}</div>
 					<div class="hidden" id="tabEmpty">{{outlet emptyOutlet}}</div>
-				</script>		
+				</script>
 	</div>
 <script>
 	var oGLOBAL = { appStart: new Date().getTime(), logFromStart: function (msg) { console.warn("logFromStart. " + msg + " Time from start:" + (new Date().getTime() - oGLOBAL.appStart)); } }; 
