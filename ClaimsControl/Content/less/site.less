@@ -237,19 +237,19 @@ ul.ulWhiteMenu li { margin-right: 5px; padding-right: 5px; border-bottom: 1px; }
 /*-------------------------- Side Panel --------------------------*/
 #sidePanel {
     #font > .regular(@basefont, bold, @baseline, #3399cc);
-   a { #font > .regular (@basefont, bold, @baseline, #3399cc);
-        text-decoration: none;
+   a { #font > .regular (@basefont, bold, @baseline, #5B8BA8);
+        text-decoration: underline;
         &:hover { color: @linkColorHover;
                   text-decoration: none;
         }
         &:selected {color: #65809d;}
     }
+    background:#F0F5F7;
 }
 .filtergroup { 
     #font > .regular(@basefont, normal, @baseline, #666);
     width: 100%;
-    padding: 0 18px; 
-    margin: 10px 0 0 0;// margin-top: 10px; 
+    padding: 12px; 
     list-style-type: none;
    &.btn, &.ui-buttonset .ui-button { 
        width: 100%;
@@ -488,9 +488,28 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 	text-decoration: underline;
 }
 .cont{
-border: 1px 1px 0 1px !important;
-border-color:#ddd !important;
-border-style:solid !important;
+	border: 1px 1px 0 1px !important;
+	border-color:#ddd !important;
+	border-style:solid !important;
 
+}
+.accidentMain-header{
+	font-size: 30px; 
+	border-top: 1px solid #999999; 
+	padding: 12px; 
+	color: #5A6F85;
+}
+.sidepanel-header{
+	background: #186C96;
+	color: #ffffff;
+	font-size: 21px; 
+	font-weight: bold; 
+	padding: 6px;
+}
+.small-blue-icon{
+	margin-right:6px;
+}
+.colmask.colmask-extended {
+    max-width: 1129px;
 }
 /*----apurav new rules end -----*/
