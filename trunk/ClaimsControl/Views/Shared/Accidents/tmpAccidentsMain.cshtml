@@ -7,16 +7,18 @@
 
 
 <div class="container">
-	<div class="left big w35pr">
-		<div id="container">{{view App.SearchField controller="accidentsController"}} </div>@*context="accidents"*@
+	<div class="left big w45pr">
+		{{view App.SearchField controller="accidentsController"}} @*context="accidents"*@
 	</div>
 	<div class="right big"><button class="btn large" {{action addNewAccident target="App.accidentsController"}}><i class="img32-plus"></i>Registruoti naują įvykį</button></div>
 </div>
 {{log this}}
 {{log App.accidentsController.content.length}}
 {{#if App.accidentsController.content.length}}
-	<h4>Paskutiniai įvykiai:</h4>
-	<div class="table zebra-striped selectable tall" id="accidentsTable">
+	<div class="accidentMain-header">
+		Paskutiniai įvykiai:
+	</div>
+	<div class="zebra-striped selectable tall" id="accidentsTable">
 	{{#each "App.accidentsController.content"}}@*{{#each person in people}}*@
 	@*{{log this}}*@
 	{{#if this.visible}}
