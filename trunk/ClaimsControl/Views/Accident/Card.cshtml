@@ -55,7 +55,18 @@ else {<h2 style="margin: 15px; display: inline-block">Įvykis Nr. @Model.Acciden
 
 	 }
 		}
-		<div><a id="btnSave" href="javascript:void(0);return false;">Išsaugoti</a><a style="margin-left: 2%;" id="btnCancel" href="javascript:void(0);return false;">Atšaukti</a></div>@*Mygtukai*@ </div>
+		<div class="container">
+			<div class="left medium">
+				<button id="btnSaveAccident" class="btn btnSave">Išsaugoti</button>	
+				<a style="margin-left: 2%;" id="btnCancel" href="javascript:void(0);return false;">Atšaukti</a>
+			</div>
+			@{if (Model.NewRec != 1) {
+			<div class="right mini">
+				<button id="btnDeleteAccident" class="btn"><i class="img32-bin" title="Ištrinti žalą"></i></button>
+			</div>
+	  }}
+		</div>
+		</div>
 	@*---------------------------------------------------------------*@
 	<div class='right w47pr_m'>
 		<div id='divMapHead'>@*---------------------------------------------------------------*@

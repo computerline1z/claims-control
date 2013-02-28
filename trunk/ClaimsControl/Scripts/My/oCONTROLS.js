@@ -64,17 +64,24 @@ var oCONTROLS = {
 		var f=field.slice(0, 1).toLowerCase() + field.slice(1);
 		return row[f];
 	},
-	UpdatableForm: function (frm,row) {
+	UpdatableForm: function (p) {//{frm:frm,row:row,btnSaveToDisable:btnSaveToDisable}
 		//frm data-ctrl:: labelType:Top/Left/undefined,
-		var sTitle = "", frmOpt = $(frm).data('ctrl'), me=this; 
-		if (row){if (row.iD) {frmOpt.NewRec=0;frmOpt.id=row.iD;}}//Jeigu yra row.iD tai redagavimas
+		var sTitle = "", frmOpt = $(p.frm).data('ctrl'), me=this,btnSaveToDisable; 
+		if (p.row){frmOpt.NewRec=0;frmOpt.id=p.row.iD;}//Jeigu yra p.row tai redagavimas
 		var data = (frmOpt.Source === 'NoData') ? "NoData" : oDATA.GET(frmOpt.Source);
 		//if(typeof data==='undefined') { alert('Source undefined in UpdatableForm(objFunc:79)!'); }
 		//log('<div>==========UpdatableForm========</div>');
-		var elements = $(frm).find('div.ExtendIt, span.ExtendIt');
+		//var elements = $(p.frm).find('div.ExtendIt, span.ExtendIt');
 		//      for(var i=0; i<elements.length; i++) {
 		//      }
-		$(frm).find('div.ExtendIt, span.ExtendIt').each(function () {
+		var fnEnableSave=function(){	btnSaveToDisable.removeAttr("disabled", "disabled");	}
+		if (p.btnSaveToDisable) { 
+			if(p.btnSaveToDisable.length===1){
+				btnSaveToDisable=p.btnSaveToDisable;if (btnSaveToDisable.is("button")){btnSaveToDisable.attr("disabled", "disabled");}else{console.error("btnSaveToDisable not button");}				
+			} else {console.error("wrong btnSaveToDisable no: "+p.btnSaveToDisable.length);}}
+		else console.warn("no btnSaveToDisable");
+		
+		$(p.frm).find('div.ExtendIt, span.ExtendIt').each(function () {
 			var e = $(this), eOpt = e.data('ctrl'), eHTML = '', ix = -1, data_ctrl = {};
 			if (!eOpt) {return true;}
 			//log("-------------------------------");
@@ -138,7 +145,7 @@ var oCONTROLS = {
 					data_ctrl[prop] = col[prop];
 				}
 			}
-			if (row){var v =  me.getValFromRow(col.FName,row); if (v){data_ctrl.Value =  v; col.Value=v;}}
+			if (p.row){var v =  me.getValFromRow(col.FName,p.row); if (v){data_ctrl.Value =  v; col.Value=v;}}
 			data_ctrl = JSON.stringify(data_ctrl);
 			//log("data_ctrl stringas:"+data_ctrl);
 			if (Type === 'Integer' || Type === 'Decimal') {
@@ -212,6 +219,11 @@ var oCONTROLS = {
 					.parent().find('input')
 					.ComboBox();
 				}
+			}
+			if (btnSaveToDisable){
+				if (Type === 'Boolean' || Type === 'checkbox') {e.find("input:checkbox").on("change",fnEnableSave);}
+				else if (col.List) {input.data("autocomplete").fnItemChanged=function(newId){fnEnableSave();}}
+				else if (input){input.on("keyup",fnEnableSave);}
 			}
 			if (col.Plugin) {
 				$.each(col.Plugin, function (name, value) {

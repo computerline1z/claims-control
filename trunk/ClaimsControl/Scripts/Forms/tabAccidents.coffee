@@ -74,13 +74,14 @@ App.SelectedAccidentView = Em.View.extend(
 		false		
 	newClaim: (e) ->
 		nTr = $(e.target).closest('div.tr')[0]
+		#Naudojam šito rekvizitus, nes divNewClaimCard_Content dar nėra
 		$(nTr).replaceWith("<div id='divNewClaimCard' data-ctrl='{\"id\":\"0\",\"NewRec\":\"1\",\"Source\":\"tblClaims\",\"ClaimTypeID\":\"0\"}'></div>")
 		d =	
 			ctrl: $('#divNewClaimCard')
 			oDATA: oDATA.GET("tblClaimTypes")
 			opt: { val: "iD", text: "name", FieldName: "ClaimTypeID", SelectText: "Pasirinkite žalos tipą:" }
 			fnAfterOptClick: (T) ->
-				$('#divNewClaimCard').find('#divClaimCardDetails,div.frmbottom').remove();
+				$('#divNewClaimCard').find('#divNewClaimCard_Content,div.frmbottom').remove();
 				#fnSetClaimCard(1, T)
 				#naujam Claimsui imamas redaguojamas viewsas SelectedClaimView ir kitas kontroleris newClaimController
 				if (MY.tabAccidents.NewClaimView) ##($("#newClaimDetailsContent").length > 0)
@@ -105,8 +106,9 @@ App.SelectedAccidentView = Em.View.extend(
 App.SelectedClaimView = Em.View.extend(
 	didInsertElement: ->
 		c=this.content[0]
-		frm=if c.NewClaim then "#divNewClaimCard" else '#divClaimCard'
-		oCONTROLS.UpdatableForm(frm)
+		frm=if c.NewClaim then "#divNewClaimCard" else '#divClaimCard_Content' # Negalim naudot '#divNewClaimCard_Content', nes divNewClaimCard yra data-ctrl, nes ten mes dedam žalos tipą kai dar nėra divNewClaimCard_Content
+		btnSaveToDisable=if c.NewClaim then $(frm).find("button.saveClaim") else $(frm).next().find("button.saveClaim")
+		oCONTROLS.UpdatableForm(frm:frm,btnSaveToDisable:btnSaveToDisable)
 		if c.TypeID==2
 			IClaim=$("#InsuranceClaimAmount").parent().parent(); IClaim.find("span").html("Žalos suma asmeniui")
 			$("#LossAmount").parent().find("span").html("Žalos suma turtui");
@@ -124,7 +126,7 @@ App.SelectedClaimView = Em.View.extend(
 			C2 = d.Claims2; TypeID = oDATA.GET("tblClaimTypes").emData.findProperty("name",d.InsuranceType).iD
 			#Claims2: 0-ClaimID, 1-VehicleID, 2-InsPolicyID, 3-InsuranceClaimAmount, 4-InsurerClaimID, 5-IsTotalLoss, 6-IsInjuredPersons, 7-Days, 8-PerDay
 			Claim =
-				ID: C2[0],VehicleID: C2[1],InsPolicyID: C2[2],InsuranceClaimAmount: C2[3],InsurerClaimID: C2[4]
+				ID: C2[0],VehicleID: C2[1],InsPolicyID: C2[2],InsuranceClaimAmount: C2[3],InsurerClaimID: C2[4].slice(1).slice(0, -1)#Panaikinam pirmą ir paskutinį ' ('nr Pvz')
 				IsTotalLoss: C2[5],IsInjuredPersons: parseInt(C2[6],10),Days: C2[7],PerDay: C2[8],LossAmount: d.LossAmount
 				NewClaim: false,TypeID: TypeID
 			App.claimEditController.set("content", [Claim]) #butinai masyvas view'e su each		
@@ -142,7 +144,7 @@ App.SelectedClaimView = Em.View.extend(
 			frm=$('#divNewClaimCard'); Action='Add'
 			Msg= Title: "Naujos žalos sukūrimas", Success: "Nauja žala sukurta.", Error: "Nepavyko išsaugot naujos žalos."
 		else
-			frm=$('#divClaimCard'); Action='Edit'
+			frm=$('#divClaimCard_Content'); Action='Edit'
 			Msg= Title: "Žalos redagavimas", Success: "Žalos duomenys pakeisti.", Error: "Nepavyko pakeisti žalos duomenų."
 		DataToSave = oCONTROLS.ValidateForm(frm)
 		if (DataToSave)
@@ -194,7 +196,7 @@ App.SelectedClaimView = Em.View.extend(
 App.accidentsController = Em.ResourceController.create(
 	url: "Accident/AccidentsList",#jei yra atsisiunčiam
 	tableName: "proc_Accidents",#jei yra, turinį į content
-	currency: 'LTL'
+	currency: 'Lt'
 	#fields: {}
 	animationSpeedEnd: 400
 	animationSpeedStart: 400

@@ -12,7 +12,7 @@
 		<div class='right w47pr_mp'>
 			{{updatableField c Field="email" labelType="Top"}}<span>@@claimscontrol.com</span>
 			{{updatableField c Field="timeZoneID" labelType="Top" List="{\"Source\":\"tblTimeZones\"}"}}
-			<button class="btn" {{action SaveChanges target="App.accountController"}}>Išsaugoti</button>
+			<button class="btn btnSave" {{action SaveChanges target="App.accountController"}}>Išsaugoti</button>
 		</div>
 	</div>
 {{/with}}
@@ -25,7 +25,7 @@
 		{{view App.UsersRowView}}
 	{{/each}}
 	</tbody></table>
-<div style="margin: 15px"><button class="btn" {{action addNewUser target="App.userCardController"}}>Prideti nauja</button></div>
+<div style="margin: 15px"><button class="btn btnSave" {{action addNewUser target="App.userCardController"}}>Prideti nauja</button></div>
 </div>
 <hr />
 @*<a class="medium" {{action deleteAccount target="App.accountController"}} href="#">Panaikinti paskyrą</a>*@

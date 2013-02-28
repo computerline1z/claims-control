@@ -72,6 +72,7 @@ _create: ->
 					#$(this).data("newval", ui.item.id).val (if ($(this).data("ctrl").Type is "List") then ui.item.value else ui.item.label) #jeigu ne List tipo kisam viska priesingu atveju tik pirma lauka
 					$(this).data("newval", ui.item.id).val (ui.item.value)
 					MY.execByName opt.fnChangeCallBack, MY, this, ui.item	if opt.fnChangeCallBack
+					input.data("autocomplete").fnItemChanged(ui.item.id) if input.data("autocomplete").fnItemChanged
 				if ui.item.refID #Su kategorijom naudojamas
 					$(this).data("refID", ui.item.refID)
 					$(this).data("categoryID", ui.item.categoryID)
@@ -85,7 +86,7 @@ _create: ->
 				t = $(this)
 				t.data "newval", ""
 				t.val ""	if opt.Type is "List"
-				input.data("autocomplete").term = ""	unless typeof input.data("autocomplete") is "undefined"
+				input.data("autocomplete").term = "" unless typeof input.data("autocomplete") is "undefined"
 				return false
 		close: (event, ui) ->
 			return false

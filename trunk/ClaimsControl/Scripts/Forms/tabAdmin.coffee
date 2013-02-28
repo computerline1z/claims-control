@@ -10,7 +10,7 @@ App.TabAdminView = App.mainMenuView.extend(
 		#c=this.content[0] neturi	
 		@_super();
 		frm='#AccountForm'
-		oCONTROLS.UpdatableForm(frm)
+		oCONTROLS.UpdatableForm(frm:frm,btnSaveToDisable:$(frm).find("button.btnSave"))
 	templateName: 'tmpAdminMain', viewIx: 5
 )
 App.UsersRowView = Em.View.extend(

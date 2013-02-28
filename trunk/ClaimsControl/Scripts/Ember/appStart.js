@@ -16,24 +16,23 @@ App.NavbarController = Em.Controller.extend({
 			oDATA.fnLoadMain();
 		}
 		//
-			var fnUnhideOutlet=function(outlet) {
-				Em.run.next(outlet, function () {
-					$('#' + this).removeClass("hidden");//Atslepiam naujai aktyvų taba
+			var fnUnhideOutlet=function(outlet,viewIx) {
+				Em.run.next({outlet:outlet,viewIx:viewIx}, function () {
+					$('#' + this.outlet).removeClass("hidden");//Atslepiam naujai aktyvų taba
+					if (this.viewIx>-1){ $('#ulMainMenu a:eq(' + this.viewIx + ')').removeClass("notactive").addClass("selected ui-corner-top"); }//Pazymim naujo menu taba
 				})				
 			}
 			$('#' + controller.get("currentOutlet")).addClass("hidden"); //Paslepiam aktyvų taba .empty()
-			if (viewIx>-1){
-				$('#ulMainMenu a:eq(' + viewIx + ')').removeClass("notactive").addClass("selected ui-corner-top"); //Pazymim naujo menu taba
-			}
+
 			if  (!newOutlet){newOutlet=newState;}//else{$('#' + controller.get("currentOutlet")).empty();}						
 			if  (controller.currentState||newOutlet===newState){
 				controller.set("currentState", newState).set("currentOutlet", newOutlet);
-				fnUnhideOutlet(newOutlet);return true;
+				fnUnhideOutlet(newOutlet,viewIx);return true;
 			} else {//jei nėra currentState ko gero buvo refresh, tai nukeliam į pradinį psl jei to reikia
 				newOutlet=(newOutlet==="tabEmpty")?"tabAccidents":newOutlet;// galim visada mest i tabAccidents";
 				controller.set("currentState", newOutlet).set("currentOutlet", newOutlet);
 				App.router.transitionTo(newOutlet);
-				fnUnhideOutlet();return false;				
+				fnUnhideOutlet("",viewIx);return false;				
 			}
 	}
 });

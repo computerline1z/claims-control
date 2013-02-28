@@ -2,8 +2,6 @@ oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 	"use strict"; var UpdateServer, DefaultTime, fnChangeCheck, fnChange, LoadScript;
 	SERVER.send("{'AccidentNo':" + AccidentNo + "}", oGLOBAL.Start.fnSetNewData, { Ctrl: "divAccidentEdit", RenderNew: 1, fnCallBack: function () { LoadScript(); } }, "/Accident/GetAccident", "json");
 
-	//oGLOBAL.temp=this;
-
 	LoadScript = function () {
 		$("#btnMapTown").button({ disabled: true }).click(function () { oGLOBAL.mapFn.GetMapFromTown(); return false; });
 		var frmOpts=$("#AccidentForm").data("ctrl");	//NewRec, Source, id, vehicles
@@ -36,13 +34,46 @@ oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 		} );
 		
 		//$("#LongNote").autoResize();
-		$("#LongNote").bind("keyup", function () {
+		//$("#LongNote").bind("keyup", function () {
 			//$(this).autoResizeTextAreaQ({ "max_rows": 8 });
 			//$(this).autoResize();
-		});
+		//});
 
-		//??
-		$("#btnSave").button().click(function () {
+		var fnRetunToAccidentInList=function (accNo,newAccident){
+			$("#btnReturnToAccidents").trigger("click"); //paspaudžiam, kad grįžtam į lista												
+			Em.run.next({ accNo: accNo }, function () {
+				var trs=$("#accidentsTable").find("div.accident").removeClass("selectedAccident"); $("#accidentsTable").find("div.dividers").remove(); $("#AccDetailsWraper").remove();
+				var tr = trs.find("div.td:nth(0):contains(" + this.accNo+ ")").parent().addClass("selectedAccident"); 	
+				Em.run.next(function () {
+					//tr.trigger("click");tr[0].click();
+					console.log(tr);tr.trigger("click");tr.trigger("click");
+					Em.run.next(function () {					
+						if (newAccident) {$("#AccDetailsContent").find("button").trigger("click");}
+						Em.run.next(function () {
+							var scroolTop = tr.offset().top - $(window).height() / 2 + 100;
+							$('html, body').animate({ scrollTop: scroolTop }, 'slow');
+						});
+					});
+				});
+			});
+		}
+		$("#btnDeleteAccident").on("click",function (e) {
+			var emData=oDATA.GET("proc_Accidents").emData;
+			var accidentRow=emData.findProperty("no",AccidentNo);
+			if  (accidentRow.cNo_All>0){oCONTROLS.dialog.Alert({title:"",msg:"Pasirinktas įvykis turi "+accidentRow.cNo_All+" žalas. Tam, kad pašalinti šį įvykį reikia pašalinti šias žalas."}); return false;}
+			oCONTROLS.dialog.Confirm({title: "Įvykio Nr. "+AccidentNo+" pašalinimas" , msg: "Ištrinti šį įvykį?"}, function() {
+				SERVER.update({Action: "Delete",DataToSave: {id: accidentRow.iD,DataTable: "tblAccidents"},
+				Msg: {Title: "Įvykio pašalinimas",Success: "Pasirinktas įvykis buvo pašalintas.",Error: "Nepavyko pašalinti šio įvykio"},
+					CallBack: {Success: function(resp, updData) {
+							$("#accidentsTable").find("div.accident").removeClass("selectedAccident"); $("#accidentsTable").find("div.dividers").remove(); $("#AccDetailsWraper").remove();
+							emData.removeObject(accidentRow);
+							$("#btnReturnToAccidents").trigger("click");
+						}
+					}
+				});
+			});
+		});
+		$("#btnSaveAccident").on("click",{fn:fnRetunToAccidentInList},function (e) {
 			var DataToSave = oCONTROLS.ValidateForm($("#AccidentForm")), Action, Msg;
 			if (DataToSave) {
 				if (oGLOBAL.AccidentForm.NewRec) {
@@ -71,30 +102,9 @@ oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 						$("#AccDocs").data("ctrl").Saved=true;//Po išsaugojimo, kad atsinaujintų dokai 23 eilutė
 			
 						if (oGLOBAL.AccidentForm.NewRec) {//naujam Accidentui nukeliu useri i lista ir scroolinu, senam nieko nereikia
-							//var tbl = $("#accidentsTable");
-							//tbl.find("div.accident div.td:contains("+no+")").							
-							//newView.appendTo(tbl);
-							$("#btnReturnToAccidents").trigger("click"); //paspaudžiam, kad grįžtam į lista												
-							//tbl.find("tr:last").trigger("click");						
-							Em.run.next({ newNo: no }, function () {
-								var tr = $("#accidentsTable").find("div.accident").find("div.td:nth(0):contains(" + this.newNo + ")").parent().addClass("selectedAccident");
-								//var tbl = $("#accidentsTable"), tr=tbl.find("div.tr:last");
-								//$("h4:last").scrollintoview({ duration: "slow", direction: "y", complete: function(){ alert("Done"); } });
-								//$("#accidentsTable").find("div.tr:last").trigger("click");
-								$("#accidentsTable").find("div.selectedAccident").trigger("click");
-								Em.run.next(function () {
-									$("#AccDetailsContent").find("button").trigger("click");
-									Em.run.next(function () {
-										var scroolTop = tr.offset().top - $(window).height() / 2 + 100;
-										//var scroolTop=$(document).height()-$(window).height()+200;
-										$('html, body').animate({ scrollTop: scroolTop }, 'slow');
-									});
-								});
-							});
-							//var scrollTop=tr.offset().top - tbl.offset().top + tbl.scrollTop();
-							//tbl.scrollTop(tr.offset().top - tbl.offset().top + tbl.scrollTop());
-							//tbl.animate({scrollTop:scrollTop});​
-							//tbl.scrollTop(scrollTop);
+							e.data.fn(no, true);
+						}else{
+							e.data.fn(AccidentNo, false);
 						}
 					}
 					}, Msg: Msg
@@ -103,7 +113,10 @@ oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 			return false;
 		});
 
-		$("#btnCancel").click(function () { oGLOBAL.LoadAccident_Card(AccidentNo); return false; });
+		$("#btnCancel").on("click",{fn:fnRetunToAccidentInList},function (e) { 
+			//oGLOBAL.LoadAccident_Card(AccidentNo); return false; 
+			e.data.fn(AccidentNo, false);
+		});
 		$("#btnReturnToAccidents").click(function (e) {
 			e.preventDefault();
 
@@ -175,6 +188,7 @@ oGLOBAL.mapFn = {
 	fnSetAddress: function(place){
 		var p=oGLOBAL.AccidentForm;
 		//place="<a target='_blank' href='https://maps.google.com/maps?q="+p.Lat+","+p.Lng+"("+place+")'>"+place+"<a>"
+		//if ($("#linkToGoogle").attr("href")!=="#"){$("#btnSaveAccident").removeAttr("disabled", "disabled");}//enablinam buttona jei neužsikrovimas
 		$("#linkToGoogle").attr("href","https://maps.google.com/maps?q="+p.Lat+","+p.Lng+"("+place+")")
 		$('#txtPlace').html(place);
 		$("#divSearchMap").css("display","none");

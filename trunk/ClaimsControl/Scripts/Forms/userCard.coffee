@@ -12,7 +12,7 @@ App.TabUserCardView = Em.View.extend( #App.mainMenuView.extend(
 	didInsertElement: ->
 		@_super(); $("#userInfoTab").tabs(); frm=$("#InfoDataForm"); ctrl=App.userCardController;
 		if ctrl.content.length then frm.data("ctrl",{NewRec:0,id:ctrl.content[0].iD,Source:"tblUsers"}) else frm.data("ctrl",{NewRec:1,id:0,Source:"tblUsers"})#Updatinant to reikia
-		oCONTROLS.UpdatableForm(frm)
+		oCONTROLS.UpdatableForm(frm:frm,btnSaveToDisable:frm.next("button.btn")) 
 		#if App.userCardController.SaveOk then me=$("#savePasswordNote"); me.html("Naujas slaptažodis išsaugotas"); setTimeout((->me.html("")),2000); App.userCardController.SaveOk=null
 		SaveOk=App.userCardController.SaveOk 
 		if SaveOk then $("#savePasswordNote").html(SaveOk).show().delay(2000).fadeOut(); App.userCardController.set("SaveOk",null)

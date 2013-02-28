@@ -14,7 +14,10 @@
       var frm;
       this._super();
       frm = '#AccountForm';
-      return oCONTROLS.UpdatableForm(frm);
+      return oCONTROLS.UpdatableForm({
+        frm: frm,
+        btnSaveToDisable: $(frm).find("button.btnSave")
+      });
     },
     templateName: 'tmpAdminMain',
     viewIx: 5

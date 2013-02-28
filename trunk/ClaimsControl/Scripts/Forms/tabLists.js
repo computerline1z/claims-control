@@ -455,7 +455,11 @@
             if (this.templateName === "tmp_InsPolicies") {
               this.$().tabs().css("margin", "-5px 1px 0 1px").find("ul").css("background-color", "#505860");
             }
-            return oCONTROLS.UpdatableForm(dialogContent, pars.row);
+            return oCONTROLS.UpdatableForm({
+              frm: dialogContent,
+              row: pars.row,
+              btnSaveToDisable: dialogContent.next().find("button.btnSave")
+            });
           },
           width: 700,
           templateName: 'dialog-content'

@@ -93,7 +93,7 @@
           SelectText: "Pasirinkite žalos tipą:"
         },
         fnAfterOptClick: function(T) {
-          $('#divNewClaimCard').find('#divClaimCardDetails,div.frmbottom').remove();
+          $('#divNewClaimCard').find('#divNewClaimCard_Content,div.frmbottom').remove();
           if (MY.tabAccidents.NewClaimView) {
             MY.tabAccidents.NewClaimView.remove();
             $("#newClaimDetailsContent").remove();
@@ -135,10 +135,14 @@
 
   App.SelectedClaimView = Em.View.extend({
     didInsertElement: function() {
-      var IClaim, c, fnCheckIsInjured, frm;
+      var IClaim, btnSaveToDisable, c, fnCheckIsInjured, frm;
       c = this.content[0];
-      frm = c.NewClaim ? "#divNewClaimCard" : '#divClaimCard';
-      oCONTROLS.UpdatableForm(frm);
+      frm = c.NewClaim ? "#divNewClaimCard" : '#divClaimCard_Content';
+      btnSaveToDisable = c.NewClaim ? $(frm).find("button.saveClaim") : $(frm).next().find("button.saveClaim");
+      oCONTROLS.UpdatableForm({
+        frm: frm,
+        btnSaveToDisable: btnSaveToDisable
+      });
       if (c.TypeID === 2) {
         IClaim = $("#InsuranceClaimAmount").parent().parent();
         IClaim.find("span").html("Žalos suma asmeniui");
@@ -171,7 +175,7 @@
           VehicleID: C2[1],
           InsPolicyID: C2[2],
           InsuranceClaimAmount: C2[3],
-          InsurerClaimID: C2[4],
+          InsurerClaimID: C2[4].slice(1).slice(0, -1),
           IsTotalLoss: C2[5],
           IsInjuredPersons: parseInt(C2[6], 10),
           Days: C2[7],
@@ -213,7 +217,7 @@
           Error: "Nepavyko išsaugot naujos žalos."
         };
       } else {
-        frm = $('#divClaimCard');
+        frm = $('#divClaimCard_Content');
         Action = 'Edit';
         Msg = {
           Title: "Žalos redagavimas",
@@ -299,7 +303,7 @@
   App.accidentsController = Em.ResourceController.create({
     url: "Accident/AccidentsList",
     tableName: "proc_Accidents",
-    currency: 'LTL',
+    currency: 'Lt',
     animationSpeedEnd: 400,
     animationSpeedStart: 400,
     setAnimationSpeed: function(e) {

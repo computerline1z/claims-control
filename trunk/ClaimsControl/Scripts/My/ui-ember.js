@@ -117,6 +117,26 @@ JQ.Dialog = Ember.View.extend(JQ.Widget, {
 				this.$().parent().css("top",t);
 			}
 		}// else{this.$().parent().css("top","10%");}	
+		//---------------------
+		// var t=this.$();btnSave=$("#btnSaveItem");
+		// if (btnSave.length) {
+			// btnSave.attr("disabled", "disabled");
+			// var fnRemove=function(){btnSave.removeAttr("disabled", "disabled");}
+			// t.on("keyup","input.UpdateField, textarea.UpdateField", function(e){				
+				// input=$(e.target);
+				// if (input.val()!=input.data("ctrl").Value){fnRemove();}
+			// });
+			// Em.run.next({t:t,fnRemove:fnRemove}, function(){
+				// var me=this;
+				// this.t.find("input.UpdateField").each(function(){
+					// var t=$(this)
+					// if (t.data("ctrl").iVal) {
+						// t.data("autocomplete").fnItemChanged=function(newId){me.fnRemove();}
+					// }
+				// });
+			// });
+		// }
+		//---------------------
 	},
 	//uiOptions: 'autoOpen height width close title buttons'.w(), //attributes have to be declared there
 	uiOptions: 'autoOpen width close title resizable modal position buttons'.w(), //attributes have to be declared there

@@ -124,6 +124,9 @@
               if (opt.fnChangeCallBack) {
                 MY.execByName(opt.fnChangeCallBack, MY, this, ui.item);
               }
+              if (input.data("autocomplete").fnItemChanged) {
+                input.data("autocomplete").fnItemChanged(ui.item.id);
+              }
             }
             if (ui.item.refID) {
               $(this).data("refID", ui.item.refID);
