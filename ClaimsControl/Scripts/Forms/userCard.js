@@ -22,7 +22,10 @@
           Source: "tblUsers"
         });
       }
-      oCONTROLS.UpdatableForm(frm);
+      oCONTROLS.UpdatableForm({
+        frm: frm,
+        btnSaveToDisable: frm.next("button.btn")
+      });
       SaveOk = App.userCardController.SaveOk;
       if (SaveOk) {
         $("#savePasswordNote").html(SaveOk).show().delay(2000).fadeOut();

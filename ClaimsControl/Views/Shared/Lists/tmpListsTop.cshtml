@@ -3,7 +3,7 @@
 <h3 style="margin: 15px;">Vairuotojai</h3>
 <div class="container" id="topNewDrivers">
 	<table class="zebra-striped">
-	<thead><tr><th>Vardas</th><th>Pavardė</th><th>Darbo sutarties pradžia</th><th>Vairavimo kategorijos</th><th>Mobilus telefonas</th><th>Dokumentai</th></tr></thead><tbody>
+	<thead><tr><th>Vardas</th><th>Pavardė</th><th>Vairuotojo pažymėjimas išduotas</th><th>Vairavimo kategorijos</th><th>Mobilus telefonas</th><th>Dokumentai</th></tr></thead><tbody>
 	{{#each "App.topNewController.drivers"}}
 		{{view App.DriverView}}
 	{{/each}}
@@ -15,7 +15,7 @@
 <h3>Transporto priemonės</h3>
 <div class="container" id="topNewVehicles">
 	<table class="zebra-striped">
-	<thead><tr><th>Tipas</th><th>Valst. Nr.</th><th>Markė</th><th>Modelis</th><th>Pagaminimo metai</th><th>Dokumentai</th></tr></thead><tbody>
+	<thead><tr><th>Valst. Nr.</th><th>Tipas</th><th>Markė</th><th>Modelis</th><th>Pagaminimo metai</th><th>Dokumentai</th></tr></thead><tbody>
 	{{#each "App.topNewController.vehicles"}}
 		{{view App.VehicleView}}
 	{{/each}}

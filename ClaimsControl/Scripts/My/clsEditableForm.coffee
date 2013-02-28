@@ -50,7 +50,7 @@ class clsEditableForm
 				.end().appendTo(opt.form)
 				.append('<div style="clear:both;"></div>').prepend("<h3>"+opt.Title+"</h3>")
 		#return false;		
-		oCONTROLS.UpdatableForm($("#divEditableForm"))	##I pusiau sugeneruota forma (Extend) sudedam likusius dalykus 
+		oCONTROLS.UpdatableForm(frm:$("#divEditableForm"))	##I pusiau sugeneruota forma (Extend) sudedam likusius dalykus 
 		form=$("#"+opt.DialogFormId).parent()
 		form.find("button:contains('Išsaugoti')").attr("disabled","disabled").addClass("ui-state-disabled")
 		form.find("input, textarea").bind('click keyup', -> 

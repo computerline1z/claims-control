@@ -1,10 +1,10 @@
 ﻿
 {{#each c in view.content}} 
 {{log c}}
-{{#unless c.newClaim}}
-	<div id='divClaimCard' class="container centerBlock" style="width:90%;" data-ctrl='{"id":"{{unbound c.ID}}","NewRec":"0","Source":"tblClaims","TypeID":"{{unbound c.TypeID}}"}'>
+{{#unless c.NewClaim}}
+	<div id='divClaimCard_Content' class="container centerBlock w90pr" data-ctrl='{"id":"{{unbound c.ID}}","NewRec":"0","Source":"tblClaims","TypeID":"{{unbound c.TypeID}}"}'>
 {{else}}
-	<div id='divClaimCardDetails' >
+	<div id='divNewClaimCard_Content' class="container centerBlock w90pr">@*data-ctrl yra motininej divNewClaimCard*@
 {{/unless}}
 {{#compare "this.TypeID" "==" "6"}} 
 	<div class='left w45pr'>
@@ -17,7 +17,7 @@
 {{else}}
 	<div class='left w45pr'>
 	{{updatableField c Field="VehicleID" id="lstVehicles" labelType="Top" Editable="{\"EditThis\":true}" }}
-	{{updatableField c Field="LossAmount" id="LossAmount" labelType="Top"}} @*"classes\":\"LossAmount*@
+	{{updatableField c Field="LossAmount" id="LossAmount" labelType="Top"}}
 	{{updatableField c Field="InsPolicyID" id="lstInsPolicies" labelType="Top" List="{\"Source\":\"proc_InsPolicies_forThisAccident\",\"tblUpdate\":\"tblInsPolicies\"}"}}
 
 	</div><div class='right w45pr'>
@@ -27,19 +27,20 @@
 	{{#compare "this.TypeID" "==" "2"}} 
 		{{updatableField c Field="IsInjuredPersons" id="IsInjuredPersons" labelType="Top"}}
 	{{/compare}}
-	{{updatableField c Field="InsuranceClaimAmount" id="InsuranceClaimAmount" labelType="Top"}} @*"classes\":\"InsuranceClaimAmount*@	
+	{{updatableField c Field="InsuranceClaimAmount" id="InsuranceClaimAmount" labelType="Top"}}
 	{{updatableField c Field="InsurerClaimID" labelType="Top"}}
 	</div>
 {{/compare}}
 </div>
-{{/each}}
+
 
 <div class="frmbottom container">
-	{{#unless c.newClaim}}
-	<div class="left mini"><button class="btn"><i style="margin:0 auto;" class="img32-bin" title="Ištrinti žalą" {{action "DeleteClaim" this}}></i></button></div>
+	{{#unless c.NewClaim}}
+	<div class="left mini"><button class="btn"><i class="img32-bin" title="Ištrinti žalą" {{action "DeleteClaim" this}}></i></button></div>
 	{{/unless}}
 	<div class="right medium" style="margin-top:10px;">
-		<button class="btn success small {{#if c.newClaim}}NewClaim{{/if}}" {{action "SaveClaim"}}></i>IŠSAUGOTI</button>
+		<button {{bindAttr class="c.NewClaim:NewClaim :btn :success :small :saveClaim"}} {{action "SaveClaim"}}></i>IŠSAUGOTI</button>
 		<a href="#" title="Atšaukti pakeitimus" style="margin:10px;" {{action "CancelSaveClaim"}}>Atšaukti</a>
 	</div>
 </div>
+{{/each}}

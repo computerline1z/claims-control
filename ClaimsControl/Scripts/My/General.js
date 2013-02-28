@@ -386,7 +386,9 @@ oGLOBAL.Start = {
 					//var ctrl=(pR.search("cls")===0)?pR.replace("."):"#"+pR; cia jeigu naudot klase
 					$('#' + pR).html(Render[pR]); var inputForm = $('#' + pR + ' div.inputForm');
 					for (var i = 0; i < inputForm.length; i++) {
-						oCONTROLS.UpdatableForm($(inputForm)[i]); // pereinam per visus ir padarom updatable
+						var btnSaveToDisable;
+						if ($(inputForm)[i].id === "AccidentForm") { btnSaveToDisable = $("#btnSaveAccident"); }
+						oCONTROLS.UpdatableForm({ frm: $(inputForm)[i] ,btnSaveToDisable:btnSaveToDisable}); // pereinam per visus ir padarom updatable
 					}
 				}
 				//#endregion

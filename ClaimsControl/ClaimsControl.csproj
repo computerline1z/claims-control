@@ -318,6 +318,7 @@
     <Content Include="Scripts\Forms\tabAdmin.js" />
     <Content Include="Scripts\Forms\tabLists.js" />
     <Content Include="Scripts\Forms\userCard.js" />
+    <Content Include="Scripts\Main\Copy of jquery-1.8.0.combined2.min.js" />
     <Content Include="Scripts\Main\jquery-1.8.0.combined2.min.js" />
     <Content Include="Scripts\My\clsEditableForm.js" />
     <Content Include="Scripts\My\General.js" />
