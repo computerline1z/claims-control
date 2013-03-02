@@ -391,7 +391,7 @@ var SERVER = {
 					}
 					console.log("col: " + fieldName + ", ok: " + ok + ", fieldValue:" + Row[fieldName])
 				})
-				if (Adding) { Row.set("visible", true); oData.emData.pushObject(Row); }
+				if (Adding) { Row.set("visible", true); oData.emData.pushObject(Row); } //oData.emData.unshiftObject(Row); }
 				else { oData.emData.findProperty("iD", Row.iD).updateTo(Row); }
 				var controller = updData.controller, emObject = (updData.emObject) ? updData.emObject : "content";
 				if (controller) {//Updatinam ir į pagrindinį kontrolerį tik insertinant (kiti updatinasi

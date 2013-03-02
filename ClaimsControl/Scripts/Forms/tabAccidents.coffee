@@ -73,9 +73,10 @@ App.SelectedAccidentView = Em.View.extend(
 		Em.run.next(() -> $("#ClaimDetailsContent").slideDown() )
 		false		
 	newClaim: (e) ->
-		nTr = $(e.target).closest('div.tr')[0]
+		nTr = $(e.target).closest('div.tr'); $(e.target).closest('div.rightFooterBig').hide();
 		#Naudojam šito rekvizitus, nes divNewClaimCard_Content dar nėra
-		$(nTr).replaceWith("<div id='divNewClaimCard' data-ctrl='{\"id\":\"0\",\"NewRec\":\"1\",\"Source\":\"tblClaims\",\"ClaimTypeID\":\"0\"}'></div>")
+		nTr.append("<div id='divNewClaimCard' data-ctrl='{\"id\":\"0\",\"NewRec\":\"1\",\"Source\":\"tblClaims\",\"ClaimTypeID\":\"0\"}'></div>")
+		fnCancelNewClaim=()->$("#divNewClaimCard").remove(); $("#AccDetailsContent").find('div.rightFooterBig').show()
 		d =	
 			ctrl: $('#divNewClaimCard')
 			oDATA: oDATA.GET("tblClaimTypes")
@@ -95,8 +96,8 @@ App.SelectedAccidentView = Em.View.extend(
 				MY.tabAccidents.NewClaimView.appendTo("#divNewClaimCard")
 				Em.run.next(() -> $("#newClaimDetailsContent").slideDown() )
 				false
-				fnCancel: () -> $("#accidentsTable").find("div.selectedAccident").trigger("click")# $(nTr).find('td').html(CancelNewClaimHtml)
-			fnCancel: () -> $("#accidentsTable").find("div.selectedAccident").trigger("click") #$(nTr).find('td').html(CancelNewClaimHtml)
+				fnCancel: () -> fnCancelNewClaim()
+			fnCancel: () -> fnCancelNewClaim()
 		oCONTROLS.Set_Updatable_HTML.mega_select_list(d)
 		false
 	elementId: "AccDetailsContent"
@@ -170,7 +171,15 @@ App.SelectedClaimView = Em.View.extend(
 			SERVER.update(opt)
 	CancelSaveClaim: (e) ->
 		#oCONTROLS.UpdatableForm_reset("#divClaimCard")
-		$("#accidentsTable").find("div.selectedAccident").trigger("click")
+		#$("#accidentsTable").find("div.selectedAccident").trigger("click")
+		t=$(e.target); tr=t.closest("tr")
+		if (tr.find("td.selectedClaim").length)#Redaguojama žala
+			MY.tabAccidents.SelectedClaimView.remove()
+			tr.parent().find("tr.selectedClaim").removeClass("selectedClaim title").next("tr").remove()
+		else #nauja žala
+			if MY.tabAccidents.NewClaimView then MY.tabAccidents.NewClaimView.remove()
+			$("#divNewClaimCard").remove()
+			$("#AccDetailsContent").find('div.rightFooterBig').show()
 	DeleteClaim: (e) ->
 		oData=oDATA.GET("tblClaims"); context=e.context.rowContext;
 		console.log("Žalos ID: "+context.Claims2[0])

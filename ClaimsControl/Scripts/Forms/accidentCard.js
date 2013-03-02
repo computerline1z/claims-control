@@ -60,7 +60,7 @@ oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 		$("#btnDeleteAccident").on("click",function (e) {
 			var emData=oDATA.GET("proc_Accidents").emData;
 			var accidentRow=emData.findProperty("no",AccidentNo);
-			if  (accidentRow.cNo_All>0){oCONTROLS.dialog.Alert({title:"",msg:"Pasirinktas įvykis turi "+accidentRow.cNo_All+" žalas. Tam, kad pašalinti šį įvykį reikia pašalinti šias žalas."}); return false;}
+			if (accidentRow.cNo_All > 0) { oCONTROLS.dialog.Alert({ title: "", msg: "Negalima šalinti įvykio, kol jis turi nepašalintų žalų (" + accidentRow.cNo_All + ")." }); return false; }
 			oCONTROLS.dialog.Confirm({title: "Įvykio Nr. "+AccidentNo+" pašalinimas" , msg: "Ištrinti šį įvykį?"}, function() {
 				SERVER.update({Action: "Delete",DataToSave: {id: accidentRow.iD,DataTable: "tblAccidents"},
 				Msg: {Title: "Įvykio pašalinimas",Success: "Pasirinktas įvykis buvo pašalintas.",Error: "Nepavyko pašalinti šio įvykio"},

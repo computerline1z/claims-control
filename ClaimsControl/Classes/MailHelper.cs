@@ -27,13 +27,15 @@ namespace DataModels.DataSources {
       /// <param name="subject">Subject of mail message</param>
       /// <param name="body">Body of mail message</param>
       public static void SendMailMessage(string to, string bcc, string cc, string subject, string body) {
+			
          var mMailMessage = new MailMessage() {
             Subject = subject,
             Body = body,
             IsBodyHtml = true,
             Priority = MailPriority.Normal,
-				From = new MailAddress("support@claimscontrol.com", "ClaimsControl")
+				From= new MailAddress("zalukontrole@gmail.com", "ClaimsControl")
          };
+
 
          mMailMessage.To.Add(new MailAddress(to));
          if (!String.IsNullOrEmpty(bcc))
@@ -43,13 +45,30 @@ namespace DataModels.DataSources {
 
          var mSmtpClient = new SmtpClient();
 			mSmtpClient.EnableSsl = true;
+			//SmtpClient SmtpServer = new SmtpClient("mail.claimscontrol.com",465);
+			////SmtpServer.Port = 465;
+			//SmtpServer.EnableSsl = true;
+			//SmtpServer.Timeout = 30000;
+			//SmtpServer.UseDefaultCredentials = false;
+			//SmtpServer.Credentials = new System.Net.NetworkCredential("support@claimscontrol.com", "uD8qfbVJ");
+			
+			
+			//SmtpServer.Timeout = 1; fdgd
+			//SmtpServer.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
+			mSmtpClient.Send(mMailMessage);
 
-			try { mSmtpClient.Send(mMailMessage); }
-			catch (Exception e) {
-				MyEventLog.AddException(e.Message,"Err in SendMailMessage",69);
-				//mSmtpClient.Send(mMailMessage);
-			}
-
+			string msg = "Subject:" + subject + Environment.NewLine;
+			msg += "body:" + body + Environment.NewLine;
+			msg += "to:" + to + Environment.NewLine;
+			msg += "Host:" + mSmtpClient.Host.ToString() + Environment.NewLine;
+			msg += "Port:" + mSmtpClient.Port.ToString() + Environment.NewLine;
+			MyEventLog.AddEvent(msg, "Sending Mail", 69);
+			
+			//try { mSmtpClient.Send(mMailMessage); }
+			//catch (Exception e) {
+			//   MyEventLog.AddException(e.Message + Environment.NewLine + "mSmtpClient.EnableSsl = true;", "Err in SendMailMessage ", 70);
+			//   throw e;		
+			//}
       }
 
 		//public static string BuildMailMessage(HttpContextBase context, string language,

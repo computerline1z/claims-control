@@ -67,15 +67,17 @@ var oCONTROLS = {
 	UpdatableForm: function (p) {//{frm:frm,row:row,btnSaveToDisable:btnSaveToDisable}
 		//frm data-ctrl:: labelType:Top/Left/undefined,
 		var sTitle = "", frmOpt = $(p.frm).data('ctrl'), me=this,btnSaveToDisable; 
-		if (p.row){frmOpt.NewRec=0;frmOpt.id=p.row.iD;}//Jeigu yra p.row tai redagavimas
+		if (p.row){ if (p.row.iD)  {frmOpt.NewRec=0;frmOpt.id=p.row.iD;}}//Jeigu yra p.row tai redagavimas
 		var data = (frmOpt.Source === 'NoData') ? "NoData" : oDATA.GET(frmOpt.Source);
 		//if(typeof data==='undefined') { alert('Source undefined in UpdatableForm(objFunc:79)!'); }
 		//log('<div>==========UpdatableForm========</div>');
 		//var elements = $(p.frm).find('div.ExtendIt, span.ExtendIt');
 		//      for(var i=0; i<elements.length; i++) {
 		//      }
-		var fnEnableSave=function(){	btnSaveToDisable.removeAttr("disabled", "disabled");	}
-		if (p.btnSaveToDisable) { 
+		var fnEnableSave=function(){	
+			btnSaveToDisable.removeAttr("disabled", "disabled");	
+		}
+		if (p.btnSaveToDisable&&!frmOpt.NewRec) { 
 			if(p.btnSaveToDisable.length===1){
 				btnSaveToDisable=p.btnSaveToDisable;if (btnSaveToDisable.is("button")){btnSaveToDisable.attr("disabled", "disabled");}else{console.error("btnSaveToDisable not button");}				
 			} else {console.error("wrong btnSaveToDisable no: "+p.btnSaveToDisable.length);}}
@@ -118,23 +120,13 @@ var oCONTROLS = {
 			} //Naujas objektas turi but
 			col = $.extend(true, col, eOpt); //overridinu data.Cols<----e.data('ctrl')
 			var Type = (col.Type) ? col.Type : ((col.List) ? "List" : ""); // (col.List)?"List":col.Type;
-			if (Type === undefined) {
-				alert("Nesusiparsino ctrl elemento objFunc.js-UpdatableForm (n�ra Type)");
-				return true;
-			}
+			if (Type === undefined) {alert("Nesusiparsino ctrl elemento objFunc.js-UpdatableForm (n�ra Type)");return true;}
 			var AddToClasses = "ui-widget-content " //ui-corner-all
 			AddToClasses += (e.hasClass("NotUpdateField")) ? " NotUpdateField" : " UpdateField";
-			if (Type === 'Integer' || Type === 'Decimal') {
-				AddToClasses += " number";
-			}
-			else if (Type === "List") {
-				col.Type = "List";
-			}
-			else if (Type) {
-				if (Type.search("Date") !== -1) {
-					AddToClasses += " date";
-				}
-			}    //classes+' text', textarea,
+			if (Type === 'Integer' || Type === 'Decimal') {AddToClasses += " number";}
+			else if (Type === "List") {col.Type = "List";}
+			else if (Type) {if (Type.search("Date") !== -1) {AddToClasses += " date";}}    //classes+' text', textarea,
+			
 			col.classes = (col.classes) ? col.classes + " " + AddToClasses : AddToClasses;
 			if (typeof col.Value !== "number"&&typeof col.Value !== "boolean") {col.Value = (col.Value) ? col.Value.replace(/'/g, "\"") : "";} //Kitaip gaidinasi	
 			for (var prop in col) {
@@ -154,19 +146,8 @@ var oCONTROLS = {
 			else if (Type.search("Date") !== -1) {
 				data_ctrl = data_ctrl.replace("match('date')", "match(date)").replace("lessThanOrEqualTo(new Date())","lessThanOrEqualTo(new Date(),\\&quot;Data negali būti didesnė už šiandieną.\\&quot;)");
 			}
-			$.extend(col, {
-				data_ctrl: data_ctrl
-			}, {
-				label: {
-					"txt": sTitle,
-					"type": col.labelType
-				}
-			});
-			//#endregion
-
+			$.extend(col, {data_ctrl: data_ctrl}, {label: {"txt": sTitle,"type": col.labelType}});
 			//var CtrlOpt={ "Value": Value, "data_ctrl": data_ctrl, "title": sTitle, "classes": classes, "id": id, "attr": attr, "label": { "txt": sTitle, "type": col.labelType} }
-			//if(Type==='List') {
-			//else
 			if (Type === 'Boolean' || Type === 'checkbox') {
 				eHTML = oCONTROLS.chk(col);
 				$(eHTML).prependTo(e);
@@ -201,12 +182,7 @@ var oCONTROLS = {
 
 				eHTML += oCONTROLS.txt(col);
 				if (isTime) {
-					eHTML += oCONTROLS.txt({
-						Value: TimeValue,
-						style: "margin:0 20px;",
-						title: "Laikas",
-						classes: "time ui-widget-content ui-corner-all"
-					});
+					eHTML += oCONTROLS.txt({Value: TimeValue,style: "margin:0 20px;",title: "Laikas",classes: "time ui-widget-content ui-corner-all"});
 				} // UpdateField nereikia, nes..
 				input = $(eHTML).prependTo(e).parent().find('input:first');
 			}
@@ -220,16 +196,23 @@ var oCONTROLS = {
 					.ComboBox();
 				}
 			}
-			if (btnSaveToDisable){
-				if (Type === 'Boolean' || Type === 'checkbox') {e.find("input:checkbox").on("change",fnEnableSave);}
-				else if (col.List) {input.data("autocomplete").fnItemChanged=function(newId){fnEnableSave();}}
-				else if (input){input.on("keyup",fnEnableSave);}
-			}
+
 			if (col.Plugin) {
 				$.each(col.Plugin, function (name, value) {
 					input[name](value);
 				});
 			}
+			if (btnSaveToDisable){
+				if (Type === 'Boolean' || Type === 'checkbox') {e.find("input:checkbox").on("change",fnEnableSave);}
+				else if (col.List) {input.data("autocomplete").fnItemChanged=function(newId){fnEnableSave();}}
+				else if (input){					
+					if (input.hasClass("hasDatepicker")){
+						input.on("keyup",fnEnableSave).datepicker("option", "onSelect",fnEnableSave);
+						input.closest("div.ExtendIt").find("input.time").on("keyup",fnEnableSave);
+					}
+					else{input.on("keyup",fnEnableSave);}
+				}
+			}						
 			if (typeof input !== 'undefined') {
 				input.val($.trim(input.val()));
 				if (Type === 'Integer' || Type === 'Decimal' || Type === 'Date') {

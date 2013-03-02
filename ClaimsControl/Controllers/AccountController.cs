@@ -94,20 +94,29 @@ namespace ClaimsControl.Controllers {
 
 		[HttpPost]
 		public ActionResult RecoverPassword(RecoverPasswordModel model) {
-			if (ModelState.IsValid) {
-				string currentUserName = Membership.GetUserNameByEmail(model.Email);
-				if (String.IsNullOrEmpty(currentUserName)) {
-					ModelState.AddModelError("EMail", String.Format("{0} - Neteisingas pašto addresas.", model.Email));
-					return View(model);
-				}
-				//MembershipUser aUser = Membership.GetUser(currentUserName);
-				MailHelper.SendMail_SetUrl(model.Email, "ResetUserPsw", "ClaimsControl sistemos slaptažodžio atnaujinimas");
-				//SendPasswordChangedMail(aUser.UserName, model.Email, (Guid)aUser.ProviderUserKey);
-				ModelState.AddModelError("", "Laiškas iškeliavo!");
+			MyEventLog.AddEvent("Model state: " + ModelState.IsValid.ToString(), "Start RecoverPassword", 1);
+			//if (ModelState.IsValid) {
+
+			string currentUserName = "";
+			try { currentUserName = Membership.GetUserNameByEmail(model.Email); }
+			catch (Exception e) {
+				MyEventLog.AddException(e.Message, "RecoverPassword", 1);
+			}
+			MyEventLog.AddEvent("currentUserName: " + currentUserName, "RecoverPassword", 1);
+
+			if (String.IsNullOrEmpty(currentUserName)) {
+				ModelState.AddModelError("EMail", String.Format("{0} - Neteisingas pašto addresas.", model.Email));
 				return View(model);
 			}
-			ModelState.AddModelError("", "Nežinoma klaida. Susisiekite su sistemos administratorium");
+			//MembershipUser aUser = Membership.GetUser(currentUserName);
+			MailHelper.SendMail_SetUrl(model.Email, "ResetUserPsw", "ClaimsControl sistemos slaptažodžio atnaujinimas");
+			//SendPasswordChangedMail(aUser.UserName, model.Email, (Guid)aUser.ProviderUserKey);
+			ModelState.AddModelError("", "Laiškas iškeliavo!");
 			return View(model);
+			//}
+			//MyEventLog.AddEvent("Model state3", "Start RecoverPassword", 1);
+			//ModelState.AddModelError("", "Nežinoma klaida. Susisiekite su sistemos administratorium");
+			//return View(model);
 		}
 		[HttpPost]
 		public JsonResult RecoverPassword2(string email, string mailTmpl) {//mailTmpl = "ResetUserPsw", "NewUserPsw"
@@ -360,7 +369,7 @@ namespace ClaimsControl.Controllers {
 			}
 			// If we got this far, something failed, redisplay form
 			//if (TempUi.HasValue)
-				//TempData[currentUserIdKey] = userId.Value.ToString();
+			//TempData[currentUserIdKey] = userId.Value.ToString();
 			return View("NewPassword");
 		}
 		[HttpPost]
