@@ -312,7 +312,6 @@
     <Content Include="Scripts\Files\jquery.iframe-transport.js" />
     <Content Include="Scripts\Files\load-image.min.js" />
     <Content Include="Scripts\Files\tmpl.min.js" />
-    <Content Include="Scripts\Final\combined.min.js" />
     <Content Include="Scripts\Forms\docsAccident.js" />
     <Content Include="Scripts\Forms\tabAccidents.js" />
     <Content Include="Scripts\Forms\tabAdmin.js" />
@@ -324,6 +323,7 @@
     <Content Include="Scripts\My\General.js" />
     <Content Include="Scripts\My\MyPlugins_Tree.js" />
     <Content Include="Scripts\My\MyPlugins_UploadFiles.js" />
+    <Content Include="Scripts\My\oCONTROLStrinti1.js" />
     <Content Include="Scripts\My\oCONTROLS.js" />
     <Content Include="Scripts\My\ui-checkbox.js" />
     <Content Include="Scripts\My\MyPlugins_Checkbox.js" />
@@ -380,6 +380,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Uploads\" />
+    <Folder Include="Scripts\Final\" />
     <Folder Include="SQL\Procedures\" />
     <Folder Include="Uploads\" />
   </ItemGroup>
@@ -396,6 +397,16 @@
     <None Include="Content\less\variables.less" />
     <None Include="Content\less\jquery-ui-1.8.16.custom.less" />
     <Content Include="Views\Account\LogOn_Layout.cshtml" />
+    <Content Include="Copy of Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Copy of Web.Debug.config">
+      <DependentUpon>Copy of Web.config</DependentUpon>
+    </Content>
+    <Content Include="Copy of Web.Release.config">
+      <DependentUpon>Copy of Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Models\db.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>db.designer.cs</LastGenOutput>

@@ -80,9 +80,14 @@
       return false;
     },
     newClaim: function(e) {
-      var d, nTr;
-      nTr = $(e.target).closest('div.tr')[0];
-      $(nTr).replaceWith("<div id='divNewClaimCard' data-ctrl='{\"id\":\"0\",\"NewRec\":\"1\",\"Source\":\"tblClaims\",\"ClaimTypeID\":\"0\"}'></div>");
+      var d, fnCancelNewClaim, nTr;
+      nTr = $(e.target).closest('div.tr');
+      $(e.target).closest('div.rightFooterBig').hide();
+      nTr.append("<div id='divNewClaimCard' data-ctrl='{\"id\":\"0\",\"NewRec\":\"1\",\"Source\":\"tblClaims\",\"ClaimTypeID\":\"0\"}'></div>");
+      fnCancelNewClaim = function() {
+        $("#divNewClaimCard").remove();
+        return $("#AccDetailsContent").find('div.rightFooterBig').show();
+      };
       d = {
         ctrl: $('#divNewClaimCard'),
         oDATA: oDATA.GET("tblClaimTypes"),
@@ -113,12 +118,12 @@
           false;
           return {
             fnCancel: function() {
-              return $("#accidentsTable").find("div.selectedAccident").trigger("click");
+              return fnCancelNewClaim();
             }
           };
         },
         fnCancel: function() {
-          return $("#accidentsTable").find("div.selectedAccident").trigger("click");
+          return fnCancelNewClaim();
         }
       };
       oCONTROLS.Set_Updatable_HTML.mega_select_list(d);
@@ -257,7 +262,19 @@
       }
     },
     CancelSaveClaim: function(e) {
-      return $("#accidentsTable").find("div.selectedAccident").trigger("click");
+      var t, tr;
+      t = $(e.target);
+      tr = t.closest("tr");
+      if ((tr.find("td.selectedClaim").length)) {
+        MY.tabAccidents.SelectedClaimView.remove();
+        return tr.parent().find("tr.selectedClaim").removeClass("selectedClaim title").next("tr").remove();
+      } else {
+        if (MY.tabAccidents.NewClaimView) {
+          MY.tabAccidents.NewClaimView.remove();
+        }
+        $("#divNewClaimCard").remove();
+        return $("#AccDetailsContent").find('div.rightFooterBig').show();
+      }
     },
     DeleteClaim: function(e) {
       var context, oData;

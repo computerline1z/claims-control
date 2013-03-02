@@ -52,130 +52,6 @@
     valueDidChange: (function() {
       return this.filterItems();
     }).observes('filterValue'),
-    addVehicleMake: function(input, e) {
-      var dialogID;
-      if (this.VehicleMakes.length === 0) {
-        this.set("VehicleMakes", oDATA.GET("tblVehicleMakes").emData);
-      }
-      dialogID = "dialog" + (+(new Date));
-      return MY[dialogID] = JQ.Dialog.create({
-        input: input,
-        dialogID: dialogID,
-        title: "Transporto priemonių markės",
-        saveData: function(p) {
-          var Source, me;
-          Source = App.listAllController.VehicleMakes;
-          me = this;
-          $.extend(p, {
-            "Ctrl": $("#" + this.dialogID),
-            "source": "tblVehicleMakes",
-            CallBackAfter: function(Row) {
-              if (p.Action === "Edit") {
-                Source.findProperty("iD", Row.iD).set("edit", false);
-              }
-              if (p.Action === "Add") {
-                MY[me.dialogID].set("addVehicleMake", false);
-              }
-              return me.input.autocomplete("option").fnRefresh();
-            }
-          });
-          SERVER.update2(p);
-          return false;
-        },
-        editVehicleMake: function(e) {
-          return e.context.set("edit", e.context.name);
-        },
-        cancelVehicleMake: function(e) {
-          return e.context.set("edit", false);
-        },
-        saveVehicleMake: function(e) {
-          var Msg, make, row, val;
-          make = e.context.name;
-          input = $(e.target).prev();
-          val = input.val();
-          row = e.context;
-          row.name = val;
-          if (make.length > 0) {
-            Msg = {
-              Title: this.title,
-              Success: "TP markė '" + make + "' pakeista.",
-              Error: "Nepavyko pakeisti '" + make + "' markės."
-            };
-            return this.saveData({
-              DataToSave: {
-                "id": row.iD,
-                "Data": [row.name],
-                "Fields": ["Name"],
-                "DataTable": "tblVehicleMakes"
-              },
-              Msg: Msg,
-              row: row,
-              Action: "Edit"
-            });
-          } else {
-            return e.context.set("name", e.context.edit).set("edit", false);
-          }
-        },
-        deleteVehicleMake: function(e) {
-          var make, me;
-          make = e.context.name;
-          me = this;
-          return oCONTROLS.dialog.Confirm({
-            title: this.title,
-            msg: "Ištrinti markę '" + make + "'?"
-          }, function() {
-            var Msg, row;
-            Msg = {
-              Title: me.title,
-              Success: "TP markė '" + make + "' ištrinta.",
-              Error: "Nepavyko ištrinti markės '" + make + "'."
-            };
-            row = e.context;
-            return me.saveData({
-              DataToSave: {
-                "id": row.iD,
-                "DataTable": "tblVehicleMakes"
-              },
-              Msg: Msg,
-              row: row,
-              Action: "Delete"
-            });
-          });
-        },
-        addNewVehicleMake: function(e) {
-          return this.set("addItem", true);
-        },
-        cancelNewVehicleMake: function(e) {
-          return this.set("addItem", false);
-        },
-        saveNewVehicleMake: function(e) {
-          var Msg, val;
-          input = $(e.target).prev();
-          val = input.val();
-          Msg = {
-            Title: this.title2,
-            Success: "Dokumento tipas '" + val + "' pridėtas.",
-            Error: "Nepavyko pridėt tipo '" + val + "'"
-          };
-          return this.saveData({
-            DataToSave: {
-              "Data": [val],
-              "Fields": ["Name"],
-              "DataTable": "tblVehicleMakes"
-            },
-            Msg: Msg,
-            row: [val],
-            Action: "Add"
-          });
-        },
-        closeDialog: function(e) {
-          $("#" + this.dialogID).dialog("close");
-          return false;
-        },
-        width: 600,
-        templateName: 'tmpVehicleMakes'
-      }).append();
-    },
     editListItems: function(input, e) {
       var dialogID, source, sourceName, tblUpdate;
       sourceName = input.data("ctrl").Source;
@@ -371,7 +247,7 @@
             this._super();
             dialogFrm = $("#openItemDialog");
             dialogContent = $("#dialogContent");
-            if (pars.row) {
+            if (pars.row.iD) {
               categoryOpts = false;
               docGroups = oDATA.GET("tblDocGroup").emData;
               me = this;
@@ -427,6 +303,8 @@
                 App.dialogDocController.setDocs(refID, groupID);
                 this.removeOnCloseView = Em.View.create(docsViewOpts).appendTo("#dialoguploadDocsContainer");
               }
+            } else {
+              $("#dialoguploadDocsContainer").remove();
             }
             $("#btnSaveItem").on("click", function() {
               var DataToSave;

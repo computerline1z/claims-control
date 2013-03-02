@@ -49,48 +49,48 @@ App.listAllController = Em.ResourceController.create(
 		# App.listAllController.set("drivers",oDATA.GET("proc_Drivers").emData)
 		# App.listAllController.set("insPolicies",oDATA.GET("proc_InsPolicies").emData)
 	# ))	
-	addVehicleMake:(input, e)-> #formTemplate: "tmpUploadForm", disabled: false, docsController: "TreeDocController", Source: "tblDocTypes"
-		#categoryOpts:{accident:{iD:70,title:"Įvykio dokumentai"},driver:{iD:80,title:"Vairuotojo 'Pranas Patv' dokai"},editList:{},vehicles:[{iD,title},{iD,title}]},
-		#data:[{categoryID,id,label},{categoryID,id,label},{categoryID,id,label},{categoryID,id,label}]		
-		if @VehicleMakes.length==0 then @.set("VehicleMakes",oDATA.GET("tblVehicleMakes").emData)  
-		dialogID="dialog"+(+new Date)#kad nesipjautų dialogai
-		MY[dialogID]=JQ.Dialog.create( #MY.dialog needed to destroyElement in ui-ember.js	
-			input: input
-			dialogID: dialogID
-			title:"Transporto priemonių markės"
-			saveData:(p)->#Msg,DataToSave,Action,row
-				Source=App.listAllController.VehicleMakes; me=@
-				$.extend(p,"Ctrl":$("#"+@dialogID),"source":"tblVehicleMakes", CallBackAfter:(Row)->
-					if p.Action=="Edit" then Source.findProperty("iD", Row.iD).set("edit",false) #redagavimas
-					if p.Action=="Add" then MY[me.dialogID].set(("addVehicleMake"),false)
-					me.input.autocomplete("option").fnRefresh()
-				)	
-				SERVER.update2(p);false
-			editVehicleMake: (e)-> e.context.set("edit",e.context.name) 
-			cancelVehicleMake: (e)-> e.context.set("edit",false)
-			saveVehicleMake: (e)->
-				make=e.context.name;input=$(e.target).prev();val=input.val();row=e.context;row.name=val
-				if make.length>0						
-					Msg={Title:@title,Success:"TP markė '"+make+"' pakeista.",Error:"Nepavyko pakeisti '"+make+"' markės."}
-					@saveData({DataToSave:{"id":row.iD,"Data":[row.name],"Fields":["Name"],"DataTable":"tblVehicleMakes"},Msg:Msg,row:row,Action:"Edit"})
-				else 
-					e.context.set("name",e.context.edit).set("edit",false)
-			deleteVehicleMake: (e)->
-				make=e.context.name; me=@
-				oCONTROLS.dialog.Confirm(title:@title,msg:"Ištrinti markę '"+make+"'?", ()->					
-					Msg={Title:me.title,Success:"TP markė '"+make+"' ištrinta.",Error:"Nepavyko ištrinti markės '"+make+"'."}; row=e.context				
-					me.saveData({DataToSave:{"id":row.iD,"DataTable":"tblVehicleMakes"},Msg:Msg,row:row,Action:"Delete"})
-				)
-			addNewVehicleMake: (e)-> @.set("addItem",true)
-			cancelNewVehicleMake: (e)-> @.set("addItem",false)				
-			saveNewVehicleMake: (e)-> 
-				input=$(e.target).prev();val=input.val();
-				Msg=Title:@title2,Success:"Dokumento tipas '"+val+"' pridėtas.",Error:"Nepavyko pridėt tipo '"+val+"'"
-				@saveData({DataToSave:{"Data":[val],"Fields":["Name"],"DataTable":"tblVehicleMakes"},Msg:Msg,row:[val],Action:"Add"})
-			closeDialog: (e)-> $("#"+@dialogID).dialog("close"); false
-			width:600
-			templateName: 'tmpVehicleMakes'
-		).append();
+	# addVehicleMake:(input, e)-> #formTemplate: "tmpUploadForm", disabled: false, docsController: "TreeDocController", Source: "tblDocTypes"
+		# #categoryOpts:{accident:{iD:70,title:"Įvykio dokumentai"},driver:{iD:80,title:"Vairuotojo 'Pranas Patv' dokai"},editList:{},vehicles:[{iD,title},{iD,title}]},
+		# #data:[{categoryID,id,label},{categoryID,id,label},{categoryID,id,label},{categoryID,id,label}]		
+		# if @VehicleMakes.length==0 then @.set("VehicleMakes",oDATA.GET("tblVehicleMakes").emData)  
+		# dialogID="dialog"+(+new Date)#kad nesipjautų dialogai
+		# MY[dialogID]=JQ.Dialog.create( #MY.dialog needed to destroyElement in ui-ember.js	
+			# input: input
+			# dialogID: dialogID
+			# title:"Transporto priemonių markės"
+			# saveData:(p)->#Msg,DataToSave,Action,row
+				# Source=App.listAllController.VehicleMakes; me=@
+				# $.extend(p,"Ctrl":$("#"+@dialogID),"source":"tblVehicleMakes", CallBackAfter:(Row)->
+					# if p.Action=="Edit" then Source.findProperty("iD", Row.iD).set("edit",false) #redagavimas
+					# if p.Action=="Add" then MY[me.dialogID].set(("addVehicleMake"),false)
+					# me.input.autocomplete("option").fnRefresh()
+				# )	
+				# SERVER.update2(p);false
+			# editVehicleMake: (e)-> e.context.set("edit",e.context.name) 
+			# cancelVehicleMake: (e)-> e.context.set("edit",false)
+			# saveVehicleMake: (e)->
+				# make=e.context.name;input=$(e.target).prev();val=input.val();row=e.context;row.name=val
+				# if make.length>0						
+					# Msg={Title:@title,Success:"TP markė '"+make+"' pakeista.",Error:"Nepavyko pakeisti '"+make+"' markės."}
+					# @saveData({DataToSave:{"id":row.iD,"Data":[row.name],"Fields":["Name"],"DataTable":"tblVehicleMakes"},Msg:Msg,row:row,Action:"Edit"})
+				# else 
+					# e.context.set("name",e.context.edit).set("edit",false)
+			# deleteVehicleMake: (e)->
+				# make=e.context.name; me=@
+				# oCONTROLS.dialog.Confirm(title:@title,msg:"Ištrinti markę '"+make+"'?", ()->					
+					# Msg={Title:me.title,Success:"TP markė '"+make+"' ištrinta.",Error:"Nepavyko ištrinti markės '"+make+"'."}; row=e.context				
+					# me.saveData({DataToSave:{"id":row.iD,"DataTable":"tblVehicleMakes"},Msg:Msg,row:row,Action:"Delete"})
+				# )
+			# addNewVehicleMake: (e)-> @.set("addItem",true)
+			# cancelNewVehicleMake: (e)-> @.set("addItem",false)				
+			# saveNewVehicleMake: (e)-> 
+				# input=$(e.target).prev();val=input.val();
+				# Msg=Title:@title2,Success:"Dokumento tipas '"+val+"' pridėtas.",Error:"Nepavyko pridėt tipo '"+val+"'"
+				# @saveData({DataToSave:{"Data":[val],"Fields":["Name"],"DataTable":"tblVehicleMakes"},Msg:Msg,row:[val],Action:"Add"})
+			# closeDialog: (e)-> $("#"+@dialogID).dialog("close"); false
+			# width:600
+			# templateName: 'tmpVehicleMakes'
+		# ).append();
 	editListItems:(input, e)-> #formTemplate: "tmpUploadForm", disabled: false, docsController: "TreeDocController", Source: "tblDocTypes"
 		#categoryOpts:{accident:{iD:70,title:"Įvykio dokumentai"},driver:{iD:80,title:"Vairuotojo 'Pranas Patv' dokai"},editList:{},vehicles:[{iD,title},{iD,title}]},
 		#data:[{categoryID,id,label},{categoryID,id,label},{categoryID,id,label},{categoryID,id,label}]		
@@ -182,7 +182,7 @@ App.listAllController = Em.ResourceController.create(
 				#Jei išsaugom data ja įrašom i endDate
 			didInsertElement: ()->
 				@_super();dialogFrm=$("#openItemDialog");dialogContent=$("#dialogContent")
-				if (pars.row)
+				if (pars.row.iD)# skriopke rodom tik redagavimui
 					categoryOpts=false;docGroups=oDATA.GET("tblDocGroup").emData;me=@; ref=0			
 					if pars.emObject=="vehicles" or pars.source=="proc_Vehicles" then ref=4
 					else if pars.emObject=="drivers" or pars.source=="proc_Drivers" then ref=3
@@ -200,6 +200,8 @@ App.listAllController = Em.ResourceController.create(
 						refID=pars.row.iD					
 						App.dialogDocController.setDocs(refID,groupID)
 						this.removeOnCloseView=Em.View.create(docsViewOpts).appendTo "#dialoguploadDocsContainer" #docsViewOpts	#Pridedam dokumentų uploadinimo view'ą					
+				else
+					$("#dialoguploadDocsContainer").remove()#jei nėra iD pašalinam skriopke
 				$("#btnSaveItem").on("click",()->
 					DataToSave=oCONTROLS.ValidateForm(dialogContent)
 					$.extend(pars,DataToSave:DataToSave,Ctrl:$("#tabLists"),CallBackAfter:(Row)->

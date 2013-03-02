@@ -10,11 +10,13 @@ using System.Security;
 namespace CC.Classes {
 	public class MyEventLog {
 		private static void CreateSource(string src, EventLog ELog) {
-			try {
+			//try {
 				if (!EventLog.SourceExists(src)) { EventLog.CreateEventSource(src, "ClaimsControl"); }
 				ELog.Source = src;
-			}
-			catch (SecurityException) { }
+			//}
+			//catch (Exception ex) {
+			//   System.Diagnostics.Debug.Print(ex.Message);
+			//}
 
 		}
 		public static void AddEvent(string Message, string src, int eventID) {

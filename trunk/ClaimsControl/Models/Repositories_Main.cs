@@ -516,9 +516,9 @@ namespace CC.Models {
 				new { FName = "ID"},//0
 				new { FName = "FirstName",Type="String", LenMax=100,IsUnique=new object[]{1,2},Validity="require().nonHtml().maxLength(100)"},//1
 				new { FName = "LastName",Type="String", LenMax=100,Validity="require().nonHtml().maxLength(100)"},//2
-				new { FName = "DateExpierence",Type="Date", Default="Today",Validity="require().match('date').lessThanOrEqualTo(new Date())", Plugin = new {datepicker = new {minDate="-25y", maxDate=0}}},//3  "Plugin":{"datepicker":{"minDate":"-3y","maxDate":"0"}}
-				new { FName = "DrivingCategory",Type="String", LenMax=20,Validity="require().nonHtml().maxLength(20)"},//4
-				new { FName = "Phone",Type="Integer", LenMax=20,Validity="require().nonHtml().maxLength(20)"},//5
+				new { FName = "DateExpierence",Type="Date", Validity="match('date').lessThanOrEqualTo(new Date())", Plugin = new {datepicker = new {minDate="-25y", maxDate=0}}},//3  "Plugin":{"datepicker":{"minDate":"-3y","maxDate":"0"}}
+				new { FName = "DrivingCategory",Type="String", LenMax=20,Validity="nonHtml().maxLength(20)"},//4
+				new { FName = "Phone",Type="Integer", LenMax=20,Validity="nonHtml().maxLength(20)"},//5
 				new { FName = "Docs",Type="String", NotEditable=1},//6
 				new { FName = "EndDate",Type="DateLess", Default="",Validity="match('date').lessThanOrEqualTo(new Date())", Plugin = new {datepicker = new {minDate="-25y", maxDate=0}}},//7
 			}; JSON.Cols = Cols;
@@ -853,7 +853,7 @@ namespace CC.Models {
 				new { FName = "CountryID"},//2
 				new { FName = "CountryDefault",Type="Integer",Validity="require().match('integer').maxLength(13).greaterThanOrEqualTo(0)"},//3
 			}; JSON.Cols = Cols;
-			JSON.Config = new { Controler = "Insurers", tblUpdate = "tblInsurers", Msg = new { AddNew = "Naujo draudiko sukūrimas", Edit = "Draudiko redagavimas", Delete = "Ištrinti draudiką", GenName = "Draudikas", GenNameWhat = "Draudiką", ListName = "Draudikų sąrašas" } };
+			JSON.Config = new { Controler = "Insurers", tblUpdate = "tblInsurers", Msg = new { AddNew = "Naujo draudiko sukūrimas", Edit = "Draudiko redagavimas", Delete = "Ištrinti draudiką", GenName = "Draudikas", GenNameWhat = "Draudiką", ListName = "Draudimo kompanijos" } };
 
 			JSON.Grid = new {
 				aoColumns = new object[]{
@@ -880,7 +880,7 @@ namespace CC.Models {
 				new { FName = "ID"},//0
 				new { FName = "Name",Type="String", LenMax=50,IsUnique=new object[]{1},Validity="require().nonHtml().maxLength(50)"},//1
 			}; JSON.Cols = Cols;
-			JSON.Config = new { Controler = "VehicleMakes", tblUpdate = "tblVehicleMakes", titleFields = new object[] { "name" }, Msg = new { AddNew = "Naujos tr. priemonių markės sukūrimas", Edit = "Tr. priemonių markės redagavimas", Delete = "Ištrinti tr. priemonių markę", GenName = "Tr. priemonės markė", GenNameWhat = "transporto priemonę", ListName = "Tr. priemonių markių sąrašas" } };
+			JSON.Config = new { Controler = "VehicleMakes", tblUpdate = "tblVehicleMakes", titleFields = new object[] { "name" }, Msg = new { AddNew = "Naujos tr. priemonių markės sukūrimas", Edit = "Tr. priemonių markės redagavimas", Delete = "Ištrinti tr. priemonių markę", GenName = "Tr. priemonės markė", GenNameWhat = "transporto priemonę", ListName = "Transporto priemonių markės" } };
 			JSON.Grid = new {
 				aoColumns = new object[]{
 					new {bVisible=false,sTitle="Markė"},//0//ID////DefaultUpdate=0

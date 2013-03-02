@@ -46,7 +46,7 @@
 </br>
 
 <fieldset class="ui-corner-all fieldSetBorder w70pr centerBlock" style="padding:0 20px;">
-	<legend>TP dokumentų tipai</legend>
+	<legend>Transporto priemonių dokumentų tipai</legend>
 	{{#each App.docsTypesController.docTypes_vehicle}}
 		{{#if this.edit}} 
 		<div class="docType"><input {{bindAttr value="name" }} type="text"/><button class="btn small" {{action saveDocType this}}>Išsaugoti</button><button class="btn small" {{action cancelDocType this}}>Atšaukti</button></div>
