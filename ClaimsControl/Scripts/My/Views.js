@@ -15,14 +15,17 @@ Handlebars.registerHelper('currency', function (prop, options) {
 	return new Handlebars.SafeString(value);
 });
 Handlebars.registerHelper('updatableField', function (prop, options) {
-	if  (this.content.length===0) return false;
-	var err = "updatableField helper ",h=(prop.hash)?prop.hash:options.hash;
-	var f = h.Field;
-	if (!f) throw new Error(err + "did not found Field");
-	var v = (this.content[0][f])?this.content[0][f]:""; //Em.getPath(this.content[0], prop)
-	if (typeof(v)==="undefined") console.error("Field "+f+" has no value in updatableField helper");
-	if (!f) throw new Error(err + "did not found value for Field" + f);
-
+	// if  (this.content.length===0) return false;
+	// var err = "updatableField helper ",h=(prop.hash)?prop.hash:options.hash;
+	// var f = h.Field;
+	// if (!f) throw new Error(err + "did not found Field");
+	// var v = (this.content[0][f])?this.content[0][f]:""; //Em.getPath(this.content[0], prop)
+	// if (typeof(v)==="undefined") console.error("Field "+f+" has no value in updatableField helper");
+	// if (!f) throw new Error(err + "did not found value for Field" + f);	
+	if (!prop) console.error("No prop");
+	var f=prop,h=options.hash,v=this[f];
+	if (!v&&this.content){v=this.content[0][f];}
+	if (!v){v="";}
 	//v = (typeof (v) === "string") ? v.replace(/'/g, "\"") : v;
 	if (typeof (v) === "string"){v=v.replace(/'/g, "\\&quot;").replace(/"/g, '\\&quot;');}
 	
@@ -75,8 +78,13 @@ Handlebars.registerHelper('compare', function (lvalue, operator, rvalue, options
 		operator = "===";
 	}
 	//jei value yra this.TypeID, laikom, kad reikia paimt lauko reiksme is konteksto
-	if (lvalue.slice(0, 4) === "this") { var v = lvalue.slice(5); lvalue = this.content[0][v]; if (lvalue === undefined) { throw new Error("Handlerbars Helper 'compare' doesn't know field " + v); } }
-	if (rvalue.slice(0, 4) === "this") { var v = rvalue.slice(5); rvalue = this.content[0][v]; if (rvalue === undefined) { throw new Error("Handlerbars Helper 'compare' doesn't know field " + v); } }
+	//if (lvalue.slice(0, 4) === "this") { var v = lvalue.slice(5); lvalue = this.content[0][v]; if (lvalue === undefined) { throw new Error("Handlerbars Helper 'compare' doesn't know field " + v); } }
+	//if (rvalue.slice(0, 4) === "this") { var v = rvalue.slice(5); rvalue = this.content[0][v]; if (rvalue === undefined) { throw new Error("Handlerbars Helper 'compare' doesn't know field " + v); } }
+	
+	if (lvalue.slice(0, 4) === "this") { var v = lvalue.slice(5); lvalue = this[v]; if (lvalue === undefined) { console.error("wrong field"); } }
+	if (rvalue.slice(0, 4) === "this") { var v = rvalue.slice(5); rvalue = this[v]; if (rvalue === undefined) { console.error("wrong field"); } }
+	
+	
 	//vietoj this.content padaro "content" tai atstatom
 	if (typeof lvalue==="string") {if (lvalue.match("content")){lvalue=lvalue.replace("content","this.content");lvalue=eval(lvalue);}}
 	operators = {

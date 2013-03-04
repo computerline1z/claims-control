@@ -226,7 +226,16 @@ var oDATA = Ember.Object.create({
 					
 					localStorage[url] = json.ver; //išsaugom versija	
 					oDATA.executed[url] = (new Date()).getTime();
+				},
+				error:function(xhr,x,y){
+					window.location='/Account/Logon';// App.router.location.lastSetURL
+					//document.location.href = '/account/login';
+				},
+				complete:function(xhr,x,y){
+					//window.location='/Account/Logon';
+					$("img.spinner").remove();
 				}
+				
 			});
 		}
 	}
@@ -456,6 +465,7 @@ var SERVER = {
 				//if (msg.d ==="Er_Saving") //{ alert("Nepavyko išsaugoti duomenų. \n Bandykite dar kartÄ….."); } //return else
 				{
 					alert("Nepavyko prisijungti..");
+					window.location='/Account/Logon';// App.router.location.lastSetURL
 				}
 			},
 			success: function (d) {

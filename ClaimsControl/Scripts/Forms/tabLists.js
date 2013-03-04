@@ -62,7 +62,8 @@
       return MY[dialogID] = JQ.Dialog.create({
         input: input,
         dialogID: dialogID,
-        title: source.Config.Msg.ListName,
+        legend: source.Config.Msg.ListName,
+        title: "Redaguoti sąrašą",
         msg: source.Config.Msg,
         addNewMsg: "Pridėti naują " + source.Config.Msg.GenNameWhat.firstSmall(),
         saveData: function(p) {

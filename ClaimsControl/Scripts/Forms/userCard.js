@@ -40,13 +40,14 @@
     sendUserPasswordForm: function() {
       return App.userCardController.set("passwordReset", true);
     },
-    sendUserPassword: function(e, mailTmpl) {
+    sendUserPassword: function(e, mailTmpl, email) {
       var ctrl, tmpl;
       ctrl = e ? $(e.target).parent() : null;
       tmpl = mailTmpl ? mailTmpl : "ResetUserPsw";
+      email = email ? email : App.userCardController.content[0].email;
       return SERVER.update3({
         pars: {
-          email: App.userCardController.content[0].email,
+          email: email,
           mailTmpl: tmpl
         },
         ctrl: ctrl,
@@ -68,9 +69,10 @@
       return App.userCardController.set("passwordReset", false);
     },
     saveUserCard: function() {
-      var Action, DataToSave, frm, opt;
+      var Action, DataToSave, frm, opt, sendUserPassword;
       frm = $("#InfoDataForm");
       DataToSave = oCONTROLS.ValidateForm(frm);
+      sendUserPassword = this.sendUserPassword;
       Action = frm.data("ctrl").NewRec ? "Add" : "Edit";
       if (DataToSave) {
         opt = {
@@ -78,26 +80,18 @@
           DataToSave: DataToSave,
           row: App.userCardController.content[0],
           source: "tblUsers",
-          Ctrl: frm
-        };
-        ({
+          Ctrl: frm,
           CallBackAfter: function(Row, Action) {
-            var name;
-            name = Row.firstName + " " + Row.surname;
-            if (name !== oDATA.GET("userData").emData[0].userName) {
-              oDATA.GET("userData").emData[0].userName = name;
-              $("#userLink").html(name);
-            }
             if (Action === "Add") {
-              this.sendUserPassword(null, "NewUserPsw");
+              sendUserPassword(null, "NewUserPsw", Row.email);
             }
-            this.setUser({
+            App.userCardController.setUser({
               myInfo: false,
               User: Row
             });
-            return App.router.transitionTo('tabAdmin ');
+            return App.router.transitionTo('tabAdmin');
           }
-        });
+        };
         return SERVER.update2(opt);
       }
     },
