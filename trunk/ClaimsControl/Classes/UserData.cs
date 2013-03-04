@@ -12,7 +12,9 @@ namespace CC.Classes {
 
 		public static void CheckIt() {
 			if (HttpContext.Current.Session["UserData_LoginName"] != null) return;
-			else SetParameters();
+			else { 
+				SetParameters();
+			}//
 		}
 
 		public static void SetParameters() {
@@ -125,8 +127,7 @@ namespace CC.Classes {
 			body = File.ReadAllText(Path); var uri = HttpContext.Current.Request.Url;
 			string url = uri.Scheme + "://" + uri.Authority + "/Account/NewPassword/" + User.tempUI.ToString();
 
-			if (tmplName == "NewUserPsw") { body = body.Replace("/*homeUrl*/", url); }
-			else if (tmplName == "ResetUserPsw") { body = body.Replace("/*homeUrl*/", url).Replace("/*userName*/", (" " + User.FirstName + " " + User.Surname)).Replace("/*companyName*/", (User.tblAccount.Name + " ")); }
+			if (tmplName == "ResetUserPsw"||tmplName == "NewUserPsw") { body = body.Replace("/*homeUrl*/", url).Replace("/*userName*/", (" " + User.FirstName + " " + User.Surname)).Replace("/*companyName*/", (User.tblAccount.Name + " ")); }
 
 			db.Connection.Close(); db = null;
 			return body;//bus tusčia jei nerado šablono

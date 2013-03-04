@@ -36,5 +36,8 @@ namespace ClaimsControl {
 
          ControllerBuilder.Current.SetControllerFactory(new NinjectControllerFactory());
       }
+		protected void Session_End() {
+			System.Diagnostics.Debug.Print("Session ended");
+		}
    }
 }

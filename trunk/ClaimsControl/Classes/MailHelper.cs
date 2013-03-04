@@ -33,7 +33,7 @@ namespace DataModels.DataSources {
             Body = body,
             IsBodyHtml = true,
             Priority = MailPriority.Normal,
-				From= new MailAddress("zalukontrole@gmail.com", "ClaimsControl")
+				//From= new MailAddress("zalukontrole@gmail.com", "ClaimsControl")
          };
 
 
@@ -63,12 +63,12 @@ namespace DataModels.DataSources {
 			msg += "Host:" + mSmtpClient.Host.ToString() + Environment.NewLine;
 			msg += "Port:" + mSmtpClient.Port.ToString() + Environment.NewLine;
 			MyEventLog.AddEvent(msg, "Sending Mail", 69);
-			
-			//try { mSmtpClient.Send(mMailMessage); }
-			//catch (Exception e) {
-			//   MyEventLog.AddException(e.Message + Environment.NewLine + "mSmtpClient.EnableSsl = true;", "Err in SendMailMessage ", 70);
-			//   throw e;		
-			//}
+
+			try { mSmtpClient.Send(mMailMessage); }
+			catch (Exception e) {
+				MyEventLog.AddException(e.Message, "SendMail ", 70);
+				throw e;
+			}
       }
 
 		//public static string BuildMailMessage(HttpContextBase context, string language,

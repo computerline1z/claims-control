@@ -27,11 +27,13 @@ App.NavbarController = Em.Controller.extend({
 			if  (!newOutlet){newOutlet=newState;}//else{$('#' + controller.get("currentOutlet")).empty();}						
 			if  (controller.currentState||newOutlet===newState){
 				controller.set("currentState", newState).set("currentOutlet", newOutlet);
+				console.log("fnSetNewTab1:"+newOutlet+";"+viewIx);
 				fnUnhideOutlet(newOutlet,viewIx);return true;
 			} else {//jei nėra currentState ko gero buvo refresh, tai nukeliam į pradinį psl jei to reikia
 				newOutlet=(newOutlet==="tabEmpty")?"tabAccidents":newOutlet;// galim visada mest i tabAccidents";
 				controller.set("currentState", newOutlet).set("currentOutlet", newOutlet);
 				App.router.transitionTo(newOutlet);
+				console.log("fnSetNewTab2:"+newOutlet+";"+viewIx);
 				fnUnhideOutlet("",viewIx);return false;				
 			}
 	}

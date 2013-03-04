@@ -129,7 +129,7 @@ namespace ClaimsControl.Controllers {
 				else {
 					//MembershipUser aUser = Membership.GetUser(UserName);
 					//SendPasswordChangedMail(aUser.UserName, email, (Guid)aUser.ProviderUserKey);
-					MailHelper.SendMail_SetUrl(email, "ResetUserPsw", "ClaimsControl sistemos slaptažodžio atnaujinimas");
+					MailHelper.SendMail_SetUrl(email, mailTmpl, "ClaimsControl sistemos slaptažodžio atnaujinimas");
 					JsonResp.ResponseMsg = "Slaptažodžio pakeitimo laiškas išsiųstas."; JsonResp.ErrorMsg = "";
 				}
 			}

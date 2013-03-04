@@ -1,21 +1,22 @@
 ﻿<h2 style="margin: 15px; display: block">Administravimas</h2>
 <hr />
 <h3 style="margin: 15px">Bendrieji paskyros nustatymai</h3>
-{{#with App.accountController}}
+
+{{#each App.accountController.content}}
 @*	Negaliu įrašyt iD nes pasikraunant jo dar nėra
 *@	<div id="AccountForm" class="inputForm container" data-ctrl='{"id":"","NewRec":0,"Source":"tblAccount","tblUpdate":"tblAccounts"}'>
 	<div class='left w47pr_mp'>
-			{{updatableField c Field="name" labelType="Top"}}
-			{{updatableField c Field="currencyID" labelType="Top" List="{\"Source\":\"tblCurrencies\"}"}}
-			{{updatableField c Field="countryID" labelType="Top" List="{\"Source\":\"tblCountries\"}"}}
+			{{updatableField name labelType="Top"}}
+			{{updatableField currencyID labelType="Top" List="{\"Source\":\"tblCurrencies\"}"}}
+			{{updatableField countryID labelType="Top" List="{\"Source\":\"tblCountries\"}"}}
 		</div>
 		<div class='right w47pr_mp'>
-			{{updatableField c Field="email" labelType="Top"}}<span>@@claimscontrol.com</span>
-			{{updatableField c Field="timeZoneID" labelType="Top" List="{\"Source\":\"tblTimeZones\"}"}}
+			{{updatableField email labelType="Top"}}<span>@@claimscontrol.com</span>
+			{{updatableField timeZoneID labelType="Top" List="{\"Source\":\"tblTimeZones\"}"}}
 			<button class="btn btnSave" {{action SaveChanges target="App.accountController"}}>Išsaugoti</button>
 		</div>
 	</div>
-{{/with}}
+{{/each}}
 <hr />
 <h3 style="margin: 15px">Naudotojų administravimas</h3>
 <div class="container" id="usersList">

@@ -102,7 +102,8 @@ App.listAllController = Em.ResourceController.create(
 		MY[dialogID]=JQ.Dialog.create( #MY.dialog needed to destroyElement in ui-ember.js	
 			input: input
 			dialogID: dialogID
-			title: source.Config.Msg.ListName
+			legend: source.Config.Msg.ListName
+			title: "Redaguoti sąrašą"
 			msg: source.Config.Msg
 			addNewMsg: "Pridėti naują "+source.Config.Msg.GenNameWhat.firstSmall()
 			saveData:(p)->#Msg,DataToSave,Action,row
