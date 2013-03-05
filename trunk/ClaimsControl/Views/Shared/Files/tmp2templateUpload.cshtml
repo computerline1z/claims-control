@@ -11,23 +11,25 @@
 @*				{%=file.type%}</br>{%=file.type2%}</br>{%=file.extension%}
 *@				<span><i class="img32-doc_{%=file.extension%}"></i></span></td>			
 		{% } %}
-        <td class="name"><span>{%=file.name%}</span></td>
-        <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
-		  {% if (file.paramName==="docs[]") { %}
-				<td><div class="ExtendIt"><input type="text" placeholder="Pasirinkite.." name="category[]" data-ctrl='{"ListType":"List","Source":"tblDocTypes","iVal":"iD","iText":["name"]}'></div></td>
+        <td class="name size" style="width:30%;">
+			<span>{%=file.name%} - {%=o.formatFileSize(file.size)%}</span><br/>
+			 {% if (file.paramName==="docs[]") { %}
+				<div class="ExtendIt"><input type="text" placeholder="Pasirinkite.." name="category[]" data-ctrl='{"ListType":"List","Source":"tblDocTypes","iVal":"iD","iText":["name"]}'></div>
 		  {% } else { %}
-				<td><span>Nuotrauka</span></td>
+				<span>Nuotrauka</span>
 		  {% } %}
-
-		  <td style="width:35%;"><textarea rows="2" style="width:100%;font-size:10px;" name="description[]"></textarea></td>
-        {% if (file.error) { %}
+		
+		</td>
+        <td style="width:60%;">
+			Aprašymas:<br/>
+			<div style="margin:15px auto">
+				<textarea rows="1" style="width:100%;font-size:10px;" name="description[]"></textarea>
+			</div>	
+		</td>
+	    {% if (file.error) { %}
             <td class="error" colspan="2"><span class="label label-important">Error</span> {%=file.error%}</td>
         {% } else if (o.files.valid && !i) { %}
-            <td>
-                <div class="progress progress-success progress-striped active hidden" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar" style="width:0%;"></div></div>
-            </td>
-
-            <td class="start hidden">{% if (!o.options.autoUpload) { %}
+             <td class="start hidden">{% if (!o.options.autoUpload) { %}
                 <button class="btn btn-primary">
                     <i class="icon-upload icon-white"></i>
                     <span>Start</span>
@@ -38,8 +40,8 @@
             <td colspan="2"></td>
         {% } %}
         <td class="cancel">{% if (!i) { %}
-				<button class="btn btn-warning btn-small" title="Atšaukti">
-					 <i class="icon-ban-circle icon-white"></i>
+				<button title="Atšaukti" style="background:none;cursor:pointer;margin-top:8px;">
+					 <i class="img32-mono_delete"></i>
 					 @*<span></span>*@
 				</button>
         {% } %}</td>

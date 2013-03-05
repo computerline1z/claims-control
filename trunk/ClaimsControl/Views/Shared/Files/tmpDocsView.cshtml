@@ -50,7 +50,7 @@
 						<a {{bindAttr href="urlDoc"}} target="_blank" >{{fileName}}</a>		
 				</div><div class="td" style="margin:0 2%;padding:5px;">
 						<input class="description" type="text" {{bindAttr value="description"}} style="width:100%"/></br><p style="color:Gray">{{docDetails}}</p>
-				</div><div class="td w25pr" style="padding:5px;">
+				</div><div class="td" style="padding:5px;">
 						<a href="#" {{action cancelSaveDoc this target="App.editDocsController"}}>Atšaukti</a>
 						<button {{action SaveEditedDoc this target="App.editDocsController"}} class="btn small">Išsaugoti</button>
 				</div>
@@ -61,8 +61,8 @@
 				</div><div class="td" style="padding:5px;">
 						{{description}}</br><p style="color:Gray">{{docDetails}}</p>
 				</div><div class="td w25pr" style="padding:5px;">
-						<i class="img32-mono_edit clickable" {{action editDoc this target="App.editDocsController"}}></i>
-						<i class="img32-mono_delete clickable" {{action deleteDoc this target="App.editDocsController"}}></i>
+						<i class="img32-mono_delete clickable right" {{action deleteDoc this target="App.editDocsController"}}></i>
+						<i class="img32-mono_edit clickable right" {{action editDoc this target="App.editDocsController"}}></i>
 				</div>
 		{{/if}}
 		</div>

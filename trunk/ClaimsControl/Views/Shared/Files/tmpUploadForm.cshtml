@@ -3,24 +3,24 @@
    @*<noscript><input type="hidden" name="redirect" value="http://blueimp.github.com/jQuery-File-Upload/"></noscript>*@
    <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
    <div class="row fileupload-buttonbar">
+   <center>
 	{{#if showPhoto}}
       <div class="span7">
-	    <a class="fileinput-button" href="#">
-					<i class="img16-attach"></i>
-               <span>Prisegti nuotraukas</span>
+	  <i class="img16-camera"></i>
+	    <a class="fileinput-button" href="#" style="margin-right:56px;">
+			   <span>Prisegti nuotraukas</span>
                <input type="file" name="pictures[]" multiple>
             </a>
           
 	{{else}}
       <div class="span7">
 	{{/if}}
-		
+		<i class="img16-attach"></i>
 		<a href="#" class="fileinput-button">
-					<i class="img16-attach"></i>
-               <span>Prisegti dokumentus</span>
+				<span>Prisegti dokumentus</span>
                <input type="file" name="docs[]" multiple>
             </a>
-      </div>
+      </div><br/>
       <!-- The global progress information -->
       <div class="span5 fileupload-progress fade">
             <!-- The global progress bar -->
@@ -30,25 +30,20 @@
             <!-- The extended global progress information -->
             <div class="progress-extended">&nbsp;</div>
       </div>
+	  </center>
    </div>
    <!-- The loading indicator is shown during file processing -->
    <div class="fileupload-loading"></div>
    <table role="presentation" class="table zebra-striped filesTable hidden">
-	<thead class="centered"><tr><th colspan="2">Dokumentas</th><th>Dydis</th><th>Kategorija</th><th>Aprašymas</th><th colspan="3">Veiksmai</th></tr>
-	</thead>
 	<tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
 
 		<div class="container submitButtons hidden">
-		<div class="right fileupload-buttonbar">
-			<button type="submit" class="btn btn-primary start w150px">
-				<i class="icon-upload icon-white"></i>
-				<span>Išsaugoti</span>
-			</button>
-			<button type="reset" class="btn btn-warning cancel w150px">
-				<i class="icon-ban-circle icon-white"></i>
-				<span>Atšaukti</span>
-			</button>	
-		</div>
+			<center>
+				<div class="fileupload-buttonbar" style="margin-top:8px;">
+					<a href="#" class="cancel">Atšaukti</a>
+					<button class="btn small start">Išsaugoti</button>
+				</div>
+			</center>
 	</div>
 
 </form>
