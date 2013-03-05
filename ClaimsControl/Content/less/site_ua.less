@@ -22,6 +22,13 @@
 	#gradient > .vertical(#f7f7f7, #eeeeee);
 	&.ui-state-active { .gradient--main; color: white; box-shadow: none; }	
 }
+
+.ui-button-no-shadow-override() {
+	background: white;
+	color: #196e99;
+	#gradient > .vertical(#f7f7f7, #eeeeee);
+	&.ui-state-active { .gradient--main; color: white; box-shadow: none; }	
+}
 #accidentTab {
 	padding: 0;
 }
@@ -33,15 +40,16 @@
 	a  { margin-right: 24px; }
 }
 
-/*#tabAccidents { is it any better than styles? it overrided comboboxe's styles
+#tabAccidents {
 	.ui-button {
-		.ui-button-override();
+		.ui-button-no-shadow-override();
 	}
-}*/
+}
 
 .filtergroup {
 	.ui-button {
 		.ui-button-override();
+		
 	}
 	
 	&.ui-buttonset .ui-button {		
@@ -134,7 +142,6 @@
 
 .container--main {
 	.container;
-	padding: 0 18px;
 	background: white;
 	//border: 1px solid #ececec;
 	box-shadow: 0 2px 3px #ddd;
@@ -198,7 +205,7 @@
 	margin: 0 -18px;
 }
 
-/*.img32 () { images are controlled through bootstrap type classes in sprite.less
+.img32 () {
 	background-position: top left !important;
 	height: 20px;
 	width: 20px;	
@@ -230,7 +237,7 @@
 
 .img32-mono_delete {}
 
-img32-mono_edit {}*/
+img32-mono_edit {}
 
 .text-warning {
 	color: red;

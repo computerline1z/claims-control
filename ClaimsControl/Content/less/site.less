@@ -88,16 +88,15 @@
 //	<input type="text" class="searchField"/><div class="divSearch"><span class="spanToClearText">x</span></div>
 
 form input.searchField {
-    float:left;width:75%; height:32px; line-height:23px;font-family:sans-serif;font-size:1em;color:#333;background: @yellowlight; 
+    float:left;margin-top:7px;width:90%; height:28px; line-height:23px;font-family:sans-serif;font-size:1em;color:#333;
     border:solid 1px #d9d9d9; border-top:solid 1px #c0c0c0;border-right:none;margin-right:-2px; vertical-align:top; 
-    .border-radius(0);
+  .border-radius(0);
 //    #gradient > .vertical(#eae4cf, #fbfbd8);
 }
 /* Style the "X" text button next to the search input field */
 form div.divSearch {
-    float:left; width:26px;height:32px;line-height:22px;padding:3px 6px !important;font-size:22px;   
-    background: @yellowlight;border:solid 1px #d9d9d9;border-top:solid 1px #c0c0c0;border-left:none;   
-}
+     position:absolute;left:35%; width:26px;height:32px;line-height:22px;padding:9px 10px !important;font-size:22px;   
+  }
 form span.spanToClearText {/*color:#A1B9ED;*/ color:#919191;cursor:pointer;padding:0px 3px;}/* Set default state of "X" and hide it */
 form span.spanToClearText:hover {/*color:#36c;*/ color:#575757}/* Set the hover state of "X" */
 /*
@@ -511,5 +510,17 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 }
 .colmask.colmask-extended {
     max-width: 1129px;
+}
+.template-upload{
+	border-top:1px dotted #000000;
+}
+.template-upload td{
+	border-color:#000000 !important;
+}
+#AccDocs{
+	padding:1em 0px !important;
+}
+.img16-camera {
+    background-position: 0 -64px;
 }
 /*----apurav new rules end -----*/
