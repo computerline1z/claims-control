@@ -5,7 +5,7 @@
 		{{#if this.edit}} 
 		<div class="docType container"><input {{bindAttr value="name" }} type="text"><button class="btn small" {{action saveItem this}}>Išsaugoti</button><a class="btn small" {{action cancelItem this}}>Atšaukti</a></div>
 		{{else}}
-			<div class="docType">
+			<div class="docType  container">
 				{{#if name}}
 					<div style="float:left">{{name}}</div>	
 				{{else}}

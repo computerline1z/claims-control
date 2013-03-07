@@ -55,7 +55,7 @@ namespace DataModels.DataSources {
 			
 			//SmtpServer.Timeout = 1; fdgd
 			//SmtpServer.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
-			mSmtpClient.Send(mMailMessage);
+			//mSmtpClient.Send(mMailMessage);
 
 			string msg = "Subject:" + subject + Environment.NewLine;
 			msg += "body:" + body + Environment.NewLine;

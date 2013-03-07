@@ -1,0 +1,12 @@
+﻿{{log this}}
+{{log this}}
+{{log content}}
+<div class="frmbottom container">
+	{{#if deleteButton}}
+	<div class="left mini"><button class="btn btn-small"><i class="img32-bin" title="Ištrinti" {{action "deleteForm" this}}></i></button></div>
+	{{/if}}
+	<div class="right medium" style="margin-top:10px;">
+		<button title="Išsaugoti pakeitimus" class="btnSave btn success btn" {{action "saveForm"}}></i>IŠSAUGOTI</button>
+		<a href="#" title="Atšaukti pakeitimus" style="margin:10px;" {{action "cancelForm"}}>Atšaukti</a>
+	</div>
+</div>

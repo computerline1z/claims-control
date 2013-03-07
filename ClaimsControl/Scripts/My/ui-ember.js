@@ -156,3 +156,21 @@ JQ.Dialog = Ember.View.extend(JQ.Widget, {
 		$(this).dialog('open'); // the same //this.get('ui').open();	
 	}
 });
+// Em.MyEventAttacher = Ember.Mixin.create({
+	// init: function() {
+		// var action = this.get('action');
+		 // target = this.get('target'),
+		 // targetObj = Ember.getPath(target);
+
+		// if (action && targetObj) {
+			// var targetEventFnc = targetObj[action];
+			// if (typeof targetEventFnc === 'function') {
+				// var actionFnc = function(event) {
+					// targetEventFnc(event);
+				// } 
+				// this.set(action, actionFnc);
+			// }
+		// }
+		 // this._super();
+	// }
+// });

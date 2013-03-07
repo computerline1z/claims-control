@@ -65,9 +65,12 @@ var oCONTROLS = {
 		return row[f];
 	},
 	UpdatableForm: function (p) {//{frm:frm,row:row,btnSaveToDisable:btnSaveToDisable}
+	//Em.run.next({t:this,p:p},function(){
 		//frm data-ctrl:: labelType:Top/Left/undefined,
-		var sTitle = "", frmOpt = $(p.frm).data('ctrl'), me=this,btnSaveToDisable; 
+		//var p=this.p, me=this.t;
+		var sTitle = "", frmOpt = $(p.frm).data('ctrl'),btnSaveToDisable,me=this;
 		if (p.row){ if (p.row.iD)  {frmOpt.NewRec=0;frmOpt.id=p.row.iD;}}//Jeigu yra p.row tai redagavimas
+		if (frmOpt.NewRec==="0"){frmOpt.NewRec=0;}
 		var data = (frmOpt.Source === 'NoData') ? "NoData" : oDATA.GET(frmOpt.Source);
 		//if(typeof data==='undefined') { alert('Source undefined in UpdatableForm(objFunc:79)!'); }
 		//log('<div>==========UpdatableForm========</div>');
@@ -77,12 +80,13 @@ var oCONTROLS = {
 		var fnEnableSave=function(){	
 			btnSaveToDisable.removeAttr("disabled", "disabled");	
 		}
-		if (p.btnSaveToDisable&&!frmOpt.NewRec) { 
-			if(p.btnSaveToDisable.length===1){
-				btnSaveToDisable=p.btnSaveToDisable;if (btnSaveToDisable.is("button")){btnSaveToDisable.attr("disabled", "disabled");}else{console.error("btnSaveToDisable not button");}				
-			} else {console.error("wrong btnSaveToDisable no: "+p.btnSaveToDisable.length);}}
-		else console.warn("no btnSaveToDisable");
-		
+		if  (!frmOpt.NewRec) {
+			if (p.btnSaveToDisable) { 
+				if(p.btnSaveToDisable.length===1){
+					btnSaveToDisable=p.btnSaveToDisable;if (btnSaveToDisable.is("button")){btnSaveToDisable.attr("disabled", "disabled");}else{console.error("btnSaveToDisable not button");}				
+				} else {console.error("wrong btnSaveToDisable no: "+p.btnSaveToDisable.length);}}
+			else console.warn("no btnSaveToDisable");
+		}
 		$(p.frm).find('div.ExtendIt, span.ExtendIt').each(function () {
 			var e = $(this), eOpt = e.data('ctrl'), eHTML = '', ix = -1, data_ctrl = {};
 			if (!eOpt) {return true;}
@@ -224,6 +228,7 @@ var oCONTROLS = {
 			}
 		});
 		//log('<div>==========UpdatableForm========</div>');
+	//});
 	},
 	ValidateForm: function (frm, DataToSaveAppend) { //Formos lauku validacija (pagal data-ctrl duomenis)
 		$("div.validity-modal-msg").remove(); //panaikinam validacijos msg jei buvo

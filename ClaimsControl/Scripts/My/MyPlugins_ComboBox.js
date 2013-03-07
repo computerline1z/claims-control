@@ -322,7 +322,7 @@
         dialogID = "dialog" + (+(new Date));
         return MY[dialogID] = JQ.Dialog.create({
           dialogID: dialogID,
-          title: "Dokumentų tipai (visi)",
+          title: "Redaguoti sąrašą",
           title2: "Dokumentų tipai",
           saveData: function(p) {
             var Source, docGroupID;

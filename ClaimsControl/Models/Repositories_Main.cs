@@ -672,7 +672,7 @@ namespace CC.Models {
 				new { FName = "MobPhone",Type="String"},
 				new { FName = "EMailForIns",Type="Email",Validity="nonHtml().match(\"email\").maxLength(35)"}
 			}; JSON.Cols = Cols;
-			JSON.Config = new { tblUpdate = "tblUsers", Msg = new { AddNew = "Naujo vartotojo sukūrimas", Edit = "Vartotojo redagavimas", Delete = "Ištrinti vartotoją", GenName = "Vartotojas", GenNameWhat = "Vartotoją", ListName = "Vartotojų sąrašas" } };
+			JSON.Config = new { tblUpdate = "tblUsers", titleFields = new object[] { "firstName", "surname" }, Msg = new { AddNew = "Naujo vartotojo sukūrimas", Edit = "Vartotojo redagavimas", Delete = "Ištrinti vartotoją", GenName = "Vartotojas", GenNameWhat = "Vartotoją", ListName = "Vartotojų sąrašas" } };
 			JSON.Grid = new {
 				aoColumns = new object[]{
 					new {bVisible=false},//0//ID

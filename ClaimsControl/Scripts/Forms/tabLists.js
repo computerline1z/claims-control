@@ -52,6 +52,63 @@
     valueDidChange: (function() {
       return this.filterItems();
     }).observes('filterValue'),
+    deleteForm: function(e) {
+      var Msg, oData, pars, row;
+      console.log(e);
+      pars = e.view._parentView.pars;
+      oData = oDATA.GET(pars.source);
+      Msg = oData.Config.Msg;
+      row = pars.row;
+      return oCONTROLS.dialog.Confirm({
+        title: "",
+        msg: "Ištrinti " + Msg.GenNameWhat + " '" + row.MapArrToString(oData.Config.titleFields, true) + "'?"
+      }, function() {
+        return SERVER.update2({
+          Action: "Delete",
+          DataToSave: {
+            id: row.iD,
+            DataTable: oData.Config.tblUpdate
+          },
+          "Ctrl": $("#tabLists"),
+          "source": pars.source,
+          "row": row,
+          CallBackAfter: function(Row) {
+            var oDataTop, r;
+            $("#openItemDialog").dialog("close");
+            App.topNewController[pars.emObject].removeObject(row);
+            App.listAllController.content.removeObject(row);
+            oDataTop = oDATA.GET(pars.source.replace("_", "_top")).emData;
+            r = oDataTop.findProperty("iD", row.iD);
+            return oDataTop.removeObject(r);
+          }
+        });
+      });
+    },
+    saveForm: function(e) {
+      var DataToSave, pars;
+      DataToSave = oCONTROLS.ValidateForm($("#dialogContent"));
+      pars = e.view._parentView.pars;
+      $.extend(pars, {
+        DataToSave: DataToSave,
+        Ctrl: $("#tabLists"),
+        CallBackAfter: function(Row) {
+          $("#openItemDialog").dialog("close");
+          if (Row.iD) {
+            if (pars.input) {
+              return pars.input.data("newval", Row.iD).autocomplete("option").fnRefresh();
+            } else {
+              return $("#tabLists").find("div.ui-tabs").find("li.ui-tabs-selected a").trigger("click");
+            }
+          }
+        }
+      });
+      SERVER.update2(pars);
+      return false;
+    },
+    cancelForm: function(e) {
+      $("#openItemDialog").dialog("close");
+      return false;
+    },
     editListItems: function(input, e) {
       var dialogID, source, sourceName, tblUpdate;
       sourceName = input.data("ctrl").Source;
@@ -185,6 +242,11 @@
     },
     openItem: function(pars) {
       var config, title;
+      if (pars.row.iD) {
+        this.set('deleteButton', true);
+      } else {
+        this.set('deleteButton', false);
+      }
       this.set("dateIsEdited", false);
       if (!App.docsTypesController) {
         App.create_docsTypesController();
@@ -307,30 +369,6 @@
             } else {
               $("#dialoguploadDocsContainer").remove();
             }
-            $("#btnSaveItem").on("click", function() {
-              var DataToSave;
-              DataToSave = oCONTROLS.ValidateForm(dialogContent);
-              $.extend(pars, {
-                DataToSave: DataToSave,
-                Ctrl: $("#tabLists"),
-                CallBackAfter: function(Row) {
-                  dialogFrm.dialog("close");
-                  if (Row.iD) {
-                    if (pars.input) {
-                      return pars.input.data("newval", Row.iD).autocomplete("option").fnRefresh();
-                    } else {
-                      return $("#tabLists").find("div.ui-tabs").find("li.ui-tabs-selected a").trigger("click");
-                    }
-                  }
-                }
-              });
-              SERVER.update2(pars);
-              return false;
-            });
-            $("#aCancelItem").on("click", function() {
-              dialogFrm.dialog("close");
-              return false;
-            });
             if (this.templateName === "tmp_InsPolicies") {
               this.$().tabs().css("margin", "-5px 1px 0 1px").find("ul").css("background-color", "#505860");
             }
@@ -376,7 +414,6 @@
       endDate = pars.row.endDate ? pars.row.endDate : "";
       this.set("endDate", endDate);
       this.set("editItem", true);
-      console.log("going to open items");
       return this.openItem(pars);
     },
     filterByField: function() {

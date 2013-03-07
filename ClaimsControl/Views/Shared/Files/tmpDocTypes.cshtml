@@ -3,7 +3,7 @@
 	{{log this}}
 	{{#each App.docsTypesController.docTypes_accident}}
 		{{#if this.edit}} 
-		<div class="docType"><input {{bindAttr value="name" }} type="text"><button class="btn small" {{action saveDocType this}}>Išsaugoti</button><button class="btn small" {{action cancelDocType this}}>Atšaukti</button></div>
+		<div class="docType content"><input {{bindAttr value="name" }} type="text"><button class="btn small" {{action saveDocType this}}>Išsaugoti</button><button class="btn small" {{action cancelDocType this}}>Atšaukti</button></div>
 		{{else}}
 			<div class="docType">
 				<div style="float:left">{{name}}</div>		
@@ -28,7 +28,7 @@
 		{{#if this.edit}} 
 		<div class="docType"><input {{bindAttr value="name" }} type="text"/><button class="btn small" {{action saveDocType this}}>Išsaugoti</button><button class="btn small" {{action cancelDocType this}}>Atšaukti</button></div>
 		{{else}}
-			<div class="docType">
+			<div class="docType content">
 				<div style="float:left">{{name}}</div>		
 				<div style="float:right">
 					<a href="#" {{action editDocType this}}><i class="img18-pencil"></i></a>
@@ -49,7 +49,7 @@
 	<legend>Transporto priemonių dokumentų tipai</legend>
 	{{#each App.docsTypesController.docTypes_vehicle}}
 		{{#if this.edit}} 
-		<div class="docType"><input {{bindAttr value="name" }} type="text"/><button class="btn small" {{action saveDocType this}}>Išsaugoti</button><button class="btn small" {{action cancelDocType this}}>Atšaukti</button></div>
+		<div class="docType content"><input {{bindAttr value="name" }} type="text"/><button class="btn small" {{action saveDocType this}}>Išsaugoti</button><button class="btn small" {{action cancelDocType this}}>Atšaukti</button></div>
 		{{else}}
 			<div class="docType">
 				<div style="float:left">{{name}}</div>		
