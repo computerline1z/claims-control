@@ -107,10 +107,10 @@ App.SelectedAccidentView = Em.View.extend(
 App.SelectedClaimView = Em.View.extend(
 	didInsertElement: ->
 		c=this.content[0]
-		frm=if c.NewClaim then "#divNewClaimCard" else '#divClaimCard_Content' # Negalim naudot '#divNewClaimCard_Content', nes divNewClaimCard yra data-ctrl, nes ten mes dedam žalos tipą kai dar nėra divNewClaimCard_Content
-		btnSaveToDisable=if c.NewClaim then $(frm).find("button.saveClaim") else $(frm).next().find("button.saveClaim")
+		frm=if c.newClaim then "#divNewClaimCard" else '#divClaimCard_Content' # Negalim naudot '#divNewClaimCard_Content', nes divNewClaimCard yra data-ctrl, nes ten mes dedam žalos tipą kai dar nėra divNewClaimCard_Content
+		btnSaveToDisable=if c.newClaim then $(frm).find("button.btnSave") else $(frm).next().find("button.btnSave")
 		oCONTROLS.UpdatableForm(frm:frm,btnSaveToDisable:btnSaveToDisable)
-		if c.TypeID==2
+		if c.typeID==2
 			IClaim=$("#InsuranceClaimAmount").parent().parent(); IClaim.find("span").html("Žalos suma asmeniui")
 			$("#LossAmount").parent().find("span").html("Žalos suma turtui");
 			fnCheckIsInjured =() ->
@@ -120,68 +120,35 @@ App.SelectedClaimView = Em.View.extend(
 				# $($0).data("ctrl").Validity=$($0).data("ctrl").Validity.replace("require()","")
 			fnCheckIsInjured.call($("#IsInjuredPersons"))
 			$("#IsInjuredPersons").on("click",-> fnCheckIsInjured.call($("#IsInjuredPersons")))	
-		$("#inputDays, #inputPerDay").on("keyup",-> $("#inputSum").val(($("#inputDays").val()*$("#inputPerDay").val()));)
+		#$("#inputDays,#inputPerDay").on("keyup",-> $("#inputSum").val(($("#inputDays").val()*$("#inputPerDay").val()));)
+		if c.typeID==6
+			inpSum=$(frm).find('.inputSum input'); days=$(frm).find('.days input');perDay=$(frm).find('.perDay input')
+			$(frm).find('.days input,.perDay input').on("keyup",-> inpSum.val(days.val()*perDay.val());)
 	init: ->
 		@_super(); d = @get("rowContext"); 		
 		if not d.newClaim
 			C2 = d.Claims2; TypeID = oDATA.GET("tblClaimTypes").emData.findProperty("name",d.InsuranceType).iD
 			#Claims2: 0-ClaimID, 1-VehicleID, 2-InsPolicyID, 3-InsuranceClaimAmount, 4-InsurerClaimID, 5-IsTotalLoss, 6-IsInjuredPersons, 7-Days, 8-PerDay
-			Claim =
-				ID: C2[0],VehicleID: C2[1],InsPolicyID: C2[2],InsuranceClaimAmount: C2[3],InsurerClaimID: C2[4].slice(1).slice(0, -1)#Panaikinam pirmą ir paskutinį ' ('nr Pvz')
-				IsTotalLoss: C2[5],IsInjuredPersons: parseInt(C2[6],10),Days: C2[7],PerDay: C2[8],LossAmount: d.LossAmount
-				NewClaim: false,TypeID: TypeID
+			Claim = Em.Object.create(
+				iD: C2[0],vehicleID: C2[1],insPolicyID: C2[2],insuranceClaimAmount: C2[3],insurerClaimID: C2[4].slice(1).slice(0, -1)#Panaikinam pirmą ir paskutinį ' ('nr Pvz')
+				isTotalLoss: C2[5],isInjuredPersons: parseInt(C2[6],10),days: C2[7],perDay: C2[8],lossAmount: d.LossAmount
+				newClaim: false,typeID: TypeID, deleteButton:true
+			)	
 			App.claimEditController.set("content", [Claim]) #butinai masyvas view'e su each		
 		else #newClaim
 			TypeID = $("#divNewClaimCard").data("ctrl").ClaimTypeID
-			Claim =
-				ID: 0,VehicleID: "",InsPolicyID: "",InsuranceClaimAmount: 0,InsurerClaimID: ""
-				IsTotalLoss: 0,IsInjuredPersons: 0,Days: 5,PerDay: 500,LossAmount: (if TypeID==6 then 2500 else 0)
-				NewClaim: true,TypeID: TypeID
+			Claim = Em.Object.create(
+				iD: 0,vehicleID: "",insPolicyID: "",insuranceClaimAmount: 0,insurerClaimID: ""
+				isTotalLoss: 0,isInjuredPersons: 0,days: 5,perDay: 500,lossAmount: (if TypeID==6 then 2500 else 0) #(->@get('days')*@get('perDay')).property('days','perDay')
+				newClaim: true,typeID: TypeID
+			)
 			App.newClaimController.set("content", [Claim]) #butinai masyvas view'e su each	
-			console.log("init new Claim.Type - "+TypeID)
-	SaveClaim: (e) ->
-		newClaim=this.rowContext.newClaim
-		if newClaim
-			frm=$('#divNewClaimCard'); Action='Add'
-			Msg= Title: "Naujos žalos sukūrimas", Success: "Nauja žala sukurta.", Error: "Nepavyko išsaugot naujos žalos."
-		else
-			frm=$('#divClaimCard_Content'); Action='Edit'
-			Msg= Title: "Žalos redagavimas", Success: "Žalos duomenys pakeisti.", Error: "Nepavyko pakeisti žalos duomenų."
-		DataToSave = oCONTROLS.ValidateForm(frm)
-		if (DataToSave)
-			if newClaim
-					DataToSave.Fields.push("ClaimTypeID"); DataToSave.Data.push(e.view.content[0].TypeID)
-					DataToSave.Fields.push("AccidentID"); DataToSave.Data.push(e.view.rowContext.accidentID)
-			DataToSave["Ext"] = e.view.rowContext.accidentID
-			opt = 
-				Action: Action,
-				DataToSave: DataToSave,
-				CallBack:
-					Success: (resp) ->
-						newRow = resp.ResponseMsg.Ext.replace(/#\|#\|/g,":::").split("|#|"); newRow[13]=newRow[13].replace(/:::/g,"#|#|") #atkeičiam atgal
-						App.accidentsController.get("setNewVal").call(App.accidentsController, {newVal:newRow,toAppend:false,fieldsToInt:[0, 1, 5, 6, 7, 8]})[0] #kuriuos reikia paverst integeriais
-						tr = $("#accidentsTable").find("div.selectedAccident") #.empty()
-						#newView.appendTo(tr)
-						#Em.View.create({
-						#    personName: 'Dr. Tobias Fünke',
-						#    template: Em.Handlebars.compile('Hello {{personName}}')
-						#}).appendTo(tr)
-						tr.trigger("click")
-				Msg: Msg
-			SERVER.update(opt)
-	CancelSaveClaim: (e) ->
-		#oCONTROLS.UpdatableForm_reset("#divClaimCard")
-		#$("#accidentsTable").find("div.selectedAccident").trigger("click")
-		t=$(e.target); tr=t.closest("tr")
-		if (tr.find("td.selectedClaim").length)#Redaguojama žala
-			MY.tabAccidents.SelectedClaimView.remove()
-			tr.parent().find("tr.selectedClaim").removeClass("selectedClaim title").next("tr").remove()
-		else #nauja žala
-			if MY.tabAccidents.NewClaimView then MY.tabAccidents.NewClaimView.remove()
-			$("#divNewClaimCard").remove()
-			$("#AccDetailsContent").find('div.rightFooterBig').show()
-	DeleteClaim: (e) ->
-		oData=oDATA.GET("tblClaims"); context=e.context.rowContext;
+		console.log("init Claim.Type - "+TypeID)
+	templateName: 'tmpClaimEdit'
+)
+App.claimEditController = Em.Controller.create(#save, delete, cancel Claims events
+	deleteForm: (e) ->
+		oData=oDATA.GET("tblClaims"); context=e.view._parentView.templateData.view.rowContext;
 		console.log("Žalos ID: "+context.Claims2[0])
 		oCONTROLS.dialog.Confirm {title:"",msg:"Ištrinti pasirinktą žalą?"},->
 			SERVER.update(Action:"Delete", DataToSave:{ id:context.Claims2[0], DataTable: oData.Config.tblUpdate, Ext:context.accidentID },
@@ -197,9 +164,39 @@ App.SelectedClaimView = Em.View.extend(
 					#oData.Data.removeRowByID(p.id) data.removeRowByProperty("id",p.id)
 					$("#accidentsTable").find("div.selectedAccident").trigger("click")
 			)
-	templateName: 'tmpClaimEdit'
-	#elementId: "ClaimDetailsContent",
-	#contentBinding: 'App.claimEditController.content'
+	saveForm: (e) ->
+		newClaim=e.view._context.newClaim; accidentID=e.view._parentView.templateData.view.rowContext.accidentID
+		if newClaim
+			frm=$('#divNewClaimCard'); Action='Add'
+			Msg= Title: "Naujos žalos sukūrimas", Success: "Nauja žala sukurta.", Error: "Nepavyko išsaugot naujos žalos."
+		else
+			frm=$('#divClaimCard_Content'); Action='Edit'
+			Msg= Title: "Žalos redagavimas", Success: "Žalos duomenys pakeisti.", Error: "Nepavyko pakeisti žalos duomenų."
+		DataToSave = oCONTROLS.ValidateForm(frm)
+		if (DataToSave)
+			if newClaim
+				DataToSave.Fields.push("ClaimTypeID"); DataToSave.Data.push(e.view._context.typeID)
+				DataToSave.Fields.push("AccidentID"); DataToSave.Data.push(accidentID)
+			DataToSave["Ext"] = accidentID
+			opt = 
+				Action: Action, DataToSave: DataToSave,
+				CallBack:
+					Success: (resp) ->
+						newRow = resp.ResponseMsg.Ext.replace(/#\|#\|/g,":::").split("|#|"); newRow[13]=newRow[13].replace(/:::/g,"#|#|") #atkeičiam atgal
+						App.accidentsController.get("setNewVal").call(App.accidentsController, {newVal:newRow,toAppend:false,fieldsToInt:[0, 1, 5, 6, 7, 8]})[0] #kuriuos reikia paverst integeriais
+						tr = $("#accidentsTable").find("div.selectedAccident") #.empty()
+						tr.trigger("click")
+				Msg: Msg
+			SERVER.update(opt)
+	cancelForm: (e) ->
+		t=$(e.target); tr=t.closest("tr")
+		if (tr.find("td.selectedClaim").length)#Redaguojama žala
+			MY.tabAccidents.SelectedClaimView.remove()
+			tr.parent().find("tr.selectedClaim").removeClass("selectedClaim title").next("tr").remove()
+		else #nauja žala
+			if MY.tabAccidents.NewClaimView then MY.tabAccidents.NewClaimView.remove()
+			$("#divNewClaimCard").remove()
+			$("#AccDetailsContent").find('div.rightFooterBig').show()
 )
 #***************************************Controler**************************************************************
 App.accidentsController = Em.ResourceController.create(
@@ -364,14 +361,8 @@ App.thisAccidentController = Em.ResourceController.create(
 	#        @set("content", ArrView)
 	#    }
 )
-App.claimEditController = Em.ResourceController.create(
-	tableName: "?"
-	#    setContent: function (ArrView) {
-	#    	@set("content", ArrView)
-	#    }
-)
 App.newClaimController = Em.ResourceController.create(
-	tableName: "?"
+	# tableName: "?"
 	#    setContent: function (ArrView) {
 	#    	@set("content", ArrView)
 	#    }

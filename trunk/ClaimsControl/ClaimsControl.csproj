@@ -85,7 +85,7 @@
       <HintPath>packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
@@ -98,7 +98,7 @@
     </Reference>
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Data.Linq" />
-    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.Helpers" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -397,16 +397,6 @@
     <None Include="Content\less\variables.less" />
     <None Include="Content\less\jquery-ui-1.8.16.custom.less" />
     <Content Include="Views\Account\LogOn_Layout.cshtml" />
-    <Content Include="Copy of Web.config">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Copy of Web.Debug.config">
-      <DependentUpon>Copy of Web.config</DependentUpon>
-    </Content>
-    <Content Include="Copy of Web.Release.config">
-      <DependentUpon>Copy of Web.config</DependentUpon>
-      <SubType>Designer</SubType>
-    </Content>
     <None Include="Models\db.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>db.designer.cs</LastGenOutput>
@@ -493,6 +483,7 @@
     <Content Include="Views\Shared\Files\tmpDocTypes.cshtml" />
     <Content Include="Views\Shared\Admin\tmpUserCard.cshtml" />
     <Content Include="Views\Shared\Admin\tmpChangeUsrPass.cshtml" />
+    <Content Include="Views\Shared\General\tmpFormBottom.cshtml" />
     <None Include="Views\Shared\LayOut_Main_Debug.cshtml" />
     <Content Include="Views\Main\Start.cshtml" />
   </ItemGroup>

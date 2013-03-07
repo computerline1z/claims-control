@@ -24,7 +24,7 @@
       }
       oCONTROLS.UpdatableForm({
         frm: frm,
-        btnSaveToDisable: frm.next("button.btn")
+        btnSaveToDisable: frm.next().find("button.btnSave")
       });
       SaveOk = App.userCardController.SaveOk;
       if (SaveOk) {
@@ -129,6 +129,7 @@
       this.setUser({
         myInfo: false
       });
+      this.set("deleteButton", false);
       App.router.transitionTo('tabUserCard');
       return false;
     },
@@ -137,7 +138,73 @@
         myInfo: false,
         User: e.view._context
       });
+      this.set("deleteButton", true);
       App.router.transitionTo('tabUserCard');
+      return false;
+    },
+    deleteForm: function(e) {
+      var Msg, frm, oData, pars, row;
+      frm = $("#InfoDataForm");
+      pars = frm.data("ctrl");
+      oData = oDATA.GET(pars.Source);
+      Msg = oData.Config.Msg;
+      row = App.userCardController.content[0];
+      return oCONTROLS.dialog.Confirm({
+        title: "",
+        msg: "Ištrinti " + Msg.GenNameWhat + " '" + row.MapArrToString(oData.Config.titleFields, true) + "'?"
+      }, function() {
+        return SERVER.update2({
+          Action: "Delete",
+          DataToSave: {
+            id: row.iD,
+            DataTable: oData.Config.tblUpdate
+          },
+          "Ctrl": $("#tabLists"),
+          "source": pars.Source,
+          "row": row,
+          CallBackAfter: function(Row) {
+            App.router.transitionTo('tabAdmin');
+            return false;
+          }
+        });
+      });
+    },
+    saveForm: function(e) {
+      var Action, DataToSave, frm, opt, sendUserPassword;
+      frm = $("#InfoDataForm");
+      DataToSave = oCONTROLS.ValidateForm(frm);
+      sendUserPassword = App.TabUserCardView.sendUserPassword;
+      Action = frm.data("ctrl").NewRec ? "Add" : "Edit";
+      if (DataToSave) {
+        opt = {
+          Action: Action,
+          DataToSave: DataToSave,
+          row: App.userCardController.content[0],
+          source: "tblUsers",
+          Ctrl: frm,
+          CallBackAfter: function(Row, Action) {
+            var mailInput;
+            if (Action === "Add") {
+              sendUserPassword(null, "NewUserPsw", Row.email);
+            } else {
+              mailInput = $('#systemEmail');
+              if (mailInput.val() !== mailInput.data("ctrl").Value) {
+                sendUserPassword(null, "ResetUserPsw", Row.email);
+              }
+            }
+            App.userCardController.setUser({
+              myInfo: false,
+              User: Row
+            });
+            return App.router.transitionTo('tabAdmin');
+          }
+        };
+        SERVER.update2(opt);
+        return false;
+      }
+    },
+    cancelForm: function(e) {
+      App.router.transitionTo('tabAdmin');
       return false;
     }
   });

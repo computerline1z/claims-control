@@ -1,46 +1,36 @@
 ﻿
 {{#each view.content}} 
 {{log this}}
-{{#unless this.NewClaim}}
-	<div id='divClaimCard_Content' class="container centerBlock w90pr" data-ctrl='{"id":"{{unbound this.ID}}","NewRec":"0","Source":"tblClaims","TypeID":"{{unbound this.TypeID}}"}'>
+{{#unless this.newClaim}}
+	<div id='divClaimCard_Content' class="container centerBlock w90pr" data-ctrl='{"id":"{{unbound this.iD}}","NewRec":"0","Source":"tblClaims","TypeID":"{{unbound this.typeID}}"}'>
 {{else}}
 	<div id='divNewClaimCard_Content' class="container centerBlock w90pr">@*data-ctrl yra motininej divNewClaimCard*@
 {{/unless}}
-{{#compare "this.TypeID" "==" "6"}} 
+{{#compare "this.typeID" "==" "6"}} 
 	<div class='left w45pr'>
-	{{updatableField VehicleID id="lstVehicles" labelType="Top"}}
-	{{updatableField Days id="inputDays" labelType="Top" event="keyUp_shallChangeLossAmount"}}
-	{{updatableField PerDay id="inputPerDay" labelType="Top" event="keyUp_shallChangeLossAmount"}}
+	{{updatableField vehicleID labelType="Top"}}
+	{{updatableField days labelType="Top" classes="days" event="keyUp_shallChangeLossAmount"}}
+	{{updatableField perDay labelType="Top" classes="perDay" event="keyUp_shallChangeLossAmount"}}
 	</div><div class='right w45pr'>
-	{{updatableField LossAmount id="inputSum" attr="DISABLED" labelType="Top" sTitle="Prastovos nuostolio suma"}}@*(Math.round((Claim.Days*Claim.PerDay*100))/100)*@	
+	{{updatableField lossAmount attr="DISABLED" classes="disabled inputSum" labelType="Top" sTitle="Prastovos nuostolio suma"}}@*(Math.round((Claim.days*Claim.PerDay*100))/100)*@	
 	</div>
 {{else}}
 	<div class='left w45pr'>
-	{{updatableField VehicleID id="lstVehicles" labelType="Top" Editable="{\"EditThis\":true}" }}
-	{{updatableField LossAmount id="LossAmount" labelType="Top"}}
-	{{updatableField InsPolicyID id="lstInsPolicies" labelType="Top" List="{\"Source\":\"proc_InsPolicies_forThisAccident\",\"tblUpdate\":\"tblInsPolicies\"}"}}
+	{{updatableField vehicleID labelType="Top" Editable="{\"EditThis\":true}" }}
+	{{updatableField lossAmount labelType="Top"}}
+	{{updatableField insPolicyID labelType="Top" List="{\"Source\":\"proc_InsPolicies_forThisAccident\",\"tblUpdate\":\"tblInsPolicies\"}"}}
 
 	</div><div class='right w45pr'>
-	{{#compare "this.TypeID" "==" "1"}} 
-		{{updatableField IsTotalLoss labelType="Top"}}
+	{{#compare "this.typeID" "==" "1"}} 
+		{{updatableField isTotalLoss labelType="Top"}}
 	{{/compare}}
-	{{#compare "this.TypeID" "==" "2"}} 
-		{{updatableField IsInjuredPersons id="IsInjuredPersons" labelType="Top"}}
+	{{#compare "this.typeID" "==" "2"}} 
+		{{updatableField isInjuredPersons id="IsInjuredPersons" labelType="Top"}}
 	{{/compare}}
-	{{updatableField InsuranceClaimAmount id="InsuranceClaimAmount" labelType="Top"}}
-	{{updatableField InsurerClaimID labelType="Top"}}
+	{{updatableField insuranceClaimAmount id="InsuranceClaimAmount" labelType="Top"}}
+	{{updatableField insurerClaimID labelType="Top"}}
 	</div>
 {{/compare}}
 </div>
-
-
-<div class="frmbottom container">
-	{{#unless this.NewClaim}}
-	<div class="left mini"><button class="btn"><i class="img32-bin" title="Ištrinti žalą" {{action "DeleteClaim" this}}></i></button></div>
-	{{/unless}}
-	<div class="right medium" style="margin-top:10px;">
-		<button {{bindAttr class="this.NewClaim:NewClaim :btn :success :small :saveClaim"}} {{action "SaveClaim"}}></i>IŠSAUGOTI</button>
-		<a href="#" title="Atšaukti pakeitimus" style="margin:10px;" {{action "CancelSaveClaim"}}>Atšaukti</a>
-	</div>
-</div>
+{{view App.FormBottomView target="App.claimEditController"}}
 {{/each}}

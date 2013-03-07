@@ -140,15 +140,15 @@
 
   App.SelectedClaimView = Em.View.extend({
     didInsertElement: function() {
-      var IClaim, btnSaveToDisable, c, fnCheckIsInjured, frm;
+      var IClaim, btnSaveToDisable, c, days, fnCheckIsInjured, frm, inpSum, perDay;
       c = this.content[0];
-      frm = c.NewClaim ? "#divNewClaimCard" : '#divClaimCard_Content';
-      btnSaveToDisable = c.NewClaim ? $(frm).find("button.saveClaim") : $(frm).next().find("button.saveClaim");
+      frm = c.newClaim ? "#divNewClaimCard" : '#divClaimCard_Content';
+      btnSaveToDisable = c.newClaim ? $(frm).find("button.btnSave") : $(frm).next().find("button.btnSave");
       oCONTROLS.UpdatableForm({
         frm: frm,
         btnSaveToDisable: btnSaveToDisable
       });
-      if (c.TypeID === 2) {
+      if (c.typeID === 2) {
         IClaim = $("#InsuranceClaimAmount").parent().parent();
         IClaim.find("span").html("Žalos suma asmeniui");
         $("#LossAmount").parent().find("span").html("Žalos suma turtui");
@@ -164,9 +164,14 @@
           return fnCheckIsInjured.call($("#IsInjuredPersons"));
         });
       }
-      return $("#inputDays, #inputPerDay").on("keyup", function() {
-        return $("#inputSum").val($("#inputDays").val() * $("#inputPerDay").val());
-      });
+      if (c.typeID === 6) {
+        inpSum = $(frm).find('.inputSum input');
+        days = $(frm).find('.days input');
+        perDay = $(frm).find('.perDay input');
+        return $(frm).find('.days input,.perDay input').on("keyup", function() {
+          return inpSum.val(days.val() * perDay.val());
+        });
+      }
     },
     init: function() {
       var C2, Claim, TypeID, d;
@@ -175,111 +180,50 @@
       if (!d.newClaim) {
         C2 = d.Claims2;
         TypeID = oDATA.GET("tblClaimTypes").emData.findProperty("name", d.InsuranceType).iD;
-        Claim = {
-          ID: C2[0],
-          VehicleID: C2[1],
-          InsPolicyID: C2[2],
-          InsuranceClaimAmount: C2[3],
-          InsurerClaimID: C2[4].slice(1).slice(0, -1),
-          IsTotalLoss: C2[5],
-          IsInjuredPersons: parseInt(C2[6], 10),
-          Days: C2[7],
-          PerDay: C2[8],
-          LossAmount: d.LossAmount,
-          NewClaim: false,
-          TypeID: TypeID
-        };
-        return App.claimEditController.set("content", [Claim]);
+        Claim = Em.Object.create({
+          iD: C2[0],
+          vehicleID: C2[1],
+          insPolicyID: C2[2],
+          insuranceClaimAmount: C2[3],
+          insurerClaimID: C2[4].slice(1).slice(0, -1),
+          isTotalLoss: C2[5],
+          isInjuredPersons: parseInt(C2[6], 10),
+          days: C2[7],
+          perDay: C2[8],
+          lossAmount: d.LossAmount,
+          newClaim: false,
+          typeID: TypeID,
+          deleteButton: true
+        });
+        App.claimEditController.set("content", [Claim]);
       } else {
         TypeID = $("#divNewClaimCard").data("ctrl").ClaimTypeID;
-        Claim = {
-          ID: 0,
-          VehicleID: "",
-          InsPolicyID: "",
-          InsuranceClaimAmount: 0,
-          InsurerClaimID: "",
-          IsTotalLoss: 0,
-          IsInjuredPersons: 0,
-          Days: 5,
-          PerDay: 500,
-          LossAmount: (TypeID === 6 ? 2500 : 0),
-          NewClaim: true,
-          TypeID: TypeID
-        };
+        Claim = Em.Object.create({
+          iD: 0,
+          vehicleID: "",
+          insPolicyID: "",
+          insuranceClaimAmount: 0,
+          insurerClaimID: "",
+          isTotalLoss: 0,
+          isInjuredPersons: 0,
+          days: 5,
+          perDay: 500,
+          lossAmount: (TypeID === 6 ? 2500 : 0),
+          newClaim: true,
+          typeID: TypeID
+        });
         App.newClaimController.set("content", [Claim]);
-        return console.log("init new Claim.Type - " + TypeID);
       }
+      return console.log("init Claim.Type - " + TypeID);
     },
-    SaveClaim: function(e) {
-      var Action, DataToSave, Msg, frm, newClaim, opt;
-      newClaim = this.rowContext.newClaim;
-      if (newClaim) {
-        frm = $('#divNewClaimCard');
-        Action = 'Add';
-        Msg = {
-          Title: "Naujos žalos sukūrimas",
-          Success: "Nauja žala sukurta.",
-          Error: "Nepavyko išsaugot naujos žalos."
-        };
-      } else {
-        frm = $('#divClaimCard_Content');
-        Action = 'Edit';
-        Msg = {
-          Title: "Žalos redagavimas",
-          Success: "Žalos duomenys pakeisti.",
-          Error: "Nepavyko pakeisti žalos duomenų."
-        };
-      }
-      DataToSave = oCONTROLS.ValidateForm(frm);
-      if (DataToSave) {
-        if (newClaim) {
-          DataToSave.Fields.push("ClaimTypeID");
-          DataToSave.Data.push(e.view.content[0].TypeID);
-          DataToSave.Fields.push("AccidentID");
-          DataToSave.Data.push(e.view.rowContext.accidentID);
-        }
-        DataToSave["Ext"] = e.view.rowContext.accidentID;
-        opt = {
-          Action: Action,
-          DataToSave: DataToSave,
-          CallBack: {
-            Success: function(resp) {
-              var newRow, tr;
-              newRow = resp.ResponseMsg.Ext.replace(/#\|#\|/g, ":::").split("|#|");
-              newRow[13] = newRow[13].replace(/:::/g, "#|#|");
-              App.accidentsController.get("setNewVal").call(App.accidentsController, {
-                newVal: newRow,
-                toAppend: false,
-                fieldsToInt: [0, 1, 5, 6, 7, 8]
-              })[0];
-              tr = $("#accidentsTable").find("div.selectedAccident");
-              return tr.trigger("click");
-            }
-          },
-          Msg: Msg
-        };
-        return SERVER.update(opt);
-      }
-    },
-    CancelSaveClaim: function(e) {
-      var t, tr;
-      t = $(e.target);
-      tr = t.closest("tr");
-      if ((tr.find("td.selectedClaim").length)) {
-        MY.tabAccidents.SelectedClaimView.remove();
-        return tr.parent().find("tr.selectedClaim").removeClass("selectedClaim title").next("tr").remove();
-      } else {
-        if (MY.tabAccidents.NewClaimView) {
-          MY.tabAccidents.NewClaimView.remove();
-        }
-        $("#divNewClaimCard").remove();
-        return $("#AccDetailsContent").find('div.rightFooterBig').show();
-      }
-    },
-    DeleteClaim: function(e) {
+    templateName: 'tmpClaimEdit'
+  });
+
+  App.claimEditController = Em.Controller.create({
+    deleteForm: function(e) {
       var context, oData;
       oData = oDATA.GET("tblClaims");
-      context = e.context.rowContext;
+      context = e.view._parentView.templateData.view.rowContext;
       console.log("Žalos ID: " + context.Claims2[0]);
       return oCONTROLS.dialog.Confirm({
         title: "",
@@ -314,7 +258,73 @@
         });
       });
     },
-    templateName: 'tmpClaimEdit'
+    saveForm: function(e) {
+      var Action, DataToSave, Msg, accidentID, frm, newClaim, opt;
+      newClaim = e.view._context.newClaim;
+      accidentID = e.view._parentView.templateData.view.rowContext.accidentID;
+      if (newClaim) {
+        frm = $('#divNewClaimCard');
+        Action = 'Add';
+        Msg = {
+          Title: "Naujos žalos sukūrimas",
+          Success: "Nauja žala sukurta.",
+          Error: "Nepavyko išsaugot naujos žalos."
+        };
+      } else {
+        frm = $('#divClaimCard_Content');
+        Action = 'Edit';
+        Msg = {
+          Title: "Žalos redagavimas",
+          Success: "Žalos duomenys pakeisti.",
+          Error: "Nepavyko pakeisti žalos duomenų."
+        };
+      }
+      DataToSave = oCONTROLS.ValidateForm(frm);
+      if (DataToSave) {
+        if (newClaim) {
+          DataToSave.Fields.push("ClaimTypeID");
+          DataToSave.Data.push(e.view._context.typeID);
+          DataToSave.Fields.push("AccidentID");
+          DataToSave.Data.push(accidentID);
+        }
+        DataToSave["Ext"] = accidentID;
+        opt = {
+          Action: Action,
+          DataToSave: DataToSave,
+          CallBack: {
+            Success: function(resp) {
+              var newRow, tr;
+              newRow = resp.ResponseMsg.Ext.replace(/#\|#\|/g, ":::").split("|#|");
+              newRow[13] = newRow[13].replace(/:::/g, "#|#|");
+              App.accidentsController.get("setNewVal").call(App.accidentsController, {
+                newVal: newRow,
+                toAppend: false,
+                fieldsToInt: [0, 1, 5, 6, 7, 8]
+              })[0];
+              tr = $("#accidentsTable").find("div.selectedAccident");
+              return tr.trigger("click");
+            }
+          },
+          Msg: Msg
+        };
+        return SERVER.update(opt);
+      }
+    },
+    cancelForm: function(e) {
+      var t, tr;
+      t = $(e.target);
+      tr = t.closest("tr");
+      if ((tr.find("td.selectedClaim").length)) {
+        MY.tabAccidents.SelectedClaimView.remove();
+        return tr.parent().find("tr.selectedClaim").removeClass("selectedClaim title").next("tr").remove();
+      } else {
+        if (MY.tabAccidents.NewClaimView) {
+          MY.tabAccidents.NewClaimView.remove();
+        }
+        $("#divNewClaimCard").remove();
+        return $("#AccDetailsContent").find('div.rightFooterBig').show();
+      }
+    }
   });
 
   App.accidentsController = Em.ResourceController.create({
@@ -558,13 +568,7 @@
     tableName: "?"
   });
 
-  App.claimEditController = Em.ResourceController.create({
-    tableName: "?"
-  });
-
-  App.newClaimController = Em.ResourceController.create({
-    tableName: "?"
-  });
+  App.newClaimController = Em.ResourceController.create();
 
   App.sidePanelController = Em.ResourceController.create({
     tableName: "?",

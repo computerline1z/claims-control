@@ -11,8 +11,8 @@ App.TabUserCardView = Em.View.extend( #App.mainMenuView.extend(
 		# @_super(); SaveOk=""
 	didInsertElement: ->
 		@_super(); $("#userInfoTab").tabs(); frm=$("#InfoDataForm"); ctrl=App.userCardController;
-		if ctrl.content.length then frm.data("ctrl",{NewRec:0,id:ctrl.content[0].iD,Source:"tblUsers"}) else frm.data("ctrl",{NewRec:1,id:0,Source:"tblUsers"})#Updatinant to reikia
-		oCONTROLS.UpdatableForm(frm:frm,btnSaveToDisable:frm.next("button.btn")) 
+		if ctrl.content.length then frm.data("ctrl",{NewRec:0,id:ctrl.content[0].iD,Source:"tblUsers"}) else frm.data("ctrl",{NewRec:1,id:0,Source:"tblUsers"});
+		oCONTROLS.UpdatableForm(frm:frm,btnSaveToDisable:frm.next().find("button.btnSave")) 
 		#if App.userCardController.SaveOk then me=$("#savePasswordNote"); me.html("Naujas slaptažodis išsaugotas"); setTimeout((->me.html("")),2000); App.userCardController.SaveOk=null
 		SaveOk=App.userCardController.SaveOk 
 		if SaveOk then $("#savePasswordNote").html(SaveOk).show().delay(2000).fadeOut(); App.userCardController.set("SaveOk",null)
@@ -70,11 +70,33 @@ App.userCardController = Em.ArrayController.create(
 	passwordReset:false
 	content:[]
 	addNewUser: (e)->
-		@.setUser(myInfo:false)
+		@.setUser(myInfo:false);@.set("deleteButton",false)
 		App.router.transitionTo('tabUserCard'); false
 	editUser: (e)->
-		@.setUser(myInfo:false,User:e.view._context)
-		App.router.transitionTo('tabUserCard'); false
+		@.setUser(myInfo:false,User:e.view._context);@.set("deleteButton",true)
+		App.router.transitionTo('tabUserCard'); false	
+	deleteForm:(e)->
+		frm=$("#InfoDataForm"); pars=frm.data("ctrl"); oData=oDATA.GET(pars.Source); Msg=oData.Config.Msg; 
+		row=App.userCardController.content[0]
+		oCONTROLS.dialog.Confirm({title:"",msg:"Ištrinti "+Msg.GenNameWhat+" '"+row.MapArrToString(oData.Config.titleFields, true)+"'?"},->
+			SERVER.update2(Action:"Delete", DataToSave:{ id:row.iD, DataTable: oData.Config.tblUpdate },"Ctrl":$("#tabLists"),"source":pars.Source,"row":row,CallBackAfter:(Row)->
+				App.router.transitionTo('tabAdmin'); false
+			)
+		)
+	saveForm:(e)->
+		frm=$("#InfoDataForm"); DataToSave = oCONTROLS.ValidateForm(frm); sendUserPassword=App.TabUserCardView.sendUserPassword
+		#Msg= Title: "Mano informacijos redagavimas", Success: "Duomenys pakeisti.", Error: "Nepavyko pakeisti duomenų."
+		Action=if frm.data("ctrl").NewRec then "Add" else "Edit"
+		if (DataToSave)
+			opt = Action: Action, DataToSave: DataToSave, row:App.userCardController.content[0],source:"tblUsers",Ctrl:frm,
+			CallBackAfter:(Row,Action)->				
+				if Action=="Add" then sendUserPassword(null,"NewUserPsw",Row.email)
+				else 
+					mailInput=$('#systemEmail')
+					if mailInput.val()!=mailInput.data("ctrl").Value then sendUserPassword(null,"ResetUserPsw",Row.email)					
+				App.userCardController.setUser(myInfo:false,User:Row); App.router.transitionTo('tabAdmin')
+			SERVER.update2(opt); false		
+	cancelForm:(e)-> App.router.transitionTo('tabAdmin'); false
 )
 App.ChangeUserPassView = Em.View.extend(
 	saveNewPass: ->

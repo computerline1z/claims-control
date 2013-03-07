@@ -36,7 +36,7 @@
 			</div>
 			</br><h4>Prisijungimo duomenys</h4>
 			<div>
-				{{updatableField email classes="w48pr" labelType="Left"}}				
+				{{updatableField email classes="w48pr" id="systemEmail" labelType="Left"}}				
 				{{#if this.myInfo}}
 					<a class="medium" style="line-height:40px;" {{action changeMyPassword}} href="#">Pakeisti slaptažodį</a>
 				{{else}}
@@ -78,9 +78,9 @@
 			</div>
 		{{/if}}		
 		</div>
-		<button class="btn btnSave" style="float:right;margin:40px" {{action saveUserCard}}>Išsaugoti</button></br>
+@*		<button class="btn btnSave" style="float:right;margin:40px" {{action saveUserCard}}>Išsaugoti</button></br>
+*@		{{view App.FormBottomView target="App.userCardController"}}
 	</div>
-
 	<div id="userInfoRights">
 		<span>Vartotojų teisės</span>
 		<button class="btn btnSave" style="float:right;margin:40px" {{action saveUserRights}}>Išsaugoti</button></br>

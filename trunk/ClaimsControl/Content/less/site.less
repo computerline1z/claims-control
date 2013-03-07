@@ -142,6 +142,9 @@ div.tr.newClaim {background-color: @systemYellow4; .ClaimsRow();.clearfix();}
 div.newClaimContent {background-color: @systemYellow3; .clearfix();}
 /*-------------------------------Updatable Form----------------------------*/
 .inputForm .ExtendIt { margin: 10px 3px 10px 0px; display: inline-block; vertical-align: top; }
+.ExtendIt.disabled input { background:none !important; }
+.ExtendIt.disabled label,.ExtendIt.disabled span { cursor: default !important; }
+
 .ExtendIt { width: 100%; margin:15px auto 15px auto;text-align:left;}
 //.ExtendIt button.ui-button-icon-only {height: @baseline;                                        
 button.drop-down.ui-button-icon-only { 
@@ -275,7 +278,6 @@ div.WasBefore a { margin-left: 1em; }
 div.IsNow { line-height: 2.5em; text-align: center; }
 div.IsNow a { text-decoration: underline !important; margin-left: 1em; }
 /*-----------------------------------------------------------------------------------------------*/
-div.inputform div.ExtendIt { margin: 10px 3px 10px 0px; display: inline-block; vertical-align: top; }
 
 span.dialog-form-label { margin: 10px; font-size: @smallfont; /*color: #666666;*/ display: inline-block; }
 div.dialog-form-label { font-size: @smallfont; /*color: #666666;*/ top: 2px; margin-bottom: 2px; }

@@ -15,13 +15,6 @@ Handlebars.registerHelper('currency', function (prop, options) {
 	return new Handlebars.SafeString(value);
 });
 Handlebars.registerHelper('updatableField', function (prop, options) {
-	// if  (this.content.length===0) return false;
-	// var err = "updatableField helper ",h=(prop.hash)?prop.hash:options.hash;
-	// var f = h.Field;
-	// if (!f) throw new Error(err + "did not found Field");
-	// var v = (this.content[0][f])?this.content[0][f]:""; //Em.getPath(this.content[0], prop)
-	// if (typeof(v)==="undefined") console.error("Field "+f+" has no value in updatableField helper");
-	// if (!f) throw new Error(err + "did not found value for Field" + f);	
 	if (!prop) console.error("No prop");
 	var f=prop,h=options.hash,v=this[f];
 	if (!v&&this.content){v=this.content[0][f];}
@@ -73,33 +66,24 @@ Handlebars.registerHelper('compare', function (lvalue, operator, rvalue, options
 	var operators, result;
 	if (arguments.length < 3) { throw new Error("Handlerbars Helper 'compare' needs 2 parameters"); }
 	if (options === undefined) {
-		options = rvalue;
-		rvalue = operator;
-		operator = "===";
+		options = rvalue;rvalue = operator;operator = "===";
 	}
 	//jei value yra this.TypeID, laikom, kad reikia paimt lauko reiksme is konteksto
-	//if (lvalue.slice(0, 4) === "this") { var v = lvalue.slice(5); lvalue = this.content[0][v]; if (lvalue === undefined) { throw new Error("Handlerbars Helper 'compare' doesn't know field " + v); } }
-	//if (rvalue.slice(0, 4) === "this") { var v = rvalue.slice(5); rvalue = this.content[0][v]; if (rvalue === undefined) { throw new Error("Handlerbars Helper 'compare' doesn't know field " + v); } }
-	
-	if (lvalue.slice(0, 4) === "this") { var v = lvalue.slice(5); lvalue = this[v]; if (lvalue === undefined) { console.error("wrong field"); } }
-	if (rvalue.slice(0, 4) === "this") { var v = rvalue.slice(5); rvalue = this[v]; if (rvalue === undefined) { console.error("wrong field"); } }
-	
-	
+	if (lvalue.slice(0, 4) === "this") { var v = lvalue.slice(5); lvalue = this[v]; if (lvalue === undefined) { 
+		console.error("wrong field"); 
+	} }
+	if (rvalue.slice(0, 4) === "this") { var v = rvalue.slice(5); rvalue = this[v]; if (rvalue === undefined) { 
+		console.error("wrong field"); 
+	} }
 	//vietoj this.content padaro "content" tai atstatom
 	if (typeof lvalue==="string") {if (lvalue.match("content")){lvalue=lvalue.replace("content","this.content");lvalue=eval(lvalue);}}
 	operators = {
-		'==': function (l, r) { return l == r; },
-		'===': function (l, r) { return l === r; },
-		'!=': function (l, r) { return l != r; },
-		'!==': function (l, r) { return l !== r; },
-		'<': function (l, r) { return l < r; },
-		'>': function (l, r) { return l > r; },
-		'<=': function (l, r) { return l <= r; },
-		'>=': function (l, r) { return l >= r; },
-		'typeof': function (l, r) { return typeof l == r; }
+		'==': function (l, r) { return l == r; },'===': function (l, r) { return l === r; },'!=': function (l, r) { return l != r; },
+		'!==': function (l, r) { return l !== r; },'<': function (l, r) { return l < r; },'>': function (l, r) { return l > r; },
+		'<=': function (l, r) { return l <= r; },'>=': function (l, r) { return l >= r; },'typeof': function (l, r) { return typeof l == r; }
 	};
 	if (!operators[operator]) {
-		throw new Error("Handlerbars Helper 'compare' doesn't know the operator " + operator);
+		console.error("No such operator " + operator);
 	}
 	result = operators[operator](lvalue, rvalue);
 	if (result) {
@@ -124,13 +108,24 @@ App.SearchField = Ember.View.extend({
 		if (controller) {App[controller].set("filterValue",f.toLowerCase());}
 	}
 })
-App.AccidentViewObj = Em.View.extend({
-	didInserElement: function () {
-		console.log("I loaded one accident");
+//App.FormBottomView = Em.View.extend(Em.MyEventAttacher,{ templateName: 'tmpFormBottom' });
+App.FormBottomView = Em.View.extend({ 
+	init: function() {
+		 var actions=['deleteForm','saveForm','cancelForm'],targetEventFnc=[],actionFnc=[];
+		 target = this.get('target'),	 
+		 targetObj = Ember.getPath(target);
+		if (!targetObj){console.error("no target");}
+		var attachFunction = function(fn){
+			if (typeof fn === 'function') {
+				var actionFnc = function(event) {fn(event);} 
+				this.set(actions[i], actionFnc);	
+				console.log('ok action: '+actions[i]);
+			} else console.warn("No target for "+actions[i]);	
+		}		
+		 for (i=0;i<actions.length;i++){ 
+			attachFunction.call(this,targetObj[actions[i]]);
+		 }
+		this._super();			 
 	},
-
-	templateName: 'tmpAccidentRowObj', //<div class="tr accident" @Html.Raw("{{action tbodyClick this target=\"this\"}}")>
-	tagName: ""//,
-	//classNames: "tr",
-
+	templateName: 'tmpFormBottom'
 });

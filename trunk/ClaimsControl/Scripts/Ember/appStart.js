@@ -19,7 +19,7 @@ App.NavbarController = Em.Controller.extend({
 			var fnUnhideOutlet=function(outlet,viewIx) {
 				Em.run.next({outlet:outlet,viewIx:viewIx}, function () {
 					$('#' + this.outlet).removeClass("hidden");//Atslepiam naujai aktyvų taba
-					if (this.viewIx>-1){ $('#ulMainMenu a:eq(' + this.viewIx + ')').removeClass("notactive").addClass("selected ui-corner-top"); }//Pazymim naujo menu taba
+					if (this.viewIx>-1){ $('#ulMainMenu a:eq(' + this.viewIx + ')').removeClass("notactive").addClass("selected"); }//Pazymim naujo menu taba
 				})				
 			}
 			$('#' + controller.get("currentOutlet")).addClass("hidden"); //Paslepiam aktyvų taba .empty()
