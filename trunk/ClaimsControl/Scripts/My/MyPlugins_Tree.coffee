@@ -1,5 +1,5 @@
 #`var w=window, App=w.App, Em=w.Em, oGLOBAL=w.oGLOBAL, oDATA=w.oDATA, oCONTROLS=w.oCONTROLS, MY=w.MY`
-`var w=window,$ = w.jQuery, App=w.App, Em=w.Em`
+`var w=window,$ = w.jQuery, App=w.App, Em=w.Em, initTreePadding = false`
 
 #`var $ = window.jQuery, App=w.App, Em=w.Em, oGLOBAL=w.oGLOBAL, oDATA=w.oDATA, oCONTROLS=w.oCONTROLS, MY=w.MY`
 App.create_docsTypesController=(categoryOpts)->(
@@ -112,6 +112,13 @@ _create: ->
 DocTreeViewOpt:
 	templateName: "tmpDocsNodes", tagName: "", opts: null,
 	didInsertElement: ->
+		#Apurav Code addition
+		#if(!initTreePadding){
+		#		$('#dynamicTree ul').each(function(){
+		#		$(this).find('div.treeContent').animate({"paddingLeft":"+=5px"}, 100);
+		#	  });
+		#	  initTreePadding = true;
+		#	}
 		$("li.treeItem").droppable
 			accept: "#gallery > li"
 			accept: "#"+@opts.docViewForTreeId+" li"
@@ -199,7 +206,7 @@ TreeViewOpts :
 	expandCollapse: (event) ->
 		node = event.target
 		if node.src.indexOf("spacer") is -1
-			subbranch = $("ul", node.parentNode)
+			subbranch = $("ul", node.parentNode.parentNode)
 			action = "hide"
 			action = "show"	if subbranch.eq(0).css("display") is "none"
 			$(subbranch).each ->
