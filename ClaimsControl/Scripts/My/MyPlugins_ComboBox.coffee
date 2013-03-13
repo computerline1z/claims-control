@@ -317,17 +317,17 @@ $.widget "ui.ComboBoxCategory", $.ui.ComboBox,
 				width:600
 				templateName: 'tmpDocTypes'	
 			).append();
-		$.extend(true, @options, data:fnGetData, editList:editList)
-		
-		
+		$.extend(true, @options, data:fnGetData, editList:editList)	
 		@_super();	
 		renderGroup=(me,ul,myCategory,docTypes,categoryID) -> 
 			currentTypes = docTypes.filter((type) -> type.categoryID==categoryID)
 			myCategory.forEach((category) ->
-				ul.append("<li class='ui-autocomplete-category'>" + category.title + "</li>")		
-				currentTypes.setEach("refID",category.iD)
-				currentTypes.forEach((type,i) -> me._renderItemData(ul, type))# bėgam per šios kategorijos tipus	
-			)	
+					ul.append("<li class='ui-autocomplete-category'>" + category.title + "</li>")           
+					currentTypes.forEach((type,i) -> # bėgam per šios kategorijos tipus
+						typeClone=$.extend({},type,refID:category.iD)#set apropriate refID for docType, clone to avoid dublication (vehicle)
+						me._renderItemData(ul, typeClone)
+					)        
+			)  	
 		widget=@
 		@element.data("autocomplete")._renderMenu = (ul, docTypes) ->
 			me = @; currentCategoryID = "";

@@ -69,7 +69,8 @@ namespace CC.Controllers {
 			//public int? GroupID { get; set; }
 			//public string Description { get; set; }
 			//public int? AccidentID { get; set; }
-			string errorMessage; tblDocsInAccident _tblDocsInAccidents = null; tblDoc _tblDocs = null;
+			//string errorMessage; tblDocsInAccident _tblDocsInAccidents = null; tblDoc _tblDocs = null;
+			string errorMessage; tblDoc _tblDocs = null;
 			try {
 				var stream = Request.Files[0].InputStream;  // Request.InputStream;
 				if (model.FileSize != stream.Length)
@@ -80,7 +81,8 @@ namespace CC.Controllers {
 				if (buffer.Length > 0) {
 					stream.Read(buffer, 0, buffer.Length);
 					FileDescriptor descriptor = FileDescriptor.CreateFileDescriptor(model, buffer.Length, UserData.UserID);
-					_tblDocs = this._flManager.StoreTblDocs(descriptor, out _tblDocsInAccidents, out errorMessage, buffer);
+					//_tblDocs = this._flManager.StoreTblDocs(descriptor, out _tblDocsInAccidents, out errorMessage, buffer);
+					_tblDocs = this._flManager.StoreTblDocs(descriptor, out errorMessage, buffer);
 					//recordId = _tblDocs.ID;
 					if (!String.IsNullOrEmpty(errorMessage)) { throw new Exception(errorMessage); }
 						
@@ -95,8 +97,8 @@ namespace CC.Controllers {
 							userID = _tblDocs.UserID, docTypeID = _tblDocs.DocTypeID, refID = _tblDocs.RefID, sortNo = _tblDocs.SortNo,
 							groupID = _tblDocs.GroupID, description = _tblDocs.Description, hasThumb=_tblDocs.HasThumb, visible=true
 						},
-						tblDocsInAccidents=(_tblDocsInAccidents==null)?null:
-						new { iD = _tblDocsInAccidents.ID, docID = _tblDocsInAccidents.DocID, accidentID = _tblDocsInAccidents.AccidentID }
+						//tblDocsInAccidents=(_tblDocsInAccidents==null)?null:
+						//new { iD = _tblDocsInAccidents.ID, docID = _tblDocsInAccidents.DocID, accidentID = _tblDocsInAccidents.AccidentID }
 					});
 
 			}

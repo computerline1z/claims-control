@@ -78,8 +78,10 @@ namespace CC.Services.Implementation {
 			return rzlt;
 		}
 
-		public tblDoc StoreTblDocs(FileDescriptor descriptor, out tblDocsInAccident _tblDocsInAccident, out string errorMessage, byte[] buffer) {
-			tblDoc record; _tblDocsInAccident = null; int Row = 0; string fileName="";
+		//public tblDoc StoreTblDocs(FileDescriptor descriptor, out tblDocsInAccident _tblDocsInAccident, out string errorMessage, byte[] buffer) {
+		public tblDoc StoreTblDocs(FileDescriptor descriptor, out string errorMessage, byte[] buffer) {
+			//tblDoc record; _tblDocsInAccident = null; int Row = 0; string fileName="";
+			tblDoc record; int Row = 0; string fileName = "";
 
 			try {
 				// Tranzakcija būtina tam, kad niekas nepakeistų SortNo, kol operacija neužbaigta.
@@ -107,7 +109,7 @@ namespace CC.Services.Implementation {
 			}
 			catch (Exception e) {
 				_dc.Transaction.Rollback();
-				_tblDocsInAccident = null;
+				//_tblDocsInAccident = null;
 				errorMessage = e.Message + " (StoreTblDocs1)";
 				record = null;
 				return record;
@@ -121,29 +123,31 @@ namespace CC.Services.Implementation {
 				bool HasThumb = StoreFile(fileName, buffer); Row++;
 				if (HasThumb) { record.HasThumb = HasThumb; }
 				_dc.SubmitChanges();
+				errorMessage = String.Empty;
 				//----------------------------------------------------------------------------
 			}
 			catch (Exception e) {
 				_dc.Transaction.Rollback();
-				_tblDocsInAccident = null;
+				//_tblDocsInAccident = null;
 				errorMessage = e.Message + " (StoreTblDocs2), fileName:" + ((fileName == null) ? fileName : "-") + ", Row:" + Row + ", storedFileName:" + storedFileName;
 				record = null;
 				return record;
 			}
 			try {
-				if (descriptor.AccidentID.HasValue) {//Ikišam dokumento priklausymo Accidentui ryšį į lentelę
-					_tblDocsInAccident = new tblDocsInAccident() {
-						DocID = record.ID, AccidentID = descriptor.AccidentID.Value
-					};
-					_dc.tblDocsInAccidents.InsertOnSubmit(_tblDocsInAccident);
-					_dc.SubmitChanges();
-				}
+				//dokumento priklausymas Accidentui surandamas per tblDocs.Ref
+				//if (descriptor.AccidentID.HasValue) {//Ikišam dokumento priklausymo Accidentui ryšį į lentelę
+				//   _tblDocsInAccident = new tblDocsInAccident() {
+				//      DocID = record.ID, AccidentID = descriptor.AccidentID.Value
+				//   };
+				//   _dc.tblDocsInAccidents.InsertOnSubmit(_tblDocsInAccident);
+				//   _dc.SubmitChanges();
+				//}
 				_dc.Transaction.Commit();
 				errorMessage = String.Empty;
 			}
 			catch (Exception e) {
 				_dc.Transaction.Rollback();
-				_tblDocsInAccident = null;
+				//_tblDocsInAccident = null;
 				errorMessage = e.Message + " (StoreTblDocs3)";
 				record = null;
 				return record;
@@ -225,11 +229,12 @@ namespace CC.Services.Implementation {
 			int originalWidth = original.Width;
 			int originalHeight = original.Height;
 
-			double factor;
-			if (originalWidth > originalHeight)
-				factor = (double)maxPixels / originalWidth;
-			else
-				factor = (double)maxPixels / originalHeight;
+			double factor = (double)maxPixels / originalHeight;//Aukštį paliekam fiksuotą
+			//if (originalWidth > originalHeight)
+			//   factor = (double)maxPixels / originalWidth;
+			//else
+			//   factor = (double)maxPixels / originalHeight;
+
 
 			return new Size((int)(originalWidth * factor), (int)(originalHeight * factor));
 		}

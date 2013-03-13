@@ -105,9 +105,6 @@ namespace CC.Models
     partial void InserttblTimeZone(tblTimeZone instance);
     partial void UpdatetblTimeZone(tblTimeZone instance);
     partial void DeletetblTimeZone(tblTimeZone instance);
-    partial void InserttblDocsInAccident(tblDocsInAccident instance);
-    partial void UpdatetblDocsInAccident(tblDocsInAccident instance);
-    partial void DeletetblDocsInAccident(tblDocsInAccident instance);
     partial void InserttblAccident(tblAccident instance);
     partial void UpdatetblAccident(tblAccident instance);
     partial void DeletetblAccident(tblAccident instance);
@@ -135,7 +132,7 @@ namespace CC.Models
     #endregion
 		
 		public dbDataContext() : 
-				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["ClaimsControlConnectionString3"].ConnectionString, mappingSource)
+				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["ClaimsControlConnectionString"].ConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
@@ -361,14 +358,6 @@ namespace CC.Models
 			get
 			{
 				return this.GetTable<tblTimeZone>();
-			}
-		}
-		
-		public System.Data.Linq.Table<tblDocsInAccident> tblDocsInAccidents
-		{
-			get
-			{
-				return this.GetTable<tblDocsInAccident>();
 			}
 		}
 		
@@ -5611,198 +5600,6 @@ namespace CC.Models
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tblDocsInAccident")]
-	public partial class tblDocsInAccident : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _ID;
-		
-		private int _DocID;
-		
-		private int _AccidentID;
-		
-		private EntityRef<tblAccident> _tblAccident;
-		
-		private EntityRef<tblDoc> _tblDoc;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIDChanging(int value);
-    partial void OnIDChanged();
-    partial void OnDocIDChanging(int value);
-    partial void OnDocIDChanged();
-    partial void OnAccidentIDChanging(int value);
-    partial void OnAccidentIDChanged();
-    #endregion
-		
-		public tblDocsInAccident()
-		{
-			this._tblAccident = default(EntityRef<tblAccident>);
-			this._tblDoc = default(EntityRef<tblDoc>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int ID
-		{
-			get
-			{
-				return this._ID;
-			}
-			set
-			{
-				if ((this._ID != value))
-				{
-					this.OnIDChanging(value);
-					this.SendPropertyChanging();
-					this._ID = value;
-					this.SendPropertyChanged("ID");
-					this.OnIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DocID", DbType="Int NOT NULL")]
-		public int DocID
-		{
-			get
-			{
-				return this._DocID;
-			}
-			set
-			{
-				if ((this._DocID != value))
-				{
-					if (this._tblDoc.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnDocIDChanging(value);
-					this.SendPropertyChanging();
-					this._DocID = value;
-					this.SendPropertyChanged("DocID");
-					this.OnDocIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AccidentID", DbType="Int NOT NULL")]
-		public int AccidentID
-		{
-			get
-			{
-				return this._AccidentID;
-			}
-			set
-			{
-				if ((this._AccidentID != value))
-				{
-					if (this._tblAccident.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnAccidentIDChanging(value);
-					this.SendPropertyChanging();
-					this._AccidentID = value;
-					this.SendPropertyChanged("AccidentID");
-					this.OnAccidentIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblAccident_tblDocsInAccident", Storage="_tblAccident", ThisKey="AccidentID", OtherKey="ID", IsForeignKey=true)]
-		public tblAccident tblAccident
-		{
-			get
-			{
-				return this._tblAccident.Entity;
-			}
-			set
-			{
-				tblAccident previousValue = this._tblAccident.Entity;
-				if (((previousValue != value) 
-							|| (this._tblAccident.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._tblAccident.Entity = null;
-						previousValue.tblDocsInAccidents.Remove(this);
-					}
-					this._tblAccident.Entity = value;
-					if ((value != null))
-					{
-						value.tblDocsInAccidents.Add(this);
-						this._AccidentID = value.ID;
-					}
-					else
-					{
-						this._AccidentID = default(int);
-					}
-					this.SendPropertyChanged("tblAccident");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblDoc_tblDocsInAccident", Storage="_tblDoc", ThisKey="DocID", OtherKey="ID", IsForeignKey=true)]
-		public tblDoc tblDoc
-		{
-			get
-			{
-				return this._tblDoc.Entity;
-			}
-			set
-			{
-				tblDoc previousValue = this._tblDoc.Entity;
-				if (((previousValue != value) 
-							|| (this._tblDoc.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._tblDoc.Entity = null;
-						previousValue.tblDocsInAccidents.Remove(this);
-					}
-					this._tblDoc.Entity = value;
-					if ((value != null))
-					{
-						value.tblDocsInAccidents.Add(this);
-						this._DocID = value.ID;
-					}
-					else
-					{
-						this._DocID = default(int);
-					}
-					this.SendPropertyChanged("tblDoc");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tblAccidents")]
 	public partial class tblAccident : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -5844,8 +5641,6 @@ namespace CC.Models
 		private bool _IsDeleted;
 		
 		private EntitySet<tblClaim> _tblClaims;
-		
-		private EntitySet<tblDocsInAccident> _tblDocsInAccidents;
 		
 		private EntityRef<tblAccidentsType> _tblAccidentsType;
 		
@@ -5896,7 +5691,6 @@ namespace CC.Models
 		public tblAccident()
 		{
 			this._tblClaims = new EntitySet<tblClaim>(new Action<tblClaim>(this.attach_tblClaims), new Action<tblClaim>(this.detach_tblClaims));
-			this._tblDocsInAccidents = new EntitySet<tblDocsInAccident>(new Action<tblDocsInAccident>(this.attach_tblDocsInAccidents), new Action<tblDocsInAccident>(this.detach_tblDocsInAccidents));
 			this._tblAccidentsType = default(EntityRef<tblAccidentsType>);
 			this._tblDriver = default(EntityRef<tblDriver>);
 			this._tblAccount = default(EntityRef<tblAccount>);
@@ -6268,19 +6062,6 @@ namespace CC.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblAccident_tblDocsInAccident", Storage="_tblDocsInAccidents", ThisKey="ID", OtherKey="AccidentID")]
-		public EntitySet<tblDocsInAccident> tblDocsInAccidents
-		{
-			get
-			{
-				return this._tblDocsInAccidents;
-			}
-			set
-			{
-				this._tblDocsInAccidents.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblAccidentsType_tblAccident", Storage="_tblAccidentsType", ThisKey="AccidentTypeID", OtherKey="ID", IsForeignKey=true)]
 		public tblAccidentsType tblAccidentsType
 		{
@@ -6414,18 +6195,6 @@ namespace CC.Models
 			this.SendPropertyChanging();
 			entity.tblAccident = null;
 		}
-		
-		private void attach_tblDocsInAccidents(tblDocsInAccident entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblAccident = this;
-		}
-		
-		private void detach_tblDocsInAccidents(tblDocsInAccident entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblAccident = null;
-		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tblDocs")]
@@ -6461,8 +6230,6 @@ namespace CC.Models
 		private string _Description;
 		
 		private System.Nullable<bool> _HasThumb;
-		
-		private EntitySet<tblDocsInAccident> _tblDocsInAccidents;
 		
 		private EntityRef<tblDocType> _tblDocType;
 		
@@ -6506,7 +6273,6 @@ namespace CC.Models
 		
 		public tblDoc()
 		{
-			this._tblDocsInAccidents = new EntitySet<tblDocsInAccident>(new Action<tblDocsInAccident>(this.attach_tblDocsInAccidents), new Action<tblDocsInAccident>(this.detach_tblDocsInAccidents));
 			this._tblDocType = default(EntityRef<tblDocType>);
 			this._tblUser = default(EntityRef<tblUser>);
 			this._tblDocGroup = default(EntityRef<tblDocGroup>);
@@ -6805,19 +6571,6 @@ namespace CC.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblDoc_tblDocsInAccident", Storage="_tblDocsInAccidents", ThisKey="ID", OtherKey="DocID")]
-		public EntitySet<tblDocsInAccident> tblDocsInAccidents
-		{
-			get
-			{
-				return this._tblDocsInAccidents;
-			}
-			set
-			{
-				this._tblDocsInAccidents.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblDocType_tblDoc", Storage="_tblDocType", ThisKey="DocTypeID", OtherKey="ID", IsForeignKey=true)]
 		public tblDocType tblDocType
 		{
@@ -6938,18 +6691,6 @@ namespace CC.Models
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
-		}
-		
-		private void attach_tblDocsInAccidents(tblDocsInAccident entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblDoc = this;
-		}
-		
-		private void detach_tblDocsInAccidents(tblDocsInAccident entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblDoc = null;
 		}
 	}
 	

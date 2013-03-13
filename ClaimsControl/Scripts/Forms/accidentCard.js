@@ -274,7 +274,8 @@ oGLOBAL.mapFn = {
 			var latlng=oGLOBAL.map.getCenter(); latlng.y=latlng.y-0.3;latlng.Xd=latlng.y;//Dėl atsiradusio paieškos lauko paslenkam žemiau
 			oGLOBAL.map.openInfoWindow(latlng, "Suraskite ir pažymėkite įvykio vietą žemėlapyje");//"Spragtelėkit žemėlapyje pažymėti įvykio vietą!");
 		};
-		if (GBrowserIsCompatible()) {
+		if (typeof GBrowserIsCompatible==="undefined") {console.warn("GBrowserIsCompatible");return false;}
+		else if (GBrowserIsCompatible()) {
 			//alert(oGLOBAL.AccidentForm.NewRec); alert(oGLOBAL.AccidentForm.Lat); alert(oGLOBAL.AccidentForm.Lng);
 			oGLOBAL.map = new GMap2(document.getElementById("divMap"));
 			if (!oGLOBAL.AccidentForm.NewRec) {

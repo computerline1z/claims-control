@@ -611,16 +611,17 @@
         },
 
         _onFail: function (jqXHR, textStatus, errorThrown, options) {
-            options.jqXHR = jqXHR;
-            options.textStatus = textStatus;
-            options.errorThrown = errorThrown;
-            this._trigger('fail', null, options);
-            if (options.recalculateProgress) {
-                // Remove the failed (error or abort) file upload from
-                // the global progress calculation:
-                this._loaded -= options.loaded || options.uploadedBytes || 0;
-                this._total -= options.total || this._getTotal(options.files);
-            }
+		if (textStatus==="parsererror"){window.location='/Account/Logon';}//mano dadeta
+		options.jqXHR = jqXHR;
+		options.textStatus = textStatus;
+		options.errorThrown = errorThrown;
+		this._trigger('fail', null, options);
+		if (options.recalculateProgress) {
+			// Remove the failed (error or abort) file upload from
+			// the global progress calculation:
+			this._loaded -= options.loaded || options.uploadedBytes || 0;
+			this._total -= options.total || this._getTotal(options.files);
+		}
         },
 
         _onAlways: function (jqXHRorResult, textStatus, jqXHRorError, options) {
