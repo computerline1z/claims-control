@@ -323,7 +323,6 @@
     <Content Include="Scripts\My\General.js" />
     <Content Include="Scripts\My\MyPlugins_Tree.js" />
     <Content Include="Scripts\My\MyPlugins_UploadFiles.js" />
-    <Content Include="Scripts\My\oCONTROLStrinti1.js" />
     <Content Include="Scripts\My\oCONTROLS.js" />
     <Content Include="Scripts\My\ui-checkbox.js" />
     <Content Include="Scripts\My\MyPlugins_Checkbox.js" />
@@ -409,7 +408,6 @@
     <Content Include="Scripts\Main\jquery.attrObserver.js" />
     <Content Include="Scripts\Ember\ember-1.0.pre.min.js" />
     <Content Include="Scripts\Ember\appStart.js" />
-    <Content Include="Scripts\My\LAB.min.js" />
     <Content Include="Scripts\Main\LAB-debug.min.js" />
     <Content Include="Scripts\Main\jquery-1.7.2-vsdoc.js" />
     <Content Include="Scripts\Main\jquery-ui-1.8.23.custom.min.js" />
@@ -462,7 +460,6 @@
     <None Include="Scripts\My\clsEditableForm.coffee" />
     <None Include="Scripts\My\MyPlugins_Tree.coffee" />
     <None Include="Scripts\My\MyPlugins_UploadFiles.coffee" />
-    <None Include="Scripts\My\view_FileUploader.coffee" />
     <None Include="Scripts\My\MyPlugins_ComboBox.coffee" />
     <Content Include="Views\Main\StartOld.cshtml" />
     <None Include="Views\Shared\Accidents\tmpClaimEdit.cshtml" />

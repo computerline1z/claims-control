@@ -150,6 +150,7 @@ JQ.Dialog = Ember.View.extend(JQ.Widget, {
 			if(removeDialog.removeOnCloseView){removeDialog.removeOnCloseView.remove();}
 			removeDialog.remove();
 		}
+		$('div.validity-tooltip').remove();
 	},			
 	open: function () {
 		//this.get('ui').dialog('open'); //Object [object Object] has no method 'dialog' 

@@ -460,13 +460,9 @@ var SERVER = {
 			data: JSONarg,
 			contentType: "application/json; charset=utf-8",
 			dataType: dataType,
-			erorr: function (msg) {
-				//Wait.Hide();
-				//if (msg.d ==="Er_Saving") //{ alert("Nepavyko išsaugoti duomenų. \n Bandykite dar kartÄ….."); } //return else
-				{
-					alert("Nepavyko prisijungti..");
-					window.location='/Account/Logon';// App.router.location.lastSetURL
-				}
+			error: function (msg) {
+				console.warn(msg);
+				window.location='/Account/Logon';// App.router.location.lastSetURL
 			},
 			success: function (d) {
 				//Wait.Hide();

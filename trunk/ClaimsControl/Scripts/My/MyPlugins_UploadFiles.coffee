@@ -23,6 +23,14 @@ _create: ->
 		form.fileupload(@options)
 	)
 	Em.run.next(@,->
+		# prepareUpload=(t)->
+			# $t=t;$t.closest("form").find("table").removeClass("hidden").end()
+			# .find("button.cancel").on("click", ->
+				# $t.closest("form").find(".submitButtons, table").addClass("hidden")#.end()
+				# console.log("Removing tr")
+				# console.log($t.closest("form").find("table tbody tr"))
+				# $t.closest("form").find("table tbody tr").remove()#.addClass("hidden"))
+			# )
 		form.bind('fileuploadadded', (e, data) -> 
 			tr=data.context#data.form,originalFiles,files[0]-bus esamas
 			data.form.find(".submitButtons").removeClass("hidden");inputCat=tr.find("input[name='category[]']")
@@ -60,8 +68,19 @@ _create: ->
 		).bind("fileuploaddone", (e, data) -> 
 			if (data.result.success)
 				console.log("Upload result for file '"+data.files[0].name+"':");	console.log(data.result)
-				#---------------------------------------------------------------------------
+				#---------------add new doc change docs number------------------------------------------------------------
 				newDoc=Em.Object.create(data.result.tblDoc); oDATA.GET("tblDocs").emData.pushObject(newDoc);
+				docRef=oDATA.GET('tblDocGroup').emData.findProperty('iD',newDoc.groupID).ref
+				if docRef==3# drivers
+					drv=oDATA.GET('proc_Drivers').emData.findProperty('iD',newDoc.refID);No=parseInt(drv.docs.slice(1,-1),10); if isNaN(No) then console.error("NaN")
+					No++; docsNo='('+No+')'; drv.set('docs',docsNo)
+					topDrivers=oDATA.GET('proc_topDrivers'); if topDrivers
+						drvTop=topDrivers.emData.findProperty('iD',newDoc.refID); if drvTop then drvTop.set('docs',docsNo)
+				else if docRef==4# vehicles
+					veh=oDATA.GET('proc_Vehicles').emData.findProperty('iD',newDoc.refID);No=parseInt(veh.docs.slice(1,-1),10); if isNaN(No) then console.error("NaN")
+					No++; docsNo='('+No+')'; veh.set('docs',docsNo)
+					topVehicles=oDATA.GET('proc_topVehicles'); if topVehicles
+						vehTop=topVehicles.emData.findProperty('iD',newDoc.refID); if vehTop then vehTop.set('docs',docsNo)
 				#if data.result.tblDocsInAccidents 
 				#	newDocInAccident=Em.Object.create(data.result.tblDocsInAccidents); oDATA.GET("tblDocsInAccidents").emData.pushObject(newDocInAccident);
 				#---------------------------------------------------------------------------
@@ -72,13 +91,25 @@ _create: ->
 					App[docsContr].refreshDocs()
 			else
 				console.log("erroras")
+		# ).find(".fileinput-button").on("click", prepareUpload:prepareUpload, (e)-> 
+			# form=$('#dialogContent'); formOpts=form.data('ctrl'); $t=$(this); prepareUpload=e.data.prepareUpload
+			# if form.length#If dialog then check before download
+				# if formOpts.NewRec#Jei naujas išsaugom jei galim
+					# DataToSave=oCONTROLS.ValidateForm(form);
+					# if DataToSave
+						# SERVER.update2(Action:'Add',DataToSave:DataToSave,Ctrl:form,source:formOpts.Source,CallBackAfter:(Row)->
+							# oCONTROLS.UpdatableForm_toSaved(Row.iD, form)
+							# prepareUpload($t)
+						# )
+					# else oCONTROLS.dialog.Alert( title:'',msg:'Užpildykite pažymėtus laukus..')
+				# else prepareUpload($t)
+			# else prepareUpload($t)
+		# )
 		).find(".fileinput-button").on("click", ->
 			#if ($(this).closest("form").find("table tbody tr").length==0)
 			$(this).closest("form").find("table").removeClass("hidden").end()#.find("tbody tr").remove().end()
-			.find("button.cancel").on("click", ->
+			.find("a.cancel").on("click", ->
 				$(@).closest("form").find(".submitButtons, table").addClass("hidden")#.end()
-				console.log("Removing tr")
-				console.log($(@).closest("form").find("table tbody tr"))
 				$(@).closest("form").find("table tbody tr").remove()#.addClass("hidden"))
 			)
 		)
