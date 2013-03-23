@@ -115,7 +115,7 @@ form input.searchField
     border: 1px solid #2F5BB7;
 }*/
 /*------------------------------Selected accident----------------------*/
-.tr.selectedAccident { .gradient--main; color: white !important; border-bottom: none!important; }
+div.zebra-striped .tr.selectedAccident { .gradient--main; color: white !important; border-bottom: none!important; }
 div.selectedAccident i.img32-mono_edit {background-image: url('images/Sprite32-white.png') !important;}
 #AccDetailsWraper {border: 4px solid #186a94; padding: 5px; border-top: 0; }
 #AccDetailsContent { width:100; display:none;}
@@ -144,7 +144,6 @@ div.newClaimContent {background-color: @systemYellow3; .clearfix();}
 .inputForm .ExtendIt { margin: 10px 3px 10px 0px; display: inline-block; vertical-align: top; }
 .ExtendIt.disabled input { background:none !important; }
 .ExtendIt.disabled label,.ExtendIt.disabled span { cursor: default !important; }
-
 .ExtendIt { width: 100%; margin:15px auto 15px auto;text-align:left;}
 //.ExtendIt button.ui-button-icon-only {height: @baseline;                                        
 button.drop-down.ui-button-icon-only { 
@@ -278,6 +277,7 @@ div.WasBefore a { margin-left: 1em; }
 div.IsNow { line-height: 2.5em; text-align: center; }
 div.IsNow a { text-decoration: underline !important; margin-left: 1em; }
 /*-----------------------------------------------------------------------------------------------*/
+div.inputform div.ExtendIt { margin: 10px 3px 10px 0px; display: inline-block; vertical-align: top; }
 
 span.dialog-form-label { margin: 10px; font-size: @smallfont; /*color: #666666;*/ display: inline-block; }
 div.dialog-form-label { font-size: @smallfont; /*color: #666666;*/ top: 2px; margin-bottom: 2px; }
@@ -393,7 +393,7 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 /*Autocomplete li a su veiksmais*/
 .actionLink {font-weight:bold !important;color:#09C !important;text-decoration:underline !important; cursor:pointer !important;}
 /*------------------------Dokumentu medis--------------------------------*/
-.gallery li.photo {float: left; padding: 10px;margin: 10px;border:1px solid #dddddd;cursor: move; height: 250px; }
+.gallery li.photo {float: left;width: 30%;padding: 10px;margin: 10px;border:1px solid #dddddd;cursor: move; height: 250px; }
 .gallery li.photo div.photo-image {width: 100%; height:120px; overflow:hidden; margin: auto auto 10px auto; }
 .gallery li.docs {cursor: move;display:block; width:100%;height:80px;border-bottom:1px dotted; }
 .docs-selected{border:2px solid #186892 !important} 
@@ -524,5 +524,10 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 }
 .img16-camera {
     background-position: 0 -64px;
+}
+.admin-topsection{
+    float: left; 
+    width: 98%; 
+    margin: 10px;
 }
 /*----apurav new rules end -----*/
