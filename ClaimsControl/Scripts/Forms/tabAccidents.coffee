@@ -185,7 +185,7 @@ App.claimEditController = Em.Controller.create(#save, delete, cancel Claims even
 						newRow = resp.ResponseMsg.Ext.replace(/#\|#\|/g,":::").split("|#|"); newRow[13]=newRow[13].replace(/:::/g,"#|#|") #atkeičiam atgal
 						App.accidentsController.get("setNewVal").call(App.accidentsController, {newVal:newRow,toAppend:false,fieldsToInt:[0, 1, 5, 6, 7, 8]})[0] #kuriuos reikia paverst integeriais
 						tr = $("#accidentsTable").find("div.selectedAccident") #.empty()
-						tr.trigger("click")
+						tr.trigger("click").trigger("click")
 				Msg: Msg
 			SERVER.update(opt)
 	cancelForm: (e) ->

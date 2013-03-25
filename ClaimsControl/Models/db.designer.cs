@@ -75,9 +75,6 @@ namespace CC.Models
     partial void InserttblClaim(tblClaim instance);
     partial void UpdatetblClaim(tblClaim instance);
     partial void DeletetblClaim(tblClaim instance);
-    partial void InserttblDriver(tblDriver instance);
-    partial void UpdatetblDriver(tblDriver instance);
-    partial void DeletetblDriver(tblDriver instance);
     partial void InserttblVehicleMake(tblVehicleMake instance);
     partial void UpdatetblVehicleMake(tblVehicleMake instance);
     partial void DeletetblVehicleMake(tblVehicleMake instance);
@@ -129,10 +126,16 @@ namespace CC.Models
     partial void InserttblInsPolicy(tblInsPolicy instance);
     partial void UpdatetblInsPolicy(tblInsPolicy instance);
     partial void DeletetblInsPolicy(tblInsPolicy instance);
+    partial void InserttblDriver(tblDriver instance);
+    partial void UpdatetblDriver(tblDriver instance);
+    partial void DeletetblDriver(tblDriver instance);
+    partial void InserttblUserMsg(tblUserMsg instance);
+    partial void UpdatetblUserMsg(tblUserMsg instance);
+    partial void DeletetblUserMsg(tblUserMsg instance);
     #endregion
 		
 		public dbDataContext() : 
-				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["ClaimsControlConnectionString"].ConnectionString, mappingSource)
+				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["ClaimsControlConnectionString1"].ConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
@@ -281,14 +284,6 @@ namespace CC.Models
 			}
 		}
 		
-		public System.Data.Linq.Table<tblDriver> tblDrivers
-		{
-			get
-			{
-				return this.GetTable<tblDriver>();
-			}
-		}
-		
 		public System.Data.Linq.Table<tblVehicleMake> tblVehicleMakes
 		{
 			get
@@ -425,6 +420,22 @@ namespace CC.Models
 			}
 		}
 		
+		public System.Data.Linq.Table<tblDriver> tblDrivers
+		{
+			get
+			{
+				return this.GetTable<tblDriver>();
+			}
+		}
+		
+		public System.Data.Linq.Table<tblUserMsg> tblUserMsgs
+		{
+			get
+			{
+				return this.GetTable<tblUserMsg>();
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.proc_Vehicles")]
 		public ISingleResult<proc_VehiclesResult> proc_Vehicles([global::System.Data.Linq.Mapping.ParameterAttribute(Name="AccountID", DbType="Int")] System.Nullable<int> accountID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Top", DbType="Bit")] System.Nullable<bool> top)
 		{
@@ -438,13 +449,6 @@ namespace CC.Models
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), iD, firstName, surname, email, accountID, languageID, roleNames);
 			iD = ((System.Nullable<int>)(result.GetParameterValue(0)));
 			return ((int)(result.ReturnValue));
-		}
-		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.proc_Drivers")]
-		public ISingleResult<proc_DriversResult> proc_Drivers([global::System.Data.Linq.Mapping.ParameterAttribute(Name="AccountID", DbType="Int")] System.Nullable<int> accountID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Top", DbType="Bit")] System.Nullable<bool> top)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), accountID, top);
-			return ((ISingleResult<proc_DriversResult>)(result.ReturnValue));
 		}
 		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.proc_Accidents")]
@@ -466,6 +470,13 @@ namespace CC.Models
 		{
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), accountID, top);
 			return ((ISingleResult<proc_InsPoliciesResult>)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.proc_Drivers")]
+		public ISingleResult<proc_DriversResult> proc_Drivers([global::System.Data.Linq.Mapping.ParameterAttribute(Name="AccountID", DbType="Int")] System.Nullable<int> accountID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Top", DbType="Bit")] System.Nullable<bool> top)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), accountID, top);
+			return ((ISingleResult<proc_DriversResult>)(result.ReturnValue));
 		}
 	}
 	
@@ -3640,329 +3651,6 @@ namespace CC.Models
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tblDrivers")]
-	public partial class tblDriver : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _ID;
-		
-		private string _FirstName;
-		
-		private string _LastName;
-		
-		private System.Nullable<System.DateTime> _DateExpierence;
-		
-		private System.Nullable<System.DateTime> _EndDate;
-		
-		private string _DrivingCategory;
-		
-		private string _Phone;
-		
-		private int _AccountID;
-		
-		private bool _IsDeleted;
-		
-		private EntitySet<tblAccident> _tblAccidents;
-		
-		private EntityRef<tblAccount> _tblAccount;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIDChanging(int value);
-    partial void OnIDChanged();
-    partial void OnFirstNameChanging(string value);
-    partial void OnFirstNameChanged();
-    partial void OnLastNameChanging(string value);
-    partial void OnLastNameChanged();
-    partial void OnDateExpierenceChanging(System.Nullable<System.DateTime> value);
-    partial void OnDateExpierenceChanged();
-    partial void OnEndDateChanging(System.Nullable<System.DateTime> value);
-    partial void OnEndDateChanged();
-    partial void OnDrivingCategoryChanging(string value);
-    partial void OnDrivingCategoryChanged();
-    partial void OnPhoneChanging(string value);
-    partial void OnPhoneChanged();
-    partial void OnAccountIDChanging(int value);
-    partial void OnAccountIDChanged();
-    partial void OnIsDeletedChanging(bool value);
-    partial void OnIsDeletedChanged();
-    #endregion
-		
-		public tblDriver()
-		{
-			this._tblAccidents = new EntitySet<tblAccident>(new Action<tblAccident>(this.attach_tblAccidents), new Action<tblAccident>(this.detach_tblAccidents));
-			this._tblAccount = default(EntityRef<tblAccount>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int ID
-		{
-			get
-			{
-				return this._ID;
-			}
-			set
-			{
-				if ((this._ID != value))
-				{
-					this.OnIDChanging(value);
-					this.SendPropertyChanging();
-					this._ID = value;
-					this.SendPropertyChanged("ID");
-					this.OnIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FirstName", DbType="NVarChar(100)")]
-		public string FirstName
-		{
-			get
-			{
-				return this._FirstName;
-			}
-			set
-			{
-				if ((this._FirstName != value))
-				{
-					this.OnFirstNameChanging(value);
-					this.SendPropertyChanging();
-					this._FirstName = value;
-					this.SendPropertyChanged("FirstName");
-					this.OnFirstNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LastName", DbType="NVarChar(100)")]
-		public string LastName
-		{
-			get
-			{
-				return this._LastName;
-			}
-			set
-			{
-				if ((this._LastName != value))
-				{
-					this.OnLastNameChanging(value);
-					this.SendPropertyChanging();
-					this._LastName = value;
-					this.SendPropertyChanged("LastName");
-					this.OnLastNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateExpierence", DbType="SmallDateTime")]
-		public System.Nullable<System.DateTime> DateExpierence
-		{
-			get
-			{
-				return this._DateExpierence;
-			}
-			set
-			{
-				if ((this._DateExpierence != value))
-				{
-					this.OnDateExpierenceChanging(value);
-					this.SendPropertyChanging();
-					this._DateExpierence = value;
-					this.SendPropertyChanged("DateExpierence");
-					this.OnDateExpierenceChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndDate", DbType="SmallDateTime")]
-		public System.Nullable<System.DateTime> EndDate
-		{
-			get
-			{
-				return this._EndDate;
-			}
-			set
-			{
-				if ((this._EndDate != value))
-				{
-					this.OnEndDateChanging(value);
-					this.SendPropertyChanging();
-					this._EndDate = value;
-					this.SendPropertyChanged("EndDate");
-					this.OnEndDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DrivingCategory", DbType="VarChar(20)")]
-		public string DrivingCategory
-		{
-			get
-			{
-				return this._DrivingCategory;
-			}
-			set
-			{
-				if ((this._DrivingCategory != value))
-				{
-					this.OnDrivingCategoryChanging(value);
-					this.SendPropertyChanging();
-					this._DrivingCategory = value;
-					this.SendPropertyChanged("DrivingCategory");
-					this.OnDrivingCategoryChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Phone", DbType="VarChar(20)")]
-		public string Phone
-		{
-			get
-			{
-				return this._Phone;
-			}
-			set
-			{
-				if ((this._Phone != value))
-				{
-					this.OnPhoneChanging(value);
-					this.SendPropertyChanging();
-					this._Phone = value;
-					this.SendPropertyChanged("Phone");
-					this.OnPhoneChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AccountID", DbType="Int NOT NULL")]
-		public int AccountID
-		{
-			get
-			{
-				return this._AccountID;
-			}
-			set
-			{
-				if ((this._AccountID != value))
-				{
-					if (this._tblAccount.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnAccountIDChanging(value);
-					this.SendPropertyChanging();
-					this._AccountID = value;
-					this.SendPropertyChanged("AccountID");
-					this.OnAccountIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsDeleted", DbType="Bit NOT NULL")]
-		public bool IsDeleted
-		{
-			get
-			{
-				return this._IsDeleted;
-			}
-			set
-			{
-				if ((this._IsDeleted != value))
-				{
-					this.OnIsDeletedChanging(value);
-					this.SendPropertyChanging();
-					this._IsDeleted = value;
-					this.SendPropertyChanged("IsDeleted");
-					this.OnIsDeletedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblDriver_tblAccident", Storage="_tblAccidents", ThisKey="ID", OtherKey="DriverID")]
-		public EntitySet<tblAccident> tblAccidents
-		{
-			get
-			{
-				return this._tblAccidents;
-			}
-			set
-			{
-				this._tblAccidents.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblAccount_tblDriver", Storage="_tblAccount", ThisKey="AccountID", OtherKey="ID", IsForeignKey=true)]
-		public tblAccount tblAccount
-		{
-			get
-			{
-				return this._tblAccount.Entity;
-			}
-			set
-			{
-				tblAccount previousValue = this._tblAccount.Entity;
-				if (((previousValue != value) 
-							|| (this._tblAccount.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._tblAccount.Entity = null;
-						previousValue.tblDrivers.Remove(this);
-					}
-					this._tblAccount.Entity = value;
-					if ((value != null))
-					{
-						value.tblDrivers.Add(this);
-						this._AccountID = value.ID;
-					}
-					else
-					{
-						this._AccountID = default(int);
-					}
-					this.SendPropertyChanged("tblAccount");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_tblAccidents(tblAccident entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblDriver = this;
-		}
-		
-		private void detach_tblAccidents(tblAccident entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblDriver = null;
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tblVehicleMakes")]
 	public partial class tblVehicleMake : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -5644,9 +5332,9 @@ namespace CC.Models
 		
 		private EntityRef<tblAccidentsType> _tblAccidentsType;
 		
-		private EntityRef<tblDriver> _tblDriver;
-		
 		private EntityRef<tblAccount> _tblAccount;
+		
+		private EntityRef<tblDriver> _tblDriver;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -5692,8 +5380,8 @@ namespace CC.Models
 		{
 			this._tblClaims = new EntitySet<tblClaim>(new Action<tblClaim>(this.attach_tblClaims), new Action<tblClaim>(this.detach_tblClaims));
 			this._tblAccidentsType = default(EntityRef<tblAccidentsType>);
-			this._tblDriver = default(EntityRef<tblDriver>);
 			this._tblAccount = default(EntityRef<tblAccount>);
+			this._tblDriver = default(EntityRef<tblDriver>);
 			OnCreated();
 		}
 		
@@ -6096,40 +5784,6 @@ namespace CC.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblDriver_tblAccident", Storage="_tblDriver", ThisKey="DriverID", OtherKey="ID", IsForeignKey=true)]
-		public tblDriver tblDriver
-		{
-			get
-			{
-				return this._tblDriver.Entity;
-			}
-			set
-			{
-				tblDriver previousValue = this._tblDriver.Entity;
-				if (((previousValue != value) 
-							|| (this._tblDriver.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._tblDriver.Entity = null;
-						previousValue.tblAccidents.Remove(this);
-					}
-					this._tblDriver.Entity = value;
-					if ((value != null))
-					{
-						value.tblAccidents.Add(this);
-						this._DriverID = value.ID;
-					}
-					else
-					{
-						this._DriverID = default(int);
-					}
-					this.SendPropertyChanged("tblDriver");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblAccount_tblAccident", Storage="_tblAccount", ThisKey="AccountID", OtherKey="ID", IsForeignKey=true)]
 		public tblAccount tblAccount
 		{
@@ -6160,6 +5814,40 @@ namespace CC.Models
 						this._AccountID = default(int);
 					}
 					this.SendPropertyChanged("tblAccount");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblDriver_tblAccident", Storage="_tblDriver", ThisKey="DriverID", OtherKey="ID", IsForeignKey=true)]
+		public tblDriver tblDriver
+		{
+			get
+			{
+				return this._tblDriver.Entity;
+			}
+			set
+			{
+				tblDriver previousValue = this._tblDriver.Entity;
+				if (((previousValue != value) 
+							|| (this._tblDriver.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._tblDriver.Entity = null;
+						previousValue.tblAccidents.Remove(this);
+					}
+					this._tblDriver.Entity = value;
+					if ((value != null))
+					{
+						value.tblAccidents.Add(this);
+						this._DriverID = value.ID;
+					}
+					else
+					{
+						this._DriverID = default(int);
+					}
+					this.SendPropertyChanged("tblDriver");
 				}
 			}
 		}
@@ -7768,13 +7456,13 @@ namespace CC.Models
 		
 		private EntitySet<tblInsurer> _tblInsurers;
 		
-		private EntitySet<tblDriver> _tblDrivers;
-		
 		private EntitySet<tblVehicle> _tblVehicles;
 		
 		private EntitySet<tblAccident> _tblAccidents;
 		
 		private EntitySet<tblUser> _tblUsers;
+		
+		private EntitySet<tblDriver> _tblDrivers;
 		
 		private EntityRef<tblCountry> _tblCountry;
 		
@@ -7805,10 +7493,10 @@ namespace CC.Models
 		public tblAccount()
 		{
 			this._tblInsurers = new EntitySet<tblInsurer>(new Action<tblInsurer>(this.attach_tblInsurers), new Action<tblInsurer>(this.detach_tblInsurers));
-			this._tblDrivers = new EntitySet<tblDriver>(new Action<tblDriver>(this.attach_tblDrivers), new Action<tblDriver>(this.detach_tblDrivers));
 			this._tblVehicles = new EntitySet<tblVehicle>(new Action<tblVehicle>(this.attach_tblVehicles), new Action<tblVehicle>(this.detach_tblVehicles));
 			this._tblAccidents = new EntitySet<tblAccident>(new Action<tblAccident>(this.attach_tblAccidents), new Action<tblAccident>(this.detach_tblAccidents));
 			this._tblUsers = new EntitySet<tblUser>(new Action<tblUser>(this.attach_tblUsers), new Action<tblUser>(this.detach_tblUsers));
+			this._tblDrivers = new EntitySet<tblDriver>(new Action<tblDriver>(this.attach_tblDrivers), new Action<tblDriver>(this.detach_tblDrivers));
 			this._tblCountry = default(EntityRef<tblCountry>);
 			this._tblCurrency = default(EntityRef<tblCurrency>);
 			this._tblTimeZone = default(EntityRef<tblTimeZone>);
@@ -7980,19 +7668,6 @@ namespace CC.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblAccount_tblDriver", Storage="_tblDrivers", ThisKey="ID", OtherKey="AccountID")]
-		public EntitySet<tblDriver> tblDrivers
-		{
-			get
-			{
-				return this._tblDrivers;
-			}
-			set
-			{
-				this._tblDrivers.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblAccount_tblVehicle", Storage="_tblVehicles", ThisKey="ID", OtherKey="AccountID")]
 		public EntitySet<tblVehicle> tblVehicles
 		{
@@ -8029,6 +7704,19 @@ namespace CC.Models
 			set
 			{
 				this._tblUsers.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblAccount_tblDriver", Storage="_tblDrivers", ThisKey="ID", OtherKey="AccountID")]
+		public EntitySet<tblDriver> tblDrivers
+		{
+			get
+			{
+				return this._tblDrivers;
+			}
+			set
+			{
+				this._tblDrivers.Assign(value);
 			}
 		}
 		
@@ -8166,18 +7854,6 @@ namespace CC.Models
 			entity.tblAccount = null;
 		}
 		
-		private void attach_tblDrivers(tblDriver entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblAccount = this;
-		}
-		
-		private void detach_tblDrivers(tblDriver entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblAccount = null;
-		}
-		
 		private void attach_tblVehicles(tblVehicle entity)
 		{
 			this.SendPropertyChanging();
@@ -8213,6 +7889,18 @@ namespace CC.Models
 			this.SendPropertyChanging();
 			entity.tblAccount = null;
 		}
+		
+		private void attach_tblDrivers(tblDriver entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblAccount = this;
+		}
+		
+		private void detach_tblDrivers(tblDriver entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblAccount = null;
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tblLanguage")]
@@ -8229,6 +7917,8 @@ namespace CC.Models
 		
 		private EntitySet<tblUser> _tblUsers;
 		
+		private EntitySet<tblUserMsg> _tblUserMsgs;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -8244,6 +7934,7 @@ namespace CC.Models
 		public tblLanguage()
 		{
 			this._tblUsers = new EntitySet<tblUser>(new Action<tblUser>(this.attach_tblUsers), new Action<tblUser>(this.detach_tblUsers));
+			this._tblUserMsgs = new EntitySet<tblUserMsg>(new Action<tblUserMsg>(this.attach_tblUserMsgs), new Action<tblUserMsg>(this.detach_tblUserMsgs));
 			OnCreated();
 		}
 		
@@ -8320,6 +8011,19 @@ namespace CC.Models
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblLanguage_tblUserMsg", Storage="_tblUserMsgs", ThisKey="ID", OtherKey="LanguageID")]
+		public EntitySet<tblUserMsg> tblUserMsgs
+		{
+			get
+			{
+				return this._tblUserMsgs;
+			}
+			set
+			{
+				this._tblUserMsgs.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -8347,6 +8051,18 @@ namespace CC.Models
 		}
 		
 		private void detach_tblUsers(tblUser entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblLanguage = null;
+		}
+		
+		private void attach_tblUserMsgs(tblUserMsg entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblLanguage = this;
+		}
+		
+		private void detach_tblUserMsgs(tblUserMsg entity)
 		{
 			this.SendPropertyChanging();
 			entity.tblLanguage = null;
@@ -9172,6 +8888,528 @@ namespace CC.Models
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tblDrivers")]
+	public partial class tblDriver : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _FirstName;
+		
+		private string _LastName;
+		
+		private System.DateTime _DateBorn;
+		
+		private System.Nullable<System.DateTime> _EndDate;
+		
+		private string _Phone;
+		
+		private int _AccountID;
+		
+		private bool _IsDeleted;
+		
+		private bool _NotUnique;
+		
+		private EntitySet<tblAccident> _tblAccidents;
+		
+		private EntityRef<tblAccount> _tblAccount;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnFirstNameChanging(string value);
+    partial void OnFirstNameChanged();
+    partial void OnLastNameChanging(string value);
+    partial void OnLastNameChanged();
+    partial void OnDateBornChanging(System.DateTime value);
+    partial void OnDateBornChanged();
+    partial void OnEndDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnEndDateChanged();
+    partial void OnPhoneChanging(string value);
+    partial void OnPhoneChanged();
+    partial void OnAccountIDChanging(int value);
+    partial void OnAccountIDChanged();
+    partial void OnIsDeletedChanging(bool value);
+    partial void OnIsDeletedChanged();
+    partial void OnNotUniqueChanging(bool value);
+    partial void OnNotUniqueChanged();
+    #endregion
+		
+		public tblDriver()
+		{
+			this._tblAccidents = new EntitySet<tblAccident>(new Action<tblAccident>(this.attach_tblAccidents), new Action<tblAccident>(this.detach_tblAccidents));
+			this._tblAccount = default(EntityRef<tblAccount>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FirstName", DbType="NVarChar(200) NOT NULL", CanBeNull=false)]
+		public string FirstName
+		{
+			get
+			{
+				return this._FirstName;
+			}
+			set
+			{
+				if ((this._FirstName != value))
+				{
+					this.OnFirstNameChanging(value);
+					this.SendPropertyChanging();
+					this._FirstName = value;
+					this.SendPropertyChanged("FirstName");
+					this.OnFirstNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LastName", DbType="NVarChar(200) NOT NULL", CanBeNull=false)]
+		public string LastName
+		{
+			get
+			{
+				return this._LastName;
+			}
+			set
+			{
+				if ((this._LastName != value))
+				{
+					this.OnLastNameChanging(value);
+					this.SendPropertyChanging();
+					this._LastName = value;
+					this.SendPropertyChanged("LastName");
+					this.OnLastNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateBorn", DbType="Date NOT NULL")]
+		public System.DateTime DateBorn
+		{
+			get
+			{
+				return this._DateBorn;
+			}
+			set
+			{
+				if ((this._DateBorn != value))
+				{
+					this.OnDateBornChanging(value);
+					this.SendPropertyChanging();
+					this._DateBorn = value;
+					this.SendPropertyChanged("DateBorn");
+					this.OnDateBornChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndDate", DbType="Date")]
+		public System.Nullable<System.DateTime> EndDate
+		{
+			get
+			{
+				return this._EndDate;
+			}
+			set
+			{
+				if ((this._EndDate != value))
+				{
+					this.OnEndDateChanging(value);
+					this.SendPropertyChanging();
+					this._EndDate = value;
+					this.SendPropertyChanged("EndDate");
+					this.OnEndDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Phone", DbType="VarChar(20)")]
+		public string Phone
+		{
+			get
+			{
+				return this._Phone;
+			}
+			set
+			{
+				if ((this._Phone != value))
+				{
+					this.OnPhoneChanging(value);
+					this.SendPropertyChanging();
+					this._Phone = value;
+					this.SendPropertyChanged("Phone");
+					this.OnPhoneChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AccountID", DbType="Int NOT NULL")]
+		public int AccountID
+		{
+			get
+			{
+				return this._AccountID;
+			}
+			set
+			{
+				if ((this._AccountID != value))
+				{
+					if (this._tblAccount.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAccountIDChanging(value);
+					this.SendPropertyChanging();
+					this._AccountID = value;
+					this.SendPropertyChanged("AccountID");
+					this.OnAccountIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsDeleted", DbType="Bit NOT NULL")]
+		public bool IsDeleted
+		{
+			get
+			{
+				return this._IsDeleted;
+			}
+			set
+			{
+				if ((this._IsDeleted != value))
+				{
+					this.OnIsDeletedChanging(value);
+					this.SendPropertyChanging();
+					this._IsDeleted = value;
+					this.SendPropertyChanged("IsDeleted");
+					this.OnIsDeletedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NotUnique", DbType="Bit NOT NULL")]
+		public bool NotUnique
+		{
+			get
+			{
+				return this._NotUnique;
+			}
+			set
+			{
+				if ((this._NotUnique != value))
+				{
+					this.OnNotUniqueChanging(value);
+					this.SendPropertyChanging();
+					this._NotUnique = value;
+					this.SendPropertyChanged("NotUnique");
+					this.OnNotUniqueChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblDriver_tblAccident", Storage="_tblAccidents", ThisKey="ID", OtherKey="DriverID")]
+		public EntitySet<tblAccident> tblAccidents
+		{
+			get
+			{
+				return this._tblAccidents;
+			}
+			set
+			{
+				this._tblAccidents.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblAccount_tblDriver", Storage="_tblAccount", ThisKey="AccountID", OtherKey="ID", IsForeignKey=true)]
+		public tblAccount tblAccount
+		{
+			get
+			{
+				return this._tblAccount.Entity;
+			}
+			set
+			{
+				tblAccount previousValue = this._tblAccount.Entity;
+				if (((previousValue != value) 
+							|| (this._tblAccount.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._tblAccount.Entity = null;
+						previousValue.tblDrivers.Remove(this);
+					}
+					this._tblAccount.Entity = value;
+					if ((value != null))
+					{
+						value.tblDrivers.Add(this);
+						this._AccountID = value.ID;
+					}
+					else
+					{
+						this._AccountID = default(int);
+					}
+					this.SendPropertyChanged("tblAccount");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_tblAccidents(tblAccident entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblDriver = this;
+		}
+		
+		private void detach_tblAccidents(tblAccident entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblDriver = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tblUserMsg")]
+	public partial class tblUserMsg : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private int _DescID;
+		
+		private string _ReferenceKey;
+		
+		private string _Msg;
+		
+		private int _LanguageID;
+		
+		private EntityRef<tblLanguage> _tblLanguage;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnDescIDChanging(int value);
+    partial void OnDescIDChanged();
+    partial void OnReferenceKeyChanging(string value);
+    partial void OnReferenceKeyChanged();
+    partial void OnMsgChanging(string value);
+    partial void OnMsgChanged();
+    partial void OnLanguageIDChanging(int value);
+    partial void OnLanguageIDChanged();
+    #endregion
+		
+		public tblUserMsg()
+		{
+			this._tblLanguage = default(EntityRef<tblLanguage>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DescID", DbType="Int NOT NULL")]
+		public int DescID
+		{
+			get
+			{
+				return this._DescID;
+			}
+			set
+			{
+				if ((this._DescID != value))
+				{
+					this.OnDescIDChanging(value);
+					this.SendPropertyChanging();
+					this._DescID = value;
+					this.SendPropertyChanged("DescID");
+					this.OnDescIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ReferenceKey", DbType="NVarChar(100)")]
+		public string ReferenceKey
+		{
+			get
+			{
+				return this._ReferenceKey;
+			}
+			set
+			{
+				if ((this._ReferenceKey != value))
+				{
+					this.OnReferenceKeyChanging(value);
+					this.SendPropertyChanging();
+					this._ReferenceKey = value;
+					this.SendPropertyChanged("ReferenceKey");
+					this.OnReferenceKeyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Msg", DbType="NVarChar(500)")]
+		public string Msg
+		{
+			get
+			{
+				return this._Msg;
+			}
+			set
+			{
+				if ((this._Msg != value))
+				{
+					this.OnMsgChanging(value);
+					this.SendPropertyChanging();
+					this._Msg = value;
+					this.SendPropertyChanged("Msg");
+					this.OnMsgChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LanguageID", DbType="Int NOT NULL")]
+		public int LanguageID
+		{
+			get
+			{
+				return this._LanguageID;
+			}
+			set
+			{
+				if ((this._LanguageID != value))
+				{
+					if (this._tblLanguage.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnLanguageIDChanging(value);
+					this.SendPropertyChanging();
+					this._LanguageID = value;
+					this.SendPropertyChanged("LanguageID");
+					this.OnLanguageIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblLanguage_tblUserMsg", Storage="_tblLanguage", ThisKey="LanguageID", OtherKey="ID", IsForeignKey=true)]
+		public tblLanguage tblLanguage
+		{
+			get
+			{
+				return this._tblLanguage.Entity;
+			}
+			set
+			{
+				tblLanguage previousValue = this._tblLanguage.Entity;
+				if (((previousValue != value) 
+							|| (this._tblLanguage.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._tblLanguage.Entity = null;
+						previousValue.tblUserMsgs.Remove(this);
+					}
+					this._tblLanguage.Entity = value;
+					if ((value != null))
+					{
+						value.tblUserMsgs.Add(this);
+						this._LanguageID = value.ID;
+					}
+					else
+					{
+						this._LanguageID = default(int);
+					}
+					this.SendPropertyChanged("tblLanguage");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
 	public partial class proc_VehiclesResult
 	{
 		
@@ -9355,158 +9593,6 @@ namespace CC.Models
 				if ((this._MakeID != value))
 				{
 					this._MakeID = value;
-				}
-			}
-		}
-	}
-	
-	public partial class proc_DriversResult
-	{
-		
-		private int _ID;
-		
-		private string _FirstName;
-		
-		private string _LastName;
-		
-		private string _DateExpierence;
-		
-		private string _DrivingCategory;
-		
-		private string _Phone;
-		
-		private string _Docs;
-		
-		private string _EndDate;
-		
-		public proc_DriversResult()
-		{
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="Int NOT NULL")]
-		public int ID
-		{
-			get
-			{
-				return this._ID;
-			}
-			set
-			{
-				if ((this._ID != value))
-				{
-					this._ID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FirstName", DbType="NVarChar(100)")]
-		public string FirstName
-		{
-			get
-			{
-				return this._FirstName;
-			}
-			set
-			{
-				if ((this._FirstName != value))
-				{
-					this._FirstName = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LastName", DbType="NVarChar(100)")]
-		public string LastName
-		{
-			get
-			{
-				return this._LastName;
-			}
-			set
-			{
-				if ((this._LastName != value))
-				{
-					this._LastName = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateExpierence", DbType="Char(10)")]
-		public string DateExpierence
-		{
-			get
-			{
-				return this._DateExpierence;
-			}
-			set
-			{
-				if ((this._DateExpierence != value))
-				{
-					this._DateExpierence = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DrivingCategory", DbType="VarChar(20)")]
-		public string DrivingCategory
-		{
-			get
-			{
-				return this._DrivingCategory;
-			}
-			set
-			{
-				if ((this._DrivingCategory != value))
-				{
-					this._DrivingCategory = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Phone", DbType="VarChar(20)")]
-		public string Phone
-		{
-			get
-			{
-				return this._Phone;
-			}
-			set
-			{
-				if ((this._Phone != value))
-				{
-					this._Phone = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Docs", DbType="VarChar(17)")]
-		public string Docs
-		{
-			get
-			{
-				return this._Docs;
-			}
-			set
-			{
-				if ((this._Docs != value))
-				{
-					this._Docs = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndDate", DbType="Char(10)")]
-		public string EndDate
-		{
-			get
-			{
-				return this._EndDate;
-			}
-			set
-			{
-				if ((this._EndDate != value))
-				{
-					this._EndDate = value;
 				}
 			}
 		}
@@ -10107,6 +10193,158 @@ namespace CC.Models
 				if ((this._InsurerID != value))
 				{
 					this._InsurerID = value;
+				}
+			}
+		}
+	}
+	
+	public partial class proc_DriversResult
+	{
+		
+		private int _ID;
+		
+		private string _FirstName;
+		
+		private string _LastName;
+		
+		private string _DateBorn;
+		
+		private string _Phone;
+		
+		private string _Docs;
+		
+		private string _EndDate;
+		
+		private bool _NotUnique;
+		
+		public proc_DriversResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="Int NOT NULL")]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this._ID = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FirstName", DbType="NVarChar(200) NOT NULL", CanBeNull=false)]
+		public string FirstName
+		{
+			get
+			{
+				return this._FirstName;
+			}
+			set
+			{
+				if ((this._FirstName != value))
+				{
+					this._FirstName = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LastName", DbType="NVarChar(200) NOT NULL", CanBeNull=false)]
+		public string LastName
+		{
+			get
+			{
+				return this._LastName;
+			}
+			set
+			{
+				if ((this._LastName != value))
+				{
+					this._LastName = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateBorn", DbType="VarChar(10)")]
+		public string DateBorn
+		{
+			get
+			{
+				return this._DateBorn;
+			}
+			set
+			{
+				if ((this._DateBorn != value))
+				{
+					this._DateBorn = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Phone", DbType="VarChar(20)")]
+		public string Phone
+		{
+			get
+			{
+				return this._Phone;
+			}
+			set
+			{
+				if ((this._Phone != value))
+				{
+					this._Phone = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Docs", DbType="VarChar(17)")]
+		public string Docs
+		{
+			get
+			{
+				return this._Docs;
+			}
+			set
+			{
+				if ((this._Docs != value))
+				{
+					this._Docs = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndDate", DbType="VarChar(10)")]
+		public string EndDate
+		{
+			get
+			{
+				return this._EndDate;
+			}
+			set
+			{
+				if ((this._EndDate != value))
+				{
+					this._EndDate = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NotUnique", DbType="Bit NOT NULL")]
+		public bool NotUnique
+		{
+			get
+			{
+				return this._NotUnique;
+			}
+			set
+			{
+				if ((this._NotUnique != value))
+				{
+					this._NotUnique = value;
 				}
 			}
 		}

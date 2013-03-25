@@ -83,21 +83,19 @@
     },
     saveForm: function(e, opts) {
       var Alert, DataToSave, execOnSuccess, pars;
-      DataToSave = oCONTROLS.ValidateForm($("#dialogContent"));
+      pars = (opts ? opts.pars : e.view._parentView.pars);
       Alert = (opts ? opts.Alert : null);
       execOnSuccess = (opts ? opts.execOnSuccess : null);
-      pars = opts ? opts.pars : null;
+      DataToSave = oCONTROLS.ValidateForm($("#dialogContent"));
       if (DataToSave) {
         $.extend(pars, {
           DataToSave: DataToSave,
           Ctrl: $("#tabLists"),
           CallBackAfter: function(row) {
-            var topController;
             if (pars.Action === 'Add') {
               App.listAllController.content.unshiftObject(row);
-              topController = App.topNewController[pars.emObject];
-              if (topController) {
-                topControler.unshiftObject(row);
+              if (App.topNewController[pars.emObject]) {
+                App.topNewController[pars.emObject].unshiftObject(row);
               }
               if (pars.input) {
                 pars.input.data("newval", row.iD);
@@ -122,8 +120,6 @@
           title: '',
           msg: 'Užpildykite pažymėtus laukus..'
         });
-      } else {
-        return $("#openItemDialog").dialog("close");
       }
     },
     cancelForm: function(e) {
@@ -377,7 +373,7 @@
               App.dialogDocController.setDocs(refID, groupID);
               return this.removeOnCloseView = Em.View.create(docsViewOpts).appendTo("#dialoguploadDocsContainer");
             } else {
-              return console.error('no ref');
+              return console.warning('no ref');
             }
           },
           didInsertElement: function() {
@@ -538,7 +534,7 @@
       view = $("#tabLists");
       view.find("div.ui-tabs").find("li:first a").trigger("click");
       return view.find("table.zebra-striped").tblSortable({
-        cols: ["firstName", "lastName", "dateExpierence", "drivingCategory", "phone", "docs"],
+        cols: ["firstName", "lastName", "dateBorn", "drivingCategory", "phone", "docs"],
         controller: "listAllController",
         sortedCol: 1
       });

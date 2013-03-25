@@ -124,5 +124,9 @@ $(function() {
 		}).on('blur','input:text,textarea',function(e) {
 			$(e.target).removeClass("activeField");
 		});
+		// setInterval(function(){
+			// $.post("System/Beat",
+				// function(data) {console.log(data);});
+		// },30000);
 	});
 });

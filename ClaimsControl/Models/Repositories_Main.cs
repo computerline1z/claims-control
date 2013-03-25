@@ -506,21 +506,21 @@ namespace CC.Models {
 				d.ID,//0
 				d.FirstName,//1
 				d.LastName,//2
-				d.DateExpierence,//3
-				d.DrivingCategory,//4
+				d.DateBorn,//3
 				d.Phone,//5
 				d.Docs,//6
 				d.EndDate,//7
+				d.NotUnique
 			};
 			object[] Cols ={
 				new { FName = "ID"},//0
 				new { FName = "FirstName",Type="String", LenMax=100,IsUnique=new object[]{1,2},Validity="require().nonHtml().maxLength(100)"},//1
 				new { FName = "LastName",Type="String", LenMax=100,Validity="require().nonHtml().maxLength(100)"},//2
-				new { FName = "DateExpierence",Type="Date", Validity="match('date').lessThanOrEqualTo(new Date())", Plugin = new {datepicker = new {minDate="-25y", maxDate=0}}},//3  "Plugin":{"datepicker":{"minDate":"-3y","maxDate":"0"}}
-				new { FName = "DrivingCategory",Type="String", LenMax=20,Validity="nonHtml().maxLength(20)"},//4
+				new { FName = "DateBorn",Type="Date", Default="", Validity="require().match('date').lessThanOrEqualTo(new Date())", Plugin = new {datepicker = new {maxDate=0}}},//3  "Plugin":{"datepicker":{"minDate":"-3y","maxDate":"0"}}
 				new { FName = "Phone",Type="Integer", LenMax=20,Validity="nonHtml().maxLength(20)"},//5
 				new { FName = "Docs",Type="String", NotEditable=1},//6
 				new { FName = "EndDate",Type="DateLess", Default="",Validity="match('date').lessThanOrEqualTo(new Date())", Plugin = new {datepicker = new {minDate="-25y", maxDate=0}}},//7
+				new { FName = "NotUnique", Default=""},//7
 			}; JSON.Cols = Cols;
 			JSON.Config = new { Controler = "Drivers", tblUpdate = "tblDrivers", titleFields = new object[] { "firstName", "lastName" }, Msg = new { AddNew = "Pridėti naują vairuotoją", Edit = "Vairuotojo duomenų redagavimas", Delete = "Ištrinti vairuotoją", GenName = "Vairuotojas", GenNameWhat = "vairuotoją", ListName = "Vairuotojų sąrašas" } };
 			JSON.Grid = new {
@@ -528,11 +528,10 @@ namespace CC.Models {
 					new {bVisible=false},//0//ID////DefaultUpdate=0
 					new {sTitle="Vardas",sClass="smallFont"},//1//FirstName//
 					new {sTitle="Pavardė",sClass="smallFont"},//2//LastName//
-					new {sTitle="Vairuotojo pažymėjimo išdavimo data"},//3//DateExpierence//
-					new {sTitle="Vairavimo kategorijos"},//4//DrivingCategory//
+					new {sTitle="Gimimo data"},//3//DateBorn//
 					new {sTitle="Mobilus telefonas"},//5//Phone//
 					new {sTitle="Dokumentai"},//6//Docs//
-					new {sTitle="Darbo pabaiga",bVisible=false},//7//EndDate//
+					new {sTitle="Darbo pabaiga",bVisible=false}//7//EndDate//
 				}, //aaSorting = new object[] { new object[] { 2, "asc" } },//???
 			};
 			return JSON;
@@ -970,7 +969,7 @@ namespace CC.Models {
 				new { FName = "ID"},//0
 				new { FName = "ClaimTypeID",Tip="Pasirinkite žalos tipą..", List=new{Source="tblClaimTypes",iVal="iD",iText=new object[]{"name"},ListType="List"}},//1
 				new { FName = "AccidentID"},//2
-				new { FName = "InsPolicyID",Tip="Pasirinkite iš sąrašo..", List=new{Source="proc_InsPolicies",iVal="iD",iText=new object[]{"claimType","insurerName"},ListType="List"}},//Editable=new{EditList=true}3 ,Append=new{id=0,value="Neapdrausta"}
+				new { FName = "InsPolicyID",Tip="Pasirinkite iš sąrašo..", List=new{Source="proc_InsPolicies",iVal="iD",iText=new object[]{"claimType","insurerName"},Editable = new{EditThis=true,AddNew=true},ListType="List"}},//Editable=new{EditList=true}3 ,Append=new{id=0,value="Neapdrausta"}
 				new { FName = "VehicleID",Tip="Valst.Nr.", List=new{Source="proc_Vehicles",iVal="iD",iText=new object[]{"plate","type","make","model"},ListType="None"}},//4
 				new { FName = "No",Type="Integer", LenMax=10,Validity="require().match('integer').maxLength(13).greaterThanOrEqualTo(0)"},//5
 				new { FName = "IsTotalLoss",Type="Boolean"},//6

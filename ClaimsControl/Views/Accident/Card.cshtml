@@ -66,29 +66,25 @@ else {<h2 style="margin: 15px; display: inline-block">Įvykis Nr. @Model.Acciden
 
 	@*---------------------------------------------------------------*@
 	<div class='right w47pr_m'>
-		<div id='divMapHead'>@*---------------------------------------------------------------*@
-			<div class='box_3pr_p border ui-corner-all'>
+		<div id='divMapHead'>
+			<div class='box_3pr_p border'>
 				<div class='dialog-form-label'>Įvykio vieta:</div>
 				@{if (Model.NewRec == 1) {
 					<span style='font-size: medium; font-weight: bold; float: left;' id='txtPlace'>Nurodykite spragtelėjimu žemėlapyje..</span>
-		}
-		else {
-					<span style='font-size: medium; font-weight: bold; float: left;' id='txtPlace'>@Model.Accident.LocationAddress, @Model.Accident.LocationDistrict,
-						@Model.Accident.LocationCountry</span>
+				} else {
+					<span style='font-size: medium; font-weight: bold; float: left;' id='txtPlace'>@Model.Accident.LocationAddress, @Model.Accident.LocationDistrict, @Model.Accident.LocationCountry</span>
 					<div><a id="btnEditMap" data-caption="Change" style='font-size: small; margin-right: 20px; margin-left: 20px;' href="#">Keisti</a><a id="linkToGoogle" style="float:right;" target='_blank' href="#">Nuoroda į Google Žemėlapį</a></div>
-		}
-				}
+				}}
 					<div style="clear: both;"></div>
-				</div>
+			</div>
 		</div>
 		@*---------------------------------------------------------------*@
 		<div style="position:relative">
-			<div id='divSearchMap' class="box" style="@{if (Model.NewRec != 1) {<text>display:none;</text>}}background-color: #8598ad; margin-top: 3%; padding: 3%;position:absolute;z-index:10;width:100%">
-				<div style="color: #FFFFFF; font-size: smaller;">Ieškokite miesto arba vietovardžio:</div>
+			<div id='divSearchMap' class="box" style="@{if (Model.NewRec != 1) {<text>display:none;</text>}}background-color: #8598ad; padding: 3%;position:absolute;z-index:10;width:100%">									 
+				<div style="color: #FFFFFF; font-size: smaller;">Surasti vietovardį arba koordinates:</div>
 				<input type='text' style="width: 75%;" id='inputChooseTown' data-ctrl='{"Tip":"Įveskite gyvenvietę parodyti žemėlapyje.."}' class='text ui-widget-content defaultText defaultTextActive' />
 				<a style="margin-right: 2%;" id="btnMapTown" href="#">Rodyti</a>
 			</div>
-
 			<div id='divMap' class="ui-corner-bottom;" style="position:absolute">map</div>
 		</div>
 	</div>
