@@ -133,15 +133,17 @@ Array.prototype.filterByTbl = function (p) {//filterTbl,joinField,filterField,fi
 	})
 	return fTbl;
 }
-Em.Object.prototype.MapArrToString = function (arrNames, mapWithNoCommas) {
+Em.Object.prototype.MapArrToString = function (arrNames, mapWithNoCommas,Source) {
 	var arrRet = [], e;
 	for (var i = 0; i < arrNames.length; i++) {
 		e = $.trim(this[arrNames[i]]);
 		if (e !== "") arrRet[arrRet.length] = e;
 	}
-	if (mapWithNoCommas) return arrRet.join(" ");
+	if  (Source||""==="proc_Drivers"){return  (this.notUnique)?(arrRet.join(" ")+", "+this.dateBorn ):arrRet.join(" ");}
+	else if (mapWithNoCommas) return arrRet.join(" ");
 	else return arrRet.join(", ");
 }
+
 Em.Object.prototype.updateTo = function (newObject) {//very ew very good, very cool!!!!!!!!!!!!!!!
 	for (var prop in this) {
 		if (!this.hasOwnProperty(prop)) continue;

@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Web.Mvc;
 using System.Web.Security;
+using CC.Classes;
 
 namespace CC.Models {
    #region Models
@@ -227,6 +228,12 @@ namespace CC.Models {
          if (String.IsNullOrEmpty(userName)) throw new ArgumentException("Value cannot be null or empty.", "userName");
 
          FormsAuthentication.SetAuthCookie(userName, createPersistentCookie);
+			//if (createPersistentCookie) {
+			//   UserData.PersistentCookie = true;
+			//}
+			//else {
+			//   UserData.PersistentCookie = false;
+			//}
       }
 
       public void SignOut() {

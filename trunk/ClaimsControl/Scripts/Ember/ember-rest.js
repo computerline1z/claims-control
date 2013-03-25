@@ -353,14 +353,17 @@ var SERVER = {
 		//SERVER.update2({"Action":Action,DataToSave:{},"Ctrl":Ctrl,"source":source,"row":row
 		if (!p.DataToSave) return false; var me=this;
 		var CallBack = { Success: function (resp, updData) {
+			var oData = oDATA.GET(p.source);id=(updData.Action==="Add")?resp.ResponseMsg.ID:p.DataToSave.id;obj=oData.emData.findProperty("iD", id); 
+			if (p.source==="proc_Drivers"){//Panaikinam dublicatus prieš jei du, nes galejo keistis, po jei du ir daugiau uzdesim
+				var dublicates=oData.emData.filter(function(item){return item.firstName===obj.firstName && item.lastName===obj.lastName;});
+				if (dublicates.length===2){dublicates.map(function(i){i.notUnique=false;});}
+			}			
 			if (updData.Action==="Delete"){	
-				src=oDATA.GET(p.source).emData
-				obj=src.findProperty("iD", p.DataToSave.id)
 				src.removeObject(obj)				
 			}else{
 				var Adding = (p.Action === "Add") ? true : false, Row = (Adding) ? Em.Object.create({}) : p.row;
 				if (!Row) throw new Error("p.Row is empty");
-				var oData = oDATA.GET(p.source), Cols = oData.Cols;
+				var  Cols = oData.Cols;
 				if (!oData) throw new Error("p.oData is empty");
 				if (Adding) { Row.iD = resp.ResponseMsg.ID; }
 
@@ -400,6 +403,11 @@ var SERVER = {
 					}
 					console.log("col: " + fieldName + ", ok: " + ok + ", fieldValue:" + Row[fieldName])
 				})
+				if (p.source==="proc_Drivers"){//dublikatus tikrinam prieš ir po
+					var confirm; dublicates=oData.emData.filter(function(item){return item.firstName===Row.firstName && item.lastName===Row.lastName;});
+					if (dublicates.length<2){confirm=false;}else{confirm=true;}
+					dublicates.map(function(i){i.notUnique=confirm;});Row.notUnique=confirm;
+				}				
 				if (Adding) { Row.set("visible", true); oData.emData.pushObject(Row); } //oData.emData.unshiftObject(Row); }
 				else { oData.emData.findProperty("iD", Row.iD).updateTo(Row); }
 				var controller = updData.controller, emObject = (updData.emObject) ? updData.emObject : "content";

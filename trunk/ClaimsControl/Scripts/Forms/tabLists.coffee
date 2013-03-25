@@ -49,13 +49,13 @@ App.listAllController = Em.ResourceController.create(
 				$("#openItemDialog").dialog("close")
 			)
 		)
-	saveForm:(e,opts)-> #opts:{Alert:true, execOnSuccess}
-		DataToSave=oCONTROLS.ValidateForm($("#dialogContent")); Alert=(if opts then opts.Alert else null); execOnSuccess=(if opts then opts.execOnSuccess else null) ####pars=if pars then pars else e.view._parentView.pars;
-		pars=if opts then opts.pars else null
+	saveForm:(e,opts)-> #opts:{Alert:true, pars:pars, execOnSuccess:fn}
+		pars=(if opts then opts.pars else e.view._parentView.pars); Alert=(if opts then opts.Alert else null); execOnSuccess=(if opts then opts.execOnSuccess else null) #pars=if pars then pars else e.view._parentView.pars;	
+		DataToSave=oCONTROLS.ValidateForm($("#dialogContent"))
 		if DataToSave
 			$.extend(pars,{DataToSave:DataToSave,Ctrl:$("#tabLists"),CallBackAfter:(row)-> #t.p. 189 eilutė
 				if pars.Action=='Add'
-					App.listAllController.content.unshiftObject(row); topController=App.topNewController[pars.emObject]; if topController then topControler.unshiftObject(row)
+					App.listAllController.content.unshiftObject(row); if App.topNewController[pars.emObject] then App.topNewController[pars.emObject].unshiftObject(row)
 					if pars.input then pars.input.data("newval",row.iD); pars.input.autocomplete("option").fnRefresh(); pars.input.data("autocomplete").fnItemChanged(row.iD)
 				if row.iD then $("#tabLists").find("div.ui-tabs").find("li.ui-tabs-selected a").trigger("click")#trigerinam, kad pagal tabus uzdėtų visible		
 				if execOnSuccess then execOnSuccess(row)
@@ -63,7 +63,7 @@ App.listAllController = Em.ResourceController.create(
 			})
 			SERVER.update2(pars); false
 		else if Alert then oCONTROLS.dialog.Alert( title:'',msg:'Užpildykite pažymėtus laukus..')
-		else $("#openItemDialog").dialog("close");
+		#else $("#openItemDialog").dialog("close");
 	cancelForm:(e)-> $("#openItemDialog").dialog("close");false
 	editListItems:(input, e)-> #formTemplate: "tmpUploadForm", disabled: false, docsController: "TreeDocController", Source: "tblDocTypes"
 		#categoryOpts:{accident:{iD:70,title:"Įvykio dokumentai"},driver:{iD:80,title:"Vairuotojo 'Pranas Patv' dokai"},editList:{},vehicles:[{iD,title},{iD,title}]},
@@ -160,7 +160,7 @@ App.listAllController = Em.ResourceController.create(
 					refID=pars.row.iD					
 					App.dialogDocController.setDocs(refID,groupID)
 					this.removeOnCloseView=Em.View.create(docsViewOpts).appendTo "#dialoguploadDocsContainer" #docsViewOpts	#Pridedam dokumentų uploadinimo view'ą				
-				else console.error('no ref')
+				else console.warning('no ref')
 			didInsertElement: ()->
 				@_super(); dialogContent=$("#dialogContent");ref=0; thisDialog=@
 				if pars.emObject=="vehicles" or pars.source=="proc_Vehicles" then ref=4
@@ -259,7 +259,7 @@ App.AllDriversView = App.mainMenuView.extend(
 	didInsertElement: ()->
 		@_super(); view=$("#tabLists"); view.find("div.ui-tabs").find("li:first a").trigger("click")
 		view.find("table.zebra-striped").tblSortable(
-			cols:["firstName","lastName","dateExpierence","drivingCategory","phone","docs",]
+			cols:["firstName","lastName","dateBorn","drivingCategory","phone","docs",]
 			controller: "listAllController", sortedCol: 1 
 		);
 )

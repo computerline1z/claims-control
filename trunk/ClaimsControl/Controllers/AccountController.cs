@@ -195,10 +195,10 @@ namespace ClaimsControl.Controllers {
 				return View("Register");
 			}
 			if (Membership.GetUserNameByEmail(model.Email) != null) {
-				showError(String.Format("{0} jau užregistruotas sistemoje."));
+				showError(String.Format("{0} jau užregistruotas kitoje paskyroje."));
 				return View("Register");
 			}
-
+			//REIKTŲ PATIKRINT ACCOUNTO PAVADINIMĄ - NES PAGAL JĮ KURSIM EMAIL IR PATH, geriau, kad būtų unikalus
 			string passwd = Membership.GeneratePassword(8, 2);
 
 			MembershipCreateStatus status;
@@ -210,11 +210,14 @@ namespace ClaimsControl.Controllers {
 			else {
 				aUser.Comment = model.UserName;
 				Membership.UpdateUser(aUser);
+
+				//this._userManager.UpdateClientInUsersTable(model.Name, model.Surname, model.Email, model.LanguageId, model.UserName);//model.UserName - čia Accounto pavadinimas
+
 				this._userManager.UpdateClientInUsersTable(model.Name, model.Surname, model.Email, model.LanguageId);
 				//SendConfirmationMail(model, (Guid)aUser.ProviderUserKey);
 				MailHelper.SendMail_SetUrl(model.Email, "NewUserPsw", "Registracija Žalų valdymo sistemoje");
 			}
-			this.TempData[currentUserIdKey] = aUser.ProviderUserKey.ToString();
+			//this.TempData[currentUserIdKey] = aUser.ProviderUserKey.ToString(); trinti šitas nesamones
 			return RedirectToAction("RegisterOK", "Account");
 		}
 

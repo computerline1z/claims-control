@@ -24,7 +24,8 @@ _create: ->
 			input: if e then $(e.target) else null
 			CallBackAfter:(Row)->
 				dialogFrm.dialog("close");
-		App.listAllController.openItem(pars)			
+		App.listAllController.openItem(pars)		
+		false
 	data = undefined
 	
 	#if(opt.Type==="List") { //Jei Type==List mapinam pagal opt.iText kitu atveju pagal Field
@@ -33,11 +34,12 @@ _create: ->
 		if opt.data then data = opt.data() else
 			fn=(a) -> 
 				if opt.excludeFromList then if opt.excludeFromList.ValueInMe(a.iD) then return null #ko nepridedam į sąrašus
-				input.val a.MapArrToString(opt.iText,opt.mapWithNoCommas) if a.iD is OptVal #Idedam verte i textboxa
-				return id: a[opt.iVal], label: a.MapArrToString(opt.iText,opt.mapWithNoCommas)				
+				input.val a.MapArrToString(opt.iText,opt.mapWithNoCommas,opt.Source) if a.iD is OptVal #Idedam verte i textboxa
+				return id: a[opt.iVal], label: a.MapArrToString(opt.iText,opt.mapWithNoCommas,opt.Source)				
 			data = $.map(oDATA.GET(opt.Source).emData, (a) -> fn(a))
 		#data[data.length] = opt.Append	if typeof opt.Append isnt "undefined" #Pridedam prie listo pvz: {Value:0, Text:"Neapdrausta"}
 		if opt.Editable.EditList then data[data.length]=id:-1,value:"Redaguoti sąrašą",label:"Redaguoti sąrašą"
+		if opt.Editable.AddNew then data[data.length]=id:-2,value:"Įvesti naują",label:"Įvesti naują"
 	fnSetData()
 	$(input).on('keyup',->$(this).parent().find("span.ui-menu-icon").remove()
 	).data("newval", opt.Value).autocomplete
@@ -48,7 +50,7 @@ _create: ->
 		fnRefresh: ()-> 
 			if input.data("newval") then opt.Value=input.data("newval")
 			fnSetData()
-			input.after("<span title='redaguoti..' class='ui-icon ui-icon-pencil ui-menu-icon'>&nbsp;</span>") if opt.Editable.EditThis and input.data("newval")		
+			input.after("<span title='redaguoti..' class='ui-icon ui-icon-pencil ui-menu-icon'>&nbsp;</span>") if opt.Editable.EditThis and input.data("newval") and opt.ListType=="None"		
 		source: (request, response) ->
 			response $.ui.autocomplete.filter(data, request.term)
 
@@ -56,6 +58,8 @@ _create: ->
 			if typeof ui.item.id=="function" then ui.item.id(); return false#jei id yra funkcija executinam ir iseinam	
 			if ui.item.id==-1 #taip žymim redagavimą
 				App.listAllController.editListItems(input, event)
+			else if ui.item.id==-2 #taip žymim naujo pridėjimą
+				fnEditItem(0,null,event)
 				# Source=$(event.target).data("ctrl").Source				
 				# if Source=="tblVehicleMakes" then App.listAllController.addVehicleMake(input, event) #App.listAllController.set("addMakeMode",true) #modelio pridėjimas
 				# else if Source=="tblInsurers" then App.listAllController.addInsurers
@@ -97,8 +101,8 @@ _create: ->
 
 		open: ->
 			#input.addClass "activeField"	unless input.hasClass("activeField")	if opt.ListType isnt "List"
-			if opt.Editable.EditList
-				$('ul.ui-autocomplete:visible').find("a:last").addClass("actionLink") #Ten bus pridėti naują su id=-1
+			if opt.Editable.EditList or opt.Editable.AddNew
+				$('ul.ui-autocomplete:visible').find("a:last").addClass("actionLink") #Ten bus pridėti naują su id=-1 arba id=-2
 				#$('<li class="actionLink" data-action="Add"><a href="#">Pridėti naują</a></li>').appendTo('ul.ui-autocomplete');
 			if opt.ListType is "None" or opt.ListType is "Combo"
 				acData = $(this).data("autocomplete")
@@ -107,8 +111,6 @@ _create: ->
 					me = $(this)					
 					regex = new RegExp(acData.term, "gi")
 					me.html me.text().replace(regex, (matched) -> termTemplate.replace "%s", matched)
-		blur: ->
-			alert "nu blur"
 	#-----Inicializavimas pagal parametrus-------------------------------------------------------------------------------------
 	# if (opt.addNewIfNotExists)
 		# input.on("blur", ->
@@ -180,6 +182,7 @@ _create: ->
 		)
 	unless opt.ListType is "None"#Prideda listo buttoną
 		@addButton
+			Editable: opt.Editable
 			title: "Parodyti visus"
 			icon: "ui-icon-triangle-1-s"
 			fn: ->
@@ -217,6 +220,9 @@ addButton: (p, input) ->
 		false
 	).removeClass("ui-corner-all").find("span").attr("class","")#.addClass("ui-button-icon" + ((if (p.NoCorners) then "" else " ui-corner-right"))).find("span.ui-icon")
 	@button.removeClass("ui-button-icon-primary ui-icon").css("margin", "-2px 0 0 -8px") if p.icon=="img18-plus"
+	console.log("opa opa")
+	if p.Editable.EditThis
+		w=input.prev().width()-26+'px'; input.css("width",w)	
 	#if ($.browser.mozilla) { this.button.attr() }
 	#else if ($.browser.msie) { }
 	#if (!$.browser.chrome) { this.button.css("margin", "0"); }

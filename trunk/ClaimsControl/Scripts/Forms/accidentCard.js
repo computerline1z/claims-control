@@ -4,6 +4,9 @@ oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 
 	LoadScript = function () {
 		$("#btnMapTown").button({ disabled: true }).click(function () { oGLOBAL.mapFn.GetMapFromTown(); return false; });
+		
+		
+		
 		var frmOpts=$("#AccidentForm").data("ctrl");	//NewRec, Source, id, vehicles
 		var tabOpts={}; if (frmOpts.NewRec){tabOpts.disabled=[ 1];}
 		$("#accidentTab").tabs(tabOpts).on( "tabsactivate", function( event, ui ) {
@@ -60,7 +63,7 @@ oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 		$("#btnDeleteAccident").on("click",function (e) {
 			var emData=oDATA.GET("proc_Accidents").emData;
 			var accidentRow=emData.findProperty("no",AccidentNo);
-			if (accidentRow.cNo_All > 0) { oCONTROLS.dialog.Alert({ title: "", msg: "Negalima šalinti įvykio, kol jis turi nepašalintų žalų (" + accidentRow.cNo_All + ")." }); return false; }
+			if (accidentRow.cNo_All > 0) { oCONTROLS.dialog.Alert({ title: "", msg: "Negalima šalinti įvykio, kol jis turi nepašalintų žalų." }); return false; }
 			oCONTROLS.dialog.Confirm({title: "Įvykio Nr. "+AccidentNo+" pašalinimas" , msg: "Ištrinti šį įvykį?"}, function() {
 				SERVER.update({Action: "Delete",DataToSave: {id: accidentRow.iD,DataTable: "tblAccidents"},
 				Msg: {Title: "Įvykio pašalinimas",Success: "Pasirinktas įvykis buvo pašalintas.",Error: "Nepavyko pašalinti šio įvykio"},
@@ -142,7 +145,7 @@ oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 		oGLOBAL.AccidentForm = $("#AccidentForm").data("ctrl"); //NewRec id Lat Lng
 		//oGLOBAL.mapFn.loadGoogleMapScript(oGLOBAL.mapFn.loadGMap);
 		oGLOBAL.mapFn.loadGMap();
-		 oGLOBAL.mapFn.fnSetAddress($('#txtPlace').html());
+		if (!oGLOBAL.AccidentForm .NewRec){oGLOBAL.mapFn.fnSetAddress($('#txtPlace').html())};
 	};
 	return false;
 	//*****************************************************************************************************************************************
@@ -152,8 +155,15 @@ oGLOBAL.Ggeocoder = null;
 oGLOBAL.AccidentForm = {};
 oGLOBAL.mapFn = {
 	GetMapFromTown: function () {
-		"use strict"; var Town = $("#inputChooseTown").val();
-		oGLOBAL.Ggeocoder.getLocations(Town, oGLOBAL.mapFn.addAddressToMap);
+		"use strict"; var Town = $("#inputChooseTown").val(), coords=Town.match(new RegExp("([0-9]+\.[0-9]+)","g")),toGeocode;
+		if  (coords===null){toGeocode=Town;}		
+		else{
+			if  (coords.length>1){
+				var toGeocode1 = new GLatLng(parseFloat(coords[0]), parseFloat(coords[1]));
+				toGeocode = new GLatLng(coords[0], coords[1]);
+			} else {toGeocode=Town;}
+		}
+		oGLOBAL.Ggeocoder.getLocations(toGeocode, oGLOBAL.mapFn.addAddressToMap);
 	},
 	SetAddress: function (latlng) {
 		if (latlng) {
@@ -274,6 +284,8 @@ oGLOBAL.mapFn = {
 			var latlng=oGLOBAL.map.getCenter(); latlng.y=latlng.y-0.3;latlng.Xd=latlng.y;//Dėl atsiradusio paieškos lauko paslenkam žemiau
 			oGLOBAL.map.openInfoWindow(latlng, "Suraskite ir pažymėkite įvykio vietą žemėlapyje");//"Spragtelėkit žemėlapyje pažymėti įvykio vietą!");
 		};
+		
+		
 		if (typeof GBrowserIsCompatible==="undefined") {console.warn("GBrowserIsCompatible");return false;}
 		else if (GBrowserIsCompatible()) {
 			//alert(oGLOBAL.AccidentForm.NewRec); alert(oGLOBAL.AccidentForm.Lat); alert(oGLOBAL.AccidentForm.Lng);
@@ -289,7 +301,6 @@ oGLOBAL.mapFn = {
 				var M = GEvent.addListener(marker, "click", function () { oGLOBAL.map.openInfoWindow(latlng, oGLOBAL.map.SetAddress); });
 				$('#btnEditMap').click(function () {
 					var t = $(this); $("#divSearchMap").toggle();
-					//$("#divSearchMap").css("display","block");		
 					if (t.data("caption") === "Change") {
 						EditMap();
 						t.attr('title', 'Atšaukti įvykio vietos keitimą').html('Atšaukti').data("caption", "Cancel");
@@ -297,7 +308,6 @@ oGLOBAL.mapFn = {
 					else {
 						if(oGLOBAL.map.EventMapclicked){ GEvent.removeListener(oGLOBAL.map.EventMapclicked);}
 						t.attr('title', 'Keisti įvykio vietą').html('Keisti').data("caption", "Change");
-						//$('#txtPlace').val(oGLOBAL.map.SetAddress);
 						oGLOBAL.mapFn.fnSetAddress(oGLOBAL.map.SetAddress);
 						if ($('#ConfirmNewMapData').length) { $('#ConfirmNewMapData').remove(); }
 						oGLOBAL.map.openInfoWindow(latlng, oGLOBAL.map.SetAddress);

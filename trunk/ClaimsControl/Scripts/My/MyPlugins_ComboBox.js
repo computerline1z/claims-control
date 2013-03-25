@@ -43,7 +43,8 @@
             return dialogFrm.dialog("close");
           }
         };
-        return App.listAllController.openItem(pars);
+        App.listAllController.openItem(pars);
+        return false;
       };
       data = void 0;
       fnSetData = function() {
@@ -59,11 +60,11 @@
               }
             }
             if (a.iD === OptVal) {
-              input.val(a.MapArrToString(opt.iText, opt.mapWithNoCommas));
+              input.val(a.MapArrToString(opt.iText, opt.mapWithNoCommas, opt.Source));
             }
             return {
               id: a[opt.iVal],
-              label: a.MapArrToString(opt.iText, opt.mapWithNoCommas)
+              label: a.MapArrToString(opt.iText, opt.mapWithNoCommas, opt.Source)
             };
           };
           data = $.map(oDATA.GET(opt.Source).emData, function(a) {
@@ -71,10 +72,17 @@
           });
         }
         if (opt.Editable.EditList) {
-          return data[data.length] = {
+          data[data.length] = {
             id: -1,
             value: "Redaguoti sąrašą",
             label: "Redaguoti sąrašą"
+          };
+        }
+        if (opt.Editable.AddNew) {
+          return data[data.length] = {
+            id: -2,
+            value: "Įvesti naują",
+            label: "Įvesti naują"
           };
         }
       };
@@ -91,7 +99,7 @@
             opt.Value = input.data("newval");
           }
           fnSetData();
-          if (opt.Editable.EditThis && input.data("newval")) {
+          if (opt.Editable.EditThis && input.data("newval") && opt.ListType === "None") {
             return input.after("<span title='redaguoti..' class='ui-icon ui-icon-pencil ui-menu-icon'>&nbsp;</span>");
           }
         },
@@ -105,6 +113,8 @@
           }
           if (ui.item.id === -1) {
             App.listAllController.editListItems(input, event);
+          } else if (ui.item.id === -2) {
+            fnEditItem(0, null, event);
             return false;
           }
           if ($(event.srcElement).hasClass("ui-menu-icon")) {
@@ -158,7 +168,7 @@
         },
         open: function() {
           var acData, termTemplate;
-          if (opt.Editable.EditList) {
+          if (opt.Editable.EditList || opt.Editable.AddNew) {
             $('ul.ui-autocomplete:visible').find("a:last").addClass("actionLink");
           }
           if (opt.ListType === "None" || opt.ListType === "Combo") {
@@ -173,9 +183,6 @@
               }));
             });
           }
-        },
-        blur: function() {
-          return alert("nu blur");
         }
       });
       $(".ui-autocomplete-input").live("autocompleteopen", function() {
@@ -246,6 +253,7 @@
       }
       if (opt.ListType !== "None") {
         this.addButton({
+          Editable: opt.Editable,
           title: "Parodyti visus",
           icon: "ui-icon-triangle-1-s",
           fn: function() {
@@ -277,6 +285,7 @@
       }
     },
     addButton: function(p, input) {
+      var w;
       this.button = $("<button style='height:" + input.outerHeight() + "px;' class='drop-down'>&nbsp;</button>").attr("tabIndex", -1).attr("title", p.title).insertAfter(input).button({
         icons: {
           primary: p.icon
@@ -287,7 +296,12 @@
         return false;
       }).removeClass("ui-corner-all").find("span").attr("class", "");
       if (p.icon === "img18-plus") {
-        return this.button.removeClass("ui-button-icon-primary ui-icon").css("margin", "-2px 0 0 -8px");
+        this.button.removeClass("ui-button-icon-primary ui-icon").css("margin", "-2px 0 0 -8px");
+      }
+      console.log("opa opa");
+      if (p.Editable.EditThis) {
+        w = input.prev().width() - 26 + 'px';
+        return input.css("width", w);
       }
     },
     destroy: function() {
