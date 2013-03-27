@@ -117,7 +117,7 @@ form input.searchField
 /*------------------------------Selected accident----------------------*/
 div.zebra-striped .tr.selectedAccident { .gradient--main; color: white !important; border-bottom: none!important; }
 div.selectedAccident i.img32-mono_edit {background-image: url('images/Sprite32-white.png') !important;}
-#AccDetailsWraper {border: 4px solid #186a94; padding: 5px; border-top: 0; }
+#AccDetailsWraper {border: 4px solid #BFBFBF; padding: 5px; border-top: 0; border-color: -moz-use-text-color #BFBFBF #BFBFBF;}
 #AccDetailsContent { width:100; display:none;}
 div.dividers { background: url(../images/bg-pattern.png) repeat; height: 6px; display:none; position: relative; border-bottom: 1px solid white; bottom: -2px }
 /*------------------------------Selected claim in accident----------------------*/
@@ -138,7 +138,7 @@ div.dividers { background: url(../images/bg-pattern.png) repeat; height: 6px; di
 	#ClaimWraper {background-color: @systemYellow !important; color:inherit !important; cursor:default !important; border-top:none;}//Content
 	//#ClaimsDetailsContent {background-color: @systemYellow !important; color:inherit !important; cursor:default !important;}
 }
-div.tr.newClaim {background-color: @systemYellow4; .ClaimsRow();.clearfix();}
+div.tr.newClaim {background-color: #a59894; .ClaimsRow();.clearfix();}
 div.newClaimContent {background-color: @systemYellow3; .clearfix();}
 /*-------------------------------Updatable Form----------------------------*/
 .inputForm .ExtendIt { margin: 10px 3px 10px 0px; display: inline-block; vertical-align: top; }
@@ -330,7 +330,7 @@ label {
              width: 100%; font-size: @smallfont; margin: 0; 
              // IDETA:
              .border-radius(0);
-             border: 1px solid @borderGreen;
+              border: 1px solid #A59894;
              //line-height:17px;
              font-size: @smallfont;
         }
@@ -420,7 +420,7 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
     }
     .treeContent:hover {
       cursor: pointer;
-      background-color:  #186B95 !important;
+      background-color:  @linkColor !important;
 	  color:#ffffff !important;
     }
     .treeContent.selected {
@@ -498,7 +498,8 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 	font-size: 30px; 
 	border-top: 1px solid #999999; 
 	padding: 12px; 
-	color: #5A6F85;
+	color: #ffffff;
+	background:A59894;
 }
 .sidepanel-header{
 	background: #186C96;
