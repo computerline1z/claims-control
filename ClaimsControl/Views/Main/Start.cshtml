@@ -12,7 +12,7 @@
 	<link rel="shortcut icon" href='@Url.Content("~/Content/images/favicon.ico")' type="image/x-icon"/>
 </head>
 <body>
-	<div class="header-top">			
+	<div class="header-top">
 			<div class="container--header">
 				<div id="divlogindisplay">
 					@Html.Partial("_LogOnPartial")
@@ -43,7 +43,7 @@
 								 <li><a class="notactive" {{action viewMap}}>ŽEMELAPIS</a></li>
 								 <li><a class="notactive" {{action viewReports}}>ATASKAITOS</a></li>
 								 <li><a class="notactive" {{action viewLists}}>SARAŠAI</a></li>
-								 <li style="float:right;"><a class="notactive" {{action viewAdmin}}>ADMINISTRAVIMAS</a></li>					 
+								 <li><a class="notactive" {{action viewAdmin}}>ADMINISTRAVIMAS</a></li>					 
 							  </ul>
 						  </div>
 					  </div>
@@ -56,13 +56,13 @@
 							<div class="col1 content">{{view App.tabAccidentsView}}</div>
 							<div class="col2 content">{{view App.SidePanelView}}</div>
 						</div>
-						<div class="content hidden container--main" id="divAccidentEdit">divAccidentEdit</div> 
+						<div class="content hidden container--main colmask colmask-extended" style="height:750px;" id="divAccidentEdit">divAccidentEdit</div> 
 					</div>
-					<div class="content hidden colmask" id="tabClaims">tmpClaims!</div>
-					<div class="content hidden colmask" id="tabMap">tmpMap!</div>
-					<div class="content hidden colmask" id="tabReports">tmpReports!</div>
-					<div class="content hidden colmask" id="tabLists">{{outlet listsOutlet}}</div>
-					<div class="content hidden colmask" id="tabAdmin">{{outlet adminOutlet}}</div>
+					<div class="content hidden colmask colmask-extended" id="tabClaims">tmpClaims!</div>
+					<div class="content hidden colmask colmask-extended" id="tabMap">tmpMap!</div>
+					<div class="content hidden colmask colmask-extended" id="tabReports">tmpReports!</div>
+					<div class="content hidden colmask colmask-extended" id="tabLists">{{outlet listsOutlet}}</div>
+					<div class="content hidden colmask colmask-extended" id="tabAdmin">{{outlet adminOutlet}}</div>
 					<div class="hidden" id="tabEmpty">{{outlet emptyOutlet}}</div>
 				</script>
 	</div>
