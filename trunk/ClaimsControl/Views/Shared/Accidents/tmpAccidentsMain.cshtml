@@ -10,7 +10,7 @@
 	<div class="left big w45pr">
 		{{view App.SearchField controller="accidentsController"}} @*context="accidents"*@
 	</div>
-	<div class="right big"><button class="ui-button btn large padded-large" {{action addNewAccident target="App.accidentsController"}}><i class="img32-plus mr8"></i>Registruoti naują įvykį</button></div>
+	<div class="right big"><button class="btn" {{action addNewAccident target="App.accidentsController"}}><i class="img32-plus mr8"></i>Registruoti naują įvykį</button></div>
 </div>
 {{log this}}
 {{log App.accidentsController.content.length}}
