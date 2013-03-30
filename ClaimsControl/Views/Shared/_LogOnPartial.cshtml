@@ -6,11 +6,9 @@
 <div style="background-color: #A59894;; color: #FFFFFF; width: 100%;">
 *@
 <div id="header">
-
-    <table border="0" cellpadding="0" cellspacing="0" style="width: 98%; margin:0 auto;">
-        <tr><td class="logo" @*style="width: 10px;"*@>
-                    <img src= "@Url.Content("~/Content/images/Logo.png")" alt="" />
-        </td><td style="font-size: 10pt; width: 100px;"><strong>Claims</strong>Control </td>
+	<img style="height: 107px; position: absolute; left: -19%; z-index: 1;" src= "@Url.Content("~/Content/images/claimslogo.png")" alt="">
+    <table border="0" cellpadding="0" cellspacing="0" style="width: 105%; margin:0 0 0 97px;">
+        <tr>
             @if (Request.IsAuthenticated) {
                 <text> 
                     <td><span id="spanLogAccount">@CC.Classes.UserData.Account</span></td>
