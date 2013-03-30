@@ -11,28 +11,28 @@
   display: inline-block;
   //.ie7-inline-block();
   padding: 4px 12px;
-  color: #196e99;
+  color: #ffffff;
   margin-bottom: 0; // For input.btn
   font-size: 12px; 
   line-height: @baseLineHeight;
   *line-height: @baseLineHeight;
   text-align: center;
   vertical-align: middle;
-  text-shadow: 0 1px 0 white;
+  text-shadow: 0 0px 0 white;
   cursor: pointer;
   //.buttonBackground(@btnBackground, @btnBackgroundHighlight);
-  #gradient > .vertical(#f7f7f7, #eeeeee);
+  #gradient > .vertical(#eb5a44, #eb5a44);
   
   border: 1px solid @btnBorder;
   *border: 0; // Remove the border to prevent IE7's black border on input:focus
-  border-bottom-color: #c5c5c5;
+  border-bottom-color: #eb5a44;
   .border-radius(7px);
   //.ie7-restore-left-whitespace(); // Give IE7 some love
   .box-shadow(~"0px 1px 2px 0px rgba(0,0,0,0.3) ,inset 0px 1px 0px 0px rgb(255,255,255)");
 
   // Hover state
   &:hover {
-    color: #196e99;
+    color: #ffffff;
     text-decoration: none;
     //background-color: darken(@white, 10%);
     *background-color: darken(@white, 15%); /* Buttons in IE7 don't get borders, so darken on hover */
@@ -62,7 +62,8 @@
   &.disabled,
   &[disabled] {
     cursor: default;
-    background-color: darken(@white, 10%);
+	color:#eb5a44;
+    background-color: #ffffff;
     background-image: none;
     .opacity(65);
     .box-shadow(none);
