@@ -516,7 +516,7 @@ namespace CC.Models {
 				new { FName = "ID"},//0
 				new { FName = "FirstName",Type="String", LenMax=100,IsUnique=new object[]{1,2},Validity="require().nonHtml().maxLength(100)"},//1
 				new { FName = "LastName",Type="String", LenMax=100,Validity="require().nonHtml().maxLength(100)"},//2
-				new { FName = "DateBorn",Type="Date", Default="", Validity="require().match('date').lessThanOrEqualTo(new Date())", Plugin = new {datepicker = new {maxDate=0}}},//3  "Plugin":{"datepicker":{"minDate":"-3y","maxDate":"0"}}
+				new { FName = "DateBorn",Type="Date", Default="", Validity="require().match('date').lessThanOrEqualTo(new Date())", Tip="yyyy.mm.dd"},//3  "Plugin":{"datepicker":{"minDate":"-3y","maxDate":"0"}} , Plugin = new {datepicker = new {maxDate=0}}
 				new { FName = "Phone",Type="Integer", LenMax=20,Validity="nonHtml().maxLength(20)"},//5
 				new { FName = "Docs",Type="String", NotEditable=1},//6
 				new { FName = "EndDate",Type="DateLess", Default="",Validity="match('date').lessThanOrEqualTo(new Date())", Plugin = new {datepicker = new {minDate="-25y", maxDate=0}}},//7

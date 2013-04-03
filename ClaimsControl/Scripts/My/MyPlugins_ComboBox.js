@@ -107,6 +107,7 @@
           return response($.ui.autocomplete.filter(data, request.term));
         },
         select: function(event, ui) {
+          var ctrl, isPencil;
           if (typeof ui.item.id === "function") {
             ui.item.id();
             return false;
@@ -116,6 +117,13 @@
           } else if (ui.item.id === -2) {
             fnEditItem(0, null, event);
             return false;
+          }
+          ctrl = input.next().next("span");
+          isPencil = ctrl.hasClass("ui-icon-pencil");
+          if (ui.item.id === 0 && isPencil) {
+            ctrl.css("display", "none");
+          } else if (isPencil) {
+            ctrl.css("display", "block");
           }
           if ($(event.srcElement).hasClass("ui-menu-icon")) {
             input.data("autocomplete").fnClickOnBtn({

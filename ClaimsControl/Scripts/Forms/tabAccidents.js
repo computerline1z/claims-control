@@ -465,8 +465,10 @@
     chkClaim: null,
     filterByField: function(row) {
       var cols, fnFilter, i, me, ret, _i, _ref;
-      if (row.filterToHide) {
-        return false;
+      if (!this.filterReduced) {
+        if (row.filterToHide) {
+          return false;
+        }
       }
       me = this;
       ret = false;
@@ -481,17 +483,16 @@
       console.log("---Start filtering----");
       for (i = _i = 0, _ref = cols.length; _i < _ref; i = _i += 1) {
         if (fnFilter(i)) {
-          ret = true;
           console.log("true - " + row[cols[i]]);
+          ret = true;
           break;
         } else {
           console.log("false - " + row[cols[i]]);
+          ret = false;
         }
       }
       console.log("---End filtering----");
-      if (!ret) {
-        row.filterToHide = true;
-      }
+      row.set("filterToHide", !ret);
       return ret;
     },
     get_filterByPanel: function() {

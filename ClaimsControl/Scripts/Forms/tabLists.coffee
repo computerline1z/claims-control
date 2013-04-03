@@ -53,6 +53,9 @@ App.listAllController = Em.ResourceController.create(
 		pars=(if opts then opts.pars else e.view._parentView.pars); Alert=(if opts then opts.Alert else null); execOnSuccess=(if opts then opts.execOnSuccess else null) #pars=if pars then pars else e.view._parentView.pars;	
 		DataToSave=oCONTROLS.ValidateForm($("#dialogContent"))
 		if DataToSave
+			# $("input[type=file]").show().focus().trigger("click");  //veikia - atsidaro pasirinkimas
+			# console.log("clicked ->");console.log($("input[type=file]")); 
+			# $("#dialoguploadDocsContainer").find("form").show().focus().fileupload('add');	
 			$.extend(pars,{DataToSave:DataToSave,Ctrl:$("#tabLists"),CallBackAfter:(row)-> #t.p. 189 eilutė
 				if pars.Action=='Add'
 					App.listAllController.content.unshiftObject(row); if App.topNewController[pars.emObject] then App.topNewController[pars.emObject].unshiftObject(row)
@@ -79,7 +82,7 @@ App.listAllController = Em.ResourceController.create(
 			legend: source.Config.Msg.ListName
 			title: "Redaguoti sąrašą"
 			msg: source.Config.Msg
-			addNewMsg: "Pridėti naują "+source.Config.Msg.GenNameWhat.firstSmall()
+			addNewMsg: "Pridėti naują"#+source.Config.Msg.GenNameWhat.firstSmall()
 			saveData:(p)->#Msg,DataToSave,Action,row
 				Source=App.listAllController.listItems; me=@
 				$.extend(p,"Ctrl":$("#"+@dialogID),"source":sourceName, 
@@ -160,7 +163,7 @@ App.listAllController = Em.ResourceController.create(
 					refID=pars.row.iD					
 					App.dialogDocController.setDocs(refID,groupID)
 					this.removeOnCloseView=Em.View.create(docsViewOpts).appendTo "#dialoguploadDocsContainer" #docsViewOpts	#Pridedam dokumentų uploadinimo view'ą				
-				else console.warning('no ref')
+				else console.warn('no ref')
 			didInsertElement: ()->
 				@_super(); dialogContent=$("#dialogContent");ref=0; thisDialog=@
 				if pars.emObject=="vehicles" or pars.source=="proc_Vehicles" then ref=4
@@ -175,7 +178,14 @@ App.listAllController = Em.ResourceController.create(
 							if dialogContent.length#If dialog then check before download
 								thisDialog.thisController.saveForm(null, Alert:true, pars:pars, execOnSuccess:(row)->
 									oCONTROLS.UpdatableForm_toSaved(row.iD, dialogContent);pars.row=row;
-									$("#dialoguploadDocsContainer").empty(); Em.run.next(()-> thisDialog.makeAttach(ref))
+									$("#dialoguploadDocsContainer").empty(); Em.run.next(()-> 
+										thisDialog.makeAttach(ref)
+										# Em.run.next(()-> 
+											# $("input[type=file]").show().focus().trigger("click"); 
+											# console.log("clicked ->");console.log($("input[type=file]")); 
+											# $("#dialoguploadDocsContainer").find("form").show().focus().fileupload('add');		 										
+										# )		 						
+									)						
 								)
 								# SERVER.update2(Action:'Add',DataToSave:DataToSave,Ctrl:dialogContent,source:formOpts.Source,CallBackAfter:(row)-> #pagr 58 eilutė
 									# oCONTROLS.UpdatableForm_toSaved(row.iD, dialogContent)
@@ -219,8 +229,16 @@ App.listAllController = Em.ResourceController.create(
 		@openItem(pars)
 	filterByField: ()->#jei yra filterValue grazina true jei ten randa, jei ne grazina true visada
 		fn=if not @filterValue then "return true;" else "var ret=false,cols="+JSON.stringify(this.current.filterCols)+
-		";console.log('Filtering by val:"+@filterValue+"'); for(var i=0; i < cols.length; i++){console.log(row[cols[i]]+', '+(row[cols[i]].toLowerCase().indexOf('"+@filterValue+"')>-1));
-		if (row[cols[i]].toLowerCase().indexOf('"+@filterValue+"')>-1){ret=true; break;}} console.log('filterByval rez: '+ret);return ret;"
+		";console.log('Filtering by val:"+@filterValue+"'); 
+		for(var i=0; i < cols.length; i++){      
+			if (row[cols[i]]==null){
+				ret=false; break;
+			}else{
+				console.log(row[cols[i]]); console.log(row[cols[i]].toLowerCase().indexOf('"+@filterValue+"')>-1);
+				if (row[cols[i]].toLowerCase().indexOf('"+@filterValue+"')>-1){ret=true; break;}
+			}
+		}
+		console.log('filterByval rez: '+ret);return ret;"
 		new Function("row",fn)
 	filterByTab: ()->
 		if @current.emObject=="drivers"

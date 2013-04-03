@@ -133,32 +133,6 @@ namespace CC.Models {
 			MyEventLog.AddWarning("id:" + id + ", tbl:" + DataObject + Environment.NewLine + "Error: " + ex.Message, "Error on Delete", 102);
 			return GetMsgFromDb(ex.Message, ex.Number, DataObject, null, null, id);
 		}
-		//private static string GetMsg(string ErrMsg, int ErrNo, string tbl, string[] Data, string[] Fields, int id = 0) {
-		//   string Reference = "", dublicate = null;
-		//   if (ErrNo == 2601) {//SELECT * FROM sysmessages /547 ForeignKey Violation, 2627 Unique Index/ Primary key Violation
-		//      Reference = GetMatch(1, ErrMsg).Replace("\'", ""); Debug.Print(Reference);//pirmas lentelė, antras raktas
-		//      switch (Reference) {
-		//         case "IX_tblUsers_Email":
-		//         case "IX_tblAccounts_Email":
-		//            //dublicate = GetField("Email", Data, Fields);
-		//            dublicate = Regex.Match(ErrMsg, @"The duplicate key value is \(([^)]*)\)").Groups[1].Value;
-		//            if (Reference == "IX_tblUsers_Email") {if (UserData.GetUserByEmail(dublicate) == null) { Reference += "_anotherAccount"; }}
-							
-						
-		//            break;
-		//         default:
-		//            MyEventLog.AddException("Reference:" + Reference + Environment.NewLine + "Msg: " + ErrMsg, "Error not parsed: 2601", 152);
-		//            break;
-		//      }
-		//   }
-		//   else if (ErrNo == 2627) {
-		//      Reference = GetMatch(0, ErrMsg).Replace("\'", "");//ucDrivers - nieko nereikia
-		//   }
-		//   return GetMsgFromDb(ErrNo, ErrMsg);
-		//   return GetMsgFromDb(Reference, ErrMsg, dublicate);
-		//}
-
-
 		private static string GetMsgFromDb(string ErrMsg, int ErrNo, string tbl, string[] Data, string[] Fields, int id = 0){
 			string Reference = "", dublicate = null, appendString="";
 			

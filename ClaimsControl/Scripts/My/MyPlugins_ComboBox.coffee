@@ -64,7 +64,12 @@ _create: ->
 				# if Source=="tblVehicleMakes" then App.listAllController.addVehicleMake(input, event) #App.listAllController.set("addMakeMode",true) #modelio pridėjimas
 				# else if Source=="tblInsurers" then App.listAllController.addInsurers
 				# else fnEditItem(0)
-				return false #čia tipo naujo itemso pridėjimas		
+				return false #čia tipo naujo itemso pridėjimas	
+				
+			ctrl=input.next().next("span"); isPencil=ctrl.hasClass("ui-icon-pencil")	#gali būt redagavimo pieštukas		
+			if ui.item.id==0 and isPencil then ctrl.css("display","none") #taip žymim neapdrausta
+			else if isPencil then ctrl.css("display","block")		
+			
 			if $(event.srcElement).hasClass("ui-menu-icon")#paspaudimas ant controlu
 				input.data("autocomplete").fnClickOnBtn(id:ui.item.id,elm:$(event.srcElement),fromInput:false)
 				#event.stopPropagation()#event.preventDefault()				

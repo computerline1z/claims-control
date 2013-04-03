@@ -8,57 +8,50 @@ App.create_docsTypesController=(categoryOpts)->(
 		init: ()-> 
 			@_super(); me = this; docTypes = oDATA.GET("tblDocTypes").emData; @.set("docTypes",docTypes) #docTypes naudojam sarašųredagavimui
 			if categoryOpts then @refreshTree(categoryOpts)
-			#categoryOpts=if categoryOpts then categoryOpts else @categoryOpts 
-			# if categoryOpts #šito tik dokumentų medžiui reikia (content)
-				# @set("categoryOpts",categoryOpts); catOpts=categoryOpts; cats = oDATA.GET("tblDocGroup").emData;
-				# if catOpts.driver then cats.findProperty("ref",3).set("name",catOpts.driver.title)
-				# cats.forEach (catItem, i) ->
-					# newItem =
-						# categoryId: catItem.iD, title: catItem.name
-					# ref = catItem.ref
-					# #console.log "catItem.iD: " + i + ", catItem.name: " + catItem.name
-					# newItem.isTree = "isTree" if ref isnt 1 and ref isnt 5 #Nuotraukom ir nepriskirtom nedarom medzio
-					# newItem.isGroup = "isGroup"
-					# newItem.isSelectable = true	if ref isnt 4 #masinom bus uz masinas medis, tai negalim pasirinkt
-					# if ref is 4
-						# newItem.items = catOpts.vehicles.map((item) ->
-							# isGroup: "isGroup", refID: item.iD, categoryId: 4, title: item.title, isTree: "isTree", isSelectable: true
-						# )
-						# newItem.items.forEach (vehicle) ->
-							# vehicle.items = me.setDocTypes(docTypes, catItem.iD, vehicle.refID)#automobiliam atskiriam pagal refID
-					# else
-						# newItem.items = me.setDocTypes(docTypes, catItem.iD)
-					# c[c.length] = newItem
-				# @set "content", c
 		refreshTree: (categoryOpts)->
 			oGLOBAL.logFromStart("Started refreshTree");
-			@set("categoryOpts",categoryOpts); catOpts=categoryOpts; cats = oDATA.GET("tblDocGroup").emData; c = []; me=@; newItem_Nepriskirti=""
+			if categoryOpts then @set("categoryOpts",categoryOpts) else categoryOpts=@categoryOpts;
+			catOpts=categoryOpts; cats=oDATA.GET("tblDocGroup").emData; docs=oDATA.GET("tblDocs").emData; c = []; me=@; newItem_Nepriskirti=""	
+
 			if catOpts.driver then cats.findProperty("ref",3).set("name",catOpts.driver.title)
 			cats.forEach (catItem, i) ->
-				newItem =
-					categoryId: catItem.iD, title: catItem.name
+				newItem = categoryId: catItem.iD, title: catItem.name
 				ref = catItem.ref
 				#console.log "catItem.iD: " + i + ", catItem.name: " + catItem.name
 				newItem.isTree = "isTree" if ref isnt 1 and ref isnt 5 #Nuotraukom ir nepriskirtom nedarom medzio
 				newItem.isGroup = "isGroup"
 				newItem.isSelectable = true	if ref isnt 4 #masinom bus uz masinas medis, tai negalim pasirinkt
+				fnGetCatDocs=(refID,item)->
+					catDocs=docs.filter((doc)->doc.refID==refID and doc.groupID==catItem.iD);
+					item.title+=if catDocs.length then " ("+catDocs.length+")" else ""
+					catDocs
 				if ref is 4
-					newItem.items = catOpts.vehicles.map((item) ->
+					No=0
+					newItem.items = catOpts.vehicles.map (item) ->
 						isGroup: "isGroup", refID: item.iD, categoryId: catItem.iD, title: item.title, isTree: "isTree", isSelectable: true
-					)
 					newItem.items.forEach (vehicle) ->
-						vehicle.items = me.setDocTypes(me.docTypes, catItem.iD, vehicle.refID)#automobiliam atskiriam pagal refID
+						catDocs=fnGetCatDocs(vehicle.refID,vehicle); No+=catDocs.length
+						vehicle.items = me.setDocTypes(me.docTypes,catItem.iD,vehicle.refID,catDocs)#automobiliam atskiriam pagal refID
+					newItem.title+=if No then " ("+No+")" else ""
 				else
-					newItem.items = me.setDocTypes(me.docTypes, catItem.iD)
+					refID=if ref==3 then catOpts.driver.iD else catOpts.accident.iD # 3-driveris, kiti įvykio iD
+					catDocs=fnGetCatDocs(refID,newItem)
+					newItem.items = me.setDocTypes(me.docTypes,catItem.iD,refID,catDocs)
 				if ref==5 then newItem_Nepriskirti=newItem else c[c.length] = newItem #Paciam gale priskiriam
 			c[c.length] = newItem_Nepriskirti	
 			@set "content", c
 			oGLOBAL.logFromStart("Finished refreshTree");
-		setDocTypes: (docTypes, groupID, refID) ->
-			fnMap
-			if (refID) then fnMap=(item) -> (categoryId: item.iD, title: item.name, refID: refID) #atskiriam pagal refID
-			else fnMap=(item) -> (categoryId: item.iD, title: item.name)
-			docTypes.filter((type) -> type.docGroupID is groupID).map(fnMap)
+		setDocTypes: (docTypes, groupID, refID,catDocs) ->
+			No="";catDocs=catDocs
+			# if (refID) then fnMap=(item) -> (categoryId: item.iD, title: item.name, refID: refID) #atskiriam pagal refID
+			# else fnMap=(item) -> (categoryId: item.iD, title: item.name)
+			docTypes.filter((type) -> type.docGroupID is groupID).map((docType) ->
+				No=catDocs.filter((doc)->
+					doc.docTypeID==docType.iD
+				).length;
+				No=if No then " ("+No+")" else ""
+				categoryId: docType.iD, title: (docType.name+No), refID: refID
+			)#atskiriam pagal refID
 		###################### dokumentų tipai ( naudojami redagavimui) App.docsTypesController #####################
 		content:[],docTypes:[]
 		filterTypes:(->
@@ -238,15 +231,13 @@ TreeDocControllerOpts:
 			)
 		else @AllDocs=docs
 		oGLOBAL.logFromStart("Finished refreshDocs");
-		Em.run.next(@,->
-			if @AllDocs.filter((doc)-> doc.groupID==5).length #Jei yra nepriskirtų keliam ten
-				$("#"+@opts.treeId).find("ul>li:last").trigger("click")
-			else
-				#t=$("#"+@opts.treeId); selected=t.find("span.ui-state-highlight")
-				#if selected.length then selected.trigger("click") else t.find("li:first span").trigger("click") #refreshinam
-				t=$("#"+@opts.treeId); selected=t.find("div.selected")
-				if selected.length then selected.trigger("click") else t.find("li:first div").trigger("click") #refreshinam
-		)
+		# Em.run.next(@,->
+			# if @AllDocs.filter((doc)-> doc.groupID==5).length #Jei yra nepriskirtų keliam ten
+				# $("#"+@opts.treeId).find("ul>li:last").trigger("click")
+			# else
+				# t=$("#"+@opts.treeId); selected=t.find("div.selected")
+				# if selected.length then selected.trigger("click") else t.find("li:first div").trigger("click") #refreshinam
+		# )
 	docs: [], opts: null, AllDocs: [] #šito konteksto visi dokai
 	selectedCategoryId: null
 	deleteDocument: (docElement, selectedNode) ->		

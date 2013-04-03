@@ -233,7 +233,6 @@ App.accidentsController = Em.ResourceController.create(
 			Em.run.next(-> $("#AccDetailsContent, div.dividers").show())
 		else
 			Em.run.next(-> $("#AccDetailsContent, div.dividers").slideDown(App.accidentsController.animationSpeedStart))	
-		
 	tbodyClick: (e) ->
 		tr = $(e.target).closest("div.tr")
 		@setfilteredPolicies(e.context.date)#Filtruojam polisus		
@@ -246,8 +245,6 @@ App.accidentsController = Em.ResourceController.create(
 		else
 			#parent.find("div.selectedAccident").removeClass("selectedAccident"); this.removeClaims(AddWr) #priešingu atveju ištrinam ir pridedam
 			this.removeClaims(AddWr,e,tr,parent) #priešingu atveju ištrinam ir pridedam	
-			
-
 		false
 	setfilteredPolicies: (accidentDate) ->
 		thisAccidentPolicies=$.map(oDATA.GET("proc_InsPolicies").Data, (i)-> if (oGLOBAL.date.firstBigger(i[4],accidentDate)) then return [i] else return null)
@@ -274,7 +271,6 @@ App.accidentsController = Em.ResourceController.create(
 	# ).observesBefore('chkDocs','chkOpen','chkData','chkClaim','filterValue')	
 	filterDidChange: ((thisObj, filterName)->	
 		console.log("filterDidChange")
-		#alert @filterValue
 		filterValue=if filterName=="All" else thisObj[filterName]
 		if (filterName=="filterValue")
 			@textFilterIsActive=if(filterValue=="")then false else true
@@ -296,20 +292,17 @@ App.accidentsController = Em.ResourceController.create(
 	chkData:null #chk12month,#chk2011,#chk2010,#chk2009
 	chkClaim:null #chkClaim_1,chkClaim_2,chkClaim_3,chkClaim_4,chkClaim_5,chkClaim_6
 	filterByField: (row)->#jei yra filterValue grazina true jei ten randa, jei ne grazina true visada
-		#fn=if not @filterValue then "return true;" else "var ret=false,cols="+JSON.stringify(this.current.filterCols)+
-		#";console.log('Filtering by val:"+@filterValue+"'); for(var i=0; i < cols.length; i++){console.log(row[cols[i]]+', '+(row[cols[i]].toLowerCase().indexOf('"+@filterValue+"')>-1));
-		#if (row[cols[i]].toLowerCase().indexOf('"+@filterValue+"')>-1){ret=true; break;}} console.log('filterByval rez: '+ret);return ret;"
-		#new Function("row",fn)
-		if (row.filterToHide) then return false #hidden by textFilter so return
+		if not @filterReduced
+			if (row.filterToHide) then return false #hidden by textFilter so return
 		me=this;ret=false;cols=JSON.parse(JSON.stringify(me.filterCols)); #console.log("Filtering by val:"+cols)
 		fnFilter =(i)-> 
-			#console.log(row[cols[i]]+', '+(row[cols[i]].toLowerCase().indexOf(me.filterValue)>-1));
 			if (row[cols[i]].toLowerCase().indexOf(me.filterValue)>-1) then true else false
 		console.log("---Start filtering----")
 		for i in [0...cols.length] by 1			
-			if fnFilter(i) then ret=true;console.log("true - "+row[cols[i]]); break else console.log("false - "+row[cols[i]])
+			if fnFilter(i) then console.log("true - "+row[cols[i]]); ret=true; break;
+			else console.log("false - "+row[cols[i]]); ret=false;
 		console.log("---End filtering----")
-		if not ret then row.filterToHide=true
+		row.set("filterToHide",not ret);
 		ret
 	get_filterByPanel: ()-> #ikisam nauja funkcija
 		fn=""#"console.log('-----------Filtering by panel-------');"#grazina tik kai tenkinamos visos sąlygos var ret=true;

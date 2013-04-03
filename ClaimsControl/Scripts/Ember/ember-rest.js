@@ -353,9 +353,11 @@ var SERVER = {
 		//SERVER.update2({"Action":Action,DataToSave:{},"Ctrl":Ctrl,"source":source,"row":row
 		if (!p.DataToSave) return false; var me=this;
 		var CallBack = { Success: function (resp, updData) {
-			var oData = oDATA.GET(p.source);id=(updData.Action==="Add")?resp.ResponseMsg.ID:p.DataToSave.id;obj=oData.emData.findProperty("iD", id); 
+			var oData = oDATA.GET(p.source);id=(updData.Action==="Add")?resp.ResponseMsg.ID:p.DataToSave.id;obj=(updData.Action==="Add")?oGLOBAL.helper .emData_fromDataToSave(p.DataToSave,id):oData.emData.findProperty("iD", id);  
 			if (p.source==="proc_Drivers"){//Panaikinam dublicatus prieš jei du, nes galejo keistis, po jei du ir daugiau uzdesim
-				var dublicates=oData.emData.filter(function(item){return item.firstName===obj.firstName && item.lastName===obj.lastName;});
+				var dublicates=oData.emData.filter(function(item){
+					return item.firstName===obj.firstName && item.lastName===obj.lastName;
+				});
 				if (dublicates.length===2){dublicates.map(function(i){i.notUnique=false;});}
 			}			
 			if (updData.Action==="Delete"){	

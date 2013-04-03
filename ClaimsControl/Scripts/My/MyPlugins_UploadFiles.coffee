@@ -23,14 +23,6 @@ _create: ->
 		form.fileupload(@options)
 	)
 	Em.run.next(@,->
-		# prepareUpload=(t)->
-			# $t=t;$t.closest("form").find("table").removeClass("hidden").end()
-			# .find("button.cancel").on("click", ->
-				# $t.closest("form").find(".submitButtons, table").addClass("hidden")#.end()
-				# console.log("Removing tr")
-				# console.log($t.closest("form").find("table tbody tr"))
-				# $t.closest("form").find("table tbody tr").remove()#.addClass("hidden"))
-			# )
 		form.bind('fileuploadadded', (e, data) -> 
 			tr=data.context#data.form,originalFiles,files[0]-bus esamas
 			data.form.find(".submitButtons").removeClass("hidden");inputCat=tr.find("input[name='category[]']")
@@ -51,7 +43,7 @@ _create: ->
 			if (ext=="xls" or ext=="doc" or ext=="pdf") then data.files[0].extension=ext else data.files[0].extension="unknown"
 			data.files[0].type2=data.files[0].type.split("/")[0]
 		).bind("fileuploadsubmit", (e, data) ->
-			tr=data.context;f=data.files[0];optsAccident=data.form.data("opts").categoryOpts.accident;catInput=tr.find("input[name='category[]']");GroupID			
+			tr=data.context;f=data.files[0];opts=data.form.data("opts"); optsAccident=opts.categoryOpts.accident;catInput=tr.find("input[name='category[]']");GroupID			
 			#FileName, FileSize, DocTypeID, RefID, GroupID, Description
 			AccidentID=if optsAccident then optsAccident.iD else null
 			RefID=catInput.data("refID");RefID=if RefID then RefID else AccidentID
@@ -59,52 +51,51 @@ _create: ->
 			if catInput.length#uploadinami dokumentai
 				GroupID=catInput.data("categoryID");GroupID=if GroupID then GroupID else 5 #Nepriskirto kodas 5
 			else GroupID=1#Nuotraukų grupė		
-			if data.form.data("opts").requireCategory
+			if opts.requireCategory
 				if (typeof catInput.data("newval")!="number") then oGLOBAL.notify.withIcon("Ne visi dokumentai išsaugoti", "Dokumentas '"+data.files[0].name+"'  neturi priskirtos kategorijos..", "img32-warning", true); return false
-			
 			data.formData=FileName:f.name, FileSize:f.size, DocTypeID:catInput.data("newval"), RefID:RefID,
 			GroupID:GroupID, Description:tr.find("textarea[name='description[]']").val(), AccidentID: AccidentID
-			#console.log(data)
+			
+			refGroupID=if opts.lastUpload then oDATA.GET("tblDocGroup").emData.findProperty("iD",opts.lastUpload.GroupID).ref else {}
+			if data.formData.GroupID==5 then opts.lastUpload=data.formData #jei nepriskirtas iš kart įrašom
+			else if refGroupID!=5 && refGroupID!=2 #jei nėra įrašyta nepriskirtų arba  įvykio dokumentų
+				opts.lastUpload=data.formData
 		).bind("fileuploaddone", (e, data) -> 
 			if (data.result.success)
 				console.log("Upload result for file '"+data.files[0].name+"':");	console.log(data.result)
-				#---------------add new doc change docs number------------------------------------------------------------
+				#---------------change doc No accordingly------------------------------------------------------------
 				newDoc=Em.Object.create(data.result.tblDoc); oDATA.GET("tblDocs").emData.pushObject(newDoc);
-				docRef=oDATA.GET('tblDocGroup').emData.findProperty('iD',newDoc.groupID).ref
-				if docRef==3# drivers
-					drv=oDATA.GET('proc_Drivers').emData.findProperty('iD',newDoc.refID);No=parseInt(drv.docs.slice(1,-1),10); if isNaN(No) then console.error("NaN")
+				refGroupID=oDATA.GET('tblDocGroup').emData.findProperty('iD',newDoc.groupID).ref
+				if refGroupID==3# drivers
+					drv=oDATA.GET('proc_Drivers').emData.findProperty('iD',newDoc.refID);No=parseInt(drv.docs.slice(1,-1),10); if isNaN(No) then No=0
 					No++; docsNo='('+No+')'; drv.set('docs',docsNo)
 					topDrivers=oDATA.GET('proc_topDrivers'); if topDrivers
 						drvTop=topDrivers.emData.findProperty('iD',newDoc.refID); if drvTop then drvTop.set('docs',docsNo)
-				else if docRef==4# vehicles
-					veh=oDATA.GET('proc_Vehicles').emData.findProperty('iD',newDoc.refID);No=parseInt(veh.docs.slice(1,-1),10); if isNaN(No) then console.error("NaN")
+				else if refGroupID==4# vehicles
+					veh=oDATA.GET('proc_Vehicles').emData.findProperty('iD',newDoc.refID);No=parseInt(veh.docs.slice(1,-1),10); if isNaN(No) then  No=0
 					No++; docsNo='('+No+')'; veh.set('docs',docsNo)
 					topVehicles=oDATA.GET('proc_topVehicles'); if topVehicles
 						vehTop=topVehicles.emData.findProperty('iD',newDoc.refID); if vehTop then vehTop.set('docs',docsNo)
-				#if data.result.tblDocsInAccidents 
-				#	newDocInAccident=Em.Object.create(data.result.tblDocsInAccidents); oDATA.GET("tblDocsInAccidents").emData.pushObject(newDocInAccident);
+				#if data.result.tblDocsInAccidents then newDocInAccident=Em.Object.create(data.result.tblDocsInAccidents); oDATA.GET("tblDocsInAccidents").emData.pushObject(newDocInAccident);
 				#---------------------------------------------------------------------------
 				data.context.remove()
 				if not data.form.find("table tbody tr").length
 					data.form.find(".submitButtons, table").addClass("hidden")
-					docsContr=data.form.data("opts").docsController
+					opts=data.form.data("opts"); docsContr=opts.docsController
 					App[docsContr].refreshDocs()
+					#--------------paklikinam ant node paskutinio uploadinto dokumento jei tai įvykio peržiūra--------------
+					if opts.lastUpload.AccidentID
+						App.docsTypesController.refreshTree()#perpaišom medį, nes reikia suskaičiuot iš naujo
+						Em.run.next(opts:opts,()->
+							lastUpload=@opts.lastUpload; refGroupID=oDATA.GET("tblDocGroup").emData.findProperty("iD",lastUpload.GroupID).ref; DocTypeID=lastUpload.DocTypeID
+							node=$("#dynamicTree>div>ul").children("li[data-category-id='"+lastUpload.GroupID+"']")#Suranda grupės noda
+							if refGroupID==4 then node=node.find("ul").children("li.isGroup[data-ref-id='" + lastUpload.RefID + "']");#tik drv suranda tp
+							#if not (refGroupID==1 or refGroupID==5) then node=node.find("ul").children("li[data-category-id='"+DocTypeID+"']")#Ne Nuotraukos ir ne Nepriskirti į konkretaus dok. tipą
+							@opts.lastUpload=null #nuresetinam naujiem siuntimam						
+							node.trigger("click")
+						)	
 			else
-				console.log("erroras")
-		# ).find(".fileinput-button").on("click", prepareUpload:prepareUpload, (e)-> 
-			# form=$('#dialogContent'); formOpts=form.data('ctrl'); $t=$(this); prepareUpload=e.data.prepareUpload
-			# if form.length#If dialog then check before download
-				# if formOpts.NewRec#Jei naujas išsaugom jei galim
-					# DataToSave=oCONTROLS.ValidateForm(form);
-					# if DataToSave
-						# SERVER.update2(Action:'Add',DataToSave:DataToSave,Ctrl:form,source:formOpts.Source,CallBackAfter:(Row)->
-							# oCONTROLS.UpdatableForm_toSaved(Row.iD, form)
-							# prepareUpload($t)
-						# )
-					# else oCONTROLS.dialog.Alert( title:'',msg:'Užpildykite pažymėtus laukus..')
-				# else prepareUpload($t)
-			# else prepareUpload($t)
-		# )
+				console.warn("upload error")
 		).find(".fileinput-button").on("click", ->
 			#if ($(this).closest("form").find("table tbody tr").length==0)
 			$(this).closest("form").find("table").removeClass("hidden").end()#.find("tbody tr").remove().end()
@@ -114,12 +105,6 @@ _create: ->
 			)
 		)
 	)
-	#$("<div>opa opa į europą</div>").appendTo( this.element )
-	# @element.addClass( "custom-colorize" )
-	# @changer$( "<button>", {text: "change","class": "custom-colorize-changer"}).appendTo( this.element ).button();
-	
-	#bind click events on the changer button to the random method
-	#@_on( this.changer, {click: "random"});# _on won't call random when widget is disabled
 
 App.editDocsController= Em.Object.create(
 	getOpts: (t)->
