@@ -554,7 +554,15 @@ oGLOBAL.date = {
 	// }
 	// }
 };
-oGLOBAL.helper = {//oGLOBAL.helper.getData_fromDataToSave(DataToSave,Field)
+oGLOBAL.helper = {
+	emData_fromDataToSave: function(DataToSave, id){//{DataToSave, id}
+		ret = {};
+		DataToSave.Fields.forEach(
+			function (Field, i) { ret[Field.firstSmall()]=DataToSave.Data[i];}
+		);
+		if (id) ret.iD=id;
+		return Em.Object.create(ret);
+	},
 	getData_fromDataToSave: function (DataToSave, field) {
 		ret = "";
 		DataToSave.Fields.forEach(

@@ -178,6 +178,9 @@
     <None Include="Content\less\sprites.less" />
     <None Include="Content\less\tables.less" />
     <None Include="Content\less\site.less" />
+    <Content Include="Content\images\claimsLogo.png" />
+    <Content Include="Content\images\icon-plus.png" />
+    <Content Include="Content\images\icon-success.png" />
     <Content Include="Properties\App_Readme\Elmah.txt" />
     <Content Include="Content\images\spinner.gif" />
     <Content Include="Content\images\spinnerBig.gif" />
@@ -349,7 +352,7 @@
     <Content Include="Scripts\Plugins scripts\MegaSelectList.js" />
     <Content Include="Scripts\Plugins scripts\TimePicker.js" />
     <Content Include="Content\LoginStyles.css" />
-    <Content Include="SQL\sql10_15.sql" />
+    <Content Include="SQL\current.sql" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -381,7 +384,6 @@
   <ItemGroup>
     <Folder Include="App_Data\Uploads\" />
     <Folder Include="Scripts\Final\" />
-    <Folder Include="SQL\Procedures\" />
     <Folder Include="Uploads\" />
   </ItemGroup>
   <ItemGroup>

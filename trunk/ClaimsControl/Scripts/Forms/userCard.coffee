@@ -94,7 +94,9 @@ App.userCardController = Em.ArrayController.create(
 				else 
 					mailInput=$('#systemEmail')
 					if mailInput.val()!=mailInput.data("ctrl").Value then sendUserPassword(null,"ResetUserPsw",Row.email)					
-				App.userCardController.setUser(myInfo:false,User:Row); App.router.transitionTo('tabAdmin')
+				if not App.userCardController.myInfo
+					App.userCardController.setUser(myInfo:false,User:Row); 
+					App.router.transitionTo('tabAdmin')
 			SERVER.update2(opt); false		
 	cancelForm:(e)-> App.router.transitionTo('tabAdmin'); false
 )
