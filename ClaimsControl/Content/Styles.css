@@ -49,3 +49,8 @@ h2
 	/* For IE 5.5 - 7 */
 	filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#C0C0C0');
 }
+/** apurav rules start **/
+.customInputProperty{border:1px solid #A59894;background:none;box-shadow:0 3px 3px rgba(0, 0, 0, 0.1) inset;}
+.customButtonPropertyPassword {	background-color:#EB5A44;color:#FFFFFF;border-color:rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.25);border-radius:7px 7px 7px 7px;width:90px;font-weight:bolder;font-size:13px;height:27px;padding:0 0 5px;}
+
+/** apurav rules end **/
