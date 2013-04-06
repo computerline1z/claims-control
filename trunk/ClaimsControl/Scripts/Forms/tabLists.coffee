@@ -199,7 +199,7 @@ App.listAllController = Em.ResourceController.create(
 				# $("#btnSaveItem").on("click",()->
 				# )
 				#$("#aCancelItem").on("click",()-> dialogFrm.dialog("close");false)
-				if @templateName=="tmp_InsPolicies" then @$().tabs().css("margin","-5px 1px 0 1px").find("ul").css("background-color","#505860")
+				if @templateName=="tmp_InsPolicies" then @$().tabs().css("margin","-5px 1px 0 1px")
 				oCONTROLS.UpdatableForm(frm:dialogContent,row:pars.row,btnSaveToDisable:dialogContent.next().find("button.btnSave"))
 			width:700
 			# buttons:
