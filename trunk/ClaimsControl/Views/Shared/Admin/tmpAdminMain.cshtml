@@ -1,6 +1,10 @@
-﻿<h2 style="margin: 15px; display: block;color:#EB5A44">Administravimas</h2>
-<hr />
-<h3 style="margin: 15px">Bendrieji paskyros nustatymai</h3>
+﻿<style type="text/css">
+#tabAdmin{background:none;}
+a{text-decoration:underline;}
+</style>
+<div class="custombackgroundListAdmin">
+<h2 style="margin: 15px; display: block;color:#EB5A44">Administravimas</h2>
+<h3 style="margin: 15px" class="h3CustomProperty">Bendrieji paskyros nustatymai</h3>
 
 {{#each App.accountController.content}}
 @*	Negaliu įrašyt iD nes pasikraunant jo dar nėra
@@ -22,13 +26,14 @@
 		<div style="width: 44%;float:left;">
 			{{updatableField timeZoneID labelType="Top" id="admin-top-timezone" List="{\"Source\":\"tblTimeZones\"}"}}
 		</div>
-		<button class="btn btnSave" style="float: right; margin-top: 15px;" {{action SaveChanges target="App.accountController"}}>Išsaugoti</button>
+		<button class="btn btnSave customButtonProperty" style="background-color:#EB5A44;color:#FFFFFF;" {{action SaveChanges target="App.accountController"}}>Išsaugoti</button>
 		</div>
 	</div>
   </div>
 {{/each}}
-<hr />
-<h3 style="margin: 15px">Naudotojų administravimas</h3>
+</div>
+<div class="custombackgroundListAdmin">
+<h3 style="margin: 15px" class="h3CustomProperty">Naudotojų administravimas</h3>
 <div class="container" id="usersList">
 	<table class="zebra-striped">
 	<thead><tr><th>El. paštas</th><th>Vardas, pavardė</th><th>Yra administratorius</th><th>Prisijungti leidžiama</th></tr></thead><tbody>
@@ -36,7 +41,7 @@
 		{{view App.UsersRowView}}
 	{{/each}}
 	</tbody></table>
-<div style="margin-right: 163px;float:right;"><button class="btn btnSave" {{action addNewUser target="App.userCardController"}}>Prideti nauja</button></div>
+<div style="margin-right: 163px;float:right;"><button class="btn btnSave" {{action addNewUser target="App.userCardController"}}>+ Prideti nauja</button></div>
 </div>
-<hr />
+</div>
 @*<a class="medium" {{action deleteAccount target="App.accountController"}} href="#">Panaikinti paskyrą</a>*@
