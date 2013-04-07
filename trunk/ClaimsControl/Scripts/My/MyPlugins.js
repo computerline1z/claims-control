@@ -99,7 +99,7 @@ jQuery(function ($) {
 				$(this).find('th').each(function(index){
 					if (opt.cols[index]){
 						$(this).addClass("clickable").on("click",function(e){
-							var $e=$(e.target), classes=$e.find("span").attr("class"),newClass,n="ui-icon-carat-1-n",s="ui-icon-carat-1-s",ns="ui-icon-carat-2-n-s"							
+							var $e=(e.target.tagName.toUpperCase()==="TH")?$(e.target ):$(e.target ).closest("th"), classes=$e.find("span").attr("class"),newClass,n="ui-icon-carat-1-n",s="ui-icon-carat-1-s",ns="ui-icon-carat-2-n-s"							
 							if (classes.indexOf(ns)>-1){newClass=s;}	//Nerūšiuota	
 							else if (classes.indexOf(n)>-1){newClass=s;}//desc
 							else if (classes.indexOf(s)>-1){newClass=n;}//asc

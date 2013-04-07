@@ -465,18 +465,18 @@ namespace CC.Models
 			return ((ISingleResult<proc_AccidentsYearsResult>)(result.ReturnValue));
 		}
 		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.proc_InsPolicies")]
-		public ISingleResult<proc_InsPoliciesResult> proc_InsPolicies([global::System.Data.Linq.Mapping.ParameterAttribute(Name="AccountID", DbType="Int")] System.Nullable<int> accountID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Top", DbType="Bit")] System.Nullable<bool> top)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), accountID, top);
-			return ((ISingleResult<proc_InsPoliciesResult>)(result.ReturnValue));
-		}
-		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.proc_Drivers")]
 		public ISingleResult<proc_DriversResult> proc_Drivers([global::System.Data.Linq.Mapping.ParameterAttribute(Name="AccountID", DbType="Int")] System.Nullable<int> accountID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Top", DbType="Bit")] System.Nullable<bool> top)
 		{
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), accountID, top);
 			return ((ISingleResult<proc_DriversResult>)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.proc_InsPolicies")]
+		public ISingleResult<proc_InsPoliciesResult> proc_InsPolicies([global::System.Data.Linq.Mapping.ParameterAttribute(Name="AccountID", DbType="Int")] System.Nullable<int> accountID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Top", DbType="Bit")] System.Nullable<bool> top)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), accountID, top);
+			return ((ISingleResult<proc_InsPoliciesResult>)(result.ReturnValue));
 		}
 	}
 	
@@ -9956,6 +9956,158 @@ namespace CC.Models
 		}
 	}
 	
+	public partial class proc_DriversResult
+	{
+		
+		private int _ID;
+		
+		private string _FirstName;
+		
+		private string _LastName;
+		
+		private string _DateBorn;
+		
+		private string _Phone;
+		
+		private string _Docs;
+		
+		private string _EndDate;
+		
+		private bool _NotUnique;
+		
+		public proc_DriversResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="Int NOT NULL")]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this._ID = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FirstName", DbType="NVarChar(200) NOT NULL", CanBeNull=false)]
+		public string FirstName
+		{
+			get
+			{
+				return this._FirstName;
+			}
+			set
+			{
+				if ((this._FirstName != value))
+				{
+					this._FirstName = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LastName", DbType="NVarChar(200) NOT NULL", CanBeNull=false)]
+		public string LastName
+		{
+			get
+			{
+				return this._LastName;
+			}
+			set
+			{
+				if ((this._LastName != value))
+				{
+					this._LastName = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateBorn", DbType="VarChar(10)")]
+		public string DateBorn
+		{
+			get
+			{
+				return this._DateBorn;
+			}
+			set
+			{
+				if ((this._DateBorn != value))
+				{
+					this._DateBorn = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Phone", DbType="VarChar(20)")]
+		public string Phone
+		{
+			get
+			{
+				return this._Phone;
+			}
+			set
+			{
+				if ((this._Phone != value))
+				{
+					this._Phone = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Docs", DbType="VarChar(17)")]
+		public string Docs
+		{
+			get
+			{
+				return this._Docs;
+			}
+			set
+			{
+				if ((this._Docs != value))
+				{
+					this._Docs = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndDate", DbType="VarChar(10)")]
+		public string EndDate
+		{
+			get
+			{
+				return this._EndDate;
+			}
+			set
+			{
+				if ((this._EndDate != value))
+				{
+					this._EndDate = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NotUnique", DbType="Bit NOT NULL")]
+		public bool NotUnique
+		{
+			get
+			{
+				return this._NotUnique;
+			}
+			set
+			{
+				if ((this._NotUnique != value))
+				{
+					this._NotUnique = value;
+				}
+			}
+		}
+	}
+	
 	public partial class proc_InsPoliciesResult
 	{
 		
@@ -9984,6 +10136,12 @@ namespace CC.Models
 		private int _ClaimTypeID;
 		
 		private int _InsurerID;
+		
+		private int _Warn_InfoAfterAcc;
+		
+		private int _Warn_PaymentAfterPapers;
+		
+		private int _Warn_SystemOfPayTerm;
 		
 		public proc_InsPoliciesResult()
 		{
@@ -10196,155 +10354,51 @@ namespace CC.Models
 				}
 			}
 		}
-	}
-	
-	public partial class proc_DriversResult
-	{
 		
-		private int _ID;
-		
-		private string _FirstName;
-		
-		private string _LastName;
-		
-		private string _DateBorn;
-		
-		private string _Phone;
-		
-		private string _Docs;
-		
-		private string _EndDate;
-		
-		private bool _NotUnique;
-		
-		public proc_DriversResult()
-		{
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="Int NOT NULL")]
-		public int ID
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Warn_InfoAfterAcc", DbType="Int NOT NULL")]
+		public int Warn_InfoAfterAcc
 		{
 			get
 			{
-				return this._ID;
+				return this._Warn_InfoAfterAcc;
 			}
 			set
 			{
-				if ((this._ID != value))
+				if ((this._Warn_InfoAfterAcc != value))
 				{
-					this._ID = value;
+					this._Warn_InfoAfterAcc = value;
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FirstName", DbType="NVarChar(200) NOT NULL", CanBeNull=false)]
-		public string FirstName
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Warn_PaymentAfterPapers", DbType="Int NOT NULL")]
+		public int Warn_PaymentAfterPapers
 		{
 			get
 			{
-				return this._FirstName;
+				return this._Warn_PaymentAfterPapers;
 			}
 			set
 			{
-				if ((this._FirstName != value))
+				if ((this._Warn_PaymentAfterPapers != value))
 				{
-					this._FirstName = value;
+					this._Warn_PaymentAfterPapers = value;
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LastName", DbType="NVarChar(200) NOT NULL", CanBeNull=false)]
-		public string LastName
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Warn_SystemOfPayTerm", DbType="Int NOT NULL")]
+		public int Warn_SystemOfPayTerm
 		{
 			get
 			{
-				return this._LastName;
+				return this._Warn_SystemOfPayTerm;
 			}
 			set
 			{
-				if ((this._LastName != value))
+				if ((this._Warn_SystemOfPayTerm != value))
 				{
-					this._LastName = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateBorn", DbType="VarChar(10)")]
-		public string DateBorn
-		{
-			get
-			{
-				return this._DateBorn;
-			}
-			set
-			{
-				if ((this._DateBorn != value))
-				{
-					this._DateBorn = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Phone", DbType="VarChar(20)")]
-		public string Phone
-		{
-			get
-			{
-				return this._Phone;
-			}
-			set
-			{
-				if ((this._Phone != value))
-				{
-					this._Phone = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Docs", DbType="VarChar(17)")]
-		public string Docs
-		{
-			get
-			{
-				return this._Docs;
-			}
-			set
-			{
-				if ((this._Docs != value))
-				{
-					this._Docs = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndDate", DbType="VarChar(10)")]
-		public string EndDate
-		{
-			get
-			{
-				return this._EndDate;
-			}
-			set
-			{
-				if ((this._EndDate != value))
-				{
-					this._EndDate = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NotUnique", DbType="Bit NOT NULL")]
-		public bool NotUnique
-		{
-			get
-			{
-				return this._NotUnique;
-			}
-			set
-			{
-				if ((this._NotUnique != value))
-				{
-					this._NotUnique = value;
+					this._Warn_SystemOfPayTerm = value;
 				}
 			}
 		}

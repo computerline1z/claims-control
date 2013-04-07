@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="ClaimsControl" Class="dbDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=SAULIUS-PC\LOCALHOST;Initial Catalog=ClaimsControl;Persist Security Info=True;User ID=sa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="ClaimsControlConnectionString1" Provider="System.Data.SqlClient" />
+  <Connection Mode="WebSettings" ConnectionString="Data Source=SAULIUS2-PC\SQLEXPRESS;Initial Catalog=ClaimsControl;Persist Security Info=True;User ID=sa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="ClaimsControlConnectionString1" Provider="System.Data.SqlClient" />
   <Table Name="dbo.tblAccidentsTypes" Member="tblAccidentsTypes">
     <Type Name="tblAccidentsType">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -477,6 +477,20 @@
       <Column Name="years" Type="System.Int32" DbType="Int" CanBeNull="true" />
     </ElementType>
   </Function>
+  <Function Name="dbo.proc_Drivers" Method="proc_Drivers">
+    <Parameter Name="AccountID" Parameter="accountID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Top" Parameter="top" Type="System.Boolean" DbType="Bit" />
+    <ElementType Name="proc_DriversResult">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FirstName" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="LastName" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="DateBorn" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="Phone" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="Docs" Type="System.String" DbType="VarChar(17)" CanBeNull="true" />
+      <Column Name="EndDate" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="NotUnique" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
   <Function Name="dbo.proc_InsPolicies" Method="proc_InsPolicies">
     <Parameter Name="AccountID" Parameter="accountID" Type="System.Int32" DbType="Int" />
     <Parameter Name="Top" Parameter="top" Type="System.Boolean" DbType="Bit" />
@@ -494,20 +508,9 @@
       <Column Name="InsuredContactID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="ClaimTypeID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="InsurerID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-    </ElementType>
-  </Function>
-  <Function Name="dbo.proc_Drivers" Method="proc_Drivers">
-    <Parameter Name="AccountID" Parameter="accountID" Type="System.Int32" DbType="Int" />
-    <Parameter Name="Top" Parameter="top" Type="System.Boolean" DbType="Bit" />
-    <ElementType Name="proc_DriversResult">
-      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="FirstName" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
-      <Column Name="LastName" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
-      <Column Name="DateBorn" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
-      <Column Name="Phone" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
-      <Column Name="Docs" Type="System.String" DbType="VarChar(17)" CanBeNull="true" />
-      <Column Name="EndDate" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
-      <Column Name="NotUnique" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Warn_InfoAfterAcc" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Warn_PaymentAfterPapers" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Warn_SystemOfPayTerm" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
     </ElementType>
   </Function>
 </Database>

@@ -323,8 +323,24 @@
     },
     TreeDocControllerOpts: {
       init: function() {
+        var tree;
+
         this._super();
-        return this.refreshDocs();
+        this.refreshDocs();
+        tree = $("#" + this.opts.treeId);
+        return Em.run.next(this, function() {
+          if (this.AllDocs.filter(function(doc) {
+            return doc.groupID === 5;
+          }).length) {
+            return tree.find("ul>li:last").trigger("click");
+          } else if (this.AllDocs.filter(function(doc) {
+            return doc.groupID === 1;
+          }).length) {
+            return tree.find("li:first").trigger("click");
+          } else {
+            return tree.find("li:nth(1)").trigger("click");
+          }
+        });
       },
       refreshDocs: function() {
         var accidentID, cats, docGroups, docs, driverGroupID, driverID, vehicleGroupID, vehicles;

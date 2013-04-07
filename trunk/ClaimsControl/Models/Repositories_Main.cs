@@ -707,7 +707,10 @@ namespace CC.Models {
 				p.InsuredContactID,//9
 				p.ClaimTypeID,//10
 				p.InsurerID,//11
-				p.MailsAddresses
+				p.MailsAddresses,
+				p.Warn_InfoAfterAcc,
+				p.Warn_PaymentAfterPapers,
+				p.Warn_SystemOfPayTerm
 			};
 			object[] Cols ={//NotEditable=true // Unique=true// LenMax/LenEqual/LenMin:10
 				//Date,DateLess,DateNoLess,Time,String
@@ -726,6 +729,10 @@ namespace CC.Models {
 				new { FName = "ClaimTypeID",List=new{Source="tblClaimTypes",ListType="List", iVal="iD",iText=new object []{"name"}}},//10
 				new { FName = "InsurerID",List=new{Source="tblInsurers",Editable=new{EditList=true},ListType="List", iVal="iD",iText=new object []{"name"}}},//11
 				new { FName = "MailsAddresses",Type="String", Tip="Įveskite draudiko ar kitus el. pašto adresus (atskirdami juos kableliu ar kabliataškiu)", LenMax=250,Validity="nonHtml().maxLength(250)"},//5
+
+				new { FName = "Warn_InfoAfterAcc",Type="Integer",Validity="require().match('integer').maxLength(4).greaterThanOrEqualTo(0)"},//6
+				new { FName = "Warn_PaymentAfterPapers",Type="Integer",Validity="require().match('integer').maxLength(4).greaterThanOrEqualTo(0)"},//7
+				new { FName = "Warn_SystemOfPayTerm",Type="Integer",Validity="require().match('integer').maxLength(4).greaterThanOrEqualTo(0)"},//8
 								}; JSON.Cols = Cols;
 			JSON.Config = new { Controler = "InsPolicy", tblUpdate = "tblInsPolicies", titleFields = new object[] { "policyNumber", "insurerName" }, Msg = new { AddNew = "Naujos draudimo sutarties sukūrimas", Edit = "Draudimo sutarties redagavimas", Delete = "Ištrinti draudimo sutartį", GenName = "Draudimo sutartis", GenNameWhat = "draudimo polisą", ListName = "Draudimo sutarčių sąrašas" } };
 			JSON.Grid = new {
@@ -744,7 +751,12 @@ namespace CC.Models {
 					new {bVisible=false,sTitle="Kontaktinis asmuo"},//9//InsuredContactID////UserID
 					new {bVisible=false,sTitle="Draudimo rūšis"},//10//ClaimTypeID////DefaultUpdate=0
 					new {bVisible=false,sTitle="Draudimo kompanija"},//11//InsurerID////
-					new {bVisible=false,sTitle="Pranešimą apie žalą siųsti į:"}//11//InsurerID////
+					new {bVisible=false,sTitle="Pranešimą apie žalą siųsti į:"},//11//InsurerID////
+
+					new {sTitle=""},
+					new {sTitle=""},
+					new {sTitle=""}
+
 				}
 				// aaSorting = new object[] { new object[] { 3, "asc" } },//???
 			};
