@@ -181,6 +181,7 @@
     <Content Include="Content\images\claimsLogo.png" />
     <Content Include="Content\images\icon-plus.png" />
     <Content Include="Content\images\icon-success.png" />
+    <Content Include="Content\images\X_orange.png" />
     <Content Include="Properties\App_Readme\Elmah.txt" />
     <Content Include="Content\images\spinner.gif" />
     <Content Include="Content\images\spinnerBig.gif" />

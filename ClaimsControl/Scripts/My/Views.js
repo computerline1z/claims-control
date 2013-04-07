@@ -101,15 +101,10 @@ App.SearchField = Ember.View.extend({
 	context: null,
 	tagName:"",
 	//tagName: "form",
-	template: Em.Handlebars.compile('<form onsubmit="return false;"><input {{action "valueDidChange" on="keyUp" target="parentView"}} type="text" class="searchField" placeholder="Ieškoti.."/><div class="divSearch"><span {{action "clear" target="parentView"}} class="spanToClearText">&#10005;</span></div></form>'),
-	//template: Em.Handlebars.compile('<input {{action "valueDidChange" on="keyUp" target="parentView"}} type="text" class="searchField" placeholder="Ieškoti.."/><div class="divSearch"><span {{action "clear" target="parentView"}} class="spanToClearText">&#10005;</span></div>'),
+	template: Em.Handlebars.compile('<form onsubmit="return false;" ><input type="text" class="searchField" placeholder="Ieškoti.."/><div class="divSearch"><span {{action "clear" target="parentView"}} class="spanToClearText">&#10005;</span></div></form>'),
+	//template: Em.Handlebars.compile('<input type="text" class="searchField" placeholder="Ieškoti.."/><div class="divSearch"><span {{action "clear" target="parentView"}} class="spanToClearText">&#10005;</span></div>'),
 	clear: function (e) { $(e.target).closest("form").find("input").val(""); this.get("valueDidChange").call(this, ""); },
-	// onKeyDown: function(e){
-		// if ((e.keyCode || e.which) === 13) e.preventDefault();
-		// else console.log("ok");
-		// return true;
-	// },
-	valueDidChange: function (e) {
+	keyUp: function (e) {
 		if ((e.keyCode || e.which) === 13) return false;
 		var f = (e) ? $(e.target).val() : "", context = this.get("context");
 		controller = this.get("controller");

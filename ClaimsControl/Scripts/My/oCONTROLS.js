@@ -141,9 +141,16 @@ var oCONTROLS = {
 					data_ctrl[prop] = col[prop];
 				}
 			}
-			if (p.row){var v =  me.getValFromRow(col.FName,p.row); if (v){data_ctrl.Value =  v; col.Value=v;}}
+			if (p.row){var v =  me.getValFromRow(col.FName,p.row);
+			
+			if (v){data_ctrl.Value =  v; col.Value=v;}}
+			if (Type === 'Integer' || Type === 'Decimal') {
+				if (typeof  v ==="number"){data_ctrl.Value =  v; col.Value=v;}
+				else if (v!==null&&typeof v!=='undefined'){data_ctrl.Value =  v; col.Value=v;}
+			}else{
+				if (v){data_ctrl.Value =  v; col.Value=v;}
+			}		
 			data_ctrl = JSON.stringify(data_ctrl);
-			//log("data_ctrl stringas:"+data_ctrl);
 			if (Type === 'Integer' || Type === 'Decimal') {
 				data_ctrl = data_ctrl.replace("match('integer')", "match(integer)").replace("match('number')", "match(number)");
 			}
@@ -373,6 +380,7 @@ var oCONTROLS = {
 	//appendLabel: function(p, t) { if(typeof p.label==='undefined') { return t; } else { return (p.label.type==="Top")?"<label><div"+((p.label.classes)?" class='"+p.label.classes+"'":"")+">"+p.label.txt+"</div>"+t+"</label>":"<label"+((p.label.classes)?" class='"+p.label.classes+"'":"")+">"+p.label.txt+t+"</label>"; } },
 	//kaip basic + p.text
 	txt: function (p) {
+		if (p.Type=="Integer"||p.Type=="Decimal"){p.Value=p.Value+'';}
 		return this.appendLabel(p, "<input type='text' " + this.basic(p) + ((p.Value) ? 'value="' + $.trim(p.Value).replace(/"/g, '&quot;') + '" ' : '') + "/>");
 	},
 	hidden: function (p) {
@@ -382,7 +390,7 @@ var oCONTROLS = {
 		return "<a " + this.basic(p) + " href='javascript:void(0);return false;'>" + $.trim(p.Value).replace(/"/g, '&quot;')+ "</a>";
 	},
 	txtarea: function (p) {
-		return this.appendLabel(p, "<textarea cols='100' rows='4' " + this.basic(p) + ">" + ((p.Value) ? p.Value.replace(/"/g, '&quot;') : "") + "</textarea>");
+		return this.appendLabel(p, "<textarea cols='100' rows='" +((p.textAreaRows)?p.textAreaRows:4)+"' " + this.basic(p) + ">" + ((p.Value) ? p.Value.replace(/"/g, '&quot;') : "") + "</textarea>");
 	},
 	chk: function (p) {
 		if (typeof p.Value === "string") { p.Value = ((p.Value.toLowerCase().search(/false/i) > -1 || p.Value === ""|| p.Value == 0) ? 0 : 1); }//==kad tiktu 0 ir "0"

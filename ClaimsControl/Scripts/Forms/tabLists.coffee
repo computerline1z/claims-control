@@ -277,7 +277,7 @@ App.AllDriversView = App.mainMenuView.extend(
 	didInsertElement: ()->
 		@_super(); view=$("#tabLists"); view.find("div.ui-tabs").find("li:first a").trigger("click")
 		view.find("table.zebra-striped").tblSortable(
-			cols:["firstName","lastName","dateBorn","drivingCategory","phone","docs",]
+			cols:["firstName","lastName","dateBorn","phone","docs",]
 			controller: "listAllController", sortedCol: 1 
 		);
 )

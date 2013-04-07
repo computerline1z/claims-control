@@ -212,7 +212,16 @@ TreeViewOpts :
 					$(this).parent().find("img.expandImage").attr "src", "Content/less/images/toggle_plus.png"
 					
 TreeDocControllerOpts:
-	init: () -> @_super(); @refreshDocs()
+	init: () ->
+		@_super(); @refreshDocs();tree=$("#"+@opts.treeId);
+		Em.run.next(@,->
+			if @AllDocs.filter((doc)-> doc.groupID==5).length #Jei yra nepriskirtų keliam ten
+				tree.find("ul>li:last").trigger("click")
+			else if @AllDocs.filter((doc)-> doc.groupID==1).length
+				tree.find("li:first").trigger("click")
+			else
+				tree.find("li:nth(1)").trigger("click")
+		)
 	refreshDocs: () ->
 		oGLOBAL.logFromStart("Started refreshDocs");
 		docs=oDATA.GET("tblDocs").emData; cats=@opts.categoryOpts; docGroups=oDATA.GET("tblDocGroup").emData
@@ -231,13 +240,6 @@ TreeDocControllerOpts:
 			)
 		else @AllDocs=docs
 		oGLOBAL.logFromStart("Finished refreshDocs");
-		# Em.run.next(@,->
-			# if @AllDocs.filter((doc)-> doc.groupID==5).length #Jei yra nepriskirtų keliam ten
-				# $("#"+@opts.treeId).find("ul>li:last").trigger("click")
-			# else
-				# t=$("#"+@opts.treeId); selected=t.find("div.selected")
-				# if selected.length then selected.trigger("click") else t.find("li:first div").trigger("click") #refreshinam
-		# )
 	docs: [], opts: null, AllDocs: [] #šito konteksto visi dokai
 	selectedCategoryId: null
 	deleteDocument: (docElement, selectedNode) ->		

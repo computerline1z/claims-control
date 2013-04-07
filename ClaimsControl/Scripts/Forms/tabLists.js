@@ -556,7 +556,7 @@
       view = $("#tabLists");
       view.find("div.ui-tabs").find("li:first a").trigger("click");
       return view.find("table.zebra-striped").tblSortable({
-        cols: ["firstName", "lastName", "dateBorn", "drivingCategory", "phone", "docs"],
+        cols: ["firstName", "lastName", "dateBorn", "phone", "docs"],
         controller: "listAllController",
         sortedCol: 1
       });
