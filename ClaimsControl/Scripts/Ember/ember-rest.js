@@ -463,6 +463,7 @@ var SERVER = {
 		oGLOBAL.notify.msg("", "Siunčiami duomenys..");
 		$.ajax({
 			type: "POST",
+			contentType: "charset=utf-8",
 			url: url,
 			beforeSend: function (xhr) {
 				xhr.setRequestHeader("Content-type", "application/json; charset=utf-8");

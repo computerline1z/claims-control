@@ -178,7 +178,8 @@ var oCONTROLS = {
 			}
 			else if (Type === 'Integer' || Type === 'Decimal') {
 				eHTML += oCONTROLS.txt(col);
-				input = $(eHTML).prependTo(e).find("input:first");
+				//input = $(eHTML).prependTo(e).find("input:first");
+				input = $(eHTML).prependTo(e).parent().find("input:first");//parent reikalingas kai nenaudojam label (InsPolicy kortelėj)
 			}
 			else if (Type.search("Date") !== -1) {// Date DateNotMore DateNotLess DateNotMoreCtrl DateNotLessCtrl
 				var isTime = 0;
