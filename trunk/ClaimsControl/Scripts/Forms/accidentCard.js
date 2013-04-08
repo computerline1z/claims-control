@@ -134,49 +134,48 @@ oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 	//*****************************************************************************************************************************************
 };
 oGLOBAL.map = null; //Gmap
-oGLOBAL.Ggeocoder = null;
+oGLOBAL.geocoder = null;
 oGLOBAL.AccidentForm = {};
+oGLOBAL.infoWindow = new google.maps.InfoWindow();
+oGLOBAL.openInfoWindow = function(latlng,content) {
+        var iW=oGLOBAL.infoWindow; iW.close();
+	iW .setContent(content);
+	iW.setPosition(latlng);
+	iW.open(oGLOBAL.map);	
+};
+
 oGLOBAL.mapFn = {
 	GetMapFromTown: function () {
 		"use strict"; var Town = $("#inputChooseTown").val(), coords=Town.match(new RegExp("([0-9]+\.[0-9]+)","g")),toGeocode;
 		if  (coords===null){toGeocode=Town;}		
 		else{
 			if  (coords.length>1){
-				var toGeocode1 = new GLatLng(parseFloat(coords[0]), parseFloat(coords[1]));
-				toGeocode = new GLatLng(coords[0], coords[1]);
+				var toGeocode1 = new google.maps.LatLng(parseFloat(coords[0]), parseFloat(coords[1]));
+				toGeocode = new google.maps.LatLng(coords[0], coords[1]);
 			} else {toGeocode=Town;}
 		}
-		oGLOBAL.Ggeocoder.getLocations(toGeocode, oGLOBAL.mapFn.addAddressToMap);
+		oGLOBAL.geocoder.geocode({'address':toGeocode}, oGLOBAL.mapFn.addAddressToMap);
 	},
 	SetAddress: function (latlng) {
 		if (latlng) {
-			oGLOBAL.Ggeocoder.getLocations(latlng, function (addresses) {
-				if (addresses.Status.code !== 200) {
-					oGLOBAL.map.SetAddress = "Adresas nerastas";
-				} else {
-					oGLOBAL.map.SetAddress = oGLOBAL.mapFn.fnGetAddress(addresses.Placemark);
-					//var address=addresses.Placemark[0];
-					//oGLOBAL.map.SetAddress=address.address;
-					oGLOBAL.map.openInfoWindow(latlng, oGLOBAL.map.SetAddress);
+			oGLOBAL.geocoder.geocode({'latLng':latlng}, function (addresses, status) {
+				if (status == google.maps.GeocoderStatus.OK) {
+					oGLOBAL.map.SetAddress = oGLOBAL.mapFn.fnGetAddress(addresses);
+					oGLOBAL.openInfoWindow(latlng, oGLOBAL.map.SetAddress);
+				}else{
+					oGLOBAL.map.SetAddress = "Adresas nerastas";			
 				}
 			});
 		}
 	},
 	fnGetAddress: function (p) {
-		var len = p.length, btn;
-		var address = p[0].address, district = (len > 3) ? p[3].address : "", address1 = (len > 1) ? p[1].address : "", address2 = (len > 2) ? p[2].address : "";
-		var ArrAddr = address.split(', '), ArrDistr = district.split(', '), ArrAddr1 = address1.split(', '), ArrAddr2 = address2.split(', '), Last = (ArrAddr.length > 1) ? ArrAddr.length - 2 : 0;
-		oGLOBAL.AccidentForm.Country = ArrAddr[ArrAddr.length - 1];
-		oGLOBAL.AccidentForm.District = ((ArrDistr[0]) ? ArrDistr[0] : ((ArrAddr.length > 1) ? ArrAddr[ArrAddr.length - 2] : "")).replace("'","");
-
-		if (ArrAddr[Last].search(ArrDistr[0]) > -1) { Last--; } //Neimam paskutinio, nes jis jau yra apskrities pavadinime
-		if (Last === -1) { oGLOBAL.AccidentForm.Address = ""; } else {
-			if (ArrAddr[Last].search(ArrAddr1[0]) === -1) { ArrAddr[Last] += ", " + ArrAddr1[0]; } //Pridedu prie paskutinio Addr1 jei jo nera
-			if (ArrAddr[Last].search(ArrAddr2[0]) === -1) { ArrAddr[Last] += ", " + ArrAddr2[0]; } //Pridedu prie paskutinio Addr2 jei jo nera
-			address = ArrAddr.splice(0, Last + 1);
-			oGLOBAL.AccidentForm.Address = (address)?(address.join(', ').replace("'","")):"";
-		}
-		return ((oGLOBAL.AccidentForm.Address) ? (oGLOBAL.AccidentForm.Address + ', ') : "") + oGLOBAL.AccidentForm.District + ', ' + oGLOBAL.AccidentForm.Country;
+		var ArrAddr=p[0].address_components,   len = ArrAddr.length, Ix=len-1;
+		if (ArrAddr[Ix].types[0]!=="country"){Ix--;}
+		var Country=ArrAddr[Ix].long_name; Ix--;
+		var District=(Ix>0)?ArrAddr[Ix].long_name:''; Ix--; if (Ix<0){Ix=0;}
+		var Address=ArrAddr.slice(0,Ix).map(function(e){return e.long_name;}).join(', ');
+		$.extend(oGLOBAL.AccidentForm, {Address: Address, District:District, Country:Country});
+		var af=oGLOBAL.AccidentForm; return  ((af.Address)?(af.Address+', '):"")+af.District+', '+af.Country;
 	},
 	fnSetAddress: function(place){
 		var p=oGLOBAL.AccidentForm;
@@ -186,23 +185,18 @@ oGLOBAL.mapFn = {
 		$('#txtPlace').html(place);
 		$("#divSearchMap").css("display","none");
 	},
-	Mapclicked: function (overlay, latlng) {
-		"use strict";
+	Mapclicked: function (event) {
+		"use strict"; var latlng=event.latLng;
 		if (latlng) {
-			oGLOBAL.AccidentForm.Lat = latlng.y;
-			oGLOBAL.AccidentForm.Lng = latlng.x;
-			oGLOBAL.Ggeocoder.getLocations(latlng, function (addresses) {
-				if (addresses.Status.code !== 200) {
-					oCONTROLS.dialog.Alert({msg:"Nepavyko rasti šios vietos adreso - " + latlng.toUrlValue(), title:"Nepavyko rasti adreso"});
-				} else {
-					var place = oGLOBAL.mapFn.fnGetAddress(addresses.Placemark);
-					oGLOBAL.map.openInfoWindow(latlng, place);
+			oGLOBAL.AccidentForm.Lat = latlng.lat();
+			oGLOBAL.AccidentForm.Lng = latlng.lng();
+			oGLOBAL.geocoder.geocode({'latLng':latlng}, function (addresses, status) {
+				if (status == google.maps.GeocoderStatus.OK) {
+					var place = oGLOBAL.mapFn.fnGetAddress(addresses);
+					oGLOBAL.openInfoWindow(latlng, place);
 					oGLOBAL.mapFn.fnSetAddress(place);
 					if (!oGLOBAL.AccidentForm.NewRec) {//.css('display', 'inline')
 						if (!$('#ConfirmNewMapData').length) {
-							//btn=$('#btnEditMap').clone(); //.attr("display", "inline-block");
-							//btn.attr("id", "ConfirmNewMapData").attr("title", "Patvirtinti įvykio vietą").html("Patvirtinti");
-							//$('#btnEditMap').after(btn);
 							$('<a id="ConfirmNewMapData" href="javascript:void(0);return false;">Patvirtinti</a>').insertAfter('#btnEditMap').button();
 							$('#ConfirmNewMapData').click(function () {
 								var DataToSave = { Data: [], Fields: [], DataTable: $("#AccidentForm").data("ctrl").Source };
@@ -215,13 +209,15 @@ oGLOBAL.mapFn = {
 
 								SERVER.update({ Action: "Edit", DataToSave: DataToSave,
 									CallBack: { Success: function (resp) {
-										oGLOBAL.map.clearOverlays();
-										latlng = new GLatLng(oGLOBAL.AccidentForm.Lat, oGLOBAL.AccidentForm.Lng);  //ignore jslint
+										latlng = new google.maps.LatLng(oGLOBAL.AccidentForm.Lat, oGLOBAL.AccidentForm.Lng);
 										oGLOBAL.map.setCenter(latlng, 8);
-										var marker = new GMarker(latlng);  //ignore jslint
-										oGLOBAL.map.addOverlay(marker);
+										var marker = new google.maps.Marker({
+											position: new google.maps.LatLng(latlng),
+											map: oGLOBAL.map
+										}); 
+										
 										oGLOBAL.mapFn.SetAddress(latlng);  //Ikisa i oGlobal.map.SetAddress
-										var M = GEvent.addListener(marker, "click", function () { oGLOBAL.map.openInfoWindow(latlng, oGLOBAL.map.SetAddress); }); //ignore jslint
+										var M = google.maps.event.addListener(marker, "click", function () { oGLOBAL.openInfoWindow(latlng, oGLOBAL.map.SetAddress); }); //ignore jslint
 										$('#btnEditMap').attr('title', 'Keisti įvykio vietą').html('Keisti').data("caption", "Change");
 										$('#ConfirmNewMapData').remove();
 										var newRow = resp.ResponseMsg.Ext.replace(/#\|#\|/g,":::").split("|#|"); newRow[13]=newRow[13].replace(/:::/g,"#|#|") //atkeičiam atgal
@@ -229,9 +225,12 @@ oGLOBAL.mapFn = {
 									}
 									}, Msg: { Title: "Įvykio vietos keitimas", Success: "Įvykio vieta pakeista.", Error: "Nepavyko pakeist įvykio vietos." }
 								});
+								return false;
 							});
 						}
 					}
+				} else {
+					oCONTROLS.dialog.Alert({msg:"Nepavyko rasti šios vietos adreso - " + latlng.toUrlValue(), title:"Nepavyko rasti adreso"});
 				}
 			});
 		}
@@ -246,57 +245,52 @@ oGLOBAL.mapFn = {
 		script.setAttribute('type', 'text/javascript');
 		document.documentElement.firstChild.appendChild(script);
 	},
-	addAddressToMap: function (response) {//Naudojamas vietovardžių paieškai
-		oGLOBAL.map.clearOverlays();
-		if (response && response.Status.code !== 200) {
-			alert("Neradau tokios vietovės - " + decodeURIComponent(response.name));
+	addAddressToMap: function (results, status) {//Naudojamas vietovardžių paieškai
+		if (status == google.maps.GeocoderStatus.OK) {
+			oGLOBAL.map.setCenter(results[0].geometry.location);
+			var marker = new google.maps.Marker({
+				map: oGLOBAL.map, position: results[0].geometry.location
+			});
+			oGLOBAL.openInfoWindow(results[0].geometry.location, results[0].formatted_address);
 		} else {
-			//var place=oGLOBAL.mapFn.fnGetAddress(response.Placemark);
-			var place = response.Placemark[0];
-			var point = new GLatLng(place.Point.coordinates[1], place.Point.coordinates[0]);
-			var Address = place.address.split(", ");
-			var Sub = (typeof place.AddressDetails.Country.SubAdministrativeArea === 'undefined') ? "" : "<b>Apskritis:</b> " + place.AddressDetails.Country.SubAdministrativeArea.SubAdministrativeAreaName + "<br>";
-			var Adm = (Address.length < 3) ? "" : "<b>Adm. centras:</b> " + Address[1] + "<br>";
-			oGLOBAL.map.setCenter(point, 5);
-			oGLOBAL.map.openInfoWindowHtml(point, "<b>Vietovardis:</b> " + Address[0] + "<br>" + Adm + Sub + "<b>Šalis:</b> " + place.AddressDetails.Country.CountryName + " (" + place.AddressDetails.Country.CountryNameCode + ")");
+			alert("Neradau šios vietovės - '" + $('#inputChooseTown').val()+"'");
 		}
 	},
 	loadGMap: function () {
 		var EditMap = function () {
-			oGLOBAL.map.EventMapclicked = GEvent.addListener(oGLOBAL.map, "click", oGLOBAL.mapFn.Mapclicked);
+			oGLOBAL.map.EventMapclicked = google.maps.event.addListener(oGLOBAL.map, "click", oGLOBAL.mapFn.Mapclicked);
 			var latlng=oGLOBAL.map.getCenter(); 
-			oGLOBAL.map.openInfoWindow(latlng, "Suraskite ir pažymėkite įvykio vietą žemėlapyje");//"Spragtelėkit žemėlapyje pažymėti įvykio vietą!");
+			oGLOBAL.openInfoWindow(latlng, "Suraskite ir pažymėkite įvykio vietą žemėlapyje");//"Spragtelėkit žemėlapyje pažymėti įvykio vietą!");
 		};
-		if (typeof GBrowserIsCompatible==="undefined") {console.warn("GBrowserIsCompatible");return false;}
-		else if (GBrowserIsCompatible()) {
-			oGLOBAL.map = new GMap2(document.getElementById("divMap"));
-			if (!oGLOBAL.AccidentForm.NewRec) {
-				var latlng = new GLatLng(oGLOBAL.AccidentForm.Lat, oGLOBAL.AccidentForm.Lng);
-				oGLOBAL.map.setCenter(latlng, 8);
-				oGLOBAL.map.setUIToDefault(); //oGLOBAL.map.addControl(new GSmallZoomControl());
-				oGLOBAL.Ggeocoder = new GClientGeocoder();
-				var marker = new GMarker(latlng);
-				oGLOBAL.map.addOverlay(marker);
-				oGLOBAL.mapFn.SetAddress(latlng);  //Ikisa i oGlobal.map.SetAddress
-				var M = GEvent.addListener(marker, "click", function () { oGLOBAL.map.openInfoWindow(latlng, oGLOBAL.map.SetAddress); });
-				$('#cancelMap').on('click',function () {
-					if(oGLOBAL.map.EventMapclicked){ GEvent.removeListener(oGLOBAL.map.EventMapclicked);}
-					oGLOBAL.mapFn.fnSetAddress(oGLOBAL.map.SetAddress);
-					if ($('#ConfirmNewMapData').length) { $('#ConfirmNewMapData').remove(); }
-					oGLOBAL.map.openInfoWindow(latlng, oGLOBAL.map.SetAddress);
-					$("#divSearchMap").hide();
-				});
-			} else {
-				oGLOBAL.map.setCenter(new GLatLng(54.682961, 25.2740478), 4);
-				oGLOBAL.map.setUIToDefault(); //oGLOBAL.map.addControl(new GSmallZoomControl());
-				oGLOBAL.Ggeocoder = new GClientGeocoder();
-				EditMap();
-			}
-			$('#btnEditMap').click(function () {
-				var t = $(this); $("#divSearchMap").show().outerHeight($("#divMapHead").height());
-				EditMap();
-			});
+		var latlng,zoom; oGLOBAL.geocoder = new  google.maps.Geocoder();
+		
+		if (!oGLOBAL.AccidentForm.NewRec) {
+			latlng = new google.maps.LatLng(oGLOBAL.AccidentForm.Lat, oGLOBAL.AccidentForm.Lng); zoom=8;
+		} else {
+			latlng = new google.maps.LatLng(54.682961, 25.2740478); zoom=4;		
 		}
+		oGLOBAL.map = new google.maps.Map(document.getElementById("divMap"), {zoom: zoom,center: latlng,mapTypeId: google.maps.MapTypeId.ROADMAP});
+		
+		if (!oGLOBAL.AccidentForm.NewRec) {
+			var marker = new google.maps.Marker({
+				position: new google.maps.LatLng(latlng),
+				map: oGLOBAL.map
+			});              
+			
+			oGLOBAL.mapFn.SetAddress(latlng);  //Ikisa i oGlobal.map.SetAddress
+			var M = google.maps.event.addListener(marker, "click", function () { oGLOBAL.openInfoWindow(latlng, oGLOBAL.map.SetAddress); });
+			$('#cancelMap').on('click',function () {
+				if(oGLOBAL.map.EventMapclicked){ google.maps.event.removeListener(oGLOBAL.map.EventMapclicked);}
+				oGLOBAL.mapFn.fnSetAddress(oGLOBAL.map.SetAddress);
+				if ($('#ConfirmNewMapData').length) { $('#ConfirmNewMapData').remove(); }
+				oGLOBAL.openInfoWindow(latlng, oGLOBAL.map.SetAddress);
+				$("#divSearchMap").hide();
+			});
+		} else {EditMap();}
+		$('#btnEditMap').click(function () {
+			var t = $(this); $("#divSearchMap").show().outerHeight($("#divMapHead").height());
+			EditMap();
+		});
 	}
 };
 console.log("accidentCard loaded");
