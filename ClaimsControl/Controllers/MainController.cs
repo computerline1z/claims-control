@@ -62,6 +62,37 @@ namespace ClaimsControl.Controllers {
 		}
 
 		[HttpPost]
+		public JsonResult tabClaims(string ver, bool tmp, bool obj) {
+			Repositories_Main acc = new Repositories_Main();
+			string currentVer = "1"; if (ver != currentVer) tmp = true; ver = currentVer;
+			tmp = true;
+			System.Diagnostics.Debug.Print("ver - " + ver + "; obj - " + obj.ToString());
+			return Json(
+				new {
+					ver = ver,
+					//jsonObj = new {//šitam visada atnaujinu objektus
+					//   proc_topDrivers = acc.GetJSON_proc_Drivers(true),
+					//   proc_topVehicles = acc.GetJSON_proc_Vehicles(true),
+					//   proc_topInsPolicies = acc.GetJSON_proc_InsPolicies(true)
+					//},
+					templates = (tmp) ? new {
+						tmpClaimsMain = RenderPartialViewToString("Claims/tmpClaimsMain"),
+						tmpClaimView = RenderPartialViewToString("Claims/tmpClaimView"),
+						tmpSidePanelForClaims = RenderPartialViewToString("Claims/tmpSidePanelForClaims"),
+						tmpClaimRegulation = RenderPartialViewToString("Claims/tmpClaimRegulation")
+
+					} : new {
+						tmpClaimsMain = "",
+						tmpClaimView = "",
+						tmpSidePanelForClaims = "",
+						tmpClaimRegulation = ""
+					}//,
+					//Script = new { File = "/Scripts/Forms/tabLists.js?ver="+ver, Pars = "" } listus siunčiu su visais nes jų reikia
+				}
+			);
+		}
+
+		[HttpPost]
 		public JsonResult tabMain(string ver, bool tmp, bool obj) {
 			Repositories_Main acc = new Repositories_Main();
 			string currentVer = "14"; if (ver != currentVer) tmp = true; ver = currentVer;
