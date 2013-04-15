@@ -1,0 +1,27 @@
+﻿<div class="container">
+	<div class="left big w45pr">
+		{{view App.SearchField controller="claimsController"}}
+	</div>
+	<div class="right big"><a href="#" class="medium listUnderlineProperty" {{action "showNotDefinedEmails"  target="view"}}>Yra gautų el. laiškų kurie nepriskirti žaloms</a></div>
+</div>
+{{log this}}
+{{log App.claimsController.content.length}}
+{{#if App.claimsController.content.length}}
+	<div class="accidentMain-header">
+		Paskutinės žalos:
+	</div>
+	<div class="zebra-striped selectable tall">
+	{{#each "App.claimsController.content"}}
+	{{#if this.visible}}
+	{{#compare claimTypeID "!==" "6"}}
+	@*<div {{action openClaim this target="App.claimsController"}} class="tr accident"> {{action tbodyClick  this target="App.accidentsController"}}*@
+	<div {{action claimRegulation this}} class="tr accident">@* {{action tbodyClick  this target="App.accidentsController"}}*@
+		{{view App.ClaimView}}
+	</div>
+	{{/compare}}
+	{{/if}}
+	{{/each}}
+	</div>
+{{else}}
+	<h4>Nėra įvesta žalų..</h4>
+{{/if}}

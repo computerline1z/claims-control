@@ -4,6 +4,7 @@ App.ClaimsView = App.mainMenuView.extend({ templateName: 'tmpClaims', viewIx: 1 
 App.MapView = App.mainMenuView.extend({ templateName: 'tmpMap', viewIx: 2 });
 App.ReportsView = App.mainMenuView.extend({ templateName: 'tmpReports', viewIx: 3 });
 //App.AdminView = App.mainMenuView.extend({ templateName: 'tmpAdmin', viewIx: 5 });
+
 App.Router = Em.Router.extend({
 	executed:{},//Užsižymim, kad buvo spausti
 	enableLogging: false,
@@ -32,7 +33,28 @@ App.Router = Em.Router.extend({
 			route: '/claims',
 			connectOutlets: function (router, context) {
 				MY.NavbarController.fnSetNewTab(router.currentState.name, 1);
-				//	router.get('applicationController').connectOutlet('claims');
+				oDATA.fnLoad2({ url: "Main/tabClaims", callBack: function () {
+						App.claimsStart();
+						router.get('applicationController').connectOutlet('claimsOutlet', 'tabClaims');		
+						router.get('applicationController').connectOutlet('claimsSidePanelOutlet', 'sidePanelForClaims');
+					}
+				});
+			},
+			//route: '/claimEdit',
+			// connectOutlets: function (router, context) {
+				// MY.NavbarController.fnSetNewTab(router.currentState.name, 1);
+				// router.get('applicationController').connectOutlet('editClaimOutlet', 'tabClaims');		
+			// },
+			claimRegulation: function (router, context){
+				//App.listsStart();//Atnaujinam, jai buvo keista
+				//MY.NavbarController.fnSetNewTab(router.currentState.name, 1);
+				App.claimsRegulationController.set('content',context.context);
+				router.get('applicationController').connectOutlet('claimRegulationOutlet','tabClaimsRegulation'); 
+			},
+			goBack:function (router, context){
+				$('#divClaimRegulation').hide().parent().spinner({ position: 'center', img: 'spinnerBig.gif' });
+				$('#divClaimsList').show();
+				$("body").find("img.spinner").remove();
 			}
 		}),
 		tabMap: Em.Route.extend({

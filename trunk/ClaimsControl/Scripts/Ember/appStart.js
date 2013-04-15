@@ -1,6 +1,20 @@
 App = Em.Application.create();
 App.ApplicationController = Em.Controller.extend();
 App.ApplicationView = Em.View.extend({ templateName: 'tmpApplication'});
+App.HidePreviousWindow = Ember.Mixin.create({
+	init:function() {
+		this._super(); $(this.previuosWindow).hide().parent().spinner({ position: 'center', img: 'spinnerBig.gif' });
+		$(this.thisWindow).show();
+	},
+	didInsertElement:function() {
+		this._super(); $("body").find("img.spinner").remove() ;//$("body").spinner('remove'); - neveikia
+	},
+	goBack:function(){
+		$(this.thisWindow).empty().hide().parent().spinner({ position: 'center', img: 'spinnerBig.gif' });
+		$(this.previuosWindow).show();
+		$("body").find("img.spinner").remove();
+	}
+});
 App.NavbarController = Em.Controller.extend({
 	currentState: null,
 	fnSetNewTab: function (newState, viewIx,newOutlet) {

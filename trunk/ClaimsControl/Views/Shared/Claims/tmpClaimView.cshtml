@@ -1,0 +1,19 @@
+﻿@*{{lossAmount}} - claim.lossAmount
+{{log this}}
+{{log view}}
+
+App.claimsController.content
+*@
+	<div class="td w05pr">{{#compare claimStatus "===" "5"}}<i class="img32-check"></i>{{else}}&nbsp;{{/compare}}</div>
+		<div class="td w12pr"><b>{{unbound accident.date}}</b><br/>{{unbound accident.no}}-{{unbound no}}</div>
+	{{#with accident}}
+		<div class="td w48pr"><b>{{unbound place}}</b><br/>{{unbound shortNote}}</div>
+	{{/with}}
+	<div class="td w20pr"><b>{{unbound claimType.name}}</b><br/>{{unbound vehicle.plate}}</div>
+	<div class="td w15pr">{{#compare insPolicyID "===" "0"}}
+		Neapdrausta
+	{{else}}
+		{{unbound insPolicy.insurerName}}<br/>{{unbound insurerClaimID}}
+	{{/compare}}</div>
+
+@*<div class="td w03pr"><a href="#" {{action editAccident this target="App.accidentsController"}}><img src="Content/less/images/icon_details.png"></a></div>*@

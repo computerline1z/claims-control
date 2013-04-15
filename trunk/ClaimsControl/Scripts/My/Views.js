@@ -4,7 +4,6 @@ Handlebars.registerHelper('highlight', function (prop, options) {
 });
 Handlebars.registerHelper('checkOut_trinti', function (prop, options) {
 	var value = Ember.getPath(this, prop);
-        console.log("opa");
 	return new Handlebars.SafeString('<span class="highlight">' + value + '</span>');
 });
 Handlebars.registerHelper('currency', function (prop, options) {
@@ -63,20 +62,19 @@ Handlebars.registerHelper('each11', function (context, options) {
 		Default comparison of "==="
 	{{/compare}}*/
 Handlebars.registerHelper('compare', function (lvalue, operator, rvalue, options) {
-	var operators, result;
+	var operators, result,me=this;
 	if (arguments.length < 3) { throw new Error("Handlerbars Helper 'compare' needs 2 parameters"); }
 	if (options === undefined) {
 		options = rvalue;rvalue = operator;operator = "===";
 	}
-	//jei value yra this.TypeID, laikom, kad reikia paimt lauko reiksme is konteksto
-	if (lvalue.slice(0, 4) === "this") { var v = lvalue.slice(5); lvalue = this[v]; if (lvalue === undefined) { 
-		console.error("wrong field"); 
-	} }
-	if (rvalue.slice(0, 4) === "this") { var v = rvalue.slice(5); rvalue = this[v]; if (rvalue === undefined) { 
-		console.error("wrong field"); 
-	} }
-	//vietoj this.content padaro "content" tai atstatom
-	if (typeof lvalue==="string") {if (lvalue.match("content")){lvalue=lvalue.replace("content","this.content");lvalue=eval(lvalue);}}
+	getVal=function(name){
+		if (!isNaN(name)){return parseInt(name,10);}//Jei tai numeris tuo ir baigsim
+		var nameArr=name.split('.'), val=me;
+		nameArr.forEach(function(n){val=val[n];});
+		return  val;
+	}
+	lvalue=getVal(lvalue);
+	rvalue=getVal(rvalue);
 	operators = {
 		'==': function (l, r) { return l == r; },'===': function (l, r) { return l === r; },'!=': function (l, r) { return l != r; },
 		'!==': function (l, r) { return l !== r; },'<': function (l, r) { return l < r; },'>': function (l, r) { return l > r; },
@@ -100,11 +98,9 @@ Handlebars.registerHelper('compare', function (lvalue, operator, rvalue, options
 App.SearchField = Ember.View.extend({
 	context: null,
 	tagName:"",
-	//tagName: "form",
-	template: Em.Handlebars.compile('<form onsubmit="return false;" ><input type="text" class="searchField" placeholder="Ieškoti.."/><div class="divSearch"><span {{action "clear" target="parentView"}} class="spanToClearText">&#10005;</span></div></form>'),
-	//template: Em.Handlebars.compile('<input type="text" class="searchField" placeholder="Ieškoti.."/><div class="divSearch"><span {{action "clear" target="parentView"}} class="spanToClearText">&#10005;</span></div>'),
+	template: Em.Handlebars.compile('<form onsubmit="return false;" ><input  {{action "valueDidChange" on="keyUp" target="parentView"}} type="text" class="searchField" placeholder="Ieškoti.."/><div class="divSearch"><span {{action "clear" target="parentView"}} class="spanToClearText">&#10005;</span></div></form>'),
 	clear: function (e) { $(e.target).closest("form").find("input").val(""); this.get("valueDidChange").call(this, ""); },
-	keyUp: function (e) {
+	valueDidChange: function (e) {
 		if ((e.keyCode || e.which) === 13) return false;
 		var f = (e) ? $(e.target).val() : "", context = this.get("context");
 		controller = this.get("controller");
@@ -126,7 +122,7 @@ App.FormBottomView = Em.View.extend({
 			if (typeof fn === 'function') {
 				var actionFnc = function(event) {fn(event);} 
 				this.set(actions[i], actionFnc);	
-				console.log('ok action: '+actions[i]);
+				//console.log('ok action: '+actions[i]);
 			} else console.warn("No target for "+actions[i]);	
 		}		
 		 for (i=0;i<actions.length;i++){ 

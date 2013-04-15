@@ -284,7 +284,7 @@ App.accidentsController = Em.ResourceController.create(
 	#claims_C2: "175#|4#|2#|500#|'bb10'#|0#|1#|0#|0"
 	textFilterIsActive=false
 	panelFilterIsActive=false
-	filterFromVisible: false
+	#filterFromVisible: false
 	filterCols: ['accType','driver','shortNote','userName','place','claims_C']#no neimam, nes jis jau yra claims_C
 	filterValue:null
 	chkDocs:null #chkWithDocs,#chkWithOutDocs
@@ -320,6 +320,7 @@ App.accidentsController = Em.ResourceController.create(
 			#fn+="console.log('chkClaim types:'+row.claims_TypeID);"
 			#option=@chkClaim #option iD Claim_1,Claim_2,chkClaim_3,chkClaim_4,chkClaim_5,chkClaim_6
 			#fn+="console.log('chkClaim option:"+option+"');"
+			#console.log('claims_TypeID: '+ row.claims_TypeID+' - '+this.chkClaim);
 			fn+="if (row.claims_TypeID.indexOf('"+@chkClaim+"')===-1) return false;"
 		fn+="return true;"	
 		new Function("row",fn)
@@ -365,7 +366,7 @@ App.sidePanelController = Em.ResourceController.create(
 	chkHandler: (lbl, option)->		
 		#newVal=if (chk.attr("checked")) then chk.data("opt") else null
 		lbl.parent().find("label").not(lbl).removeClass("ui-state-active")
-		newVal=if (lbl.hasClass("ui-state-active")) then lbl.attr("for").replace("chk_claimTypes","").replace("chk_","") else null
+		newVal=if (lbl.hasClass("ui-state-active")) then lbl.attr("for").replace("chk_claimTypes","").replace("chk_date","") else null
 		#lbl.toggleClass("ui-state-active")
 		App.accidentsController.set(option,newVal)
 	init: -> 
@@ -373,7 +374,7 @@ App.sidePanelController = Em.ResourceController.create(
 		oDATA.execWhenLoaded(["tblClaimTypes"],()=>
 			# @.set('years',oDATA.GET("proc_Years").emData)
 			# @.set('claimTypes',oDATA.GET("tblClaimTypes").emData)
-			@.set('years',oDATA.GET("proc_Years").emData.map((item)->item.chkId="chk_"+item.year; return item))
+			@.set('years',oDATA.GET("proc_Years").emData.map((item)->item.chkId="chk_date"+item.year; return item))
 			@.set('claimTypes',oDATA.GET("tblClaimTypes").emData.map((item)->item.chkId="chk_claimTypes"+item.iD; return item;))
 			@claimTypes.findProperty("iD",0).visible=false	
 			Em.run.next(@,()->(
@@ -391,7 +392,7 @@ App.SidePanelView = Em.View.extend(
 	didInsertElement: ()->
 		@_super(); 	
 		Em.run.next(()->
-			$("#sidePanel").closest("div.col2").scrollelement()
+			$("#sidePanel").closest("div.col2").stickyPanel()
 			#c=$("#sidePanel").closest("div.col2");if $.browser.msie then c.scrollelement() else c.jScroll()
 			$("#chkOpen").buttonset().on("click",(e)->
 				chk=$(e.target).closest("label").prev();
@@ -412,11 +413,10 @@ App.SidePanelView = Em.View.extend(
 		$("#chkOpen,#chkDocs").find("label").removeClass("ui-state-active").end().prev().removeAttr("checked")
 		$("#sidePanel").find("input:checkbox").removeAttr("checked").parent().next().next().find("span.ui-checkbox-icon").removeClass("ui-icon ui-icon-check").attr("aria-checked","false")				
 		#App.accidentsController.filterwillChange()	
-		App.accidentsController.chkOpen=null
-		App.accidentsController.chkDocs=null
-		App.accidentsController.chkData=null
-		App.accidentsController.chkClaim=null
-		App.accidentsController.filterDidChange(@,'All')	
+		ctrl=App.accidentsController
+		ctrl.chkOpen=null; ctrl.chkDocs=null
+		ctrl.chkData=null; ctrl.chkClaim=null
+		ctrl.filterDidChange(@,'All')	
 		#e.stopPropagation();
 		#e.preventDefault();
 		#if $(this.target).attr("checked") then $(this.target).attr("checked", "") else $(this.target).attr("checked", "checked")	

@@ -1,0 +1,104 @@
+﻿@*{{lossAmount}} - claim.lossAmount
+{{log this}}
+{{log view}}
+
+App.claimsController.content
+
+	<div class="td w05pr">{{#compare claimStatus "===" "5"}}<i class="img32-check"></i>{{else}}&nbsp;{{/compare}}</div>
+		<div class="td w12pr"><b>{{unbound accident.date}}</b><br/>{{unbound accident.no}}-{{unbound no}}</div>
+	{{#with accident}}
+		<div class="td w48pr"><b>{{unbound place}}</b><br/>{{unbound shortNote}}</div>
+	{{/with}}
+	<div class="td w20pr"><b>{{unbound claimType.name}}</b><br/>{{unbound vehicle.plate}}</div>
+	<div class="td w15pr">{{#compare insPolicyID "===" "0"}}
+		Neapdrausta
+	{{else}}
+		{{unbound insPolicy.insurerName}}<br/>{{unbound insurerClaimID}}
+	{{/compare}}</div>
+*@
+@*<div class="td w03pr"><a href="#" {{action editAccident this target="App.accidentsController"}}><img src="Content/less/images/icon_details.png"></a></div>*@
+{{log this}}
+{{log view}}
+<div class="content content-claims">
+@*	<h2 class="driversColorProperty">Žala nr. {{accident.no}}-{{no}}, {{insPolicy.claimType}}, {{insPolicy.insurerName}}</h2><a {{action goBack}} href="#" style="color:#5A6F85;">(atgal į Žalų sąrašą)</a>
+*@
+	<h2 class="driversColorProperty">Žala nr. 0101-3, Kasko, Lietuvos draudimas</h2><a {{action goBack}} href="#" style="color:#5A6F85;">(atgal į Žalų sąrašą)</a>
+	<h4 class="driversColorProperty">DGV906, Saulius Jonynas</h4>
+
+	<div class="claims">
+		<div class="line"></div>
+		<div class="step-box first active">
+			<div class="step-box-header">
+				<div class="num">1.</div>
+				<div class="name">Item Name</div>
+			</div>
+			<div class="step-box-content">
+				<div class="inner">
+					content
+					<div class="date">2005 12 03</div> 				
+				</div>
+			</div>
+		</div>
+		<div class="step-box active">
+			<div class="step-box-header">
+				<div class="num">2.</div>
+				<div class="name">Item Name Lorem Ipsum</div>
+			</div>
+			<div class="step-box-content">
+				<div class="inner">
+				<a href="">content content <span class="text-red">content content</span></a>				
+				</div>
+			</div>
+			<div class="step-box-addon">
+				<div class="inner">
+					<p>
+						<strong>gfgfgfg</strong>
+					</p>
+					<label class="date-label">Date:</label>
+					<input class="" type="text">							
+					<button class="btn btn-small">Button</button>													
+				</div>  
+			</div>	 		
+		</div>	
+		<div class="step-box current"> 
+			<div class="step-box-header">
+				<div class="num">3.</div>
+				<div class="name">Item Name Lorem Ipsum</div>
+			</div>
+			<div class="step-box-content">
+				<div class="inner">
+					content content content content
+				</div>
+			</div>
+		</div>		
+		<div class="step-box disabled">
+			<div class="step-box-header">
+				<div class="num">4.</div>
+				<div class="name">Item Name Lorem Ipsum</div>
+			</div>
+		</div>	
+		<div class="step-box disabled">
+			<div class="step-box-header">
+				<div class="num">5.</div>
+				<div class="name">Item Name Lorem Ipsum</div>
+			</div>
+		</div>				
+	</div>
+		
+</div>
+
+<div class="content content-fullwidth">
+	<ul class="tabnav"> 
+		<li class="active">
+			tabbbbbbbbb
+		</li>
+		<li>
+			tabbbbbbbbb2
+		</li>
+		<li>
+			tabbbbbbbbb3
+		</li>				
+	</ul>	
+	<div id="actions-zone"></div>	
+</div>
+<div id="entry-zone"></div>

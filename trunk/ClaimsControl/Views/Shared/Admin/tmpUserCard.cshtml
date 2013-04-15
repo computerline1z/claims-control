@@ -1,11 +1,11 @@
 ﻿{{log this}}
 <h2 style="margin: 15px; display: inline-block">
-	{{#if this.myInfo}}Mano informacija</h2>
+	{{#if myInfo}}Mano informacija</h2>
 	{{else}}
-		{{#compare this.content.length "==" "0"}}
+		{{#compare content.length "==" "0"}}
 			Naujas naudotojas
 		{{else}}
-			{{#each this.content}}@*tik tas vienas realiai*@
+			{{#each content}}@*tik tas vienas realiai*@
 				{{firstName}}&nbsp;{{surname}}
 			{{/each}}
 		{{/compare}}</h2><a {{action goToAdminTab}} href="#">(atgal į Administravimą)</a>
@@ -20,7 +20,7 @@
 
 	<div id="userInfoData">
 		<div id="InfoDataForm" class="inputForm whiteTab container" data-ctrl='{"NewRec":0,"Source":"tblUsers","id":0}'>	
-		{{#if this.content}}	
+		{{#if content}}	
 			<div class="row">
 				{{updatableField firstName classes="w25pr" labelType="Top"}}
 				{{updatableField surname classes="w25pr" labelType="Top"}}
@@ -37,10 +37,10 @@
 			</br><h4>Prisijungimo duomenys</h4>
 			<div>
 				{{updatableField email classes="w48pr" id="systemEmail" labelType="Left"}}				
-				{{#if this.myInfo}}
+				{{#if myInfo}}
 					<a class="medium" style="line-height:40px;" {{action changeMyPassword}} href="#">Pakeisti slaptažodį</a>
 				{{else}}
-					{{#if this.passwordReset}}
+					{{#if passwordReset}}
 						<div class="well cont" style="margin:15px;display:inline-block">
 						<p>Slaptažodžio atstatymas vyksta išsiunčiant naudotojui el. laišką su patvirtinimo nuoroda.</p>
 						<button class="btn" style="float:left;margin:10px" {{action sendUserPassword}}>Siųsti</button>
@@ -71,7 +71,7 @@
 			<br><h4>Prisijungimo duomenys</h4>
 			<div>
 				<div class="ExtendIt w48pr" data-ctrl='{"Value":"","Field":"Email","classes":"UpdateField","labelType":"Left"}'></div>
-				{{#compare this.content.length "==" "0"}}
+				{{#compare content.length "==" "0"}}
 				<span style="color:Red;line-height:40px">Išsaugojus, šiuo adresu bus išsiųstas laiškas su nuoroda slaptažodžio sukūrimui.</span>
 				{{/compare}}
 				<div style="display:block;" class="ExtendIt w48pr" data-ctrl='{"Value":true,"Field":"IsActive","classes":"UpdateField","labelType":"Left"}'></div>

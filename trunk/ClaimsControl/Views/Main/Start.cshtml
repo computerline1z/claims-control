@@ -48,17 +48,22 @@
 						  </div>
 					  </div>
 				</script>
-				<script type="text/x-handlebars" data-template-name="tmpApplication">
+				<script type="text/x-handlebars" data-template-name="tmpApplication">@*New*@
 					  {{view App.NavbarView controllerBinding="controller.controllers.navbarController"}}	 
 					<div class="colmask colmask-extended hidden" id="tabAccidents">
-						
 						<div class="colleft" id="divAccidentsList">
 							<div class="col1 content">{{view App.tabAccidentsView}}</div>
 							<div class="col2 content">{{view App.SidePanelView}}</div>
 						</div>
-						<div class="content hidden container--main colmask colmask-extended" style="height:750px;" id="divAccidentEdit">divAccidentEdit</div> 
+						<div class="content hidden container--main colmask colmask-extended" id="divAccidentEdit">divAccidentEdit</div> 
 					</div>
-					<div class="content hidden colmask colmask-extended" id="tabClaims">tmpClaims!</div>
+					<div class="colmask colmask-extended hidden" id="tabClaims">
+						<div class="colleft" id="divClaimsList">
+							<div class="col1 content">{{outlet claimsOutlet}}</div>
+							<div class="col2 content">{{outlet claimsSidePanelOutlet}}</div>
+						</div>
+						<div class="content hidden container--main colmask colmask-extended" id="divClaimRegulation">{{outlet claimRegulationOutlet}}</div> 
+					</div>
 					<div class="content hidden colmask colmask-extended" id="tabMap">tmpMap!</div>
 					<div class="content hidden colmask colmask-extended" id="tabReports">tmpReports!</div>
 					<div class="content hidden colmask colmask-extended" id="tabLists">{{outlet listsOutlet}}</div>
@@ -97,7 +102,7 @@
 <script src="@Url.Content("~/Scripts/My/MyPlugins_UploadFiles.js")" type="text/javascript"  charset="utf-8"></script>
 
 <script src="@Url.Content("~/Scripts/My/Views.js")" type="text/javascript"  charset="utf-8"></script>
-<script src="@Url.Content("~/Scripts/Forms/tabAccidents.js")" type="text/javascript"  charset="utf-8"></script>
+<script src="@Url.Content("~/Scripts/Forms/tabAccidents.js")" type="text/javascript"  charset="utf-8"></script>@*??*@
 
 <script src="@Url.Content("~/Scripts/My/clsEditableForm.js")" type="text/javascript"  charset="utf-8"></script>
 
@@ -106,8 +111,10 @@
 <script src="@Url.Content("~/Scripts/My/MyPlugins.js")" type="text/javascript"  charset="utf-8"></script>
 <script src="@Url.Content("~/Scripts/Plugins/plugs.min.js")" type="text/javascript"  charset="utf-8"></script>
 <script src="@Url.Content("~/Scripts/Plugins/jquery.notify.min.js")" type="text/javascript"  charset="utf-8"></script>
-<script src="@Url.Content("~/Scripts/Forms/tabLists.js")" type="text/javascript"  charset="utf-8"></script>
+<script src="@Url.Content("~/Scripts/Forms/tabClaims.js")" type="text/javascript"  charset="utf-8"></script>@*New*@
+<script src="@Url.Content("~/Scripts/Forms/tabClaimsRegulation.js")" type="text/javascript"  charset="utf-8"></script>@*New*@
 
+<script src="@Url.Content("~/Scripts/Forms/tabLists.js")" type="text/javascript"  charset="utf-8"></script>
 <script src="@Url.Content("~/Scripts/Forms/accidentCard.js")" type="text/javascript"  charset="utf-8"></script>
 <script src="@Url.Content("~/Scripts/Forms/userCard.js")" type="text/javascript"  charset="utf-8"></script>
 

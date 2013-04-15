@@ -12,12 +12,10 @@
 <table class="zebra-striped">
 	<thead><tr><th>Draudimo rūšis</th><th>Draudimo kompanija</th><th>Poliso numeris</th><th>Pabaigos data</th><th>Draudėjas</th></tr></thead><tbody>
 	{{#each "App.listAllController.content"}}
-		{{#if this.visible}}
-		{{#if this.iD}}
-@*		{{#compare "this.iD" ">" "0"  }}
-*@			{{view App.InsPolicyView}}
-		@*{{/compare}}*@
-		{{/if}}
+		{{#if visible}}
+			{{#if iD}}
+				{{view App.InsPolicyView}}
+			{{/if}}
 		{{/if}}
 	{{/each}}
 </tbody></table>

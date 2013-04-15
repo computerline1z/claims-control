@@ -317,9 +317,12 @@
     <Content Include="Scripts\Files\jquery.iframe-transport.js" />
     <Content Include="Scripts\Files\load-image.min.js" />
     <Content Include="Scripts\Files\tmpl.min.js" />
+    <Content Include="Scripts\Final\combined.min.js" />
     <Content Include="Scripts\Forms\docsAccident.js" />
     <Content Include="Scripts\Forms\tabAccidents.js" />
     <Content Include="Scripts\Forms\tabAdmin.js" />
+    <Content Include="Scripts\Forms\tabClaims.js" />
+    <Content Include="Scripts\Forms\tabClaimsRegulation.js" />
     <Content Include="Scripts\Forms\tabLists.js" />
     <Content Include="Scripts\Forms\userCard.js" />
     <Content Include="Scripts\Main\Copy of jquery-1.8.0.combined2.min.js" />
@@ -384,7 +387,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Uploads\" />
-    <Folder Include="Scripts\Final\" />
     <Folder Include="Uploads\" />
   </ItemGroup>
   <ItemGroup>
@@ -440,6 +442,8 @@
     <None Include="packages\Ninject.Web.Common.3.0.0.7\Ninject.Web.Common.3.0.0.7.nupkg" />
     <Content Include="packages\repositories.config" />
     <None Include="packages\WebActivator.1.5.1\WebActivator.1.5.1.nupkg" />
+    <None Include="Scripts\Forms\tabClaimsRegulation.coffee" />
+    <None Include="Scripts\Forms\tabClaims.coffee" />
     <None Include="Scripts\Forms\userCard.coffee" />
     <None Include="Scripts\Forms\docsAccident.coffee" />
     <None Include="Scripts\Forms\tabAccidents.coffee" />
@@ -485,6 +489,10 @@
     <Content Include="Views\Shared\Admin\tmpUserCard.cshtml" />
     <Content Include="Views\Shared\Admin\tmpChangeUsrPass.cshtml" />
     <Content Include="Views\Shared\General\tmpFormBottom.cshtml" />
+    <Content Include="Views\Shared\Claims\tmpClaimsMain.cshtml" />
+    <Content Include="Views\Shared\Claims\tmpClaimView.cshtml" />
+    <Content Include="Views\Shared\Claims\tmpSidePanelForClaims.cshtml" />
+    <Content Include="Views\Shared\Claims\tmpClaimRegulation.cshtml" />
     <None Include="Views\Shared\LayOut_Main_Debug.cshtml" />
     <Content Include="Views\Main\Start.cshtml" />
   </ItemGroup>

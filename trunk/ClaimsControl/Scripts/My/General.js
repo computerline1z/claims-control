@@ -481,7 +481,7 @@ oGLOBAL.Start = {
 	}
 }
 oGLOBAL.date = {
-	dateFormat: "yyyy.mm.dd",
+	dateFormat: "yyyy.mm.dd",//$.datepicker.formatDate('yy.mm.dd', new Date())
 	dateDelimiter: ".",
 	getTodayString: function () {
 		var d = new Date();

@@ -1,0 +1,48 @@
+﻿<div id="sidePanelCl" style="">
+	<div class = "filtergroup">
+		<img class="small-blue-icon" src="Content/less/images/icon_reset_filter.png">
+		<a href="#" {{action "showAll"  target="view"}}>Nustatyti filtrą iš naujo</a>
+	</div>
+
+<div class="lineTop filtergroup" id="chkCriteria"><h4>Rodyti žalas tik:</h4>
+	<input type="checkbox" id="chkOpen"/><label for="chkOpen">atviras</label>
+	<input type="checkbox" id="chkWithWarnings"/><label for="chkWithWarnings">su įspėjimais</label>
+	<input type="checkbox" id="chkWithMyTasks"/><label for="chkWithMyTasks">su mano užduotimis</label>
+</div>
+</br>
+
+<div class="lineTop filtergroup" id="chkInsurers"><h4>Rodyti šių draudikų žalas:</h4>
+	{{#each "App.sidePanelForClaimsController.insurers"}}
+	{{#if this.visible}}
+		<input type="checkbox" id={{unbound chkId}} /><label for={{unbound chkId}} >{{unbound name}}</label>
+	{{/if}}
+	{{/each}}
+</div>
+<br />
+
+<div class="lineTop filtergroup" id="chkClaimsTypesCl"><h4>Rodyti įvykius, turinčius šio tipo žalas:</h4>
+	{{#each "App.sidePanelForClaimsController.claimTypes"}}
+	{{#if this.visible}}
+		<input type="checkbox" id={{unbound chkId2}} /><label for={{unbound chkId2}} >{{unbound name}}</label>
+	{{/if}}
+	{{/each}}
+</div>
+<br />
+
+@*<div class="lineTop filtergroup" id="chkYearsCl"><h4>Rodyti įvykius, atitinkančius datą:</h4>
+<input type="checkbox" name="chkYears" id="chk_12monthCl"/><label for="chk_12monthCl"> Paskutiniai 12 men</label>
+	{{#each "App.sidePanelForClaimsController.years"}}
+	{{log this}}
+	<input type="checkbox" name="checkbox" id={{unbound chkYearId}} /><label for={{unbound chkId}}>{{unbound year}} metai</label>
+	{{/each}}
+</div>    
+<br/>*@
+
+<div class="lineTop filtergroup" id="chkYearsCl"><h4>Rodyti įvykius, atitinkančius datą:</h4>
+<input type="checkbox" id="chkDate_12month"/><label for="chkDate_12month"> Paskutiniai 12 men</label>
+	{{#each "App.sidePanelForClaimsController.years"}}
+	<input type="checkbox" id={{unbound chkId2}} /><label for={{unbound chkId2}} >{{unbound year}} metai</label>@*name="checkbox" *@
+	{{/each}}
+</div>    
+<br/>
+</div>
