@@ -21,69 +21,82 @@
 	<div id="userInfoData">
 		<div id="InfoDataForm" class="inputForm whiteTab container" data-ctrl='{"NewRec":0,"Source":"tblUsers","id":0}'>	
 		{{#if content}}	
-			<div class="row">
-				{{updatableField firstName classes="w25pr" labelType="Top"}}
-				{{updatableField surname classes="w25pr" labelType="Top"}}
-				{{updatableField languageID classes="w25pr" style="float:right" labelType="Top"}}
+		<div class="border ui-corner-all admin-topsection" style="height:75px;margin-bottom:40px;">		
+			<div class="row" style="margin-left:15px;">
+				{{updatableField firstName classes="w25pr" style="width:24%;" labelType="Top"}}
+				{{updatableField surname classes="w25pr" style="width:24%;" labelType="Top"}}
+				{{updatableField languageID classes="w25pr" style="float:right;margin-right:20px;width:24%;" labelType="Top"}}
 			</div></br>
-			</br><h4>Kontaktiniai duomenys, kuriuos reikia nurodyti pranešimuose draudikui apie žalą</h4>
-			<div>
-				{{updatableField position classes="w25pr" labelType="Left"}}
-				{{updatableField phone classes="w25pr" labelType="Left"}}			
-			</div><div>
-				{{updatableField eMailForIns classes="w25pr" labelType="Left"}}
-				{{updatableField mobPhone classes="w25pr" labelType="Left"}}
-			</div>
-			</br><h4>Prisijungimo duomenys</h4>
-			<div>
-				{{updatableField email classes="w48pr" id="systemEmail" labelType="Left"}}				
+			</div></br>
+			
+			<h3 class="marginLeft10Class">Kontaktiniai duomenys, kuriuos reikia nurodyti pranešimuose draudikui apie žalą</h3>
+			<div class="border ui-corner-all admin-topsection" style="height:75px;margin-bottom:40px;">			
+			<div style="margin-left:15px;">
+				{{updatableField position classes="w25pr" style="width:24%;" labelType="Top"}}
+				{{updatableField phone classes="w25pr" style="width:24%;" labelType="Top"}}				
+				{{updatableField eMailForIns classes="w25pr" style="width:24%;" labelType="Top"}}
+				{{updatableField mobPhone classes="w25pr" style="width:24%;" labelType="Top"}}
+			</div></br>
+			</div></br>
+			<h3 class="marginLeft10Class">Prisijungimo duomenys</h3>
+			<div class="border ui-corner-all admin-topsection" style="height:105px;margin-bottom:40px;">			
+			<div style="margin-left:15px;">
+				{{updatableField email classes="w48pr" id="systemEmail" labelType="Top"}}				
 				{{#if myInfo}}
-					<a class="medium" style="line-height:40px;" {{action changeMyPassword}} href="#">Pakeisti slaptažodį</a>
+					<a class="medium btn customButtonDisabled" style="line-height:15px;margin-top:22px" {{action changeMyPassword}} href="#">Pakeisti slaptažodį</a>
 				{{else}}
 					{{#if passwordReset}}
 						<div class="well cont" style="margin:15px;display:inline-block">
 						<p>Slaptažodžio atstatymas vyksta išsiunčiant naudotojui el. laišką su patvirtinimo nuoroda.</p>
-						<button class="btn" style="float:left;margin:10px" {{action sendUserPassword}}>Siųsti</button>
-						@*<button class="btn" style="float:left;margin:10px" {{action emailText}}>Laiško tekstas</button>*@
+						<button class="btn customButtonDisabled" style="float:left;margin:10px" {{action sendUserPassword}}>Siųsti</button>
+						@*<button class="btn customButtonDisabled" style="float:left;margin:10px" {{action emailText}}>Laiško tekstas</button>*@
 						<a style="float:left;line-height:40px;margin:10px" {{action cancelSendUserPassword}} href="#">Atšaukti</a>
 						</div>
 					{{else}}
-						<a class="medium" style="line-height:40px;" {{action sendUserPasswordForm}} href="#">Atstatyti slaptažodį</a>
+						<a class="medium btn customButtonDisabled" style="line-height:15px;margin-top:22px;" {{action sendUserPasswordForm}} href="#">Atstatyti slaptažodį</a>
 					{{/if}}		
-					{{updatableField isActive classes="w48pr" labelType="Left"}}		
+					{{updatableField isActive classes="w48pr" style="width:40%;" labelType="Left"}}		
 				{{/if}}
 					<p id="savePasswordNote" style="color:#B94A48;display:inline-block"></p>	
 			</div>
 		{{else}}
-				<div class="row">
-					<div class="ExtendIt w25pr" data-ctrl='{"Value":"","Field":"FirstName","classes":"UpdateField","labelType":"Top"}'></div>
-					<div class="ExtendIt w25pr" data-ctrl='{"Value":"","Field":"Surname","classes":"UpdateField","labelType":"Top"}'></div>
-					<div class="ExtendIt w25pr" style="float:right" data-ctrl='{"Value":1,"Field":"LanguageID","classes":"UpdateField","labelType":"Top"}'></div>
+			<div class="border ui-corner-all admin-topsection" style="height:75px;margin-bottom:40px;">		
+				<div class="row" style="margin-left:15px;">
+					<div class="ExtendIt w25pr" style="width:24%;" data-ctrl='{"Value":"","Field":"FirstName","classes":"UpdateField","labelType":"Top"}'></div>
+					<div class="ExtendIt w25pr" style="width:24%;" data-ctrl='{"Value":"","Field":"Surname","classes":"UpdateField","labelType":"Top"}'></div>
+					<div class="ExtendIt w25pr" style="float:right;margin-right:20px;width:24%;" data-ctrl='{"Value":1,"Field":"LanguageID","classes":"UpdateField","labelType":"Top"}'></div>
 				</div><br>
-				<br><h4>Kontaktiniai duomenys, kuriuos reikia nurodyti pranešimuose draudikui apie žalą</h4>
-				<div>
-					<div class="ExtendIt w25pr" data-ctrl='{"Value":"","Field":"Position","classes":"UpdateField","labelType":"Left"}'></div>
-					<div class="ExtendIt w25pr" data-ctrl='{"Value":"","Field":"Phone","classes":"UpdateField","labelType":"Left"}'></div>			
-				</div><div>
-					<div class="ExtendIt w25pr" data-ctrl='{"Value":"","Field":"EMailForIns","classes":"UpdateField","labelType":"Left"}'></div>
-					<div class="ExtendIt w25pr" data-ctrl='{"Value":"","Field":"MobPhone","classes":"UpdateField","labelType":"Left"}'></div>
+				</div><br>
+				<br><h3 class="marginLeft10Class">Kontaktiniai duomenys, kuriuos reikia nurodyti pranešimuose draudikui apie žalą</h3>
+				<div class="border ui-corner-all admin-topsection" style="height:75px;margin-bottom:40px;">		
+				<div class="row" style="margin-left:15px;">
+					<div class="ExtendIt w25pr" style="width:24%;" data-ctrl='{"Value":"","Field":"Position","classes":"UpdateField","labelType":"Top"}'></div>
+					<div class="ExtendIt w25pr" style="width:24%;" data-ctrl='{"Value":"","Field":"Phone","classes":"UpdateField","labelType":"Top"}'></div>			
+					<div class="ExtendIt w25pr" style="width:24%;" data-ctrl='{"Value":"","Field":"EMailForIns","classes":"UpdateField","labelType":"Top"}'></div>
+					<div class="ExtendIt w25pr" style="width:24%;" data-ctrl='{"Value":"","Field":"MobPhone","classes":"UpdateField","labelType":"Top"}'></div>
 			</div>
-			<br><h4>Prisijungimo duomenys</h4>
-			<div>
+			</div><br>
+			<br><h3>Prisijungimo duomenys</h3>
+			<div class="border ui-corner-all admin-topsection" style="height:105px;margin-bottom:40px;">			
+			<div style="margin-left:15px;">
 				<div class="ExtendIt w48pr" data-ctrl='{"Value":"","Field":"Email","classes":"UpdateField","labelType":"Left"}'></div>
 				{{#compare content.length "==" "0"}}
 				<span style="color:Red;line-height:40px">Išsaugojus, šiuo adresu bus išsiųstas laiškas su nuoroda slaptažodžio sukūrimui.</span>
 				{{/compare}}
 				<div style="display:block;" class="ExtendIt w48pr" data-ctrl='{"Value":true,"Field":"IsActive","classes":"UpdateField","labelType":"Left"}'></div>
 			</div>
+			</div><br>
 		{{/if}}		
 		</div>
-@*		<button class="btn btnSave" style="float:right;margin:40px" {{action saveUserCard}}>Išsaugoti</button></br>
+		</div>
+@*		<button class="btn btnSave customButtonDisabled" style="float:right;margin:40pxbackground-color:#EB5A44;
+ color:#FFFFFF;" {{action saveUserCard}}>Išsaugoti</button></br>
 *@		{{view App.FormBottomView target="App.userCardController"}}
 	</div>
 	<div id="userInfoRights">
 		<span>Vartotojų teisės</span>
-		<button class="btn btnSave" style="float:right;margin:40px" {{action saveUserRights}}>Išsaugoti</button></br>
+		<button class="btn btnSave customButtonDisabled" style="float:right;margin:40pxbackground-color:#EB5A44;
+ color:#FFFFFF;" {{action saveUserRights}}>Išsaugoti</button></br>
 	</div>
 
 </div>
