@@ -196,8 +196,15 @@ a.ui-state-hover .ui-icon { background-image: url(images_ui/ui-icons_888888_256x
 /* states and images */
 .ui-icon { width: 16px; height: 16px; background-image: url(images_ui/ui-icons_222222_256x240.png); }
 .ui-widget-content .ui-icon {background-image: url(images_ui/ui-icons_222222_256x240.png); }
-.ui-widget-header .ui-icon.ui-icon-closethick {/*Nėra tokio:*/ background-image: url(images_ui/ui-icons_white.png);
-background-image: url(images_ui/ui-icons-ffffff-256x240.png);
+.ui-widget-header .ui-icon.ui-icon-closethick {
+background-image: url(images_ui/close.png);
+height:22px;
+width:22px;
+margin-right:12px;
+}
+a.ui-state-hover .ui-icon.ui-icon-closethick {
+background-image: url(images_ui/close.png) !important;
+
 }
 .ui-widget-header .ui-icon {background-image: url(images_ui/ui-icons_222222_256x240.png); }
 .ui-state-default .ui-icon { background-image: url(images_ui/ui-icons_888888_256x240.png); }
@@ -317,7 +324,7 @@ background-image: url(images_ui/ui-icons-ffffff-256x240.png);
 .ui-icon-minus { background-position: -48px -128px; }
 .ui-icon-minusthick { background-position: -64px -128px; }
 .ui-icon-close { background-position: -80px -128px; }
-.ui-icon-closethick { background-position: -32px -192px; }
+/*.ui-icon-closethick { background-position: -32px -192px; }*/
 .ui-icon-key { background-position: -112px -128px; }
 .ui-icon-lightbulb { background-position: -128px -128px; }
 .ui-icon-scissors { background-position: -144px -128px; }
@@ -726,7 +733,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 //  font-weight:bold;
   margin-top:5px;
   margin-bottom:5px;
-  padding:5px;
+  padding:5px 5px 5px 15px;
 // ĮDĖTA:
     #font > .header(25px, normal, 37px, #fff);
   
@@ -755,7 +762,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 
 .ui-dialog .ui-dialog-titlebar-close span { 
   display: block; 
-  margin: 1px;
+  margin: 1px 1px 1px -23px;
   text-indent: 9999px;
 }
 
@@ -893,7 +900,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
   cursor: text;
   padding: 0 15px;
   margin-right: 2px;
-  line-height: 34px;
+  line-height: 40px;
     
     // BUVO:  
     // border: 1px solid transparent;
