@@ -47,13 +47,21 @@
 #font {
     font-size: @basefont;
   .regular(@size: @basefont, @weight: normal, @lineHeight: @baseline, @color: #000) {
-    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    font-family: 'Open Sans',Arial, "Helvetica Neue", Helvetica, sans-serif;
     font-size: @size;
     font-weight: @weight;
     line-height: @lineHeight;
     color: @color;
     .dlFont;
   }
+  .header-menu(@size: 12px, @weight: normal, @lineHeight: 15px, @color: #000) {
+    font-family: 'PFD',Arial, "Helvetica Neue", Helvetica, sans-serif;
+    font-size: @size;
+    font-weight: @weight;
+    line-height: @lineHeight;
+    color: @color;
+    .dlFont;
+  }  
   .header(@size: 14px, @weight: normal, @lineHeight: 15px, @color: #000) {
     font-family: /*'Asap',*/ Arial, "Helvetica Neue", Helvetica, sans-serif;
     font-size: @size;
