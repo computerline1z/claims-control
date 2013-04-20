@@ -6,12 +6,12 @@
 <h3 style="margin: 15px;" class="h3CustomProperty">Vairuotojai</h3>
 <div class="container" id="topNewDrivers">
 	<table class="zebra-striped">
-	<thead><tr><th>Vardas</th><th>Pavardė</th><th>Gimimo data</th><th>Mobilus telefonas</th><th>Dokumentai</th></tr></thead><tbody>
+	<thead><tr><th>Vardas</th><th>Pavardė</th><th>Gimimo data</th><th>Vairavimo kategorijos</th><th>Mobilus telefonas</th><th>Dokumentai</th></tr></thead><tbody>
 	{{#each "App.topNewController.drivers"}}
 		{{view App.DriverView}}
 	{{/each}}
 	</tbody></table>
-	<div class="right medium" data-ctrl='{"goTo":"allDrivers","source":"proc_Drivers","template":"tmp_Drivers","controller":"topNewController","emObject":"drivers","filterCols":["firstName","lastName","phone"]}'><a class="medium listUnderlineProperty" {{action toListAll}} href="#">Peržiūrėti pilną sąrašą</a><button class="btn" {{action addNew target="App.listAllController"}}>Pridėti naują</button></div>
+	<div class="right medium" data-ctrl='{"goTo":"allDrivers","source":"proc_Drivers","template":"tmp_Drivers","controller":"topNewController","emObject":"drivers","filterCols":["firstName","lastName","phone"]}'><a class="medium listUnderlineProperty" {{action toListAll}} href="#">Peržiūrėti pilną sąrašą</a><button class="btn" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button></div>
 </div>
 </div>
 <hr />
@@ -25,7 +25,7 @@
 		{{view App.VehicleView}}
 	{{/each}}
 	</tbody></table>
-	<div class="right medium" data-ctrl='{"goTo":"allVehicles","source":"proc_Vehicles","template":"tmp_Vehicles","controller":"topNewController","emObject":"vehicles","filterCols":["model","plate","type","make"]}'><a class="medium listUnderlineProperty" {{action toListAll}} href="#">Peržiūrėti pilną sąrašą</a><button class="btn" {{action addNew target="App.listAllController"}}>Pridėti naują</button></div>
+	<div class="right medium" data-ctrl='{"goTo":"allVehicles","source":"proc_Vehicles","template":"tmp_Vehicles","controller":"topNewController","emObject":"vehicles","filterCols":["model","plate","type","make"]}'><a class="medium listUnderlineProperty" {{action toListAll}} href="#">Peržiūrėti pilną sąrašą</a><button class="btn" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button></div>
 </div>
 </div>
 <hr />
@@ -41,6 +41,6 @@
 	{{/if}}
 	{{/each}}
 	</tbody></table>
-	<div class="right medium" data-ctrl='{"goTo":"allInsPolicies","source":"proc_InsPolicies","template":"tmp_InsPolicies","controller":"topNewController","emObject":"insPolicies","filterCols":["claimType","policyNumber","insuredName","insurerName"]}'><a class="medium listUnderlineProperty" {{action toListAll}} href="#">Peržiūrėti pilną sąrašą</a><button class="btn underlineProperty" {{action addNew target="App.listAllController"}}>Pridėti naują</button></div>
+	<div class="right medium" data-ctrl='{"goTo":"allInsPolicies","source":"proc_InsPolicies","template":"tmp_InsPolicies","controller":"topNewController","emObject":"insPolicies","filterCols":["claimType","policyNumber","insuredName","insurerName"]}'><a class="medium listUnderlineProperty" {{action toListAll}} href="#">Peržiūrėti pilną sąrašą</a><button class="btn underlineProperty" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button></div>
 </div>
 </div>

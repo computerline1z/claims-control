@@ -6,7 +6,7 @@
 <h2 style="margin:0 20px;">Draudimo sutarčių sąrašas</h2><a {{action toTop}} href="#">(atgal į Sąrašus)</a>
 <div class="container">
 	<div class="right medium w15pr" data-ctrl='{"source":"proc_InsPolicies","template":"tmp_InsPolicies","controller":"listAllController","emObject":"content"}'>
-	<button class="btn" {{action addNew target="App.listAllController"}}>Pridėti naują</button>
+	<button class="btn" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button>
 	</div>
 </div>
 <table class="zebra-striped">
@@ -15,12 +15,12 @@
 		{{#if visible}}
 			{{#if iD}}
 				{{view App.InsPolicyView}}
-			{{/if}}
+		{{/if}}
 		{{/if}}
 	{{/each}}
 </tbody></table>
 <div class="container">
 	<div class="right medium w15pr" data-ctrl='{"source":"proc_InsPolicies","template":"tmp_InsPolicies","controller":"listAllController","emObject":"content"}'>
-	<button class="btn" {{action addNew target="App.listAllController"}}>Pridėti naują</button>
+	<button class="btn" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button>
 	</div>
 </div>
