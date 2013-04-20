@@ -118,7 +118,7 @@ form input.searchField
     border: 1px solid #2F5BB7;
 }*/
 /*------------------------------Selected accident----------------------*/
-div.zebra-striped .tr.selectedAccident { #gradient > .vertical(#3F3B3B,#3F3B3B);background-color: #3F3B3B; color: white !important; border-bottom: none!important; }
+div.zebra-striped .tr.selectedAccident { border: 4px solid #3f3b3b;padding: 5px;border-top: 0;background-color: #3F3B3B; color: white !important; border-bottom: none!important; }
 div.selectedAccident i.img32-mono_edit {background-image: url('images/Sprite32-white.png') !important;}
 #AccDetailsWraper {border: 4px solid #BFBFBF; padding: 5px; border-top: 0; border-color: -moz-use-text-color #3F3B3B #3F3B3B;}
 #AccDetailsContent { width:100; display:none;}
@@ -239,7 +239,7 @@ ul.ulWhiteMenu li { margin-right: 5px; padding-right: 5px; border-bottom: 1px; }
 #tabAccidents, #tabClaims, #tabMap, #tabReports, #tabLists, #tabAdmin { overflow: hidden;width: 100%; }
 */
 /*-------------------------- Side Panel --------------------------*/
-#sidePanel, #sidePanelCl {
+#sidePanel {
     #font > .regular(@basefont, bold, @baseline, #3399cc);
    a { #font > .regular (@basefont, bold, @baseline, #EB5A44);
         text-decoration: underline;
@@ -394,7 +394,7 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 //#openItemDialog ul a { color:#505860; background-color:#C3C5C3;}
 #openItemDialog ul li.ui-tabs-active a { color:#505860;}
 /*Autocomplete li a su veiksmais*/
-.actionLink {font-weight:bold !important;color:#09C !important;text-decoration:underline !important; cursor:pointer !important;}
+.actionLink {font-weight:bold !important;color:#eb5a44 !important;text-decoration:underline !important; cursor:pointer !important;}
 /*------------------------Dokumentu medis--------------------------------*/
 .gallery li.photo {float: left;width: 30%;padding: 10px;margin: 10px;border:1px solid #dddddd;cursor: move; height: 250px; }
 .gallery li.photo div.photo-image {width: 100%; height:120px; overflow:hidden; margin: auto auto 10px auto; }
@@ -582,6 +582,15 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
  background-color:#EB5A44;
  color:#FFFFFF;
  } 
+.rowSearchSelector{
+    background-image: url(/Content/less/images/icon_details.png);
+    background-repeat: no-repeat;
+    display: block;
+    height: 33px;
+}
+.selectedAccident a.rowSearchSelector{
+    background-image: url(/Content/less/images/details_white.png);
+}
 /*----apurav new rules end -----*/
 /*----claims regulation form start -----*/
 @blue: #758ba3;
