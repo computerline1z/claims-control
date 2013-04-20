@@ -42,9 +42,9 @@ div.bordered-table {
 
 div.zebra-striped
 {
-	.tr {border-top: 1px solid #999; padding: 12px; &:last-of-type { border-bottom: 1px solid #999; } }
-    .tr:nth-child(odd) { background: #FAF9F2; }	 
-    > .tr:hover { background-color: @grayUltraLight; }
+	.tr {color:#5C636A;border-top: 1px solid #EAE9E9; padding: 12px; &:last-of-type { border-bottom: 1px solid #EAE9E9; } }
+    .tr:nth-child(odd) { background: #F5F4F3; }	 
+    > .tr:hover { background-color: #FFF7F5; }
 	.tr:hover { cursor: pointer; }
 
 }
@@ -52,7 +52,7 @@ div.zebra-striped
 div.selectable > div.tr { cursor: pointer; }
 div.notSelectable > div { cursor: default; }
 div.table {
-    //> div.tr:hover { background-color: @grayLight; color:@white; }
+    //> div.tr:hover { background-color: @grayLight; color:#5C636A; }
     //.tr:hover { background-color:  #e6e6e6; }
 }
 
@@ -64,7 +64,7 @@ table.zebra-striped
 	tr td {/*border-bottom: 4px solid @grayLighter;*/ border-bottom: 1px dotted @grayLighter; padding: 5px 20px; }
 	tr { background: white; }
 	tr:nth-child(even) { background: #faf9f2; }	 
-	tbody tr:hover { background-color: @grayLight; color:@white; }
+	tbody tr:hover { background-color:  #FFF7F5; color:#5C636A; }
 	th.clickable:hover { background-color: darken(@systemBlueLight, 10%); color:@white; }
 	th.clickable:hover span.ui-tblHead-icon { background-image: url(images_ui/ui-icons_2e83ff_256x240.png) !important; }
 
@@ -75,7 +75,7 @@ table.not-striped
 	thead.centered tr th { text-align:center;}
 	tr th {font-weight: bold; border-bottom: 1px dotted @grayLighter; padding: 8px 8px 7px; text-align:left;}
 	tr td {border-bottom: 1px dotted @grayLighter; padding: 8px 8px 7px;}
-	tbody tr:hover { background-color: @grayLight; color:@white; }
+	tbody tr:hover { background-color:  #FFF7F5; color:#5C636A; }
 }
 
 .cell--long { width: 45%; }

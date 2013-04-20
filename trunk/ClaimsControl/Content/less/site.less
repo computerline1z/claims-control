@@ -95,10 +95,13 @@ form input.searchField {
 }
 /* Style the "X" text button next to the search input field */
 form div.divSearch {
-     position:absolute;left:35%; width:26px;height:32px;line-height:22px;padding:9px 10px !important;font-size:22px;   
+     position:absolute;right:13%; width:26px;height:32px;line-height:22px;padding:9px 10px !important;font-size:22px;   
   }
 form span.spanToClearText {/*color:#A1B9ED;*/ color:#919191;cursor:pointer;padding:0px 3px;}/* Set default state of "X" and hide it */
 form span.spanToClearText:hover {/*color:#36c;*/ color:#575757}/* Set the hover state of "X" */
+.topSearchForm{
+	position: relative;
+}
 /*
 
 
@@ -127,7 +130,7 @@ div.dividers { background: url(../images/bg-pattern.png) repeat; height: 6px; di
 #tblClaims{
 	width:100%;
 	tr>td {background-color: @systemYellow2; color: #666; .ClaimsRow();}
-	tr:hover td { background-color: @grayLight; color:@white;}
+	tr:hover td { background-color: #FFF7F5; color:#5C636A;}
 
 	tr.claimOK>td {background-color: white; color:@gray;}
 	tr.claimOK:hover td { background-color: @grayLight; color:@white;}
@@ -245,7 +248,7 @@ ul.ulWhiteMenu li { margin-right: 5px; padding-right: 5px; border-bottom: 1px; }
         }
         &:selected {color: #65809d;}
     }
-    background:#faf9f2;
+    background:#FFEFED;
 }
 .filtergroup { 
     #font > .regular(@basefont, normal, @baseline, #666);
@@ -568,6 +571,17 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
  background-color: #A59894; 
  width:20px;height:25px;
  }
+ 
+ 
+ .marginLeft10Class{margin-left:10px;}
+ .customButtonDisabled[disabled]{
+ background-color:#EB5A44;
+ color:#FFFFFF;
+ }
+.customButtonDisabled{
+ background-color:#EB5A44;
+ color:#FFFFFF;
+ } 
 /*----apurav new rules end -----*/
 /*----claims regulation form start -----*/
 @blue: #758ba3;
