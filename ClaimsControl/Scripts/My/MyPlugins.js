@@ -178,7 +178,6 @@ var methods = {
                     selected: $(this)
                 }, methods.scroll);
 		$(window).resize(function(){
-			console.log("----------------------------------------");
 			methods.unstick(options.element);
 			Em.run.next(methods,function(){this.scroll(options.element);});//call resize to remove add fix
 		}); 					

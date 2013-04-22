@@ -49,7 +49,7 @@
 						  </div>
 					  </div>
 				</script>
-				</span>
+	</span>
 				<script type="text/x-handlebars" data-template-name="tmpApplication">
 					  {{view App.NavbarView controllerBinding="controller.controllers.navbarController"}}	 
 					<div class="colmask colmask-extended hidden" id="tabAccidents">
@@ -72,15 +72,21 @@
 					<div class="content hidden colmask colmask-extended" id="tabLists">{{outlet listsOutlet}}</div>
 					<div class="content hidden colmask colmask-extended" id="tabAdmin">{{outlet adminOutlet}}</div>
 					<div class="hidden" id="tabEmpty">{{outlet emptyOutlet}}</div>
+					<div class="big colmask colmask-extended">
+					<div class="right big">
+						<a class="medium listUnderlineProperty" target="_blank" href="http://claimscontrol.com/">©&nbsp;&nbsp;Žalų administravimo sistema "ClaimsControl"</a>
+						<a class="medium listUnderlineProperty" target="_blank" href="http://claimscontrol.com/">Privatumo politika</a>
+						<a class="medium listUnderlineProperty" target="_blank" href="http://claimscontrol.com/">Versijų istorija</a>
+						<a class="medium listUnderlineProperty" target="_blank" href="http://claimscontrol.com/">Pagalba</a>
+					</div>
+					</div>
 				</script>
 	</div>
 <script>
 	var oGLOBAL = { appStart: new Date().getTime(), logFromStart: function (msg) { console.warn("logFromStart. " + msg + " Time from start:" + (new Date().getTime() - oGLOBAL.appStart)); } }; 
 </script>
 
-@*<script src='http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=true&amp;key=AIzaSyBmiyz9zmTD_hY7qT7Degr0o7tqAzjKQos' type='text/javascript'></script>
-*@
-<script src='http://maps.google.com/maps/api/js?v=3&sensor=false' type='text/javascript'></script>
+@*<script src='http://maps.google.com/maps/api/js?v=3&sensor=false' type='text/javascript'></script>*@
 				 
 
 <script src="@Url.Content("~/Scripts/Main/jquery-1.8.0.combined2.min.js")" type="text/javascript" charset="utf-8"></script>

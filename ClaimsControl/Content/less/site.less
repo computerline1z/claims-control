@@ -607,7 +607,9 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 		.line {	position: absolute;top: 45px;height: 1px;right: 0;left: 0;background: #c9d1da;box-shadow: 0 -1px 1px #C9D1DA;}
 		.step-box {width: 150px;float: left;min-height: 120px;
 			//border: 1px solid #c4c4c4;
-			margin-left: 35px;border-radius: 3px;&.first { margin-left: 0; }
+			margin-left: 35px;border-radius: 3px;
+			&.first { margin-left: 0; }
+			//&.current step-box-header{background-color: #eb5a44;}
 		}
 		.step-box-header {
 			height: 35px+6px;border: 3px solid @box-border-color;border-radius: 3px;color: @box-text-color;overflow: hidden;//background-image: linear-gradient(#9DC017, #84A714);
@@ -627,9 +629,13 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 		}
 		.date {font-weight: bold;}
 		.step-box-addon {
-			width: 340px;min-height: 80px;padding: 20px;margin-left: -95px; margin-top: 11px;background: #c9d1da;position: relative;border-radius: 5px;box-shadow: 2px 1px 1px #999;
+			width: 340px;min-height: 80px;padding: 20px;margin-left: -95px; margin-top: 22px;background: #c9d1da;position: relative;border-radius: 5px;box-shadow: 2px 1px 1px #999;
+			button {margin-left: 2em;}
 			//css arrow
-			&:before {border-bottom: 12px solid #C9D1DA;border-left: 10px solid transparent;border-right: 10px solid transparent;content: "";height: 0;position: absolute;right: 47%;top: -9px;width: 0;}				
+			&:before {border-bottom: 12px solid #C9D1DA;border-left: 10px solid transparent;border-right: 10px solid transparent;content: "";height: 0;position: absolute;right: 47%;top: -9px;width: 0;}		
+		}
+		.current.first, .current.alert{
+			.step-box-header {background-color: #eb5a44; background-image:none;}
 		}
 		.current {
 			.step-box-header {
@@ -638,17 +644,20 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 			} 
 			.step-box-content {
 				border: 0 none;
-				.inner {text-align: left;width: 100%;}
+				.inner {width: 100%;}//text-align: left;
 			}			
 			.num    { line-height: 18px; }
 		}
-		.active {
+		.completed {
 			.step-box-header {
 				background-image: linear-gradient(#3faf17, #3ede18);
 				color: white;
 				.num {border-right: 1px solid #38b316;box-shadow: 0 0 1px #78dd5e;}
 			}
 			.step-box-content {margin-top: 10px;min-height: 52px;border: 1px solid #c6c6c6;border-radius: 3px;}
+		}
+		.pending {
+			.step-box-content {border:none;}
 		}
  }
  .sidenav {

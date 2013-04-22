@@ -964,7 +964,9 @@ namespace CC.Models {
 				d.ClaimStatus,//11
 				d.AmountIsConfirmed,//12
 				d.Days,//13
-				d.PerDay//14
+				d.PerDay,//14
+				d.DateNotification,
+				d.DateDocsSent
 				};
 			//Datepicker ir plugin on blur
 			//Markup.Type:Date,Date,DateNotLess,DateLess,Year,YearLess,YearNotLess,Integer,Decimal
@@ -992,7 +994,9 @@ namespace CC.Models {
 				new { FName = "ClaimStatus",Type="Integer", LenEqual=2,Validity="require().match('integer').maxLength(2).greaterThanOrEqualTo(0)"},//11
 				new { FName = "AmountIsConfirmed",Type="Boolean"},//12
 				new { FName = "Days",Type="Integer", LenMax=10,Validity="require().match('integer').maxLength(10).greaterThanOrEqualTo(0)"},//13
-				new { FName = "PerDay",Type="Decimal", LenEqual=10,Validity="require().match('number').greaterThanOrEqualTo(0)"}//14
+				new { FName = "PerDay",Type="Decimal", LenEqual=10,Validity="require().match('number').greaterThanOrEqualTo(0)"},//14
+				new { FName = "DateNotification",Type="Date", Validity="match('date')"},
+				new { FName = "DateDocsSent",Type="Date", Validity="match('date')"}
 				}; JSON.Cols = Cols;
 			JSON.Config = new {
 				Controler = "Claims", tblUpdate = "tblClaims", Msg = new { AddNew = "Naujos žalos pridėjimas", Edit = "Žalos redagavimas", Delete = "Ištrinti žalą", GenName = "Žala" }
@@ -1013,7 +1017,9 @@ namespace CC.Models {
 				new {sTitle="Žalos būklė"},//11//ClaimStatus//
 				new {sTitle="Žalos suma patvirtinta"},//12//AmountIsConfirmed//
 				new {sTitle="Prastovų skaičius dienomis"},//13//Days//
-				new {sTitle="Vienos dienos prastovos kaina"}//14//PerDay//
+				new {sTitle="Vienos dienos prastovos kaina"},//14//PerDay//
+				new {sTitle="Pranešimo data"},
+				new {sTitle="Dokumentų pateikimo data"}
 				}
 			};
 			return JSON;
