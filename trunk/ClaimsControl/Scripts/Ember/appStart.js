@@ -10,7 +10,7 @@ App.HidePreviousWindow = Ember.Mixin.create({
 		this._super(); $("body").find("img.spinner").remove() ;//$("body").spinner('remove'); - neveikia
 	},
 	goBack:function(){
-		$(this.thisWindow).empty().hide().parent().spinner({ position: 'center', img: 'spinnerBig.gif' });
+		$(this.thisWindow).hide().parent().spinner({ position: 'center', img: 'spinnerBig.gif' });
 		$(this.previuosWindow).show();
 		$("body").find("img.spinner").remove();
 	}

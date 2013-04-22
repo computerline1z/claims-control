@@ -48,14 +48,16 @@ App.Router = Em.Router.extend({
 			claimRegulation: function (router, context){
 				//App.listsStart();//Atnaujinam, jai buvo keista
 				//MY.NavbarController.fnSetNewTab(router.currentState.name, 1);
-				App.claimsRegulationController.set('content',context.context);
+				console.log(context.context);
+				//App.tabClaimsRegulationController.set('content',[context.context]);//!!!!būtinai array
+				App.tabClaimsRegulationController.set('claim',context.context);//!!!!būtinai array
 				router.get('applicationController').connectOutlet('claimRegulationOutlet','tabClaimsRegulation'); 
 			},
-			goBack:function (router, context){
-				$('#divClaimRegulation').hide().parent().spinner({ position: 'center', img: 'spinnerBig.gif' });
-				$('#divClaimsList').show();
-				$("body").find("img.spinner").remove();
-			}
+			// goBack:function (router, context){
+				// $('#divClaimRegulation').hide().parent().spinner({ position: 'center', img: 'spinnerBig.gif' });
+				// $('#divClaimsList').show();
+				// $("body").find("img.spinner").remove();
+			// }
 		}),
 		tabMap: Em.Route.extend({
 			route: '/map',
