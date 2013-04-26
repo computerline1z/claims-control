@@ -95,7 +95,7 @@ form input.searchField {
 }
 /* Style the "X" text button next to the search input field */
 form div.divSearch {
-     position:absolute;right:13%; width:26px;height:32px;line-height:22px;padding:9px 10px !important;font-size:22px;   
+     position:absolute;right:13%; width:26px;height:32px;line-height:22px;padding:6px 10px 9px 10px !important;font-size:22px;   
   }
 form span.spanToClearText {/*color:#A1B9ED;*/ color:#919191;cursor:pointer;padding:0px 3px;}/* Set default state of "X" and hide it */
 form span.spanToClearText:hover {/*color:#36c;*/ color:#575757}/* Set the hover state of "X" */
@@ -129,19 +129,19 @@ div.dividers { background: url(../images/bg-pattern.png) repeat; height: 6px; di
 
 #tblClaims{
 	width:100%;
-	tr>td {background-color: @systemYellow2; color: #666; .ClaimsRow();}
+	tr>td {background-color: #F7F7F7; color: #666; .ClaimsRow();}
 	tr:hover td { background-color: #FFF7F5; color:#5C636A;}
 
 	tr.claimOK>td {background-color: white; color:@gray;}
 	tr.claimOK:hover td { background-color: @grayLight; color:@white;}
 
-	tr.selectedClaim>td {background-color: #f9f8f3 !important; color:#666 !important; cursor:default !important;}
+	tr.selectedClaim>td {background-color: #ffffff !important; color:#666 !important; cursor:default !important;}
 	tr.selectedClaim.title>td {border-bottom:none;font-weight:bold;}
 	tr.selectedClaim.title>td:last-child {box-shadow: 5px 5px 3px #ccc;}
-	#ClaimWraper {background-color: @systemYellow !important; color:inherit !important; cursor:default !important; border-top:none;}//Content
+	#ClaimWraper {background-color: #ffffff !important; color:inherit !important; cursor:default !important; border-top:none;}//Content
 	//#ClaimsDetailsContent {background-color: @systemYellow !important; color:inherit !important; cursor:default !important;}
 }
-div.tr.newClaim {background-color: #a59894; .ClaimsRow();.clearfix();}
+div.tr.newClaim {background-color: #EFEBEF; .ClaimsRow();.clearfix();}
 div.newClaimContent {background-color: @systemYellow3; .clearfix();}
 /*-------------------------------Updatable Form----------------------------*/
 .inputForm .ExtendIt { margin: 10px 3px 10px 0px; display: inline-block; vertical-align: top; }
@@ -311,13 +311,14 @@ input[type=text].time {width:4em !important;
      font-size: @smallfont;
      height: @inputHeight;
 }
-label.leftlabel > span { width: 30%; font-size: @smallfont; margin: 0; padding: 0; /*color: #666666;*/// cursor: pointer; display: inline-block; }
+label.leftlabel > span { width: 30%; font-size: @smallfont; font-weight:bold;margin: 0; padding: 0; /*color: #666666;*/// cursor: pointer; display: inline-block; }
 /*
 label.leftlabel input[type=text], label.left textarea { 
 	width: 70%; font-size: @basefont; margin: 0; 
     // IDETA:
     .border-radius(0);
     height: @inputHeight;
+    color:#000000;
 }
 input [type="text"] {width:7em;}
 input.time [type="text"] {width:4em;
@@ -339,11 +340,12 @@ label {
         }
     }
     &.leftlabel {
-        > span { width: 30%; font-size: @smallfont; margin: 0; padding: 0; /*color: #666666;*/ cursor: pointer; display: inline-block; }
+        > span { width: 30%; font-size: @smallfont;font-weight:bold; margin: 0; padding: 0; /*color: #666666;*/ cursor: pointer; display: inline-block; }
         input[type=text], label.left textarea { 
             width: 70%; font-size: @basefont; margin: 0; 
             // IDETA:
             .border-radius(0);
+	    color:#000000;
         }
     }
 }
@@ -590,6 +592,15 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 }
 .selectedAccident a.rowSearchSelector{
     background-image: url(/Content/less/images/details_white.png);
+}
+.btn.btn-small.btn-small-delete{
+	background-color:#A59894;
+	background-image:none;
+	padding:1px 6px;
+}
+ .curvedBorderGroove {
+    border: 1px solid #EB5A44;
+	border-radius: 6px 6px 6px 6px;
 }
 /*----apurav new rules end -----*/
 /*----claims regulation form start -----*/
