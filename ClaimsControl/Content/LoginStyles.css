@@ -45,8 +45,61 @@ h2
 	/* For IE 5.5 - 7 */
 	filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#C0C0C0');
 }
-/** custom apurav rules **/
-.customButtonPropertyLogin {	background-color:#EB5A44;color:#FFFFFF;border-color:rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.25);border-radius:7px 7px 7px 7px;width:110px;font-weight:bolder;font-size:13px;height:32px;padding:0 0 5px;}
-.customInputProperty{border:1px solid #A59894;background:none;box-shadow:0 3px 3px rgba(0, 0, 0, 0.1) inset;}
+.customButtonPropertyLogin {
+display: inline-block;
+padding: 0 12px 4px;
+color: #ffffff;
+margin-bottom: 0;
+font-size: 12px;
+line-height: 20px;
+text-align: center;
+vertical-align: middle;
+text-shadow: 0 0px 0 white;
+cursor: pointer;
+background-color: #f1897a;
+background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f39c8f), to(#ef6d5a));
+background-image: linear-gradient(to bottom, #f39c8f, #ef6d5a);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff39c8f', endColorstr='#ffef6d5a', GradientType=0);
+background-color: #ef6d5a;
+background-repeat: repeat-x;
+background-image: -khtml-gradient(linear, left top, left bottom, from(#f39c8f), to(#ef6d5a));
+background-image: -moz-linear-gradient(top, #f39c8f, #ef6d5a);
+background-image: -ms-linear-gradient(top, #f39c8f, #ef6d5a);
+background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f39c8f), color-stop(100%, #ef6d5a));
+background-image: -webkit-linear-gradient(top, #f39c8f, #ef6d5a);
+background-image: -o-linear-gradient(top, #f39c8f, #ef6d5a);
+background-image: linear-gradient(top, #f39c8f, #ef6d5a);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f39c8f', endColorstr='#ef6d5a', GradientType=0);
+border: 1px solid #eb5a44;
 
-/** custom apurav rules end **/
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+border-radius: 4px;
+}
+
+.button.customButtonPropertyLogin:hover{
+color: #ffffff;
+background-color: #f39d90;
+background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f5aba0), to(#f18778));
+background-image: linear-gradient(to bottom, #f5aba0, #f18778);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5aba0', endColorstr='#fff18778', GradientType=0);
+background-color: #f18778;
+background-repeat: repeat-x;
+background-image: -khtml-gradient(linear, left top, left bottom, from(#f5aba0), to(#f18778));
+background-image: -moz-linear-gradient(top, #f5aba0, #f18778);
+background-image: -ms-linear-gradient(top, #f5aba0, #f18778);
+background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f5aba0), color-stop(100%, #f18778));
+background-image: -webkit-linear-gradient(top, #f5aba0, #f18778);
+background-image: -o-linear-gradient(top, #f5aba0, #f18778);
+background-image: linear-gradient(top, #f5aba0, #f18778);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f5aba0', endColorstr='#f18778', GradientType=0);
+background-position: 0;
+}
+.button.customButtonPropertyLogin:active{
+color: #ffffff;
+background-color:#C64129;
+background-image: none;
+background-position: 0;
+}
+
+.customInputProperty{border:1px solid #A59894;background:none;box-shadow:0 3px 3px rgba(0, 0, 0, 0.1) inset;}
