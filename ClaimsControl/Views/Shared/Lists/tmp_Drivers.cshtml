@@ -16,18 +16,18 @@ data-ctrl='{"NewRec":1,"Source":"proc_Drivers","tblUpdate":"tblDrivers"}'>
 
 		{{#if editItem}}
 			{{#if dateIsEdited}}
-				<div class="tr borderGroove">
+				<div class="tr curvedBorderGroove">
 					<div class="td w70pr" style="padding:2%;"><input type="text" id="dialogEndDateInput" {{bindAttr value="endDate"}} style="width:100%;" placeholder="Nebedirba nuo.."/></div>
 					<div class="td w25pr" style="text-align:center;padding:2%;"><a {{action saveDate}} href="#" class="inLine">Išsaugoti</a></div>
 				</div>
 			{{else}}
 				{{#if endDate}}
-						<div style="background-color:#EB5A44; font-weight:bolder;" class="tr">
+						<div style="background-color:#EB5A44; font-weight:bolder;" class="tr curvedBorderGroove">
 							<div class="td w70pr" style="padding:2%;color:White; font-weight:bolder;"><span class="inLine">Nebedirba nuo {{endDate}}</span></div>
 							<div class="td w25pr" style="text-align:center;padding:2%;"><a href="#" {{action goToEditDate}} class="inLine" style="color:White; border:none;">Keisti</a></div>
 						</div>
 				{{else}}
-						<div class="tr borderGroove">
+						<div class="tr curvedBorderGroove">
 							<a href="#" class="inLine" {{action goToEditDate}} style="margin:0;width:100%;text-align:center;">Pažymėkite, jei darbuotojas nebedirba</a>
 						</div>
 				{{/if}}
