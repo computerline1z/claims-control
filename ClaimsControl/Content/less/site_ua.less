@@ -44,7 +44,7 @@
 	.ui-button {
 		color: #3F3B3B;
 		
-		&.ui-state-active { #gradient > .vertical(#EB5A44, #EB5A44);background-color: #EB5A44; color: white; box-shadow: none; }	
+		&.ui-state-active { #gradient > .vertical(#EB5A44, #EB5A44);background-color: #EB5A44; color: white; .box-shadow(~"inset 0 2px 4px rgba(0,0,0,.25), 0 1px 2px rgba(0,0,0,.05)"); }	
 
 	}
 }
@@ -60,12 +60,23 @@
 		margin-bottom: 7px;	
 		border-radius: 7px;			
 	}
-	
+	&.ui-buttonset .ui-button:hover {		
+		background-color:#EFDFDE !important;
+		background-image:none !important;
+		color:#985e55 !important;
+		border: 1px solid #F7B6AD !important;
+	}
 	.ui-buttonset .ui-button {
 		margin-right: -3px;
 		&:nth-of-type(1) { border-right-color: #F8F8F8; }
 		&:nth-of-type(2) { border-left-color: #E5E5E5; }
 		
+	}
+	.ui-buttonset .ui-button:hover {		
+		background-color:#EFDFDE !important;
+		background-image:none !important;
+		color:#985e55 !important;
+		border: 1px solid #F7B6AD !important;
 	}
 	
 	.ui-corner-left { border-top-left-radius: 7px; border-bottom-left-radius: 7px; }
