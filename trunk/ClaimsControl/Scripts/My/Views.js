@@ -98,7 +98,7 @@ Handlebars.registerHelper('compare', function (lvalue, operator, rvalue, options
 App.SearchField = Ember.View.extend({
 	context: null,
 	tagName:"",
-	template: Em.Handlebars.compile('<form class="topSearchForm" onsubmit="return false;" ><input  {{action "valueDidChange" on="keyUp" target="parentView"}} type="text" class="searchField" placeholder="Ieškoti.."/><div class="divSearch"><span {{action "clear" target="parentView"}} class="spanToClearText">&#10005;</span></div></form>'),
+	template: Em.Handlebars.compile('<form class="topSearchForm" onsubmit="return false;" ><input  {{action "valueDidChange" on="keyUp" target="parentView"}} type="text" class="searchField" placeholder="Ieškoti.."/><div class="divSearch"><span {{action "clear" target="parentView"}} class="spanToClearText"><img src="Content/images/icon-cancel.png"></span></div></form>'),
 	clear: function (e) { $(e.target).closest("form").find("input").val(""); this.get("valueDidChange").call(this, ""); },
 	valueDidChange: function (e) {
 		if ((e.keyCode || e.which) === 13) return false;
