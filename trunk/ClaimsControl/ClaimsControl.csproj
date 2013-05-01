@@ -182,6 +182,7 @@
     <Content Include="Content\images\icon-plus.png" />
     <Content Include="Content\images\icon-success.png" />
     <Content Include="Content\images\X_orange.png" />
+    <Content Include="Content\less\images_ui\close.png" />
     <Content Include="Properties\App_Readme\Elmah.txt" />
     <Content Include="Content\images\spinner.gif" />
     <Content Include="Content\images\spinnerBig.gif" />
@@ -469,7 +470,6 @@
     <None Include="Scripts\My\MyPlugins_Tree.coffee" />
     <None Include="Scripts\My\MyPlugins_UploadFiles.coffee" />
     <None Include="Scripts\My\MyPlugins_ComboBox.coffee" />
-    <Content Include="Views\Main\StartOld.cshtml" />
     <None Include="Views\Shared\Accidents\tmpClaimEdit.cshtml" />
     <Content Include="Views\Shared\Accidents\tmpAccidentsMain.cshtml" />
     <Content Include="Views\Shared\Accidents\tmpAccidentRow.cshtml" />
@@ -493,6 +493,14 @@
     <Content Include="Views\Shared\Claims\tmpClaimView.cshtml" />
     <Content Include="Views\Shared\Claims\tmpSidePanelForClaims.cshtml" />
     <Content Include="Views\Shared\Claims\tmpClaimRegulation.cshtml" />
+    <Content Include="Views\Shared\Claims\tmpActionMain.cshtml" />
+    <Content Include="Views\Shared\Claims\tmpActionWrapper.cshtml" />
+    <Content Include="Views\Shared\Claims\tmpAction_sendEmail.cshtml" />
+    <Content Include="Views\Shared\Claims\tmpAction_addEmail.cshtml" />
+    <Content Include="Views\Shared\Claims\tmpAction_note.cshtml" />
+    <Content Include="Views\Shared\Claims\tmpAction_meeting.cshtml" />
+    <Content Include="Views\Shared\Claims\tmpAction_phone.cshtml" />
+    <Content Include="Views\Shared\Claims\tmpAction_task.cshtml" />
     <None Include="Views\Shared\LayOut_Main_Debug.cshtml" />
     <Content Include="Views\Main\Start.cshtml" />
   </ItemGroup>

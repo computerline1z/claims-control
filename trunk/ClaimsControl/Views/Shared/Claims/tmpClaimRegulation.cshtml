@@ -1,8 +1,9 @@
-﻿<div class="content content-claims">
-@*{{log claim}}*@
+﻿@*{{log claim}}*@
+<div class="content box-1pr-btm">
 {{#with claim}}
 	<h2 class="driversColorProperty">Žala nr. {{accident.no}}-{{no}}, {{claimType.name}}, {{insPolicy.insurerName}}</h2><a href="#" {{action goBack target="this"}} style="color:#5A6F85;">(atgal į Žalų sąrašą)</a>
 	<h4 class="driversColorProperty">{{vehicle.plate}}, {{accident.driver}}</h4>
+
 	<div class="claims" id="claimsSteps">
 		<div class="line"></div>
 		{{#each steps}}
@@ -21,20 +22,29 @@
 			</div>
 		{{/each}}
 	</div>
-</div>
 {{/with}}
-<div class="content content-fullwidth">
-	<ul class="tabnav"> 
-		<li class="active">
-			tabbbbbbbbb
-		</li>
-		<li>
-			tabbbbbbbbb2
-		</li>
-		<li>
-			tabbbbbbbbb3
-		</li>				
-	</ul>	
-	<div id="actions-zone"></div>	
 </div>
-<div id="entry-zone"></div>
+
+<div id="claimRegulationTab" style="padding:0.2em 0;">
+	<ul class="ulWhiteMenu"> 
+		<li><a href="#actionsFormOfClaimReg"><span>Veiksmai</span></a></li>
+		<li><a href="#docsOfClaimReg"><span>Dokumentai</span></a></li>
+		<li><a href="#historyOfClaimReg"><span>Pakeitimų istorija</span></a></li>				
+	</ul>	
+	<div id="actionsFormOfClaimReg" style="padding:0;">
+		<div class="content">
+			<table class="zebra-striped"><thead><tr><th>Data</th><th>Veiksmas</th><th>Kas</th><th>Kam</th><th>Info</th><th>Priedai</th></tr></thead><tbody>
+				<tr><td>Data</td><td>Veiksmas</td><td>Kas</td><td>Kam</td><td>Info</td><td>Priedai</td></tr>
+			</tbody></table>
+		</div>
+		<div id="actionsEnterOfClaimReg">
+			<div class="left" style="width:100%;margin-top:1.5%;"></div>
+			{{view view.actionView}}
+		</div>
+	</div>
+
+	<div class="content" id="docsOfClaimReg">Dokumentai</div>
+
+	<div class="content" id="historyOfClaimReg">Pakeitimų istorija</div>
+
+</div>

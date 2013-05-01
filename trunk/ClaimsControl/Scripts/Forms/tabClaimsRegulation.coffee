@@ -66,14 +66,65 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 		#DataToSave={"id":@claim.iD,"Data":[groupID,docTypeID,desc],"Fields":["groupID","docTypeID","description"],"DataTable":"tblClaims"}
 		SERVER.update2(Action:'Edit',DataToSave:DataToSave,Ctrl:$("#claimsSteps"),source:"tblClaims",row:@claim,CallBackAfter:(Row)-> console.log(Row))		
 )	
+App.ActionMainView = Em.View.extend(
+	viewName:"actionMain",
+	templateName: 'tmpActionMain',
+	controller: App.actionViewController
+)
+App.actionViewController = Em.ObjectController.create(
+	parentView:{},#ref to App.TabClaimsRegulationView
+	#wrapperView:{},
+	#wrapperView:App.ActionWrapperView,
+	#childView:App.Action_createEmail,
+	title:"",childViewName:""
+	goToOtherView: (e) -> 
+		p=$(e.target).data("ctrl")
+		@.set("title",p.title).set("childViewName","view_"+p.view);
+		@parentView.set("actionView",@view_wrapper).rerender()
+	saveForm: (e) ->
+		alert("saveForm")
+	cancelForm: (e) ->
+		@parentView.set("actionView",App.ActionMainView).rerender()
+	view_wrapper: Em.View.extend(
+		#cia savo kontrollerio nesimato, matosi tik pats view'as kaip view
+		init: -> 
+			@_super(); ctrl=App.actionViewController;
+			@set("childView",@[ctrl.childViewName]).set("title",ctrl.title)
+		childView:{},childViewName:""#controller will set
+		viewName:"actionWrapper",
+		templateName: 'tmpActionWrapper',
+		view_sendEmail: Em.View.extend(
+			viewName:"action_sendEmail", templateName: 'tmpAction_sendEmail'
+		),
+		view_addEmail: Em.View.extend(
+			viewName:"action_addEmail", templateName: 'tmpAction_addEmail'
+		),
+		view_meeting: Em.View.extend(
+			viewName:"action_meeting", templateName: 'tmpAction_meeting'
+		),
+		view_note: Em.View.extend(
+			viewName:"action_note", templateName: 'tmpAction_note'
+		),
+		view_phone: Em.View.extend(
+			viewName:"action_phone", templateName: 'tmpAction_phone'
+		),
+		view_task: Em.View.extend(
+			viewName:"action_task", templateName: 'tmpAction_task'
+		)
+	)
+)
 App.TabClaimsRegulationView = Ember.View.extend(App.HidePreviousWindow,
+	viewName:"tabClaimsRegulation",
 	previuosWindow: '#divClaimsList'
 	thisWindow: '#divClaimRegulation'
 	init: -> 
 		@_super(); @controller.setSteps()
+		App.actionViewController.set("parentView",@)
 		#$('#tabClaims').removeClass("colmask")
+	actionView: App.ActionMainView,
 	templateName: 'tmpClaimRegulation'
 	didInsertElement: ()->
+		#------------------step boxes-----------------------------------------------------------
 		@_super(); me=@; idx=0; ctrl=me.controller;stepBox={}; 
 		@.$().find("#claimsSteps").on('click','a',(e)->#Patvirtinimo iškvietimas arba atšaukimas
 			stepBox=$(@).closest("div.step-box"); classes=stepBox.attr("class"); stepNo=stepBox.data("stepno") #current completed pending
@@ -97,14 +148,14 @@ App.TabClaimsRegulationView = Ember.View.extend(App.HidePreviousWindow,
 			stepBox.find("div.step-box-addon").slideUp('slow').remove()
 			false
 		)
-		
+		#------------------actions tabs-----------------------------------------------------------
+		$("#claimRegulationTab").tabs().on( "tabsactivate", (event, ui) ->
+			if (ui.newTab.index()==1) then console.log("first")
+		)
 	#contentBinding: 'App.claimsRegulationController.content'
 	#controller: 'App.claimsRegulationController'
-	controller:App.tabClaimsRegulationController 
-	#context 
+	controller:App.tabClaimsRegulationController
 )
-
-
 
 ###
 MY.tabAccidents={}

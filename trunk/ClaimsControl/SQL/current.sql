@@ -1,3 +1,8 @@
+------------------1.017 no updates --------------------------------------------------------------------------------------------------
+------------------1.016 local local and ClaimsControl --------------------------------------------------------------------------------------------------
+ALTER TABLE tblClaims ADD DateNotification date NULL
+ALTER TABLE tblClaims ADD DateDocsSent date NULL
+------------------1.015 no updates --------------------------------------------------------------------------------------------------
 ------------------1.014 local and ClaimsControl --------------------------------------------------------------------------------------------------
 proc_Update_Edit
 proc_Update_AddNew
@@ -47,10 +52,6 @@ proc_Update_AddNew
 --WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 --INSERT INTO tblUserMsg
 --SELECT 10,'IX_tblVehicles_Plate','Transporto priemonë tokiu valstybiniu numeriu(''{{}}'') jau yra ávesta.',1
-
-
-
-SELECT * FROM [ClaimsControl].[dbo].[tblUserMsg]
 
 -------------------------------------------------------------------------------------------------------------------------------------
 --SELECT * FROM tblDocGroups

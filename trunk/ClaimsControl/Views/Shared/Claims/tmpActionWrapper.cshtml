@@ -1,0 +1,10 @@
+﻿<div class="ui-dialog ui-widget ui-widget-content left" tabindex="-1" style="position:relative; height: auto; width:100%; display: block;">
+<div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+	<span id="ui-id-1" class="ui-dialog-title">{{view.title}}</span>
+	<a href="#" class="ui-dialog-titlebar-close ui-corner-all" {{action cancelForm target="App.actionViewController"}}><span class="ui-icon ui-icon-closethick">close</span></a>
+</div>
+<div id="openItemDialog" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 25px; height: auto;" scrolltop="0" scrollleft="0">
+	<div id="contentOfClaimReg" class="inputForm container w95pr centerBlock" data-ctrl='{"NewRec":1,"Source":"proc_Drivers","tblUpdate":"tblDrivers"}'>		{{view view.childView}}	</div> 
+	{{view App.FormBottomView target="App.actionViewController"}}
+</div>
+</div>
