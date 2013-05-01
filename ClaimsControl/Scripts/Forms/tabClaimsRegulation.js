@@ -148,13 +148,78 @@
     }
   });
 
+  App.ActionMainView = Em.View.extend({
+    viewName: "actionMain",
+    templateName: 'tmpActionMain',
+    controller: App.actionViewController
+  });
+
+  App.actionViewController = Em.ObjectController.create({
+    parentView: {},
+    title: "",
+    childViewName: "",
+    goToOtherView: function(e) {
+      var p;
+
+      p = $(e.target).data("ctrl");
+      this.set("title", p.title).set("childViewName", "view_" + p.view);
+      return this.parentView.set("actionView", this.view_wrapper).rerender();
+    },
+    saveForm: function(e) {
+      return alert("saveForm");
+    },
+    cancelForm: function(e) {
+      return this.parentView.set("actionView", App.ActionMainView).rerender();
+    },
+    view_wrapper: Em.View.extend({
+      init: function() {
+        var ctrl;
+
+        this._super();
+        ctrl = App.actionViewController;
+        return this.set("childView", this[ctrl.childViewName]).set("title", ctrl.title);
+      },
+      childView: {},
+      childViewName: "",
+      viewName: "actionWrapper",
+      templateName: 'tmpActionWrapper',
+      view_sendEmail: Em.View.extend({
+        viewName: "action_sendEmail",
+        templateName: 'tmpAction_sendEmail'
+      }),
+      view_addEmail: Em.View.extend({
+        viewName: "action_addEmail",
+        templateName: 'tmpAction_addEmail'
+      }),
+      view_meeting: Em.View.extend({
+        viewName: "action_meeting",
+        templateName: 'tmpAction_meeting'
+      }),
+      view_note: Em.View.extend({
+        viewName: "action_note",
+        templateName: 'tmpAction_note'
+      }),
+      view_phone: Em.View.extend({
+        viewName: "action_phone",
+        templateName: 'tmpAction_phone'
+      }),
+      view_task: Em.View.extend({
+        viewName: "action_task",
+        templateName: 'tmpAction_task'
+      })
+    })
+  });
+
   App.TabClaimsRegulationView = Ember.View.extend(App.HidePreviousWindow, {
+    viewName: "tabClaimsRegulation",
     previuosWindow: '#divClaimsList',
     thisWindow: '#divClaimRegulation',
     init: function() {
       this._super();
-      return this.controller.setSteps();
+      this.controller.setSteps();
+      return App.actionViewController.set("parentView", this);
     },
+    actionView: App.ActionMainView,
     templateName: 'tmpClaimRegulation',
     didInsertElement: function() {
       var ctrl, idx, me, stepBox;
@@ -164,7 +229,7 @@
       idx = 0;
       ctrl = me.controller;
       stepBox = {};
-      return this.$().find("#claimsSteps").on('click', 'a', function(e) {
+      this.$().find("#claimsSteps").on('click', 'a', function(e) {
         var classes, stepNo, steps;
 
         stepBox = $(this).closest("div.step-box");
@@ -201,6 +266,11 @@
         ctrl.fnStepForward(idx);
         stepBox.find("div.step-box-addon").slideUp('slow').remove();
         return false;
+      });
+      return $("#claimRegulationTab").tabs().on("tabsactivate", function(event, ui) {
+        if (ui.newTab.index() === 1) {
+          return console.log("first");
+        }
       });
     },
     controller: App.tabClaimsRegulationController

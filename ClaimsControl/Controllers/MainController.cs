@@ -79,13 +79,28 @@ namespace ClaimsControl.Controllers {
 						tmpClaimsMain = RenderPartialViewToString("Claims/tmpClaimsMain"),
 						tmpClaimView = RenderPartialViewToString("Claims/tmpClaimView"),
 						tmpSidePanelForClaims = RenderPartialViewToString("Claims/tmpSidePanelForClaims"),
-						tmpClaimRegulation = RenderPartialViewToString("Claims/tmpClaimRegulation")
-
+						tmpClaimRegulation = RenderPartialViewToString("Claims/tmpClaimRegulation"),
+						tmpActionMain = RenderPartialViewToString("Claims/tmpActionMain"),
+						tmpActionWrapper = RenderPartialViewToString("Claims/tmpActionWrapper"),
+						tmpAction_sendEmail = RenderPartialViewToString("Claims/tmpAction_sendEmail"),
+						tmpAction_addEmail = RenderPartialViewToString("Claims/tmpAction_addEmail"),
+						tmpAction_meeting = RenderPartialViewToString("Claims/tmpAction_meeting"),
+						tmpAction_note = RenderPartialViewToString("Claims/tmpAction_note"),
+						tmpAction_phone = RenderPartialViewToString("Claims/tmpAction_phone"),
+						tmpAction_task = RenderPartialViewToString("Claims/tmpAction_task")
 					} : new {
 						tmpClaimsMain = "",
 						tmpClaimView = "",
 						tmpSidePanelForClaims = "",
-						tmpClaimRegulation = ""
+						tmpClaimRegulation = "",
+						tmpActionMain = "",
+						tmpActionWrapper = "",
+						tmpAction_sendEmail = "",
+						tmpAction_addEmail = "",
+						tmpAction_meeting = "",
+						tmpAction_note = "",
+						tmpAction_phone = "",
+						tmpAction_task = ""
 					}//,
 					//Script = new { File = "/Scripts/Forms/tabLists.js?ver="+ver, Pars = "" } listus siunčiu su visais nes jų reikia
 				}

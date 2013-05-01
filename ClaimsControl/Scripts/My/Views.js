@@ -118,15 +118,17 @@ App.FormBottomView = Em.View.extend({
 		 target = this.get('target'),	 
 		 targetObj = Ember.getPath(target);
 		if (!targetObj){console.error("no target");}
-		var attachFunction = function(fn){
+		var attachFunction = function(fn,thisContext){
 			if (typeof fn === 'function') {
-				var actionFnc = function(event) {fn(event);} 
+				//var actionFnc = function(event) {fn(event);} 
+				var actionFnc = function(event) {fn.call(thisContext,event);} 
 				this.set(actions[i], actionFnc);	
 				//console.log('ok action: '+actions[i]);
 			} else console.warn("No target for "+actions[i]);	
 		}		
+		thisContext=Em.get(target);//nustatom this=target(controller)
 		 for (i=0;i<actions.length;i++){ 
-			attachFunction.call(this,targetObj[actions[i]]);
+			attachFunction.call(this,targetObj[actions[i]],thisContext);
 		 }
 		this._super();			 
 	},
