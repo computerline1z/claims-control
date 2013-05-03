@@ -87,7 +87,11 @@ namespace ClaimsControl.Controllers {
 						tmpAction_meeting = RenderPartialViewToString("Claims/tmpAction_meeting"),
 						tmpAction_note = RenderPartialViewToString("Claims/tmpAction_note"),
 						tmpAction_phone = RenderPartialViewToString("Claims/tmpAction_phone"),
-						tmpAction_task = RenderPartialViewToString("Claims/tmpAction_task")
+						tmpAction_task = RenderPartialViewToString("Claims/tmpAction_task"),
+						tmpAddCompensation = RenderPartialViewToString("Claims/tmpAddCompensation"),
+						tmpAddInsuranceBenefit = RenderPartialViewToString("Claims/tmpAddInsuranceBenefit"),
+						tmpAddInvoice = RenderPartialViewToString("Claims/tmpAddInvoice"),
+						tmpAddPropReport = RenderPartialViewToString("Claims/tmpAddPropReport")
 					} : new {
 						tmpClaimsMain = "",
 						tmpClaimView = "",
@@ -100,7 +104,11 @@ namespace ClaimsControl.Controllers {
 						tmpAction_meeting = "",
 						tmpAction_note = "",
 						tmpAction_phone = "",
-						tmpAction_task = ""
+						tmpAction_task = "",
+						tmpAddCompensation = "",
+						tmpAddInsuranceBenefit = "",
+						tmpAddInvoice = "",
+						tmpAddPropReport = ""
 					}//,
 					//Script = new { File = "/Scripts/Forms/tabLists.js?ver="+ver, Pars = "" } listus siunčiu su visais nes jų reikia
 				}

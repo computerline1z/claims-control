@@ -52,27 +52,27 @@
 	</span>
 				<script type="text/x-handlebars" data-template-name="tmpApplication">
 					  {{view App.NavbarView controllerBinding="controller.controllers.navbarController"}}	 
-					<div class="colmask colmask-extended hidden" id="tabAccidents">
+					<div class="colmask hidden" id="tabAccidents">
 						
 						<div class="colleft" id="divAccidentsList">
 							<div class="col1 content">{{view App.tabAccidentsView}}</div>
 							<div class="col2 content">{{view App.SidePanelView}}</div>
 						</div>
-						<div class="content hidden container--main colmask colmask-extended" id="divAccidentEdit">divAccidentEdit</div> 
+						<div class="content hidden container--main colmask" id="divAccidentEdit">divAccidentEdit</div>
 					</div>
-					<div class="colmask colmask-extended hidden" id="tabClaims">
+					<div class="colmask hidden" id="tabClaims">
 						<div class="colleft" id="divClaimsList">
 							<div class="col1 content">{{outlet claimsOutlet}}</div>
 							<div class="col2 content">{{outlet claimsSidePanelOutlet}}</div>
 						</div>
-						<div class="content hidden colmask colmask-extended" id="divClaimRegulation">{{outlet claimRegulationOutlet}}</div> @*pakeitimas*@
+						<div class="content hidden colmask transparent" id="divClaimRegulation">{{outlet claimRegulationOutlet}}</div> 
 					</div>
-					<div class="content hidden colmask colmask-extended" id="tabMap">tmpMap!</div>
-					<div class="content hidden colmask colmask-extended" id="tabReports">tmpReports!</div>
-					<div class="content hidden colmask colmask-extended" id="tabLists">{{outlet listsOutlet}}</div>
-					<div class="content hidden colmask colmask-extended" id="tabAdmin">{{outlet adminOutlet}}</div>
+					<div class="content hidden colmask" id="tabMap">tmpMap!</div>
+					<div class="content hidden colmask" id="tabReports">tmpReports!</div>
+					<div class="content hidden colmask" id="tabLists">{{outlet listsOutlet}}</div>
+					<div class="content hidden colmask" id="tabAdmin">{{outlet adminOutlet}}</div>
 					<div class="hidden" id="tabEmpty">{{outlet emptyOutlet}}</div>
-					<div class="big colmask colmask-extended">
+					<div class="big colmask">
 					<div class="right big">
 						<a class="medium listUnderlineProperty" target="_blank" href="http://claimscontrol.com/">©&nbsp;&nbsp;Žalų administravimo sistema "ClaimsControl"</a>
 						<a class="medium listUnderlineProperty" target="_blank" href="http://claimscontrol.com/">Privatumo politika</a>
