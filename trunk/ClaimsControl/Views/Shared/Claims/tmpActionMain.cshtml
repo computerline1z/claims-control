@@ -19,18 +19,18 @@
 	</div>
 </div>
 <div class="content left col1-right">
-	<div class="line"><div>žalos suma:</div><div class="box-1pr-left w35pr">2450 lt</div><div class="w25pr"><a href="#">įvesti turto nurašymo aktą</a></div><div class="right"><a href="#">įvesti sąskaitą-faktūrą</a></div></div>
+	<div class="line"><div>žalos suma:</div><div class="box-1pr-left w35pr">2450 lt</div><div class="w25pr"><a {{action goToOtherView target="App.actionViewController"}} data-ctrl='{"view":"addPropReport","title":"Turto nurašymo aktas"}' href="#">Įvesti turto nurašymo aktą</a></div><div class="right"><a {{action goToOtherView target="App.actionViewController"}} data-ctrl='{"view":"addInvoice","title":"Sąskaita faktūra"}' href="#">Įvesti sąskaitą-faktūrą</a></div></div>
 				
 
 	<table class="zebra-striped"><thead><tr><th>Suma</th><th>Tiekėjas</th><th>Mokėtojas</th><th>Paskirtis</th><th>Priedai</th></tr></thead><tbody>
 		<tr><td>Suma</td><td>Tiekėjas</td><td>Mokėtojas</td><td>Paskirtis</td><td>Priedai</td></tr>
 	</tbody></table>
 
-	<div class="line"><div>Draudimo išmoka:</div><div class="box-1pr-left">2450 Lt</div><div class="right"><a href="#">Įvesti draudimo išmoką</a></div></div>
+	<div class="line"><div>Draudimo išmoka:</div><div class="box-1pr-left">2450 Lt</div><div class="right"><a {{action goToOtherView target="App.actionViewController"}} data-ctrl='{"view":"addInsuranceBenefit","title":"Draudimo išmoka"}' href="#">Įvesti draudimo išmoką</a></div></div>
 
 	<table class="zebra-striped"><thead><tr><th>Suma</th><th>Data</th><th>Gavėjas</th><th>Pastabos</th><th>Priedai</th></tr></thead><tbody>
 		<tr><td>Suma</td><td>Data</td><td>Gavėjas</td><td>Pastabos</td><td>Priedai</td></tr>
 	</tbody></table>
 
-	<div class="line"><div>Kaltininko kompensacija:</div><div class="box-1pr-left">0 Lt</div><div class="right"><a href="#">Įvesti kaltininko kompensaciją</a></div></div>
+	<div class="line"><div>Kaltininko kompensacija:</div><div class="box-1pr-left">0 Lt</div><div class="right"><a href="#" {{action goToOtherView target="App.actionViewController"}} data-ctrl='{"view":"addCompensation","title":"Kaltininko kompensacija"}'>Įvesti kaltininko kompensaciją</a></div></div>
 </div>
