@@ -10,14 +10,11 @@
 		div{ padding: 20px 4px;}
 	}
 }
-//.cont{
-	//.right{float:right; text-align:left;}
-	//.left{float:left;}
-//	.clearfix();
-//}
+
 .centerBlock {
 	.center-block()
 }
+
 .mr5 { margin-right: 5px; }
 .mr8 { margin-right: 8px; }
 .mr12 { margin-right: 12px; }
@@ -61,31 +58,45 @@
 .big {padding: 13px;}
 
 a, .btn, div, span {
-.large, &.large {padding: 9px 14px; font-size: @basefont + 10px;}
-.medium, &.medium {padding: 6px 8px; font-size: @basefont;}
-.small, &.small {padding: 4px 6px; font-size: @basefont - 2px;}
-.mini, &.mini {padding: 2px 4px; font-size: @basefont - 4px;}
+    .large, &.large {
+        padding: 9px 14px;
+        font-size: @basefont + 10px;
+    }
+
+    .medium, &.medium {
+        padding: 6px 8px;
+        font-size: @basefont;
+    }
+
+    .small, &.small {
+        padding: 4px 6px;
+        font-size: @basefont - 2px;
+    }
+
+    .mini, &.mini {
+        padding: 2px 4px;
+        font-size: @basefont - 4px;
+    }
 }
-.btn{
-    //.btn > .large {.border-radius(6px);}
-   &.large {
+.btn {
+    padding: 1px 10px;
+    .border-radius(4px);
+    border-color: #888;
+    .box-shadow(0px 1px 0px #C3C3C3);
+    #font > .regular(@basefont, bolder, @baseline, #666);
+    text-shadow: #fff 1px 1px 1px;
+
+    &.large {
         .border-radius(5px);
         border-style: double;
-        /*border-width: 4px;*/
         border-color: #d5d5d1;
         #font > .header(20px, bolder, @baseline, #5d7c9b);
         padding: 3px 15px;
         .box-shadow(0px 0px 0px #fff);
     }
-    // Mažas button'as
-    padding: 1px 10px; 
-    .border-radius(4px);    
-    border-color: #888;
-    .box-shadow(0px 1px 0px #C3C3C3); 
-    #font > .regular(@basefont, bolder, @baseline, #666);
-    text-shadow: #fff 1px 1px 1px;
 }
-.fieldSetBorder{border: 2px groove threedface;}
+
+.fieldSetBorder{ border: 2px groove threedface; }
 
 .styled-select {
     width: 100%;
@@ -104,35 +115,23 @@ select {
     }
  }
 
-
-
 // Download Font
 .dlFont {
     @font-face {
-    font-family: 'PFD';
-    font-style: normal;
-    font-size:13px;
-    src: local('Asap'), local('Asap-Regular'), url(/Content/PFDinTextPro-Medium.ttf) format('truetype');
- /* font-family: 'Asap';
-  font-style: normal;
- font-size:13px;
-   src: local('Asap'), local('Asap-Regular'), url(/Content/PFDinTextPro-Medium.ttf) format('truetype');
-//    url(http://fonts.googleapis.com/css?family=Asap)
-    */ 
+        font-family: 'PFD';
+        font-style: normal;
+        font-size: 13px;
+        src: local('Asap'), local('Asap-Regular'), url(/Content/PFDinTextPro-Medium.ttf) format('truetype');
     }
 }
 
-
-//input[type="text"] { .border-radius(0);  }
-
 /**********apurav rules **********/
+
 .btn.large.padded-large{
 	padding:10px !important;
 	color:#176891 !important;
 	box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.3) ,inset 0px 1px 0px 0px rgb(255,255,255);
-
 }
-
 
 /*****apurav rules end *********/
 
