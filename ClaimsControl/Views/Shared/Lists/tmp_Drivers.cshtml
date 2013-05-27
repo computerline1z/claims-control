@@ -1,19 +1,16 @@
 ﻿<div id="dialogContent" class="inputForm container w95pr centerBlock"
 data-ctrl='{"NewRec":1,"Source":"proc_Drivers","tblUpdate":"tblDrivers"}'>
       <div class='left w45pr'>
-         <div class='ExtendIt' data-ctrl='{"Field":"FirstName","classes":"UpdateField","id":"FirstName","labelType":"Left"}'>
+         <div class='ExtendIt leftBlock' data-ctrl='{"Field":"FirstName","id":"FirstName","labelType":"Left","classes":{"span":"w30pr","input":"w70pr"}}'>
          </div>
-         <div class='ExtendIt' data-ctrl='{"Field":"DateBorn","classes":"UpdateField","id":"DateBorn","labelType":"Left", "Type":"DateLess"}'>@*"Plugin":{"datepicker":{"maxDate":"0"}}*@
+         <div class='ExtendIt leftBlock' data-ctrl='{"Field":"DateBorn","id":"DateBorn","labelType":"Left", "Type":"DateLess","classes":{"span":"w30pr","input":"w70pr"}}'>@*"Plugin":{"datepicker":{"maxDate":"0"}}  "classes":"UpdateField",*@
          </div>
-         <div class='ExtendIt' data-ctrl='{"Field":"Phone","classes":"UpdateField","id":"Phone","labelType":"Left"}'>
+         <div class='ExtendIt leftBlock' data-ctrl='{"Field":"Phone","id":"Phone","labelType":"Left","classes":{"span":"w30pr","input":"w70pr"}}'>
          </div>
       </div>
       <div class='right w45pr'>
-         <div class='ExtendIt' data-ctrl='{"Field":"LastName","classes":"UpdateField","id":"LastName","labelType":"Left"}'>
+         <div class='ExtendIt leftBlock' data-ctrl='{"Field":"LastName","id":"LastName","labelType":"Left","classes":{"span":"w30pr","input":"w70pr"}}'>
          </div>
-@*         <div class='ExtendIt' data-ctrl='{"Field":"DrivingCategory","classes":"UpdateField","id":"DrivingCategory","labelType":"Left"}'>
-         </div>	*@
-
 		{{#if editItem}}
 			{{#if dateIsEdited}}
 				<div class="tr curvedBorderGroove">
@@ -35,9 +32,5 @@ data-ctrl='{"NewRec":1,"Source":"proc_Drivers","tblUpdate":"tblDrivers"}'>
 		{{/if}}
       </div>
 </div> 
-@*<center style="margin: 2em 0;"><button id="btnSaveItem" class="btn btnSave">Išsaugoti</button><a style="margin-left: 2%;" id="aCancelItem" href="#">Atšaukti</a></center>
-*@
-
 {{view App.FormBottomView target="App.listAllController"}}
-
 <div class="uploadDocsContainer" id="dialoguploadDocsContainer"></div>

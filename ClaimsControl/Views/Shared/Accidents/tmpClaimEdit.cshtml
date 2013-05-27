@@ -8,27 +8,27 @@
 {{/unless}}
 {{#compare typeID "===" "6"}} 
 	<div class='left w45pr'>
-	{{updatableField vehicleID labelType="Top"}}
-	{{updatableField days labelType="Top" classes="days" event="keyUp_shallChangeLossAmount"}}
-	{{updatableField perDay labelType="Top" classes="perDay" event="keyUp_shallChangeLossAmount"}}
+	{{updatableField vehicleID labelType="Top" classes="wrapper:'leftBlock'" }}
+	{{updatableField days labelType="Top" classes="wrapper:'leftBlock days'" event="keyUp_shallChangeLossAmount"}}
+	{{updatableField perDay labelType="Top" classes="wrapper:'leftBlock perDay'" event="keyUp_shallChangeLossAmount"}}
 	</div><div class='right w45pr'>
-	{{updatableField lossAmount attr="DISABLED" classes="disabled inputSum" labelType="Top" sTitle="Prastovos nuostolio suma"}}@*(Math.round((Claim.days*Claim.PerDay*100))/100)*@	
+	{{updatableField lossAmount attr="DISABLED" classes="wrapper:'leftBlock perDay disabled inputSum'" labelType="Top" sTitle="Prastovos nuostolio suma"}}@*(Math.round((Claim.days*Claim.PerDay*100))/100)*@	
 	</div>
 {{else}}
 	<div class='left w45pr'>
-	{{updatableField vehicleID labelType="Top" Editable="{\"EditThis\":true}" }}
-	{{updatableField lossAmount labelType="Top"}}
-	{{updatableField insPolicyID labelType="Top" List="{\"Source\":\"proc_InsPolicies_forThisAccident\",\"tblUpdate\":\"tblInsPolicies\"}"}}
+	{{updatableField vehicleID labelType="Top" classes="wrapper:'leftBlock'" Editable="{\"EditThis\":true}" }}
+	{{updatableField lossAmount labelType="Top" classes="wrapper:'leftBlock'" }}
+	{{updatableField insPolicyID labelType="Top" classes="wrapper:'leftBlock'" List="{\"Source\":\"proc_InsPolicies_forThisAccident\",\"tblUpdate\":\"tblInsPolicies\"}"}}
 
 	</div><div class='right w45pr'>
 	{{#compare typeID "===" "1"}} 
-		{{updatableField isTotalLoss labelType="Top"}}
+		{{updatableField isTotalLoss labelType="Top" classes="wrapper:'leftBlock'"}}
 	{{/compare}}
 	{{#compare typeID "===" "2"}} 
-		{{updatableField isInjuredPersons id="IsInjuredPersons" labelType="Top"}}
+		{{updatableField isInjuredPersons id="IsInjuredPersons" labelType="Top" classes="wrapper:'leftBlock'"}}
 	{{/compare}}
-	{{updatableField insuranceClaimAmount id="InsuranceClaimAmount" labelType="Top"}}
-	{{updatableField insurerClaimID labelType="Top"}}
+	{{updatableField insuranceClaimAmount id="InsuranceClaimAmount" labelType="Top" classes="wrapper:'leftBlock'"}}
+	{{updatableField insurerClaimID labelType="Top" classes="wrapper:'leftBlock'"}}
 	</div>
 {{/compare}}
 </div>

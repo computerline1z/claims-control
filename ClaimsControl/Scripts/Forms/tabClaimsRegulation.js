@@ -156,14 +156,22 @@
 
   App.actionViewController = Em.ObjectController.create({
     parentView: {},
+    init: function() {},
     title: "",
     childViewName: "",
+    userData: {},
     goToOtherView: function(e) {
       var p;
 
       p = $(e.target).data("ctrl");
       this.set("title", p.title).set("childViewName", "view_" + p.view);
-      return this.parentView.set("actionView", this.view_wrapper).rerender();
+      this.parentView.set("actionView", this.view_wrapper).rerender();
+      return Em.run.next(function() {
+        $("#contentOfClaimReg").find("div.row").find("div.ExtendIt:first").data("ctrl").Value = oDATA.GET("userData").emData[0].userID;
+        return oCONTROLS.UpdatableForm({
+          frm: "#contentOfClaimReg"
+        });
+      });
     },
     saveForm: function(e) {
       return alert("saveForm");
@@ -206,6 +214,22 @@
       view_task: Em.View.extend({
         viewName: "action_task",
         templateName: 'tmpAction_task'
+      }),
+      view_addCompensation: Em.View.extend({
+        viewName: "addCompensation",
+        templateName: 'tmpAddCompensation'
+      }),
+      view_addInsuranceBenefit: Em.View.extend({
+        viewName: "addInsuranceBenefit",
+        templateName: 'tmpAddInsuranceBenefit'
+      }),
+      view_addInvoice: Em.View.extend({
+        viewName: "addInvoice",
+        templateName: 'tmpAddInvoice'
+      }),
+      view_addPropReport: Em.View.extend({
+        viewName: "addPropReport",
+        templateName: 'tmpAddPropReport'
       })
     })
   });

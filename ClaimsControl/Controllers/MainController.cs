@@ -70,11 +70,11 @@ namespace ClaimsControl.Controllers {
 			return Json(
 				new {
 					ver = ver,
-					//jsonObj = new {//šitam visada atnaujinu objektus
-					//   proc_topDrivers = acc.GetJSON_proc_Drivers(true),
-					//   proc_topVehicles = acc.GetJSON_proc_Vehicles(true),
-					//   proc_topInsPolicies = acc.GetJSON_proc_InsPolicies(true)
-					//},
+					jsonObj = new {//šitam visada atnaujinu objektus
+						proc_Activity = acc.GetJSON_proc_Activity(),
+						proc_ClaimDamage = acc.GetJSON_proc_ClaimDamage(),
+						proc_ClaimCompensation = acc.GetJSON_proc_ClaimCompensation()
+					},
 					templates = (tmp) ? new {
 						tmpClaimsMain = RenderPartialViewToString("Claims/tmpClaimsMain"),
 						tmpClaimView = RenderPartialViewToString("Claims/tmpClaimView"),

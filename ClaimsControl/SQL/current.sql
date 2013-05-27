@@ -1,3 +1,100 @@
+
+
+------------------1.019 local --------------------------------------------------------------------------------------------------
+USE [ClaimsControl]
+GO
+/****** Object:  Table [dbo].[tblActivity]    Script Date: 05/05/2013 16:59:24 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tblActivity](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[ClaimID] [int] NOT NULL,
+	[ActivityTypeID] [int] NOT NULL,
+	[FromText] [nvarchar](500) NULL,
+	[From] [int] NULL,
+	[ToText] [nvarchar](500) NULL,
+	[To] [int] NULL,
+	[Subject] [nvarchar](200) NULL,
+	[Body] [nvarchar](max) NULL,
+	[DueDate] [date] NULL,
+	[IsDeleted] [bit] NOT NULL,
+ CONSTRAINT [PK_tblActivity] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+CREATE TABLE [dbo].[tblClaimDamage](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[ClaimID] [int] NOT NULL,
+	[Amount] [float] NOT NULL,
+	[Purpose] [nvarchar](200) NOT NULL,
+	[Note] [nvarchar](max) NULL,
+	[Type] [int] NOT NULL,
+	[IsDeleted] [bit] NOT NULL,
+ CONSTRAINT [PK_tblClaimDamage] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+CREATE TABLE [dbo].[tblClaimCompensation](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[ClaimID] [int] NOT NULL,
+	[Date] [date] NOT NULL,
+	[Amount] [float] NOT NULL,
+	[Note] [nchar](10) NULL,
+	[IsDeleted] [bit] NOT NULL,
+ CONSTRAINT [PK_tblClaimCompensation] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[tblActivity] ADD  CONSTRAINT [DF_tblActivity_IsDeleted]  DEFAULT ((0)) FOR [IsDeleted]
+GO
+ALTER TABLE [dbo].[tblClaimDamage] ADD  CONSTRAINT [DF_tblClaimDamage_IsDeleted]  DEFAULT ((0)) FOR [IsDeleted]
+GO
+ALTER TABLE [dbo].[tblClaimCompensation] ADD  CONSTRAINT [DF_tblClaimCompensation_IsDeleted]  DEFAULT ((0)) FOR [IsDeleted]
+GO
+
+
+
+--Atsiþymim apie naujas lenteles
+ALTER TABLE tblObjects_ID DROP COLUMN tblID_trinti
+GO
+INSERT INTO tblObjects_ID(tblName,Date)
+VALUES('tblActivity', GETDATE()),--48
+('tblClaimDamage', GETDATE()),--49
+('tblClaimCompensation', GETDATE()--50)
+GO
+--Indeksuojam
+CREATE INDEX IX_tblUsersActivities_Updates_TableID ON tblUsersActivities_Updates (TableID)
+GO
+CREATE INDEX IX_tblUsersActivities_Updates_RecordID ON tblUsersActivities_Updates (RecordID)
+GO
+
+--pridedam tipus
+ALTER TABLE dbo.tblActivity ADD CONSTRAINT FK_tblActivity_tblActivityTypes FOREIGN KEY(ActivityTypeID)REFERENCES tblActivityTypes(ID) 
+GO
+INSERT INTO tblActivityTypes(ActivityType)
+VALUES('MailSend'),('MailUpload'),('Task'),('Phone'),('Meeting'),('Note')
+GO
+
+ALTER TABLE dbo.tblActivity ADD CONSTRAINT FK_tblActivity_tblClaims FOREIGN KEY(ClaimID)REFERENCES tblClaims(ID) 
+GO
+ALTER TABLE dbo.tblClaimDamage ADD CONSTRAINT FK_tblClaimDamage_tblClaims FOREIGN KEY(ClaimID)REFERENCES tblClaims(ID) 
+GO
+ALTER TABLE dbo.tblClaimCompensation ADD CONSTRAINT FK_tblClaimCompensation_tblClaims FOREIGN KEY(ClaimID)REFERENCES tblClaims(ID) 
+GO
+
+SELECT * FROM tblUsersActivities_Updates WHERE Action=0 AND
+
+SELECT * FROM tblUsersActivities_Updates WHERE Action=0 AND TableID IN (48,49,50)
+
+------------------1.018 no updates --------------------------------------------------------------------------------------------------
 ------------------1.017 no updates --------------------------------------------------------------------------------------------------
 ------------------1.016 local local and ClaimsControl --------------------------------------------------------------------------------------------------
 ALTER TABLE tblClaims ADD DateNotification date NULL
@@ -55,29 +152,17 @@ proc_Update_AddNew
 
 -------------------------------------------------------------------------------------------------------------------------------------
 --SELECT * FROM tblDocGroups
-
 --UPDATE tblDocGroups SET Name='Transporto priemoniø dokumentai' WHERE Name='TP Dokumentai'
-
-
 --SELECT * FROM tblAccidents WHERE AccountID=3
-
 ----SELECT * FROM tblDocsInAccident WHERE AccidentID IN (SELECT ID FROM tblAccidents WHERE AccountID=3)
-
 --SELECT * FROM [ClaimsControl].[dbo].[tblDocs] WHERE UserID IN (Select ID from tblUsers WHERE AccountID=3)
-
 --Select * from tblDrivers WHERE AccountID=3
-
 --Select * from tblVehicles WHERE AccountID=3
-
 --SELECT * FROM tblVehicleTypes
-
 --UPDATE tblDocGroups SET Name='Transporto priemoniø dokumentai' WHERE Name='TP Dokumentai'
-
 --UPDATE tblVehicleTypes SET Name='Priekaba, puspriekabë' WHERE ID=2--Furgonas
 --UPDATE tblVehicleTypes SET Name='Krovininis automobilis' WHERE ID=3--Savivartis
 --UPDATE tblVehicleTypes SET Name='Lengvasis automobilis' WHERE ID=4--Puspriekabë
 --UPDATE tblVehicleTypes SET Name='Autobusas' WHERE ID=5--Priekaba
-
-
 --UPDATE tblVehicles SET TypeID=1 WHERE TypeID IN(6,7,8)
 --DELETE FROM tblVehicleTypes WHERE ID IN(6,7,8)

@@ -76,11 +76,22 @@ App.actionViewController = Em.ObjectController.create(
 	#wrapperView:{},
 	#wrapperView:App.ActionWrapperView,
 	#childView:App.Action_createEmail,
-	title:"",childViewName:""
+	init: -> 
+		#@.set('userData',oDATA.GET("userData").emData[0])
+		#me=@
+		#oDATA.execWhenLoaded(["userData"], ()->console.log(me); me.set('userData',oDATA.GET("userData").emData[0]))
+	title:"",childViewName:"", userData:{}
 	goToOtherView: (e) -> 
 		p=$(e.target).data("ctrl")
 		@.set("title",p.title).set("childViewName","view_"+p.view);
 		@parentView.set("actionView",@view_wrapper).rerender()
+		Em.run.next(->
+			#$("#claimsFromField").find("div.ExtendIt").data("ctrl").Value=oDATA.GET("userData").emData[0].userID
+			$("#contentOfClaimReg").find("div.row").find("div.ExtendIt:first").data("ctrl").Value=oDATA.GET("userData").emData[0].userID
+			
+			#$("#claims-from-input").data("ctrl").Value=oDATA.GET("userData").emData[0].userID;#pagal nutylejima esamas useris
+			oCONTROLS.UpdatableForm(frm:"#contentOfClaimReg")
+		)
 	saveForm: (e) ->
 		alert("saveForm")
 	cancelForm: (e) ->
@@ -110,6 +121,18 @@ App.actionViewController = Em.ObjectController.create(
 		),
 		view_task: Em.View.extend(
 			viewName:"action_task", templateName: 'tmpAction_task'
+		),
+		view_addCompensation: Em.View.extend(
+			viewName:"addCompensation", templateName: 'tmpAddCompensation'
+		),
+		view_addInsuranceBenefit: Em.View.extend(
+			viewName:"addInsuranceBenefit", templateName: 'tmpAddInsuranceBenefit'
+		),
+		view_addInvoice: Em.View.extend(
+			viewName:"addInvoice", templateName: 'tmpAddInvoice'
+		),
+		view_addPropReport: Em.View.extend(
+			viewName:"addPropReport", templateName: 'tmpAddPropReport'
 		)
 	)
 )

@@ -17,7 +17,7 @@ App.HidePreviousWindow = Ember.Mixin.create({
 });
 App.NavbarController = Em.Controller.extend({
 	currentState: null,
-	fnSetNewTab: function (newState, viewIx,newOutlet) {
+	fnSetNewTab: function (p) {//newState, viewIx,newOutlet
 		var controller = this;
 		var lastState = this.get("currentState");
 		if (lastState) {
@@ -30,25 +30,28 @@ App.NavbarController = Em.Controller.extend({
 			oDATA.fnLoadMain();
 		}
 		//
-			var fnUnhideOutlet=function(outlet,viewIx) {
+			var fnUnhideOutlet=function(outlet,viewIx,transparent) {
 				Em.run.next({outlet:outlet,viewIx:viewIx}, function () {
-					$('#' + this.outlet).removeClass("hidden");//Atslepiam naujai aktyvų taba
+					var outlet=$('#' + this.outlet);
+					outlet.removeClass("hidden");//Atslepiam naujai aktyvų taba
+					if(!transparent){outlet.removeClass("transparent");}
+					else{outlet.addClass("transparent");}
 					if (this.viewIx>-1){ $('#ulMainMenu a:eq(' + this.viewIx + ')').removeClass("notactive").addClass("selected"); }//Pazymim naujo menu taba
 				})				
 			}
 			$('#' + controller.get("currentOutlet")).addClass("hidden"); //Paslepiam aktyvų taba .empty()
 
-			if  (!newOutlet){newOutlet=newState;}//else{$('#' + controller.get("currentOutlet")).empty();}						
-			if  (controller.currentState||newOutlet===newState){
-				controller.set("currentState", newState).set("currentOutlet", newOutlet);
-				console.log("fnSetNewTab1:"+newOutlet+";"+viewIx);
-				fnUnhideOutlet(newOutlet,viewIx);return true;
+			if  (!p.newOutlet){p.newOutlet=p.newState;}//else{$('#' + controller.get("currentOutlet")).empty();}						
+			if  (controller.currentState||p.newOutlet===p.newState){
+				controller.set("currentState", p.newState).set("currentOutlet", p.newOutlet);
+				console.log("fnSetNewTab1:"+p.newOutlet+";"+p.viewIx);
+				fnUnhideOutlet(p.newOutlet,p.viewIx,p.transparent);return true;
 			} else {//jei nėra currentState ko gero buvo refresh, tai nukeliam į pradinį psl jei to reikia
-				newOutlet=(newOutlet==="tabEmpty")?"tabAccidents":newOutlet;// galim visada mest i tabAccidents";
-				controller.set("currentState", newOutlet).set("currentOutlet", newOutlet);
-				App.router.transitionTo(newOutlet);
-				console.log("fnSetNewTab2:"+newOutlet+";"+viewIx);
-				fnUnhideOutlet("",viewIx);return false;				
+				p.newOutlet=(p.newOutlet==="tabEmpty")?"tabAccidents":p.newOutlet;// galim visada mest i tabAccidents";
+				controller.set("currentState", p.newOutlet).set("currentOutlet", p.newOutlet);
+				App.router.transitionTo(p.newOutlet);
+				console.log("fnSetNewTab2:"+p.newOutlet+";"+p.viewIx);
+				fnUnhideOutlet("",p.iewIx,p.transparent);return false;				
 			}
 	}
 });

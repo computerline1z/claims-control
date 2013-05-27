@@ -92,14 +92,9 @@ var oCONTROLS = {
 			if (!eOpt) {return true;}
 			//log("-------------------------------");
 			//log("Elementas:"+e[0].tagName+"; id:"+e.attr("id")+"; klase:"+e.attr("class")+"; e.data('ctrl'):"+typeof e.data("ctrl"));
-			if (typeof eOpt.Control !== "undefined") {
-				if (eOpt.Control === "swfUpload" && typeof frmOpt.id === "undefined") {
-					return true;
-				} else {
-					e[eOpt.Control](eOpt);
-					return true;
-				}
-			} //swfUpload nerenderinam jei naujas dokumentas
+			// if (typeof eOpt.Control !== "undefined") {
+				// if (eOpt.Control === "swfUpload" && typeof frmOpt.id === "undefined") {return true;} else {e[eOpt.Control](eOpt);return true;}
+			// } //swfUpload nerenderinam jei naujas dokumentas
 
 			if (data !== "NoData") {
 				var eCols = data.Cols;
@@ -122,7 +117,13 @@ var oCONTROLS = {
 			if (data !== "NoData") {
 				col = $.extend({}, data.Cols[ix]);
 			} //Naujas objektas turi but
+			if (eOpt.classes) {//ensure eOpt.classes is object
+				if (typeof eOpt.classes==="string"){eOpt.classes={span:"",input:eOpt.classes};}
+			} else {
+				eOpt.classes={span:"",input:""};
+			}
 			col = $.extend(true, col, eOpt); //overridinu data.Cols<----e.data('ctrl')
+			
 			var Type = (col.Type) ? col.Type : ((col.List) ? "List" : ""); // (col.List)?"List":col.Type;
 			if (Type === undefined) {alert("Nesusiparsino ctrl elemento objFunc.js-UpdatableForm (n�ra Type)");return true;}
 			var AddToClasses = "ui-widget-content " //ui-corner-all
@@ -130,8 +131,8 @@ var oCONTROLS = {
 			if (Type === 'Integer' || Type === 'Decimal') {AddToClasses += " number";}
 			else if (Type === "List") {col.Type = "List";}
 			else if (Type) {if (Type.search("Date") !== -1) {AddToClasses += " date";}}    //classes+' text', textarea,
+			col.classes.input= col.classes.input+" "+AddToClasses;
 			
-			col.classes = (col.classes) ? col.classes + " " + AddToClasses : AddToClasses;
 			if (typeof col.Value !== "number"&&typeof col.Value !== "boolean") {col.Value = (col.Value) ? col.Value.replace(/'/g, "\"") : "";} //Kitaip gaidinasi	
 			for (var prop in col) {
 				if (prop === 'List') {
@@ -158,22 +159,22 @@ var oCONTROLS = {
 				data_ctrl = data_ctrl.replace("match('date')", "match(date)").replace("lessThanOrEqualTo(new Date())","lessThanOrEqualTo(new Date(),\\&quot;Data negali būti didesnė už šiandieną.\\&quot;)");
 			}
 			$.extend(col, {data_ctrl: data_ctrl}, {label: {"txt": sTitle,"type": col.labelType}});
-			//var CtrlOpt={ "Value": Value, "data_ctrl": data_ctrl, "title": sTitle, "classes": classes, "id": id, "attr": attr, "label": { "txt": sTitle, "type": col.labelType} }
+			//var CtrlOpt={ "Value": Value, "data_ctrl": data_ctrl, "title": sTitle, "classes": {span,input}, "id": id, "attr": attr, "label": { "txt": sTitle, "type": col.labelType} }
 			if (Type === 'Boolean' || Type === 'checkbox') {
 				eHTML = oCONTROLS.chk(col);
 				$(eHTML).prependTo(e);
 			}
-			else if (Type === 'String' || Type === 'Email' || Type === "text" || Type === "textarea" || Type === "hidden") {
+			else if (Type === 'String' || Type === 'Email' || Type === "text" || Type === "Textarea" || Type === "hidden") {
 				var len = (typeof col.LenMax === 'undefined') ? 0 : col.LenMax;
 				if (Type === "hidden") {
 					eHTML += oCONTROLS.hidden(col);
 					input = $(eHTML).prependTo(e).parent().find('input:first');
-				} else if (len < 101 && Type !== "textarea") {
+				} else if (len < 101 && Type !== "Textarea") {
 					eHTML += oCONTROLS.txt(col);
 					input = $(eHTML).prependTo(e).parent().find('input:first');
 				} else {
 					eHTML += oCONTROLS.txtarea(col);
-					input = $(eHTML).prependTo(e).parent().find('textarea:first');
+					input = $(eHTML).prependTo(e).parent().find('Textarea:first').autosize(); 
 				}
 			}
 			else if (Type === 'Integer' || Type === 'Decimal') {
@@ -364,7 +365,7 @@ var oCONTROLS = {
 		//disabled - dadedam klase ui-state-disabled
 		//green - dadedam klase ui-state-green
 		//if(p.type!='undefined') { if(p.type=='green') { oCONTROLS.AddToProperty(p, 'classes', 'ui-state-green'); }   }
-		return ((p.attr) ? p.attr + " " : "") + ((p.id) ? "id='" + p.id + "' " : "") + ((p.style) ? 'style="' + p.style + '" ' : '') + ((p.notabstop) ? "tabindex='-1' " : "") + ((p.title) ? "title='" + p.title + "' " : "") + ((p.data_ctrl) ? "data-ctrl='" + p.data_ctrl + "' " : "") + ((p.classes) ? "class='" + p.classes + "' " : "");
+		return ((p.attr) ? p.attr + " " : "") + ((p.id) ? "id='" + p.id + "' " : "") + ((p.style) ? 'style="' + p.style + '" ' : '') + ((p.notabstop) ? "tabindex='-1' " : "") + ((p.title) ? "title='" + p.title + "' " : "") + ((p.data_ctrl) ? "data-ctrl='" + p.data_ctrl + "' " : "") + ((p.classes.input) ? "class='" + p.classes.input + "' " : "");
 
 		//return ((p.attr)?p.attr:'')+((p.id)?'id="'+p.id+'" ':'')+((p.style)?"style='"+p.style+"' ":"")+((p.notabstop)?'tabindex="-1" ':'')+((p.title)?'title="'+p.title+'" ':'')+((p.data_ctrl)?'data-ctrl="'+p.data_ctrl+'" ':'')+((p.classes)?'class="'+p.classes+'" ':'');
 	},
@@ -375,7 +376,14 @@ var oCONTROLS = {
 		if (typeof p.label === 'undefined' || p.label === 'None') {
 			return t;
 		} else {
-			return (p.label.type === "Top") ? "<label class='toplabel'><span>" + p.label.txt + "</span>" + t + "</label>" : "<label class='leftlabel'><span>" + p.label.txt + ":</span>" + t + "</label>";
+			// return (p.label.type === "Top") ? "<label class='toplabel'><span>" + p.label.txt + "</span>" + t + "</label>" : "<label class='leftlabel'><span>" + p.label.txt + ":</span>" + t + "</label>";
+			// return (p.label.type === "Top")
+			// ? 
+			// "<label class='toplabel'><span>" + p.label.txt + "</span>" + t + "</label>" 
+			// : 
+			// "<label class='leftlabel'><span>" + p.label.txt + ":</span>" + t + "</label>";
+			var Top=(p.label.type === "Top")?true:false;
+			return "<label class='"+((Top)?"toplabel":"leftlabel")+"'><span "+((p.classes.span)?"class='"+p.classes.span+"'":"")+">" + p.label.txt + ((Top)?"":":")+"</span>" + t + "</label>" 
 		}
 	},
 	//appendLabel: function(p, t) { if(typeof p.label==='undefined') { return t; } else { return (p.label.type==="Top")?"<label><div"+((p.label.classes)?" class='"+p.label.classes+"'":"")+">"+p.label.txt+"</div>"+t+"</label>":"<label"+((p.label.classes)?" class='"+p.label.classes+"'":"")+">"+p.label.txt+t+"</label>"; } },
@@ -529,16 +537,11 @@ var oCONTROLS = {
 			});
 		},
 		lbltxt_inline_btnConfirm: function (d) {
-			//d={ctrl:??,lblTitle:??,txt:{Title:??,Value:??}, btnTitle:??,Data:{tblToUpdate:??,UpdateField:??,id:??,Validity:??},fnCallBack:??,fnPostInit:?? }
-
-			//d={ctrl:??,lblTitle:??,txt:{Title:??,Value:??}, btnTitle:??,Data:{tblToUpdate:??,Validity:??},DataToSave:{Data:[??],Fields:[?],id:??},fnCallBack:??,fnPostInit:?? }
-			//var primaryHTML=ctrl.html();
 			d.ctrl.html(oCONTROLS.lbl(d.lblTitle) + oCONTROLS.txt(d.txt.Title, d.txt.Value, "{\"Validity\":\"" + d.Data.Validity + "\"}") + oCONTROLS.btnOKimg(d.btnTitle));
 			if (typeof d.fnPostInit != 'undefined') d.fnPostInit();
 			d.ctrl.find("button").bind('click', function (e) {
 				e.preventDefault();
 				if (oGLOBAL.ValidateCtrlsArr([d.ctrl.find("input")])) {
-					//var DataToSave={ Data: [d.ctrl.find("input").val()], Fields: [d.Data.UpdateField] }; DataToSave["id"]=d.Data.id;
 					d.DataToSave.Data[0] = d.ctrl.find("input").val();
 					SERVER.update("Edit", d.DataToSave, d.Data.tblToUpdate, d.fnCallBack, "");
 				}
