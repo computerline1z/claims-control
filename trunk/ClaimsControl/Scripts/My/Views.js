@@ -21,18 +21,29 @@ Handlebars.registerHelper('updatableField', function (prop, options) {
 	//v = (typeof (v) === "string") ? v.replace(/'/g, "\"") : v;
 	if (typeof (v) === "string"){v=v.replace(/'/g, "\\&quot;").replace(/"/g, '\\&quot;');}
 	
-	var cl = (h.classes)? h.classes : "";//UpdateField
+	var classes = (h.classes)?h.classes: "",classesObject="";//UpdateField
+	"dfgdgsf{}".indexOf(">")
+	if (classes.indexOf(":")>-1){ // classes=""wrapper":"class1 class1","span":"class3, class4", "input":"class5 class6""
+		var clObject={},clArr=classes.split(","),classesObject={},isEmpty=true;classes="";
+		clArr.forEach(function(item,i){
+			var itemArr=item.split(":"), name=$.trim(itemArr[0]).replace(/'/g,""), value=$.trim(itemArr[1]).replace(/'/g,"");
+			if (name==="wrapper"){classes=value;}//wrapper
+			else{classesObject[name]=value;isEmpty=false;}//span, input
+		})
+		classesObject=(isEmpty)?'':',"classes":' +JSON.stringify(classesObject);
+		//classes=(classes.wrapper)?classes.wrapper:"";
+		//console.log(classesObject);
+	}
 	var st =  (h.style)? ("style='"+h.style+"'") : "";
-	var id = h.id; id = (id) ? "\"id\":\"" + id + "\"," : "";
-	var lblT = h.labelType; lblT = (lblT) ? "\"labelType\":\"" + lblT + "\"," : "";
-	var sTitle = h.sTitle; sTitle = (sTitle) ? "\"sTitle\":\"" + sTitle + "\"," : "";
-	var attr = h.attr; attr = (attr) ? "\"attr\":\"" + attr + "\"," : "";
-	var List = h.List; List = (List) ? "\"List\":" + List + "," : ""; //List yra objektas ir jam kabuciu nereikia
-	var Editable = h.Editable; Editable = (Editable) ? "\"Editable\":" + Editable + "," : ""; //Editable yra objektas ir jam kabuciu nereikia
-	//var retString = " class='ExtendIt "+((h.classes)?h.classes:"")+"' "+st+" data-ctrl='{\"Value\":" + (v===""?"\"\"":v) + ",\"Field\":\"" + f.firstBig() + "\",\"classes\":\"UpdateField\"," + id + lblT + attr+List+Editable;
-	var retString = " class='ExtendIt "+((h.classes)?h.classes:"")+"' "+st+" data-ctrl='{\"Value\":\"" + v + "\",\"Field\":\"" + f.firstBig() + "\",\"classes\":\"UpdateField\"," + id + lblT+sTitle + attr+List+Editable;
+	var id = h.id; id = (id) ? ",\"id\":\"" + id+"\"" : "";
+	var lblT = h.labelType; lblT = (lblT) ? ",\"labelType\":\"" + lblT+"\"": "";
+	var sTitle = h.sTitle; sTitle = (sTitle) ? ",\"sTitle\":\"" + sTitle  +"\"": "";
+	var attr = h.attr; attr = (attr) ? ",\"attr\":\"" + attr +"\"": "";
+	var List = h.List; List = (List) ? ",\"List\":" + List  : ""; //List yra objektas ir jam kabuciu nereikia
+	var Editable = h.Editable; Editable = (Editable) ? ",\"Editable\":" + Editable  : ""; //Editable yra objektas ir jam kabuciu nereikia
 
-	if (retString.charAt(retString.length - 1) === ",") {retString = retString.slice(0, -1); } //iškertam paskutini kalbeli jei yra
+	var retString = " class='ExtendIt"+((classes)?" "+classes:"")+"' "+st+" data-ctrl='{\"Value\":\"" + v + "\",\"Field\":\"" + f.firstBig()+"\"" + classesObject+ id + lblT+sTitle + attr+List+Editable;
+	//if (retString.charAt(retString.length - 1) === ",") {retString = retString.slice(0, -1); } //iškertam paskutini kalbeli jei yra
 	if (h.tag) {retString="<"+h.tag+ retString + "}'></"+h.tag+">";} else  {retString="<div"+ retString + "}'></div>";}
 	return new Handlebars.SafeString(retString );
 });

@@ -118,9 +118,6 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
-    <Reference Include="WebActivator">
-      <HintPath>packages\WebActivator.1.5.1\lib\net40\WebActivator.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Converters.cs" />
@@ -172,6 +169,8 @@
     <Content Include="App_Data\MailTmpl\LT\ChangedMail.htm" />
     <Content Include="App_Data\MailTmpl\LT\NewUserPsw.htm" />
     <Content Include="App_Data\MailTmpl\LT\ResetUserPsw.htm" />
+    <None Include="Content\less\grid-system-mixins.less" />
+    <None Include="Content\less\grid-system.less" />
     <None Include="Content\less\notify.less" />
     <None Include="Content\less\jquery.validity.less" />
     <None Include="Content\less\my.less" />

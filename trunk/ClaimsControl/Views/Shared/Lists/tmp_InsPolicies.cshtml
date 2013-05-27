@@ -4,38 +4,43 @@ data-ctrl='{"NewRec":1,"Source":"proc_InsPolicies","tblUpdate":"tblInsPolicies"}
       <li><a href="#tabs-policy">Polisas ir draudėjas</a></li>
       <li><a href="#tabs-docs">Pateikiami dokumentai</a></li>
    </ul>
+   
+   
+<!--    <div class='ExtendIt leftBlock' data-ctrl='{"Field":"TypeID","classes":{"span":"w30pr","input":"w70pr"}}'></div>
+ -->   
+   
    <div id="tabs-policy" style="padding:1em 0;">
 		<div class="container" style="border-bottom:1px solid #e6e6e6; padding:8px">
 			<h5>Draudimo poliso duomenys</h5>
          <div class='left w45pr'>
-            <div class='ExtendIt' data-ctrl='{"Field":"ClaimTypeID","classes":"UpdateField","labelType":"Left","List":{"excludeFromList":[0,6]}}'></div>
-            <div class='ExtendIt' data-ctrl='{"Field":"PolicyNumber","classes":"UpdateField","labelType":"Left"}'></div>
+            <div class='ExtendIt leftBlock' data-ctrl='{"Field":"ClaimTypeID","classes":{"span":"w30pr","input":"w70pr"},"labelType":"Left","List":{"excludeFromList":[0,6]}}'></div>
+            <div class='ExtendIt leftBlock' data-ctrl='{"Field":"PolicyNumber","classes":{"span":"w30pr","input":"w70pr"},"labelType":"Left"}'></div>
          </div>
          <div class='right w45pr'>
-            <div class='ExtendIt' data-ctrl='{"Field":"InsurerID","classes":"UpdateField","labelType":"Left"}'></div>
-            <div class='ExtendIt' data-ctrl='{"Field":"EndDate","classes":"UpdateField","labelType":"Left","Plugin":{"datepicker":{}}}'></div>
+            <div class='ExtendIt leftBlock' data-ctrl='{"Field":"InsurerID","classes":{"span":"w30pr","input":"w70pr"},"labelType":"Left"}'></div>
+            <div class='ExtendIt leftBlock' data-ctrl='{"Field":"EndDate","classes":{"span":"w30pr","input":"w70pr"},"labelType":"Left","Plugin":{"datepicker":{}}}'></div>
          </div>
 		</div>
 
 		<div class="container text" style="border-bottom:1px solid #e6e6e6; padding:8px">
 			<h5>Žalų reguliavimo nustatymai</h5>
-			<span>Pateikti visus žalos dokumentus draudikui per</span><span class='ExtendIt inputInLine w5em' data-ctrl='{"Field":"Warn_InfoAfterAcc"}'></span><span> d. nuo įvykio datos.</span></br>
-			<span>Pradėti rodyti įspėjimą likus</span><span class='ExtendIt inputInLine w5em' data-ctrl='{"Field":"Warn_PaymentAfterPapers"}'></span><span> d. iki žalos dokumentų draudikui pateikimo termino pabaigos.</span></br>
-			<span>Draudimo išmoka turi būti sumokėta per</span><span class='ExtendIt inputInLine w5em' data-ctrl='{"Field":"Warn_SystemOfPayTerm"}'></span><span> d. nuo dokumentų pateikimo datos.</span></br>
+			<span>Pateikti visus žalos dokumentus draudikui per</span><span class='ExtendIt leftBlock inputInLine w5em' data-ctrl='{"Field":"Warn_InfoAfterAcc"}'></span><span> d. nuo įvykio datos.</span></br>
+			<span>Pradėti rodyti įspėjimą likus</span><span class='ExtendIt leftBlock inputInLine w5em' data-ctrl='{"Field":"Warn_PaymentAfterPapers"}'></span><span> d. iki žalos dokumentų draudikui pateikimo termino pabaigos.</span></br>
+			<span>Draudimo išmoka turi būti sumokėta per</span><span class='ExtendIt leftBlock inputInLine w5em' data-ctrl='{"Field":"Warn_SystemOfPayTerm"}'></span><span> d. nuo dokumentų pateikimo datos.</span></br>
 		</div>
 
 		<div class="container" style="border-bottom:1px solid #e6e6e6; padding:8px">
 			<h5>Pranešimo draudimo kompanijai apie žalą nustatymai</h5>
-         <center>
-            <div class='ExtendIt' data-ctrl='{"Field":"MailsAddresses","classes":"UpdateField","labelType":"Top","textAreaRows":2}'></div>
-         </center>
+<!--          <center> </center>"classes":{"span":"w30pr","input":"w70pr"},
+ -->     <div class='ExtendIt leftBlock' data-ctrl='{"Field":"MailsAddresses","labelType":"Top","textAreaRows":2,"classes":{"input":"row"}}'></div>
+        
          <div class='left w45pr'>
-            <div class='ExtendIt' data-ctrl='{"Field":"InsuredName","classes":"UpdateField","labelType":"Left"}'></div>
-            <div class='ExtendIt' data-ctrl='{"Field":"InsuredAddress","classes":"UpdateField","labelType":"Left"}'></div>
+            <div class='ExtendIt leftBlock' data-ctrl='{"Field":"InsuredName","classes":{"span":"w30pr","input":"w70pr"},"labelType":"Left"}'></div>
+            <div class='ExtendIt leftBlock' data-ctrl='{"Field":"InsuredAddress","classes":{"span":"w30pr","input":"w70pr"},"labelType":"Left"}'></div>
          </div>
          <div class='right w45pr'>
-            <div class='ExtendIt' data-ctrl='{"Field":"InsuredCode","classes":"UpdateField","labelType":"Left"}'></div>
-            <div class='ExtendIt' data-ctrl='{"Field":"InsuredContactID","classes":"UpdateField","labelType":"Left"}'></div>
+            <div class='ExtendIt leftBlock' data-ctrl='{"Field":"InsuredCode","classes":{"span":"w30pr","input":"w70pr"},"labelType":"Left"}'></div>
+            <div class='ExtendIt leftBlock' data-ctrl='{"Field":"InsuredContactID","classes":{"span":"w30pr","input":"w70pr"},"labelType":"Left"}'></div>
          </div>
 		</div>
    </div>

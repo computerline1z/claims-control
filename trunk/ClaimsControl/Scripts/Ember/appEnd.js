@@ -22,7 +22,7 @@ App.Router = Em.Router.extend({
 		tabAccidents: Em.Route.extend({
 			route: '/',
 			connectOutlets: function (router, context) {
-				MY.NavbarController.fnSetNewTab(router.currentState.name, 0);
+				MY.NavbarController.fnSetNewTab({newState:router.currentState.name, viewIx:0});//newState, viewIx,newOutlet
 				$("#divAccidentsList").find("div.col2").css("top","0");//Pataisyt šoninį stulpelį, kad būtų lygiai su viršum
 			}//,
 			//uploadFiles:function (e){
@@ -32,7 +32,7 @@ App.Router = Em.Router.extend({
 		tabClaims: Em.Route.extend({
 			route: '/claims',
 			connectOutlets: function (router, context) {
-				MY.NavbarController.fnSetNewTab(router.currentState.name, 1);
+				MY.NavbarController.fnSetNewTab({newState:router.currentState.name, viewIx:1});
 				oDATA.fnLoad2({ url: "Main/tabClaims", callBack: function () {
 						App.claimsStart();
 						router.get('applicationController').connectOutlet('claimsOutlet', 'tabClaims');		
@@ -47,7 +47,7 @@ App.Router = Em.Router.extend({
 			// },
 			claimRegulation: function (router, context){
 				//App.listsStart();//Atnaujinam, jai buvo keista
-				//MY.NavbarController.fnSetNewTab(router.currentState.name, 1);
+				MY.NavbarController.fnSetNewTab({newState:router.currentState.name, viewIx:1,transparent:true});
 				console.log(context.context);
 				//App.tabClaimsRegulationController.set('content',[context.context]);//!!!!būtinai array
 				App.tabClaimsRegulationController.set('claim',context.context);//!!!!būtinai array
@@ -62,21 +62,21 @@ App.Router = Em.Router.extend({
 		tabMap: Em.Route.extend({
 			route: '/map',
 			connectOutlets: function (router, context) {
-				MY.NavbarController.fnSetNewTab(router.currentState.name, 2);
+				MY.NavbarController.fnSetNewTab({newState:router.currentState.name, viewIx:2});
 				//	router.get('applicationController').connectOutlet('map');
 			}
 		}),
 		tabReports: Em.Route.extend({
 			route: '/reports',
 			connectOutlets: function (router, context) {
-				MY.NavbarController.fnSetNewTab(router.currentState.name, 3);
+				MY.NavbarController.fnSetNewTab({newState:router.currentState.name, viewIx:3});
 				//router.get('applicationController').connectOutlet('reports');
 			}
 		}),
 		tabLists: Em.Route.extend({
 			route: '/tabLists',
 			connectOutlets: function (router, context) {
-				MY.NavbarController.fnSetNewTab(router.currentState.name, 4);
+				MY.NavbarController.fnSetNewTab({newState:router.currentState.name, viewIx:4,transparent:true});
 				oDATA.fnLoad2({ url: "Main/tabLists", checkFn: "App.listsStart", runAllways:true, callBack: function () {
 						App.listsStart();
 						router.get('applicationController').connectOutlet('listsOutlet','topLists');
@@ -84,13 +84,14 @@ App.Router = Em.Router.extend({
 				});
 			},
 			toListAll: function (router, context) {
-				if (MY.NavbarController.fnSetNewTab(router.currentState.name, 4,'tabLists')) {
+				if (MY.NavbarController.fnSetNewTab({newState:router.currentState.name, viewIx:4,newOutlet:'tabLists'})) {
 					d=$(context.target).parent().data("ctrl");
 					App.listAllController.set("current",d);			
 					router.get('applicationController').connectOutlet('listsOutlet', d.goTo);
 				}
 			},
 			toTop: function (router, context){
+				MY.NavbarController.fnSetNewTab({newState:router.currentState.name, viewIx:4,transparent:true});
 				App.listsStart();//Atnaujinam, jai buvo keista
 				router.get('applicationController').connectOutlet('listsOutlet','topLists');
 			}
@@ -98,7 +99,7 @@ App.Router = Em.Router.extend({
 		tabAdmin: Em.Route.extend({
 			route: '/tabAdmin',
 			connectOutlets: function (router, context) {
-				MY.NavbarController.fnSetNewTab(router.currentState.name, 5);
+				MY.NavbarController.fnSetNewTab({newState:router.currentState.name, viewIx:5,transparent:true});
 				oDATA.fnLoad2({ url: "Main/tabAdmin", callBack: function () {
 					App.adminStart();
 					console.log(".connectOutlet('adminOutlet', 'tabAdmin');");
@@ -111,7 +112,7 @@ App.Router = Em.Router.extend({
 			route: '/tabUserCard',
 			connectOutlets: function (router, context) {	
 				var ix=(App.userCardController.myInfo)?-1:5;
-				if (MY.NavbarController.fnSetNewTab(router.currentState.name, ix,'tabAdmin')){//Jeigu false jis permes i route tabAdmin, todel sito nevykdysim
+				if (MY.NavbarController.fnSetNewTab({newState:router.currentState.name, viewIx:ix,newOutlet:'tabAdmin'})){//Jeigu false jis permes i route tabAdmin, todel sito nevykdysim
 					router.get('applicationController').connectOutlet('adminOutlet', 'tabUserCard');		
 				}				
 			}
@@ -119,7 +120,7 @@ App.Router = Em.Router.extend({
 		tabMyCard: Em.Route.extend({
 			route: '/tabMyCard',
 			connectOutlets: function (router, context) {	
-				if (MY.NavbarController.fnSetNewTab(router.currentState.name, -1,'tabAdmin')){//Jeigu false jis permes i route tabAdmin, todel sito nevykdysim
+				if (MY.NavbarController.fnSetNewTab({newState:router.currentState.name, viewIx:-1,newOutlet:'tabAdmin'})){//Jeigu false jis permes i route tabAdmin, todel sito nevykdysim
 					router.get('applicationController').connectOutlet('adminOutlet', 'tabUserCard');		
 				}				
 			}
@@ -127,7 +128,7 @@ App.Router = Em.Router.extend({
 		tabChangePass: Em.Route.extend({
 			route: '/changePass',
 			connectOutlets: function (router, context) {			
-				if (MY.NavbarController.fnSetNewTab(router.currentState.name, -1,'tabEmpty')){
+				if (MY.NavbarController.fnSetNewTab({newState:router.currentState.name, viewIx:-1,newOutlet:'tabEmpty'})){
 					router.get('applicationController').connectOutlet('emptyOutlet', 'changeUserPass');	//'tabAdmin';			
 				}				
 			}

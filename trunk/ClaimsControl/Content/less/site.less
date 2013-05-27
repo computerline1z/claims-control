@@ -72,7 +72,16 @@
 //.colmask .col1 { width: 79%; left: 28.5%; }
 //.colmask .col2 { width: 16%; left: 28%; }
 //.colmask .colleft { right: 27%; }
-.colmask { .container; }
+
+.colmask { //.container; 
+	.clearfix;
+	margin:0 auto;
+	zoom:1;
+	max-width:1050px;
+}
+.transparent{
+	background:none !important;
+}
 .col1 { width: 79%; margin-right: 1%; }
 .col2 { width: 20%; }// margin-top: 0 !important;
 .col1-right {width: 79%; margin-left:1%;}
@@ -145,28 +154,27 @@ div.dividers { background: url(../images/bg-pattern.png) repeat; height: 6px; di
 div.tr.newClaim {background-color: #EFEBEF; .ClaimsRow();.clearfix();}
 div.newClaimContent {background-color: @systemYellow3; .clearfix();}
 /*-------------------------------Updatable Form----------------------------*/
-.inputForm .ExtendIt { margin: 10px 3px 10px 0px; display: inline-block; vertical-align: top; }
+//.inputForm .ExtendIt { margin: 10px 3px 10px 0px; display: inline-block; vertical-align: top; }
+//.ExtendIt { width: 100%; margin:15px auto 15px auto;text-align:left;}
 .ExtendIt.disabled input { background:none !important; }
 .ExtendIt.disabled label,.ExtendIt.disabled span { cursor: default !important; }
-.ExtendIt { width: 100%; margin:15px auto 15px auto;text-align:left;}
-//.ExtendIt button.ui-button-icon-only {height: @baseline;                                        
+
+.row .leftlabel button.drop-down.ui-button-icon-only {float:left;} //to keep in one line floats when row is used
 button.drop-down.ui-button-icon-only { 
 	 margin:0 -2.2em;
     border-style: none; //solid solid solid none; iš inputo pasiima (kitaip kartais nepataiko ant inputo borderiu)
     background: url('images/DropDown-Arrow.png') no-repeat center !important;
     vertical-align:top;
     &:hover, &:active { background: url('images/DropDown-Arrow-hover.png') no-repeat center; }
-
 }/*comboboxo buttonas*/
-.ExtendIt input[type="text"], .ExtendIt textarea, .ExtendIt input[type="password"] {vertical-align:top;margin-top:0; width: 100%; .border-radius(0); border-color: @borderGreen;}
-//.ExtendIt button {vertical-align:top;margin-top:0;}/*comboboxo išlyginimui*/
+//.ExtendIt input[type="text"], .ExtendIt textarea, .ExtendIt input[type="password"] {vertical-align:top;margin-top:0; width: 100%; .border-radius(0); border-color: @borderGreen;}
 
 span.dialog-form-label { margin: 10px; font-size: @basefont; /*color: #666666;*/ display: inline-block; }
 div.dialog-form-label { font-size: @basefont; /*color: #666666;*/ top: 2px; margin-bottom: 2px; }
 
 /*label { font-size: @basefont; color: 666; cursor: pointer; }*/
  .ExtendIt label  { padding-left: 0px; margin-left: 0px; cursor: pointer; /*ideta: */ font-size: @smallfont; }
-
+ .ExtendIt span  { line-height: @lowline; }
 label.toplabel > span { display: block; font-size: @basefont; /*color: #666666;*/ cursor: pointer; margin-bottom: 5px; 
     &.ui-icon { 
         left:-4px;top:3px;
@@ -176,15 +184,6 @@ label.toplabel > span { display: block; font-size: @basefont; /*color: #666666;*
 }
 }
 label.toplabel input[type=text], label.top textarea { width: 100%; line-height: @baseline; font-size: @basefont; vertical-align:top;}
-
-//label.leftlabel > span { width: 30%; font-size: x-small; margin: 0; padding: 0; /*color: #666666;*/ cursor: pointer; display: inline-block; }
-//label.leftlabel input[type=text], label.left textarea { width: 70%; font-size: @basefont; margin: 0;} padding: 0; 
-
-/*div.inputform textarea { width: 100%; font-size: @basefont; }
-div.inputform input { font-size:  @basefont; }
-div.inputform { padding: 0 !important; }
-div.inputform input.date { width: 100px !important; }
-div.inputform input.time { width: 50px !important; }*/
 /*-------------------------------megaSelectList----------------------------*/
 /*div.leftContainer { border-style: dotted; width: 100%; display: inline-block; }
 .RightSpanInTab { float: right; vertical-align: bottom; margin-right: 20px; padding: 0.5em; }*/
@@ -286,53 +285,14 @@ div.inputform div.ExtendIt { margin: 10px 3px 10px 0px; display: inline-block; v
 span.dialog-form-label { margin: 10px; font-size: @smallfont; /*color: #666666;*/ display: inline-block; }
 div.dialog-form-label { font-size: @smallfont; /*color: #666666;*/ top: 2px; margin-bottom: 2px; }
 
-/*label { font-size: small; color: #666666; cursor: pointer; }*/
-/*
-label input[type="checkbox"] { padding-left: 0px; margin-left: 0px; cursor: pointer; }
-
-label.toplabel > span { display: block; font-size: @smallfont; /*color: #666666;*/// cursor: pointer; }
-/*
-label.toplabel input[type=text], label.top textarea {
-	 width: 100%; font-size: @smallfont; margin: 0; 
-     // IDETA:
-     /*
-     .border-radius(0);
-     border: 1px solid @borderGreen;
-     //line-height:17px;
-     /*
-     font-size: @smallfont;
-     height: @inputHeight;
-}
-input[type=text].date {width:7em !important;}
-input[type=text].time {width:4em !important;
-     // IDETA:/*
-     .border-radius(0);
-     border: 1px solid @borderGreen;
-     //line-height: 17px;
-     font-size: @smallfont;
-     height: @inputHeight;
-}
-label.leftlabel > span { width: 30%; font-size: @smallfont; font-weight:bold;margin: 0; padding: 0; /*color: #666666;*/// cursor: pointer; display: inline-block; }
-/*
-label.leftlabel input[type=text], label.left textarea { 
-	width: 70%; font-size: @basefont; margin: 0; 
-    // IDETA:
-    .border-radius(0);
-    height: @inputHeight;
-    color:#000000;
-}
-input [type="text"] {width:7em;}
-input.time [type="text"] {width:4em;
-}
-*/
-
 label {
     input[type="checkbox"] { padding-left: 0px; margin-left: 0px; cursor: pointer; }
     input[type=text] { height: @inputHeight; }
     &.toplabel {
         > span { display: block; font-size: @smallfont; /*color: #666666;*/ cursor: pointer; }
          input[type=text], label.top textarea {
-             width: 100%; font-size: @smallfont; margin: 0; 
+             width: 100%;
+			 font-size: @smallfont; margin: 0; 
              // IDETA:
              .border-radius(0);
               border: 1px solid #A59894;
@@ -341,9 +301,13 @@ label {
         }
     }
     &.leftlabel {
-        > span { width: 30%; font-size: @smallfont;font-weight:bold; margin: 0; padding: 0; /*color: #666666;*/ cursor: pointer; display: inline-block; }
+        > span { 
+			//width: 30%; 
+			font-size: @smallfont;font-weight:bold; margin: 0; padding: 0; /*color: #666666;*/ cursor: pointer; display: inline-block;
+		}
         input[type=text], label.left textarea { 
-            width: 70%; font-size: @basefont; margin: 0; 
+            //width: 70%;
+			font-size: @basefont; margin: 0; 
             // IDETA:
             .border-radius(0);
 	    color:#000000;
@@ -363,12 +327,10 @@ input[type=text].time {width:4em !important;
 input [type="text"] {width:7em;}
 input.time [type="text"] {width:4em;
 }
-
-
-
 /*-----------------------------------------------------------------------------------------------*/
+.text>span {line-height:2.5em;}
 /*butonai apacioj*/
-div.frmbottom { width: 100%; display: inline-block; overflow: hidden; }
+div.frmbottom { width: 100%; display: inline-block; overflow: hidden; padding: 2%;}
 /*veikia kaip floatu nuresetintojas*/
 div.frmbottom button, div.frmbottom a { margin-left: 20px; margin-right: 20px; }
 /*veikia kaip floatu nuresetintojas*/
@@ -378,8 +340,8 @@ div.frmbottom button, div.frmbottom a { margin-left: 20px; margin-right: 20px; }
 #divMap { margin: auto; }
 div.growlUI { background: url(images/check48.png) no-repeat 10px 10px; }
 div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-align: left; }
-#Form-Accident-Card .text { width: 400px; }
-#Form-Accident-Card .ui-autocomplete-input { width: 200px; }
+//#Form-Accident-Card .text { width: 400px; }
+//#Form-Accident-Card .ui-autocomplete-input { width: 200px; }
 /*-------------------swfupload--------------------
 #swfupload-control p { margin: 10px 5px; font-size: 0.9em; }
 #log { margin: 0; padding: 0; width: 500px; }
@@ -519,10 +481,10 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 .small-blue-icon{
 	margin-right:6px;
 }
-.colmask.colmask-extended {
-    max-width: 1054px;
-	background: none;
-}
+// .colmask.colmask-extended {
+    // max-width: 1054px;
+	// background: none;
+// }
 .template-upload{
 	border-top:1px dotted #000000;
 }
@@ -535,11 +497,11 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 .img16-camera {
     background-position: 0 -64px;
 }
-.admin-topsection{
-    float: left; 
-    width: 98%; 
-    margin: 10px;
-}
+// .admin-topsection{
+    // float: left; 
+    // width: 98%; 
+    // margin: 10px;
+// }
 .listUnderlineProperty {
 	text-decoration:underline;
 }
@@ -567,8 +529,8 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 	float: right; 
 	margin-top: 15px;	
 }
-.h3CustomProperty {
-	color:#111;
+.brownColor {
+	color:@systemBrown;
 }
  #btnDeleteAccident {
  border-radius:4px 4px 4px 4px;
@@ -691,58 +653,4 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 		.line {padding:1.2em;}
 	}
 }
-  /* 
-.financial-record-header{
-	margin:20px 0;
-}
-.financial-record-header span{
-	padding:0 20px;
-	font-weight:bold;
-}
-
-label.leftlabel > span{
-	width:5%;
-	font-size:12px;
-}
-label.leftlabel > input[type="text"],label.leftlabel > textarea{
-	width:90%;
-	padding:4px 6px;
-	
-}
-label.toplabel input[type="text"], label.top textarea {
-	vertical-align: middle;
-}
-.content-colfullwidth{
-	width:99%;
-	padding:0 10%;
-}
-.custom-title, table.no-stripes tr th,.custom-title th{
-	background-color:#C4E1EC !important;
-	
-}
-.custom-title:after{
-	clear:none !important;
-}
-.ui-dialog-title-custom{
-	color:#000000 !important;
-}
-table.no-stripes tr td {
-	border-bottom: 1px dotted #E6E6E6;
-	padding: 8px 8px 7px;
-}
-table.no-stripes tr  {
-	border: 1px dotted #E6E6E6;
-}
-table.no-stripes tr:nth-child(2n+1){
-	background-color:#ffffff;
-}
-.ExtendItCenter{
-	text-align:center;
-}
-.ExtendItCenter button{
-	min-width:330px;
-}
-.topmargin{
-	margin-top:10px;
-}*/
  /*----claims regulation form end -----*/

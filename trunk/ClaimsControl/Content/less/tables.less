@@ -12,18 +12,12 @@ div.table {
 div.tr {.clearfix();}
 div.td {float:left;}
 
-//div.row:hover{ background-color: #ccc; } 
-//div.table div.tr{}
-
 //bordered table
 div.bordered-table {
   //border: 1px solid #ddd;
   border-collapse: separate; // Done so we can round those corners!
   *border-collapse: collapse; /* IE7, collapse table to remove spacing */
   .border-radius(4px);
-  //div.td + div.td {
-   // border-left: 1px solid #ddd;
-	//border-bottom: 1px solid #ddd;}
   div.tr:first-child div.td:first-child {
     .border-radius(4px 0 0 0);
   }

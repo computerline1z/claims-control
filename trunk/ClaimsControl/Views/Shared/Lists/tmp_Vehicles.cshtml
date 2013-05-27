@@ -2,17 +2,13 @@
 *@<div id="dialogContent" class="inputForm container w95pr centerBlock"
 data-ctrl='{"NewRec":1,"Source":"proc_Vehicles","tblUpdate":"tblVehicles"}'>
      <div class='left w45pr'>
-         <div class='ExtendIt' data-ctrl='{"Field":"TypeID","classes":"UpdateField","id":"lstTypeID","labelType":"Left"}'></div>
-@*				{{#if addMakeMode}}
-					<div class="ExtendIt"><label class="leftlabel"><span>Nauja markė:</span><input type="text" placeholder="Įveskite naują TP markę.."/></label></div>
-					<div style="float:right;"><button class="btn small" {{action saveAddNewMake}}>Išsaugoti</button><a href="#" class="small" {{action cancelAddNewMake}}>Atšaukti</a></div>
-				{{/if}}*@
-         <div class='ExtendIt' data-ctrl='{"Field":"MakeID","classes":"UpdateField","id":"lstMakeID","labelType":"Left"}'></div>
-         <div class='ExtendIt' data-ctrl='{"Field":"Year","classes":"UpdateField","id":"Year","labelType":"Left"}'></div>
+         <div class='ExtendIt leftBlock' data-ctrl='{"Field":"TypeID","classes":{"span":"w30pr","input":"w70pr"},"id":"lstTypeID","labelType":"Left"}'></div>
+         <div class='ExtendIt leftBlock' data-ctrl='{"Field":"MakeID","classes":{"span":"w30pr","input":"w70pr"},"id":"lstMakeID","labelType":"Left"}'></div>
+         <div class='ExtendIt leftBlock' data-ctrl='{"Field":"Year","classes":{"span":"w30pr","input":"w70pr"},"id":"Year","labelType":"Left"}'></div>
       </div>
       <div class='right w45pr'>
-         <div class='ExtendIt' data-ctrl='{"Field":"Plate","classes":"UpdateField","id":"Plate","labelType":"Left"}'></div>
-         <div class='ExtendIt' data-ctrl='{"Field":"Model","classes":"UpdateField","id":"Model","labelType":"Left"}'></div>
+         <div class='ExtendIt leftBlock' data-ctrl='{"Field":"Plate","classes":{"span":"w30pr","input":"w70pr"},"id":"Plate","labelType":"Left"}'></div>
+         <div class='ExtendIt leftBlock' data-ctrl='{"Field":"Model","classes":{"span":"w30pr","input":"w70pr"},"id":"Model","labelType":"Left"}'></div>
 		@*ui-corner-all borderGroove*@
 
 		{{#if editItem}}
