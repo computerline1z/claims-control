@@ -189,13 +189,13 @@
 /* Icons
 ----------------------------------*/
 .ui-menu-icon {position: relative !important; cursor: pointer !important;}
-.ui-tblHead-icon {display:inline-block !important;margin:0 !important;padding-top:4px !important;float:right;}
+.ui-tblHead-icon { margin: 0 !important; padding-top:4px !important;  position: absolute; right: 10px; top: 12px;}
 #ui-active-menuitem .ui-icon {background-image: url(images_ui/ui-icons_f6cf3b_256x240.png)!important; }
 a.ui-state-hover .ui-icon { background-image: url(images_ui/ui-icons_888888_256x240.png)!important; }
 
 /* states and images */
-.ui-icon { width: 16px; height: 16px; background-image: url(images_ui/ui-icons_222222_256x240.png); }
-.ui-widget-content .ui-icon {background-image: url(images_ui/ui-icons_222222_256x240.png); }
+.ui-icon { width: 16px; height: 16px; background-image: url(images_ui/ui-icons_white.png); margin-top: -4px !important; }
+.ui-widget-content .ui-icon {background-image: url(images_ui/ui-icons_white.png); }
 .ui-widget-header .ui-icon.ui-icon-closethick {
 background-image: url(images_ui/close.png);
 height:22px;
@@ -866,7 +866,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
  .ui-tabs .ui-tabs-nav{ background:none; border-color: #ddd;
   border-style: solid;
   border-width: 0 0 1px;}
-.ui-tabs { position: relative; padding: .2em; zoom: 1; border:0px; } /* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
+.ui-tabs { position: relative; padding: 0 0 10px 0; zoom: 1; border:0px; } /* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
 
 
 .ui-tabs .ui-tabs-nav li:hover, .ui-tabs .ui-tabs-nav li a:hover{

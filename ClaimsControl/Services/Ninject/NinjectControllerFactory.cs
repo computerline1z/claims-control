@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Ninject;
+using CC.Services.Ninject;
 using CC.Services.Interfaces;
 using CC.Services.Implementation;
 using System.Web.Routing;
 using CC.Models;
 using System.Configuration;
 using CC.Controllers;
+using Ninject;
 
 namespace CC.Services.Ninject
 {

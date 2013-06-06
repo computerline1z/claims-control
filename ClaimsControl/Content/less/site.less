@@ -2,7 +2,7 @@
 //body { font-family: "Arial" Arial, Helvetica, sans-serif; font-size: 80%; background-color: #d7d7d3; }
 .input {width: 250px; background: #ffc; border: 1px inset; font-size: 10pt; height: 1.5em; padding-left: 5px; }
 .hidden {display:none;}
-.clickable {cursor: pointer;}
+.clickable {cursor: pointer; position: relative;}
 /*---------Login-------------------*/
 #divlogindisplay span { color: #ffffff; font-size: 10pt; }
 /*---------Menu-------------------backkgroundas 7A90A5 RGB 122/144/165
@@ -98,14 +98,24 @@
 //	<input type="text" class="searchField"/><div class="divSearch"><span class="spanToClearText">x</span></div>
 
 form input.searchField {
-    float:left;margin-top:7px;width:90%; height:28px; line-height:23px;font-family:sans-serif;font-size:1em;color:#333;
+    float:left;margin-top:7px;width:100%; height:28px; line-height:23px;font-family:sans-serif;font-size:1em;color:#333;
     border:solid 1px #d9d9d9; border-top:solid 1px #c0c0c0;border-right:none;margin-right:-2px; vertical-align:top; 
   .border-radius(0);
 //    #gradient > .vertical(#eae4cf, #fbfbd8);
 }
+
+.listAllSearchField {
+    width: 350px;
+    margin-right: 15px;
+    margin-top: 37px;
+    font-family: 'Myriad Pro';
+    font-size: 19pt;
+    letter-spacing: -1px;
+}
+
 /* Style the "X" text button next to the search input field */
 form div.divSearch {
-     position:absolute;right:13%; width:26px;height:32px;line-height:22px;padding:6px 10px 9px 10px !important;font-size:22px;   
+     position:absolute;right:5px; width:26px;height:32px;line-height:22px;padding:6px 10px 9px 10px !important;font-size:22px;   
   }
 form span.spanToClearText {/*color:#A1B9ED;*/ color:#919191;cursor:pointer;padding:0px 3px;}/* Set default state of "X" and hide it */
 form span.spanToClearText:hover {/*color:#36c;*/ color:#575757}/* Set the hover state of "X" */
@@ -507,20 +517,36 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 }
 .listColorProperty {
 	color:#EB5A44;
-	margin: 15px; 
-	display: block
+	margin: 5px 5px 5px 15px; 
+	display: block;
+    font-family: 'Myriad Pro';
+    font-size: 19pt;
+    letter-spacing: -1px;
 }
 #tabLists {	
 	margin-bottom:20px;
+    background: none;
 }
 .custombackgroundList {
 	background:none repeat scroll 0 0 #FFFFFF;
-	margin:-14px 0 14px;
+	margin:-4px 0 14px 0;
+    padding-top: 13px !important;
+    .box-shadow(0px 1px 3px rgba(0, 0, 0, 0.30));
+    border-left: 1px solid rgba(0,0,0,0.15);
+    border-right: 1px solid rgba(0,0,0,0.15)
 }
 .driversColorProperty {
 	margin:0 20px;
 	color:#EB5A44;
+    padding-top: 45px;
+    padding-bottom: 15px;
+    .headerFontStyle();
 }
+
+.fullListContainer {
+    background-color: #fff;
+}
+
 .custombackgroundListAdmin {
 	background:none repeat scroll 0 0 #FFFFFF;
 	margin:-14px 0 30px;
@@ -528,6 +554,12 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 .customButtonProperty {
 	float: right; 
 	margin-top: 15px;	
+}
+.h3CustomProperty {
+	color:#333;
+    margin-bottom: 11px !important;
+    font-family: 'myriad pro';
+    font-size: 21px;
 }
 .brownColor {
 	color:@systemBrown;

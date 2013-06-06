@@ -1,33 +1,33 @@
-﻿<div class="container"/>
-	<div class="right medium w35pr">
-	<div>{{view App.SearchField controller="listAllController"}}</div>	
-</div>
-<h2 class="driversColorProperty">Vairuotojų sąrašas</h2><a {{action toTop}} href="#" >(atgal į Sąrašus)</a>
+﻿<div class="fullListContainer">
+	<div class="right medium listAllSearchField">
+		<div>{{view App.SearchField controller="listAllController"}}</div>	
+	</div>
+	<h2 class="driversColorProperty">Vairuotojų sąrašas</h2><a {{action toTop}} href="#" >(atgal į Sąrašus)</a>
 
-<div class="ui-tabs"><ul class='ulWhiteMenu ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header'>
-	<li class="ui-state-default ui-corner-top"><a href="#" {{action filterWorking target="App.listAllController"}}>
-		<span>Dirbantys</span></a></li>
-	<li class="ui-state-default ui-corner-top"><a href="#" {{action filterNotWorking target="App.listAllController"}}>
-		<span>Nebedirbantys</span></a></li>
-	<div class="right medium w15pr" data-ctrl='{"source":"proc_Drivers","template":"tmp_Drivers","controller":"listAllController","emObject":"content"}'>
+	<div class="ui-tabs"><ul class='ulWhiteMenu ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header'>
+		<li class="ui-state-default ui-corner-top"><a href="#" {{action filterWorking target="App.listAllController"}}>
+			<span>Dirbantys</span></a></li>
+		<li class="ui-state-default ui-corner-top"><a href="#" {{action filterNotWorking target="App.listAllController"}}>
+			<span>Nebedirbantys</span></a></li>
+		<div class="right medium w15pr" data-ctrl='{"source":"proc_Drivers","template":"tmp_Drivers","controller":"listAllController","emObject":"content"}'>
+			<button class="btn" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button>
+		</div>
+	</ul>
+
+	</div>
+	<div class="container"/>
+	<table class="zebra-striped">
+		<thead><tr><th>Vardas</th><th>Pavardė</th><th>Gimimo data</th><th>Mobilus telefonas</th><th>Dokumentai</th></tr></thead>
+		<tbody>
+		{{#each "App.listAllController.content"}}
+			{{#if this.visible}}
+				{{view App.DriverView}}
+			{{/if}}
+		{{/each}}
+	</tbody></table>
+	<div class="container">
+		<div class="right medium w15pr" data-ctrl='{"source":"proc_Drivers","template":"tmp_Drivers","controller":"listAllController","emObject":"content"}'>
 		<button class="btn" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button>
-	</div>
-</ul>
-
-</div>
-<div class="container"/>
-<table class="zebra-striped">
-	<thead><tr><th>Vardas</th><th>Pavardė</th><th>Gimimo data</th><th>Mobilus telefonas</th><th>Dokumentai</th></tr></thead>
-	<tbody>
-	{{#each "App.listAllController.content"}}
-		{{#if this.visible}}
-			{{view App.DriverView}}
-		{{/if}}
-	{{/each}}
-</tbody></table>
-<div class="container">
-	<div class="right medium w15pr" data-ctrl='{"source":"proc_Drivers","template":"tmp_Drivers","controller":"listAllController","emObject":"content"}'>
-	<button class="btn" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button>
+		</div>
 	</div>
 </div>
-

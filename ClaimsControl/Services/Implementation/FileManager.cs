@@ -5,10 +5,11 @@ using System.Web;
 using CC.Services.Interfaces;
 using CC.Models;
 using CC.Classes;
-using Ninject;
+using CC.Services.Ninject;
 using System.IO;
 using System.Drawing;
 using System.Configuration;
+using Ninject;
 
 namespace CC.Services.Implementation {
 	public class FileManager : IFileManager {

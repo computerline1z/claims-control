@@ -4,11 +4,12 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using CC.Services.Interfaces;
-using Ninject;
+using CC.Services.Ninject;
 using CC.Models;
 using CC.Classes;
 using System.Configuration;
 using System.Web.UI.WebControls;
+using Ninject;
 
 namespace CC.Controllers {
 	/// <summary>
