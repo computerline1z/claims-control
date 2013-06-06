@@ -4,16 +4,17 @@ using System.Linq;
 using System.Web;
 using CC.Services.Interfaces;
 using CC.Models;
-using Ninject;
+using CC.Services.Ninject;
 using System.Web.Mvc;
 using CC.Classes;
+using Ninject;
 
 namespace CC.Services.Implementation {
 	public class UserManager : IUserManager {
 		private dbDataContext _dc;
 		private string _defaultLanguage;
 
-		[Inject]
+        [Inject]
 		public UserManager(dbDataContext dc, string defaultLanguage) {
 			this._dc = dc;
 			this._defaultLanguage = defaultLanguage;

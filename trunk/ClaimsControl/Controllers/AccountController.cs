@@ -8,9 +8,10 @@ using System.Web.Security;
 using CC.Models;
 //using CC.Views.Account;
 using DataModels.DataSources;
-using Ninject;
+using CC.Services.Ninject;
 using CC.Services.Interfaces;
 using CC.Classes;
+using Ninject;
 
 namespace ClaimsControl.Controllers {
 
