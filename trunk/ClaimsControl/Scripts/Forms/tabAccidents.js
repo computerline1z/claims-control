@@ -34,13 +34,14 @@
             Claims2: ArrClaims2[i].split('#|')
           };
           objView[i] = {
-            finished: (ArrClaims[i][0] === "2" ? true : false),
+            finished: (ArrClaims[i][0] === "5" ? true : false),
             no: ArrView[i].Claims[1],
             type: ArrView[i].Claims[2],
             autoNo: ArrView[i].Claims[3],
             insurer: ArrView[i].Claims[4],
             loss: ArrView[i].Claims[5],
             Claims2: ArrView[i].Claims2,
+            claimStatus: ArrClaims[i][0],
             accidentID: this.get("iD"),
             accidentDate: this.date
           };
@@ -67,7 +68,8 @@
           LossAmount: d.loss,
           InsuranceType: d.type,
           accidentID: d.accidentID,
-          accidentDate: d.accidentDate
+          accidentDate: d.accidentDate,
+          claimStatus: d.claimStatus
         },
         elementId: "ClaimDetailsContent",
         contentBinding: 'App.claimEditController.content'
@@ -141,7 +143,7 @@
 
   App.SelectedClaimView = Em.View.extend({
     didInsertElement: function() {
-      var IClaim, btnSaveToDisable, c, days, fnCheckIsInjured, frm, inpSum, perDay;
+      var IClaim, btnSaveToDisable, c, days, fnCheckIsInjured, frm, inpSum, inputs, perDay;
 
       c = this.content[0];
       frm = c.newClaim ? "#divNewClaimCard" : '#divClaimCard_Content';
@@ -170,9 +172,23 @@
         inpSum = $(frm).find('.inputSum input');
         days = $(frm).find('.days input');
         perDay = $(frm).find('.perDay input');
-        return $(frm).find('.days input,.perDay input').on("keyup", function() {
+        $(frm).find('.days input,.perDay input').on("keyup", function() {
           return inpSum.val(days.val() * perDay.val());
         });
+      }
+      if (c.claimStatus > 2) {
+        inputs = $(frm).find("input");
+        if (c.claimStatus === "3") {
+          inputs = inputs.eq(1).prop('title', 'Suma jau patvirtina');
+        } else if (c.claimStatus === "4") {
+          inputs = inputs.filter(function(i) {
+            return i === 1 || $(this).attr("id") === "InsuranceClaimAmount";
+          }).prop('title', 'Suma jau patvirtina');
+        } else if (c.claimStatus === "5") {
+          $(frm).find("button").prop("disabled", true);
+          inputs.prop('title', 'Žala uždaryta');
+        }
+        return inputs.prop("disabled", true);
       }
     },
     init: function() {
@@ -194,6 +210,7 @@
           days: C2[7],
           perDay: C2[8],
           lossAmount: d.LossAmount,
+          claimStatus: d.claimStatus,
           newClaim: false,
           typeID: TypeID,
           deleteButton: true
@@ -263,6 +280,19 @@
         });
       });
     },
+    fnUpdateAccident: function(resp) {
+      var newRow, tr;
+
+      newRow = resp.ResponseMsg.Ext.replace(/#\|#\|/g, ":::").split("|#|");
+      newRow[13] = newRow[13].replace(/:::/g, "#|#|");
+      App.accidentsController.get("setNewVal").call(App.accidentsController, {
+        newVal: newRow,
+        toAppend: false,
+        fieldsToInt: [0, 1, 5, 6, 7, 8]
+      })[0];
+      tr = $("#accidentsTable").find("div.selectedAccident");
+      return tr.trigger("click").trigger("click");
+    },
     saveForm: function(e) {
       var Action, DataToSave, Msg, accidentID, frm, newClaim, opt;
 
@@ -298,19 +328,7 @@
           Action: Action,
           DataToSave: DataToSave,
           CallBack: {
-            Success: function(resp) {
-              var newRow, tr;
-
-              newRow = resp.ResponseMsg.Ext.replace(/#\|#\|/g, ":::").split("|#|");
-              newRow[13] = newRow[13].replace(/:::/g, "#|#|");
-              App.accidentsController.get("setNewVal").call(App.accidentsController, {
-                newVal: newRow,
-                toAppend: false,
-                fieldsToInt: [0, 1, 5, 6, 7, 8]
-              })[0];
-              tr = $("#accidentsTable").find("div.selectedAccident");
-              return tr.trigger("click").trigger("click");
-            }
+            Success: this.fnUpdateAccident
           },
           Msg: Msg
         };

@@ -108,6 +108,9 @@ var MY = {
 		}
 	}
 }
+Number.prototype.toRound=function(){
+	return (Math.round(this*100)/100).toFixed(2);
+}
 String.prototype.toRowObject=function (fieldNamesArr){
 	var valsArr=this.split(" "); retObj={};
 	for (var i = 0; i < valsArr.length; i++) {
@@ -144,7 +147,7 @@ Em.Object.prototype.MapArrToString = function (arrNames, mapWithNoCommas,Source)
 	else return arrRet.join(", ");
 }
 
-Em.Object.prototype.updateTo = function (newObject) {//very ew very good, very cool!!!!!!!!!!!!!!!
+Em.Object.prototype.updateTo = function (newObject) {
 	for (var prop in this) {
 		if (!this.hasOwnProperty(prop)) continue;
 		if (newObject[prop] && this[prop] !== newObject[prop]) {

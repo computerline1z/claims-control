@@ -31,26 +31,45 @@
 .img32-warning {background-position:-96px -96px;}
 
  [class^="img18"],[class*=" img18"] {
-  display: inline-block;width: 18px;height: 19px;/* line-height: 18px;*/vertical-align: middle; //text-top;
+  display: inline-block;width: 18px;height: 18px;/* line-height: 18px;*/vertical-align: middle; //text-top;
   background-image: url('images/Sprite18.png');background-position: 18px 18px;background-repeat: no-repeat;
 }
 .btn:hover [class^="img18"], .btn:hover [class*=" img18"],
 .ui-state-hover [class^="img18"], .ui-state-hover [class*=" img18"] {
 	background-image: url('images/Sprite18-hover.png');
  }
-.img18-delete {background-position:0px 0px;}
-.img18-exit {background-position:-18px 0px;}
-.img18-pencil {background-position:-36px 0px;}
-.img18-plus {background-position:0px -18px;}
-.img18-search {background-position:-18px -18px;}
-.img18-select {background-position:-36px -18px;}
-.img18-table {background-position:0px -36px;}
-.img18-triangle_green {background-position:-18px -36px;}
-.img18-triangle_red {background-position:-36px -36px;}
+.img18-check {background-position: -5px -5px;}
+.img18-delete {background-position: -33px -5px;}
+.img18-meeting {background-position: -61px -5px;}
+.img18-note {background-position: -5px -33px;}
+.img18-pencil {background-position: -33px -33px;}
+.img18-phone {background-position: -61px -33px;}
+.img18-photo {background-position: -5px -61px;}
+.img18-recieved_mail {background-position: -33px -61px;}
+.img18-sent_mail {background-position: -61px -61px;}
+.img18-tasks {background-position: -89px -5px;}
+.img18-warning {background-position: -89px -33px;}
+.img18-warning-yellow {background-position: -89px -61px;}
+
+.img18-pencil.ui-menu-icon {position: relative;display: block;margin: -22px 5px auto auto;}
 
 i{ margin: 0 auto;}//su tekstu reikia dar margin-right.
 
-//#srcSubmit:hover {}
+ [class^="img28"],[class*=" img28"] {
+  display: inline-block;width: 28px;height: 28px;vertical-align: middle; cursor:pointer;
+  background-image: url('images/Sprite28.png');background-position: 28px 28px;background-repeat: no-repeat; 
+}
+.btn:hover [class^="img28"], .btn:hover [class*=" img28"],
+.ui-state-hover [class^="img28"], .ui-state-hover [class*=" img28"] {
+	background-image: url('images/Sprite28-hover.png');
+}
+.img28-meeting {background-position: -5px -5px;}
+.img28-note { background-position: -43px -5px;}
+.img28-phone {background-position: -5px -43px;}
+.img28-recieved_mail {background-position: -43px -43px;}
+.img28-sent_mail {background-position: -81px -5px;}
+.img28-tasks {background-position: -81px -43px;}
+
 [class^="icon-"],
 [class*=" icon-"] {
   display: inline-block;

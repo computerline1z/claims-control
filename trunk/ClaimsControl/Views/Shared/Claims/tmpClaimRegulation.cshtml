@@ -1,7 +1,9 @@
-﻿@*{{log claim}}*@
+﻿@*{{log ""}}{{log ""}}
+{{log this}}
+{{log ""}}{{log ""}}*@
 <div class="content box-1pr-btm">
 {{#with claim}}
-	<h2 class="driversColorProperty">Žala nr. {{accident.no}}-{{no}}, {{claimType.name}}, {{insPolicy.insurerName}}</h2><a href="#" {{action goBack target="this"}} style="color:#5A6F85;">(atgal į Žalų sąrašą)</a>
+	<h2 class="driversColorProperty">Žala nr. {{accident.no}}-{{no}}, {{claimType.name}}, {{insPolicy.insurerName}}</h2><a  {{action goBack target="this"}} style="color:#5A6F85;">(atgal į Žalų sąrašą)</a>
 	<h4 class="driversColorProperty">{{vehicle.plate}}, {{accident.driver}}</h4>
 
 	<div class="claims" id="claimsSteps">
@@ -33,14 +35,14 @@
 	</ul>	
 	<div id="actionsFormOfClaimReg" style="padding:0;">
 		<div class="content">
-			<table class="zebra-striped"><thead><tr><th>Data</th><th>Veiksmas</th><th>Kas</th><th>Kam</th><th>Info</th><th>Priedai</th></tr></thead><tbody>
-				<tr><td>Data</td><td>Veiksmas</td><td>Kas</td><td>Kam</td><td>Info</td><td>Priedai</td></tr>
+			<table class="zebra-striped"><thead><tr><th>&nbsp;</th><th>Data</th><th>Kas</th><th>Kam</th><th>Info</th><th>Priedai</th></tr></thead><tbody>
+				{{#each activitiesTbl}}	
+					<tr {{action goToOtherView this}} class="clickable"><td><i class={{unbound icon}}></i></td><td>{{entryDate}}</td><td>{{from}}</td><td>{{to}}</td><td>{{subject}}</td><td>{{docs}}</td></tr>
+				{{/each}}
 			</tbody></table>
 		</div>
-		<div id="actionsEnterOfClaimReg">
-			<div class="left" style="width:100%;margin-top:1.5%;"></div>
-			{{view view.actionView}}
-		</div>
+		<div class="left" style="width:100%;margin-top:1.5%;"></div>
+		<div id="actionsEnterOfClaimReg"></div>@*Activities view*@
 	</div>
 
 	<div class="content" id="docsOfClaimReg">Dokumentai</div>

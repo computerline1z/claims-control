@@ -68,7 +68,7 @@ var oCONTROLS = {
 	//Em.run.next({t:this,p:p},function(){
 		//frm data-ctrl:: labelType:Top/Left/undefined,
 		//var p=this.p, me=this.t;
-		var sTitle = "", frmOpt = $(p.frm).data('ctrl'),btnSaveToDisable,me=this;
+		var sTitle = "", frmOpt = $(p.frm).data('ctrl'),btnSaveToDisable,me=this; if (!frmOpt){console.warn("No frmOpt");return;}
 		if (p.row){ if (p.row.iD)  {frmOpt.NewRec=0;frmOpt.id=p.row.iD;}}//Jeigu yra p.row tai redagavimas
 		if (frmOpt.NewRec==="0"){frmOpt.NewRec=0;}
 		var data = (frmOpt.Source === 'NoData') ? "NoData" : oDATA.GET(frmOpt.Source);
@@ -140,6 +140,12 @@ var oCONTROLS = {
 				} //Listo propercius dedu vienam lygyje su kitais data_ctrl.Type="List";
 				else if (prop === 'Value' || prop === 'Validity' || prop === 'AgrValidity' || prop === 'Tip' || prop === 'Field' || prop === 'Type' || prop === 'Ext' || prop === 'UpdateField' || prop === 'Editable') {
 					data_ctrl[prop] = col[prop];
+				} else if (prop==="Radio"){
+					var colVal=parseInt(col.Value);
+					if (!isNaN(colVal)){//if valid value ammend radio checked array
+						col[prop].forEach(function(c){var v=parseInt(c.value); if (colVal===v){c.checked=1;}else{delete c.checked;}});
+					}
+					data_ctrl[prop]=col[prop];
 				}
 			}
 			if (p.row){var v =  me.getValFromRow(col.FName,p.row);
@@ -182,6 +188,10 @@ var oCONTROLS = {
 				//input = $(eHTML).prependTo(e).find("input:first");
 				input = $(eHTML).prependTo(e).parent().find("input:first");//parent reikalingas kai nenaudojam label (InsPolicy kortelėj)
 			}
+			else if (Type === 'Radio') {
+				eHTML = oCONTROLS.radio(col);e.addClass("UpdateField").data("ctrl").Type="Radio";//wraper will be used for update
+				$(eHTML).prependTo(e);		
+			}
 			else if (Type.search("Date") !== -1) {// Date DateNotMore DateNotLess DateNotMoreCtrl DateNotLessCtrl
 				var isTime = 0;
 				if (!col.Value && col.Default === "Today") {
@@ -195,7 +205,7 @@ var oCONTROLS = {
 
 				eHTML += oCONTROLS.txt(col);
 				if (isTime) {
-					eHTML += oCONTROLS.txt({Value: TimeValue,style: "margin:0 20px;",title: "Laikas",classes: "time ui-widget-content ui-corner-all"});
+					eHTML += oCONTROLS.txt({Value: TimeValue,title: "Laikas",classes: "ui-widget-content time"});
 				} // UpdateField nereikia, nes..
 				input = $(eHTML).prependTo(e).parent().find('input:first');
 			}
@@ -274,6 +284,8 @@ var oCONTROLS = {
 					var Validity = (e.data("ctrl").Validity) ? e.data("ctrl").Validity : "";
 					if (Type === "hidden") {
 						val = e.val();
+					}else if (Type==="Radio"){
+						val=e.find('input:radio:checked').val();OldVal=e.data("ctrl").Value;
 					} else if (Type.substring(0, 4) == "Date") {
 						Validity = (Validity.replace(/match\(date\)/g, "match('date')"));
 						val = $.trim(e.val());
@@ -336,10 +348,19 @@ var oCONTROLS = {
 		//[{ Fields: "AccidentID", Data: $('#tblClaims').data('ctrl').AccidentID }]
 		//Pridedam papildomus parametrus kuriuos siunciam servui
 
-		if (typeof (DataToSaveAppend) != 'undefined') {
-			for (var i = 0; i < DataToSaveAppend.length; i++) {
-				DataToSave.Data.push(DataToSaveAppend[i].Data);
-				DataToSave.Fields.push(DataToSaveAppend[i].Fields)
+		if (typeof DataToSaveAppend === 'object') {//array is also object
+			if  ($.isArray(DataToSaveAppend)){//Array
+				for (var i = 0; i < DataToSaveAppend.length; i++) {
+					DataToSave.Data.push(DataToSaveAppend[i].Data);
+					DataToSave.Fields.push(DataToSaveAppend[i].Fields)
+				}			
+			}else{//Object
+				if (!$.isEmptyObject(DataToSaveAppend)){//Object is not empty
+					for (var i = 0; i < DataToSaveAppend.Data.length; i++) {
+						DataToSave.Data.push(DataToSaveAppend.Data[i]);
+						DataToSave.Fields.push(DataToSaveAppend.Fields[i])
+					} 				
+				}
 			}
 		}
 		var ValRes = $.validity.end();
@@ -349,7 +370,7 @@ var oCONTROLS = {
 			};
 			return DataToSave;
 		}
-		else if (ValRes.valid) return 0//reiskia, kad niekas nepakeista
+		else if (ValRes.valid) return 0;//reiskia, kad niekas nepakeista
 		else return false;
 	},
 	lbl: function (text) {
@@ -365,7 +386,10 @@ var oCONTROLS = {
 		//disabled - dadedam klase ui-state-disabled
 		//green - dadedam klase ui-state-green
 		//if(p.type!='undefined') { if(p.type=='green') { oCONTROLS.AddToProperty(p, 'classes', 'ui-state-green'); }   }
-		return ((p.attr) ? p.attr + " " : "") + ((p.id) ? "id='" + p.id + "' " : "") + ((p.style) ? 'style="' + p.style + '" ' : '') + ((p.notabstop) ? "tabindex='-1' " : "") + ((p.title) ? "title='" + p.title + "' " : "") + ((p.data_ctrl) ? "data-ctrl='" + p.data_ctrl + "' " : "") + ((p.classes.input) ? "class='" + p.classes.input + "' " : "");
+		var classes="";//naudojamas tik inputams (labeliams klases pareina per appendLabel
+		if (typeof p.classes ==="string") {classes=p.classes;}
+		else if ( p.classes.input){classes=p.classes.input;}
+		return ((p.attr) ? p.attr + " " : "") + ((p.id) ? "id='" + p.id + "' " : "") + ((p.style) ? 'style="' + p.style + '" ' : '') + ((p.notabstop) ? "tabindex='-1' " : "") + ((p.title) ? "title='" + p.title + "' " : "") + ((p.data_ctrl) ? "data-ctrl='" + p.data_ctrl + "' " : "") + ((classes) ? "class='" + classes + "' " : "");
 
 		//return ((p.attr)?p.attr:'')+((p.id)?'id="'+p.id+'" ':'')+((p.style)?"style='"+p.style+"' ":"")+((p.notabstop)?'tabindex="-1" ':'')+((p.title)?'title="'+p.title+'" ':'')+((p.data_ctrl)?'data-ctrl="'+p.data_ctrl+'" ':'')+((p.classes)?'class="'+p.classes+'" ':'');
 	},
@@ -394,6 +418,11 @@ var oCONTROLS = {
 	},
 	hidden: function (p) {
 		return this.appendLabel(p, "<input type='hidden' " + this.basic(p) + ((p.Value) ? 'value="' + $.trim(p.Value).replace(/"/g, '&quot;') + '" ' : '') + "/>");
+	},
+	radio: function(p){	
+		retStr="<label style='margin-right:1em;'>"+p.sTitle+":</label>";
+		retStr+=p.Radio.map(function(rad,i){ return "<label style='margin-right:.5em;'><input type='radio' name='rd_"+p.Field+"' value='"+rad.value+"'"+((rad.checked)?" checked":"")+"/>"+rad.label+"</label>";}).join("");
+		return retStr;
 	},
 	a: function (p) {
 		return "<a " + this.basic(p) + " href='javascript:void(0);return false;'>" + $.trim(p.Value).replace(/"/g, '&quot;')+ "</a>";

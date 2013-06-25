@@ -15,15 +15,7 @@ App.docsAccident=(p)-> #({accidentForm, docsForm, uploadForm})
 		driver:{iD:driverID,title:driverTitle},#driver:{iD:87,title:"Vairuotojo Albinas Palubinskas dokumentai"},
 		vehicles:vehicles #vehicles:[{iD:14,title:"TP BBB, Volvo __ dokumentai"},{iD:7,title:"BRU643, Volvo, FH12"}]
 	
-	# oDATA.execWhenLoaded(["tmpDocsTree"], ()-> 
-		# p.uploadForm.UploadFiles(#tmpUploadForm - iš Main controllerio paskutinis
-		# categoryOpts:settings
-	# ); 
-	# App.startTree(settings)
-	# )	
 	oDATA.execWhenLoaded(["tmpUploadForm","tmpDocsTree"], ()-> 
 		$('#uploadDocsToAccident').UploadFiles(settings)
-		# if $("#AccDocs").data("ctrl").Saved then App.docsTypesController.refreshTree(settings.categoryOpts); $("#AccDocs").data("ctrl").Saved=false
-		# else 
 		$('#uploadDocsToAccident').next().Tree(categoryOpts:settings.categoryOpts)
 	)

@@ -17,7 +17,7 @@
 						<input class="description" type="text" {{bindAttr value="description"}} style="width:100%;margin-bottom:5px;"/>
 						<input class="docType" type="text" {{bindAttr value="docType"}}/>
 						<div style="margin-top:18px">
-							<a href="#" {{action cancelSaveDoc this target="App.editDocsController"}}>Atšaukti</a>
+							<a  {{action cancelSaveDoc this target="App.editDocsController"}}>Atšaukti</a>
 							<button {{action SaveEditedDoc this target="App.editDocsController"}} class="btn small">Išsaugoti</button>
 						</div>
 					</div>
@@ -51,7 +51,7 @@
 				</div><div class="td" style="margin:0 2%;padding:5px;">
 						<input class="description" type="text" {{bindAttr value="description"}} style="width:100%"/></br><p style="color:Gray">{{docDetails}}</p>
 				</div><div class="td" style="padding:5px;">
-						<a href="#" {{action cancelSaveDoc this target="App.editDocsController"}}>Atšaukti</a>
+						<a  {{action cancelSaveDoc this target="App.editDocsController"}}>Atšaukti</a>
 						<button {{action SaveEditedDoc this target="App.editDocsController"}} class="btn small">Išsaugoti</button>
 				</div>
 		{{else}}

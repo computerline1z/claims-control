@@ -44,7 +44,7 @@ App.NavbarController = Em.Controller.extend({
 			if  (!p.newOutlet){p.newOutlet=p.newState;}//else{$('#' + controller.get("currentOutlet")).empty();}						
 			if  (controller.currentState||p.newOutlet===p.newState){
 				controller.set("currentState", p.newState).set("currentOutlet", p.newOutlet);
-				console.log("fnSetNewTab1:"+p.newOutlet+";"+p.viewIx);
+				//console.log("fnSetNewTab1:"+p.newOutlet+";"+p.viewIx);
 				fnUnhideOutlet(p.newOutlet,p.viewIx,p.transparent);return true;
 			} else {//jei nėra currentState ko gero buvo refresh, tai nukeliam į pradinį psl jei to reikia
 				p.newOutlet=(p.newOutlet==="tabEmpty")?"tabAccidents":p.newOutlet;// galim visada mest i tabAccidents";

@@ -80,17 +80,23 @@
 	* http://www.netmagazine.com/tutorials/building-modern-grid-system
 	* 
 	*/
-	.col + .col:last-child { 
-		float: right; 
+	//.col + .col:last-child { 
+	//	float: right; 
+	//}
+	.row .col.last{
+		float: right;
 	}
-
+	
 	.col + .col.end { 
 		float: left; 
 	}
 
 	//Cancel the left margin in the first item
-	.row .col:first-child, 
-	.row .row .col:first-child {
+	//.row .col:first-child, 
+	//.row .row .col:first-child {
+	//	margin-left: 0;
+	//} replaced with
+	.row .col.first{
 		margin-left: 0;
 	}
 

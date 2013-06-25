@@ -12,7 +12,7 @@
             @if (Request.IsAuthenticated) {
                 <text> 
                     <td><span id="spanLogAccount">@CC.Classes.UserData.Account</span></td>
-                    <td class="user"><a class="whiteLink" id="userLink" href="#">@CC.Classes.UserData.UserName</a></td>
+                    <td class="user"><a class="whiteLink" id="userLink" >@CC.Classes.UserData.UserName</a></td>
                     <td class="logOut"><a href='#' class="whiteLink" onclick="location='@LogoutUrl'">Atsijungti</a></td>
                 </text>
             }
@@ -24,7 +24,7 @@
                 </td>
                 <text> <td style="width: 110px;">
                     <span id='spanLogAction' onclick="location='@LoginUrl'">Prisijungti</span></td><td style="width: 100px;">
-                        <a class="whiteLink"  id="userLink" href="#">@CC.Classes.UserData.UserName</a></td>
+                        <a class="whiteLink"  id="userLink" >@CC.Classes.UserData.UserName</a></td>
                 </text>
             }
         </tr>

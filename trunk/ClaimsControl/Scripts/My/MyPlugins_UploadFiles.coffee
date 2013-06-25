@@ -145,7 +145,7 @@ App.editDocsController= Em.Object.create(
 		oCONTROLS.dialog.Confirm({title:"Dokumento pašalinimas",msg:"Ištrinti dokumentą '"+c.docName+"'?"}, ()-> 
 			SERVER.update2("Action":"Delete","Ctrl":t,"source":"tblDocs",#"row":doc,
 			DataToSave:{"id":c.docID, "DataTable":"tblDocs"},
-			Msg: { Title: "Duokumento pašalinimas", Success: "Dokumentas '"+c.docName+"' pašalintas.", Error: "Nepavyko pašalinti dokumento '"+c.docName+"'." },
+			Msg: { Title: "Dokumento pašalinimas", Success: "Dokumentas '"+c.docName+"' pašalintas.", Error: "Nepavyko pašalinti dokumento '"+c.docName+"'." },
 			CallBackAfter:(Row)->
 				#doc=oDATA.GET("tblDocs").emData.findProperty("iD", c.docID)
 				#oDATA.GET("tblDocs").emData.removeObject(doc)

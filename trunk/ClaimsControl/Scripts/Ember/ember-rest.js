@@ -228,6 +228,7 @@ var oDATA = Ember.Object.create({
 					oDATA.executed[url] = (new Date()).getTime();
 				},
 				error:function(xhr,x,y){
+					debugger;
 					window.location='/Account/Logon';// App.router.location.lastSetURL
 					//document.location.href = '/account/login';
 				},
@@ -353,17 +354,20 @@ var SERVER = {
 		//SERVER.update2({"Action":Action,DataToSave:{},"Ctrl":Ctrl,"source":source,"row":row
 		if (!p.DataToSave) return false; var me=this;
 		var CallBack = { Success: function (resp, updData) {
-			var oData = oDATA.GET(p.source);id=(updData.Action==="Add")?resp.ResponseMsg.ID:p.DataToSave.id;obj=(updData.Action==="Add")?oGLOBAL.helper .emData_fromDataToSave(p.DataToSave,id):oData.emData.findProperty("iD", id);  
+			var oData = oDATA.GET(p.source);id=(updData.Action==="Add")?resp.ResponseMsg.ID:p.DataToSave.id;Row =(p.Action === "Add")?Em.Object.create({}):p.row; obj=(updData.Action==="Add")?oGLOBAL.helper .emData_fromDataToSave(p.DataToSave,id):oData.emData.findProperty("iD", id);  
 			if (p.source==="proc_Drivers"){//Panaikinam dublicatus prieš jei du, nes galejo keistis, po jei du ir daugiau uzdesim
 				var dublicates=oData.emData.filter(function(item){
 					return item.firstName===obj.firstName && item.lastName===obj.lastName;
 				});
 				if (dublicates.length===2){dublicates.map(function(i){i.notUnique=false;});}
-			}			
+			}		
+			if (p.DataToSave.id&&!Row){//when we have id we can find Row if missing
+				Row=oData.emData.findProperty("iD",p.DataToSave.id);
+			}
 			if (updData.Action==="Delete"){	
-				src.removeObject(obj)				
+				oData.emData.removeObject(obj)				
 			}else{
-				var Adding = (p.Action === "Add") ? true : false, Row = (Adding) ? Em.Object.create({}) : p.row;
+				var Adding = (p.Action === "Add") ? true : false;
 				if (!Row) throw new Error("p.Row is empty");
 				var  Cols = oData.Cols;
 				if (!oData) throw new Error("p.oData is empty");
@@ -375,6 +379,10 @@ var SERVER = {
 						if (fieldName == updateField.firstSmall()) {
 							//debugger;
 							var newVal = updData.DataToSave.Data[i2];
+							if  (col.Type) {
+								if (col.Type==="Decimal") {newVal=parseFloat(newVal,10);}
+								if (col.Type==="Integer"||col.Type==="Radio"||col.Type==="Boolean") {newVal=parseInt(newVal,10);}
+							}else if (col.FName.slice(-2)==="ID"){newVal=parseInt(newVal,10);}
 							Row.set(fieldName, newVal); ok = true;
 							if (col.List) {//Jeigu List, updatinam ir teksto lauka
 								var updateCol = Cols.findObjectByProperty("IdField", fieldName);
@@ -386,21 +394,21 @@ var SERVER = {
 						}
 					});
 					if (!ok && (Adding && fieldName !== "iD")) {//Jeigu naujos pridejimas ir nerado, ikisam ka nors
-						if (col.Default)
+						if (col.Default) {
+							var u=oDATA.GET('userData').emData[0];
 							if (col.Default === "Today") { Row.set(fieldName, oGLOBAL.date.getTodayString()); }
-							else if (col.Default === "UserName") { Row.set(fieldName, UserData.Name()); }
-							else if (col.Default === "UserId") { Row.set(fieldName, UserData.Id()); }
+							else if (col.Default === "UserName") { Row.set(fieldName, u.userName); }
+							else if (col.Default === "UserId") { Row.set(fieldName, u.userID); }
 							else Row.set(fieldName, col.Default);
-						else { 
+						} else { 
 							//debugger;
 							// if  (col.IdField) {		
 								// var infoRow=Cols.getColByFName (col.IdField), source=infoRow.List.Source,Field=infoRow.FName;
 								// var i=updData.DataToSave.Fields.findIndexByVal(Field,true),iDVal=updData.DataToSave.Data[i];
 								// Row.set(fieldName,oDATA.GET(source).emData.findProperty("iD", iDVal).MapArrToString(infoRow.List.iText, false));
 							// }else 
-							if(fieldName=="docs"){
-								Row.set("docs", "(0)");
-							}else {Row.set(fieldName, "");} 
+							//if(fieldName==="docs"){Row.set("docs", "(0)");}else {}
+							Row.set(fieldName, ""); 
 						}
 					}
 					console.log("col: " + fieldName + ", ok: " + ok + ", fieldValue:" + Row[fieldName])
@@ -410,7 +418,11 @@ var SERVER = {
 					if (dublicates.length<2){confirm=false;}else{confirm=true;}
 					dublicates.map(function(i){i.notUnique=confirm;});Row.notUnique=confirm;
 				}				
-				if (Adding) { Row.set("visible", true); oData.emData.pushObject(Row); } //oData.emData.unshiftObject(Row); }
+				if (Adding) { 
+						Row.set("visible", true); 
+						if  (p.source==="proc_Activities"||p.source==="proc_Finances") {oData.emData.unshiftObject(Row);}//Į pradžią
+						else {oData.emData.pushObject(Row); } 
+				}
 				else { oData.emData.findProperty("iD", Row.iD).updateTo(Row); }
 				var controller = updData.controller, emObject = (updData.emObject) ? updData.emObject : "content";
 				if (controller) {//Updatinam ir į pagrindinį kontrolerį tik insertinant (kiti updatinasi
@@ -472,6 +484,7 @@ var SERVER = {
 			contentType: "application/json; charset=utf-8",
 			dataType: dataType,
 			error: function (msg) {
+				debugger;
 				console.warn(msg);
 				window.location='/Account/Logon';// App.router.location.lastSetURL
 			},

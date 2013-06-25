@@ -47,8 +47,8 @@ App.SelectedAccidentView = Em.View.extend(
 				#Claims: 0-ClaimStatus,1-No,2-ClaimType(text),3-Vehicle,4-Insurer(text),5-lossAmount
 				#Claims2: 0-ClaimID, 1-VehicleID, 2-InsPolicyID, 3-InsuranceClaimAmount, 4-InsurerClaimID, 5-IsTotalLoss, 6-IsInjuredPersons, 7-Days, 8-PerDay	
 				objView[i] = 
-					finished: (if(ArrClaims[i][0] == "2") then true else false), no: ArrView[i].Claims[1], type: ArrView[i].Claims[2]
-					autoNo: ArrView[i].Claims[3], insurer: ArrView[i].Claims[4], loss: ArrView[i].Claims[5], Claims2: ArrView[i].Claims2
+					finished: (if(ArrClaims[i][0] == "5") then true else false), no: ArrView[i].Claims[1], type: ArrView[i].Claims[2]
+					autoNo: ArrView[i].Claims[3], insurer: ArrView[i].Claims[4], loss: ArrView[i].Claims[5], Claims2: ArrView[i].Claims2, claimStatus:ArrClaims[i][0]
 					accidentID: @get("iD"), accidentDate: @date
 		App.thisAccidentController.set("content", objView) #butinai masyvas
 		App.thisAccidentController.set("accidentID", @get("iD")) #butinai masyvas		
@@ -65,7 +65,7 @@ App.SelectedAccidentView = Em.View.extend(
 		tr.parent().find("tr.selectedClaim").removeClass("selectedClaim title")
 		d = e.context;
 		MY.tabAccidents.SelectedClaimView = App.SelectedClaimView.create(
-			rowContext: { Claims2: d.Claims2, newClaim: false, LossAmount: d.loss, InsuranceType: d.type, accidentID: d.accidentID, accidentDate: d.accidentDate }
+			rowContext: { Claims2: d.Claims2, newClaim: false, LossAmount: d.loss, InsuranceType: d.type, accidentID: d.accidentID, accidentDate: d.accidentDate, claimStatus: d.claimStatus }
 			elementId: "ClaimDetailsContent", contentBinding: 'App.claimEditController.content'
 		)
 		tr.addClass("selectedClaim title").after("<tr><td id='ClaimWraper' colspan='7' class='selectedClaim content'></td></tr>");
@@ -124,6 +124,12 @@ App.SelectedClaimView = Em.View.extend(
 		if c.typeID==6
 			inpSum=$(frm).find('.inputSum input'); days=$(frm).find('.days input');perDay=$(frm).find('.perDay input')
 			$(frm).find('.days input,.perDay input').on("keyup",-> inpSum.val(days.val()*perDay.val());)
+		if c.claimStatus>2
+			inputs=$(frm).find("input")
+			if c.claimStatus=="3" then inputs=inputs.eq(1).prop('title', 'Suma jau patvirtina')#lossAmount placement important!!
+			else if c.claimStatus=="4" then inputs=inputs.filter((i)->i==1||$(@).attr("id")=="InsuranceClaimAmount").prop('title', 'Suma jau patvirtina')#lossAmount & insuranceClaimAmount
+			else if c.claimStatus=="5" then ($(frm).find("button").prop("disabled", true); inputs.prop('title', 'Žala uždaryta'))#laimStatus==5 disabled everything
+			inputs.prop("disabled", true)
 	init: ->
 		@_super(); d = @get("rowContext"); 		
 		if not d.newClaim
@@ -131,7 +137,7 @@ App.SelectedClaimView = Em.View.extend(
 			#Claims2: 0-ClaimID, 1-VehicleID, 2-InsPolicyID, 3-InsuranceClaimAmount, 4-InsurerClaimID, 5-IsTotalLoss, 6-IsInjuredPersons, 7-Days, 8-PerDay
 			Claim = Em.Object.create(
 				iD: C2[0],vehicleID: C2[1],insPolicyID: C2[2],insuranceClaimAmount: C2[3],insurerClaimID: C2[4].slice(1).slice(0, -1)#Panaikinam pirmą ir paskutinį ' ('nr Pvz')
-				isTotalLoss: C2[5],isInjuredPersons: parseInt(C2[6],10),days: C2[7],perDay: C2[8],lossAmount: d.LossAmount
+				isTotalLoss: C2[5],isInjuredPersons: parseInt(C2[6],10),days: C2[7],perDay: C2[8],lossAmount: d.LossAmount, claimStatus: d.claimStatus
 				newClaim: false,typeID: TypeID, deleteButton:true
 			)	
 			App.claimEditController.set("content", [Claim]) #butinai masyvas view'e su each		
@@ -164,6 +170,11 @@ App.claimEditController = Em.Controller.create(#save, delete, cancel Claims even
 					#oData.Data.removeRowByID(p.id) data.removeRowByProperty("id",p.id)
 					$("#accidentsTable").find("div.selectedAccident").trigger("click")
 			)
+	fnUpdateAccident: (resp)-> #also used when updating claimStatus from claim regulation
+		newRow = resp.ResponseMsg.Ext.replace(/#\|#\|/g,":::").split("|#|"); newRow[13]=newRow[13].replace(/:::/g,"#|#|") #atkeičiam atgal
+		App.accidentsController.get("setNewVal").call(App.accidentsController, {newVal:newRow,toAppend:false,fieldsToInt:[0, 1, 5, 6, 7, 8]})[0] #kuriuos reikia paverst integeriais
+		tr = $("#accidentsTable").find("div.selectedAccident") #.empty()
+		tr.trigger("click").trigger("click")	
 	saveForm: (e) ->
 		newClaim=e.view._context.newClaim; accidentID=e.view._parentView.templateData.view.rowContext.accidentID
 		if newClaim
@@ -178,15 +189,7 @@ App.claimEditController = Em.Controller.create(#save, delete, cancel Claims even
 				DataToSave.Fields.push("ClaimTypeID"); DataToSave.Data.push(e.view._context.typeID)
 				DataToSave.Fields.push("AccidentID"); DataToSave.Data.push(accidentID)
 			DataToSave["Ext"] = accidentID
-			opt = 
-				Action: Action, DataToSave: DataToSave,
-				CallBack:
-					Success: (resp) ->
-						newRow = resp.ResponseMsg.Ext.replace(/#\|#\|/g,":::").split("|#|"); newRow[13]=newRow[13].replace(/:::/g,"#|#|") #atkeičiam atgal
-						App.accidentsController.get("setNewVal").call(App.accidentsController, {newVal:newRow,toAppend:false,fieldsToInt:[0, 1, 5, 6, 7, 8]})[0] #kuriuos reikia paverst integeriais
-						tr = $("#accidentsTable").find("div.selectedAccident") #.empty()
-						tr.trigger("click").trigger("click")
-				Msg: Msg
+			opt = Action: Action, DataToSave: DataToSave, CallBack: {Success: @fnUpdateAccident}, Msg: Msg
 			SERVER.update(opt)
 	cancelForm: (e) ->
 		t=$(e.target); tr=t.closest("tr")
