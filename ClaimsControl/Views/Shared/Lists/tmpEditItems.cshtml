@@ -12,8 +12,8 @@
 					<div style="float:left">{{insurerName}}</div>	
 				{{/if}}	
 				<div style="float:right">
-					<a href="#" {{action editItem this}}><i class="img18-pencil"></i></a>
-					<a href="#" {{action deleteItem this}}><i class="img18-delete"></i></a>
+					<a  {{action editItem this}}><i class="img18-pencil"></i></a>
+					<a  {{action deleteItem this}}><i class="img18-delete"></i></a>
 				</div>
 			</div>
 		{{/if}}
@@ -21,7 +21,7 @@
 	{{#if this.addItem}} 
 		<div style="line-height:30px;"><input type="text"/><button class="btn small" {{action saveNewItem}}>Išsaugoti</button></div><div><button class="btn small" {{action cancelNewItem}}>Atšaukti</button></div>
 	{{else}}
-		<a style="line-height:30px;" {{action addNewItem}} href="#">{{this.addNewMsg}}</a>
+		<a style="line-height:30px;" {{action addNewItem}} >{{this.addNewMsg}}</a>
 	{{/if}}
 </fieldset>
 </br>

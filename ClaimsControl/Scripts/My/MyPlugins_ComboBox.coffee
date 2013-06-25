@@ -50,7 +50,8 @@ _create: ->
 		fnRefresh: ()-> 
 			if input.data("newval") then opt.Value=input.data("newval")
 			fnSetData()
-			input.after("<span title='redaguoti..' class='ui-icon ui-icon-pencil ui-menu-icon'>&nbsp;</span>") if opt.Editable.EditThis and input.data("newval") and opt.ListType=="None"		
+			#input.after("<span title='redaguoti..' class='ui-icon ui-icon-pencil ui-menu-icon'>&nbsp;</span>") if opt.Editable.EditThis and input.data("newval") and opt.ListType=="None"	
+			input.after("<i title='redaguoti..' class='img18-pencil ui-menu-icon'></i>") if opt.Editable.EditThis and input.data("newval") and opt.ListType=="None"
 		source: (request, response) ->
 			response $.ui.autocomplete.filter(data, request.term)
 
@@ -66,7 +67,7 @@ _create: ->
 				# else fnEditItem(0)
 				return false #čia tipo naujo itemso pridėjimas	
 				
-			ctrl=input.next().next("span"); isPencil=ctrl.hasClass("ui-icon-pencil")	#gali būt redagavimo pieštukas		
+			ctrl=input.next().next("span"); isPencil=ctrl.hasClass("img18-pencil")	#gali būt redagavimo pieštukas		
 			if ui.item.id==0 and isPencil then ctrl.css("display","none") #taip žymim neapdrausta
 			else if isPencil then ctrl.css("display","block")		
 			
@@ -155,14 +156,13 @@ _create: ->
 	if opt.Editable.EditThis
 		id = $(this).data("newval")
 		id = (if (id) then id else 0)#onclick='alert(\"opa\"); return false;'
-		opt.appendToList="<span title='redaguoti..' class='ui-icon ui-icon-pencil ui-menu-icon'>&nbsp;</span>"
-		#"<span style='margin:-22px 20px auto auto;' title='redaguoti..' class='ui-icon ui-icon-pencil ui-menu-icon'>&nbsp;</span>"
-		# <span style='margin:-16px 2px auto auto;' title='ištrinti..' class='ui-icon ui-icon-trash ui-menu-icon'>&nbsp;</span>"
+		#opt.appendToList="<span title='redaguoti..' class='ui-icon ui-icon-pencil ui-menu-icon'>&nbsp;</span>"
+		opt.appendToList="<i title='redaguoti..' class='img18-pencil ui-menu-icon'></i>"
 		input.after(opt.appendToList)
 		input.data("autocomplete").fnClickOnBtn=(p) ->
-			Action=if p.elm.hasClass("ui-icon-pencil") then "Edit" else "Delete"
+			Action=if p.elm.hasClass("img18-pencil") then "Edit" else "Delete"
 			oData=oDATA.GET(opt.Source)
-			if p.elm.hasClass("ui-icon-pencil")#Edit
+			if p.elm.hasClass("img18-pencil")#Edit
 				fnEditItem p.id
 			else
 				#parent=p.elm.parent(); val=if p.fromInput then parent.find("input").val().trim() else parent.find("span:nth(0)").html()+parent.html().replace(/<span\b[^>]*>(.*?)<\/span>/gi,"").replace(/&nbsp;/gi,"").trim()
@@ -181,7 +181,7 @@ _create: ->
 				)	
 				
 		#input.siblings().filter("span.ui-menu-icon").on("click", ->
-		input.parent().on("click", "span.ui-menu-icon", ->
+		input.parent().on("click", "span.ui-menu-icon,i.ui-menu-icon", ->
 			e=$(this);id=e.parent().find("input").data("newval");
 			input.data("autocomplete").fnClickOnBtn(id:id,elm:e,fromInput:true)
 		)
@@ -216,8 +216,8 @@ _create: ->
 		input.click ->
 			@select()
 addButton: (p, input) ->
-	# @button = $("<button style='margin:0 0 0 -2.2em;height:" + input.outerHeight() + "px;' class='drop-down'>&nbsp;</button>").attr("tabIndex", -1).attr("title", p.title).insertAfter(input).button( #.attr("style", "margin-left:0.1em;left:0;");
-	@button = $("<button style='height:" + input.outerHeight() + "px;' class='drop-down'>&nbsp;</button>").attr("tabIndex", -1).attr("title", p.title).insertAfter(input).button( #.attr("style", "margin-left:0.1em;left:0;");
+	height=if input.outerHeight() !=0 then "style='height:" + input.outerHeight() + "px;'" else "";
+	@button = $("<button "+height+" class='drop-down'>&nbsp;</button>").attr("tabIndex", -1).attr("title", p.title).insertAfter(input).button( #.attr("style", "margin-left:0.1em;left:0;");
 		icons: {primary: p.icon}
 		text: false
 	).click(->

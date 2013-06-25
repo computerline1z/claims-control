@@ -193,8 +193,7 @@ TreeViewOpts :
 		)
 		
 		App[@opts.TreeDocController].set("isPhoto", isPhoto)
-		console.log("showDocs:")
-		console.log(showDocs)
+		#console.log("showDocs:");console.log(showDocs)
 		App[@opts.TreeDocController].set("docs", showDocs)
 		false
 	expandCollapse: (event) ->

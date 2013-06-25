@@ -1031,41 +1031,36 @@ namespace CC.Models {
 					  select d).AsEnumerable();
 		}
 
-		public jsonArrays GetJSON_proc_Activity() {
+		public jsonArrays GetJSON_proc_Activities() {
 			jsonArrays JSON = new jsonArrays();
-			JSON.Data = from a in dc.proc_Activity(UserData.AccountID)
+			JSON.Data = from a in dc.proc_Activities(UserData.AccountID)
 				select new object[] {
 				a.ID,//0
 				a.ClaimID,//1
 				a.ActivityTypeID,//2
 				a.FromText,//3
-				a.From,//4
+				a.FromID,//4
 				a.ToText,//5
-				a.To,//6
+				a.ToID,//6
 				a.Subject,//7
 				a.Body,//8
 				a.DueDate,//9
 				a.UserID,//10
 				a.EntryDate//11
 				};
-			//,Tip="Pasirinkite žalos tipą..", List=new{Source="tblClaimTypes",iVal="iD",iText=new object[]{"name"},ListType="List"}
-			//Editable = new{EditThis=true,AddNew=true} Append=new{id=0,value="Neapdrausta"}
-			//,Type="Integer", LenMax=10,Validity="require().match('integer').maxLength(13).greaterThanOrEqualTo(0)"
-			//,Type="Decimal", LenMax=15,Validity="require().match('number').greaterThanOrEqualTo(0)
-			//Type="Boolean"
 			object[] Cols ={
 				new { FName = "ID"},//0
 				new { FName = "ClaimID"},//1
 				new { FName = "ActivityTypeID"},//2
-				new { FName = "FromText", List=new{Source="tblUsers",iVal="iD",iText=new object[]{"firstName","surname"},ListType="List"}},//3 Value pagal nutylėjimą esamas useris
-				new { FName = "From", List=new{Source="tblUsers",iVal="iD",iText=new object[]{"firstName","surname"},ListType="List"}},//4
+				new { FName = "FromText",Type="String"},//3 Value pagal nutylėjimą esamas useris
+				new { FName = "FromID", List=new{Source="tblUsers",iVal="iD",iText=new object[]{"firstName","surname"},ListType="List"}},//4
 				new { FName = "ToText",Type="String"},//5 
-				new { FName = "To",Type="String"},//6
+				new { FName = "ToID", List=new{Source="tblUsers",iVal="iD",iText=new object[]{"firstName","surname"},ListType="List"}},//6
 				new { FName = "Subject",Type="String"},//7
 				new { FName = "Body",Type="Textarea"},//8
-				new { FName = "DueDate",Type="Date", Default="Today", Validity="require().match('date').maxLength(2).greaterThanOrEqualTo(new Date())",Plugin = new {datepicker = new {minDate=0, maxDate="2y"}}},//9
-				new { FName = "UserID"},//10
-				new { FName = "EntryDate"}//11
+				new { FName = "DueDate",Default="Today",Type="DateMore", Validity="require().match('date')",Plugin = new {datepicker = new {minDate=0, maxDate="2y"}}},//9
+				new { FName = "UserID", Default="UserId"},//10
+				new { FName = "EntryDate", Default="Today"}//11
 				}; JSON.Cols = Cols;
 			JSON.Config = new {
 				tblUpdate = "tblActivity", Msg = new { AddNew = "Naujos veiklos pridėjimas", Edit = "Veiklos redagavimas", Delete = "Ištrinti veiklą", GenName = "Veikla" }
@@ -1076,9 +1071,9 @@ namespace CC.Models {
 				new {bVisible=false},//1 ClaimID
 				new {bVisible=false},//2 ActivityTypeID
 				new {sTitle="Kas"},//3 FromText
-				new {sTitle="Kas"},// From
+				new {sTitle="Kas"},// FromID
 				new {sTitle="Su kuo"},//5 ToText
-				new {sTitle="Su kuo"},//6 To
+				new {sTitle="Su kuo"},//6 ToID
 				new {sTitle="Tema"},//7 Subject
 				new {sTitle=""},//8 Body
 				new {sTitle="Kada"},//9 DueDate
@@ -1089,91 +1084,125 @@ namespace CC.Models {
 			return JSON;
 		}
 
-		public jsonArrays GetJSON_proc_ClaimDamage() {
+		public jsonArrays GetJSON_proc_Finances() {
 			jsonArrays JSON = new jsonArrays();
-			JSON.Data = from a in dc.proc_ClaimDamage(UserData.AccountID)
+			JSON.Data = from a in dc.proc_Finances(UserData.AccountID)
 							select new object[] {
 				a.ID,//0
 				a.ClaimID,//1
 				a.Amount,//2
-				a.Purpose,//3
-				a.Note,//4
-				a.Type,//5
-				a.UserID,//6
-				a.EntryDate//7
+				a.Date,//3
+				a.Purpose,//4
+				a.Note,//5
+				a.FinancesTypeID,//6
+				a.UserID,//7
+				a.EntryDate,//8
+				a.Docs
 				};
-			//,Tip="Pasirinkite žalos tipą..", List=new{Source="tblClaimTypes",iVal="iD",iText=new object[]{"name"},ListType="List"}
-			//Editable = new{EditThis=true,AddNew=true} Append=new{id=0,value="Neapdrausta"}
-			//,,Type="Date", Validity="require().match('integer').maxLength(2).greaterThanOrEqualTo(new Date())"
-			//,Type="Decimal", LenMax=15,Validity="require().match('number').greaterThanOrEqualTo(0)
 			object[] Cols ={
 				new { FName = "ID"},//0
 				new { FName = "ClaimID"},//1
 				new { FName = "Amount",Type="Decimal", LenMax=15,Validity="require().match('number').greaterThanOrEqualTo(0)"},//2
-				new { FName = "Purpose",Type="String"},//3
-				new { FName = "Note",Type="String"},//4
-				new { FName = "Type",Type="Boolean"},//5
-				new { FName = "UserID"},//6
-				new { FName = "EntryDate"}//7
+				new { FName = "Date",Default="Today",Type="DateLess", Validity="require().match('date')",Plugin = new {datepicker = new {minDate="-2y", maxDate="0"}}},//3
+				new { FName = "Purpose",Type="String"},//4
+				new { FName = "Note",Type="Textarea"},//5
+				new { FName = "FinancesTypeID",Type="Radio"},//6
+				new { FName = "UserID", Default="UserId"},//7
+				new { FName = "EntryDate", Default="Today"},//8
+				new { FName = "Docs"}//9
 				}; JSON.Cols = Cols;
 			JSON.Config = new {
-				tblUpdate = "tblClaimDamage"//, Msg = new { AddNew = "Naujos veiklos pridėjimas", Edit = "Veiklos redagavimas", Delete = "Ištrinti veiklą", GenName = "Veikla" }
+				tblUpdate = "tblFinances"//, Msg = new { AddNew = "Naujos veiklos pridėjimas", Edit = "Veiklos redagavimas", Delete = "Ištrinti veiklą", GenName = "Veikla" }
 			};
 			JSON.Grid = new {
 				aoColumns = new object[]{
 				new {bVisible=false},//0
 				new {bVisible=false},//1 ClaimID
 				new {sTitle="Turto vertė be PVM"},//2 Amount
-				new {sTitle="Turto pavadinimas"},//3 Purpose
-				new {sTitle="Pastabos"},// Note
-				new {sTitle=""},//5 Type
-				new {sTitle=""},//10 UserID
-				new {sTitle=""},//11 EntryDate
+				new {sTitle=""},//3 Date
+				new {sTitle=""},//4 Purpose
+				new {sTitle=""},//5 Note
+				new {sTitle=""},//6 TypeID
+				new {sTitle=""},//7 UserID
+				new {sTitle=""},//8 EntryDate
+				new {sTitle=""}//9 Docs
 				}
 			};
 			return JSON;
 		}
-		public jsonArrays GetJSON_proc_ClaimCompensation() {
+		public jsonArrays GetJSON_tblFinTypes() {
 			jsonArrays JSON = new jsonArrays();
-			JSON.Data = from a in dc.proc_ClaimCompensation(UserData.AccountID)
-							select new object[] {
+			JSON.Data = from a in dc.tblFinTypes
+				select new object[] {
 				a.ID,//0
-				a.ClaimID,//1
-				a.Amount,//2
-				a.Note,//3
-				a.Date,//4
-				a.UserID,//5
-				a.EntryDate//6
+				a.Name//1
 				};
-			//,Tip="Pasirinkite žalos tipą..", List=new{Source="tblClaimTypes",iVal="iD",iText=new object[]{"name"},ListType="List"}
-			//Editable = new{EditThis=true,AddNew=true} Append=new{id=0,value="Neapdrausta"}
-			//,,Type="Date", Validity="require().match('integer').maxLength(2).greaterThanOrEqualTo(new Date())"
-			//,Type="Decimal", LenMax=15,Validity="require().match('number').greaterThanOrEqualTo(0)
 			object[] Cols ={
 				new { FName = "ID"},//0
-				new { FName = "ClaimID"},//1
-				new { FName = "Amount",Type="Decimal", LenMax=15,Validity="require().match('number').greaterThanOrEqualTo(0)"},//2
-				new { FName = "Note",Type="String"},//3
-				new { FName = "Date",Type="Date"},//4
-				new { FName = "UserID"},//5
-				new { FName = "EntryDate"}//6
+				new { FName = "Name"}//1
 				}; JSON.Cols = Cols;
 			JSON.Config = new {
-				tblUpdate = "tblClaimCompensation"//, Msg = new { AddNew = "Naujos veiklos pridėjimas", Edit = "Veiklos redagavimas", Delete = "Ištrinti veiklą", GenName = "Veikla" }
+				tblUpdate = "tblFinances"//, Msg = new { AddNew = "Naujos veiklos pridėjimas", Edit = "Veiklos redagavimas", Delete = "Ištrinti veiklą", GenName = "Veikla" }
 			};
 			JSON.Grid = new {
 				aoColumns = new object[]{
 				new {bVisible=false},//0
-				new {bVisible=false},//1 ClaimID
-				new {sTitle="Turto vertė be PVM"},//2 Amount
-				new {sTitle="Pastabos"},// Note
-				new {sTitle="Mokėjimo data"},//5 Type
-				new {sTitle=""},//10 UserID
-				new {sTitle=""},//11 EntryDate
+				new {sTitle="Pavadinimas"}//1 Amount
 				}
 			};
 			return JSON;
 		}
+
+		public jsonArrays GetJSON_tblDocsInActivity() {
+			jsonArrays JSON = new jsonArrays();
+
+						//JSON.Data = from d in dc.tblClaims join a in dc.tblAccidents on d.AccidentID equals a.ID
+						//   where d.IsDeleted == false && a.AccountID == UserData.AccountID
+						//   select new object[] {
+
+			JSON.Data = from dIna in dc.tblDocsInActivities join a in dc.tblActivities on dIna.ActivityID equals a.ID
+							join d in dc.tblDocs on dIna.DocID equals d.ID
+							join u in dc.tblUsers on d.UserID equals u.ID
+							where a.IsDeleted == false && d.IsDeleted == false && u.AccountID == UserData.AccountID
+							select new object[] {
+			      dIna.ID,//0
+			      dIna.ActivityID,//1
+			      dIna.DocID//2
+			   };
+
+			object[] Cols ={
+			   new { FName = "ID"},//0
+			   new { FName = "ActivityID"},//1
+			   new { FName = "DocID"}//2
+			   }; JSON.Cols = Cols;
+			JSON.Config = new {
+				tblUpdate = "tblDocsInActivity"
+			};
+			return JSON;
+		}
+
+		public jsonArrays GetJSON_tblDocsInFin() {
+			jsonArrays JSON = new jsonArrays();
+			JSON.Data = from dInf in dc.tblDocsInFins join f in dc.tblFinances on dInf.FinID equals f.ID
+							join d in dc.tblDocs on dInf.DocID equals d.ID
+							join u in dc.tblUsers on d.UserID equals u.ID
+							where f.IsDeleted == false && d.IsDeleted == false && u.AccountID == UserData.AccountID
+							select new object[] {
+					dInf.ID,//0
+					dInf.FinID,//1
+					dInf.DocID//2
+				};
+			object[] Cols ={
+				new { FName = "ID"},//0
+				new { FName = "ActivityID"},//1
+				new { FName = "DocID"}//2
+				}; JSON.Cols = Cols;
+			JSON.Config = new {
+				tblUpdate = "tblDocsInActivity"
+			};
+			return JSON;
+		}
+
 
 	}
 }

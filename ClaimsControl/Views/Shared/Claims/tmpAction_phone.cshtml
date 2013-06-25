@@ -1,1 +1,10 @@
-﻿Phone Phone Phone
+﻿<div id="contentOfClaimReg" class="inputForm container w90pr centerBlock" data-ctrl='{"NewRec":1,"Source":"proc_Activities","tblUpdate":"tblActivities"}'>
+	<div class="row">	
+		{{updatableField fromText labelType="Left" classes="span:'col one', input:'col three'"}}
+		{{updatableField toText labelType="Left" classes="span:'col one', input:'col three'"}}
+		{{updatableField dueDate labelType="Left" classes="span:'col one box-14pr-left', input:'col last'"}}
+	</div>	
+	{{updatableField subject labelType="Left" classes="wrapper:row, span:'col one first', input:'col eleven last'"}}
+	{{updatableField body labelType="None" classes="wrapper:row, input:'row'"}}
+	{{view App.FormBottomView target="App.tabClaimsRegulationController"}}
+</div>

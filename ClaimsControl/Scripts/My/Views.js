@@ -31,9 +31,8 @@ Handlebars.registerHelper('updatableField', function (prop, options) {
 			else{classesObject[name]=value;isEmpty=false;}//span, input
 		})
 		classesObject=(isEmpty)?'':',"classes":' +JSON.stringify(classesObject);
-		//classes=(classes.wrapper)?classes.wrapper:"";
-		//console.log(classesObject);
 	}
+	var radio =  (h.Radio)? (",\"Radio\":"+h.Radio.replace(/'/g,'"')) : "";
 	var st =  (h.style)? ("style='"+h.style+"'") : "";
 	var id = h.id; id = (id) ? ",\"id\":\"" + id+"\"" : "";
 	var lblT = h.labelType; lblT = (lblT) ? ",\"labelType\":\"" + lblT+"\"": "";
@@ -42,7 +41,7 @@ Handlebars.registerHelper('updatableField', function (prop, options) {
 	var List = h.List; List = (List) ? ",\"List\":" + List  : ""; //List yra objektas ir jam kabuciu nereikia
 	var Editable = h.Editable; Editable = (Editable) ? ",\"Editable\":" + Editable  : ""; //Editable yra objektas ir jam kabuciu nereikia
 
-	var retString = " class='ExtendIt"+((classes)?" "+classes:"")+"' "+st+" data-ctrl='{\"Value\":\"" + v + "\",\"Field\":\"" + f.firstBig()+"\"" + classesObject+ id + lblT+sTitle + attr+List+Editable;
+	var retString = " class='ExtendIt"+((classes)?" "+classes:"")+"' "+st+" data-ctrl='{\"Value\":\"" + v + "\",\"Field\":\"" + f.firstBig()+"\"" + classesObject+ id + lblT+sTitle + attr+List+Editable+radio;
 	//if (retString.charAt(retString.length - 1) === ",") {retString = retString.slice(0, -1); } //iškertam paskutini kalbeli jei yra
 	if (h.tag) {retString="<"+h.tag+ retString + "}'></"+h.tag+">";} else  {retString="<div"+ retString + "}'></div>";}
 	return new Handlebars.SafeString(retString );
@@ -81,8 +80,15 @@ Handlebars.registerHelper('compare', function (lvalue, operator, rvalue, options
 	getVal=function(name){
 		if (!isNaN(name)){return parseInt(name,10);}//Jei tai numeris tuo ir baigsim
 		var nameArr=name.split('.'), val=me;
-		nameArr.forEach(function(n){val=val[n];});
-		return  val;
+		//nameArr.forEach(function(n){val=val[n];});
+		if (nameArr.length===1) {
+			var valL=nameArr[0].toLowerCase();
+			if  (valL=="true"||valL=="false") {val=((valL==="true")?true:false);}
+			else val=val[nameArr[0]];
+		} else {
+			nameArr.forEach(function(n){val=val[n];});
+		}
+		return val;
 	}
 	lvalue=getVal(lvalue);
 	rvalue=getVal(rvalue);
@@ -126,7 +132,7 @@ App.SearchField = Ember.View.extend({
 App.FormBottomView = Em.View.extend({ 
 	init: function() {
 		 var actions=['deleteForm','saveForm','cancelForm'],targetEventFnc=[],actionFnc=[];
-		 target = this.get('target'),	 
+		 var target = this.get('target'),	thisContext ,
 		 targetObj = Ember.getPath(target);
 		if (!targetObj){console.error("no target");}
 		var attachFunction = function(fn,thisContext){

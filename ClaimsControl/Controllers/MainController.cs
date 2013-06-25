@@ -3,6 +3,7 @@ using CC.Models;
 
 
 using CC.Classes;
+using System;
 
 namespace ClaimsControl.Controllers {
 
@@ -71,9 +72,11 @@ namespace ClaimsControl.Controllers {
 				new {
 					ver = ver,
 					jsonObj = new {//šitam visada atnaujinu objektus
-						proc_Activity = acc.GetJSON_proc_Activity(),
-						proc_ClaimDamage = acc.GetJSON_proc_ClaimDamage(),
-						proc_ClaimCompensation = acc.GetJSON_proc_ClaimCompensation()
+						proc_Activities = acc.GetJSON_proc_Activities(),
+						proc_Finances = acc.GetJSON_proc_Finances(),
+						tblFinTypes = acc.GetJSON_tblFinTypes(),
+						tblDocsInActivity = acc.GetJSON_tblDocsInActivity(),
+						tblDocsInFin = acc.GetJSON_tblDocsInFin(),
 					},
 					templates = (tmp) ? new {
 						tmpClaimsMain = RenderPartialViewToString("Claims/tmpClaimsMain"),
@@ -90,8 +93,8 @@ namespace ClaimsControl.Controllers {
 						tmpAction_task = RenderPartialViewToString("Claims/tmpAction_task"),
 						tmpAddCompensation = RenderPartialViewToString("Claims/tmpAddCompensation"),
 						tmpAddInsuranceBenefit = RenderPartialViewToString("Claims/tmpAddInsuranceBenefit"),
-						tmpAddInvoice = RenderPartialViewToString("Claims/tmpAddInvoice"),
-						tmpAddPropReport = RenderPartialViewToString("Claims/tmpAddPropReport")
+						tmpAddDamageCA = RenderPartialViewToString("Claims/tmpAddDamageCA"),
+						tmpAddDamageKASKO = RenderPartialViewToString("Claims/tmpAddDamageKASKO")
 					} : new {
 						tmpClaimsMain = "",
 						tmpClaimView = "",
@@ -107,8 +110,8 @@ namespace ClaimsControl.Controllers {
 						tmpAction_task = "",
 						tmpAddCompensation = "",
 						tmpAddInsuranceBenefit = "",
-						tmpAddInvoice = "",
-						tmpAddPropReport = ""
+						tmpAddDamageCA = "",
+						tmpAddDamageKASKO = ""
 					}//,
 					//Script = new { File = "/Scripts/Forms/tabLists.js?ver="+ver, Pars = "" } listus siunčiu su visais nes jų reikia
 				}

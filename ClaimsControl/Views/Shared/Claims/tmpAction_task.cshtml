@@ -1,51 +1,9 @@
-﻿<div id="contentOfClaimReg" class="inputForm container w90pr centerBlock" data-ctrl='{"NewRec":1,"Source":"proc_Activity","tblUpdate":"tblActivity"}'>
-	
+﻿<div id="contentOfClaimReg" class="inputForm container w90pr centerBlock" data-ctrl='{"NewRec":1,"Source":"proc_Activities","tblUpdate":"tblActivities"}'>
 	<div class="row">	
-		{{updatableField from id="claimsFromField" labelType="Left" classes="span:'col one col-right', input:'col three'"}}
-		<div class="col five"></div>
-		{{updatableField dueDate labelType="Left" classes="span:'col one', input:'col three' '"}}
+		{{updatableField toID labelType="Left" sTitle="Kam" classes="span:'col one first', input:'col three'"}}
+		{{updatableField dueDate labelType="Left" classes="span:'col one box-45pr-left', input:'col three last'"}}
 	</div>	
-	{{updatableField subject labelType="Left" classes="wrapper:row, span:'col one', input:'col eleven'"}}
+	{{updatableField subject labelType="Left" classes="wrapper:row, span:'col one first', input:'col eleven'"}}
 	{{updatableField body labelType="None" classes="wrapper:row, input:'row'"}}
-
-	
-	{{updatableField from id="claimsFromField" labelType="Left" classes="span:'col one col-right', input:'col three'"}}
-	</br>
-	</br>
-	{{updatableField from id="claimsFromField" labelType="Left" classes="span:'col', input:'col'"}}
-	
-	</br>
-	</br>
-	{{updatableField from id="claimsFromField" labelType="Left" classes="input:'col'"}} <!-- OK -->
-	</br>
-	</br>
-	{{updatableField from id="claimsFromField" labelType="Left" classes="span:'one', input:'three'"}}
-	
-	@*
-				a.ID,//0
-				a.ClaimID,//1
-				a.ActivityTypeID,//2
-				a.FromText,//3
-				a.From,//4
-				a.ToText,//5
-				a.To,//6
-				a.Subject,//7
-				a.Body,//8
-				a.DueDate,//9
-				a.UserID,//10
-				a.EntryDate//11
-	*@
-
-	
-		@*
-	<div class="row">
-	<div class="col one">Kam:</div><input class="col three" type="text" value="tekstas kam" />
-	<div class="col five"></div>
-	<div class="col one">Atlikti iki:</div><input class="col one date" type="text" value="2013.05.16"/>
-	</div>
-	<div class="row">
-		<div class="col one">Kam:</div><input class="col eleven" type="text" value="tekstas kam" />
-	</div>
-	<textarea class="row">sdfas</textarea>*@
-	{{view App.FormBottomView target="App.actionViewController"}}
+	{{view App.FormBottomView target="App.tabClaimsRegulationController"}}
 </div> 

@@ -185,6 +185,10 @@
     <Content Include="Content\images\icon-plus.png" />
     <Content Include="Content\images\icon-success.png" />
     <Content Include="Content\images\X_orange.png" />
+    <Content Include="Content\less\images\Sprite18-hover.png" />
+    <Content Include="Content\less\images\Sprite18.png" />
+    <Content Include="Content\less\images\Sprite28-hover.png" />
+    <Content Include="Content\less\images\Sprite28.png" />
     <Content Include="Content\less\images_ui\close.png" />
     <Content Include="Content\less\less.js" />
     <Content Include="Content\less\main.css">
@@ -231,9 +235,9 @@
     <Content Include="Content\less\images\glyphicons-halflings-white.png" />
     <Content Include="Content\less\images\glyphicons-halflings.png" />
     <Content Include="Content\less\images\navi_bg.png" />
-    <Content Include="Content\less\images\Sprite18-hover.png" />
-    <Content Include="Content\less\images\Sprite18-white.png" />
-    <Content Include="Content\less\images\Sprite18.png" />
+    <Content Include="Content\less\images\Sprite18-hover_trinti.png" />
+    <Content Include="Content\less\images\Sprite18-white_trinti.png" />
+    <Content Include="Content\less\images\Sprite18_trinti.png" />
     <Content Include="Content\less\images\Sprite32-hover.png" />
     <Content Include="Content\less\images\Sprite32.png" />
     <Content Include="Content\less\images\Sprite32-white.png" />
@@ -515,10 +519,11 @@
     <Content Include="Views\Shared\Claims\tmpAction_meeting.cshtml" />
     <Content Include="Views\Shared\Claims\tmpAction_phone.cshtml" />
     <Content Include="Views\Shared\Claims\tmpAction_task.cshtml" />
-    <Content Include="Views\Shared\Claims\tmpAddPropReport.cshtml" />
-    <Content Include="Views\Shared\Claims\tmpAddInvoice.cshtml" />
+    <Content Include="Views\Shared\Claims\tmpAddDamageCA.cshtml" />
     <Content Include="Views\Shared\Claims\tmpAddInsuranceBenefit.cshtml" />
     <Content Include="Views\Shared\Claims\tmpAddCompensation.cshtml" />
+    <Content Include="Views\Shared\Claims\tmpAddDamageKASKO.cshtml" />
+    <Content Include="Views\Shared\Files\tmpUploadFormClaim.cshtml" />
     <None Include="Views\Shared\LayOut_Main_Debug.cshtml" />
   </ItemGroup>
   <ItemGroup>

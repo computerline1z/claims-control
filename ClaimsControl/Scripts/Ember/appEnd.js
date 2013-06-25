@@ -48,7 +48,7 @@ App.Router = Em.Router.extend({
 			claimRegulation: function (router, context){
 				//App.listsStart();//Atnaujinam, jai buvo keista
 				MY.NavbarController.fnSetNewTab({newState:router.currentState.name, viewIx:1,transparent:true});
-				console.log(context.context);
+				//console.log(context.context);
 				//App.tabClaimsRegulationController.set('content',[context.context]);//!!!!būtinai array
 				App.tabClaimsRegulationController.set('claim',context.context);//!!!!būtinai array
 				router.get('applicationController').connectOutlet('claimRegulationOutlet','tabClaimsRegulation'); 

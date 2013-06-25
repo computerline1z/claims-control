@@ -8,7 +8,7 @@
 			{{#each content}}@*tik tas vienas realiai*@
 				{{firstName}}&nbsp;{{surname}}
 			{{/each}}
-		{{/compare}}</h2><a {{action goToAdminTab}} href="#">(atgal į Administravimą)</a>
+		{{/compare}}</h2><a {{action goToAdminTab}} >(atgal į Administravimą)</a>
 	{{/if}}
 
 
@@ -42,16 +42,16 @@
 				{{updatableField email classes="wrapper:'col six'" id="systemEmail" labelType="Top"}}
 					<div class="col six">
 					{{#if myInfo}}
-						<a class="btn" style="line-height:15px;margin-top:22px" {{action changeMyPassword}} href="#">Pakeisti slaptažodį</a>
+						<a class="btn" style="line-height:15px;margin-top:22px" {{action changeMyPassword}} >Pakeisti slaptažodį</a>
 					{{else}}
 						{{#if passwordReset}}
 							<div class="well cont box-1pr-margin" style="display:inline-block">
 								<p>Slaptažodžio atstatymas vyksta išsiunčiant naudotojui el. laišką su patvirtinimo nuoroda.</p>
 								<button class="btn" style="float:left;margin:10px" {{action sendUserPassword}}>Siųsti</button>
-								<a style="float:left;line-height:40px;margin:10px" {{action cancelSendUserPassword}} href="#">Atšaukti</a>
+								<a style="float:left;line-height:40px;margin:10px" {{action cancelSendUserPassword}} >Atšaukti</a>
 							</div>
 						{{else}}
-							<a class="btn" style="margin-top:8px;" {{action sendUserPasswordForm}} href="#">Atstatyti slaptažodį</a>
+							<a class="btn" style="margin-top:8px;" {{action sendUserPasswordForm}} >Atstatyti slaptažodį</a>
 						{{/if}}		
 					</div>	
 					<div class="row">{{updatableField isActive classes="wrapper:'col six'" labelType="Left"}}</div>

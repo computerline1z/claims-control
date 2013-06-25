@@ -185,15 +185,6 @@ div.dialog-form-label { font-size: @basefont; /*color: #666666;*/ top: 2px; marg
 /*label { font-size: @basefont; color: 666; cursor: pointer; }*/
  .ExtendIt label  { padding-left: 0px; margin-left: 0px; cursor: pointer; /*ideta: */ font-size: @smallfont; }
  .ExtendIt span  { line-height: @lowline; }
-label.toplabel > span { display: block; font-size: @basefont; /*color: #666666;*/ cursor: pointer; margin-bottom: 5px; 
-    &.ui-icon { 
-        left:-4px;top:3px;
-        width: 18px; height: 18px;
-        background: url('images/Sprite16.png') no-repeat center; 
-        background-position: -47px -32px;        
-}
-}
-label.toplabel input[type=text], label.top textarea { width: 100%; line-height: @baseline; font-size: @basefont; vertical-align:top;}
 /*-------------------------------megaSelectList----------------------------*/
 /*div.leftContainer { border-style: dotted; width: 100%; display: inline-block; }
 .RightSpanInTab { float: right; vertical-align: bottom; margin-right: 20px; padding: 0.5em; }*/
@@ -277,12 +268,6 @@ ul.ulWhiteMenu li { margin-right: 5px; padding-right: 5px; border-bottom: 1px; }
 
 
 /*----------------------------------------------------Editable Form-------------------------------------------------------------------------*/
-/*div.inputform textarea { width: 100%; font-size: small; }
-div.inputform input { font-size: small; }
-div.inputform { padding: 0 !important; }
-div.inputform input.date { width: 100px !important; }
-div.inputform input.time { width: 50px !important; }*/
-
 div.DocsRow { background-color: White; margin: 0; padding: 1.5em 5em; }
 
 div.WasBefore { background-color: #FF5E5E; background-image: none !important; line-height: 2.5em; text-align: center; color: White; }
@@ -299,31 +284,25 @@ label {
     input[type="checkbox"] { padding-left: 0px; margin-left: 0px; cursor: pointer; }
     input[type=text] { height: @inputHeight; }
     &.toplabel {
-        > span { display: block; font-size: @smallfont; /*color: #666666;*/ cursor: pointer; }
-         input[type=text], label.top textarea {
+		> span:first-child { margin:0.5em 0;}
+        > span { display: block; font-size: @smallfont; cursor: pointer;}/*color: #666666;*/ 
+		&.ui-icon { left:-4px;top:3px; width: 18px; height: 18px; background: url('images/Sprite16.png') no-repeat center; background-position: -47px -32px; }
+        input[type=text], [type=textarea]{
              width: 100%;
 			 font-size: @smallfont; margin: 0; 
-             // IDETA:
              .border-radius(0);
               border: 1px solid #A59894;
-             //line-height:17px;
              font-size: @smallfont;
         }
     }
     &.leftlabel {
-        > span { 
-			//width: 30%; 
-			font-size: @smallfont;font-weight:bold; margin: 0; padding: 0; /*color: #666666;*/ cursor: pointer; display: inline-block;
-		}
-        input[type=text], label.left textarea { 
-            //width: 70%;
-			font-size: @basefont; margin: 0; 
-            // IDETA:
-            .border-radius(0);
-	    color:#000000;
-        }
+        > span { font-size: @smallfont;font-weight:bold; padding: 0; /* margin: 0; color: #666666;*/ cursor: pointer; display: inline-block; line-height:2.5em;	}
+        input[type=text], label.left textarea { font-size: @basefont; vertical-align:top; .border-radius(0); color:#000000; }
     }
 }
+.date{text-align: center;width:10% !important;min-width:6.5em;}
+.time{text-align: center;width:7%  !important;min-width:4em; margin-left: 1em;}
+/*
 input[type=text].date {width:7em !important;}
 input[type=text].time {width:4em !important;
      // IDETA:
@@ -333,10 +312,7 @@ input[type=text].time {width:4em !important;
      font-size: @smallfont;
      height: @inputHeight;
 }
-
-input [type="text"] {width:7em;}
-input.time [type="text"] {width:4em;
-}
+*/
 /*-----------------------------------------------------------------------------------------------*/
 .text>span {line-height:2.5em;}
 /*butonai apacioj*/
@@ -674,7 +650,7 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
  	.items {list-style: none;margin:0;border-top: 1px dotted #bfbfbf;}
  	.item {
  		border-bottom: 1px dotted #bfbfbf; padding:0 .5em 0 2em;
- 		a {display: block;padding: 15px 20px; font-weight: bold;}
+ 		a {display: inline-block;padding: 10px 15px; font-weight: bold;}
  		&:last-of-type { border-bottom: 0 none; }
  	}
  }
