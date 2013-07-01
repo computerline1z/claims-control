@@ -339,6 +339,9 @@
       } else {
         emCategories = oDATA.GET("tblDocGroup").emData;
       }
+      if (!App.docsTypesController) {
+        App.create_docsTypesController();
+      }
       fnGetData = function() {
         var emTypes;
 

@@ -429,7 +429,8 @@ namespace CC.Models {
 				d.Claims_C2,//,13
 				d.DaysFrom,
 				d.DocNo,
-				d.Claims_TypeID
+				d.Claims_TypeID,
+				d.DriverID
 			};
 			object[] Cols ={//NotEditable=true // Unique=true// LenMax/LenEqual/LenMin:10
 				//Date,DateLess,DateNoLess,Time,String
@@ -451,26 +452,10 @@ namespace CC.Models {
 				new { FName = "DaysFrom"},//15
 				new { FName = "DocNo"},//15
 				new { FName = "Claims_TypeID"},//15
+				new { FName = "DriverID"},//15
 			}; JSON.Cols = Cols;
 			JSON.Config = new { Controler = "Accidents", tblUpdate = "" };
 			JSON.Grid = new {
-				//                aoColumns = new object[]{
-				//new {bVisible=false},//0//ID//
-				//new {sTitle="Nr"},//1//No
-				//new {sTitle="Data"},//2//Date
-				//new {sTitle="Vieta"},//3//Place
-				//new {sTitle="Tipas"},//4//AccType
-				//new {sTitle="Visos"},//5//CNo_All
-				//new {sTitle="Atviros"},//6//CNo_NotF
-				//new {sTitle="Žalos suma"},//7//LossSum
-				//new {sTitle="Visa žalos suma?",bVisible=false},//8//AmountIsConfirmed
-				//new {sTitle="Kas atsitiko"},//9//ShortNote//
-				//new {sTitle="Pastabos",bVisible=false,sClass="smallFont"},//10//LongNote//
-				//new {sTitle="Vairuotojas",bVisible=false},//11//Driver
-				//new {sTitle="Kas įvedė",bVisible=false},//12//UserName
-				//new {sTitle="Žalos",bVisible=false},//13//Claims_C
-				//new {sTitle="Žalos2",bVisible=false},//14//Claims_C2
-				//new {bSortable=false}//14//Claims_C
 				aoColumns = new object[]{
 					new {bVisible=false},//0//ID//
 					new {sTitle="Nr"},//1//No
@@ -489,7 +474,8 @@ namespace CC.Models {
 					new {sTitle="Žalos2"},//14//Claims_C2
 					new {sTitle="Praėjo dienų"},//14//Claims_C2
 					new {sTitle="Dokumentai"},//14//Claims_C2
-					new {sTitle="Žalų tipai"}//14//Claims_C2
+					new {sTitle="Žalų tipai"},//14//Claims_C2
+					new {bVisible=false}
 					//new {bSortable=false,fnRender=function(){return <span class='ui-icon ui-icon-mail-closed'></span><span class='ui-icon ui-icon-mail-closed'></span>;}} //"function(oObj){return oObj.aData[0];}"}
 				}
 				//aaSorting = new object[] { new object[] { 2, "desc" } },
@@ -945,10 +931,9 @@ namespace CC.Models {
 			};
 			return JSON;
 		}
-		public jsonArrays GetJSON_tblClaims() {
+		public jsonArrays GetJSON_proc_Claims() {
 			jsonArrays JSON = new jsonArrays();
-			JSON.Data = from d in dc.tblClaims join a in dc.tblAccidents on d.AccidentID equals a.ID
-							where d.IsDeleted == false && a.AccountID == UserData.AccountID
+			JSON.Data = from d in dc.proc_Claims(UserData.AccountID)
 							select new object[] {
 				d.ID,//0
 				d.ClaimTypeID,//1
@@ -968,17 +953,7 @@ namespace CC.Models {
 				d.DateNotification,
 				d.DateDocsSent
 				};
-			//Datepicker ir plugin on blur
-			//Markup.Type:Date,Date,DateNotLess,DateLess,Year,YearLess,YearNotLess,Integer,Decimal
-			//NotImplemented:String,String,NotEditable=true,LenMax/LenEqual/LenMin:10
 
-			//GenerateHTML
-			//Markup.Type:Boolean(checkbox),substring(0,4)==="Date"(Date),LenMax>100(textarea)
-			//else if Cols[i].List(List)else text
-			//Markup:IsUnique=new object[]{1,2}
-			//Markup:Default=Today
-			//Tip="Pradėkite vesti.."
-			//List=new{Source="tblVehicleMakes",iVal="iD",iText=new object []{1}}
 			object[] Cols ={
 				new { FName = "ID"},//0
 				new { FName = "ClaimTypeID",Tip="Pasirinkite žalos tipą..", List=new{Source="tblClaimTypes",iVal="iD",iText=new object[]{"name"},ListType="List"}},//1
@@ -1046,7 +1021,8 @@ namespace CC.Models {
 				a.Body,//8
 				a.DueDate,//9
 				a.UserID,//10
-				a.EntryDate//11
+				a.EntryDate,//11
+				a.Docs
 				};
 			object[] Cols ={
 				new { FName = "ID"},//0
@@ -1056,11 +1032,12 @@ namespace CC.Models {
 				new { FName = "FromID", List=new{Source="tblUsers",iVal="iD",iText=new object[]{"firstName","surname"},ListType="List"}},//4
 				new { FName = "ToText",Type="String"},//5 
 				new { FName = "ToID", List=new{Source="tblUsers",iVal="iD",iText=new object[]{"firstName","surname"},ListType="List"}},//6
-				new { FName = "Subject",Type="String"},//7
+				new { FName = "Subject",Type="String",Validity="require()"},//7
 				new { FName = "Body",Type="Textarea"},//8
 				new { FName = "DueDate",Default="Today",Type="DateMore", Validity="require().match('date')",Plugin = new {datepicker = new {minDate=0, maxDate="2y"}}},//9
 				new { FName = "UserID", Default="UserId"},//10
-				new { FName = "EntryDate", Default="Today"}//11
+				new { FName = "EntryDate", Default="Today"},//11
+				new { FName = "Docs"}//12
 				}; JSON.Cols = Cols;
 			JSON.Config = new {
 				tblUpdate = "tblActivity", Msg = new { AddNew = "Naujos veiklos pridėjimas", Edit = "Veiklos redagavimas", Delete = "Ištrinti veiklą", GenName = "Veikla" }
@@ -1104,7 +1081,7 @@ namespace CC.Models {
 				new { FName = "ClaimID"},//1
 				new { FName = "Amount",Type="Decimal", LenMax=15,Validity="require().match('number').greaterThanOrEqualTo(0)"},//2
 				new { FName = "Date",Default="Today",Type="DateLess", Validity="require().match('date')",Plugin = new {datepicker = new {minDate="-2y", maxDate="0"}}},//3
-				new { FName = "Purpose",Type="String"},//4
+				new { FName = "Purpose",Type="String", Validity="require()"},//4
 				new { FName = "Note",Type="Textarea"},//5
 				new { FName = "FinancesTypeID",Type="Radio"},//6
 				new { FName = "UserID", Default="UserId"},//7
@@ -1183,13 +1160,13 @@ namespace CC.Models {
 
 		public jsonArrays GetJSON_tblDocsInFin() {
 			jsonArrays JSON = new jsonArrays();
-			JSON.Data = from dInf in dc.tblDocsInFins join f in dc.tblFinances on dInf.FinID equals f.ID
+			JSON.Data = from dInf in dc.tblDocsInFins join f in dc.tblFinances on dInf.ActivityID equals f.ID
 							join d in dc.tblDocs on dInf.DocID equals d.ID
 							join u in dc.tblUsers on d.UserID equals u.ID
 							where f.IsDeleted == false && d.IsDeleted == false && u.AccountID == UserData.AccountID
 							select new object[] {
 					dInf.ID,//0
-					dInf.FinID,//1
+					dInf.ActivityID,//1
 					dInf.DocID//2
 				};
 			object[] Cols ={

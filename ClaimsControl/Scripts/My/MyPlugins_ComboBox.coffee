@@ -269,6 +269,7 @@ $.widget "ui.ComboBoxCategory", $.ui.ComboBox,
 		opts=@options;opts.element=@element;categoryOpts=opts.categoryOpts
 		if categoryOpts.showCategories then emCategories=categoryOpts.showCategories
 		else emCategories=oDATA.GET("tblDocGroup").emData
+		if not App.docsTypesController then App.create_docsTypesController() #reikalingas kategorijų sarašam parodyt ir redaguot
 		fnGetData=()->
 			emTypes=oDATA.GET("tblDocTypes").emData;
 			$.map.call(this, emTypes, (a) ->

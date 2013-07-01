@@ -1,38 +1,40 @@
-﻿<form enctype="multipart/form-data">@* id="uploadDocs" *@
-   <!-- Redirect browsers with JavaScript disabled to the origin page action="//jquery-file-upload.appspot.com/" method="POST" -->
-   @*<noscript><input type="hidden" name="redirect" value="http://blueimp.github.com/jQuery-File-Upload/"></noscript>*@
-   <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+﻿<form enctype="multipart/form-data">
+   @*Redirect browsers with JavaScript disabled to the origin page action="//jquery-file-upload.appspot.com/" method="POST"
+   <noscript><input type="hidden" name="redirect" value="http://blueimp.github.com/jQuery-File-Upload/"></noscript>
+   The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload*@
    <div class="row fileupload-buttonbar">
    <center>
+	<div class="span7">
 	{{#if showPhoto}}
-      <div class="span7">
-	  <i class="img16-camera"></i>
-	    <a class="fileinput-button"  style="margin-right:56px;">
-			   <span>Prisegti nuotraukas</span>
-               <input type="file" name="pictures[]" multiple>
-            </a>
-          
-	{{else}}
-      <div class="span7">
+		<i class="img16-camera"></i>
+			<a class="fileinput-button mr50">
+				<span>Prisegti nuotraukas</span>
+				<input type="file" name="pictures[]" multiple>
+			</a>
 	{{/if}}
 		<i class="img16-attach"></i>
-		<a  class="fileinput-button">
+			<a  class="fileinput-button mr50">
 				<span>Prisegti dokumentus</span>
-               <input type="file" name="docs[]" multiple>
-            </a>
-      </div><br/>
-      <!-- The global progress information -->
-      <div class="span5 fileupload-progress fade">
-            <!-- The global progress bar -->
+				<input type="file" name="docs[]" multiple>
+			</a>
+	{{#if showFromAccident}}
+			<a class="fileinput-button mr50" {{action addFromAccident this  target="this"}}>
+				<span>Įkelti iš įvykio kortelės</span>
+			</a>
+	{{/if}}
+     </div><br/>
+		@*The global progress information*@ 
+     <div class="span5 fileupload-progress fade">
+            @*The global progress bar*@
             <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
                <div class="bar" style="width:0%;"></div>
             </div>
-            <!-- The extended global progress information -->
+            @*The extended global progress information*@
             <div class="progress-extended">&nbsp;</div>
       </div>
 	  </center>
    </div>
-   <!-- The loading indicator is shown during file processing -->
+   @*The loading indicator is shown during file processing*@
    <div class="fileupload-loading"></div>
    <table role="presentation" class="table zebra-striped filesTable hidden">
 	<tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
@@ -45,5 +47,4 @@
 				</div>
 			</center>
 	</div>
-
 </form>

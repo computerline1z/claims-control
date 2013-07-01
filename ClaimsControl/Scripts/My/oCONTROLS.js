@@ -33,15 +33,6 @@ var oCONTROLS = {
 				NewRec: 0,
 				id: RecId
 			});
-			// frm.find("span.Control, div.Control").each(function () {//renderinam swfUpload jei nera
-				// var e = $(this), eOpt = e.data('ctrl');
-				// if (eOpt.Control === "swfUpload" && e.children().length === 0) {
-					// $.extend(e.data("ctrl"), {
-						// RecId: RecId
-					// }); //Darasom id
-					// e[eOpt.Control](e.data("ctrl"));
-				// }
-			// });
 		}
 		frm.find('.UpdateField').each(function () {//Darasom Value
 			var e = $(this), eOpt = e.data('ctrl'), val;

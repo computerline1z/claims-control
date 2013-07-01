@@ -139,7 +139,7 @@ namespace ClaimsControl.Controllers {
 						tblInsurers = acc.GetJSON_tblInsurers(),
 						tblVehicleMakes = acc.GetJSON_tblVehicleMakes(),
 						tblVehicleTypes = acc.GetJSON_tblVehicleTypes(),
-						tblClaims = acc.GetJSON_tblClaims(),
+						proc_Claims = acc.GetJSON_proc_Claims(), //tblClaims
 						tblUsers = acc.GetJSON_tblUsers(),
 						tblCountries = acc.GetJSON_tblCountries(),
 						tblDocs = acc.GetJSON_tblDocs(),

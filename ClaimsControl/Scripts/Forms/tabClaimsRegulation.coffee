@@ -1,10 +1,10 @@
 
 `var w=window, App=w.App, Em=w.Em, oGLOBAL=w.oGLOBAL, oDATA=w.oDATA, oCONTROLS=w.oCONTROLS, MY=w.MY`
 # App.claimsStart=()->
-	# oDATA.execWhenLoaded(["tblClaims"], ()->
-		# App.claimsController.set("content",oDATA.GET("tblClaims").emData)	
+	# oDATA.execWhenLoaded(["proc_Claims"], ()->
+		# App.claimsController.set("content",oDATA.GET("proc_Claims").emData)	
 	# )
-activityView={};
+ACTIVITYVIEW={};DOCSVIEW={}
 App.tabClaimsRegulationController = Em.ArrayController.create(
 	stepsCont1: ['<a href="#">Parenkite ir siųskite</a><div>arba</div><a href="#">Užregistruokite</a>','<a href="#">Patvirtinti, kad visa informacija yra pateikta</a>','<a href="#">Patvirtinti #### Lt kaip galutinę žalos sumą</a>','<a href="#">Patvirtinti #### Lt kaip galutinę išmokos sumą</a>','<a href="#">Uždaryti bylą</a>']
 	stepsCont2: ['Draudikui pranešta ####','Visa informacija pateikta:</br>####</br><a href="#">Atšaukti</a>','Patvirtinta galutinė žalos suma: #### Lt</br><a href="#">Atšaukti</a>','Patvirtinta galutinė išmokos suma: #### Lt</br><a href="#">Atšaukti</a>','Byla uždaryta <a href="#"></br>Atidaryti</a>']
@@ -66,7 +66,7 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 	fnSaveData: (dataAndFields)->
 		DataToSave=$.extend({"id":@claim.iD,"DataTable":"tblClaims"},dataAndFields)
 		#DataToSave={"id":@claim.iD,"Data":[groupID,docTypeID,desc],"Fields":["groupID","docTypeID","description"],"DataTable":"tblClaims"}
-		SERVER.update2(Action:'Edit',DataToSave:DataToSave,Ctrl:$("#claimsSteps"),source:"tblClaims",row:@claim,CallBackAfter:(Row)-> console.log(Row))		
+		SERVER.update2(Action:'Edit',DataToSave:DataToSave,Ctrl:$("#claimsSteps"),source:"proc_Claims",row:@claim,CallBackAfter:(Row)-> console.log(Row))	
 		@fnclaimStatusChanged()
 	#--------------------------------activities & finances---------------------------------------------------------------------
 	target: (() -> @).property() #view actions with current controler targeted to controller
@@ -108,16 +108,21 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 	# finDamageChanged: (()->
 		# alert("activitiesTblChanged")
 	# ).observes('activitiesTbl.@each')
-	setActivitiesTable: ()->
+	setActivitiesTable: (newDocNo)-> #newDocNo:{ID:??,docNo:??}
 		#alert("setting activity table")
 		claimID=@claim.iD; console.log("Showing all activities Claim iD: "+claimID)
-		activities=oDATA.GET("proc_Activities").emData.filter((item)->item.claimID==claimID);@.set("users",oDATA.GET("tblUsers").emData);#console.log(item.claimID);console.log(claimID);console.log(item.claimID==claimID)
+		activities=oDATA.GET("proc_Activities").emData
+		if newDocNo then activities.findProperty("iD",newDocNo.iD).set("docs",("("+newDocNo.docNo+")"))
+		activities=activities.filter((item)->item.claimID==claimID);
+		@.set("users",oDATA.GET("tblUsers").emData);#console.log(item.claimID);console.log(claimID);console.log(item.claimID==claimID)
 		activitiesTbl=activities.map(@fnMapActivitiesRecord,@)
 		#App.actionViewController.set("activitiesTbl",activitiesTbl)
 		@set("activitiesTbl",activitiesTbl)
-	setFinancesTables: ()->
+	setFinancesTables: (newDocNo)-> #newDocNo:{ID:??,docNo:??}
 		claimID=@claim.iD; console.log("Setting finances table")
-		finances=oDATA.GET("proc_Finances").emData.filter((item)->item.claimID==claimID)
+		finances=oDATA.GET("proc_Finances").emData
+		if newDocNo then finances.findProperty("iD",newDocNo.iD).set("docs",("("+newDocNo.docNo+")"))
+		finances=finances.filter((item)->item.claimID==claimID)
 		finTypes=oDATA.GET("tblFinTypes").emData; @TypesKasko=finTypes.slice(0,2); @TypesCA=finTypes.slice(2,4);
 		@set('finDamageTbl',[]).set('finInsurerTbl',[]).set('finOtherPartyTbl',[]) #Nunulinam pries dedami naujus
 		finances.forEach(@fnMapFinancesRecord,@) #mapping to appropriate table 
@@ -213,16 +218,16 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 	actViewZone:"#actionsEnterOfClaimReg"
 	frm:"#contentOfClaimReg", activityTypeID:""
 	goToOtherView: (e) -> 
-		p=e.context
+		p=$.extend(e.context,claim:@claim)
 		@replaceActivityView(p)
 	replaceActivityView:(p)->
 		scroll = $(window).scrollTop();
 		actView = $(@actViewZone)	
 		if actView.length>0
-			if (actView.html().length>0) then activityView.remove(); actView.empty()	
-		if p then activityView=@newActionView.create(p)
-		else activityView=@mainView.create(controller:@)#claim:@mainController.claim
-		activityView.appendTo(@actViewZone)
+			if (actView.html().length>0) then ACTIVITYVIEW.remove(); actView.empty()	
+		if p then ACTIVITYVIEW=@newActionView.create(p)
+		else ACTIVITYVIEW=@mainView.create(controller:@)#claim:@mainController.claim
+		ACTIVITYVIEW.appendTo(@actViewZone)
 		Em.run.next(scroll,->$(window).scrollTop(@);)
 	deleteForm: (e) ->
 		cnt=e.context; frm=$(@frm); frmOpt=frm.data("ctrl"); me=@
@@ -241,7 +246,7 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 			)
 		)		
 	saveForm: (e) ->
-		form=$(@frm); context=e.view.bindingContext
+		form=$(@frm); context=e.view.bindingContext; execOnSuccess=e.execOnSuccess;
 		formOpts=form.data('ctrl'); me=@; addData={}; Action=if formOpts.NewRec then "Add" else "Edit"
 		if Action=="Add" #new record
 			ClaimID=@claim.iD; addData={Fields:["ClaimID"],Data:[ClaimID]} # me.mainController->me
@@ -250,14 +255,16 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 			else if context.financesTypeID #Finances finTypeID užsideda iš Radio pas tmpAddDamageKASKO ir tmpAddDamageCA
 				addData.Fields.push("FinancesTypeID");addData.Data.push(context.financesTypeID)
 		DataToSave=oCONTROLS.ValidateForm(form,addData)
+		if not DataToSave and e.isTrigger then oCONTROLS.dialog.Alert( title:'Veiksmo išsaugojimas',msg:'Užpildykite pažymėtus laukus..')
 		if DataToSave
-			SERVER.update2(Action:Action,DataToSave:DataToSave,Ctrl:form,source:formOpts.Source,CallBackAfter:(Row)-> #row?
-				me.cancelForm();
-				if (context.activityTypeID) then me.setActivitiesTable() #galim ir fnMapActivitiesRecord(Row) nes grazina naują record'ą
-				else me.setFinancesTables() #fnMapFinancesRecord(Row) negalim, nes ten jau ikisa priklausomai nuo rekordo i atitinkama lentele
-			)
+			CallBackAfter=(Row)->
+					if (context.activityTypeID) then me.setActivitiesTable() #galim ir fnMapActivitiesRecord(Row) nes grazina naują record'ą
+					else me.setFinancesTables() #fnMapFinancesRecord(Row) negalim, nes ten jau ikisa priklausomai nuo rekordo i atitinkama lentele
+					if execOnSuccess then execOnSuccess(Row,form) else me.cancelForm();
+			SERVER.update2(Action:Action,DataToSave:DataToSave,Ctrl:form,source:formOpts.Source,CallBackAfter:CallBackAfter)
+
 	cancelForm: () ->
-		@replaceActivityView(); @
+		@replaceActivityView(); $("div.validity-tooltip").remove(); @
 	mainView: Em.View.extend(
 		#duomenys imami iš kontrolerio App.tabClaimsRegulationController
 		#taip pat iš view'o imami šie:
@@ -295,36 +302,77 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 				$.extend(@,prop)	
 			@set("childView", Em.View.extend(templateName: @tmp))
 		didInsertElement: ()->
-			@_super();
+			@_super(); frm=$(@frm); claim=@claim; me=@
 			if @isNew #New record
 				switch @activityTypeID
 					when 3,4,5 
-						divExt=$(@frm).find("div.row").find("div.ExtendIt:first"); user=oDATA.GET("userData").emData[0]
+						divExt=frm.find("div.row").find("div.ExtendIt:first"); user=oDATA.GET("userData").emData[0]
 						if @activityTypeID==3 then divExt.data("ctrl").Value=user.userID #Task
 						else Em.run.next({divExt:divExt,user:user}, ()-> @divExt.find("input").val(@user.userName))
 					else console.log("loaded view")			
 			else #Edit record
 				( (iD)-> 
-					@NewRec=0;@id=iD #@-> $(@frm).data("ctrl")
-				).call $(@frm).data("ctrl"), @iD
+					@NewRec=0;@id=iD #@-> frm.data("ctrl")
+				).call frm.data("ctrl"), @iD
 				@.set("deleteButton",true)
-				#$(@frm).data("ctrl").NewRec=0 
-			oCONTROLS.UpdatableForm(frm:@frm,btnSaveToDisable:$(this.frm).find("button.btnSave"))
+				#frm.data("ctrl").NewRec=0 
+			oCONTROLS.UpdatableForm(frm:@frm,btnSaveToDisable:frm.find("button.btnSave"))
+
+			if (not @isNew)# skriopke rodom tik redagavimui
+				@makeAttach(@,frm,claim)
+			else
+				$('<div class="row fileupload-buttonbar box_2pr"><center><i class="img16-attach"></i><a class="fileinput-button">Išsaugoti ir prisegti dokumentus</a></center></div>')
+					.appendTo(@uploadZone).find('a').on("click", (e)->
+						e.preventDefault(); $("#contentOfClaimReg").find("button.btnSave").trigger(type:"click", execOnSuccess:(row,frm)->							
+							oCONTROLS.UpdatableForm_toSaved(row.iD, frm);
+							$(me.uploadZone).empty(); 
+							Em.run.next(me,()-> me.makeAttach(row,frm,claim))
+						)
+					)
+		makeAttach: (row,frm,claim)->
+			categoryOpts=
+				accident:{iD:claim.accidentID,title:"Įvykio dokumentai"}
+				driver:{iD:claim.accident.driverID,title:"Vairuotojo '"+claim.accident.driver+"' dokumentai"}
+				vehicles:[iD:claim.vehicleID,title:"TP "+claim.vehicle.make+" "+claim.vehicle.model+", "+claim.vehicle.plate]
+			tblProps=Fields:["ActivityID","DocID"],Data:[row.iD] #DataTable:tbl,Fields:["ActivityID","DocID"],Data:[ActivityID-turim(row.iD),DocID - pridedam po downloadinimo - data.result.iD]	
+			switch frm.data("ctrl").tblUpdate
+				when "tblFinances" then tblProps.DataTable="tblDocsInFin";
+				when "tblActivities" then tblProps.DataTable="tblDocsInActivity";
+				else console.error('no such tbl')
+
+			$(@uploadZone).UploadFiles(
+				categoryOpts:categoryOpts, showFromAccident:true,requireCategory:true,
+				docsController:"claimDocController",updateRelationsTbl:tblProps
+			)
+			
+			App.claimDocController.setDocs(tblProps.DataTable,row.iD) #Jau uploadintų dokumentų kontroleris
+			if not $.isEmptyObject(DOCSVIEW) #make sure nothing left there
+				DOCSVIEW.remove(); DOCSVIEW.destroy()
+			DOCSVIEW=Em.View.create(
+				opts: null #opcijos
+				templateName: "tmpDocsView"
+				tagName: "ul"
+				classNames: ["gallery", "ui-helper-reset", "ui-helper-clearfix"]
+				controller: App.claimDocController
+				didInsertElement: ->
+					@_super()
+					this.$().data("opts",@opts)
+			).appendTo @uploadZone	#Pridedam jau uploadintų dokumentų view'ą	
+			
 		templateName: 'tmpActionWrapper'
 		frm:"#contentOfClaimReg"
+		uploadZone:"#uploadClaimDocs"
 	)
 )	
-App.actionViewController = Em.ObjectController.create(
-
-)
+# App.actionViewController = Em.ObjectController.create()
 App.TabClaimsRegulationView = Ember.View.extend(App.HidePreviousWindow,
 	#viewName:"tabClaimsRegulation",
 	previuosWindow: '#divClaimsList'
 	thisWindow: '#divClaimRegulation'
 	init: -> 
 		@_super(); 
-		if not $.isEmptyObject(activityView) #make sure nothing left there
-			activityView.remove(); activityView.destroy()
+		if not $.isEmptyObject(ACTIVITYVIEW) #make sure nothing left there
+			ACTIVITYVIEW.remove(); ACTIVITYVIEW.destroy()
 		@controller.setActivitiesTable().setFinancesTables(); #alert("setting table")
 		Em.run.next(@,->@controller.setSteps();)#have to set steps on the end as it uses numbers from setActivitiesTable().setFinancesTables()
 	templateName: 'tmpClaimRegulation'
@@ -358,40 +406,29 @@ App.TabClaimsRegulationView = Ember.View.extend(App.HidePreviousWindow,
 		$("#claimRegulationTab").tabs().on( "tabsactivate", (event, ui) ->
 			if (ui.newTab.index()==1) then console.log("first")
 		)
-		makeAttach: (ref)->
-			dialogFrm=$("#openItemDialog"); categoryOpts=false;docGroups=oDATA.GET("tblDocGroup").emData			
-			if ref
-				groupID=docGroups.findProperty("ref",ref).iD					
-				if ref==4
-					name="TP "+pars.row.make+", "+pars.row.model+", "+pars.row.plate+" dokumentai"
-					categoryOpts=showCategories:[iD:groupID,ref:ref,name:name],vehicles:[{iD:pars.row.iD,title:name}]
-				if ref==3
-					name="Vairuotojo '"+pars.row.firstName+" "+pars.row.lastName+"' dokumentai"
-					categoryOpts={showCategories:[iD:groupID,ref:ref,name:name],driver:{iD:pars.row.iD,title:name}}#Įrašom kurias kategorijas rodyt ir tos kategorijos duomenis
-				#Ref 1-Nuotraukos,2-Įvykio dok, 3-Vairuotojo dok, 4-TP dok, 0-Nepriskirti
-				dialogFrm.find("div.uploadDocsContainer").UploadFiles(categoryOpts: categoryOpts,showPhoto:false,docsController:"dialogDocController",requireCategory:true)
-				#Atrenkam dokumentus kuriuos reiks parodyti
-				refID=pars.row.iD					
-				App.dialogDocController.setDocs(refID,groupID)
-				this.removeOnCloseView=Em.View.create(docsViewOpts).appendTo "#dialoguploadDocsContainer" #docsViewOpts	#Pridedam dokumentų uploadinimo view'ą				
-			else console.warn('no ref')
 	#contentBinding: 'App.claimsRegulationController.content'
 	#controller: 'App.claimsRegulationController'
 	controller:App.tabClaimsRegulationController
 )
 #Dokummentų rodymo Tp/driverio dialoge controller'is, dar žemiau opcjos view'o (dokumentų rodymo)
 App.claimDocController = Em.ResourceController.create(
-	refID:null, groupID:null, docs:[]
-	refreshDocs: () -> @setDocs(@refID,@groupID)
-	setDocs: (refID,groupID) ->
-		#currentDocs.forEach (doc) -> console.log "iD: " + doc.iD + ", docName: " + doc.docName + ", docTypeID:" + doc.docTypeID + ", groupID:" + doc.groupID	
-		if refID then @refID=refID; @groupID=groupID #else refID=@refID; groupID=@groupID
+	#refID:null, groupID:null, docs:[]
+	relationTbl:null, activityID:null, docs:[]
+	refreshDocs: ->
+		@setDocs(@relationTbl,@activityID)
+		ctrl=App.tabClaimsRegulationController
+		if @relationTbl=="tblDocsInActivity" then ctrl.setActivitiesTable(iD:@activityID,docNo:@docs.length) #updating oDATA and tables with new No
+		else ctrl.setFinancesTables(iD:@activityID,docNo:@docs.length)
+	setDocs: (relationTbl,activityID) ->
+		@relationTbl=relationTbl; @activityID=activityID
+		relTbl=oDATA.GET(relationTbl).emData.filter((doc)->(doc.activityID==activityID)).map((doc)->doc.docID)
 		
 		docsPath=oDATA.GET("userData").emData[0].docsPath; url="Uploads/"+docsPath; users=oDATA.GET("tblUsers").emData; docTypes=oDATA.GET("tblDocTypes").emData	
 		fnGetIcon=(ext) -> ext=ext.slice(0,3); return "img32-doc_" + (if ext=="xls"||ext=="doc"||ext=="pdf" then ext else "unknown" )
 		fnGetUser=((userID) -> u=users.find((user)->user.iD==userID); u.firstName+" "+u.surname;)		
-		fnGetDocType = (typeID)-> docTypes.find((type)->type.iD==typeID).name			
-		docs=oDATA.GET("tblDocs").emData.filter((doc)->(doc.refID==refID and doc.groupID==groupID)).map((doc)-> 
+		fnGetDocType = (typeID)-> docTypes.find((type)->type.iD==typeID).name	
+		
+		docs=oDATA.GET("tblDocs").emData.filter((doc)->(relTbl.contains(doc.iD))).map((doc)-> 
 			user=fnGetUser(doc.userID);file="/"+doc.iD+"."+doc.fileType
 			Em.Object.create(
 				docID:doc.iD,
@@ -401,7 +438,7 @@ App.claimDocController = Em.ResourceController.create(
 				docDetails: "Įkėlė "+user+" "+doc.fileDate+", dydis - "+Math.ceil(doc.fileSize/10000)/100+"Mb"
 			)
 		)
-		@.set("docs",docs)
+		@.set("docs",docs)	
 )
 docsViewOpts= #Listų dokumentų opcijos
 	opts: null #opcijos
