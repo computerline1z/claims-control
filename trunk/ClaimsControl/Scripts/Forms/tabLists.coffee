@@ -65,7 +65,7 @@ App.listAllController = Em.ResourceController.create(
 				else $("#openItemDialog").dialog("close")				
 			})
 			SERVER.update2(pars); false
-		else if Alert then oCONTROLS.dialog.Alert( title:'',msg:'Užpildykite pažymėtus laukus..')
+		else if Alert then oCONTROLS.dialog.Alert( title:'Įšsaugojimas',msg:'Užpildykite pažymėtus laukus..')
 		#else $("#openItemDialog").dialog("close");
 	cancelForm:(e)-> $("#openItemDialog").dialog("close");false
 	editListItems:(input, e)-> #formTemplate: "tmpUploadForm", disabled: false, docsController: "TreeDocController", Source: "tblDocTypes"
@@ -121,7 +121,6 @@ App.listAllController = Em.ResourceController.create(
 	openItem:(pars)->#source,template,row
 		if pars.row.iD then @set('deleteButton',true) else @set('deleteButton',false)
 		@.set("dateIsEdited",false) #nuresetinam datų redagavimą, kad nerodytų	
-		if not App.docsTypesController then App.create_docsTypesController() #reikalingas sarašam parodyt ir redaguot
 
 		config=oDATA.GET(pars.source).Config
 		title=if pars.row then config.Msg.GenName+": "+pars.row.MapArrToString(config.titleFields,(if pars.template=="tmp_Drivers" then true else false)) else config.Msg.AddNew
@@ -158,11 +157,20 @@ App.listAllController = Em.ResourceController.create(
 						name="Vairuotojo '"+pars.row.firstName+" "+pars.row.lastName+"' dokumentai"
 						categoryOpts={showCategories:[iD:groupID,ref:ref,name:name],driver:{iD:pars.row.iD,title:name}}#Įrašom kurias kategorijas rodyt ir tos kategorijos duomenis
 					#Ref 1-Nuotraukos,2-Įvykio dok, 3-Vairuotojo dok, 4-TP dok, 0-Nepriskirti
-					dialogFrm.find("div.uploadDocsContainer").UploadFiles(categoryOpts: categoryOpts,showPhoto:false,docsController:"dialogDocController",requireCategory:true)
+					dialogFrm.find("div.uploadDocsContainer").UploadFiles(categoryOpts: categoryOpts,docsController:"dialogDocController",requireCategory:true)
 					#Atrenkam dokumentus kuriuos reiks parodyti
 					refID=pars.row.iD					
-					App.dialogDocController.setDocs(refID,groupID)
-					this.removeOnCloseView=Em.View.create(docsViewOpts).appendTo "#dialoguploadDocsContainer" #docsViewOpts	#Pridedam dokumentų uploadinimo view'ą				
+					App.dialogDocController.setDocs(refID,groupID) #Jau uploadintų dokumentų kontroleris
+					this.removeOnCloseView=Em.View.create(
+						opts: null #opcijos
+						templateName: "tmpDocsView"
+						tagName: "ul"
+						classNames: ["gallery", "ui-helper-reset", "ui-helper-clearfix"]
+						controller: App.dialogDocController
+						didInsertElement: ->
+							@_super()
+							this.$().data("opts",@opts)
+					).appendTo "#dialoguploadDocsContainer"	#Pridedam jau uploadintų dokumentų view'ą				
 				else console.warn('no ref')
 			didInsertElement: ()->
 				@_super(); dialogContent=$("#dialogContent");ref=0; thisDialog=@
@@ -326,15 +334,6 @@ App.dialogDocController = Em.ResourceController.create(
 		)
 		@.set("docs",docs)
 )
-docsViewOpts= #Listų dokumentų opcijos
-	opts: null #opcijos
-	templateName: "tmpDocsView"
-	tagName: "ul"
-	classNames: ["gallery", "ui-helper-reset", "ui-helper-clearfix"]
-	controller: App.dialogDocController
-	didInsertElement: ->
-		@_super()
-		this.$().data("opts",@opts)
 
 	
 #MY.tabLists={}

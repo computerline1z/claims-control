@@ -75,7 +75,7 @@ App.SelectedAccidentView = Em.View.extend(
 	newClaim: (e) ->
 		nTr = $(e.target).closest('div.tr'); $(e.target).closest('div.rightFooterBig').hide();
 		#Naudojam šito rekvizitus, nes divNewClaimCard_Content dar nėra
-		nTr.append("<div id='divNewClaimCard' data-ctrl='{\"id\":\"0\",\"NewRec\":\"1\",\"Source\":\"tblClaims\",\"ClaimTypeID\":\"0\"}'></div>")
+		nTr.append("<div id='divNewClaimCard' data-ctrl='{\"id\":\"0\",\"NewRec\":\"1\",\"Source\":\"proc_Claims\",\"ClaimTypeID\":\"0\"}'></div>")
 		fnCancelNewClaim=()->$("#divNewClaimCard").remove(); $("#AccDetailsContent").find('div.rightFooterBig').show()
 		d =	
 			ctrl: $('#divNewClaimCard')
@@ -154,7 +154,7 @@ App.SelectedClaimView = Em.View.extend(
 )
 App.claimEditController = Em.Controller.create(#save, delete, cancel Claims events
 	deleteForm: (e) ->
-		oData=oDATA.GET("tblClaims"); context=e.view._parentView.templateData.view.rowContext;
+		oData=oDATA.GET("proc_Claims"); context=e.view._parentView.templateData.view.rowContext;
 		console.log("Žalos ID: "+context.Claims2[0])
 		oCONTROLS.dialog.Confirm {title:"",msg:"Ištrinti pasirinktą žalą?"},->
 			SERVER.update(Action:"Delete", DataToSave:{ id:context.Claims2[0], DataTable: oData.Config.tblUpdate, Ext:context.accidentID },
@@ -166,7 +166,7 @@ App.claimEditController = Em.Controller.create(#save, delete, cancel Claims even
 					#	claims_c=newRow.slice(13,17).join("|#|"); claims_c2=newRow[17]; newRow=newRow.slice(0,13)
 					#	newRow[13]=claims_c; newRow[14]=claims_c2
 					App.accidentsController.get("setNewVal").call(App.accidentsController, {newVal:newRow,toAppend:false,fieldsToInt:[0, 1, 5, 6, 7, 8]})[0] #kuriuos reikia paverst integeriais
-					oData.Data.removeRowByID(parseInt(updData.DataToSave.id,10)) #ištrinam ir iš tblClaims jau ištrintą žalą					
+					oData.Data.removeRowByID(parseInt(updData.DataToSave.id,10)) #ištrinam ir iš proc_Claims jau ištrintą žalą					
 					#oData.Data.removeRowByID(p.id) data.removeRowByProperty("id",p.id)
 					$("#accidentsTable").find("div.selectedAccident").trigger("click")
 			)

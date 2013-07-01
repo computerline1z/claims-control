@@ -584,5 +584,19 @@ oGLOBAL.helper = {
 		var args = Array.prototype.slice.call(arguments, 2), namespaces = functionName.split("."), func = namespaces.pop();
 		for (var i = 0; i < namespaces.length; i++) {context = context[namespaces[i]];if (!context){return false;}}
 		return context[func]||false;
+	},
+	execWhen: function (p,calledNo) {//p:{fnCondition, fnExec, timeout} calledNo-nereikia rasyt
+		if (!calledNo){calledNo=0;}
+		if (!p.timeout){p.timeout=2000;}//default timeout
+		if (p.fnCondition()){
+			p.fnExec(); console.log("execWhen: baigiau - atitiko");
+		} else {
+			if (p.timeout/(200*calledNo)>200){//dar laikas nepasibaigė
+				 console.log("execWhen: dar");
+				setTimeout(function () {oGLOBAL.helper.execWhen(p,calledNo++)}, 200);
+			} else {
+				p.fnExec(); console.log("execWhen: baigesi laikas");
+			}
+		}
 	}
 }

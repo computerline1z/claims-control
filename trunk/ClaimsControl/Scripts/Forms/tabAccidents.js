@@ -86,7 +86,7 @@
 
       nTr = $(e.target).closest('div.tr');
       $(e.target).closest('div.rightFooterBig').hide();
-      nTr.append("<div id='divNewClaimCard' data-ctrl='{\"id\":\"0\",\"NewRec\":\"1\",\"Source\":\"tblClaims\",\"ClaimTypeID\":\"0\"}'></div>");
+      nTr.append("<div id='divNewClaimCard' data-ctrl='{\"id\":\"0\",\"NewRec\":\"1\",\"Source\":\"proc_Claims\",\"ClaimTypeID\":\"0\"}'></div>");
       fnCancelNewClaim = function() {
         $("#divNewClaimCard").remove();
         return $("#AccDetailsContent").find('div.rightFooterBig').show();
@@ -243,7 +243,7 @@
     deleteForm: function(e) {
       var context, oData;
 
-      oData = oDATA.GET("tblClaims");
+      oData = oDATA.GET("proc_Claims");
       context = e.view._parentView.templateData.view.rowContext;
       console.log("Žalos ID: " + context.Claims2[0]);
       return oCONTROLS.dialog.Confirm({

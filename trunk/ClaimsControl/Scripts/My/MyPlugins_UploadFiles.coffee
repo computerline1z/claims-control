@@ -1,11 +1,10 @@
 
 `var w=window, $=w.jQuery, App=w.App, Em=w.Em;`
-
+WAIT_AJAX=0
 $.widget "ui.UploadFiles",  
 options:
-	#fileupload opcijos
-	uploadTemplateId:"tmp2templateUpload", downloadTemplateId:"tmp2templateDownload", formTemplate:"tmpUploadForm",
-	showPhoto:true, docsController:"treeDocController" #gavus dokus reikia žinot kokį kontrolerį refrešint
+	#fileupload opcijos. showPhoto,showFromAccident:false
+	uploadTemplateId:"tmp2templateUpload", downloadTemplateId:"tmp2templateDownload", formTemplate:"tmpUploadForm", docsController:"treeDocController" #gavus dokus reikia žinot kokį kontrolerį refrešint
 	url: "Files/Start",fileuploaddone: ->
 		console.log("opa")	
 	#kitos opcijos
@@ -17,7 +16,11 @@ options:
 
 _create: ->	
 	form=""
-	Em.View.create(templateName:@options.formTemplate,showPhoto:@options.showPhoto).appendTo(@.element);	
+	Em.View.create(
+		templateName:@options.formTemplate
+		showPhoto:@options.showPhoto,showFromAccident:@options.showFromAccident
+		addFromAccident: ()-> alert("addFromAccident")
+	).appendTo(@.element);	
 	Em.run.next(@,->
 		form=@.element.find("form").data("opts",@options)
 		form.fileupload(@options)
@@ -76,15 +79,30 @@ _create: ->
 					No++; docsNo='('+No+')'; veh.set('docs',docsNo)
 					topVehicles=oDATA.GET('proc_topVehicles'); if topVehicles
 						vehTop=topVehicles.emData.findProperty('iD',newDoc.refID); if vehTop then vehTop.set('docs',docsNo)
+				opts=data.form.data("opts");	
+				#----------------------------updatinam tblDocsInFin/Activity lentele-----------------------------				
+				if opts.updateRelationsTbl
+					WAIT_AJAX++
+					#DataToSave=$.extend({},opts.updateRelationsTbl) #Nukopijuojam, kad keistusi id, neperduotu pagal ref
+					DataToSave=JSON.parse(JSON.stringify(opts.updateRelationsTbl)) #Nukopijuojam, kad keistusi id, neperduotu pagal ref
+					
+					#source=opts.updateRelationsTbl.DataTable; opts.updateRelationsTbl.Data[1]=data.result.tblDoc.iD #setting doc iD to DataToSave object (don't use push)
+					source=DataToSave.DataTable; DataToSave.Data.push(data.result.tblDoc.iD) #setting doc iD to DataToSave object
+					SERVER.update2(Action:"Add", DataToSave:DataToSave,"source":source,CallBackAfter:(Row)->WAIT_AJAX--)
 				#if data.result.tblDocsInAccidents then newDocInAccident=Em.Object.create(data.result.tblDocsInAccidents); oDATA.GET("tblDocsInAccidents").emData.pushObject(newDocInAccident);
 				#---------------------------------------------------------------------------
 				data.context.remove()
 				if not data.form.find("table tbody tr").length
 					data.form.find(".submitButtons, table").addClass("hidden")
-					opts=data.form.data("opts"); docsContr=opts.docsController
-					App[docsContr].refreshDocs()
+					docsContr=opts.docsController
+					if opts.updateRelationsTbl
+						oGLOBAL.helper.execWhen
+							fnCondition:->WAIT_AJAX==0 
+							fnExec:->App[docsContr].refreshDocs()
+					else
+						App[docsContr].refreshDocs()
 					#--------------paklikinam ant node paskutinio uploadinto dokumento jei tai įvykio peržiūra--------------
-					if opts.lastUpload.AccidentID
+					if opts.lastUpload.AccidentID and opts.refreshTree
 						App.docsTypesController.refreshTree()#perpaišom medį, nes reikia suskaičiuot iš naujo
 						Em.run.next(opts:opts,()->
 							lastUpload=@opts.lastUpload; refGroupID=oDATA.GET("tblDocGroup").emData.findProperty("iD",lastUpload.GroupID).ref; DocTypeID=lastUpload.DocTypeID

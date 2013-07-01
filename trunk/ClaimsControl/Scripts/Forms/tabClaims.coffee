@@ -1,8 +1,8 @@
 
 `var w=window, App=w.App, Em=w.Em, oGLOBAL=w.oGLOBAL, oDATA=w.oDATA, oCONTROLS=w.oCONTROLS, MY=w.MY`
 App.claimsStart=()->
-	oDATA.execWhenLoaded(["tblClaims"], ()->
-		App.claimsController.set("content",oDATA.GET("tblClaims").emData)	
+	oDATA.execWhenLoaded(["proc_Claims"], ()->
+		App.claimsController.set("content",oDATA.GET("proc_Claims").emData)	
 	)
 App.TabClaimsView = App.mainMenuView.extend(
 	templateName: 'tmpClaimsMain'#, viewIx: 5

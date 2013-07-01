@@ -4,8 +4,8 @@
   var panelFilterIsActive, textFilterIsActive;
 
   App.claimsStart = function() {
-    return oDATA.execWhenLoaded(["tblClaims"], function() {
-      return App.claimsController.set("content", oDATA.GET("tblClaims").emData);
+    return oDATA.execWhenLoaded(["proc_Claims"], function() {
+      return App.claimsController.set("content", oDATA.GET("proc_Claims").emData);
     });
   };
 

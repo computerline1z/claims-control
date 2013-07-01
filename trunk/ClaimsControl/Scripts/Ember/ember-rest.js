@@ -351,6 +351,7 @@ var SERVER = {
 	},
 	update2: function (p) {
 		//nereikia callbacko, updatina jsonObj, todėl papildomai reikia "source"(oDATA pavadinimas) ir "row" //oDATA.GET("proc_Vehicles").emData
+		//jei nėra Ctrl, nerodo rutuliuko
 		//SERVER.update2({"Action":Action,DataToSave:{},"Ctrl":Ctrl,"source":source,"row":row
 		if (!p.DataToSave) return false; var me=this;
 		var CallBack = { Success: function (resp, updData) {
@@ -435,6 +436,7 @@ var SERVER = {
 		}
 		};
 		$.extend(p, { CallBack: CallBack });
+		if  (!p.Ctrl){p.Ctrl="";}
 		this.update(p);
 	},
 	update: function (p) {
@@ -462,16 +464,9 @@ var SERVER = {
 		if (!dataType){dataType='json';}
 		if  (typeof  JSONarg!=="string"){JSONarg=JSON.stringify(JSONarg);}
 		if (updData.Ctrl) { $(updData.Ctrl).spinner({ position: 'center', img: 'spinnerBig.gif' }); }
-		else $("div.content:first").spinner({ position: 'center', img: 'spinnerBig.gif' });
-		if (!dataType) {
-			dataType = 'json';
-		}
-		//if (typeof updData.Ctrl !== 'undefined') {
-		//	if ($('#' + updData.Ctrl).length && $('#' + updData.Ctrl).html().length === 0) {
-		//		var e = $('#' + updData.Ctrl), h = e.height();
-		//		e.html("<center><img style='margin-top:" + h / 2.2 + "px;' src='/Content/images/ajax-loader.gif' alt='' /></center>");
-		//	}
-		//}
+		else if (updData.Ctrl!==""){$("div.content:first").spinner({ position: 'center', img: 'spinnerBig.gif' });}
+
+		if (!dataType) {dataType = 'json';}
 		oGLOBAL.notify.msg("", "Siunčiami duomenys..");
 		$.ajax({
 			type: "POST",

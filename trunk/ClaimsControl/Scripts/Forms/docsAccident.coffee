@@ -10,7 +10,7 @@ App.docsAccident=(p)-> #({accidentForm, docsForm, uploadForm})
 			if not vehicles.findProperty("iD",item.iD) then vehicles.addObject(item)
 		)
 	#vehicles = if isNew then null else frmObj.vehicles
-	settings=categoryOpts:
+	settings=showPhoto:true,refreshTree:true,categoryOpts:
 		accident:{iD:accidentID,title:"Įvykio dokumentai"} #accident:{iD:24,title:"Įvykio dokumentai"}
 		driver:{iD:driverID,title:driverTitle},#driver:{iD:87,title:"Vairuotojo Albinas Palubinskas dokumentai"},
 		vehicles:vehicles #vehicles:[{iD:14,title:"TP BBB, Volvo __ dokumentai"},{iD:7,title:"BRU643, Volvo, FH12"}]
