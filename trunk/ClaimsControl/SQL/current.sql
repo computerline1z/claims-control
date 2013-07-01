@@ -1,20 +1,34 @@
+-----------------------------------------------1.020----------------------------------------------------------
+INSERT INTO tblObjects_ID(tblName,Date)
+VALUES('tblDocsInActivity', GETDATE()),--50
+('tblDocsInFin', GETDATE())--51
+GO
 
-------------------1.019 local --------------------------------------------------------------------------------------------------
 USE [ClaimsControl]
 GO
-/****** Object:  StoredProcedure [dbo].[proc_Accidents]    Script Date: 06/23/2013 20:13:32 ******/
+/****** Object:  StoredProcedure [dbo].[proc_Claims]    Script Date: 06/26/2013 16:49:54 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 -- =============================================
--- Author:		<Author,,Name>
--- Create date: <Create Date,,>
--- Description:	[dbo].[proc_Accidents] 2,74
---Pasikeitus sios sproc iseinantiems duomenimis reikia atitinkamai pakeist:
--- [dbo].[proc_Update_AddNew]
--- [dbo].[proc_Update_Delete]
---kadangi pastarosios naudoja sios paskutinius stulpelius (Claims_C,Claims_C2)
+-- Description:	[dbo].[proc_Claims] 2
+-- =============================================
+CREATE PROCEDURE [dbo].[proc_Claims]
+@AccountID int
+AS
+BEGIN
+SET NOCOUNT ON
+
+SELECT c.ID,c.ClaimTypeID,c.AccidentID,isNull(c.InsPolicyID,'') InsPolicyID,c.VehicleID,c.No,isNull(c.IsTotalLoss,'')IsTotalLoss,c.LossAmount,c.InsuranceClaimAmount,c.IsInjuredPersons,
+c.InsuranceClaimAmount,
+c.IsInjuredPersons,isNull(c.InsurerClaimID,'')InsurerClaimID,c.ClaimStatus,c.AmountIsConfirmed,isNull(c.Days,'')Days,isNull(c.PerDay,'')PerDay,dbo.fn_strDate(c.DateNotification)DateNotification,
+dbo.fn_strDate(c.DateDocsSent)DateDocsSent
+FROM tblClaims c JOIN tblAccidents a on a.ID=c.AccidentID WHERE a.AccountID=@AccountID AND c.IsDeleted=0
+
+END
+GO
+
 -- =============================================
 ALTER PROCEDURE [dbo].[proc_Accidents]
 @AccountID int,
@@ -88,7 +102,7 @@ SET @iRow=@iRow+1 END
 IF @AccidentID is null BEGIN
 	SELECT A.ID, A.No, CONVERT (varchar(10),A.Date,102) Date, isnull(LocationCountry,'')+', '+isnull(LocationDistrict,'')+', '+isnull(LocationAddress,'') Place,AT.Name AccType, isnull(CSUM.CNo,0) CNo_All,isnull(CStat.CNo,0) CNo_NotF,isnull(CSUM.LossSum,0) LossSum,isnull(CSUM.AmountIsConfirmed,0) AmountIsConfirmed,
 	A.ShortNote, isnull(A.LongNote,'') LongNote, D.FirstName+' '+D.LastName Driver, u.FirstName+' '+u.Surname UserName, isnull(CC.ConcString,'') Claims_C, isnull(CC.ConcString2,'') Claims_C2,
-	datediff(d,A.Date,getdate()) DaysFrom, isnull(doc.No,0) DocNo, isnull(CC.ClaimTypeID,'') Claims_TypeID	
+	datediff(d,A.Date,getdate()) DaysFrom, isnull(doc.No,0) DocNo, isnull(CC.ClaimTypeID,'') Claims_TypeID, D.ID DriverID	
 
 	--SELECT isnull(CC.ConcString,'') Claims_C, '['+isnull(CC.ConcString2,'')+']' Claims_C2
 	FROM tblAccidents A left join
@@ -106,7 +120,7 @@ IF @AccidentID is null BEGIN
 END ELSE BEGIN
 	SELECT A.ID, A.No, CONVERT (varchar(10),A.Date,102) Date, isnull(LocationCountry,'')+', '+isnull(LocationDistrict,'')+', '+isnull(LocationAddress,'') Place,AT.Name AccType, isnull(CSUM.CNo,0) CNo_All,isnull(CStat.CNo,0) CNo_NotF,isnull(CSUM.LossSum,0) LossSum,isnull(CSUM.AmountIsConfirmed,0) AmountIsConfirmed,
 	A.ShortNote, isnull(A.LongNote,'') LongNote, D.FirstName+' '+D.LastName Driver, u.FirstName+' '+u.Surname UserName, isnull(CC.ConcString,'') Claims_C, isnull(CC.ConcString2,'') Claims_C2,
-	datediff(d,A.Date,getdate()) DaysFrom, isnull(doc.No,0) DocNo, isnull(CC.ClaimTypeID,'') Claims_TypeID	
+	datediff(d,A.Date,getdate()) DaysFrom, isnull(doc.No,0) DocNo, isnull(CC.ClaimTypeID,'') Claims_TypeID, D.ID DriverID	
 	FROM tblAccidents A left join
 	(SELECT sum(LossAmount) LossSum, COUNT(*) CNo, MIN(AmountIsConfirmed) AmountIsConfirmed, AccidentID FROM tblTempClaims WHERE Spid=@Spid GROUP BY AccidentID) CSUM on A.ID=CSUM.AccidentID left join
 	(SELECT COUNT(*) CNo, AccidentID FROM tblTempClaims WHERE ClaimStatus<5 AND Spid=@Spid GROUP BY AccidentID) CStat on A.ID=CStat.AccidentID left join
@@ -125,187 +139,27 @@ DELETE FROM tblTempConcString WHERE Spid=@Spid
 DELETE FROM tblTempClaims WHERE Spid=@Spid
 --PRINT cast(@Spid as varchar(20))
 END
-
-
-
-
-
+GO
+----------------------------------------------------------
+sp_RENAME 'tblDocsInFin.[FinID]' , 'ActivityID', 'COLUMN'
+GO
+-----------------------------------------------------------
 USE [ClaimsControl]
 GO
-ALTER TABLE tblDocs DROP COLUMN FileName
-GO
-/****** Object:  Table [dbo].[tblActivity]    Script Date: 05/05/2013 16:59:24 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[tblActivities](
-	[ID] [int] IDENTITY(1,1) NOT NULL,
-	[ClaimID] [int] NOT NULL,
-	[ActivityTypeID] [int] NOT NULL,
-	[FromText] [nvarchar](500) NULL,
-	[FromID] [int] NULL,
-	[ToText] [nvarchar](500) NULL,
-	[ToID] [int] NULL,
-	[Subject] [nvarchar](200) NULL,
-	[Body] [nvarchar](max) NULL,
-	[DueDate] [date] NULL,
-	[IsDeleted] [bit] NOT NULL,
- CONSTRAINT [PK_tblActivities] PRIMARY KEY CLUSTERED 
-(
-	[ID] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-ALTER TABLE [dbo].[tblActivities] ADD  CONSTRAINT [DF_tblActivity_IsDeleted]  DEFAULT ((0)) FOR [IsDeleted]
-GO
-
---Atsiþymim apie naujas lenteles------------------------
-ALTER TABLE tblObjects_ID DROP COLUMN tblID_trinti
-GO
-INSERT INTO tblObjects_ID(tblName,Date)
-VALUES('tblActivities', GETDATE()),--48
-('tblFinances', GETDATE()),--49
-('tblFinTypes', GETDATE()--50)
-GO
---Indeksuojam----------------------------
-CREATE INDEX IX_tblUsersActivities_Updates_TableID ON tblUsersActivities_Updates (TableID)
-GO
-CREATE INDEX IX_tblUsersActivities_Updates_RecordID ON tblUsersActivities_Updates (RecordID)
-GO
-
---pridedam tipus-------------------------
-ALTER TABLE dbo.tblActivities ADD CONSTRAINT FK_tblActivity_tblActivityTypes FOREIGN KEY(ActivityTypeID)REFERENCES tblActivityTypes(ID) 
-GO
-INSERT INTO tblActivityTypes(ActivityType)
-VALUES('MailSend'),('MailUpload'),('Task'),('Phone'),('Meeting'),('Note')
-GO
-
---------------
-ALTER TABLE dbo.tblActivities ADD CONSTRAINT FK_tblActivity_tblClaims FOREIGN KEY(ClaimID)REFERENCES tblClaims(ID) 
-GO
-
--------------------
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[tblDocsInActivity](
-	[ID] [int] IDENTITY(1,1) NOT NULL,
-	[ActivityID] [int] NOT NULL,
-	[DocID] [int] NOT NULL,
- CONSTRAINT [PK_tblDocsInActivity] PRIMARY KEY CLUSTERED 
-(
-	[ID] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-CREATE INDEX IX_tblDocsInActivity_ActivityID ON tblDocsInActivity (ActivityID)
-GO
---------------------
-ALTER TABLE dbo.tblDocsInActivity ADD CONSTRAINT FK_tblDocsInActivity_tblActivity FOREIGN KEY(ActivityID)REFERENCES tblActivities(ID) 
-GO
-ALTER TABLE dbo.tblDocsInActivity ADD CONSTRAINT FK_tblDocsInActivity_tblDocs FOREIGN KEY(DocID)REFERENCES tblDocs(ID) 
-GO
-
---------------
+/****** Object:  StoredProcedure [dbo].[proc_Finances]    Script Date: 06/30/2013 21:47:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 -- =============================================
--- Author:		Að
--- Create date: long ago
--- Description:	[dbo].[proc_Activities] 2
--- FromID mostly same as UserID except in meeting and phone (there is from and toText)
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	[dbo].[proc_Finances] 2
+--Pasikeitus sios sproc iseinantiems duomenimis reikia atitinkamai pakeist:
+-- [dbo].[proc_Update_AddNew]
+-- [dbo].[proc_Update_Delete]
 --kadangi pastarosios naudoja sios paskutinius stulpelius (Claims_C,Claims_C2)
 -- =============================================
-CREATE PROCEDURE [dbo].[proc_Activities]
-@AccountID int
-AS
-BEGIN
-SET NOCOUNT ON
-SELECT a.ID,a.ClaimID,a.ActivityTypeID,isnull(a.FromText,'') FromText,ISNULL(a.FromID,'') FromID,isnull(a.ToText,'') ToText,
-isnull(a.ToID,'')ToID,isnull(a.Subject,'') Subject,isnull(a.Body,'')Body,dbo.fn_strDate(DueDate) DueDate,ua.UserID,
-dbo.fn_strDate(ua.Date) EntryDate, CASE WHEN doc.No IS NULL  then '' ELSE '('+cast(doc.No as varchar(10))+')' END Docs-- isnull(doc.No,'') Docs
-	FROM tblActivities a
-JOIN tblClaims c on a.ClaimID=c.ID
-JOIN tblAccidents acc on c.AccidentID=acc.ID
-JOIN tblUsersActivities_Updates ua on ua.RecordID=a.ID AND ua.TableID=(SELECT ID FROM tblObjects_ID WHERE tblName='tblActivities')
-LEFT JOIN (SELECT count(*) No, ActivityID FROM tblDocsInActivity GROUP BY ActivityID) doc ON a.ID=doc.ActivityID
-WHERE acc.AccountID=@AccountID and ua.Action=0 and ua.TableID=48 --tblActivity ID in tblObjects_ID
-and c.IsDeleted=0 and a.IsDeleted=0 ORDER BY ua.Date desc
-END
-GO
----------------------------------------------tblClaimFin ir pan-----------------------------------------------------------------
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[tblFinances](
-	[ID] [int] IDENTITY(1,1) NOT NULL,
-	[ClaimID] [int] NOT NULL,
-	[Amount] [float] NOT NULL,
-	[Date] [date] NULL,
-	[Purpose] [nvarchar](200) NULL,
-	[Note] [nvarchar](max) NULL,
-	[FinancesTypeID] [int] NOT NULL,
-	[IsDeleted] [bit] NOT NULL,
- CONSTRAINT [PK_tblFinances] PRIMARY KEY CLUSTERED 
-(
-	[ID] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-
-CREATE TABLE [dbo].[tblFinTypes](
-	[ID] [int] IDENTITY(1,1) NOT NULL,
-	[Name] [nvarchar](50) NOT NULL,
- CONSTRAINT [PK_tblFinancesTypes] PRIMARY KEY CLUSTERED 
-(
-	[ID] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
----------------------------------------------
-INSERT INTO tblFinTypes(Name)
-VALUES('Sàskaita'),('Nuraðymo aktas'),('Þala turtui'),('Þala asmeniui'),('Iðmoka'),('Kompensacija nuketëjusiam'),('Kaltininko kompensacija')
-GO
----------------------------------------------
-
-ALTER TABLE [dbo].[tblFinances]  WITH CHECK ADD  CONSTRAINT [FK_tblClaimFin_tblClaimFinTypes] FOREIGN KEY([FinancesTypeID])
-REFERENCES [dbo].[tblFinTypes] ([ID])
-GO
-ALTER TABLE [dbo].[tblFinances] CHECK CONSTRAINT [FK_tblClaimFin_tblClaimFinTypes]
-GO
-ALTER TABLE [dbo].[tblFinances]  WITH CHECK ADD  CONSTRAINT [FK_tblClaimFin_tblClaims] FOREIGN KEY([ClaimID])
-REFERENCES [dbo].[tblClaims] ([ID])
-GO
-ALTER TABLE [dbo].[tblFinances] CHECK CONSTRAINT [FK_tblClaimFin_tblClaims]
-GO
-
-CREATE TABLE [dbo].[tblDocsInFin](
-	[ID] [int] IDENTITY(1,1) NOT NULL,
-	[FinID] [int] NOT NULL,
-	[DocID] [int] NOT NULL,
- CONSTRAINT [PK_tblDocsInFin] PRIMARY KEY CLUSTERED 
-(
-	[ID] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
-GO
-ALTER TABLE [dbo].[tblDocsInFin]  WITH CHECK ADD  CONSTRAINT [FK_tblDocsInFin_tblClaimFin] FOREIGN KEY([FinID])
-REFERENCES [dbo].[tblFinances] ([ID])
-GO
-ALTER TABLE [dbo].[tblDocsInFin] CHECK CONSTRAINT [FK_tblDocsInFin_tblClaimFin]
-GO
-ALTER TABLE [dbo].[tblDocsInFin]  WITH CHECK ADD  CONSTRAINT [FK_tblDocsInFin_tblDocs] FOREIGN KEY([DocID])
-REFERENCES [dbo].[tblDocs] ([ID])
-GO
-ALTER TABLE [dbo].[tblDocsInFin] CHECK CONSTRAINT [FK_tblDocsInFin_tblDocs]
-GO
-
 ALTER PROCEDURE [dbo].[proc_Finances]
 @AccountID int
 AS
@@ -318,82 +172,12 @@ JOIN tblClaims c on f.ClaimID=c.ID
 JOIN tblAccidents acc on c.AccidentID=acc.ID
 JOIN tblUsersActivities_Updates ua on ua.RecordID=f.ID AND ua.TableID=(SELECT ID FROM tblObjects_ID WHERE tblName='tblFinances')
 
-LEFT JOIN (SELECT count(*) No, FinID FROM tblDocsInFin GROUP BY FinID) doc ON f.ID=doc.FinID
+LEFT JOIN (SELECT count(*) No, ActivityID FROM tblDocsInFin GROUP BY ActivityID) doc ON f.ID=doc.ActivityID
 
-WHERE acc.AccountID=@AccountID and ua.Action=0 and ua.TableID=50 --tblClaimCompensation ID in tblObjects_ID
+WHERE acc.AccountID=@AccountID and ua.Action=0 and ua.TableID=(SELECT ID FROM tblObjects_ID WHERE tblName='tblFinances')
 and c.IsDeleted=0 and f.IsDeleted=0 ORDER by ua.Date desc
 END
+GO
+-----------------------------------------------------------
 
---Iki èia scriptus persiøst dar ir Tomui
-------------------1.018 no updates --------------------------------------------------------------------------------------------------
-------------------1.017 no updates --------------------------------------------------------------------------------------------------
-------------------1.016 local local and ClaimsControl --------------------------------------------------------------------------------------------------
-ALTER TABLE tblClaims ADD DateNotification date NULL
-ALTER TABLE tblClaims ADD DateDocsSent date NULL
-------------------1.015 no updates --------------------------------------------------------------------------------------------------
-------------------1.014 local and ClaimsControl --------------------------------------------------------------------------------------------------
-proc_Update_Edit
-proc_Update_AddNew
-------------------1.013 local and ClaimsControl --------------------------------------------------------------------------------------------------
-[dbo].[proc_InsPolicies]
-------------------1.012 local and ClaimsControl --------------------------------------------------------------------------------------------------
-[dbo].[proc_Vehicles]
-[dbo].[proc_Drivers]
-[dbo].[proc_Update_Delete]
-------------------1.011 local --------------------------------------------------------------------------------------------------
 
-------------------1.010 local and ClaimsControl--------------------------------------------------------------------------------------------------
---ALTER TABLE tblDrivers DROP COLUMN DrivingCategory 
---sp_RENAME 'tblDrivers.[DateExpierence]' , 'DateBorn', 'COLUMN'
---UPDATE tblDrivers SET DateBorn='1970-05-16' where DateBorn is null
---ALTER TABLE tblDrivers ALTER COLUMN DateBorn date NOT NULL
---ALTER TABLE tblDrivers ALTER COLUMN EndDate date NULL
---DROP INDEX tblDrivers.IX_tblDrivers_FullName
---UPDATE tblDrivers SET FirstName='Vardenis'+cast(id as varchar(4)) WHERE FirstName is null
---UPDATE tblDrivers SET LastName='Pavardenis'+cast(id as varchar(4)) WHERE LastName is null
---ALTER TABLE tblDrivers ALTER COLUMN FirstName nvarchar(200) NOT NULL
---ALTER TABLE tblDrivers ALTER COLUMN LastName nvarchar(200) NOT NULL
---ALTER TABLE tblDrivers ADD CONSTRAINT ucDrivers UNIQUE (FirstName,LastName,DateBorn,AccountID)
---ALTER TABLE tblDrivers ADD NotUnique bit NOT NULL CONSTRAINT dcNotUnique DEFAULT 0
-
---proc_Drivers dar pridët
---visos 3 updatinimo proceduros
-
---sp_RENAME 'tblObjects_Lang.[MsgLT]' , 'Msg', 'COLUMN'
---ALTER TABLE tblObjects_Lang ADD LanguageID int NOT NULL DEFAULT 1
---ALTER TABLE tblObjects_Lang ADD CONSTRAINT ucReference UNIQUE (ReferenceKey,LanguageID)
---sp_rename 'tblObjects_Lang', 'tblUserMsg'
---alter table tblUserMsg add constraint FK_tblUserMsg_tblLanguage FOREIGN KEY (LanguageID) REFERENCES tblLanguage(ID)
-
---INSERT INTO tblUserMsg
---SELECT 10,'IX_tblUsers_Email','Ðis el. paðto adresas(''{{}}'') jau yra priskirtas kitam naudotojui.',1--DescID þymiu 10 naujus ir patikrintus
---INSERT INTO tblUserMsg
---SELECT 10,'IX_tblUsers_Email_anotherAccount','Ðis el. paðto adresas(''{{}}'') jau yra naudojamas kitos ámonës paskyroje.',1
---INSERT INTO tblUserMsg
---SELECT 10,'ucDrivers','Jau yra ávestas vairuotojas su tokiu paèiu vardu, pavarde ir gimimo data.',1
---INSERT INTO tblUserMsg
---SELECT 10,'IX_tblAccounts_Email','Toks e-paðto adresas(''{{}}'') jau yra naudojamas. Pasirinkite kità.',1
-
---DROP INDEX tblVehicles.IX_tblVehicles_Plate
---CREATE UNIQUE NONCLUSTERED INDEX [IX_tblVehicles_Plate] ON [dbo].[tblVehicles] ([Plate] ASC,[AccountID] ASC)
---WHERE [IsDeleted] = 0
---WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
---INSERT INTO tblUserMsg
---SELECT 10,'IX_tblVehicles_Plate','Transporto priemonë tokiu valstybiniu numeriu(''{{}}'') jau yra ávesta.',1
-
--------------------------------------------------------------------------------------------------------------------------------------
---SELECT * FROM tblDocGroups
---UPDATE tblDocGroups SET Name='Transporto priemoniø dokumentai' WHERE Name='TP Dokumentai'
---SELECT * FROM tblAccidents WHERE AccountID=3
-----SELECT * FROM tblDocsInAccident WHERE AccidentID IN (SELECT ID FROM tblAccidents WHERE AccountID=3)
---SELECT * FROM [ClaimsControl].[dbo].[tblDocs] WHERE UserID IN (Select ID from tblUsers WHERE AccountID=3)
---Select * from tblDrivers WHERE AccountID=3
---Select * from tblVehicles WHERE AccountID=3
---SELECT * FROM tblVehicleTypes
---UPDATE tblDocGroups SET Name='Transporto priemoniø dokumentai' WHERE Name='TP Dokumentai'
---UPDATE tblVehicleTypes SET Name='Priekaba, puspriekabë' WHERE ID=2--Furgonas
---UPDATE tblVehicleTypes SET Name='Krovininis automobilis' WHERE ID=3--Savivartis
---UPDATE tblVehicleTypes SET Name='Lengvasis automobilis' WHERE ID=4--Puspriekabë
---UPDATE tblVehicleTypes SET Name='Autobusas' WHERE ID=5--Priekaba
---UPDATE tblVehicles SET TypeID=1 WHERE TypeID IN(6,7,8)
---DELETE FROM tblVehicleTypes WHERE ID IN(6,7,8)
