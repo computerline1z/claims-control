@@ -2,10 +2,6 @@ Handlebars.registerHelper('highlight', function (prop, options) {
 	var value = Ember.getPath(this, prop);
 	return new Handlebars.SafeString('<span class="highlight">' + value + '</span>');
 });
-Handlebars.registerHelper('checkOut_trinti', function (prop, options) {
-	var value = Ember.getPath(this, prop);
-	return new Handlebars.SafeString('<span class="highlight">' + value + '</span>');
-});
 Handlebars.registerHelper('currency', function (prop, options) {
 	var value = Ember.getPath(this, prop)+'';
 	var i=value.length-3;
@@ -46,31 +42,15 @@ Handlebars.registerHelper('updatableField', function (prop, options) {
 	if (h.tag) {retString="<"+h.tag+ retString + "}'></"+h.tag+">";} else  {retString="<div"+ retString + "}'></div>";}
 	return new Handlebars.SafeString(retString );
 });
+/* šitas kveikiantis ->context=this[context];
 Handlebars.registerHelper('eachArr', function (context, block) {
-	var ret = "";
+	var ret = ""; context=this[context];
 	for (var i = 0, j = context.length; i < j; i++) {
-		//context[i].index = i;
 		ret = ret + block(context[i]);
 	}
 	return ret;
 });
-Handlebars.registerHelper('each11', function (context, options) {
-	var ret = "";
-
-	for (var i = 0, j = context.length; i < j; i++) {
-		ret = ret + options.fn(context[i]);
-	}
-
-	return ret;
-});
-
-/*	{{#compare Database.Tables.Count ">" 5}}
-		There are more than 5 tables
-	{{/compare}}
-
-	{{#compare "claimID" "Test"}}
-		Default comparison of "==="
-	{{/compare}}*/
+*/
 Handlebars.registerHelper('compare', function (lvalue, operator, rvalue, options) {
 	var operators, result,me=this;
 	if (arguments.length < 3) { throw new Error("Handlerbars Helper 'compare' needs 2 parameters"); }
@@ -91,7 +71,7 @@ Handlebars.registerHelper('compare', function (lvalue, operator, rvalue, options
 		return val;
 	}
 	lvalue=getVal(lvalue);
-	rvalue=getVal(rvalue);
+	rvalue=(rvalue)?getVal(rvalue):"";
 	operators = {
 		'==': function (l, r) { return l == r; },'===': function (l, r) { return l === r; },'!=': function (l, r) { return l != r; },
 		'!==': function (l, r) { return l !== r; },'<': function (l, r) { return l < r; },'>': function (l, r) { return l > r; },

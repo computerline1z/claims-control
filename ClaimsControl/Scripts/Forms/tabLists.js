@@ -276,170 +276,165 @@
       if (!pars.row && pars.newVals) {
         pars.row = pars.newVals.vals.toRowObject(pars.newVals.cols);
       }
-      if (MY.dialog) {
-        MY.dialog.remove();
-      }
-      return Em.run.next(this, function() {
-        return MY.dialog = JQ.Dialog.create({
-          controllerBinding: "App.listAllController",
-          thisController: this,
-          pars: pars,
-          init: function() {
-            this._super();
-            this.templateName = pars.template;
-            this.title = title;
-            return this.pars = pars;
-          },
-          goToEditDate: function() {
-            App.listAllController.set("dateIsEdited", true);
-            return Em.run.next(this, function() {
-              return $("#dialogEndDateInput").datepicker({
-                "minDate": "-3y",
-                "maxDate": "0"
-              }).trigger("focus");
-            });
-          },
-          saveDate: function() {
-            var newDate, obj;
+      return MY.dialog = JQ.Dialog.create({
+        controllerBinding: "App.listAllController",
+        thisController: this,
+        pars: pars,
+        init: function() {
+          this._super();
+          this.templateName = pars.template;
+          this.title = title;
+          return this.pars = pars;
+        },
+        goToEditDate: function() {
+          App.listAllController.set("dateIsEdited", true);
+          return Em.run.next(this, function() {
+            return $("#dialogEndDateInput").datepicker({
+              "minDate": "-3y",
+              "maxDate": "0"
+            }).trigger("focus");
+          });
+        },
+        saveDate: function() {
+          var newDate, obj;
 
-            newDate = $(event.target).parent().parent().find("input").val();
-            if (!oGLOBAL.date.isDate(newDate)) {
-              newDate = "";
+          newDate = $(event.target).parent().parent().find("input").val();
+          if (!oGLOBAL.date.isDate(newDate)) {
+            newDate = "";
+          }
+          obj = $("#dialogContent").data("ctrl");
+          SERVER.update2({
+            "Action": "Edit",
+            "Ctrl": $("#openItemDialog"),
+            "source": obj.Source,
+            "row": this.pars.row,
+            DataToSave: {
+              "id": obj.id,
+              "Data": [newDate],
+              "Fields": ["EndDate"],
+              "DataTable": obj.tblUpdate
+            },
+            CallBackAfter: function(Row) {
+              return $("#tabLists").find("div.ui-tabs").find("li.ui-tabs-selected a").trigger("click");
             }
-            obj = $("#dialogContent").data("ctrl");
-            SERVER.update2({
-              "Action": "Edit",
-              "Ctrl": $("#openItemDialog"),
-              "source": obj.Source,
-              "row": this.pars.row,
-              DataToSave: {
-                "id": obj.id,
-                "Data": [newDate],
-                "Fields": ["EndDate"],
-                "DataTable": obj.tblUpdate
-              },
-              CallBackAfter: function(Row) {
-                return $("#tabLists").find("div.ui-tabs").find("li.ui-tabs-selected a").trigger("click");
-              }
-            });
-            console.log("išsaugoti " + newDate);
-            this.pars.me.endDate = newDate;
-            return App.listAllController.set("dateIsEdited", false).set("endDate", newDate);
-          },
-          makeAttach: function(ref) {
-            var categoryOpts, dialogFrm, docGroups, groupID, name, refID;
+          });
+          console.log("išsaugoti " + newDate);
+          this.pars.me.endDate = newDate;
+          return App.listAllController.set("dateIsEdited", false).set("endDate", newDate);
+        },
+        makeAttach: function(ref) {
+          var categoryOpts, dialogFrm, docGroups, groupID, name, refID;
 
-            dialogFrm = $("#openItemDialog");
-            categoryOpts = false;
-            docGroups = oDATA.GET("tblDocGroup").emData;
-            if (ref) {
-              groupID = docGroups.findProperty("ref", ref).iD;
-              if (ref === 4) {
-                name = "TP " + pars.row.make + ", " + pars.row.model + ", " + pars.row.plate + " dokumentai";
-                categoryOpts = {
-                  showCategories: [
-                    {
-                      iD: groupID,
-                      ref: ref,
-                      name: name
-                    }
-                  ],
-                  vehicles: [
-                    {
-                      iD: pars.row.iD,
-                      title: name
-                    }
-                  ]
-                };
-              }
-              if (ref === 3) {
-                name = "Vairuotojo '" + pars.row.firstName + " " + pars.row.lastName + "' dokumentai";
-                categoryOpts = {
-                  showCategories: [
-                    {
-                      iD: groupID,
-                      ref: ref,
-                      name: name
-                    }
-                  ],
-                  driver: {
+          dialogFrm = $("#openItemDialog");
+          categoryOpts = false;
+          docGroups = oDATA.GET("tblDocGroup").emData;
+          if (ref) {
+            groupID = docGroups.findProperty("ref", ref).iD;
+            if (ref === 4) {
+              name = "TP " + pars.row.make + ", " + pars.row.model + ", " + pars.row.plate + " dokumentai";
+              categoryOpts = {
+                showCategories: [
+                  {
+                    iD: groupID,
+                    ref: ref,
+                    name: name
+                  }
+                ],
+                vehicles: [
+                  {
                     iD: pars.row.iD,
                     title: name
                   }
-                };
-              }
-              dialogFrm.find("div.uploadDocsContainer").UploadFiles({
-                categoryOpts: categoryOpts,
-                docsController: "dialogDocController",
-                requireCategory: true
-              });
-              refID = pars.row.iD;
-              App.dialogDocController.setDocs(refID, groupID);
-              return this.removeOnCloseView = Em.View.create({
-                opts: null,
-                templateName: "tmpDocsView",
-                tagName: "ul",
-                classNames: ["gallery", "ui-helper-reset", "ui-helper-clearfix"],
-                controller: App.dialogDocController,
-                didInsertElement: function() {
-                  this._super();
-                  return this.$().data("opts", this.opts);
+                ]
+              };
+            }
+            if (ref === 3) {
+              name = "Vairuotojo '" + pars.row.firstName + " " + pars.row.lastName + "' dokumentai";
+              categoryOpts = {
+                showCategories: [
+                  {
+                    iD: groupID,
+                    ref: ref,
+                    name: name
+                  }
+                ],
+                driver: {
+                  iD: pars.row.iD,
+                  title: name
                 }
-              }).appendTo("#dialoguploadDocsContainer");
-            } else {
-              return console.warn('no ref');
+              };
             }
-          },
-          didInsertElement: function() {
-            var dialogContent, ref, thisDialog;
-
-            this._super();
-            dialogContent = $("#dialogContent");
-            ref = 0;
-            thisDialog = this;
-            if (pars.emObject === "vehicles" || pars.source === "proc_Vehicles") {
-              ref = 4;
-            } else if (pars.emObject === "drivers" || pars.source === "proc_Drivers") {
-              ref = 3;
-            }
-            if (pars.row.iD) {
-              this.makeAttach(ref);
-            } else {
-              title = ref === 4 ? "tr. priemonę" : "vairuotoją";
-              $('<div class="row fileupload-buttonbar" style="padding:10px 0 20px 40px;"><center><i class="img16-attach"></i><a href="#" class="fileinput-button">Išsaugoti naują ' + title + ' ir prisegti dokumentus</a></center></div>').appendTo("#dialoguploadDocsContainer").find('a').on("click", function(e) {
-                var formOpts;
-
-                e.preventDefault();
-                formOpts = dialogContent.data('ctrl');
-                if (dialogContent.length) {
-                  return thisDialog.thisController.saveForm(null, {
-                    Alert: true,
-                    pars: pars,
-                    execOnSuccess: function(row) {
-                      oCONTROLS.UpdatableForm_toSaved(row.iD, dialogContent);
-                      pars.row = row;
-                      $("#dialoguploadDocsContainer").empty();
-                      return Em.run.next(function() {
-                        return thisDialog.makeAttach(ref);
-                      });
-                    }
-                  });
-                }
-              });
-            }
-            if (this.templateName === "tmp_InsPolicies") {
-              this.$().tabs().css("margin", "-5px 1px 0 1px");
-            }
-            return oCONTROLS.UpdatableForm({
-              frm: dialogContent,
-              row: pars.row,
-              btnSaveToDisable: dialogContent.next().find("button.btnSave")
+            dialogFrm.find("div.uploadDocsContainer").UploadFiles({
+              categoryOpts: categoryOpts,
+              docsController: "dialogDocController",
+              requireCategory: true
             });
-          },
-          width: 700,
-          templateName: 'dialog-content'
-        }).append();
-      });
+            refID = pars.row.iD;
+            App.dialogDocController.setDocs(refID, groupID);
+            return this.removeOnCloseView = Em.View.create({
+              opts: null,
+              templateName: "tmpDocsView",
+              tagName: "ul",
+              classNames: ["gallery", "ui-helper-reset", "ui-helper-clearfix"],
+              controller: App.dialogDocController,
+              didInsertElement: function() {
+                this._super();
+                return this.$().data("opts", this.opts);
+              }
+            }).appendTo("#dialoguploadDocsContainer");
+          } else {
+            return console.warn('no ref');
+          }
+        },
+        didInsertElement: function() {
+          var dialogContent, ref, thisDialog;
+
+          this._super();
+          dialogContent = $("#dialogContent");
+          ref = 0;
+          thisDialog = this;
+          if (pars.emObject === "vehicles" || pars.source === "proc_Vehicles") {
+            ref = 4;
+          } else if (pars.emObject === "drivers" || pars.source === "proc_Drivers") {
+            ref = 3;
+          }
+          if (pars.row.iD) {
+            this.makeAttach(ref);
+          } else {
+            title = ref === 4 ? "tr. priemonę" : "vairuotoją";
+            $('<div class="row fileupload-buttonbar" style="padding:10px 0 20px 40px;"><center><i class="img16-attach"></i><a href="#" class="fileinput-button">Išsaugoti naują ' + title + ' ir prisegti dokumentus</a></center></div>').appendTo("#dialoguploadDocsContainer").find('a').on("click", function(e) {
+              var formOpts;
+
+              e.preventDefault();
+              formOpts = dialogContent.data('ctrl');
+              if (dialogContent.length) {
+                return thisDialog.thisController.saveForm(null, {
+                  Alert: true,
+                  pars: pars,
+                  execOnSuccess: function(row) {
+                    oCONTROLS.UpdatableForm_toSaved(row.iD, dialogContent);
+                    pars.row = row;
+                    $("#dialoguploadDocsContainer").empty();
+                    return Em.run.next(function() {
+                      return thisDialog.makeAttach(ref);
+                    });
+                  }
+                });
+              }
+            });
+          }
+          if (this.templateName === "tmp_InsPolicies") {
+            this.$().tabs().css("margin", "-5px 1px 0 1px");
+          }
+          return oCONTROLS.UpdatableForm({
+            frm: dialogContent,
+            row: pars.row,
+            btnSaveToDisable: dialogContent.next().find("button.btnSave")
+          });
+        },
+        width: 700,
+        templateName: 'dialog-content'
+      }).append();
     },
     addNew: function(e) {
       var pars;

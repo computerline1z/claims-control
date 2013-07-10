@@ -1,4 +1,47 @@
------------------------------------------------1.020----------------------------------------------------------
+-----------------------------------------------1.021----------------------------------------------------------
+CREATE TYPE RelationsTbl AS TABLE (ID int)
+GO
+USE [ClaimsControl]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[proc_InsertRelations]
+--@AccountID int,
+@relTbl RelationsTbl READONLY,
+--laukø vardai
+@MainID int,
+@IDField varchar(100),
+@Field varchar(100),
+@DataTable varchar(100),
+@DeletePrevious bit
+AS
+BEGIN
+SET NOCOUNT ON
+DECLARE @sql nvarchar(500),@RowAff int
+--Istrinam visus buvusius ID
+IF @DeletePrevious=1 BEGIN
+	SET @sql = 'DELETE FROM '+@DataTable+' WHERE '+@IDField+'=@MainID'--Dokumentø ID skirsis nepriklausomai nuo Accounto todël to uþtenka
+	--EXEC sp_executesql N'SELECT * FROM @tbl', N'@tbl tbltype READONLY', @tbl
+	EXEC  sp_executesql  @sql, N'@MainID int', @MainID
+END
+
+SET @sql = 'INSERT INTO '+@DataTable+'('+@IDField+','+@Field+ ')SELECT @MainID, ID FROM @relTbl SELECT @RNo=@@ROWCOUNT'
+INSERT INTO tblLogs(Msg,Date)SELECT CAST(@MainID as varchar(10))+', '+CAST(ID as varchar(10)),GETDATE() FROM @relTbl 
+--INSERT INTO tblDocsInActivity(ActivityID,DocID)SELECT * FROM @relTbl SELECT @RNo=@@ROWCOUNT
+
+
+EXECUTE  sp_executesql  @sql, N'@MainID int, @relTbl RelationsTbl READONLY, @RNo int output',@MainID, @relTbl, @RowAff OUTPUT
+
+IF @RowAff=0 BEGIN
+	RAISERROR ('No records inserted.',16,1);
+END
+END
+GO
+UPDATE tblInsurers SET Name='' WHERE ID=0
+GO
+-----------------------------------------------1.020-------UPDATED---------------------------------------------------
 INSERT INTO tblObjects_ID(tblName,Date)
 VALUES('tblDocsInActivity', GETDATE()),--50
 ('tblDocsInFin', GETDATE())--51

@@ -1,0 +1,30 @@
+﻿{{#each vGroup}}
+	{{log this}}@*controller.vGroup*@
+	{{log items}}
+	{{#if items}}
+		<div class="row box_1pr groupHead" style="background-color:Gray">@*groupID,items,refID,title*@
+			<div class="first ten col">{{title}}</div>
+			<div class="last one col tac"><input type="checkbox" /></div>
+		</div> 
+		<div class="w90pr centerBlock groupItems">
+		{{#each items}}
+			{{#if isPhoto}}
+			<div class="left photo-image" style="width:120px;position:relative;">
+			  <a data-gallery="gallery" target="_blank" {{bindAttr href="urlDoc"}}>
+				  <img style="width:120px;" img {{bindAttr src="urlThumb"}} {{bindAttr alt="fileName"}}>
+			  </a>
+				<div class="row">
+					<a class="first col ten" {{bindAttr href="urlDoc"}} target="_blank" >{{fileName}}</a>
+					{{view Ember.Checkbox checkedBinding="added" classNames="last col one"}}@*<input class="" type="checkbox" />*@
+				</div>
+			</div>
+			{{else}}
+				<div class="td w38pr">{{docType}}</a></div>
+				<div class="td w32pr"><a {{bindAttr href="urlDoc"}} target="_blank" >{{fileName}}</a></div>
+				<div class="td w20pr">{{fileDate}}</a></div>
+				<div class="td w10pr">{{view Ember.Checkbox checkedBinding="added"}}</div>@*<input type="checkbox" />*@
+			{{/if}}
+		{{/each}}
+		</div>
+	{{/if}}
+{{/each}}

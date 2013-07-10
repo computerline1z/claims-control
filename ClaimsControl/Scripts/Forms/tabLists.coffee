@@ -125,8 +125,7 @@ App.listAllController = Em.ResourceController.create(
 		config=oDATA.GET(pars.source).Config
 		title=if pars.row then config.Msg.GenName+": "+pars.row.MapArrToString(config.titleFields,(if pars.template=="tmp_Drivers" then true else false)) else config.Msg.AddNew
 		if not pars.row and pars.newVals then pars.row=pars.newVals.vals.toRowObject(pars.newVals.cols) #ivedimo forma užpildom jau užpildytais iš langelio 
-		if MY.dialog then MY.dialog.remove()
-		Em.run.next(@, -> MY.dialog=JQ.Dialog.create( #MY.dialog needed to destroyElement in ui-ember.js
+		MY.dialog=JQ.Dialog.create( #MY.dialog needed to destroyElement in ui-ember.js
 			controllerBinding: "App.listAllController"
 			thisController: @, pars: pars
 			init: -> 
@@ -214,7 +213,7 @@ App.listAllController = Em.ResourceController.create(
 				# "Išsaugoti pakeitimus": ()-> alert("Išsaugoti")
 				# "Atšaukti": ()-> $(this).dialog("close")
 			templateName: 'dialog-content'	
-		).append();)		
+		).append()		
 	# prepareEdit: ()->
 		# @prepareEdit=true
 	addNew: (e)->

@@ -94,7 +94,8 @@ namespace ClaimsControl.Controllers {
 						tmpAddCompensation = RenderPartialViewToString("Claims/tmpAddCompensation"),
 						tmpAddInsuranceBenefit = RenderPartialViewToString("Claims/tmpAddInsuranceBenefit"),
 						tmpAddDamageCA = RenderPartialViewToString("Claims/tmpAddDamageCA"),
-						tmpAddDamageKASKO = RenderPartialViewToString("Claims/tmpAddDamageKASKO")
+						tmpAddDamageKASKO = RenderPartialViewToString("Claims/tmpAddDamageKASKO"),
+						tmpAccidentDocs = RenderPartialViewToString("Claims/tmpAccidentDocs")
 					} : new {
 						tmpClaimsMain = "",
 						tmpClaimView = "",
@@ -111,7 +112,8 @@ namespace ClaimsControl.Controllers {
 						tmpAddCompensation = "",
 						tmpAddInsuranceBenefit = "",
 						tmpAddDamageCA = "",
-						tmpAddDamageKASKO = ""
+						tmpAddDamageKASKO = "",
+						tmpAccidentDocs = ""
 					}//,
 					//Script = new { File = "/Scripts/Forms/tabLists.js?ver="+ver, Pars = "" } listus siunčiu su visais nes jų reikia
 				}

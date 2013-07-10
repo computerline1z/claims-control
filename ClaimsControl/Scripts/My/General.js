@@ -174,6 +174,32 @@ Array.prototype.FNameIndex = function (FNameVal) {
 	}
 	return ctr;
 };
+//[1, 2, 3].move(0, 1) -> [2, 1, 3]
+//[1, 2, 3, 4, 5].move(-1, -2) -> [1, 2, 3, 5, 4]
+Array.prototype.move = function (old_index, new_index) {
+    while (old_index < 0) {
+        old_index += this.length;
+    }
+    while (new_index < 0) {
+        new_index += this.length;
+    }
+    if (new_index >= this.length) {
+        var k = new_index - this.length;
+        while ((k--) + 1) {
+            this.push(undefined);
+        }
+    }
+    this.splice(new_index, 0, this.splice(old_index, 1)[0]);
+    return this; // for testing purposes
+};
+Array.prototype.findIndexByKeyValue = function (key, value) {
+	for (var i = 0; i < this.length; i++) {
+		if (this[i][key] == value) {
+			return i;
+		}
+	}
+	return null;
+}
 Array.prototype.findIndexByVal = function (value,normallize) {
 	var ctr = "";if (normallize){value=value.toLowerCase();}
 	for (var i = 0; i < this.length; i++) {

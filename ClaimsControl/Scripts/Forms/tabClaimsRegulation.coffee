@@ -204,8 +204,8 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 			toText:acts.toText
 		)
 	cmdActivities: [
-		{icon:"img28-sent_mail",tmp:"tmpAction_sendEmail",title:"Siųsti el. laišką",activityTypeID:1}
-		{icon:"img28-recieved_mail",tmp:"tmpAction_addEmail",title:"Įkelti el. laišką",activityTypeID:2}
+		# {icon:"img28-sent_mail",tmp:"tmpAction_sendEmail",title:"Siųsti el. laišką",activityTypeID:1}
+		# {icon:"img28-recieved_mail",tmp:"tmpAction_addEmail",title:"Įkelti el. laišką",activityTypeID:2}
 		{icon:"img28-tasks",tmp:"tmpAction_task",title:"Užduotis",activityTypeID:3}
 		{icon:"img28-phone",tmp:"tmpAction_phone",title:"Pokalbis telefonu",activityTypeID:4}
 		{icon:"img28-meeting",tmp:"tmpAction_meeting",title:"Susitikimas",activityTypeID:5}
@@ -219,7 +219,7 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 	frm:"#contentOfClaimReg", activityTypeID:""
 	goToOtherView: (e) -> 
 		p=$.extend(e.context,claim:@claim)
-		@replaceActivityView(p)
+		this.replaceActivityView(p)
 	replaceActivityView:(p)->
 		scroll = $(window).scrollTop();
 		actView = $(@actViewZone)	
@@ -281,7 +281,7 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 			@addCompensation=$.extend({},cmdFinances.addCompensation,comp)
 			#@.set("controller",ctrl)#čia nemato kontrollerio, o jo reikia view'e
 		controller: App.tabClaimsRegulationController
-		templateName: 'tmpActionMain',
+		templateName: 'tmpActionMain'
 	)		
 	newActionView: Em.View.extend(
 		#cia savo kontrollerio nesimato, matosi tik pats view'as kaip view
@@ -342,7 +342,7 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 
 			$(@uploadZone).UploadFiles(
 				categoryOpts:categoryOpts, showFromAccident:true,requireCategory:true,
-				docsController:"claimDocController",updateRelationsTbl:tblProps
+				docsController:"claimDocController",updateRelationsTbl:tblProps,claim:this.claim
 			)
 			
 			App.claimDocController.setDocs(tblProps.DataTable,row.iD) #Jau uploadintų dokumentų kontroleris
@@ -412,8 +412,9 @@ App.TabClaimsRegulationView = Ember.View.extend(App.HidePreviousWindow,
 )
 #Dokummentų rodymo Tp/driverio dialoge controller'is, dar žemiau opcjos view'o (dokumentų rodymo)
 App.claimDocController = Em.ResourceController.create(
+	target: (() -> @).property() #view actions with current controler targeted to controller
 	#refID:null, groupID:null, docs:[]
-	relationTbl:null, activityID:null, docs:[]
+	relationTbl:null, activityID:null, docs:[], accDoc:[]
 	refreshDocs: ->
 		@setDocs(@relationTbl,@activityID)
 		ctrl=App.tabClaimsRegulationController
@@ -439,6 +440,51 @@ App.claimDocController = Em.ResourceController.create(
 			)
 		)
 		@.set("docs",docs)	
+	fnMapDocs:(relationTbl,activityID)-> (
+		docTypes=oDATA.GET("tblDocTypes").emData
+		fnGetDocType = (typeID)-> docTypes.find((type)->type.iD==typeID).name
+		docsPath=oDATA.GET("userData").emData[0].docsPath; url="Uploads/"+docsPath
+		docsInAccident=oDATA.GET(relationTbl).emData.filter((o)-> o.activityID==activityID).map((o)->o.docID);
+		(d)->
+			file="/"+d.iD+"."+d.fileType
+			Em.Object.create(				
+				docID:d.iD,
+				hasThumb:d.hasThumb,
+				urlThumb:url+"/Thumbs"+file,
+				urlDoc:url+file,
+				docType:fnGetDocType(d.docTypeID)
+				docName:d.docName
+				fileDate:d.fileDate
+				fileName:d.docName+"."+d.fileType
+				isPhoto:(if d.groupID==1 then true else false)
+				added:(if docsInAccident.contains(d.iD) then true else false)
+			)
+	)
+	fnSetGroup:(vGroup)-> #array to view: {groupID:??,refID:??,title:??} refID-priklausomai nuo groupID reiškia iD įvykio, vairuotojo arba driverio iD
+		(group,refID,title)->
+			vGroup.push(groupID:group.iD,refID:refID,title:(if title then title else group.name),items:[])
+			false
+	setAccDocs:(accCats,claim)->
+		vGroup=[]; fn=@fnSetGroup(vGroup);
+		oDATA.GET("tblDocGroup").emData.forEach((group)->
+			acc=accCats.accident;drv=accCats.driver;vehs=accCats.vehicles
+			switch group.ref
+				when 1,2 then fn(group,acc.iD) #photo #accident
+				when 3 then fn(group,drv.iD,drv.title)#driver
+				when 4 then vehs.forEach((veh)->fn(group,veh.iD,veh.title);)#vehicles array
+				when 5 then fn(group,acc.iD)#other
+		)
+		i=vGroup.findIndexByKeyValue("groupID",5)
+		if i<4 then vGroup.move(i,4)#"other" shall be the last
+		fnMapDocs=@fnMapDocs(@relationTbl,@activityID)
+		oDATA.GET("tblDocs").emData.forEach((d)->
+			for gr in vGroup
+				if d.groupID==gr.groupID
+					if d.refID==gr.refID then gr.items.addObject(fnMapDocs(d)); break #for loop
+					else if gr.groupID!=4 then break #All vehicles will have same groupID so we need to loop all them to check	
+		)
+		@.set("vGroup",vGroup)
+	vGroup:[]
 )
 docsViewOpts= #Listų dokumentų opcijos
 	opts: null #opcijos
