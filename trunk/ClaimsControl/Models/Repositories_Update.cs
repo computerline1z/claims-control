@@ -113,7 +113,40 @@ namespace CC.Models {
 			finally { con.Close(); }
 			return JsonResp;
 		}
+
+		public jsonResponse updateRelations(Int32 id, string idField, string Field, string[] Data, string DataTable) {
+			jsonResponse JsonResp = new jsonResponse { ErrorMsg = "", ResponseMsg = "" };
+
+			DataTable relTbl = new DataTable("tblRelations");
+			relTbl.Columns.Add("ID", typeof(int));
+			Data.ForEach(d => relTbl.Rows.Add(d));
+
+			SqlConnection con = new SqlConnection(conStr);
+			SqlCommand cmd = new SqlCommand("proc_InsertRelations", con);
+			cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+			SqlParameter tbl = cmd.Parameters.AddWithValue("@relTbl", relTbl);
+			tbl.SqlDbType = SqlDbType.Structured;
+			tbl.TypeName = "dbo.RelationsTbl";
+
+			cmd.Parameters.AddWithValue("@MainID", id);
+			cmd.Parameters.AddWithValue("@IDField", idField);
+			cmd.Parameters.AddWithValue("@Field", Field);
+			cmd.Parameters.AddWithValue("@DataTable", DataTable);
+			cmd.Parameters.AddWithValue("@DeletePrevious", true);
+			try {
+				con.Open(); cmd.ExecuteNonQuery(); { JsonResp.ResponseMsg = ""; }
+			}
+			catch (Exception ex) { JsonResp.ErrorMsg = ex.Message; }
+			finally { con.Close(); }
+			return JsonResp;
+		}
 	}
+
+
+
+
+
 	public static class ErrorHandler {
 		private static string conStr = ConfigurationManager.ConnectionStrings["ClaimsControlConnectionString"].ToString();
 		public static string GetAddNewMsg(string[] Data, string[] Fields, string DataObject, SqlException ex) {

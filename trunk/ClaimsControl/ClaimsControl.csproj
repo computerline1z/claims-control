@@ -261,10 +261,6 @@
     <Content Include="Content\images\Zvaigzde.png" />
     <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
-    <Content Include="Library\compiler.jar" />
-    <Content Include="Library\dotless.Compiler.exe" />
-    <Content Include="Library\dotless.Core.dll" />
-    <Content Include="Library\yuicompressor-2.4.7.jar" />
     <Content Include="packages\elmah.1.2.2\content\App_Readme\Elmah.txt" />
     <Content Include="packages\elmah.1.2.2\Readme.txt" />
     <Content Include="packages\elmah.corelibrary.1.2.2\lib\Elmah.dll" />
@@ -321,6 +317,7 @@
     <Content Include="packages\Ninject.Web.Common.3.0.0.7\lib\net45-full\Ninject.Web.Common.xml" />
     <Content Include="packages\WebActivator.1.5.1\lib\net40\WebActivator.dll" />
     <Content Include="Scripts\Ember\appEnd.js" />
+    <Content Include="Scripts\Ember\handlebars-1.0.0rc.4.js" />
     <Content Include="Scripts\Ember\ember-rest.js" />
     <Content Include="Scripts\Ember\handlebars-1.0.0.beta.6.js" />
     <Content Include="Scripts\Files\canvas-to-blob.min.js" />
@@ -403,6 +400,7 @@
   <ItemGroup>
     <Folder Include="App_Data\Uploads\" />
     <Folder Include="App_Readme\" />
+    <Folder Include="Library\" />
     <Folder Include="Uploads\" />
   </ItemGroup>
   <ItemGroup>
@@ -524,6 +522,7 @@
     <Content Include="Views\Shared\Claims\tmpAddCompensation.cshtml" />
     <Content Include="Views\Shared\Claims\tmpAddDamageKASKO.cshtml" />
     <Content Include="Views\Shared\Files\tmpUploadFormClaim.cshtml" />
+    <Content Include="Views\Shared\Claims\tmpAccidentDocs.cshtml" />
     <None Include="Views\Shared\LayOut_Main_Debug.cshtml" />
   </ItemGroup>
   <ItemGroup>

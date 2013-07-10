@@ -2,7 +2,7 @@
 {{#each view.content}} 
 @*{{log this}}*@
 {{#unless newClaim}}
-	<div id='divClaimCard_Content' class="container centerBlock w90pr" data-ctrl='{"id":"{{unbound iD}}","NewRec":"0","Source":"tblClaims","TypeID":"{{unbound typeID}}"}'>
+	<div id='divClaimCard_Content' class="container centerBlock w90pr" data-ctrl='{"id":"{{unbound iD}}","NewRec":"0","Source":"proc_Claims","TypeID":"{{unbound typeID}}"}'>
 {{else}}
 	<div id='divNewClaimCard_Content' class="container centerBlock w90pr">@*data-ctrl yra motininej divNewClaimCard*@
 {{/unless}}

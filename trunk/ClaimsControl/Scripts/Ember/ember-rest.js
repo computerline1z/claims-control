@@ -355,80 +355,90 @@ var SERVER = {
 		//SERVER.update2({"Action":Action,DataToSave:{},"Ctrl":Ctrl,"source":source,"row":row
 		if (!p.DataToSave) return false; var me=this;
 		var CallBack = { Success: function (resp, updData) {
-			var oData = oDATA.GET(p.source);id=(updData.Action==="Add")?resp.ResponseMsg.ID:p.DataToSave.id;Row =(p.Action === "Add")?Em.Object.create({}):p.row; obj=(updData.Action==="Add")?oGLOBAL.helper .emData_fromDataToSave(p.DataToSave,id):oData.emData.findProperty("iD", id);  
-			if (p.source==="proc_Drivers"){//Panaikinam dublicatus prieš jei du, nes galejo keistis, po jei du ir daugiau uzdesim
-				var dublicates=oData.emData.filter(function(item){
-					return item.firstName===obj.firstName && item.lastName===obj.lastName;
-				});
-				if (dublicates.length===2){dublicates.map(function(i){i.notUnique=false;});}
-			}		
-			if (p.DataToSave.id&&!Row){//when we have id we can find Row if missing
-				Row=oData.emData.findProperty("iD",p.DataToSave.id);
-			}
-			if (updData.Action==="Delete"){	
-				oData.emData.removeObject(obj)				
-			}else{
-				var Adding = (p.Action === "Add") ? true : false;
-				if (!Row) throw new Error("p.Row is empty");
-				var  Cols = oData.Cols;
-				if (!oData) throw new Error("p.oData is empty");
-				if (Adding) { Row.iD = resp.ResponseMsg.ID; }
+			var oData = oDATA.GET(p.source),id=(updData.Action==="Add")?resp.ResponseMsg.ID:p.DataToSave.id,Row={},obj={};
+			if (p.Action==="updateRelations"){
+				var idField=p.DataToSave.idField.firstSmall(),field=p.DataToSave.Field.firstSmall(), filtered=oData.emData.filter(function(i){return i[idField]!==id;})
+				var newArr=p.DataToSave.Data.map(function(i){ var o={};o[idField]=id;o[field]=i;  return Em.Object.create(o);})
+				//console.log("New relations array:");console.log(newArr);
+				var joined=filtered.concat(newArr),newNo=joined.length; oData.emData=joined;
+				var docsTbl=(p.source==="tblDocsInActivity")?"proc_Activities":"proc_Finances";
+				oDATA.GET(docsTbl).emData.findProperty("iD",id).set("docs",((newNo===0)?"":newNo));//Atnaujinam dokumentų skaičių
+			} else {
+				Row =(p.Action === "Add")?Em.Object.create({}):p.row;  obj=(updData.Action==="Add")?oGLOBAL.helper .emData_fromDataToSave(p.DataToSave,id):oData.emData.findProperty("iD", id);  
+				if (p.source==="proc_Drivers"){//Panaikinam dublicatus prieš jei du, nes galejo keistis, po jei du ir daugiau uzdesim
+					var dublicates=oData.emData.filter(function(item){
+						return item.firstName===obj.firstName && item.lastName===obj.lastName;
+					});
+					if (dublicates.length===2){dublicates.map(function(i){i.notUnique=false;});}
+				}		
+				if (p.DataToSave.id&&!Row){//when we have id we can find Row if missing
+					Row=oData.emData.findProperty("iD",p.DataToSave.id);
+				}
+				if (updData.Action==="Delete"){	
+					oData.emData.removeObject(obj)				
+				}else{
+					var Adding = (p.Action === "Add") ? true : false;
+					if (!Row) throw new Error("p.Row is empty");
+					var  Cols = oData.Cols;
+					if (!oData) throw new Error("p.oData is empty");
+					if (Adding) { Row.iD = resp.ResponseMsg.ID; }
 
-				Cols.forEach(function (col, i) {//Eina per esamus laukus
-					var ok = false, fieldName = col.FName.firstSmall();  //f=col.FName, f.slice(0, 1).toLowerCase() +f.slice(1);
-					updData.DataToSave.Fields.forEach(function (updateField, i2) {//Randam ar yra col tarp updatinamu
-						if (fieldName == updateField.firstSmall()) {
-							//debugger;
-							var newVal = updData.DataToSave.Data[i2];
-							if  (col.Type) {
-								if (col.Type==="Decimal") {newVal=parseFloat(newVal,10);}
-								if (col.Type==="Integer"||col.Type==="Radio"||col.Type==="Boolean") {newVal=parseInt(newVal,10);}
-							}else if (col.FName.slice(-2)==="ID"){newVal=parseInt(newVal,10);}
-							Row.set(fieldName, newVal); ok = true;
-							if (col.List) {//Jeigu List, updatinam ir teksto lauka
-								var updateCol = Cols.findObjectByProperty("IdField", fieldName);
-								if (updateCol) {
-									var newVal1 = oDATA.GET(col.List.Source).emData.findObjectByProperty("iD", newVal).MapArrToString(col.List.iText, true);
-									Row.set(updateCol.FName.firstSmall(), newVal1);
-								} else { console.warn("List field '" + updateField + "' without IdField"); }
+					Cols.forEach(function (col, i) {//Eina per esamus laukus
+						var ok = false, fieldName = col.FName.firstSmall();  //f=col.FName, f.slice(0, 1).toLowerCase() +f.slice(1);
+						updData.DataToSave.Fields.forEach(function (updateField, i2) {//Randam ar yra col tarp updatinamu
+							if (fieldName == updateField.firstSmall()) {
+								//debugger;
+								var newVal = updData.DataToSave.Data[i2];
+								if  (col.Type) {
+									if (col.Type==="Decimal") {newVal=parseFloat(newVal,10);}
+									if (col.Type==="Integer"||col.Type==="Radio"||col.Type==="Boolean") {newVal=parseInt(newVal,10);}
+								}else if (col.FName.slice(-2)==="ID"){newVal=parseInt(newVal,10);}
+								Row.set(fieldName, newVal); ok = true;
+								if (col.List) {//Jeigu List, updatinam ir teksto lauka
+									var updateCol = Cols.findObjectByProperty("IdField", fieldName);
+									if (updateCol) {
+										var newVal1 = oDATA.GET(col.List.Source).emData.findObjectByProperty("iD", newVal).MapArrToString(col.List.iText, true);
+										Row.set(updateCol.FName.firstSmall(), newVal1);
+									} else { console.warn("List field '" + updateField + "' without IdField"); }
+								}
+							}
+						});
+						if (!ok && (Adding && fieldName !== "iD")) {//Jeigu naujos pridejimas ir nerado, ikisam ka nors
+							if (col.Default) {
+								var u=oDATA.GET('userData').emData[0];
+								if (col.Default === "Today") { Row.set(fieldName, oGLOBAL.date.getTodayString()); }
+								else if (col.Default === "UserName") { Row.set(fieldName, u.userName); }
+								else if (col.Default === "UserId") { Row.set(fieldName, u.userID); }
+								else Row.set(fieldName, col.Default);
+							} else { 
+								//debugger;
+								// if  (col.IdField) {		
+									// var infoRow=Cols.getColByFName (col.IdField), source=infoRow.List.Source,Field=infoRow.FName;
+									// var i=updData.DataToSave.Fields.findIndexByVal(Field,true),iDVal=updData.DataToSave.Data[i];
+									// Row.set(fieldName,oDATA.GET(source).emData.findProperty("iD", iDVal).MapArrToString(infoRow.List.iText, false));
+								// }else 
+								//if(fieldName==="docs"){Row.set("docs", "(0)");}else {}
+								Row.set(fieldName, ""); 
 							}
 						}
-					});
-					if (!ok && (Adding && fieldName !== "iD")) {//Jeigu naujos pridejimas ir nerado, ikisam ka nors
-						if (col.Default) {
-							var u=oDATA.GET('userData').emData[0];
-							if (col.Default === "Today") { Row.set(fieldName, oGLOBAL.date.getTodayString()); }
-							else if (col.Default === "UserName") { Row.set(fieldName, u.userName); }
-							else if (col.Default === "UserId") { Row.set(fieldName, u.userID); }
-							else Row.set(fieldName, col.Default);
-						} else { 
-							//debugger;
-							// if  (col.IdField) {		
-								// var infoRow=Cols.getColByFName (col.IdField), source=infoRow.List.Source,Field=infoRow.FName;
-								// var i=updData.DataToSave.Fields.findIndexByVal(Field,true),iDVal=updData.DataToSave.Data[i];
-								// Row.set(fieldName,oDATA.GET(source).emData.findProperty("iD", iDVal).MapArrToString(infoRow.List.iText, false));
-							// }else 
-							//if(fieldName==="docs"){Row.set("docs", "(0)");}else {}
-							Row.set(fieldName, ""); 
-						}
+						console.log("col: " + fieldName + ", ok: " + ok + ", fieldValue:" + Row[fieldName])
+					})
+					if (p.source==="proc_Drivers"){//dublikatus tikrinam prieš ir po
+						var confirm; dublicates=oData.emData.filter(function(item){return item.firstName===Row.firstName && item.lastName===Row.lastName;});
+						if (dublicates.length<2){confirm=false;}else{confirm=true;}
+						dublicates.map(function(i){i.notUnique=confirm;});Row.notUnique=confirm;
+					}				
+					if (Adding) { 
+							Row.set("visible", true); 
+							if  (p.source==="proc_Activities"||p.source==="proc_Finances") {oData.emData.unshiftObject(Row);}//Į pradžią
+							else {oData.emData.pushObject(Row); } 
 					}
-					console.log("col: " + fieldName + ", ok: " + ok + ", fieldValue:" + Row[fieldName])
-				})
-				if (p.source==="proc_Drivers"){//dublikatus tikrinam prieš ir po
-					var confirm; dublicates=oData.emData.filter(function(item){return item.firstName===Row.firstName && item.lastName===Row.lastName;});
-					if (dublicates.length<2){confirm=false;}else{confirm=true;}
-					dublicates.map(function(i){i.notUnique=confirm;});Row.notUnique=confirm;
-				}				
-				if (Adding) { 
-						Row.set("visible", true); 
-						if  (p.source==="proc_Activities"||p.source==="proc_Finances") {oData.emData.unshiftObject(Row);}//Į pradžią
-						else {oData.emData.pushObject(Row); } 
-				}
-				else { oData.emData.findProperty("iD", Row.iD).updateTo(Row); }
-				var controller = updData.controller, emObject = (updData.emObject) ? updData.emObject : "content";
-				if (controller) {//Updatinam ir į pagrindinį kontrolerį tik insertinant (kiti updatinasi
-					if (Adding) { App[controller][emObject].pushObject(Row); }
-					//else{App[controller][emObject].findProperty("iD",Row.iD).updateTo(Row);}				
+					else { oData.emData.findProperty("iD", Row.iD).updateTo(Row); }
+					var controller = updData.controller, emObject = (updData.emObject) ? updData.emObject : "content";
+					if (controller) {//Updatinam ir į pagrindinį kontrolerį tik insertinant (kiti updatinasi
+						if (Adding) { App[controller][emObject].pushObject(Row); }
+						//else{App[controller][emObject].findProperty("iD",Row.iD).updateTo(Row);}				
+					}
 				}
 			}
 			Em.run.next(function () { $("img.spinner").remove(); });
@@ -518,6 +528,7 @@ var SERVER = {
 
 		//Msg = updData.Msg[Type] || DefMsg[Type][updData.Action];
 		Msg = (updData.Msg)?updData.Msg[Type]:DefMsg[Type][updData.Action];
+		if (!Msg) Msg="";//Jei kitas duomenų tipas
 		if (Type === "Error") { Msg += " Klaida:\n" + resp.ErrorMsg; }
 		if (updData.CallBack) {
 			if (typeof updData.CallBack[Type] === 'function') { updData.CallBack[Type](resp, updData); }

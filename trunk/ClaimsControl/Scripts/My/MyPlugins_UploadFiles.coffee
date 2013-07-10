@@ -8,7 +8,7 @@ options:
 	url: "Files/Start",fileuploaddone: ->
 		console.log("opa")	
 	#kitos opcijos
-	categoryOpts: editList:true#Kategorijos
+	categoryOpts:{} # editList:true#Kategorijos
 	#accident:{iD:16,title:"Įvykio dokumentai"}
 	#driver:{iD:87,title:"Vairuotojo Albinas Palubinskas dokumentai"}
 	#vehicles:[{iD:14,title:"TP BBB, Volvo __ dokumentai"},{iD:7,title:"BRU643, Volvo, FH12"}]	
@@ -16,11 +16,49 @@ options:
 
 _create: ->	
 	form=""
+	#----------------------------"Prisegti dokumentus viewas (Files\tmpUploadForm.cshtml)"--------------------------------------------
 	Em.View.create(
-		templateName:@options.formTemplate
+		templateName:@options.formTemplate, options:@options
 		showPhoto:@options.showPhoto,showFromAccident:@options.showFromAccident
-		addFromAccident: ()-> alert("addFromAccident")
+		addFromAccident: (e)->#-----Accidento dokumentų view'as--------------------------------
+			#if MY.dialog then MY.dialog.remove()
+			Em.run.next(@, -> MY.dialog=JQ.Dialog.create( #MY.dialog needed to destroyElement in ui-ember.js
+				controllerBinding: "App.claimDocController"
+				categoryOpts: @options.categoryOpts
+				claim: @options.claim
+				init: ->
+					@_super(); a=@claim.accident; @title="Įvykis Nr. "+a.no+", "+a.accType+", "+a.date
+					App.claimDocController.setAccDocs(@categoryOpts,@claim)
+				didInsertElement: ()->
+					@_super(); dialogContent=$("#dialogContent")
+
+				width:700
+				buttons:
+					"Išsaugoti pakeitimus": ()->
+						changedID=[]; ctrl=App.claimDocController
+						ctrl.vGroup.forEach((gr)->
+							gr.items.forEach((item)-> if item.added then changedID.push(item.docID))
+						)
+						DataToSave=id:ctrl.activityID,idField:"ActivityID",Field:"DocID",Data:changedID,DataTable:ctrl.relationTbl
+						SERVER.update2(Action:'updateRelations',DataToSave:DataToSave,source:ctrl.relationTbl,CallBackAfter:()-> #row?
+							ctrl.refreshDocs()#jai atsinaujino perpiešiam dokus ir idedam nauja ju skaiciu
+							MY.dialog.ui.close()
+						)
+						#updateRelations(Int32 id, string idField, string Field, string[] Data, string DataTable)
+						console.log(DataToSave)
+						
+						oDATA.GET('proc_InsPolicies').emData
+				runFunction: (t) ->
+					t.$().find("div.groupHead input").on("click",(e)->
+						t=$(e.target); groupHead=t.closest("div.groupHead")
+						if groupHead.length #Keičiant grupės checką keičiam visos grupės
+							groupItems=groupHead.next().find("input").prop("checked",$(e.target).prop("checked"))
+					)
+				cancelLink: true
+				templateName: 'tmpAccidentDocs'	
+			).append();)
 	).appendTo(@.element);	
+	#----------------------------------------------------------------------------------------------------------------------------------
 	Em.run.next(@,->
 		form=@.element.find("form").data("opts",@options)
 		form.fileupload(@options)

@@ -415,16 +415,6 @@
     },
     cmdActivities: [
       {
-        icon: "img28-sent_mail",
-        tmp: "tmpAction_sendEmail",
-        title: "Siųsti el. laišką",
-        activityTypeID: 1
-      }, {
-        icon: "img28-recieved_mail",
-        tmp: "tmpAction_addEmail",
-        title: "Įkelti el. laišką",
-        activityTypeID: 2
-      }, {
         icon: "img28-tasks",
         tmp: "tmpAction_task",
         title: "Užduotis",
@@ -779,7 +769,8 @@
           showFromAccident: true,
           requireCategory: true,
           docsController: "claimDocController",
-          updateRelationsTbl: tblProps
+          updateRelationsTbl: tblProps,
+          claim: this.claim
         });
         App.claimDocController.setDocs(tblProps.DataTable, row.iD);
         if (!$.isEmptyObject(DOCSVIEW)) {
@@ -877,9 +868,13 @@
   });
 
   App.claimDocController = Em.ResourceController.create({
+    target: (function() {
+      return this;
+    }).property(),
     relationTbl: null,
     activityID: null,
     docs: [],
+    accDoc: [],
     refreshDocs: function() {
       var ctrl;
 
@@ -951,7 +946,106 @@
         });
       });
       return this.set("docs", docs);
-    }
+    },
+    fnMapDocs: function(relationTbl, activityID) {
+      var docTypes, docsInAccident, docsPath, fnGetDocType, url;
+
+      docTypes = oDATA.GET("tblDocTypes").emData;
+      fnGetDocType = function(typeID) {
+        return docTypes.find(function(type) {
+          return type.iD === typeID;
+        }).name;
+      };
+      docsPath = oDATA.GET("userData").emData[0].docsPath;
+      url = "Uploads/" + docsPath;
+      docsInAccident = oDATA.GET(relationTbl).emData.filter(function(o) {
+        return o.activityID === activityID;
+      }).map(function(o) {
+        return o.docID;
+      });
+      return function(d) {
+        var file;
+
+        file = "/" + d.iD + "." + d.fileType;
+        return Em.Object.create({
+          docID: d.iD,
+          hasThumb: d.hasThumb,
+          urlThumb: url + "/Thumbs" + file,
+          urlDoc: url + file,
+          docType: fnGetDocType(d.docTypeID),
+          docName: d.docName,
+          fileDate: d.fileDate,
+          fileName: d.docName + "." + d.fileType,
+          isPhoto: (d.groupID === 1 ? true : false),
+          added: (docsInAccident.contains(d.iD) ? true : false)
+        });
+      };
+    },
+    fnSetGroup: function(vGroup) {
+      return function(group, refID, title) {
+        vGroup.push({
+          groupID: group.iD,
+          refID: refID,
+          title: (title ? title : group.name),
+          items: []
+        });
+        return false;
+      };
+    },
+    setAccDocs: function(accCats, claim) {
+      var fn, fnMapDocs, i, vGroup;
+
+      vGroup = [];
+      fn = this.fnSetGroup(vGroup);
+      oDATA.GET("tblDocGroup").emData.forEach(function(group) {
+        var acc, drv, vehs;
+
+        acc = accCats.accident;
+        drv = accCats.driver;
+        vehs = accCats.vehicles;
+        switch (group.ref) {
+          case 1:
+          case 2:
+            return fn(group, acc.iD);
+          case 3:
+            return fn(group, drv.iD, drv.title);
+          case 4:
+            return vehs.forEach(function(veh) {
+              return fn(group, veh.iD, veh.title);
+            });
+          case 5:
+            return fn(group, acc.iD);
+        }
+      });
+      i = vGroup.findIndexByKeyValue("groupID", 5);
+      if (i < 4) {
+        vGroup.move(i, 4);
+      }
+      fnMapDocs = this.fnMapDocs(this.relationTbl, this.activityID);
+      oDATA.GET("tblDocs").emData.forEach(function(d) {
+        var gr, _i, _len, _results;
+
+        _results = [];
+        for (_i = 0, _len = vGroup.length; _i < _len; _i++) {
+          gr = vGroup[_i];
+          if (d.groupID === gr.groupID) {
+            if (d.refID === gr.refID) {
+              gr.items.addObject(fnMapDocs(d));
+              break;
+            } else if (gr.groupID !== 4) {
+              break;
+            } else {
+              _results.push(void 0);
+            }
+          } else {
+            _results.push(void 0);
+          }
+        }
+        return _results;
+      });
+      return this.set("vGroup", vGroup);
+    },
+    vGroup: []
   });
 
   docsViewOpts = {

@@ -15,9 +15,7 @@
       fileuploaddone: function() {
         return console.log("opa");
       },
-      categoryOpts: {
-        editList: true
-      },
+      categoryOpts: {},
       ListType: "List",
       Source: "tblDocTypes",
       iVal: "iD",
@@ -29,10 +27,78 @@
       form = "";
       Em.View.create({
         templateName: this.options.formTemplate,
+        options: this.options,
         showPhoto: this.options.showPhoto,
         showFromAccident: this.options.showFromAccident,
-        addFromAccident: function() {
-          return alert("addFromAccident");
+        addFromAccident: function(e) {
+          return Em.run.next(this, function() {
+            return MY.dialog = JQ.Dialog.create({
+              controllerBinding: "App.claimDocController",
+              categoryOpts: this.options.categoryOpts,
+              claim: this.options.claim,
+              init: function() {
+                var a;
+
+                this._super();
+                a = this.claim.accident;
+                this.title = "Įvykis Nr. " + a.no + ", " + a.accType + ", " + a.date;
+                return App.claimDocController.setAccDocs(this.categoryOpts, this.claim);
+              },
+              didInsertElement: function() {
+                var dialogContent;
+
+                this._super();
+                return dialogContent = $("#dialogContent");
+              },
+              width: 700,
+              buttons: {
+                "Išsaugoti pakeitimus": function() {
+                  var DataToSave, changedID, ctrl;
+
+                  changedID = [];
+                  ctrl = App.claimDocController;
+                  ctrl.vGroup.forEach(function(gr) {
+                    return gr.items.forEach(function(item) {
+                      if (item.added) {
+                        return changedID.push(item.docID);
+                      }
+                    });
+                  });
+                  DataToSave = {
+                    id: ctrl.activityID,
+                    idField: "ActivityID",
+                    Field: "DocID",
+                    Data: changedID,
+                    DataTable: ctrl.relationTbl
+                  };
+                  SERVER.update2({
+                    Action: 'updateRelations',
+                    DataToSave: DataToSave,
+                    source: ctrl.relationTbl,
+                    CallBackAfter: function() {
+                      ctrl.refreshDocs();
+                      return MY.dialog.ui.close();
+                    }
+                  });
+                  console.log(DataToSave);
+                  return oDATA.GET('proc_InsPolicies').emData;
+                }
+              },
+              runFunction: function(t) {
+                return t.$().find("div.groupHead input").on("click", function(e) {
+                  var groupHead, groupItems;
+
+                  t = $(e.target);
+                  groupHead = t.closest("div.groupHead");
+                  if (groupHead.length) {
+                    return groupItems = groupHead.next().find("input").prop("checked", $(e.target).prop("checked"));
+                  }
+                });
+              },
+              cancelLink: true,
+              templateName: 'tmpAccidentDocs'
+            }).append();
+          });
         }
       }).appendTo(this.element);
       Em.run.next(this, function() {

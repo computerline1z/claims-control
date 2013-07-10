@@ -24,5 +24,11 @@ namespace CC.Controllers {
          Repositories_Update UpdateRep = new Repositories_Update();
          return Json(UpdateRep.Delete(id, DataTable, Ext));
       }
+		[HttpPost]
+		public JsonResult updateRelations(Int32 id, string idField, string Field, string[] Data, string DataTable) {
+			Repositories_Update UpdateRep = new Repositories_Update();
+			return Json(UpdateRep.updateRelations(id, idField, Field, Data, DataTable));
+			//return Json(new jsonResponse { ErrorMsg = "", ResponseMsg = "" });
+		}
    }
 }

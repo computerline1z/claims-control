@@ -1,4 +1,3 @@
-// Put jQuery UI inside its own namespace
 //JQ = {};
 // Namespaces in Ember should be created with Ember.Namespace.create()
 JQ = Ember.Namespace.create();
@@ -109,7 +108,14 @@ JQ.Dialog = Ember.View.extend(JQ.Widget, {
 	elementId: 'openItemDialog',
 	uiType: 'dialog',
 	didInsertElement: function() {
-		this._super(); 
+		this._super(); me=this;
+		if (this.cancelLink){// appending cancel a.link
+			dialog=this.$(); pane=dialog.next().find("div.ui-dialog-buttonset");
+			$('<a />', {'class': 'linkCancel',text: 'Atšaukti'}).appendTo(pane).click(function(){
+				me.ui.close();
+			});
+		}
+		if (this.runFunction)this.runFunction(this);
 		if (this.pars){
 			if (this.pars.input){
 				//console.log($(this.input).offset().top);
@@ -117,41 +123,20 @@ JQ.Dialog = Ember.View.extend(JQ.Widget, {
 				this.$().parent().css("top",t);
 			}
 		}// else{this.$().parent().css("top","10%");}	
-		//---------------------
-		// var t=this.$();btnSave=$("#btnSaveItem");
-		// if (btnSave.length) {
-			// btnSave.attr("disabled", "disabled");
-			// var fnRemove=function(){btnSave.removeAttr("disabled", "disabled");}
-			// t.on("keyup","input.UpdateField, textarea.UpdateField", function(e){				
-				// input=$(e.target);
-				// if (input.val()!=input.data("ctrl").Value){fnRemove();}
-			// });
-			// Em.run.next({t:t,fnRemove:fnRemove}, function(){
-				// var me=this;
-				// this.t.find("input.UpdateField").each(function(){
-					// var t=$(this)
-					// if (t.data("ctrl").iVal) {
-						// t.data("autocomplete").fnItemChanged=function(newId){me.fnRemove();}
-					// }
-				// });
-			// });
-		// }
-		//---------------------
 	},
 	//uiOptions: 'autoOpen height width close title buttons'.w(), //attributes have to be declared there
 	uiOptions: 'autoOpen width close title resizable modal position buttons'.w(), //attributes have to be declared there
 	autoOpen: true, width: 400, resizable: false, modal:true, position: 'top',
 	close: function () {
-		//this.get('ui').dialog('destroy'); // has no method getS
-		$(this).dialog('destroy');
-		$(this).remove(); var id=$(this).attr("id")
-		var removeDialog =(id!== 'openItemDialog') ?MY[id]:MY.dialog;
-		if (removeDialog){
-			if(removeDialog.removeOnCloseView){removeDialog.removeOnCloseView.remove();}
-			removeDialog.remove();
-		}
-		$('div.validity-tooltip').remove();
-	},			
+			$(this).dialog('destroy');
+			$(this).remove(); var id=$(this).attr("id")
+			var removeDialog =(id!== 'openItemDialog') ?MY[id]:MY.dialog;
+			if (removeDialog){
+				if(removeDialog.removeOnCloseView){removeDialog.removeOnCloseView.remove();}
+				removeDialog.remove();
+			}else console.error("??");
+			$('div.validity-tooltip').remove();
+		},			
 	open: function () {
 		//this.get('ui').dialog('open'); //Object [object Object] has no method 'dialog' 
 		$(this).dialog('open'); // the same //this.get('ui').open();	
