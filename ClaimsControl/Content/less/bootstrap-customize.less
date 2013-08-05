@@ -1,0 +1,153 @@
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+/* CSS RESET  */
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+
+button {
+
+	&:hover {
+		cursor: pointer;
+	}
+}
+
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+/* BUTTONS  */
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+
+.btn {
+	background: @orange;
+	border: none;
+	.box-shadow(none);
+
+	&:hover {
+		background: darken(@orange, 10%);
+	}
+}
+
+.btn-link {
+	background: transparent;
+
+	&:hover {
+		background: transparent;
+	}
+}
+
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+/* FORMS  */
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+
+.control-group {
+	margin-bottom: 8px;
+}
+
+.control-group-checkbox {
+	input[type="checkbox"] {
+		position: relative;
+		top: 2px;
+	}
+
+	label {
+		display: inline;
+		padding-left: 2px;
+	}
+}
+
+legend {
+	font-size: 24px;
+	line-height: 45px;
+	border-bottom: none;
+	color: @orange;
+}
+
+legend + .control-group {
+	margin-top: 0;
+}
+
+label, input, button, select, textarea {
+	font-size: 12px;
+	line-height: 20px;
+}
+
+label {
+	margin-bottom: 2px;
+}
+
+select,
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+.uneditable-input {
+	.border-radius( @radius: 0 );
+	color: @blueDark;
+	margin-bottom: 7px;
+}
+
+.input-block-level {
+	min-height: 26px;
+}
+
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+/* MODALS  */
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+
+.modal {
+	.border-radius( @radius: 0 );
+}
+
+.modal-header {
+	padding-left: 47px;
+}
+
+.modal-body {
+	padding: 30px 50px;
+}
+
+.modal-header {
+	background: @orange;
+	border-bottom: none;
+	padding-top: 13px;
+	padding-bottom: 13px;
+
+	h3 {
+		font-size: 24px;
+		line-height: 34px;
+		color: @white;
+	}
+}
+
+button::-moz-focus-inner { 
+    border: 0;
+    padding: 0;
+}
+
+.modal .close {
+	margin-top: 8px;
+}
+
+.close {
+	padding-left: 5px;
+	padding-right: 5px;
+	line-height: 22px;
+	color: @grayDarker;
+	background: @white;
+	text-align: center;
+	.opacity(100);
+	.border-radius(11px);
+
+	&:hover {
+		background: darken( @white, 10% );
+		color: darken( @grayDarker, 10% );
+		.opacity(100);
+	}
+}

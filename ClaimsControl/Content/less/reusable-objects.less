@@ -1,0 +1,46 @@
+.shadowed-white-box {
+	background: @white;
+	padding: 30px 50px;
+	.box-shadow( @shadow: 0 0 3px @grayLight );
+}
+
+.button-red {
+	.btn;
+	background: @orange;
+	border: none;
+	.box-shadow( @shadow: none );
+	line-height: 27px;
+	font-size: 16px;
+	padding: 4px 24px;
+
+	&:hover {
+		background: darken( @orange, 10% );
+	}
+}
+
+.validation-summary-errors {
+	padding: 8px 35px 8px 14px;
+	margin-bottom: 10px;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+	background: #f2dede;
+	border: 1px solid #eed3d7;
+	color: #b94a48;
+	.border-radius( @radius: 4px );
+
+	>span {
+		display: block;
+		line-height: 20px;
+		font-weight: bold;
+	}
+
+	ul {
+		list-style: none;
+		margin: 0;
+
+		li {
+			color: #b94a48;
+			padding-left: 10px;
+		}
+	}
+
+}

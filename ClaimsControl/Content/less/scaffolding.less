@@ -8,13 +8,15 @@
 // -----------------
 
 body {
-  background-color: @grayLighter;
-  margin: 0 auto !important;
-  //max-width: 1100px !important;
-  
-//  font-family: 'Asap', 'AsapRegular', "Arial" Arial, "Helvetica Neue", Helvetica,sans-serif;
-  //#font > .regular();
-  font: 12px 'Open Sans','Arial', sans-serif;
+	font: 12px "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	background-color: @grayLighter;
+	margin: 0 auto !important;
+	//max-width: 1100px !important;
+
+	//  font-family: 'Asap', 'AsapRegular', "Arial" Arial, "Helvetica Neue", Helvetica,sans-serif;
+	//#font > .regular();
+
+  color: @blueDark;
 }
 
 // Container (centered, fixed-width layouts)
@@ -53,7 +55,6 @@ a {
   text-decoration: underline;
   color: @linkColor;
   line-height: inherit;
-  font-weight: bold;
   font-size: 11px;
   &:hover {
     color: @linkColorHover;
