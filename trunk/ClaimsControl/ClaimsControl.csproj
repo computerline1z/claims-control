@@ -175,10 +175,6 @@
     <Content Include="App_Data\MailTmpl\LT\ResetUserPsw.htm" />
     <None Include="Content\less\grid-system-mixins.less" />
     <None Include="Content\less\grid-system.less" />
-    <Content Include="Content\less\login.css">
-      <DependentUpon>login.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\login.less" />
     <None Include="Content\less\notify.less" />
     <None Include="Content\less\jquery.validity.less" />
     <None Include="Content\less\my.less" />

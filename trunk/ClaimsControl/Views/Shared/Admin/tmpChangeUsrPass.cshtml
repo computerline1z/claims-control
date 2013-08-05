@@ -20,3 +20,40 @@
 		<a {{action cancelNewPass target="this"}} >Atšaukti</a>
 	</div>
 </div>
+
+<!-- Button to trigger modal -->
+<a href="#myModal" role="button" class="btn" data-toggle="modal">Launch demo modal</a>
+ 
+<!-- Modal -->
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="myModalLabel">Keisti slaptažodį</h3>
+	</div>
+
+	<div class="modal-body">
+		<form>
+
+			<div class="control-group">
+				<label>Esamas slaptažodis:<label>
+				<input class="input-block-level" type="password" />
+			</div>
+
+			<div class="control-group">
+				<label>Naujas slaptažodis:<label>
+				<input class="input-block-level" type="password" />
+			</div>
+
+			<div class="control-group">
+				<label>Pakartokite naują slaptažodį:<label>
+				<input class="input-block-level" type="password" />
+			</div>
+
+		</form>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Atšaukti</button>
+		<button class="btn btn-primary">Išsaugoti</button>
+	</div>
+</div>

@@ -10,7 +10,7 @@
 .btn, .ui-button  {
   display: inline-block;
   //.ie7-inline-block();
-  padding: 3px 12px;
+  padding: 4px 12px;
   color: #ffffff;
   margin-bottom: 0; // For input.btn
   font-size: 12px; 
@@ -21,18 +21,18 @@
   text-shadow: 0 0px 0 white;
   cursor: pointer;
   //.buttonBackground(@btnBackground, @btnBackgroundHighlight);
-  #gradient > .vertical(#EF6D5A, #EB5A44);
-  font-weight: normal;
+  #gradient > .vertical(#F39C8F, #EF6D5A);
   
   border: 1px solid @btnBorder;
   *border: 0; // Remove the border to prevent IE7's black border on input:focus
   border-bottom-color: #eb5a44;
   .border-radius(4px);
   //.ie7-restore-left-whitespace(); // Give IE7 some love
-  
+
   // Hover state
   &:hover {
   color: #ffffff;
+   #gradient > .vertical(#F5ABA0, #F18778);
   background-position:0;
   }
 
