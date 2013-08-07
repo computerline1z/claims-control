@@ -16,34 +16,38 @@ body {
 	//  font-family: 'Asap', 'AsapRegular', "Arial" Arial, "Helvetica Neue", Helvetica,sans-serif;
 	//#font > .regular();
 
-  color: @blueDark;
+	color: @blueDark;
 }
 
 // Container (centered, fixed-width layouts)
 .container {
-  .fixed-container();
+	.fixed-container();
 }
 
-
+.colmask {
+	width: 980px;
+	margin: 0 auto;
+	.clearfix;
+}
 
 
 // Fluid layouts (left aligned, with sidebar, min- & max-width content)
 .container-fluid {
-  position: relative;
-  min-width: 940px;
-  padding-left: 20px;
-  padding-right: 20px;
-  .clearfix();
-  > .sidebar {
-    position: absolute;
-    top: 0;
-    left: 20px;
-    width: 220px;
-  }
-  // TODO in v2: rename this and .popover .content to be more specific
-  > .content {
-    margin-left: 240px;
-  }
+	position: relative;
+	min-width: 940px;
+	padding-left: 20px;
+	padding-right: 20px;
+	.clearfix();
+	> .sidebar {
+		position: absolute;
+		top: 0;
+		left: 20px;
+		width: 220px;
+	}
+	// TODO in v2: rename this and .popover .content to be more specific
+	> .content {
+		margin-left: 240px;
+	}
 }
 
 
@@ -52,37 +56,37 @@ body {
 
 // Links
 a {
-  text-decoration: underline;
-  color: @linkColor;
-  line-height: inherit;
-  font-size: 11px;
-  &:hover {
-    color: @linkColorHover;
-    text-decoration: none;
-  }  
+	text-decoration: underline;
+	color: @linkColor;
+	line-height: inherit;
+	font-size: 11px;
+	&:hover {
+		color: @linkColorHover;
+		text-decoration: none;
+	}  
 }
 .whiteLink {
-  color: #ffffff;
-  line-height: inherit;
-  text-decoration: none;
-  font-weight: inherit;
-  &:hover {
-    color: #3f3b3b;
-  }  
+	color: #ffffff;
+	line-height: inherit;
+	text-decoration: none;
+	font-weight: inherit;
+	&:hover {
+		color: #3f3b3b;
+	}  
 }
 
 // Quick floats
 .pull-right {
-  float: right;
+	float: right;
 }
 .pull-left {
-  float: left;
+	float: left;
 }
 
 // Toggling content
 .hide {
-  display: none;
+	display: none;
 }
 .show {
-  display: block;
+	display: block;
 }

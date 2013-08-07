@@ -13,8 +13,9 @@ button {
 /* BUTTONS  */
 /* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
 
+/*
 .btn {
-	background: @orange;
+	
 	border: none;
 	.box-shadow(none);
 
@@ -30,16 +31,34 @@ button {
 		background: transparent;
 	}
 }
+*/
 
 /* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
 /* FORMS  */
 /* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
 
+
+form label, form input { // OVERWRITE BAD CSS RESET RULE * { content-box: border-box }
+	box-sizing: content-box; // css3 rec 
+	-moz-box-sizing: content-box; // ff2 
+	-ms-box-sizing: content-box; // ie8 
+	-webkit-box-sizing: content-box; // safari3 
+	-khtml-box-sizing: content-box; // konqueror 
+}
+
+
+input,
+button,
+select,
+textarea {
+	font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; 
+}
+
 .control-group {
 	margin-bottom: 8px;
 }
 
-.control-group-checkbox {
+.control-group-checkbox { // fix, because html syntax is not as in bootstrap
 	input[type="checkbox"] {
 		position: relative;
 		top: 2px;
@@ -51,24 +70,26 @@ button {
 	}
 }
 
+.control-group-remember-me {
+	input[type="checkbox"] {
+		top: 3px;
+	}
+	label {
+		font-size: 11px;
+	}
+}
+
 legend {
 	font-size: 24px;
 	line-height: 45px;
 	border-bottom: none;
 	color: @orange;
+	margin-bottom: 0;// changed margin to padding in order to avoid margin collapse in safari
+	padding-bottom: 20px;
 }
 
 legend + .control-group {
 	margin-top: 0;
-}
-
-label, input, button, select, textarea {
-	font-size: 12px;
-	line-height: 20px;
-}
-
-label {
-	margin-bottom: 2px;
 }
 
 select,
@@ -88,13 +109,14 @@ input[type="search"],
 input[type="tel"],
 input[type="color"],
 .uneditable-input {
-	.border-radius( @radius: 0 );
+	padding: 2px 6px;
 	color: @blueDark;
-	margin-bottom: 7px;
+	.border-radius( 0 );
+	//margin-bottom: 7px;
 }
 
-.input-block-level {
-	min-height: 26px;
+.form-horizontal .control-label {
+	padding-top: 3px;// original 5px
 }
 
 /* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
@@ -102,7 +124,7 @@ input[type="color"],
 /* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
 
 .modal {
-	.border-radius( @radius: 0 );
+	.border-radius(0);
 }
 
 .modal-header {

@@ -6,63 +6,61 @@
 
 @{ Html.RenderAction("Header", "Account"); }
 
-<div class="colmask">
+	<div class="colmask">
 
-   <div class="row">
+		<div class="row">
 
-	  <div class="col three">
-
-	  </div>
-
-	  <div class="col six">
-
-		@using (Html.BeginForm()) {
-
-			<div class="shadowed-white-box margin-t100">
-
-				<fieldset>
-
-					<legend>Naudotojų prisijungimas</legend>
-
-					<div class="control-group">
-						@Html.LabelFor(m => m.Email)
-						@Html.TextBoxFor(m => m.Email, new { @class = "input input-block-level customInputProperty" }) @Html.ValidationMessageFor(m => m.Email)
-					</div>
-
-					<div class="control-group">
-						@Html.LabelFor(m => m.Password)
-						@Html.PasswordFor(m => m.Password, new { @class = "input input-block-level customInputProperty" }) @Html.ValidationMessageFor(m => m.Password)
-					</div>
-
-					<div class="control-group">
-						@Html.ActionLink("Pamiršote slaptažodį?", "RecoverPassword", null, new { @style = "color: #EB5A44;" })
-					</div>
-
-					<div class="control-group control-group-checkbox">
-						@Html.CheckBoxFor(m => m.RememberMe) @Html.LabelFor(m => m.RememberMe)
-					</div>
-
-					@Html.ValidationSummary(true, "Nepavyko prisijungti.")
-
-					<div class="control-group">
-						<input type="submit" class="button-red" name="submitButton" value="Prisijungti" />
-					</div>
-
-				
-					@Html.ActionLink("Sukurti naują vartotoją", "Register", null, new {})
-					
-				</fieldset>
+			<div class="col three">
 
 			</div>
-		   
-		}
 
-	  </div>
+			<div class="col six">
 
-	  <div class="col three">
+				@using (Html.BeginForm()) {
 
-	  </div>
+					<div class="shadowed-white-box margin-t100">
 
-   </div><!-- row -->
+						<fieldset>
 
-</div><!-- colmask -->
+							<legend>Naudotojų prisijungimas</legend>
+
+							<div class="control-group">
+								@Html.LabelFor(m => m.Email)
+								@Html.TextBoxFor(m => m.Email, new { @class = "input input-block-level customInputProperty" }) @Html.ValidationMessageFor(m => m.Email)
+							</div>
+
+							<div class="control-group">
+								@Html.LabelFor(m => m.Password)
+								@Html.PasswordFor(m => m.Password, new { @class = "input input-block-level customInputProperty" }) @Html.ValidationMessageFor(m => m.Password)
+							</div>
+
+							<div class="control-group">
+								@Html.ActionLink("Pamiršote slaptažodį?", "RecoverPassword", null, new {} )
+							</div>
+
+							<div class="control-group control-group-remember-me control-group-checkbox">
+								@Html.CheckBoxFor(m => m.RememberMe) @Html.LabelFor(m => m.RememberMe)
+							</div>
+
+							@Html.ValidationSummary(true, "Nepavyko prisijungti.")
+
+							<div class="control-group">
+								<input type="submit" class="btn btn-large" name="submitButton" value="Prisijungti" />
+							</div>
+
+							@Html.ActionLink("Sukurti naują vartotoją", "Register", null, new {})
+							
+						</fieldset>
+						
+					</div>
+				}
+
+			</div>
+
+			<div class="col three">
+
+			</div>
+
+		</div><!-- row -->
+
+	</div><!-- colmask -->
