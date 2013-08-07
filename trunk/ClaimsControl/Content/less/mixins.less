@@ -5,12 +5,10 @@
 
 // Clearfix for clearing floats like a boss h5bp.com/q
 .clearfix() {
-  zoom: 1;
   &:before,
   &:after {
-    display: table;
-    content: "";
-    zoom: 1;
+    content: " "; /* 1 */
+    display: table; /* 2 */
   }
   &:after {
     clear: both;

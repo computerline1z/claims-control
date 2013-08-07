@@ -1,0 +1,128 @@
+/* FORMS (bootstrap-customize.less)  */
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+/* FORMS (bootstrap-customize.less)  */
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+.input-block-level {
+  min-height: 20px;
+  line-height: 19px;
+}
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+/* GRID */
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+/*============================================================================
+  uses grid-system-mixins default variables @columns(12), @gutter(.5%)
+==============================================================================
+  Rows, containing any number of columns 
+============================================================================*/
+.row {
+  display: block;
+  margin: 0 auto 20px;
+  /*max-width: 1280px;*/
+
+  /*Make sure the grid doesn't get too wide*/
+
+  width: 100%;
+  *zoom: 1;
+}
+.row:before,
+.row:after {
+  content: " ";
+  /* 1 */
+
+  display: table;
+  /* 2 */
+
+}
+.row:after {
+  clear: both;
+}
+.row .row {
+  min-width: 0;
+}
+/*==============================================================================
+  Columns, inside a media query 
+==============================================================================*/
+/**
+* In order to work around browsers' different rounding behaviours, we'll float 
+* the last column in a row to the right so the edge aligns. You can override 
+* that behaviour by adding class="end" in the last column. 
+* 
+* Idea taken from: 
+* http://foundation.zurb.com/docs/grid.php 
+* http://www.netmagazine.com/tutorials/building-modern-grid-system
+* 
+*/
+.row .col.last {
+  float: right;
+}
+.col + .col.end {
+  float: left;
+}
+.row .col.first {
+  margin-left: 0;
+}
+/*Column, generic*/
+.col {
+  display: inline;
+  float: left;
+  min-height: 1px;
+  position: relative;
+  margin: 0 0 0 0.5%;
+}
+/*Columns widths and left margins*/
+.one {
+  width: 40px;
+  width: 7.875%;
+}
+.two {
+  width: 100px;
+  width: 16.25%;
+}
+.three {
+  width: 160px;
+  width: 24.625%;
+}
+.four {
+  width: 220px;
+  width: 33%;
+}
+.five {
+  width: 280px;
+  width: 41.375%;
+}
+.six {
+  width: 340px;
+  width: 49.75%;
+}
+.seven {
+  width: 400px;
+  width: 58.125%;
+}
+.eight {
+  width: 460px;
+  width: 66.5%;
+}
+.nine {
+  width: 520px;
+  width: 74.875%;
+}
+.ten {
+  width: 580px;
+  width: 83.25%;
+}
+.eleven {
+  width: 640px;
+  width: 91.625%;
+}
+.six .two {
+  margin-left: 1.0050251256281406%;
+  width: 32.663316582914575%;
+}
+.six .three {
+  margin-left: 1.0050251256281406%;
+  width: 49.497487437185924%;
+}
+.six .four {
+  margin-left: 1.0050251256281406%;
+  width: 66.33165829145729%;
+}
