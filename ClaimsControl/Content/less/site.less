@@ -218,7 +218,7 @@ ul.ulWhiteMenu li { margin-right: 5px; padding-right: 5px; border-bottom: 1px; }
 /*-------------------------- Side Panel --------------------------*/
 #sidePanel {
     #font > .regular(@basefont, bold, @baseline, #3399cc);
-   a { #font > .regular (@basefont, bold, @baseline, #EB5A44);
+   a { #font > .regular (@basefont, normal, @baseline, #EB5A44);
         text-decoration: underline;
         &:hover { color: @linkColorHover;
                   text-decoration: none;
@@ -228,9 +228,8 @@ ul.ulWhiteMenu li { margin-right: 5px; padding-right: 5px; border-bottom: 1px; }
     background:#FFEFED;
 }
 .filtergroup { 
-    #font > .regular(@basefont, normal, @baseline, #666);
     width: 100%;
-    padding: 12px; 
+    padding: 0 12px 8px; 
     list-style-type: none;
    &.btn, &.ui-buttonset .ui-button { 
        width: 100%;
@@ -238,8 +237,23 @@ ul.ulWhiteMenu li { margin-right: 5px; padding-right: 5px; border-bottom: 1px; }
        border-style: solid solid none solid;
        &:last-child { border-style: solid; }
    }
+
+    h4 {
+        font-size: 14px;
+        line-height: 16px;
+        color: #333;
+    }
 }
-.lineTop {  width: 95% margin: 0 auto; border-top: solid 1px #ddd; }
+
+.btn-reset-filters {
+    display: block;
+    padding: 12px;
+    display: block;
+    background: #ffefed;
+    font-weight: normal;
+}
+
+.lineTop {  width: 95% margin: 0 auto; border-top: solid 1px #f8f8f8; }
 
 
 
@@ -500,8 +514,9 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 }
 
 .custombackgroundListAdmin {
-	background:none repeat scroll 0 0 #FFFFFF;
-	margin:-14px 0 30px;
+	background: #fff;
+	margin-bottom: 30px;
+    padding: 1px; // in order to prevent margin collapse
 }
 .customButtonProperty {
 	float: right; 
