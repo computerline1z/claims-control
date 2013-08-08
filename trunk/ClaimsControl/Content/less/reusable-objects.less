@@ -1,24 +1,10 @@
-.shadowed-white-box {
+.shadowed-white-box { /* created for login page */
 	background: @white;
 	padding: 30px 50px;
 	.box-shadow( 0 0 3px @grayLight );
 }
 
-.button-red {
-	.btn;
-	background: @orange;
-	border: none;
-	.box-shadow(none);
-	line-height: 27px;
-	font-size: 16px;
-	padding: 4px 24px;
-
-	&:hover {
-		background: darken( @orange, 10% );
-	}
-}
-
-.validation-summary-errors {
+.validation-summary-errors { /* created to style errors displayed in login page */
 	padding: 8px 35px 8px 14px;
 	margin-bottom: 10px;
 	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
@@ -42,5 +28,51 @@
 			padding-left: 10px;
 		}
 	}
+}
 
+.links-group a {
+	display: inline-block;
+	margin-left: 10px;
+
+	&:first-child {
+		margin-left: 0;
+	}
+}
+
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+/* ICONS  */
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+
+.icons-gear { /* created to style header */
+	position: relative;
+	padding-left: 17px;
+
+	&:before {
+		content: '';
+		display: block;
+		width: 12px;
+		height: 12px;
+		background: url(../images/Zvaigzde.png) no-repeat;
+		position: absolute;
+		top: 50%;
+		margin-top: -6px;
+		left: 0;
+	}
+}
+
+.icons-x { /* created to style header */
+	position: relative;
+	padding-left: 17px;
+
+	&:before {
+		content: '';
+		display: block;
+		width: 12px;
+		height: 12px;
+		background: url(../images/X_orange.png) no-repeat;
+		position: absolute;
+		top: 50%;
+		margin-top: -6px;
+		left: 0;
+	}
 }

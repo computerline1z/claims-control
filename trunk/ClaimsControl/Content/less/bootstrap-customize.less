@@ -173,3 +173,98 @@ button::-moz-focus-inner {
 		.opacity(100);
 	}
 }
+
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+/* TOP MENU (overwrite site_ua.less)  */
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+
+.header-nav {
+	padding-top: 15px;
+	padding-bottom: 0;
+}
+
+#ulMainMenu li:first-of-type {
+	border-left: 0;
+}
+
+#ulMainMenu {
+	margin: 0 auto 0 205px;
+}
+
+#ulMainMenu li {
+	border-right: 0;
+	padding-top: 0;
+}
+
+#ulMainMenu li a, #ulMainMenu li a.selected {
+	display: block;
+	padding: 5px 15px;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+#ulMainMenu li a.selected:after {
+	display: none;
+}
+
+.container--header {
+	clear: none;
+	max-width: none;
+	width: 980px;
+}
+
+#ulMainMenu li a {
+	font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	line-height: 20px;
+}
+
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+/* SIDE PANEL (overwrite site_ua.less)  */
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+
+#tabAccidents .ui-button {
+	background: #f5f4f3;
+	border: 1px solid #eae9e8;
+	color: #3f3b3b;
+	text-shadow: 0 1px 0 #fff;
+	padding: 1px 14px;
+	margin: 0;
+	margin-bottom: 6px;
+	.box-shadow(none);
+	.border-radius(4px);
+
+	&:hover {
+		color: darken(#f7b6ad, 20%)!important; // overwriting originals important
+		text-shadow: none;
+	}
+}
+
+#tabAccidents .ui-button.ui-state-active {
+	background-image: none;
+	background: #eb5a44;
+	color: #fff;
+	text-shadow: 0 -1px 0 darken(#eb5a44, 5%);
+	border: 1px solid #da513c;
+	border-bottom: 1px solid #eb5a44;
+
+	&:hover {
+		background: lighten(#eb5a44, 5%)!important;
+		border: 1px solid lighten(#da513c, 5%);
+		color: #fff!important;
+	}
+}
+
+#tabAccidents .buttons-switch {
+
+	.ui-button {
+		display: block;
+		float: left;
+		.border-radius(0 4px 4px 0);
+	}
+
+	.first {
+		.border-radius(4px 0 0 4px);
+		border-right: 1px solid #fff;
+	}
+}
+

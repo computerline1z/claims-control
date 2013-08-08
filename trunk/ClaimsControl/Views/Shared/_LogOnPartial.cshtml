@@ -1,32 +1,25 @@
 ﻿@{
-    string LogoutUrl = Url.Action("LogOff", "Account"),
-           LoginUrl = Url.Action("LogOn", "Account");
+	string LogoutUrl = Url.Action("LogOff", "Account"),
+	LoginUrl = Url.Action("LogOn", "Account");
 }
-@*
-<div style="background-color: #A59894;; color: #FFFFFF; width: 100%;">
-*@
-<div id="header">
-	<img style="height: 67px; position: absolute; left: -144px; z-index: 1;" src= "@Url.Content("~/Content/images/claimslogo.png")" alt="">
-    <table border="0" cellpadding="0" cellspacing="0" style="width: 105%; margin:0 0 0 97px;">
-        <tr>
-            @if (Request.IsAuthenticated) {
-                <text> 
-                    <td><span id="spanLogAccount">@CC.Classes.UserData.Account</span></td>
-                    <td class="user"><a class="whiteLink" id="userLink" >@CC.Classes.UserData.UserName</a></td>
-                    <td class="logOut"><a href='#' class="whiteLink" onclick="location='@LogoutUrl'">Atsijungti</a></td>
-                </text>
-            }
-            else {
-                <td>
-                    <span style="font-weight: bold; font-size: 8pt;">Transporto žalų valdymo sistema</span>
-                </td><td style="width: 10px; padding: 0px;">
-                    <img src= "@Url.Content("~/Content/images/Zvaigzde.png")" alt="Žvaigždė" />
-                </td>
-                <text> <td style="width: 110px;">
-                    <span id='spanLogAction' onclick="location='@LoginUrl'">Prisijungti</span></td><td style="width: 100px;">
-                        <a class="whiteLink"  id="userLink" >@CC.Classes.UserData.UserName</a></td>
-                </text>
-            }
-        </tr>
-    </table>
-</div>
+
+@if (Request.IsAuthenticated){
+
+	<span class="uppercase">@CC.Classes.UserData.Account</span>
+	<div class="links-group pull-right">
+		<a id="userLink" class="icons-gear">@CC.Classes.UserData.UserName</a>
+		<a href='#' class="icons-x" onclick="location='@LogoutUrl'">Atsijungti</a>
+	</div>
+}
+else {
+    
+	<span class="uppercase">Transporto žalų valdymo sistema</span>
+	<div class="pull-right">
+		<a id='spanLogAction' class="icons-gear" onclick="location='@LoginUrl'">Prisijungti</a>
+	</div>
+	
+	@* Tomas 2013.08.08
+	<a class="whiteLink"  id="userLink" >@CC.Classes.UserData.UserName</a>
+	*@
+}
+
