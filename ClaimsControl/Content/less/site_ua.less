@@ -10,24 +10,19 @@
 @box-border-color: #607286;
 @box-text-color: #c1cbd6; 
 
-.gradient--main() {
-	#gradient > .vertical(#196e99, #196e99);
-	background-color: #196e99;
-}
-
 .ui-button-override() {
 	box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.3) ,inset 0px 1px 0px 0px rgb(255,255,255);
 	background: white;
 	color: #196e99;
-	#gradient > .vertical(#f7f7f7, #eeeeee);
-	&.ui-state-active { .gradient--main; color: white; box-shadow: none; }	
+	//#gradient > .vertical(#f7f7f7, #eeeeee);
+	&.ui-state-active { color: white; box-shadow: none; }	
 }
 
 .ui-button-no-shadow-override() {
-	background: #EB5A44;
-	color: #FFFFFF;
-	#gradient > .vertical(#EB5A44, #EB5A44);
-	&.ui-state-active { #gradient > .vertical(#EB5A44, #EB5A44);background-color: #EB5A44; color: white; box-shadow: none; }	
+	//#gradient > .vertical(#EB5A44, #EB5A44);
+	&.ui-state-active {
+	//#gradient > .vertical(#EB5A44, #EB5A44);background-color: #EB5A44; color: white; box-shadow: none;
+	}	
 }
 #accidentTab {
 	padding: 0;
@@ -38,15 +33,6 @@
 .docs__actions {
 	text-align: center;
 	a  { margin-right: 24px; }
-}
-
-#tabAccidents {
-	.ui-button {
-		color: #3F3B3B;
-		
-		&.ui-state-active { #gradient > .vertical(#EB5A44, #EB5A44);background-color: #EB5A44; color: white; .box-shadow(~"inset 0 2px 4px rgba(0,0,0,.25), 0 1px 2px rgba(0,0,0,.05)"); }	
-
-	}
 }
 
 .filtergroup {
@@ -61,10 +47,10 @@
 		border-radius: 7px;			
 	}
 	&.ui-buttonset .ui-button:hover {		
-		background-color:#EFDFDE !important;
-		background-image:none !important;
-		color:#985e55 !important;
-		border: 1px solid #F7B6AD !important;
+		background-color:#EFDFDE;
+		background-image:none;
+		color:#985e55;
+		border: 1px solid #F7B6AD;
 	}
 	.ui-buttonset .ui-button {
 		margin-right: -3px;
@@ -73,10 +59,10 @@
 		
 	}
 	.ui-buttonset .ui-button:hover {		
-		background-color:#EFDFDE !important;
-		background-image:none !important;
-		color:#985e55 !important;
-		border: 1px solid #F7B6AD !important;
+		background-color:#EFDFDE;
+		background-image:none;
+		color:#985e55;
+		border: 1px solid #F7B6AD;
 	}
 	
 	.ui-corner-left { border-top-left-radius: 7px; border-bottom-left-radius: 7px; }
@@ -90,7 +76,6 @@
 }
 
 .header--sidebar {
-	.gradient--main;
 	box-shadow: 0 2px 3px #ddd;
 }
 
