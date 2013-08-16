@@ -125,3 +125,16 @@
   margin-left: 1.0050251256281406%;
   width: 66.33165829145729%;
 }
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+/* SIDEBAR / FILTERS */
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+#tabAccidents .lineTop.ui-buttonset .ui-button {
+  margin: -2px;
+}
+#tabAccidents .lineTop.ui-buttonset div {
+  width: 10px;
+  height: 10px;
+}
+.zebra-striped div {
+  margin: 0;
+}

@@ -3,42 +3,33 @@
 /* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
 
 button {
-
-	&:hover {
-		cursor: pointer;
-	}
+	cursor: pointer;
 }
 
 /* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
 /* BUTTONS  */
 /* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
 
-/*
-.btn {
-	
-	border: none;
-	.box-shadow(none);
+.btn-large-with-plus {
+	position: relative;
+	padding-left: 45px;
 
-	&:hover {
-		background: darken(@orange, 10%);
+	&:before {
+		content: "+";
+		font-size: 26px;
+		font-weight: bold;
+		position: absolute;
+		top: 5px;
+		left: 25px;
 	}
 }
-
-.btn-link {
-	background: transparent;
-
-	&:hover {
-		background: transparent;
-	}
-}
-*/
 
 /* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
 /* FORMS  */
 /* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
 
 
-form label, form input { // OVERWRITE BAD CSS RESET RULE * { content-box: border-box }
+form label, form input { // OVERWRITE CSS RESET RULE * { content-box: border-box }
 	box-sizing: content-box; // css3 rec 
 	-moz-box-sizing: content-box; // ff2 
 	-ms-box-sizing: content-box; // ie8 
@@ -222,7 +213,12 @@ button::-moz-focus-inner {
 /* SIDE PANEL (overwrite site_ua.less)  */
 /* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
 
+.container--main {
+	max-width: 980px;
+}
+
 #tabAccidents .ui-button {
+	/* huge ie8 margin hack in ie_8_and_below.less */
 	background: #f5f4f3;
 	border: 1px solid #eae9e8;
 	color: #3f3b3b;
@@ -234,23 +230,32 @@ button::-moz-focus-inner {
 	.border-radius(4px);
 
 	&:hover {
+		background: #EFDFDE;
+		border: 1px solid #F7B6AD;
 		color: darken(#f7b6ad, 20%)!important; // overwriting originals important
 		text-shadow: none;
 	}
 }
 
-#tabAccidents .ui-button.ui-state-active {
-	background-image: none;
-	background: #eb5a44;
-	color: #fff;
-	text-shadow: 0 -1px 0 darken(#eb5a44, 5%);
-	border: 1px solid #da513c;
-	border-bottom: 1px solid #eb5a44;
+#tabAccidents  {
 
-	&:hover {
-		background: lighten(#eb5a44, 5%)!important;
-		border: 1px solid lighten(#da513c, 5%);
-		color: #fff!important;
+	.ui-button.ui-state-active {
+		background-image: none;
+		background: #eb5a44;
+		color: #fff;
+		text-shadow: 0 -1px 0 darken(#eb5a44, 5%);
+		border: 1px solid #da513c;
+		border-bottom: 1px solid #eb5a44;
+
+		&:hover {
+			background: lighten(#eb5a44, 5%);
+			border: 1px solid lighten(#da513c, 5%);
+			color: #fff!important;
+		}
+	}
+
+	.first, .first:hover, .ui-button.ui-state-active.first, .ui-button.ui-state-active.first:hover {
+		border-right: none;
 	}
 }
 
@@ -263,8 +268,29 @@ button::-moz-focus-inner {
 	}
 
 	.first {
+		margin-right: 1px;
 		.border-radius(4px 0 0 4px);
-		border-right: 1px solid #fff;
+		border-right: none;
+	}
+
+	.ui-button-text {
+		display: block;
+		margin-top: 2px;
 	}
 }
 
+
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+/* TABLES */
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+
+div.zebra-striped .tr {
+	margin: 0;
+	padding: 11px;
+}
+
+div.zebra-striped .tr.selectedAccident {
+	border: 0;
+	padding: 11px;
+	padding-top: 12px;
+}

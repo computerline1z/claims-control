@@ -74,26 +74,37 @@
 //	<input type="text" class="searchField"/><div class="divSearch"><span class="spanToClearText">x</span></div>
 
 form input.searchField {
-    float:left;margin-top:7px;width:100%; height:28px; line-height:23px;font-family:sans-serif;font-size:1em;color:#333;
-    border:solid 1px #d9d9d9; border-top:solid 1px #c0c0c0;border-right:none;margin-right:-2px; vertical-align:top; 
-  .border-radius(0);
-//    #gradient > .vertical(#eae4cf, #fbfbd8);
+	width:100%;
+	height:20px;
+	line-height:20px;
+	font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size:1em;color:#333;
+	border:solid 1px #d9d9d9;
+	border-top:solid 1px #c0c0c0;
+	vertical-align:top; 
+	.border-radius(0);
+	//    #gradient > .vertical(#eae4cf, #fbfbd8);
 }
 
 .listAllSearchField {
     width: 350px;
     margin-right: 15px;
     margin-top: 37px;
-    font-family: 'Myriad Pro';
     font-size: 19pt;
     letter-spacing: -1px;
 }
 
 /* Style the "X" text button next to the search input field */
 form div.divSearch {
-     position:absolute;right:5px; width:26px;height:32px;line-height:22px;padding:6px 10px 9px 10px !important;font-size:22px;   
-  }
-form span.spanToClearText {/*color:#A1B9ED;*/ color:#919191;cursor:pointer;padding:0px 3px;}/* Set default state of "X" and hide it */
+	position:absolute;
+	top: 0;
+	right: 0;
+}
+form span.spanToClearText {
+	color:#919191;
+	cursor:pointer;
+	padding:0px 3px;
+}
 form span.spanToClearText:hover {/*color:#36c;*/ color:#575757}/* Set the hover state of "X" */
 .topSearchForm{
 	position: relative;
@@ -116,28 +127,49 @@ form input.searchField
 /*------------------------------Selected accident----------------------*/
 div.zebra-striped .tr.selectedAccident { border: 4px solid #3f3b3b;padding: 5px;border-top: 0;background-color: #3F3B3B; color: white !important; border-bottom: none!important; }
 div.selectedAccident i.img32-mono_edit {background-image: url('images/Sprite32-white.png') !important;}
-#AccDetailsWraper {border: 4px solid #BFBFBF; padding: 5px; border-top: 0; border-color: -moz-use-text-color #3F3B3B #3F3B3B;}
+#AccDetailsWraper {
+	border: 4px solid #3f3b3b;
+	padding: 0 4px 3px 4px;
+}
 #AccDetailsContent { width:100; display:none;}
-div.dividers { background: url(../images/bg-pattern.png) repeat; height: 6px; display:none; position: relative; border-bottom: 1px solid white; bottom: -2px }
+div.dividers {
+	height: 4px;
+	display:none;
+	background: #e4e1e0;
+}
 /*------------------------------Selected claim in accident----------------------*/
-.whiteBorders(){border-color:white;border-style:solid none solid none; border-width: 5px;}
-.ClaimsRow(){.whiteBorders(); cursor:pointer; padding:6px;}//line-height:32px;height:32px; iškraipo pieštukus
+.whiteBorders(){border-color:#fff;border-style:solid none solid none; border-width: 3px; border-bottom: none!important;}
+.ClaimsRow(){.whiteBorders(); cursor:pointer; padding:6px; padding-bottom: 5px;}//line-height:32px;height:32px; iškraipo pieštukus
 
 #tblClaims{
 	width:100%;
-	tr>td {background-color: #F7F7F7; color: #666; .ClaimsRow();}
+	tr>td {
+    background-color: #F7F7F7;
+    color: #666;
+    .ClaimsRow();
+  }
 	tr:hover td { background-color: #FFF7F5; color:#5C636A;}
 
 	tr.claimOK>td {background-color: white; color:@gray;}
 	tr.claimOK:hover td { background-color: @grayLight; color:@white;}
 
-	tr.selectedClaim>td {background-color: #ffffff !important; color:#666 !important; cursor:default !important;}
+	tr.selectedClaim>td {background-color: #f5f4f3; color:#666 !important; cursor:default !important;}
 	tr.selectedClaim.title>td {border-bottom:none;font-weight:bold;}
-	tr.selectedClaim.title>td:last-child {box-shadow: 5px 5px 3px #ccc;}
 	#ClaimWraper {background-color: #ffffff !important; color:inherit !important; cursor:default !important; border-top:none;}//Content
 	//#ClaimsDetailsContent {background-color: @systemYellow !important; color:inherit !important; cursor:default !important;}
 }
-div.tr.newClaim {background-color: #EFEBEF; .ClaimsRow();.clearfix();}
+div.tr.newClaim {
+  background-color: #EFEBEF;
+  .ClaimsRow();
+  .clearfix();
+  cursor: default!important;
+  padding: 0!important;
+
+  .rightFooterBig {
+    margin: 0;
+    padding: 3px;
+  }
+}
 div.newClaimContent {background-color: @systemYellow3; .clearfix();}
 /*-------------------------------Updatable Form----------------------------*/
 //.inputForm .ExtendIt { margin: 10px 3px 10px 0px; display: inline-block; vertical-align: top; }
@@ -147,8 +179,8 @@ div.newClaimContent {background-color: @systemYellow3; .clearfix();}
 
 .row .leftlabel button.drop-down.ui-button-icon-only {float:left;} //to keep in one line floats when row is used
 button.drop-down.ui-button-icon-only { 
-	 margin:0 -2.2em;
-    border-style: none; //solid solid solid none; iš inputo pasiima (kitaip kartais nepataiko ant inputo borderiu)
+    margin:0 -2.2em!important;
+    border-style: none!important; //solid solid solid none; iš inputo pasiima (kitaip kartais nepataiko ant inputo borderiu)
     background: url('images/DropDown-Arrow.png') no-repeat center !important;
     vertical-align:top;
     &:hover, &:active { background: url('images/DropDown-Arrow-hover.png') no-repeat center; }
@@ -159,15 +191,31 @@ span.dialog-form-label { margin: 10px; font-size: @basefont; /*color: #666666;*/
 div.dialog-form-label { font-size: @basefont; /*color: #666666;*/ top: 2px; margin-bottom: 2px; }
 
 /*label { font-size: @basefont; color: 666; cursor: pointer; }*/
- .ExtendIt label  { padding-left: 0px; margin-left: 0px; cursor: pointer; /*ideta: */ font-size: @smallfont; }
+ .ExtendIt label  {
+    display: block;
+    padding-left: 0px;
+    margin-left: 0px;
+    cursor: pointer;
+    /*ideta: */ font-size: @smallfont;
+    .clearfix();
+
+    input[type="checkbox"] {
+      display: block;
+      float: left;
+      margin: 4px 4px 0 0;
+      padding: 0;
+      border: none;
+    }
+  }
  .ExtendIt span  { line-height: @lowline; }
 /*-------------------------------megaSelectList----------------------------*/
 /*div.leftContainer { border-style: dotted; width: 100%; display: inline-block; }
 .RightSpanInTab { float: right; vertical-align: bottom; margin-right: 20px; padding: 0.5em; }*/
 
+/* Tomas 08.14 isimiau, perrasysiu tai ka reikia
 .megaselectlistcolumn { width: 31%; margin: 0 1%; float: left; }
 .megaselectlist .currentitem { padding: 0; border: 0.1em dotted Green; color: Black; }
-/* Optional styles */
+// Optional styles
 .megaselectlist { background-color: #F5F5F5; border: 1px solid Silver; }
 //.megaselectlistcolumn {width: 48%; padding:0 5%;}
 .megaselectlistcolumn > h2 { font-size: 1em; background-color: #ECECEC; text-align: center; padding: 2px 0; margin: 0; }
@@ -185,11 +233,16 @@ div.dialog-form-label { font-size: @basefont; /*color: #666666;*/ top: 2px; marg
 		background: url(../images/icon-plus-2.png) no-repeat;	
 	}
 }
+
 						
 .megaselectlistcolumn > ul > li:hover { background-color: #ECECEC; }
 
 div.megaselectlistoptions { overflow: hidden; background: #faf1d4; }
 div.megaselectlistoptions li { color: #176891; padding-left: 16px; position: relative; }
+
+*/
+
+
 /*-----------------------------------------*/
 tr.hide { display: none; }
 input.activeField, textarea.activeField { border-color: #008000; /*background-color: #FFCC99 !important;*/ background-color: @yellowlight !important; background: none; }
@@ -229,7 +282,7 @@ ul.ulWhiteMenu li { margin-right: 5px; padding-right: 5px; border-bottom: 1px; }
 }
 .filtergroup { 
     width: 100%;
-    padding: 0 12px 8px; 
+    padding: 0 6px 8px; 
     list-style-type: none;
    &.btn, &.ui-buttonset .ui-button { 
        width: 100%;
@@ -442,7 +495,7 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 
 }
 .accidentMain-header{
-	font-size: 30px; 
+	font-size: 24px; 
 	padding: 12px; 
 	color: #EB5A44;
 	background:#FFFFFF;
@@ -559,7 +612,7 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 .btn.btn-small.btn-small-delete{
 	background-color:#A59894;
 	background-image:none;
-	padding:1px 6px;
+	padding: 5px 7px 1px 8px;
 }
  .curvedBorderGroove {
     border: 1px solid #EB5A44;
@@ -653,3 +706,125 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 	}
 }
  /*----claims regulation form end -----*/
+
+/* TOMAS */
+
+.topSearchForm {
+	position: relative;
+	width: 300px;
+	margin-bottom: 0;
+	margin-top: 5px;
+
+	.searchField {
+		width: 262px;
+		margin-bottom: 0;
+		padding-right: 30px;
+	}
+
+	span.spanToClearText {
+		display: block;
+		padding: 7px;
+		padding-bottom: 6px;
+	}
+}
+
+/*
+form input.searchField {
+	width:100%;
+	height:28px;
+	line-height:23px;
+	font-family:sans-serif;
+	font-size:1em;color:#333;
+	border:solid 1px #d9d9d9;
+	border-top:solid 1px #c0c0c0;
+	border-right:none;
+	vertical-align:top; 
+	.border-radius(0);
+	//    #gradient > .vertical(#eae4cf, #fbfbd8);
+}
+*/
+
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+/* NEW CLAIM CARD  */
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+
+#divNewClaimCard {
+
+	.heading {
+		background: #eae9e8;
+		color: #333;
+		font-weight: bold;
+		padding: 3px 10px;
+		min-height: 33px;
+
+		.left {
+			padding-top: 5px;
+		}
+
+		span {
+			color: #eb5a44;
+			padding-left: 4px;
+		}
+	}
+
+	.megaselectlistoptions {
+		background: #f5f4f3;
+		overflow: hidden; // Required to hide on height:0
+
+		ul {
+			display: block;
+			float: left;
+			width: 30%;
+			list-style: none;
+			padding-left: 0;
+			margin: 0;
+			padding: 2%;
+
+			li {
+				color: #eb5a44;
+				cursor: pointer;
+
+				&:hover {
+					color: darken(#eb5a44, 10%);
+				}
+
+				&:before {
+					content: '+';
+					font-weight: bold;
+					padding-right: 4px;
+					font-size: 18px;
+					position: relative;
+					top: 1px;
+				}
+			}
+		}
+	}
+
+	#newClaimDetailsContent {
+		background: #fff;
+	}
+}
+
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+/* SIDE PANEL / FILTER  */
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+
+.filter-switch-label {
+	display: block;
+	margin-top: -1px;
+	padding-left: 3px;
+	float: left;
+	width: 80px;
+	height: 26px;
+
+	span {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 80px;
+		height: 26px;
+		line-height: 13px;
+		padding: 0;
+		margin: 0;
+	}
+}

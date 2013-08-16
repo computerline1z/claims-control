@@ -246,9 +246,11 @@ var oCONTROLS = {
 		if (!id & !NewRec) {
 			console.error("Nėra nurodyta id formos data(ctrl)!");
 		}
+
 		//$.validity.setup({
-		//    outputMode: "modal"
+		//	outputMode: "modal"
 		//});
+
 		$.validity.start();
 		var DataToSave = {
 			Data: [],
@@ -508,10 +510,10 @@ var oCONTROLS = {
 			//d={ctrl:??,oDATA:??, opt:{text:??,val:??,FieldName:??,SelectText:??},fnAfterOptClick:?? }
 			//oDATA.obj atiduodamas visas SD (kad turet ir Data ir Cols
 			//istatomas listas, kuris i data("ctrl")._FieldName_ pagal pasirinkima istato val, be to kolapsinasi
-			var HTML = "<div tabindex='0' class='container medium' style='background-color:#d3d1ba;margin-top:0px;font-weight:bold;'><div class='left'>"
-				 + d.opt.SelectText + "<span style='cursor:pointer;color: #3366CC;text-decoration: underline;'></span></div>"
-				 + "<div class='right'><a id='aCancelSelectOpt' class='floatright' href='#'>Atšaukti</a></div></div>";
-			HTML += "<div class='megaselectlistoptions'>";
+			var HTML = "<div class='container medium heading'><div class='left'>"
+				 + d.opt.SelectText + "<span></span></div>"
+				 + "<div class='right'><a id='aCancelSelectOpt' class='floatright btn' href='#'>Atšaukti</a></div></div>";
+			HTML += "<div class='megaselectlistoptions clearfix'>";
 			var listHTML = "";
 			for (var i = 1; i < d.oDATA.emData.length; i += 3) {//0-neimam, nes ten neapdrausta - jei kitur naudosim reiks tai daryt tik Source='tblClaimTypes'
 				listHTML += "<div class='megaselectlistcolumn'><ul>";
