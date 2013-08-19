@@ -168,41 +168,51 @@ var oDATA = Ember.Object.create({
 	// },
 	executed: {}, //Čia įsimenam kas buvo klikinta (tie turės viską atsisiuntę
 	fnLoad2: function (p) {
-		//url:url,callBack:callBack, checkObj:checkObj //checkObj:checkObj[nebūinas] - pagal juos tikrinam ar reikia siustis ir ar reikia objekto
+		//url:url,callBack:callBack
+		//ctrl: uzdedam, kad siunciasi
 		if (!localStorage) throw new Error("No localStorage in Browser");
 		//užsikraunant įrašom localStorage["topNew_ver"] versijas ir siunčiam ar atitinka, jei neatitinka grazinam tuos objektus
 		//scripta užkraunam atsakydami, kontroleryj versijos kontroliuojamos "/controller/action?ver=123"
 		//if (!p.checkFn) console.error("oDATA.fnLoad without checkFn");	
 
-		var start = new Date().getTime(), setter = this.get("SET"), emBuilder = this.get("emBuilder"), me = this, obj;
+		var start = new Date().getTime(), setter = this.get("SET"), emBuilder = this.get("emBuilder"), me = this;
 		var finished = function (start, msg) { 
-			console.warn("fnLoad2 started '" + p.url + "'. " + msg + ". Time,ms:" + (new Date().getTime() - start)); 
+			//console.warn("fnLoad2 started '" + p.url + "'. " + msg + ". Time,ms:" + (new Date().getTime() - start)); 
 			if (p.callBack) p.callBack();
 		}
-
-		if (this.executed[p.url]&&!p.runAllways) {//jei jau buvo klikinta, nieko siųst nereikia(nebent reikia)
+		if (p.ctrl) { $(p.ctrl).spinner({ position: 'center', img: 'spinnerBig.gif' }); }
+		var wasLoaded=(p.name)?("ver_"+p.name):p.url;	//ar reikia antra kart kviest		
+		if (this.executed[wasLoaded]&&!p.runAllways) {//jei jau buvo klikinta, nieko siųst nereikia(nebent reikia)
 			finished(start, "Second click no need to load.");
+			$("img.spinner").remove();
 		} else {
-			var url = p.url, dataPars = {
-				ver: localStorage[url],
-				tmp: (localStorage[url] ? false : true),
-				obj: (oDATA.GET(p.checkObj) ? false : true)
+			var dataPars = {
+				ver: (localStorage[wasLoaded])?localStorage[wasLoaded]:0//Versijos Nr
+				//tmp: (localStorage[wasLoaded] ? false : true),
+				//obj: (oDATA.GET(p.checkObj) ? false : true)
 			}
+			if (p.name) { dataPars.name=p.name;}
+			if (p.dataPars){$.extend(dataPars,p.dataPars);}//Papildomi parametrai
 			$.ajax({
 				url: p.url, dataType: 'json', type: 'POST', data: dataPars,
 				success: function (json) {
 					if (json.jsonObj) {
 						$.each(json.jsonObj, function (objName, value) {
-							console.log("New jsonObj:" + objName); setter.call(me, objName, value);
-							setter.call(me, objName, value);
-							emBuilder.call(me, { newData: value.Data, tblName: objName, toAppend: true }); //{oData, toAppend:{"sort":"asc/desc","col":"date"}}
+							//console.log("New jsonObj:" + objName); setter.call(me, objName, value);
+							objName=(p.name)?p.name: objName;//obj pavadinimas
+							setter.call(me, objName, value); 
+							emBuilder.call(me, { newData: value.Data, tblName:objName, toAppend: true }); //{oData, toAppend:{"sort":"asc/desc","col":"date"}}
 						});
 					}
 					if (json.templates) {
 						$.each(json.templates, function (objName, value) {
-							console.log("New template:" + objName);
-							if (!value) { value = localStorage[objName]; } //Jei nėra imam iš localStorage					
-							else { localStorage[objName] = value; }
+							//console.log("New template:" + objName);
+							objName=(p.name)?p.name: objName;//tmp pavadinimas bus koks ir objekto, nebent, mes nurodom parametra 'name'
+							if (!value) { value = localStorage[objName]; } //Jei nėra imam iš localStorage		
+							else { 
+								if (wasLoaded===objName){debugger;}
+								localStorage[objName] = value; 
+							}
 							if (!value) console.error("No template " + objName);
 							if (objName.slice(0,4)==="tmp2") {//tmpl template naudojama file uploads
 								$("body").append('<script id="'+objName+'" type="text/x-tmpl">'+value+'</script>');
@@ -223,11 +233,11 @@ var oDATA = Ember.Object.create({
 					} else{//Jei yra scriptas callBack executinam tik po scripto užkrovimo (viršuj), šiuo atveju nėra, taigi executinam čia
 						finished(start, "First click, no script.");
 					}
-					
-					localStorage[url] = json.ver; //išsaugom versija	
-					oDATA.executed[url] = (new Date()).getTime();
+					localStorage[wasLoaded] = json.ver; //Isaugojam, kad antra kart nekviest tos pacios akcijos arba url	
+					oDATA.executed[wasLoaded] = (new Date()).getTime();
 				},
 				error:function(xhr,x,y){
+					console.log(xhr.responseText);
 					debugger;
 					window.location='/Account/Logon';// App.router.location.lastSetURL
 					//document.location.href = '/account/login';

@@ -1,0 +1,6 @@
+﻿{{log this}}
+{{log view}}
+<div class="row big">
+<div class="col six first border">{{#each view.chkLeft}}{{log this}}<label class="clickable">{{view Ember.Checkbox checkedBinding="visible" }}{{title}}</label></br>{{/each}}</div>
+<div class="col six last border">{{#each view.chkRight}}<label class="clickable">{{view Ember.Checkbox checkedBinding="visible" }}{{title}}</label></br>{{/each}}</div>
+</div>

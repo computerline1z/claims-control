@@ -6,14 +6,16 @@ App.listsStart=()->
 	# App.topNewController.drivers.pushObjects(oDATA.GET("proc_topDrivers").emData)#.slice(0,3)	
 	# App.topNewController.vehicles.pushObjects(oDATA.GET("proc_topVehicles").emData)
 	# App.topNewController.insPolicies.pushObjects(oDATA.GET("proc_topInsPolicies").emData)	
-	App.topNewController.set('drivers',oDATA.GET("proc_topDrivers").emData)	
-	App.topNewController.set('vehicles',oDATA.GET("proc_topVehicles").emData)	
-	App.topNewController.set('insPolicies',oDATA.GET("proc_topInsPolicies").emData)	
+	ctrl=App.topNewController
+	ctrl.set('drivers',oDATA.GET("proc_topDrivers").emData)	
+	ctrl.set('vehicles',oDATA.GET("proc_topVehicles").emData)	
+	ctrl.set('insPolicies',oDATA.GET("proc_topInsPolicies").emData)	
 	
 	oDATA.execWhenLoaded(["proc_Vehicles","proc_Drivers","proc_InsPolicies"], ()->
-		App.listAllController.set("vehicles",oDATA.GET("proc_Vehicles").emData)
-		App.listAllController.set("drivers",oDATA.GET("proc_Drivers").emData)
-		App.listAllController.set("insPolicies",oDATA.GET("proc_InsPolicies").emData)
+		ctrl=App.listAllController
+		ctrl.set("vehicles",oDATA.GET("proc_Vehicles").emData)
+		ctrl.set("drivers",oDATA.GET("proc_Drivers").emData)
+		ctrl.set("insPolicies",oDATA.GET("proc_InsPolicies").emData)
 	)
 	
 App.topNewController = Em.ResourceController.create(

@@ -1,4 +1,34 @@
------------------------------------------------1.021----------------------------------------------------------
+-----------------------------------------------1.022----------------------------------------------------------
+USE [ClaimsControl]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tblReports](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[Title] [nvarchar](500) NOT NULL,
+	[Name] [nvarchar](100) NOT NULL,
+ CONSTRAINT [PK_tblReports] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+INSERT INTO tblReports(Title,Name)
+VALUES('Þalø sàraðas','rep_claimsList'),
+('Suminë þalø ataskaita','rep_claimsSummary'),
+('Þalø profilis pagal franðizes','rep_claimsProfilByFrachize'),
+('Draudimo iðmokos','rep_insurerCompensations'),
+('Ávykiai pagal vairuotojus','rep_accidentsByDrivers'),
+('Ávykiai pagal transporto priemones','rep_accidentsByVehicles'),
+('Ávykiø sàraðas','rep_accidentsList'),
+('Vairuotojø reitingas','rep_driversRate'),
+('Paþeidimø sàraðas','rep_violationsList')
+GO
+DELETE FROM tblAccidentsTypes WHERE ID=-1
+GO
+-----------------------------------------------1.021---------UPDATED-------------------------------------------------
 CREATE TYPE RelationsTbl AS TABLE (ID int)
 GO
 USE [ClaimsControl]
@@ -41,6 +71,13 @@ END
 GO
 UPDATE tblInsurers SET Name='' WHERE ID=0
 GO
+/* Dadët SPROC'us
+proc_Accidents
+proc_GetStrFromRecord
+[dbo].[proc_InsPolicies]
+ */
+
+
 -----------------------------------------------1.020-------UPDATED---------------------------------------------------
 INSERT INTO tblObjects_ID(tblName,Date)
 VALUES('tblDocsInActivity', GETDATE()),--50

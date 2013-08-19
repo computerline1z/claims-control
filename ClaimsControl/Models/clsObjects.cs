@@ -1,5 +1,4 @@
 ﻿namespace CC.Models {
-
    public class jsonArrays {
       private object[] _Cols;
       private object _Config = 0;

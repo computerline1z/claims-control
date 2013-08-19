@@ -1,9 +1,6 @@
 ﻿using System.Web.Mvc;
 using CC.Models;
-
-
 using CC.Classes;
-using System;
 
 namespace ClaimsControl.Controllers {
 
@@ -19,13 +16,34 @@ namespace ClaimsControl.Controllers {
 			ViewBag.Title = "Žalų valdymo sistema";
 			return View();
 		}
-
 		[HttpPost]
-		public JsonResult tabLists(string ver, bool tmp, bool obj) {
+		public JsonResult tabReports(string ver) {
 			Repositories_Main acc = new Repositories_Main();
-			string currentVer = "6"; if (ver != currentVer) tmp = true; ver = currentVer;
+			string currentVer = "6";bool tmp=false ; if (ver != currentVer) tmp = true; ver = currentVer;
 			tmp = true;
-			System.Diagnostics.Debug.Print("ver - " + ver + "; obj - " + obj.ToString());
+			return Json(
+				new {
+					ver = ver,
+					jsonObj = new {
+						words_Reports = acc.GetJSON_wReports()
+					},
+					templates = (tmp) ? new {
+						tmpMainReport = RenderPartialViewToString("Reports/tmpMainReport"),
+						tmpReportCols = RenderPartialViewToString("Reports/tmpReportCols")
+					} : new {
+						tmpMainReport = "",
+						tmpReportCols = ""
+					}//,
+					//Script = new { File = "/Scripts/Forms/tabLists.js?ver="+ver, Pars = "" } listus siunčiu su visais nes jų reikia
+				}
+			);
+		}
+		[HttpPost]
+		public JsonResult tabLists(string ver) {
+			Repositories_Main acc = new Repositories_Main();
+			string currentVer = "6";bool tmp=false ; if (ver != currentVer) tmp = true; ver = currentVer;
+			tmp = true;
+			System.Diagnostics.Debug.Print("ver - " + ver);
 			return Json(
 				new {
 					ver = ver,
@@ -61,22 +79,19 @@ namespace ClaimsControl.Controllers {
 				}
 			);
 		}
-
 		[HttpPost]
-		public JsonResult tabClaims(string ver, bool tmp, bool obj) {
+		public JsonResult tabClaims(string ver) {
 			Repositories_Main acc = new Repositories_Main();
-			string currentVer = "1"; if (ver != currentVer) tmp = true; ver = currentVer;
+			string currentVer = "1";bool tmp=false ; if (ver != currentVer) tmp = true; ver = currentVer;
 			tmp = true;
-			System.Diagnostics.Debug.Print("ver - " + ver + "; obj - " + obj.ToString());
+			System.Diagnostics.Debug.Print("ver - " + ver);
 			return Json(
 				new {
 					ver = ver,
 					jsonObj = new {//šitam visada atnaujinu objektus
 						proc_Activities = acc.GetJSON_proc_Activities(),
-						proc_Finances = acc.GetJSON_proc_Finances(),
-						tblFinTypes = acc.GetJSON_tblFinTypes(),
-						tblDocsInActivity = acc.GetJSON_tblDocsInActivity(),
-						tblDocsInFin = acc.GetJSON_tblDocsInFin(),
+						tblActivityTypes = acc.GetJSON_tblActivityTypes(),
+						tblDocsInActivity = acc.GetJSON_tblDocsInActivity()
 					},
 					templates = (tmp) ? new {
 						tmpClaimsMain = RenderPartialViewToString("Claims/tmpClaimsMain"),
@@ -121,11 +136,11 @@ namespace ClaimsControl.Controllers {
 		}
 
 		[HttpPost]
-		public JsonResult tabMain(string ver, bool tmp, bool obj) {
+		public JsonResult tabMain(string ver) {
 			Repositories_Main acc = new Repositories_Main();
-			string currentVer = "14"; if (ver != currentVer) tmp = true; ver = currentVer;
+			string currentVer = "14";bool tmp=false ; if (ver != currentVer) tmp = true; ver = currentVer;
 			tmp = true;
-			System.Diagnostics.Debug.Print("ver - " + ver + "; obj - " + obj.ToString());
+			System.Diagnostics.Debug.Print("ver - " + ver);
 			return Json(
 				new {
 					ver = ver,
@@ -169,7 +184,7 @@ namespace ClaimsControl.Controllers {
 						//tmpVehicleMakes = RenderPartialViewToString("Lists/tmpVehicleMakes"),
 						tmpEditItems = RenderPartialViewToString("Lists/tmpEditItems"),
 						tmpUserCard = RenderPartialViewToString("Admin/tmpUserCard"),
-						tmpChangeUsrPass = RenderPartialViewToString("Admin/tmpChangeUsrPass")						
+						tmpChangeUsrPass = RenderPartialViewToString("Admin/tmpChangeUsrPass")
 					} : new {
 						tmpClaimEdit = "",
 						tmpUploadForm = "",
@@ -192,29 +207,24 @@ namespace ClaimsControl.Controllers {
 				}
 
 			);
-			
+
 		}
 
 		[HttpPost]
-		public JsonResult tabAdmin(string ver, bool tmp, bool obj) {
+		public JsonResult tabAdmin(string ver) {
 			Repositories_Main acc = new Repositories_Main();
-			string currentVer = "6";if (ver != currentVer) tmp = true; ver = currentVer;
+			string currentVer = "6";bool tmp=false ; if (ver != currentVer) tmp = true; ver = currentVer;
 			tmp = true;
-			System.Diagnostics.Debug.Print("ver - " + ver + "; obj - " + obj.ToString());
+			System.Diagnostics.Debug.Print("ver - " + ver);
 			return Json(
 				new {
 					ver = ver,
-					jsonObj = (obj) ? new {
+					jsonObj = new {
 						tblAccount = acc.GetJSON_tblAccount(),
 						tblCurrencies = acc.GetJSON_tblCurrencies(),
 						tblCountries = acc.GetJSON_tblCountries(),
 						tblTimeZones = acc.GetJSON_tblTimeZones()
-					} : new {
-						tblAccount = acc.GetJSON_tblAccount(),
-						tblCurrencies = acc.GetJSON_tblCurrencies(),
-						tblCountries = acc.GetJSON_tblCountries(),
-						tblTimeZones = acc.GetJSON_tblTimeZones()
-					},
+					} ,
 					templates = (tmp) ? new {
 						tmpUserRow = RenderPartialViewToString("Admin/tmpUserRow"),
 						tmpAdminMain = RenderPartialViewToString("Admin/tmpAdminMain")
@@ -222,7 +232,7 @@ namespace ClaimsControl.Controllers {
 						tmpUserRow = "",
 						tmpAdminMain = ""
 					},
-					Script = new { File = "/Scripts/Forms/tabAdmin.js?ver="+ver, Pars = "" }
+					Script = new { File = "/Scripts/Forms/tabAdmin.js?ver=" + ver, Pars = "" }
 				}
 			);
 		}

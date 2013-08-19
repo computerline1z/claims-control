@@ -1,16 +1,16 @@
 ﻿@*{{log this}}
+{{log this}}*@
 {{log this}}
-{{log this}}
 {{log claim}}
 {{log claim}}
 {{log claim}}
-{{log view}}*@
+{{log view}}
 <div class="content left col2">
 	<div class="sidenav">
 			<h5 class="sidenav-header">Naujas veiksmas:</h5>
 			<ul class="items"}' >
-				{{#each cmdActivities}}
-					<li class="item"><i class="{{unbound icon}}"></i><a {{action goToOtherView this}}>{{unbound title}}</a></li>
+				{{#each ativitiesNotFin}}
+					<li class="item"><i class="img28-{{unbound icon}}"></i><a {{action goToOtherView this}}>{{unbound title}}</a></li>
 				{{/each}}
 			</ul>
 	</div>
@@ -23,7 +23,7 @@
 	{{#if finDamageTbl.length}}
 		<table class="zebra-striped"><thead><tr><th>Suma</th><th>Dokumento tipas</th><th>Paskirtis</th><th>Priedai</th></tr></thead><tbody>
 			{{#each finDamageTbl}}	
-				<tr class="clickable" {{action goToOtherView this}}><td>{{amount}} Lt</td><td>{{docType}}</td><td>{{purpose}}</td><td>{{docs}}</td></tr>
+				<tr class="clickable" {{action goToOtherView this}}><td>{{amount}} Lt</td><td>{{docType}}</td><td>{{subject}}</td><td>{{docs}}</td></tr>
 			{{/each}}
 		</tbody></table>
 	{{/if}}
@@ -35,7 +35,7 @@
 		{{#if finInsurerTbl.length}}
 			<table class="zebra-striped"><thead><tr><th>Suma</th><th>Data</th><th>Pastabos</th><th>Priedai</th></tr></thead><tbody>
 				{{#each finInsurerTbl}}	
-					<tr class="clickable" {{action goToOtherView this}}><td>{{amount}} Lt</td><td>{{date}}</td><td>{{note}}</td><td>{{docs}}</td></tr>
+					<tr class="clickable" {{action goToOtherView this}}><td>{{amount}} Lt</td><td>{{date}}</td><td>{{body}}</td><td>{{docs}}</td></tr>
 				{{/each}}
 			</tbody></table>
 		{{/if}}
@@ -48,11 +48,11 @@
 		{{#compare claim.claimTypeID "===" "1"}} data-ctrl='{"tmp":"tmpAddCompensation","title":"Kaltininko kompensacija","finTypeID":7}'>Įvesti kaltininko kompensaciją
 		{{else}}data-ctrl='{"tmp":"tmpAddCompensation","title":"Kompensacija nukentėjusiam","finTypeID":6}'>Įvesti kompensaciją nukentėjusiam{{/compare}}
 	</a></div></div>*@
-	<div class="line"><div>{{unbound view.addCompensation.title}}</div><div class="box-1pr-left">{{compensationSum}} Lt</div><div class="right"><a  {{action goToOtherView "view.addCompensation"}} >{{unbound view.addCompensation.txt}}</a></div></div>
+	<div class="line"><div>{{unbound view.addCompensation.title}}:</div><div class="box-1pr-left">{{compensationSum}} Lt</div><div class="right"><a  {{action goToOtherView "view.addCompensation"}} >{{unbound view.addCompensation.txt}}</a></div></div>
 		{{#if finOtherPartyTbl.length}}
 			<table class="zebra-striped"><thead><tr><th>Suma</th><th>Data</th><th>Pastabos</th><th>Priedai</th></tr></thead><tbody>
 				{{#each finOtherPartyTbl}}	
-					<tr class="clickable" {{action goToOtherView this}}><td>{{amount}} Lt</td><td>{{date}}</td><td>{{note}}</td><td>{{docs}}</td></tr>
+					<tr class="clickable" {{action goToOtherView this}}><td>{{amount}} Lt</td><td>{{date}}</td><td>{{body}}</td><td>{{docs}}</td></tr>
 				{{/each}}
 			</tbody></table>
 		{{/if}}

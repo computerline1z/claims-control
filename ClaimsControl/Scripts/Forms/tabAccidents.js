@@ -662,7 +662,7 @@
     didInsertElement: function() {
       this._super();
       return Em.run.next(function() {
-        // Tomas 2013.08.08 laikinas uzkomentavimas $("#sidePanel").closest("div.col2").stickyPanel();
+         $("#sidePanel").closest("div.col2").stickyPanel();
         $("#chkOpen").buttonset().on("click", function(e) {
           var chk, newVal;
 

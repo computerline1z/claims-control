@@ -81,18 +81,15 @@ _create: ->
 				if ui.item.id isnt $(this).data("newval")
 					#$(this).data("newval", ui.item.id).val (if ($(this).data("ctrl").Type is "List") then ui.item.value else ui.item.label) #jeigu ne List tipo kisam viska priesingu atveju tik pirma lauka
 					$(this).data("newval", ui.item.id).val (ui.item.value)
-					MY.execByName opt.fnChangeCallBack, MY, this, ui.item	if opt.fnChangeCallBack
 					input.data("autocomplete").fnItemChanged(ui.item.id) if input.data("autocomplete").fnItemChanged
 				if ui.item.refID #Su kategorijom naudojamas
 					$(this).data("refID", ui.item.refID)
 					$(this).data("categoryID", ui.item.categoryID)
 					false #kad nieko daugiau nedarytu
-
-		change: (event, ui) ->
+				if opt.fnChangeCallBack then opt.fnChangeCallBack(event, ui) #CallBackas tik kai yra kas nors pasirinkta
+		change: (event, ui) -> #įvyksta tik ant blur
 			unless ui.item
 				fnEditItem(0,input.val(),event) #čia iškviečiu naujo pridėjimo popupa, jei įrašė ko nėra
-				# opt.fnChangeCallBack yra stringas, o opt.fnValueChanged funkcija
-				MY.execByName opt.fnChangeCallBack, MY, this, null	if opt.fnChangeCallBack #ui.item===null kitais atvejais eina per select
 				t = $(this)
 				t.data "newval", ""
 				t.val ""	if opt.Type is "List"
@@ -103,8 +100,6 @@ _create: ->
 			#if opt.Editable.Edit #linko pridėjimas
 				# t = input # (t.data("newval"))?t.data("newval").replace("0", ""):"";
 				# newVal = t.data("newval")
-			# opt.fnValueChanged input.data("newval"), input.val()	if opt.fnValueChanged and input.data("newval") #NewVal,NewText
-
 		open: ->
 			#input.addClass "activeField"	unless input.hasClass("activeField")	if opt.ListType isnt "List"
 			if opt.Editable.EditList or opt.Editable.AddNew
@@ -357,3 +352,70 @@ $.widget "ui.ComboBoxCategory", $.ui.ComboBox,
 				id:(target)-> widget.options.editList(widget.options),
 				label:"Redaguoti sarašą",value:"Redaguoti sarašą"})
 				ul.find("li:last a").addClass("actionLink")
+				
+#####Gridai######
+$.widget "my.sortableGrid",
+	# options:
+		# controller: 0
+	_create: ->
+		@ctrl=@options.controller
+		@element[0].innerHTML="<table class='zebra-striped'><thead></thead><tbody></tbody><table>"
+		@updateGrid(true); false
+	updateGrid:(updateAll)->
+		f=@ctrl.fields;cont=@ctrl.content;el=@element;
+		len=f.length; last=len-1; 
+		#console.error "notSameNo"  if len isnt Object.keys(cont[0]).length	
+		if updateAll
+			el.find('thead')[0].innerHTML=@_getHead(f,last)
+			@_appendHandler()
+		el.find('tbody')[0].innerHTML=@_getBody(f,cont)
+		false
+	_getHead: (f,last) ->	
+		thead = "<tr>"
+		f.forEach((col, i)->
+			if col.visible
+				thead += "<th data-name='"; thead += col.name; thead +="'>";
+				thead += col.title; thead += ((if i isnt last then "</th>" else "</th><tr>"))
+		)
+		thead
+	_getBody: (f,cont) ->
+		tbody = ""; last=0; f.forEach((v,i)->if v.visible then last=i;)
+		cont.forEach((row)->
+			tbody += "<tr><td>"
+			f.forEach((col, i) ->
+				if col.visible
+					tbody += row[col.name]; tbody += ((if i isnt last then "</td><td>" else "</td></tr>"))
+			)
+		)
+		tbody
+	_appendHandler: () ->
+		span='<span class="ui-icon ui-icon-carat-2-n-s ui-tblHead-icon"></span>'
+		newClass=""; me=@; ctrl=@ctrl
+		n="ui-icon-carat-1-n"
+		s="ui-icon-carat-1-s"
+		ns="ui-icon-carat-2-n-s"
+		base="ui-icon ui-tblHead-icon"
+		
+		thead=@element.find("thead").find("th").addClass("clickable").append(span).end().on("click","th",(e) ->
+			#alert($(this).text()+" "+$(this).index());
+			t = $(@); thisSpan = t.find("span");thisClass = thisSpan.attr("class")
+			if thisClass.indexOf(n) > -1 then newClass = s #desc
+			else newClass = n #ns -Nerūšiuota or s -asc
+			thisSpan.attr("class", newClass+" "+base)
+			t.siblings().find("span").attr("class", ns+" "+base)
+			if newClass is n then ctrl.set("sortAscending",true) else ctrl.set("sortAscending", false)
+			ctrl.set("sortProperties", [t.data("name")]); newContent=ctrl.get("arrangedContent")
+			ctrl.set("content", newContent)
+			Em.run.next(me,()-> @updateGrid(false))
+		)
+		sortCols=ctrl.get("sortProperties")
+		if sortCols.length>0
+			cl=if ctrl.sortAscending then n else s
+			thead.find("th").filter("[data-name='"+sortCols[0]+"']").find("span").attr("class",cl+" "+base);#Jei bus daugiau nei viena reiks ciklo
+		false
+	_setOption: (key, value) ->
+        @options[ key ] = value;
+        @_update();
+	destroy: () ->
+        #this.element.removeClass( "progressbar" ).text( "" );
+        $.Widget.prototype.destroy.call(@);

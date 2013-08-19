@@ -81,11 +81,12 @@
     <ApplicationIcon>Content\images\Program.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="dotless.Core">
-      <HintPath>..\..\..\DLL\dotless.Core.dll</HintPath>
+    <Reference Include="ClosedXML">
+      <HintPath>Library\ClosedXML.dll</HintPath>
     </Reference>
-    <Reference Include="Elmah, Version=1.2.14706.0, Culture=neutral, processorArchitecture=MSIL" />
-    <Reference Include="EntityFramework, Version=4.4.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
+    <Reference Include="DocumentFormat.OpenXml">
+      <HintPath>Library\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -119,12 +120,10 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
-    <Reference Include="WebActivator">
-      <HintPath>packages\WebActivator.1.5.1\lib\net40\WebActivator.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Converters.cs" />
+    <Compile Include="Classes\Reports.cs" />
     <Compile Include="Classes\FileDescriptorDTO.cs" />
     <Compile Include="Classes\General.cs" />
     <Compile Include="Classes\Generics.cs" />
@@ -134,6 +133,7 @@
     <Compile Include="Classes\SQLHelper.cs" />
     <Compile Include="Controllers\AccidentController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\SystemController.cs" />
     <Compile Include="Controllers\FilesController.cs" />
     <Compile Include="Controllers\UpdateController.cs" />
@@ -145,6 +145,7 @@
     <Compile Include="Models\clsObjects.cs" />
     <Compile Include="Models\CCMemProvider.cs" />
     <Compile Include="Models\cls_db_partial.cs" />
+    <Compile Include="Models\Repositories_Report.cs" />
     <Compile Include="Models\db.cs">
       <DependentUpon>db.dbml</DependentUpon>
     </Compile>
@@ -259,7 +260,6 @@
     <Content Include="Content\images\Question.png" />
     <Content Include="Content\images\WaitBar.gif" />
     <Content Include="Content\images\Zvaigzde.png" />
-    <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
     <Content Include="packages\elmah.1.2.2\content\App_Readme\Elmah.txt" />
     <Content Include="packages\elmah.1.2.2\Readme.txt" />
@@ -336,6 +336,7 @@
     <Content Include="Scripts\Forms\tabClaims.js" />
     <Content Include="Scripts\Forms\tabClaimsRegulation.js" />
     <Content Include="Scripts\Forms\tabLists.js" />
+    <Content Include="Scripts\Forms\tabReports.js" />
     <Content Include="Scripts\Forms\userCard.js" />
     <Content Include="Scripts\Main\Copy of jquery-1.8.0.combined2.min.js" />
     <Content Include="Scripts\Main\jquery-1.8.0.combined2.min.js" />
@@ -367,7 +368,6 @@
     <Content Include="Scripts\Plugins scripts\jsonUpdate.js" />
     <Content Include="Scripts\Plugins scripts\MegaSelectList.js" />
     <Content Include="Scripts\Plugins scripts\TimePicker.js" />
-    <Content Include="Content\LoginStyles.css" />
     <Content Include="SQL\current.sql" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -396,6 +396,16 @@
     <Content Include="Views\Shared\Lists\tmpAllInsPolicies.cshtml" />
     <Content Include="Views\Shared\Lists\tmpAllVehicles.cshtml" />
     <Content Include="Views\Shared\Lists\tmpEditItems.cshtml" />
+    <Content Include="Views\Shared\Reports\rep_violationsList.cshtml" />
+    <Content Include="Views\Shared\Reports\rep_claimsSummary.cshtml" />
+    <Content Include="Views\Shared\Reports\rep_claimsProfilByFrachize.cshtml" />
+    <Content Include="Views\Shared\Reports\rep_accidentsByDrivers.cshtml" />
+    <Content Include="Views\Shared\Reports\rep_accidentsByVehicles.cshtml" />
+    <Content Include="Views\Shared\Reports\rep_accidentsList.cshtml" />
+    <Content Include="Views\Shared\Reports\rep_driversRate.cshtml" />
+    <Content Include="Views\Shared\Reports\rep_claimsList.cshtml" />
+    <Content Include="Views\Shared\Reports\tmpReportCols.cshtml" />
+    <None Include="Views\Shared\Reports\rep_insurerCompensations1.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Uploads\" />
@@ -458,6 +468,7 @@
     <None Include="packages\Ninject.Web.Common.3.0.0.7\Ninject.Web.Common.3.0.0.7.nupkg" />
     <Content Include="packages\repositories.config" />
     <None Include="packages\WebActivator.1.5.1\WebActivator.1.5.1.nupkg" />
+    <None Include="Scripts\Forms\tabReports.coffee" />
     <None Include="Scripts\Forms\tabClaimsRegulation.coffee" />
     <None Include="Scripts\Forms\tabClaims.coffee" />
     <None Include="Scripts\Forms\userCard.coffee" />
@@ -523,7 +534,7 @@
     <Content Include="Views\Shared\Claims\tmpAddDamageKASKO.cshtml" />
     <Content Include="Views\Shared\Files\tmpUploadFormClaim.cshtml" />
     <Content Include="Views\Shared\Claims\tmpAccidentDocs.cshtml" />
-    <None Include="Views\Shared\LayOut_Main_Debug.cshtml" />
+    <Content Include="Views\Shared\Reports\tmpMainReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
@@ -538,6 +549,26 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>5</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -51,8 +51,8 @@
 	};
 	// default spinner options
 	$.fn.spinner.defaults = {
-		position: 'right'       // left, right, center
-		  , img: 'spinner.gif' //'spinnerBig.gif'  path to spinner img
+		// position: left, right, center(pagal nutylėjima)
+		  img: 'spinnerBig.gif' //'spinnerBig.gif', 'spinner.gif'
 		  , height: 16            // height of spinner img
 		  , width: 16            // width of spinner img
 		  , zIndex: 1001          // z-index of spinner
@@ -101,6 +101,23 @@ jQuery.fn.log = function (msg) {
 //    valueBinding: Ember.Binding.from("App.person.age")
 //});
 //http://jsfiddle.net/L6vmc/4/
+if (!Object.keys) {//del senoviniu brovseriu (IE8)
+	Object.keys = (function () {
+		var hasOwnProperty = Object.prototype.hasOwnProperty,
+		hasDontEnumBug = !({toString: null}).propertyIsEnumerable('toString'),
+		dontEnums = ['toString','toLocaleString','valueOf','hasOwnProperty','isPrototypeOf','propertyIsEnumerable','constructor' ],
+		dontEnumsLength = dontEnums.length;
+		return function (obj) {
+			if (typeof obj !== 'object' && typeof obj !== 'function' || obj === null) throw new TypeError('Object.keys called on non-object');
+			var result = [];
+			for (var prop in obj) {if (hasOwnProperty.call(obj, prop)) result.push(prop); }
+			if (hasDontEnumBug) {
+				for (var i=0; i < dontEnumsLength; i++) {if (hasOwnProperty.call(obj, dontEnums[i])) result.push(dontEnums[i]);}
+			}
+			return result;
+		};
+	})();
+}
 var MY = {
 	change: {
 		onlyNumbers: function (input) {

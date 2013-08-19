@@ -4,11 +4,9 @@
 	<a  class="ui-dialog-titlebar-close ui-corner-all" {{action cancelForm target="App.tabClaimsRegulationController"}}><span class="ui-icon ui-icon-closethick">close</span></a>
 </div>
 <div id="openClaimDialog" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 25px; height: auto;" scrolltop="0" scrollleft="0">
-	{{#compare isNew "===" "false" }}
-		<div style="float:right;width:90%;margin:.5em 5%;" class="rightComment">Įvedė: {{unbound userName}}, {{entryDate}}</div>
-	{{/compare}}
-	{{view view.childView}}
-	
+	<div id="contentOfClaimReg" class="inputForm container w90pr centerBlock" data-ctrl='{"NewRec":1,"Source":"proc_Activities","tblUpdate":"tblActivities"}'>
+		{{view view.childView}}
+	</div>
 </div>
 	<div class="uploadDocsContainer" id="uploadClaimDocs"></div>
 </div>

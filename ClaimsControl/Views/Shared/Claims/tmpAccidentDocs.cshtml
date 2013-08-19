@@ -1,4 +1,7 @@
-﻿{{#each vGroup}}
+﻿{{#if noAccidentDocs}}
+<div class="box_1pr">Įvykis neturi priskirtų dokumentų..</div>
+{{else}}
+{{#each vGroup}}
 	{{log this}}@*controller.vGroup*@
 	{{log items}}
 	{{#if items}}
@@ -28,3 +31,4 @@
 		</div>
 	{{/if}}
 {{/each}}
+{{/if}}
