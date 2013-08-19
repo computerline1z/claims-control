@@ -1,12 +1,10 @@
-﻿<div id="contentOfClaimReg" class="inputForm container w90pr centerBlock" data-ctrl='{"NewRec":1,"Source":"proc_Finances","tblUpdate":"tblFinances"}'>
-	</br>
-	<div class="row">	
-		{{updatableField financesTypeID labelType="Left" classes="wrapper:'col eight first'" sTitle="Pretenzijos tipas" Radio="[{'label':'Žala turtui','value':'3','checked':1},{'label':'Žala asmeniui','value':'4'}]"}}
-	</div>	
-	<div class="row">	
-	{{updatableField purpose labelType="Top" classes="wrapper:'col nine first'" sTitle="Pretenziją pateikė"}}
-	{{updatableField amount labelType="Top" classes="wrapper:'col three last'" sTitle="Pretenzijos suma be PVM"}}
-	</div>
-	{{updatableField note labelType="Top" classes="input:'row'" sTitle="Pastabos"}}
-	{{view App.FormBottomView target="App.tabClaimsRegulationController"}}
-</div> 
+﻿</br>
+<div class="row">	
+	{{updatableField typeID labelType="Left" classes="wrapper:'col eight first'" sTitle="Pretenzijos tipas" Radio="[{'label':'Žala turtui','value':'9','checked':1},{'label':'Žala asmeniui','value':'10'}]"}}
+</div>	
+<div class="row">	
+{{updatableField subject labelType="Top" classes="wrapper:'col nine first'" sTitle="Pretenziją pateikė"}}
+{{updatableField amount labelType="Top" classes="wrapper:'col three last'" sTitle="Pretenzijos suma be PVM"}}
+</div>
+{{updatableField body labelType="Top" classes="input:'row'" sTitle="Pastabos"}}
+{{view App.FormBottomView target="App.tabClaimsRegulationController"}}

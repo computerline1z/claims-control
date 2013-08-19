@@ -43,14 +43,20 @@ Handlebars.registerHelper('updatableField', function (prop, options) {
 	return new Handlebars.SafeString(retString );
 });
 /* šitas kveikiantis ->context=this[context];
-Handlebars.registerHelper('eachArr', function (context, block) {
+Handlebars.registerHelper('eachReportArr', function (context, options) {
+	var ret = ""; context=this[context];
+	for (var i = 0, j = context.length; i < j; i++) {
+		ret = ret + block(context[i]);
+	}
+	return ret;
+});*/
+Handlebars.registerHelper('reportRow', function (context, options) {
 	var ret = ""; context=this[context];
 	for (var i = 0, j = context.length; i < j; i++) {
 		ret = ret + block(context[i]);
 	}
 	return ret;
 });
-*/
 Handlebars.registerHelper('compare', function (lvalue, operator, rvalue, options) {
 	var operators, result,me=this;
 	if (arguments.length < 3) { throw new Error("Handlerbars Helper 'compare' needs 2 parameters"); }

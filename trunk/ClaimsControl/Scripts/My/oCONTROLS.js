@@ -56,18 +56,11 @@ var oCONTROLS = {
 		return row[f];
 	},
 	UpdatableForm: function (p) {//{frm:frm,row:row,btnSaveToDisable:btnSaveToDisable}
-	//Em.run.next({t:this,p:p},function(){
-		//frm data-ctrl:: labelType:Top/Left/undefined,
-		//var p=this.p, me=this.t;
+	/*Jei .ExtendIt nėra Type parametro  - elementas nebus generuojamas, nebent ten yra Radio objektas*/
 		var sTitle = "", frmOpt = $(p.frm).data('ctrl'),btnSaveToDisable,me=this; if (!frmOpt){console.warn("No frmOpt");return;}
 		if (p.row){ if (p.row.iD)  {frmOpt.NewRec=0;frmOpt.id=p.row.iD;}}//Jeigu yra p.row tai redagavimas
 		if (frmOpt.NewRec==="0"){frmOpt.NewRec=0;}
 		var data = (frmOpt.Source === 'NoData') ? "NoData" : oDATA.GET(frmOpt.Source);
-		//if(typeof data==='undefined') { alert('Source undefined in UpdatableForm(objFunc:79)!'); }
-		//log('<div>==========UpdatableForm========</div>');
-		//var elements = $(p.frm).find('div.ExtendIt, span.ExtendIt');
-		//      for(var i=0; i<elements.length; i++) {
-		//      }
 		var fnEnableSave=function(){	
 			btnSaveToDisable.removeAttr("disabled", "disabled");	
 		}
@@ -179,7 +172,7 @@ var oCONTROLS = {
 				//input = $(eHTML).prependTo(e).find("input:first");
 				input = $(eHTML).prependTo(e).parent().find("input:first");//parent reikalingas kai nenaudojam label (InsPolicy kortelėj)
 			}
-			else if (Type === 'Radio') {
+			else if (Type === 'Radio'||col.Radio) {
 				eHTML = oCONTROLS.radio(col);e.addClass("UpdateField").data("ctrl").Type="Radio";//wraper will be used for update
 				$(eHTML).prependTo(e);		
 			}
@@ -583,6 +576,32 @@ var oCONTROLS = {
 			});
 		}
 	},
+	table: {
+		getAll: function(p){//p={fields:??,content:??}, kur fields=[{name:"claimType",title:"Tipas",visible:true},{name:"accDate",title:"Įvykio data",visible:false}],content={name:val,name2:val2}}
+			var f=p.fields,c=p.content,len=f.length; last=len-1; if (len!==Object.keys(c[0]).length) { console.error('notSameNo'); }
+			var thead="<table class='zebra-striped'><thead><tr><th>";
+			f.forEach(function(col, i) {
+				if (col.visible) {
+					thead += col.title;
+					thead += (i !== last ? "</th><th>" : "</th></thead>");
+				}
+			});
+			return thead+this.getBody(p)+"</table>";
+		},
+		getBody:function(p){//p={fields:??,content:??}
+			 var tbody="<tbody>",f=p.fields;
+			p.content.forEach(function(row) {
+				tbody += "<tr><td>";
+				f.forEach(function(col, i) {
+					if (col.visible) {
+						tbody += row[col.name];
+						tbody += (i !== last ? "</td><td>" : "</td></tr>");
+					}
+				});
+			});
+			return tbody+"</tbody>";
+		}
+	},
 	dialog: {
 		opt: {
 			title: '', msg: '', autoOpen: false, height: 'auto', width: 350, minWidth: 300, modal: true, show: 'clip', hide: 'clip',
@@ -594,16 +613,31 @@ var oCONTROLS = {
 			this.showDialog(opt, buttons);
 		},
 		Confirm: function (opt, fnCallBack) {//iskvietimui oCONTROLS.dialog.Confirm({title:"fds",msg:"sdf"},fnCallBack)
-			oCONTROLS.dialog.fnCallBack = fnCallBack;
+			oCONTROLS.dialog.fnCallBack = fnCallBack; var isLink=false;
 			buttons = {
 				"Taip": function () { d = oCONTROLS.dialog; d.fnCallBack(); d.destroy(this); },
 				"Ne": function () { oCONTROLS.dialog.destroy(this); }
 			};
-			this.showDialog(opt, buttons);
+			if (typeof fnCallBack ==="string"){
+				delete buttons["Taip"];
+				opt.open=function(e,ui) {
+					$('<a />', {'class':'linkClass linkYes',text: 'Taip',href: fnCallBack,target:"_blank"})
+					.insertBefore($(".ui-dialog-buttonpane button"));
+					//.click(function(){$(event.target).dialog('close'); });
+				};
+				isLink=true;
+			}
+			this.showDialog(opt, buttons,isLink);
 		},
-		showDialog: function (opt, buttons) {
+		showDialog: function (opt, buttons,isLink) {
 			var o = $.extend(true, {}, this.opt, { buttons: buttons }, opt);
 			var $dialog = $('<div id="dialog_form_tmp_id">').html(opt.msg).dialog(o).dialog('open');
+			Em.run.next(
+				function(){
+					$("#dialog_form_tmp_id").on("click","a.linkYes",function() {
+						alert("opa");
+					});
+				});
 		}
 	}
 };

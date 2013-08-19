@@ -1,0 +1,41 @@
+﻿<table class="zebra-striped">
+{{log fields}}
+@*	
+	<thead><tr>{{#each fields}}
+		{{log this}}
+		{{#if visible}}<th>{{unbound title}}</th>{{/if}}
+	{{/each}}</tr></thead>*@
+	{{#with fields}}
+	<thead><tr>
+			{{#if claimType.visible}}<th>{{unbound claimType.title}}</th>{{/if}}
+			{{#if accDate.visible}}<th>{{unbound accDate.title}}</th>{{/if}}
+			{{#if accCountry.visible}}<th>{{unbound accCountry.title}}</th>{{/if}}
+			{{#if accType.visible}}<th>{{unbound accType.title}}</th>{{/if}}
+			{{#if plate.visible}}<th>{{unbound plate.title}}</th>{{/if}}
+			{{#if driver.visible}}<th>{{unbound driver.title}}</th>{{/if}}
+			{{#if quilty.visible}}<th>{{unbound quilty.title}}</th>{{/if}}
+			{{#if insurer.visible}}<th>{{unbound insurer.title}}</th>{{/if}}
+			{{#if policyNo.visible}}<th>{{unbound policyNo.title}}</th>{{/if}}
+			{{#if lossAmount.visible}}<th>{{unbound lossAmount.title}}</th>{{/if}}
+			{{#if closed.visible}}<th>{{unbound closed.title}}</th>{{/if}}
+	</tr></thead>
+	{{/with}}
+
+ 	<tbody>{{#each content}}<tr>
+	{{reportRow}}
+	
+<!-- 			{{#if fields.claimType.visible}}<td>{{unbound claimType}}</td>{{/if}}
+			{{#if fields.accDate.visible}}<td>{{unbound accDate}}</td>{{/if}}
+			{{#if fields.accCountry.visible}}<td>{{unbound accCountry}}</td>{{/if}}
+			{{#if fields.accType.visible}}<td>{{unbound accType}}</td>{{/if}}
+			{{#if fields.plate.visible}}<td>{{unbound plate}}</td>{{/if}}
+			{{#if fields.driver.visible}}<td>{{unbound driver}}</td>{{/if}}
+			{{#if fields.quilty.visible}}<td>{{unbound quilty}}</td>{{/if}}
+			{{#if fields.insurer.visible}}<td>{{unbound insurer}}</td>{{/if}}
+			{{#if fields.policyNo.visible}}<td>{{unbound policyNo}}</td>{{/if}}
+			{{#if fields.lossAmount.visible}}<td>{{unbound lossAmount}}</td>{{/if}}
+			{{#if fields.closed.visible}}<td>{{unbound closed}}</td>{{/if}} -->
+	</tr>{{/each}}</tbody>
+</table>
+
+

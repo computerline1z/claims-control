@@ -24,10 +24,7 @@ App.Router = Em.Router.extend({
 			connectOutlets: function (router, context) {
 				MY.NavbarController.fnSetNewTab({newState:router.currentState.name, viewIx:0});//newState, viewIx,newOutlet
 				$("#divAccidentsList").find("div.col2").css("top","0");//Pataisyt šoninį stulpelį, kad būtų lygiai su viršum
-			}//,
-			//uploadFiles:function (e){
-			//	oCONTROLS.fnStartUploader({title:"mano titulas"});
-			//}
+			}
 		}),
 		tabClaims: Em.Route.extend({
 			route: '/claims',
@@ -40,37 +37,24 @@ App.Router = Em.Router.extend({
 					}
 				});
 			},
-			//route: '/claimEdit',
-			// connectOutlets: function (router, context) {
-				// MY.NavbarController.fnSetNewTab(router.currentState.name, 1);
-				// router.get('applicationController').connectOutlet('editClaimOutlet', 'tabClaims');		
-			// },
 			claimRegulation: function (router, context){
-				//App.listsStart();//Atnaujinam, jai buvo keista
 				MY.NavbarController.fnSetNewTab({newState:router.currentState.name, viewIx:1,transparent:true});
-				//console.log(context.context);
-				//App.tabClaimsRegulationController.set('content',[context.context]);//!!!!būtinai array
-				App.tabClaimsRegulationController.set('claim',context.context);//!!!!būtinai array
+				App.tabClaimsRegulationController.set('claim',context.context);// !!būtinai array
 				router.get('applicationController').connectOutlet('claimRegulationOutlet','tabClaimsRegulation'); 
 			},
-			// goBack:function (router, context){
-				// $('#divClaimRegulation').hide().parent().spinner({ position: 'center', img: 'spinnerBig.gif' });
-				// $('#divClaimsList').show();
-				// $("body").find("img.spinner").remove();
-			// }
 		}),
-		tabMap: Em.Route.extend({
+		/*tabMap: Em.Route.extend({
 			route: '/map',
 			connectOutlets: function (router, context) {
 				MY.NavbarController.fnSetNewTab({newState:router.currentState.name, viewIx:2});
-				//	router.get('applicationController').connectOutlet('map');
 			}
-		}),
+		}),*/
 		tabReports: Em.Route.extend({
 			route: '/reports',
 			connectOutlets: function (router, context) {
 				MY.NavbarController.fnSetNewTab({newState:router.currentState.name, viewIx:3});
-				//router.get('applicationController').connectOutlet('reports');
+				if ($("#tabReports").length){if  ($("#tabReports>div").html().length){return false;}}//Jei ten tuscia idedam nauja (emberis viduj diva ideda)
+				oDATA.fnLoad2({ url: "Main/tabReports", callBack: function () {App.reportsStart();router.get('applicationController').connectOutlet('reportsOutlet','tabReportsMain');}});
 			}
 		}),
 		tabLists: Em.Route.extend({

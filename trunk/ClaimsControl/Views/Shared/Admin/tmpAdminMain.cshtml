@@ -3,8 +3,8 @@ a{text-decoration:underline;}
 
 </style>
 <div class="custombackgroundListAdmin">
-<h2 style="margin: 15px; display: block;color:#EB5A44">Administravimas</h2>
-<h3 style="margin: 15px" class="brownColor">Bendrieji paskyros nustatymai</h3>
+<h2 class="formTitle">Administravimas</h2>
+<h3 class="tableTitle">Bendrieji paskyros nustatymai</h3>
 {{#each App.accountController.content}}
 @*	Negaliu įrašyt iD nes pasikraunant jo dar nėra
 *@	<div id="AccountForm" class="inputForm container" data-ctrl='{"id":"","NewRec":0,"Source":"tblAccount","tblUpdate":"tblAccounts"}'>
@@ -32,7 +32,7 @@ a{text-decoration:underline;}
 {{/each}}
 </div>
 <div class="custombackgroundListAdmin">
-<h3 style="margin: 15px" class="brownColor">Naudotojų administravimas</h3>
+<h3 style="padding-top:10px;" class="tableTitle">Naudotojų administravimas</h3>
 <div class="container" id="usersList">
 	<table class="zebra-striped">
 	<thead><tr><th>El. paštas</th><th>Vardas, pavardė</th><th>Yra administratorius</th><th>Prisijungti leidžiama</th></tr></thead><tbody>

@@ -141,9 +141,6 @@
             }
             if (ui.item.id !== $(this).data("newval")) {
               $(this).data("newval", ui.item.id).val(ui.item.value);
-              if (opt.fnChangeCallBack) {
-                MY.execByName(opt.fnChangeCallBack, MY, this, ui.item);
-              }
               if (input.data("autocomplete").fnItemChanged) {
                 input.data("autocomplete").fnItemChanged(ui.item.id);
               }
@@ -151,7 +148,10 @@
             if (ui.item.refID) {
               $(this).data("refID", ui.item.refID);
               $(this).data("categoryID", ui.item.categoryID);
-              return false;
+              false;
+            }
+            if (opt.fnChangeCallBack) {
+              return opt.fnChangeCallBack(event, ui);
             }
           }
         },
@@ -160,9 +160,6 @@
 
           if (!ui.item) {
             fnEditItem(0, input.val(), event);
-            if (opt.fnChangeCallBack) {
-              MY.execByName(opt.fnChangeCallBack, MY, this, null);
-            }
             t = $(this);
             t.data("newval", "");
             if (opt.Type === "List") {
@@ -544,6 +541,116 @@
           return ul.find("li:last a").addClass("actionLink");
         }
       };
+    }
+  });
+
+  $.widget("my.sortableGrid", {
+    _create: function() {
+      this.ctrl = this.options.controller;
+      this.element[0].innerHTML = "<table class='zebra-striped'><thead></thead><tbody></tbody><table>";
+      this.updateGrid(true);
+      return false;
+    },
+    updateGrid: function(updateAll) {
+      var cont, el, f, last, len;
+
+      f = this.ctrl.fields;
+      cont = this.ctrl.content;
+      el = this.element;
+      len = f.length;
+      last = len - 1;
+      if (updateAll) {
+        el.find('thead')[0].innerHTML = this._getHead(f, last);
+        this._appendHandler();
+      }
+      el.find('tbody')[0].innerHTML = this._getBody(f, cont);
+      return false;
+    },
+    _getHead: function(f, last) {
+      var thead;
+
+      thead = "<tr>";
+      f.forEach(function(col, i) {
+        if (col.visible) {
+          thead += "<th data-name='";
+          thead += col.name;
+          thead += "'>";
+          thead += col.title;
+          return thead += (i !== last ? "</th>" : "</th><tr>");
+        }
+      });
+      return thead;
+    },
+    _getBody: function(f, cont) {
+      var last, tbody;
+
+      tbody = "";
+      last = 0;
+      f.forEach(function(v, i) {
+        if (v.visible) {
+          return last = i;
+        }
+      });
+      cont.forEach(function(row) {
+        tbody += "<tr><td>";
+        return f.forEach(function(col, i) {
+          if (col.visible) {
+            tbody += row[col.name];
+            return tbody += (i !== last ? "</td><td>" : "</td></tr>");
+          }
+        });
+      });
+      return tbody;
+    },
+    _appendHandler: function() {
+      var base, cl, ctrl, me, n, newClass, ns, s, sortCols, span, thead;
+
+      span = '<span class="ui-icon ui-icon-carat-2-n-s ui-tblHead-icon"></span>';
+      newClass = "";
+      me = this;
+      ctrl = this.ctrl;
+      n = "ui-icon-carat-1-n";
+      s = "ui-icon-carat-1-s";
+      ns = "ui-icon-carat-2-n-s";
+      base = "ui-icon ui-tblHead-icon";
+      thead = this.element.find("thead").find("th").addClass("clickable").append(span).end().on("click", "th", function(e) {
+        var newContent, t, thisClass, thisSpan;
+
+        t = $(this);
+        thisSpan = t.find("span");
+        thisClass = thisSpan.attr("class");
+        if (thisClass.indexOf(n) > -1) {
+          newClass = s;
+        } else {
+          newClass = n;
+        }
+        thisSpan.attr("class", newClass + " " + base);
+        t.siblings().find("span").attr("class", ns + " " + base);
+        if (newClass === n) {
+          ctrl.set("sortAscending", true);
+        } else {
+          ctrl.set("sortAscending", false);
+        }
+        ctrl.set("sortProperties", [t.data("name")]);
+        newContent = ctrl.get("arrangedContent");
+        ctrl.set("content", newContent);
+        return Em.run.next(me, function() {
+          return this.updateGrid(false);
+        });
+      });
+      sortCols = ctrl.get("sortProperties");
+      if (sortCols.length > 0) {
+        cl = ctrl.sortAscending ? n : s;
+        thead.find("th").filter("[data-name='" + sortCols[0] + "']").find("span").attr("class", cl + " " + base);
+      }
+      return false;
+    },
+    _setOption: function(key, value) {
+      this.options[key] = value;
+      return this._update();
+    },
+    destroy: function() {
+      return $.Widget.prototype.destroy.call(this);
     }
   });
 

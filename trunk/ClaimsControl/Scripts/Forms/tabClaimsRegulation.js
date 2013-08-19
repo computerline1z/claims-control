@@ -8,6 +8,25 @@
   DOCSVIEW = {};
 
   App.tabClaimsRegulationController = Em.ArrayController.create({
+    init: function() {
+      var me;
+
+      this._super();
+      me = this;
+      return oDATA.execWhenLoaded(["proc_Activities", "tblActivityTypes", "tblUsers"], function() {
+        var actTypes;
+
+        actTypes = oDATA.GET("tblActivityTypes").emData.map(function(t) {
+          t.typeID = t.iD;
+          delete t.iD;
+          return t;
+        });
+        me.set("activities", oDATA.GET("proc_Activities").emData).set("activityTypes", actTypes).set("users", oDATA.GET("tblUsers").emData);
+        return me.set("ativitiesNotFin", actTypes.filter(function(a) {
+          return !a.isFinances;
+        }));
+      });
+    },
     stepsCont1: ['<a href="#">Parenkite ir siųskite</a><div>arba</div><a href="#">Užregistruokite</a>', '<a href="#">Patvirtinti, kad visa informacija yra pateikta</a>', '<a href="#">Patvirtinti #### Lt kaip galutinę žalos sumą</a>', '<a href="#">Patvirtinti #### Lt kaip galutinę išmokos sumą</a>', '<a href="#">Uždaryti bylą</a>'],
     stepsCont2: ['Draudikui pranešta ####', 'Visa informacija pateikta:</br>####</br><a href="#">Atšaukti</a>', 'Patvirtinta galutinė žalos suma: #### Lt</br><a href="#">Atšaukti</a>', 'Patvirtinta galutinė išmokos suma: #### Lt</br><a href="#">Atšaukti</a>', 'Byla uždaryta <a href="#"></br>Atidaryti</a>'],
     stepsConfirm: ['', '<p>Įveskite paskutinio dokumento pateikimo datą:</p><input class="date" type="text" value="####"><button class="btn btn-small">Patvirtinti</button>', '<p>Galutinė žalos dydžio suma - #### Lt.</p><button class="btn btn-small">Patvirtinti</button>', '<p>Galutinė išmokos dydžio suma - #### Lt</p><button class="btn btn-small">Patvirtinti</button>', ''],
@@ -249,43 +268,44 @@
         return this.set('compensationSum', sum.toRound());
       });
     }).observes('finOtherPartyTbl.@each'),
-    setActivitiesTable: function(newDocNo) {
-      var activities, activitiesTbl, claimID;
+    setActivitiesTables: function(newDocNo) {
+      var activities, activitiesTbl, activityTypes, claimID, me;
 
+      this.set("finDamageTbl", []).set("finInsurerTbl", []).set("finOtherPartyTbl", []);
       claimID = this.claim.iD;
       console.log("Showing all activities Claim iD: " + claimID);
-      activities = oDATA.GET("proc_Activities").emData;
+      activities = this.activities;
+      activityTypes = this.activityTypes;
       if (newDocNo) {
         activities.findProperty("iD", newDocNo.iD).set("docs", "(" + newDocNo.docNo + ")");
       }
       activities = activities.filter(function(item) {
         return item.claimID === claimID;
       });
-      this.set("users", oDATA.GET("tblUsers").emData);
-      activitiesTbl = activities.map(this.fnMapActivitiesRecord, this);
-      return this.set("activitiesTbl", activitiesTbl);
-    },
-    setFinancesTables: function(newDocNo) {
-      var claimID, finTypes, finances;
+      me = this;
+      activitiesTbl = [];
+      activities.forEach(function(item) {
+        var type;
 
-      claimID = this.claim.iD;
-      console.log("Setting finances table");
-      finances = oDATA.GET("proc_Finances").emData;
-      if (newDocNo) {
-        finances.findProperty("iD", newDocNo.iD).set("docs", "(" + newDocNo.docNo + ")");
-      }
-      finances = finances.filter(function(item) {
-        return item.claimID === claimID;
+        type = activityTypes.findProperty("typeID", item.typeID);
+        activitiesTbl.push(me.fnMapActivitiesRecord(item, type));
+        if (type.isFinances) {
+          switch (type.tmp) {
+            case "tmpAddDamageCA":
+            case "tmpAddDamageKASKO":
+              return me.finDamageTbl.addObject(me.fnMapDamageRecord(item, type.typeTitle));
+            case "tmpAddInsuranceBenefit":
+              return me.finInsurerTbl.addObject(me.fnMapRefundRecord(item));
+            case "tmpAddCompensation":
+              return me.finOtherPartyTbl.addObject(me.fnMapRefundRecord(item));
+            default:
+              return console.error('checkTmp in tblActivities');
+          }
+        }
       });
-      finTypes = oDATA.GET("tblFinTypes").emData;
-      this.TypesKasko = finTypes.slice(0, 2);
-      this.TypesCA = finTypes.slice(2, 4);
-      this.set('finDamageTbl', []).set('finInsurerTbl', []).set('finOtherPartyTbl', []);
-      return finances.forEach(this.fnMapFinancesRecord, this);
+      return me.set("activitiesTbl", activitiesTbl);
     },
     users: null,
-    TypesKasko: null,
-    TypesCA: null,
     fnGetUser: function(userID) {
       var u;
 
@@ -294,118 +314,74 @@
       });
       return u.firstName + " " + u.surname;
     },
-    fnGetIcon: function(activityID) {
-      switch (activityID) {
-        case 1:
-          return 'sent_mail';
-        case 2:
-          return 'recieved_mail';
-        case 3:
-          return 'tasks';
-        case 4:
-          return 'phone';
-        case 5:
-          return 'meeting';
-        case 6:
-          return 'note';
-      }
-    },
     fnGetFrom: function(acts) {
-      switch (acts.activityTypeID) {
-        case 1:
-        case 2:
-          return console.error('not implemented');
+      switch (acts.typeID) {
         case 3:
         case 6:
           return this.fnGetUser(acts.fromID);
         case 4:
         case 5:
           return acts.fromText;
-        default:
-          return console.error('not implemented');
       }
     },
     fnGetTo: function(acts) {
-      switch (acts.activityTypeID) {
-        case 1:
-        case 2:
-          return console.error('not implemented');
+      switch (acts.typeID) {
         case 3:
           return this.fnGetUser(acts.toID);
         case 4:
         case 5:
           return acts.toText;
-        case 6:
+        default:
           return "";
-        default:
-          return console.error('not implemented');
       }
     },
-    fnGetSubject: function(acts) {
-      var text;
+    fnMapDamageRecord: function(a, typeTitle) {
+      return Em.Object.create({
+        iD: a.iD,
+        amount: a.amount,
+        docType: typeTitle,
+        subject: a.subject,
+        body: a.body,
+        docs: a.docs,
+        typeID: a.typeID,
+        userID: a.userID,
+        userName: this.fnGetUser(a.userID),
+        entryDate: a.entryDate
+      });
+    },
+    fnMapRefundRecord: function(a) {
+      return Em.Object.create({
+        iD: a.iD,
+        amount: a.amount,
+        date: a.date,
+        body: a.body,
+        docs: a.docs,
+        typeID: a.typeID,
+        userID: a.userID,
+        userName: this.fnGetUser(a.userID),
+        entryDate: a.entryDate
+      });
+    },
+    fnMapActivitiesRecord: function(acts, type) {
+      var from, subject;
 
-      text = acts.activityTypeID === 6 ? acts.body : acts.subject;
-      if (text.length > 25) {
-        return text.slice(0, 25) + " [...]";
-      } else {
-        return text;
-      }
-    },
-    fnMapFinancesRecord: function(finRec) {
-      switch (finRec.financesTypeID) {
-        case 1:
-        case 2:
-          return this.finDamageTbl.push(this.fnMapDamageRecord(finRec, this.TypesKasko));
-        case 3:
-        case 4:
-          return this.finDamageTbl.push(this.fnMapDamageRecord(finRec, this.TypesCA));
-        default:
-          if (finRec.financesTypeID === 5) {
-            return this.finInsurerTbl.push(this.fnMapRefundRecord(finRec));
-          } else {
-            return this.finOtherPartyTbl.push(this.fnMapRefundRecord(finRec));
-          }
-      }
-    },
-    fnMapDamageRecord: function(f, arrTypes) {
-      return Em.Object.create({
-        iD: f.iD,
-        amount: f.amount,
-        docType: (f.financesTypeID === arrTypes[0].iD ? arrTypes[0].name : arrTypes[1].name),
-        purpose: f.purpose,
-        docs: f.docs,
-        financesTypeID: f.financesTypeID,
-        userID: f.userID,
-        userName: this.fnGetUser(f.userID),
-        entryDate: f.entryDate
-      });
-    },
-    fnMapRefundRecord: function(f) {
-      return Em.Object.create({
-        iD: f.iD,
-        amount: f.amount,
-        date: f.date,
-        note: f.note,
-        docs: f.docs,
-        financesTypeID: f.financesTypeID,
-        userID: f.userID,
-        userName: this.fnGetUser(f.userID),
-        entryDate: f.entryDate
-      });
-    },
-    fnMapActivitiesRecord: function(acts) {
+      subject = acts.typeID === 6 ? acts.body : acts.subject;
+      from = this.fnGetFrom(acts);
       return Em.Object.create({
         iD: acts.iD,
         claimID: acts.claimID,
-        activityTypeID: acts.activityTypeID,
+        typeID: acts.typeID,
         body: acts.body,
-        dueDate: acts.dueDate,
+        date: acts.date,
         entryDate: acts.entryDate,
-        from: this.fnGetFrom(acts),
-        subject: this.fnGetSubject(acts),
+        from: from,
+        fromOnlyTbl: type.isFinances ? (type.typeTitle ? type.typeTitle : type.title) : from,
+        subject: subject,
+        amount: acts.amount,
+        infoOnlyTbl: type.isFinances ? (subject ? subject + ", " : '') + acts.amount + " Lt" : (subject.length > 25 ? subject.slice(0, 25) + " [...]" : subject),
         userID: acts.userID,
         userName: this.fnGetUser(acts.userID),
-        icon: 'img18-' + this.fnGetIcon(acts.activityTypeID),
+        icon: type.icon ? type.icon : '',
         to: this.fnGetTo(acts),
         docs: acts.docs,
         toID: acts.toID,
@@ -413,48 +389,9 @@
         toText: acts.toText
       });
     },
-    cmdActivities: [
-      {
-        icon: "img28-tasks",
-        tmp: "tmpAction_task",
-        title: "Užduotis",
-        activityTypeID: 3
-      }, {
-        icon: "img28-phone",
-        tmp: "tmpAction_phone",
-        title: "Pokalbis telefonu",
-        activityTypeID: 4
-      }, {
-        icon: "img28-meeting",
-        tmp: "tmpAction_meeting",
-        title: "Susitikimas",
-        activityTypeID: 5
-      }, {
-        icon: "img28-note",
-        tmp: "tmpAction_note",
-        title: "Užrašas",
-        activityTypeID: 6
-      }
-    ],
-    cmdFinances: {
-      addDamage: {
-        tmp: "tmpAddDamage",
-        title: "Žalos suma",
-        txt: "Įvesti žalos sumą"
-      },
-      addBenefit: {
-        tmp: "tmpAddInsuranceBenefit",
-        title: "Draudimo išmoka",
-        txt: "Įvesti draudimo išmoką",
-        financesTypeID: 5
-      },
-      addCompensation: {
-        tmp: "tmpAddCompensation"
-      }
-    },
     actViewZone: "#actionsEnterOfClaimReg",
     frm: "#contentOfClaimReg",
-    activityTypeID: "",
+    typeID: "",
     goToOtherView: function(e) {
       var p;
 
@@ -475,7 +412,7 @@
         }
       }
       if (p) {
-        ACTIVITYVIEW = this.newActionView.create(p);
+        ACTIVITYVIEW = this.actionView.create(p);
       } else {
         ACTIVITYVIEW = this.mainView.create({
           controller: this
@@ -549,12 +486,14 @@
           Fields: ["ClaimID"],
           Data: [ClaimID]
         };
-        if (context.activityTypeID) {
-          addData.Fields.push("ActivityTypeID", "FromID");
-          addData.Data.push(context.activityTypeID, oDATA.GET("userData").emData[0].userID);
-        } else if (context.financesTypeID) {
-          addData.Fields.push("FinancesTypeID");
-          addData.Data.push(context.financesTypeID);
+        if (context.isFinances) {
+          if (context.tmp.slice(0, 12) !== "tmpAddDamage") {
+            addData.Fields.push("TypeID");
+            addData.Data.push(context.typeID);
+          }
+        } else {
+          addData.Fields.push("TypeID", "FromID");
+          addData.Data.push(context.typeID, oDATA.GET("userData").emData[0].userID);
         }
       }
       DataToSave = oCONTROLS.ValidateForm(form, addData);
@@ -566,11 +505,7 @@
       }
       if (DataToSave) {
         CallBackAfter = function(Row) {
-          if (context.activityTypeID) {
-            me.setActivitiesTable();
-          } else {
-            me.setFinancesTables();
-          }
+          me.setActivitiesTables();
           if (execOnSuccess) {
             return execOnSuccess(Row, form);
           } else {
@@ -596,36 +531,43 @@
       addBenefit: {},
       addCompensation: {},
       init: function() {
-        var claimTypeID, cmdFinances, comp, ctrl;
+        var claimTypeID, compName, compTxt, ctrl, fnGetProperties, tmpName, types;
 
         this._super();
         ctrl = App.tabClaimsRegulationController;
         claimTypeID = ctrl.claim.claimTypeID;
-        cmdFinances = ctrl.cmdFinances;
-        this.addDamage = $.extend({}, cmdFinances.addDamage, {
-          tmp: cmdFinances.addDamage.tmp + (claimTypeID === 1 ? "KASKO" : "CA")
-        });
-        this.addBenefit = $.extend({}, cmdFinances.addBenefit);
-        this.addBenefit.title += " (" + this.controller.claim.insPolicy.insurerName + ")";
-        comp = claimTypeID === 1 ? {
-          title: "Kaltininko kompensacija",
-          txt: "Įvesti kaltininko kompensaciją",
-          financesTypeID: 7
-        } : {
-          title: "Kompensacija nukentėjusiam",
-          txt: "Įvesti kompensaciją nukentėjusiam",
-          financesTypeID: 6
+        types = ctrl.activityTypes;
+        fnGetProperties = function(propName, propFilter) {
+          var props;
+
+          props = types.findProperty(propName, propFilter);
+          if (!props.title) {
+            props.title = props.typeTitle;
+          }
+          return $.parseJSON(JSON.stringify(props));
         };
-        return this.addCompensation = $.extend({}, cmdFinances.addCompensation, comp);
+        tmpName = claimTypeID === 1 ? "tmpAddDamageKASKO" : "tmpAddDamageCA";
+        this.addDamage = $.extend({
+          txt: "Įvesti žalos sumą"
+        }, fnGetProperties("tmp", tmpName));
+        this.addBenefit = $.extend({
+          txt: "Įvesti draudimo išmoką"
+        }, fnGetProperties("tmp", "tmpAddInsuranceBenefit"));
+        this.addBenefit.title += " (" + this.controller.claim.insPolicy.insurerName + ")";
+        compName = claimTypeID === 1 ? "finances_compensationFrom" : "finances_compensationTo";
+        compTxt = claimTypeID === 1 ? "Įvesti kaltininko kompensaciją" : "Įvesti kompensaciją nukentėjusiam";
+        return this.addCompensation = $.extend({
+          txt: compTxt
+        }, fnGetProperties("name", compName));
       },
       controller: App.tabClaimsRegulationController,
       templateName: 'tmpActionMain'
     }),
-    newActionView: Em.View.extend({
+    actionView: Em.View.extend({
       isNew: true,
       deleteButton: false,
       init: function() {
-        var ctrl, prop, _ref;
+        var ctrl, prop;
 
         this._super();
         if (!this.tmp) {
@@ -633,42 +575,10 @@
             isNew: false
           };
           ctrl = App.tabClaimsRegulationController;
-          if (this.activityTypeID) {
-            $.extend(prop, ctrl.cmdActivities.findProperty("activityTypeID", this.activityTypeID));
-          } else {
-            switch (this.financesTypeID) {
-              case 1:
-              case 2:
-              case 3:
-              case 4:
-                $.extend(prop, ctrl.cmdFinances.addDamage);
-                if ((_ref = this.financesTypeID) === 1 || _ref === 2) {
-                  prop.tmp += "KASKO";
-                } else {
-                  prop.tmp += "CA";
-                }
-                break;
-              case 5:
-                $.extend(prop, ctrl.cmdFinances.addBenefit);
-                break;
-              case 6:
-              case 7:
-                $.extend(prop, ctrl.cmdFinances.addCompensation);
-                if (this.financesTypeID === 6) {
-                  $.extend(prop, {
-                    title: "Kompensacija nukentėjusiam"
-                  });
-                } else {
-                  $.extend(prop, {
-                    title: "Kaltininko kompensacija"
-                  });
-                }
-                break;
-              default:
-                console.error('no tmp for' + this.financesTypeID);
-            }
-          }
-          $.extend(this, prop);
+          $.extend(this, prop, $.parseJSON(JSON.stringify(ctrl.activityTypes.findProperty("typeID", this.typeID))));
+        }
+        if (!this.title) {
+          this.title = this.typeTitle;
         }
         return this.set("childView", Em.View.extend({
           templateName: this.tmp
@@ -682,13 +592,13 @@
         claim = this.claim;
         me = this;
         if (this.isNew) {
-          switch (this.activityTypeID) {
+          switch (this.typeID) {
             case 3:
             case 4:
             case 5:
               divExt = frm.find("div.row").find("div.ExtendIt:first");
               user = oDATA.GET("userData").emData[0];
-              if (this.activityTypeID === 3) {
+              if (this.typeID === 3) {
                 divExt.data("ctrl").Value = user.userID;
               } else {
                 Em.run.next({
@@ -804,7 +714,7 @@
         ACTIVITYVIEW.remove();
         ACTIVITYVIEW.destroy();
       }
-      this.controller.setActivitiesTable().setFinancesTables();
+      this.controller.setActivitiesTables();
       return Em.run.next(this, function() {
         return this.controller.setSteps();
       });
@@ -881,7 +791,7 @@
       this.setDocs(this.relationTbl, this.activityID);
       ctrl = App.tabClaimsRegulationController;
       if (this.relationTbl === "tblDocsInActivity") {
-        return ctrl.setActivitiesTable({
+        return ctrl.setActivitiesTables({
           iD: this.activityID,
           docNo: this.docs.length
         });
@@ -963,6 +873,7 @@
       }).map(function(o) {
         return o.docID;
       });
+      this.set("noAccidentDocs", (docsInAccident.length === 0 ? true : false));
       return function(d) {
         var file;
 

@@ -94,13 +94,38 @@ jQuery(function ($) {
 	$.fn.extend({
 		tblSortable: function (options) {
 			var defaults = { cols: [], controller: null, sortedCol: 1 }
-			var opt = $.extend(defaults, options);
-			return this.each(function () {
+			var opt = $.extend(defaults, options), table=this;
+			return table.each(function () {
+				// var span='<span class="ui-icon ui-icon-carat-2-n-s ui-tblHead-icon"></span>',newClass,n="ui-icon-carat-1-n",s="ui-icon-carat-1-s",ns="ui-icon-carat-2-n-s",base="ui-icon ui-tblHead-icon";
+				
+				// $(this).find('th').addClass("clickable").append(span)
+					// .end().on("click","th", function(e){
+						// //alert($(this).text()+" "+$(this).index());
+						// var t=$(this); thisSpan=t.find("span"); thisClass=thisSpan.attr("class");
+						// if (thisClass.indexOf(ns)>-1){newClass=n;}	//Nerūšiuota	
+						// else if (thisClass.indexOf(n)>-1){newClass=s;}//desc
+						// else if (thisClass.indexOf(s)>-1){newClass=n;}//asc
+						// else  throw new Error("noClass");
+						// thisSpan.attr("class",newClass+" "+base);
+						// t.siblings().find("span").attr("class",ns+" "+base);
+						
+						// var c=App[opt.controller];							
+						// if (newClass===n){c.set("sortAscending", true);}else{c.set("sortAscending", false);}
+						// c.set("sortProperties",[opt.cols[index]]);
+						// c.set("content",c.get("arrangedContent"));
+						// if (opt.refreshView&&!e.isTrigger) { opt.refreshView.call(c);}//kai su funkcija pats saves nepaleis, turinys turi but jau išrusiuotas pries tai (!e.isTrigger||e.isOk)
+					// });
+				// if (index===opt.sortedCol){$(this).trigger("click"); }
+				// $(this).on("click","th", function(e){
+					// alert($(this).text()+" "+$(this).index());
+				// });
+				
 				$(this).find('th').each(function(index){
 					if (opt.cols[index]){
 						$(this).addClass("clickable").on("click",function(e){
-							var $e=(e.target.tagName.toUpperCase()==="TH")?$(e.target ):$(e.target ).closest("th"), classes=$e.find("span").attr("class"),newClass,n="ui-icon-carat-1-n",s="ui-icon-carat-1-s",ns="ui-icon-carat-2-n-s"							
-							if (classes.indexOf(ns)>-1){newClass=s;}	//Nerūšiuota	
+							table.spinner();
+							var $e=(e.target.tagName.toUpperCase()==="TH")?$(e.target ):$(e.target ).closest("th"), classes=$e.find("span").attr("class"),newClass,n="ui-icon-carat-1-n",s="ui-icon-carat-1-s",ns="ui-icon-carat-2-n-s";				
+							if (classes.indexOf(ns)>-1){newClass=n;}	//Nerūšiuota	
 							else if (classes.indexOf(n)>-1){newClass=s;}//desc
 							else if (classes.indexOf(s)>-1){newClass=n;}//asc
 							else  throw new Error("no needed class found");
@@ -110,13 +135,16 @@ jQuery(function ($) {
 							$e.find("span").toggleClass(ns+" "+newClass);
 							
 							var c=App[opt.controller];							
-							if (newClass===s){c.set("sortAscending", true);}else{c.set("sortAscending", false);}
+							if (newClass===n){c.set("sortAscending", true);}else{c.set("sortAscending", false);}
 							c.set("sortProperties",[opt.cols[index]]);
 							c.set("content",c.get("arrangedContent"));
+							if (opt.refreshView&&!e.isTrigger) { opt.refreshView.call(c);}//kai su funkcija pats saves nepaleis, turinys turi but jau išrusiuotas pries tai (!e.isTrigger||e.isOk)
+							table.spinner('remove');
 						}).append('<span class="ui-icon ui-icon-carat-2-n-s ui-tblHead-icon"></span>');
-						if (index===opt.sortedCol){$(this).trigger("click"); }
+						if (index===opt.sortedCol){$(this).trigger("click"); }//{type:"click",isOk:true}
 					}
 				});
+				
 			});
 		}
 	});
@@ -179,17 +207,19 @@ var methods = {
                 }, methods.scroll);
 		$(window).resize(function(){
 			methods.unstick(options.element);
+			return false;
 			Em.run.next(methods,function(){this.scroll(options.element);});//call resize to remove add fix
 		}); 					
             });
         },
         scroll: function (event) {
-            //var node = event.data.selected;
-            var node = (event.originalEvent)?event.data.selected:event;//call from resize to remove resize bug
-            var o = node.data("stickyPanel.state").options//event.data.options;
-            var parentContainer = node.data("stickyPanel.state").parentContainer;
-            var parentHeight = parentContainer.height();
-            var nodeHeight = node.outerHeight(true);
+	//var node = event.data.selected;
+	var node = (event.originalEvent)?event.data.selected:event;//call from resize to remove resize bug
+	var o = node.data("stickyPanel.state").options//event.data.options;
+	var parentContainer = node.data("stickyPanel.state").parentContainer;
+	var parentHeight = parentContainer.height();
+	var nodeHeight = node.outerHeight(true);
+	if (nodeHeight+50>parentHeight){return false;}
             var scrollTop = o.parentSelector ? parentContainer.scrollTop() : $(document).scrollTop();
             var docHeight = o.parentSelector ? parentContainer.height() : $(document).height();
             var HeightDiff = o.parentSelector ? parentHeight : (docHeight - parentHeight);
@@ -366,3 +396,19 @@ jQuery.loadScript = function (url, arg1, arg2) {
 		};
 	};
 };
+// jQuery.download = function(url, data, method){
+	// //url and data options required
+	// if( url && data ){ 
+		// //data can be string of parameters or array/object
+		// data = typeof data == 'string' ? data : jQuery.param(data);
+		// //split params into form inputs
+		// var inputs = '';
+		// jQuery.each(data.split('&'), function(){ 
+			// var pair = this.split('=');
+			// inputs+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />'; 
+		// });
+		// //send request
+		// jQuery('<form action="'+ url +'" method="'+ (method||'post') +'">'+inputs+'</form>')
+		// .appendTo('body').submit().remove();
+	// };
+// };

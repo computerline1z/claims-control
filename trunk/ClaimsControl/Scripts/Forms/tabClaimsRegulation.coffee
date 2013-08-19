@@ -6,6 +6,13 @@
 	# )
 ACTIVITYVIEW={};DOCSVIEW={}
 App.tabClaimsRegulationController = Em.ArrayController.create(
+	init: -> 
+		@_super(); me=@
+		oDATA.execWhenLoaded(["proc_Activities","tblActivityTypes","tblUsers"], ()->
+			actTypes=oDATA.GET("tblActivityTypes").emData.map((t)->t.typeID=t.iD; delete t.iD; return t;)
+			me.set("activities",oDATA.GET("proc_Activities").emData).set("activityTypes",actTypes).set("users",oDATA.GET("tblUsers").emData)
+			me.set("ativitiesNotFin",actTypes.filter((a)->not a.isFinances))
+		)
 	stepsCont1: ['<a href="#">Parenkite ir siųskite</a><div>arba</div><a href="#">Užregistruokite</a>','<a href="#">Patvirtinti, kad visa informacija yra pateikta</a>','<a href="#">Patvirtinti #### Lt kaip galutinę žalos sumą</a>','<a href="#">Patvirtinti #### Lt kaip galutinę išmokos sumą</a>','<a href="#">Uždaryti bylą</a>']
 	stepsCont2: ['Draudikui pranešta ####','Visa informacija pateikta:</br>####</br><a href="#">Atšaukti</a>','Patvirtinta galutinė žalos suma: #### Lt</br><a href="#">Atšaukti</a>','Patvirtinta galutinė išmokos suma: #### Lt</br><a href="#">Atšaukti</a>','Byla uždaryta <a href="#"></br>Atidaryti</a>']
 	stepsConfirm: ['','<p>Įveskite paskutinio dokumento pateikimo datą:</p><input class="date" type="text" value="####"><button class="btn btn-small">Patvirtinti</button>','<p>Galutinė žalos dydžio suma - #### Lt.</p><button class="btn btn-small">Patvirtinti</button>','<p>Galutinė išmokos dydžio suma - #### Lt</p><button class="btn btn-small">Patvirtinti</button>','']
@@ -108,115 +115,91 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 	# finDamageChanged: (()->
 		# alert("activitiesTblChanged")
 	# ).observes('activitiesTbl.@each')
-	setActivitiesTable: (newDocNo)-> #newDocNo:{ID:??,docNo:??}
-		#alert("setting activity table")
+	setActivitiesTables: (newDocNo)-> #newDocNo:{ID:??,docNo:??}
+		@set("finDamageTbl",[]).set("finInsurerTbl",[]).set("finOtherPartyTbl",[])
 		claimID=@claim.iD; console.log("Showing all activities Claim iD: "+claimID)
-		activities=oDATA.GET("proc_Activities").emData
+		activities=@activities# oDATA.GET("proc_Activities").emData
+		activityTypes=@activityTypes #oDATA.GET("tblActivityTypes").emData
 		if newDocNo then activities.findProperty("iD",newDocNo.iD).set("docs",("("+newDocNo.docNo+")"))
 		activities=activities.filter((item)->item.claimID==claimID);
-		@.set("users",oDATA.GET("tblUsers").emData);#console.log(item.claimID);console.log(claimID);console.log(item.claimID==claimID)
-		activitiesTbl=activities.map(@fnMapActivitiesRecord,@)
-		#App.actionViewController.set("activitiesTbl",activitiesTbl)
-		@set("activitiesTbl",activitiesTbl)
-	setFinancesTables: (newDocNo)-> #newDocNo:{ID:??,docNo:??}
-		claimID=@claim.iD; console.log("Setting finances table")
-		finances=oDATA.GET("proc_Finances").emData
-		if newDocNo then finances.findProperty("iD",newDocNo.iD).set("docs",("("+newDocNo.docNo+")"))
-		finances=finances.filter((item)->item.claimID==claimID)
-		finTypes=oDATA.GET("tblFinTypes").emData; @TypesKasko=finTypes.slice(0,2); @TypesCA=finTypes.slice(2,4);
-		@set('finDamageTbl',[]).set('finInsurerTbl',[]).set('finOtherPartyTbl',[]) #Nunulinam pries dedami naujus
-		finances.forEach(@fnMapFinancesRecord,@) #mapping to appropriate table 
-	users: null, TypesKasko: null, TypesCA: null
+		me=@;activitiesTbl=[];#finIDs=[]; activityTypes.forEach((item) -> if item.isFinances then finIDs.push(item.iD))
+		activities.forEach((item) ->
+			type=activityTypes.findProperty("typeID",item.typeID)
+			activitiesTbl.push(me.fnMapActivitiesRecord(item,type))
+			if type.isFinances #item.typeID in finIDs 
+				switch type.tmp
+					when "tmpAddDamageCA","tmpAddDamageKASKO" then me.finDamageTbl.addObject(me.fnMapDamageRecord(item,type.typeTitle))
+					when "tmpAddInsuranceBenefit" then me.finInsurerTbl.addObject(me.fnMapRefundRecord(item))
+					when "tmpAddCompensation" then me.finOtherPartyTbl.addObject(me.fnMapRefundRecord(item))
+					else console.error('checkTmp in tblActivities')
+		)
+		me.set("activitiesTbl",activitiesTbl)
+	users: null#, TypesKasko: null, TypesCA: null
 	fnGetUser:(userID) ->
 		u=@users.find((user)->user.iD==userID); u.firstName+" "+u.surname
-	fnGetIcon:(activityID)->
-		switch activityID
-			when 1 then 'sent_mail'
-			when 2 then 'recieved_mail'
-			when 3 then 'tasks'
-			when 4 then 'phone'
-			when 5 then 'meeting'
-			when 6 then 'note'
 	fnGetFrom:(acts)->
-		switch acts.activityTypeID
-			when 1,2 then console.error('not implemented')#1-sendEmail, 2-addEmail
+		switch acts.typeID
+			#when 1,2 then console.error('not implemented')#1-sendEmail, 2-addEmail
 			when 3,6 then @fnGetUser(acts.fromID) #3-task 6-note
 			when 4,5 then acts.fromText #, 4-phone, 5-meeting
-			else console.error('not implemented')
 	fnGetTo:(acts)->
-		switch acts.activityTypeID
-			when 1,2 then console.error('not implemented')#1-sendEmail, 2-addEmail
+		switch acts.typeID
+			#when 1,2 then console.error('not implemented')#1-sendEmail, 2-addEmail
 			when 3 then @fnGetUser(acts.toID) #3-task
 			when 4,5 then acts.toText #4-phone, 5-meeting
-			when 6 then "" #6-note
-			else console.error('not implemented')	
-	fnGetSubject:(acts)->
-		text=if acts.activityTypeID==6 then acts.body else acts.subject
-		if(text.length>25) then text.slice(0,25)+" [...]" else text
-	fnMapFinancesRecord: (finRec)->
-		switch finRec.financesTypeID
-			when 1,2 then @finDamageTbl.push(@fnMapDamageRecord(finRec,@TypesKasko))
-			when 3,4 then @finDamageTbl.push(@fnMapDamageRecord(finRec,@TypesCA))
-			else #5,6,7
-				if finRec.financesTypeID==5 then @finInsurerTbl.push(@fnMapRefundRecord(finRec))#5
-				else @finOtherPartyTbl.push(@fnMapRefundRecord(finRec))#6,7
-	fnMapDamageRecord: (f,arrTypes)->
+			#when 6 then "" #6-note
+			else ""	
+	fnMapDamageRecord: (a,typeTitle)->
 		Em.Object.create(
-			iD:f.iD
-			amount:f.amount
-			docType:(if f.financesTypeID==arrTypes[0].iD then arrTypes[0].name else arrTypes[1].name)
-			purpose:f.purpose
-			docs:f.docs
-			financesTypeID:f.financesTypeID
-			userID:f.userID
-			userName:@fnGetUser(f.userID)
-			entryDate:f.entryDate			
+			iD:a.iD
+			amount:a.amount
+			docType:typeTitle
+			subject:a.subject
+			body:a.body
+			docs:a.docs
+			typeID:a.typeID
+			userID:a.userID
+			userName:@fnGetUser(a.userID)
+			entryDate:a.entryDate			
 		)
-	fnMapRefundRecord: (f)->
+	fnMapRefundRecord: (a)->
 		Em.Object.create(
-			iD:f.iD
-			amount:f.amount
-			date:f.date
-			note:f.note#purpose nėra kaip pas fnMapDamageRecord
-			docs:f.docs
-			financesTypeID:f.financesTypeID
-			userID:f.userID
-			userName:@fnGetUser(f.userID)
-			entryDate:f.entryDate
+			iD:a.iD
+			amount:a.amount
+			date:a.date
+			body:a.body#purpose nėra kaip pas fnMapDamageRecord
+			docs:a.docs
+			typeID:a.typeID
+			userID:a.userID
+			userName:@fnGetUser(a.userID)
+			entryDate:a.entryDate
 		)
-	fnMapActivitiesRecord: (acts)->
+	fnMapActivitiesRecord: (acts,type)->
+		subject=if acts.typeID==6 then acts.body else acts.subject#notes=6
+		from=@fnGetFrom(acts)
 		Em.Object.create(	
 			iD:acts.iD
 			claimID:acts.claimID
-			activityTypeID:acts.activityTypeID
+			typeID:acts.typeID
 			body:acts.body
-			dueDate:acts.dueDate
+			date:acts.date
 			entryDate:acts.entryDate
-			from:@fnGetFrom(acts)
-			subject:@fnGetSubject(acts)
+			from:from
+			fromOnlyTbl:if type.isFinances then (if type.typeTitle then type.typeTitle else type.title) else from
+			subject:subject
+			amount:acts.amount
+			infoOnlyTbl:if type.isFinances then (if subject then subject+", " else '')+acts.amount+" Lt" else (if(subject.length>25) then subject.slice(0,25)+" [...]" else subject)#Tik bendrai lentelei
 			userID:acts.userID,
 			userName:@fnGetUser(acts.userID)
-			icon:'img18-'+@fnGetIcon(acts.activityTypeID)
+			icon:if type.icon then type.icon else ''
 			to:@fnGetTo(acts)
 			docs:acts.docs
 			toID:acts.toID#reikalingi rodant naujus recordus formoj
 			fromText:acts.fromText
 			toText:acts.toText
 		)
-	cmdActivities: [
-		# {icon:"img28-sent_mail",tmp:"tmpAction_sendEmail",title:"Siųsti el. laišką",activityTypeID:1}
-		# {icon:"img28-recieved_mail",tmp:"tmpAction_addEmail",title:"Įkelti el. laišką",activityTypeID:2}
-		{icon:"img28-tasks",tmp:"tmpAction_task",title:"Užduotis",activityTypeID:3}
-		{icon:"img28-phone",tmp:"tmpAction_phone",title:"Pokalbis telefonu",activityTypeID:4}
-		{icon:"img28-meeting",tmp:"tmpAction_meeting",title:"Susitikimas",activityTypeID:5}
-		{icon:"img28-note",tmp:"tmpAction_note",title:"Užrašas",activityTypeID:6}
-	]
-	cmdFinances:
-		addDamage:{tmp:"tmpAddDamage",title:"Žalos suma",txt:"Įvesti žalos sumą"}#Priklausomai nuo claimTypeID parenkam tmp(KASKO arba CA), financesTypeID pagal radio
-		addBenefit:{tmp:"tmpAddInsuranceBenefit",title:"Draudimo išmoka",txt:"Įvesti draudimo išmoką",financesTypeID:5}
-		addCompensation:{tmp:"tmpAddCompensation"}#Priklausomai nuo claim.claimTypeID keičiam title, txt, financesTypeID
 	actViewZone:"#actionsEnterOfClaimReg"
-	frm:"#contentOfClaimReg", activityTypeID:""
+	frm:"#contentOfClaimReg", typeID:""
 	goToOtherView: (e) -> 
 		p=$.extend(e.context,claim:@claim)
 		this.replaceActivityView(p)
@@ -225,7 +208,7 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 		actView = $(@actViewZone)	
 		if actView.length>0
 			if (actView.html().length>0) then ACTIVITYVIEW.remove(); actView.empty()	
-		if p then ACTIVITYVIEW=@newActionView.create(p)
+		if p then ACTIVITYVIEW=@actionView.create(p)
 		else ACTIVITYVIEW=@mainView.create(controller:@)#claim:@mainController.claim
 		ACTIVITYVIEW.appendTo(@actViewZone)
 		Em.run.next(scroll,->$(window).scrollTop(@);)
@@ -250,64 +233,54 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 		formOpts=form.data('ctrl'); me=@; addData={}; Action=if formOpts.NewRec then "Add" else "Edit"
 		if Action=="Add" #new record
 			ClaimID=@claim.iD; addData={Fields:["ClaimID"],Data:[ClaimID]} # me.mainController->me
-			if context.activityTypeID #Activities
-				addData.Fields.push("ActivityTypeID","FromID");addData.Data.push(context.activityTypeID,oDATA.GET("userData").emData[0].userID) #userID- nes gali būt reikalingas formuojant from
-			else if context.financesTypeID #Finances finTypeID užsideda iš Radio pas tmpAddDamageKASKO ir tmpAddDamageCA
-				addData.Fields.push("FinancesTypeID");addData.Data.push(context.financesTypeID)
+			if context.isFinances  #Finances finTypeID užsideda iš Radio pas tmpAddDamageKASKO ir tmpAddDamageCA
+				if context.tmp.slice(0,12)!="tmpAddDamage" then addData.Fields.push("TypeID");addData.Data.push(context.typeID)
+			else 
+				addData.Fields.push("TypeID","FromID");addData.Data.push(context.typeID,oDATA.GET("userData").emData[0].userID) #userID- nes gali būt reikalingas formuojant from
 		DataToSave=oCONTROLS.ValidateForm(form,addData)
 		if not DataToSave and e.isTrigger then oCONTROLS.dialog.Alert( title:'Veiksmo išsaugojimas',msg:'Užpildykite pažymėtus laukus..')
 		if DataToSave
 			CallBackAfter=(Row)->
-					if (context.activityTypeID) then me.setActivitiesTable() #galim ir fnMapActivitiesRecord(Row) nes grazina naują record'ą
-					else me.setFinancesTables() #fnMapFinancesRecord(Row) negalim, nes ten jau ikisa priklausomai nuo rekordo i atitinkama lentele
+					me.setActivitiesTables() #galim ir fnMapActivitiesRecord(Row) nes grazina naują record'ą
 					if execOnSuccess then execOnSuccess(Row,form) else me.cancelForm();
 			SERVER.update2(Action:Action,DataToSave:DataToSave,Ctrl:form,source:formOpts.Source,CallBackAfter:CallBackAfter)
-
 	cancelForm: () ->
 		@replaceActivityView(); $("div.validity-tooltip").remove(); @
 	mainView: Em.View.extend(
-		#duomenys imami iš kontrolerio App.tabClaimsRegulationController
-		#taip pat iš view'o imami šie:
-		# - claim 
-		# - addDamage:{tmp:"tmpAddDamage",title:"Žalos suma",txt:"Įvesti žalos sumą"}#Priklausomai nuo claimTypeID parenkam tmp -(KASKO arba CA), financesTypeID pagal radio
-		# - addBenefit:{tmp:"tmpAddInsuranceBenefit",title:"Draudimo išmoka",txt:"Įvesti draudimo išmoką",financesTypeID:5}
-		# - addCompensation:{tmp:"tmpAddCompensation",financesTypeID:5}#Priklausomai nuo claim.claimTypeID keičiam title, txt, financesTypeID
 		addDamage:{}, addBenefit:{}, addCompensation:{}
 		init: ->#čia sudedamas kontekstas akcijom viewe
-			@_super(); ctrl=App.tabClaimsRegulationController; claimTypeID=ctrl.claim.claimTypeID; cmdFinances=ctrl.cmdFinances
-			@addDamage=$.extend({},cmdFinances.addDamage,tmp:(cmdFinances.addDamage.tmp+(if claimTypeID==1 then "KASKO" else "CA")))
-			@addBenefit=$.extend({},cmdFinances.addBenefit); @addBenefit.title+=" ("+@controller.claim.insPolicy.insurerName+")"
-			comp=if claimTypeID==1 then title:"Kaltininko kompensacija",txt:"Įvesti kaltininko kompensaciją",financesTypeID:7 else title:"Kompensacija nukentėjusiam",txt:"Įvesti kompensaciją nukentėjusiam",financesTypeID:6
-			@addCompensation=$.extend({},cmdFinances.addCompensation,comp)
-			#@.set("controller",ctrl)#čia nemato kontrollerio, o jo reikia view'e
+			@_super(); ctrl=App.tabClaimsRegulationController; claimTypeID=ctrl.claim.claimTypeID; types=ctrl.activityTypes
+			#cmdFinances=ctrl.cmdFinances
+			fnGetProperties=(propName,propFilter)->
+				props=types.findProperty(propName,propFilter); #props.typeiD=props.iD;		
+				if not props.title then props.title=props.typeTitle
+				$.parseJSON(JSON.stringify(props))
+			tmpName=if claimTypeID==1 then "tmpAddDamageKASKO" else "tmpAddDamageCA"
+			@addDamage=$.extend({txt:"Įvesti žalos sumą"}, fnGetProperties("tmp",tmpName))#,tmp:"tmpAddDamage"+(if claimTypeID==1 then "KASKO" else "CA")
+			@addBenefit=$.extend({txt:"Įvesti draudimo išmoką"}, fnGetProperties("tmp","tmpAddInsuranceBenefit")); @addBenefit.title+=" ("+@controller.claim.insPolicy.insurerName+")"
+			compName=if claimTypeID==1 then "finances_compensationFrom" else "finances_compensationTo" #Jei Kasko
+			compTxt=if claimTypeID==1 then "Įvesti kaltininko kompensaciją" else "Įvesti kompensaciją nukentėjusiam"
+			@addCompensation=$.extend({txt:compTxt},fnGetProperties("name",compName))#; @addCompensation.title=@addCompensation.typeTitle
 		controller: App.tabClaimsRegulationController
 		templateName: 'tmpActionMain'
 	)		
-	newActionView: Em.View.extend(
+	actionView: Em.View.extend(
 		#cia savo kontrollerio nesimato, matosi tik pats view'as kaip view
 		isNew:true, deleteButton: false
 		init: -> 
 			@_super();
 			if not @tmp #edit record
 				prop={isNew:false}; ctrl=App.tabClaimsRegulationController
-				if @activityTypeID then $.extend(prop,ctrl.cmdActivities.findProperty("activityTypeID",@activityTypeID))
-				else
-					switch @financesTypeID
-						when 1,2,3,4 then ($.extend(prop,ctrl.cmdFinances.addDamage); if @financesTypeID in [1,2] then prop.tmp+="KASKO" else prop.tmp+="CA")
-						when 5 then $.extend(prop,ctrl.cmdFinances.addBenefit);
-						when 6,7
-							$.extend(prop,ctrl.cmdFinances.addCompensation);
-							if @financesTypeID==6 then $.extend(prop,title:"Kompensacija nukentėjusiam") else $.extend(prop,title:"Kaltininko kompensacija")
-						else console.error('no tmp for'+@financesTypeID)
-				$.extend(@,prop)	
+				$.extend(@, prop, $.parseJSON(JSON.stringify(ctrl.activityTypes.findProperty("typeID", this.typeID))))
+			if not @title then @title=@typeTitle
 			@set("childView", Em.View.extend(templateName: @tmp))
 		didInsertElement: ()->
 			@_super(); frm=$(@frm); claim=@claim; me=@
 			if @isNew #New record
-				switch @activityTypeID
+				switch @typeID
 					when 3,4,5 
 						divExt=frm.find("div.row").find("div.ExtendIt:first"); user=oDATA.GET("userData").emData[0]
-						if @activityTypeID==3 then divExt.data("ctrl").Value=user.userID #Task
+						if @typeID==3 then divExt.data("ctrl").Value=user.userID #Task
 						else Em.run.next({divExt:divExt,user:user}, ()-> @divExt.find("input").val(@user.userName))
 					else console.log("loaded view")			
 			else #Edit record
@@ -315,7 +288,6 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 					@NewRec=0;@id=iD #@-> frm.data("ctrl")
 				).call frm.data("ctrl"), @iD
 				@.set("deleteButton",true)
-				#frm.data("ctrl").NewRec=0 
 			oCONTROLS.UpdatableForm(frm:@frm,btnSaveToDisable:frm.find("button.btnSave"))
 
 			if (not @isNew)# skriopke rodom tik redagavimui
@@ -370,10 +342,10 @@ App.TabClaimsRegulationView = Ember.View.extend(App.HidePreviousWindow,
 	previuosWindow: '#divClaimsList'
 	thisWindow: '#divClaimRegulation'
 	init: -> 
-		@_super(); 
+		@_super();
 		if not $.isEmptyObject(ACTIVITYVIEW) #make sure nothing left there
 			ACTIVITYVIEW.remove(); ACTIVITYVIEW.destroy()
-		@controller.setActivitiesTable().setFinancesTables(); #alert("setting table")
+		@controller.setActivitiesTables()#.setFinancesTables(); #alert("setting table")
 		Em.run.next(@,->@controller.setSteps();)#have to set steps on the end as it uses numbers from setActivitiesTable().setFinancesTables()
 	templateName: 'tmpClaimRegulation'
 	didInsertElement: ()->
@@ -418,7 +390,7 @@ App.claimDocController = Em.ResourceController.create(
 	refreshDocs: ->
 		@setDocs(@relationTbl,@activityID)
 		ctrl=App.tabClaimsRegulationController
-		if @relationTbl=="tblDocsInActivity" then ctrl.setActivitiesTable(iD:@activityID,docNo:@docs.length) #updating oDATA and tables with new No
+		if @relationTbl=="tblDocsInActivity" then ctrl.setActivitiesTables(iD:@activityID,docNo:@docs.length) #updating oDATA and tables with new No
 		else ctrl.setFinancesTables(iD:@activityID,docNo:@docs.length)
 	setDocs: (relationTbl,activityID) ->
 		@relationTbl=relationTbl; @activityID=activityID
@@ -445,6 +417,7 @@ App.claimDocController = Em.ResourceController.create(
 		fnGetDocType = (typeID)-> docTypes.find((type)->type.iD==typeID).name
 		docsPath=oDATA.GET("userData").emData[0].docsPath; url="Uploads/"+docsPath
 		docsInAccident=oDATA.GET(relationTbl).emData.filter((o)-> o.activityID==activityID).map((o)->o.docID);
+		@set("noAccidentDocs",(if docsInAccident.length==0 then true else false))
 		(d)->
 			file="/"+d.iD+"."+d.fileType
 			Em.Object.create(				

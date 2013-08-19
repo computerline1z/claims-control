@@ -55,6 +55,13 @@ namespace CC.Classes {
 				//return DateTime.Now.AddHours(addHours);//pridedam valandas jai mūsų serve nustatyta GMT laikas
 			}
 		}
+		public static Int32 GetUserLanguageID() {
+			Int32 LanguageID;
+			using (dbDataContext db = new dbDataContext(conString)) {
+				LanguageID = (from aa in db.tblUsers where aa.ID == UserData.UserID select aa.LanguageID).Single();
+			}
+			return LanguageID;
+		}
 		public static string GetStringDate(DateTime date) {
 			return date.ToShortDateString();
 		}
@@ -103,6 +110,9 @@ namespace CC.Classes {
 		public static string DocsPath {
 			get { CheckIt(); return (string)HttpContext.Current.Session["DocsPath"]; }
 			set { HttpContext.Current.Session["DocsPath"] = value; }
+		}
+		public static string GetFullReportsPath {
+			get { CheckIt(); return HttpContext.Current.Server.MapPath(@"~//Uploads//" + UserData.DocsPath + "//Reports"); }
 		}
 		//public static bool PersistentCookie {
 		//   get { CheckIt(); return (bool)HttpContext.Current.Session["PersistentCookie"]; }

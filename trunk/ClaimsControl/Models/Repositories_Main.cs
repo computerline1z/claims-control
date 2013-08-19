@@ -31,10 +31,10 @@ namespace CC.Models {
 				Vehicles = null;
 			}
 			else {
-				NewRec = 0; 
+				NewRec = 0;
 				Vehicles = AccRep.Get_Vehicles(Accident.ID);
 			}
-			
+
 			//var s = AccRep.Get_tblAccident_Types();????????
 			//AccTypes = s.ToSelectListItem(1, i => i.ID, i => i.Name, i => i.ID.ToString());
 		}
@@ -44,11 +44,11 @@ namespace CC.Models {
 		public int NewRec { get; set; }
 
 		public IQueryable<AccidentVehicles> Vehicles { get; set; }
-	
-							//v.ID,
-							//v.Plate,
-							//v.tblVehicleMake.Name,
-							//v.Model
+
+		//v.ID,
+		//v.Plate,
+		//v.tblVehicleMake.Name,
+		//v.Model
 
 		//public IEnumerable<SelectListItem> AccTypes { get; set; }
 		//public IEnumerable<SelectListItem> Drivers { get; set; }
@@ -124,7 +124,7 @@ namespace CC.Models {
 		public jsonArrays GetJSON_tblDocs() {
 			jsonArrays JSON = new jsonArrays();
 			JSON.Data = from d in dc.tblDocs
-							where d.IsDeleted == false && d.tblDocType.AccountID == UserData.AccountID || d.tblDocType.AccountID==0
+							where d.IsDeleted == false && d.tblDocType.AccountID == UserData.AccountID || d.tblDocType.AccountID == 0
 							select new object[] {
             d.ID,//0
             d.DocName,//1
@@ -174,7 +174,7 @@ namespace CC.Models {
 		}
 		public jsonArrays GetJSON_tblDocType() {//orderby d.DocGroupID reikalingas sukabinant su GetJSON_tblDocGroup
 			jsonArrays JSON = new jsonArrays();
-			JSON.Data = from d in dc.tblDocTypes orderby d.DocGroupID where d.IsDeleted == false && (d.AccountID == UserData.AccountID||d.AccountID == 0)
+			JSON.Data = from d in dc.tblDocTypes orderby d.DocGroupID where d.IsDeleted == false && (d.AccountID == UserData.AccountID || d.AccountID == 0)
 							select new object[] {
 							d.ID,//0
 							d.Name,//1
@@ -227,7 +227,7 @@ namespace CC.Models {
 			//var tblDocTypes = (from d in dc.tblDocTypes where d.IsDeleted == false && d.AccountID == UserData.AccountID select d.DocGroupID).ToArray();
 			//JSON.Data = from d in dc.tblDocGroups where d.IsDeleted == false && tblDocTypes.Contains(d.ID)
 			JSON.Data = from d in dc.tblDocGroups orderby d.ID where d.IsDeleted == false && (d.AccountID == UserData.AccountID || d.AccountID == 0) //Visiems vienodos grupės
-							  select new object[] {
+							select new object[] {
 								d.ID,//0
 								d.Name,//1
 								d.Ref//Naudojamas tik medžiui paišyt
@@ -430,7 +430,8 @@ namespace CC.Models {
 				d.DaysFrom,
 				d.DocNo,
 				d.Claims_TypeID,
-				d.DriverID
+				d.DriverID,
+				d.IsNotOurFault
 			};
 			object[] Cols ={//NotEditable=true // Unique=true// LenMax/LenEqual/LenMin:10
 				//Date,DateLess,DateNoLess,Time,String
@@ -453,6 +454,7 @@ namespace CC.Models {
 				new { FName = "DocNo"},//15
 				new { FName = "Claims_TypeID"},//15
 				new { FName = "DriverID"},//15
+				new { FName = "IsNotOurFault"}//15
 			}; JSON.Cols = Cols;
 			JSON.Config = new { Controler = "Accidents", tblUpdate = "" };
 			JSON.Grid = new {
@@ -474,7 +476,8 @@ namespace CC.Models {
 					new {sTitle="Žalos2"},//14//Claims_C2
 					new {sTitle="Praėjo dienų"},//14//Claims_C2
 					new {sTitle="Dokumentai"},//14//Claims_C2
-					new {sTitle="Žalų tipai"},//14//Claims_C2
+					new {sTitle="Žalų tipas"},//14//Claims_C2
+					new {bVisible=false},
 					new {bVisible=false}
 					//new {bSortable=false,fnRender=function(){return <span class='ui-icon ui-icon-mail-closed'></span><span class='ui-icon ui-icon-mail-closed'></span>;}} //"function(oObj){return oObj.aData[0];}"}
 				}
@@ -821,15 +824,15 @@ namespace CC.Models {
 
 		public tblAccident Get_tblAccident(int No) {
 			return (from d in dc.tblAccidents
-					  where d.No == No && d.IsDeleted == false && d.AccountID==UserData.AccountID
+					  where d.No == No && d.IsDeleted == false && d.AccountID == UserData.AccountID
 					  select d).SingleOrDefault() ?? null;
 		}
 		public IQueryable<AccidentVehicles> Get_Vehicles(int accidentID) {
-		return (from c in dc.tblClaims join v in dc.tblVehicles on c.VehicleID equals v.ID
-				  where c.AccidentID == accidentID && c.IsDeleted == false
+			return (from c in dc.tblClaims join v in dc.tblVehicles on c.VehicleID equals v.ID
+					  where c.AccidentID == accidentID && c.IsDeleted == false
 					  select new AccidentVehicles {
-							ID = v.ID,
-							Title = v.Plate + "," + v.tblVehicleMake.Name + "," + v.Model + " dokumentai"
+						  ID = v.ID,
+						  Title = v.Plate + "," + v.tblVehicleMake.Name + "," + v.Model + " dokumentai"
 					  });
 		}
 
@@ -1009,35 +1012,37 @@ namespace CC.Models {
 		public jsonArrays GetJSON_proc_Activities() {
 			jsonArrays JSON = new jsonArrays();
 			JSON.Data = from a in dc.proc_Activities(UserData.AccountID)
-				select new object[] {
+							select new object[] {
 				a.ID,//0
 				a.ClaimID,//1
-				a.ActivityTypeID,//2
+				a.TypeID,//2
 				a.FromText,//3
 				a.FromID,//4
 				a.ToText,//5
 				a.ToID,//6
 				a.Subject,//7
 				a.Body,//8
-				a.DueDate,//9
+				a.Date,//9
 				a.UserID,//10
 				a.EntryDate,//11
-				a.Docs
+				a.Amount,//12
+				a.Docs//13
 				};
 			object[] Cols ={
 				new { FName = "ID"},//0
 				new { FName = "ClaimID"},//1
-				new { FName = "ActivityTypeID"},//2
+				new { FName = "TypeID"},//2
 				new { FName = "FromText",Type="String"},//3 Value pagal nutylėjimą esamas useris
 				new { FName = "FromID", List=new{Source="tblUsers",iVal="iD",iText=new object[]{"firstName","surname"},ListType="List"}},//4
 				new { FName = "ToText",Type="String"},//5 
 				new { FName = "ToID", List=new{Source="tblUsers",iVal="iD",iText=new object[]{"firstName","surname"},ListType="List"}},//6
 				new { FName = "Subject",Type="String",Validity="require()"},//7
 				new { FName = "Body",Type="Textarea"},//8
-				new { FName = "DueDate",Default="Today",Type="DateMore", Validity="require().match('date')",Plugin = new {datepicker = new {minDate=0, maxDate="2y"}}},//9
+				new { FName = "Date",Default="Today",Type="Date", Validity="require().match('date')",Plugin = new {datepicker = new {minDate=0, maxDate="2y"}}},//9
 				new { FName = "UserID", Default="UserId"},//10
 				new { FName = "EntryDate", Default="Today"},//11
-				new { FName = "Docs"}//12
+				new { FName = "Amount",Type="Decimal", LenMax=15,Validity="require().match('number').greaterThanOrEqualTo(0)"},//12
+				new { FName = "Docs"}//13
 				}; JSON.Cols = Cols;
 			JSON.Config = new {
 				tblUpdate = "tblActivity", Msg = new { AddNew = "Naujos veiklos pridėjimas", Edit = "Veiklos redagavimas", Delete = "Ištrinti veiklą", GenName = "Veikla" }
@@ -1046,16 +1051,18 @@ namespace CC.Models {
 				aoColumns = new object[]{
 				new {bVisible=false},//0
 				new {bVisible=false},//1 ClaimID
-				new {bVisible=false},//2 ActivityTypeID
+				new {bVisible=false},//2 TypeID
 				new {sTitle="Kas"},//3 FromText
 				new {sTitle="Kas"},// FromID
 				new {sTitle="Su kuo"},//5 ToText
 				new {sTitle="Su kuo"},//6 ToID
 				new {sTitle="Tema"},//7 Subject
 				new {sTitle=""},//8 Body
-				new {sTitle="Kada"},//9 DueDate
+				new {sTitle="Kada"},//9 Date
 				new {sTitle=""},//10 UserID
 				new {sTitle=""},//11 EntryDate
+				new {sTitle="Suma"},//11 Amount
+				new {sTitle="Priedai"}//11 Docs
 				}
 			};
 			return JSON;
@@ -1107,24 +1114,42 @@ namespace CC.Models {
 			};
 			return JSON;
 		}
-		public jsonArrays GetJSON_tblFinTypes() {
+		//from c in dc.tblClaims join v in dc.tblVehicles on c.VehicleID equals v.ID
+		public jsonArrays GetJSON_tblActivityTypes() {
 			jsonArrays JSON = new jsonArrays();
-			JSON.Data = from a in dc.tblFinTypes
-				select new object[] {
+			JSON.Data = from a in dc.tblActivityTypes where a.ID>2
+							from wTitle in dc.fnWords(UserData.GetUserLanguageID(), "tblActivities").Where(w => w.KeyName == a.Tmp).DefaultIfEmpty()
+							from wTypeTitle in dc.fnWords(UserData.GetUserLanguageID(), "tblActivities").Where(w => w.KeyName == a.Name).DefaultIfEmpty()
+							//from w in this.dc.proc_Words(UserData.GetUserLanguageID(), "tblActivities").Select(w => w).ToList().Where(wd => wd.KeyName == a.Tmp).DefaultIfEmpty()
+							//from w in words.Where(wd => wd.KeyName==a.Tmp).DefaultIfEmpty()
+							//from w in words.Where(wd => a.Tmp.Contains(wd.KeyName)).DefaultIfEmpty()
+							//on a.Tmp equals w.KeyName
+							select new object[] {
 				a.ID,//0
-				a.Name//1
+				a.Name,//1
+				wTitle.Label,
+				wTypeTitle.Label,
+				a.Tmp,
+				a.Icon,
+				a.IsFinances,
+				a.Other
 				};
 			object[] Cols ={
 				new { FName = "ID"},//0
-				new { FName = "Name"}//1
+				new { FName = "Name"},//1
+				new { FName = "Title"},
+				new { FName = "TypeTitle"},
+				new { FName = "Tmp"},
+				new { FName = "Icon"},
+				new { FName = "IsFinances"},
+				new { FName = "Other"}
 				}; JSON.Cols = Cols;
 			JSON.Config = new {
-				tblUpdate = "tblFinances"//, Msg = new { AddNew = "Naujos veiklos pridėjimas", Edit = "Veiklos redagavimas", Delete = "Ištrinti veiklą", GenName = "Veikla" }
+				tblUpdate = ""//, Msg = new { AddNew = "Naujos veiklos pridėjimas", Edit = "Veiklos redagavimas", Delete = "Ištrinti veiklą", GenName = "Veikla" }
 			};
 			JSON.Grid = new {
 				aoColumns = new object[]{
-				new {bVisible=false},//0
-				new {sTitle="Pavadinimas"}//1 Amount
+				new {bVisible=false}//,//0
 				}
 			};
 			return JSON;
@@ -1133,9 +1158,9 @@ namespace CC.Models {
 		public jsonArrays GetJSON_tblDocsInActivity() {
 			jsonArrays JSON = new jsonArrays();
 
-						//JSON.Data = from d in dc.tblClaims join a in dc.tblAccidents on d.AccidentID equals a.ID
-						//   where d.IsDeleted == false && a.AccountID == UserData.AccountID
-						//   select new object[] {
+			//JSON.Data = from d in dc.tblClaims join a in dc.tblAccidents on d.AccidentID equals a.ID
+			//   where d.IsDeleted == false && a.AccountID == UserData.AccountID
+			//   select new object[] {
 
 			JSON.Data = from dIna in dc.tblDocsInActivities join a in dc.tblActivities on dIna.ActivityID equals a.ID
 							join d in dc.tblDocs on dIna.DocID equals d.ID
@@ -1158,28 +1183,51 @@ namespace CC.Models {
 			return JSON;
 		}
 
-		public jsonArrays GetJSON_tblDocsInFin() {
+		//public jsonArrays GetJSON_tblDocsInFin() {
+		//   jsonArrays JSON = new jsonArrays();
+		//   JSON.Data = from dInf in dc.tblDocsInFins join f in dc.tblFinances on dInf.ActivityID equals f.ID
+		//               join d in dc.tblDocs on dInf.DocID equals d.ID
+		//               join u in dc.tblUsers on d.UserID equals u.ID
+		//               where f.IsDeleted == false && d.IsDeleted == false && u.AccountID == UserData.AccountID
+		//               select new object[] {
+		//         dInf.ID,//0
+		//         dInf.ActivityID,//1
+		//         dInf.DocID//2
+		//      };
+		//   object[] Cols ={
+		//      new { FName = "ID"},//0
+		//      new { FName = "ActivityID"},//1
+		//      new { FName = "DocID"}//2
+		//      }; JSON.Cols = Cols;
+		//   JSON.Config = new {
+		//      tblUpdate = "tblDocsInActivity"
+		//   };
+		//   return JSON;
+		//}
+
+		public jsonArrays GetJSON_wReports() {
 			jsonArrays JSON = new jsonArrays();
-			JSON.Data = from dInf in dc.tblDocsInFins join f in dc.tblFinances on dInf.ActivityID equals f.ID
-							join d in dc.tblDocs on dInf.DocID equals d.ID
-							join u in dc.tblUsers on d.UserID equals u.ID
-							where f.IsDeleted == false && d.IsDeleted == false && u.AccountID == UserData.AccountID
-							select new object[] {
-					dInf.ID,//0
-					dInf.ActivityID,//1
-					dInf.DocID//2
-				};
-			object[] Cols ={
-				new { FName = "ID"},//0
-				new { FName = "ActivityID"},//1
-				new { FName = "DocID"}//2
-				}; JSON.Cols = Cols;
-			JSON.Config = new {
-				tblUpdate = "tblDocsInActivity"
-			};
+			//int objectID = (from r in dc.tblObjects_IDs where r.tblName == "Reports" select r.ID).Single();
+			//JSON.Data = from r in dc.tblWords where r.LanguageID == UserData.GetUserLanguageID() && r.ObjectID == objectID
+			//            select new object[] { r.ID,r.KeyName,r.Label };
+			JSON.Data = Get_Words("Reports",false);
+			object[] Cols = { new { FName = "ID" }, new { FName = "Name" }, new { FName = "Title" }}; JSON.Cols = Cols;
+			JSON.Config = new { tblUpdate = "" };
 			return JSON;
 		}
 
+		public object Get_Words(string ObjectName, bool withTip) {
+			int objectID = (from r in dc.tblObjects_IDs where r.tblName == ObjectName select r.ID).Single();
+			if (withTip) {
+				return from r in dc.tblWords where r.LanguageID == UserData.GetUserLanguageID() && r.ObjectID == objectID
+						 select new object[] { r.ID, r.KeyName, r.Label, r.Tip };
+			}
+			else {
+				return from r in dc.tblWords where r.LanguageID == UserData.GetUserLanguageID() && r.ObjectID == objectID
+						 select new object[] { r.ID, r.KeyName, r.Label };
+			}
+		}
+		//	{ FName = "ID" }, new { FName = "Name" }, new { FName = "Title" }, new { FName = "Tip" } 
 
 	}
 }

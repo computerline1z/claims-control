@@ -2,12 +2,10 @@
 	<div class="left big w45pr">
 		{{view App.SearchField controller="claimsController"}}
 	</div>
-	<div class="right big"><a  class="medium listUnderlineProperty" {{action "showNotDefinedEmails"  target="view"}}>Yra gautų el. laiškų kurie nepriskirti žaloms</a></div>
+	<div class="right big"><a  class="medium" {{action "showNotDefinedEmails"  target="view"}}>Yra gautų el. laiškų kurie nepriskirti žaloms</a></div>
 </div>
 {{#if App.claimsController.content.length}}
-	<div class="accidentMain-header">
-		Paskutinės žalos:
-	</div>
+	<h2 class="formTitle">Paskutinės žalos:</h2>
 	<div class="zebra-striped selectable tall">
 	{{#each "App.claimsController.content"}}
 		{{#if this.visible}}

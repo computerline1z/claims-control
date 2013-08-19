@@ -52,7 +52,10 @@ namespace CC.Models {
 				con.Open(); cmd.ExecuteNonQuery(); Int32 ID = Convert.ToInt32(IDout.Value);
 				JsonResp.ResponseMsg = new { ID = ID, Ext = ((Extout.Value != null) ? Convert.ToString(Extout.Value) : "") };
 			}
-			catch (SqlException ex) { JsonResp.ErrorMsg = ErrorHandler.GetAddNewMsg(Data, Fields, DataObject, ex); }
+			catch (SqlException ex) {
+				MyEventLog.AddException(string.Format("Exception:{0}\n\r Data:{1}\n\r Fields:{2}\n\r DataObject:{3}\n\r Ext:{4}\n\r", ex.Message, GetStringFromArrComma(Data), GetStringFromArrComma(Fields), DataObject,Ext), "AddNew Update", 10);  
+				JsonResp.ErrorMsg = ErrorHandler.GetAddNewMsg(Data, Fields, DataObject, ex); 
+			}
 			finally { con.Close(); }
 			return JsonResp;
 		}
@@ -79,7 +82,10 @@ namespace CC.Models {
 				con.Open(); cmd.ExecuteNonQuery();
 				if (Extout.Value != null) { JsonResp.ResponseMsg = new { Ext = ((Extout.Value != null) ? Convert.ToString(Extout.Value) : "") }; }
 			}
-			catch (SqlException ex) { JsonResp.ErrorMsg = ErrorHandler.GetEditMsg(id, Data, Fields, DataObject, ex); }
+			catch (SqlException ex) {
+				MyEventLog.AddException(string.Format("Exception:{0}\n\r id:{1}\n\r Data:{2}\n\r Fields:{3}\n\r DataObject:{4}\n\r Ext:{5}\n\r", ex.Message, id, GetStringFromArrComma(Data), GetStringFromArrComma(Fields), DataObject, Ext), "Edit Update", 10);  
+				JsonResp.ErrorMsg = ErrorHandler.GetEditMsg(id, Data, Fields, DataObject, ex); 
+			}
 			finally { con.Close(); }
 			return JsonResp;
 		}
@@ -109,7 +115,9 @@ namespace CC.Models {
 				con.Open(); cmd.ExecuteNonQuery(); { JsonResp.ResponseMsg = new { Ext = ((Extout.Value != null) ? Convert.ToString(Extout.Value) : "") }; }
 				//con.Open(); cmd.ExecuteNonQuery(); { JsonResp.ResponseMsg = new { SuccessMsg = ((SuccessMsg.Value != null) ? Convert.ToString(SuccessMsg.Value) : ""), Ext = ((Extout.Value != null) ? Convert.ToString(Extout.Value) : "") }; }
 			}
-			catch (Exception ex) { JsonResp.ErrorMsg = ex.Message; }
+			catch (Exception ex) { 
+				MyEventLog.AddException(string.Format("Exception:{0}\n\r id:{1}\n\r DataObject:{4}\n\r Ext:{5}\n\r", ex.Message, id, DataObject, Ext), "Delete Update", 10);  
+				JsonResp.ErrorMsg = ex.Message; }
 			finally { con.Close(); }
 			return JsonResp;
 		}
@@ -117,9 +125,10 @@ namespace CC.Models {
 		public jsonResponse updateRelations(Int32 id, string idField, string Field, string[] Data, string DataTable) {
 			jsonResponse JsonResp = new jsonResponse { ErrorMsg = "", ResponseMsg = "" };
 
-			DataTable relTbl = new DataTable("tblRelations");
-			relTbl.Columns.Add("ID", typeof(int));
-			Data.ForEach(d => relTbl.Rows.Add(d));
+			//DataTable relTbl = new DataTable("tblRelations");
+			//relTbl.Columns.Add("ID", typeof(int));
+			//Data.ForEach(d => relTbl.Rows.Add(d));
+			DataTable relTbl=Utils.convertToTbl(Data);
 
 			SqlConnection con = new SqlConnection(conStr);
 			SqlCommand cmd = new SqlCommand("proc_InsertRelations", con);
@@ -137,7 +146,10 @@ namespace CC.Models {
 			try {
 				con.Open(); cmd.ExecuteNonQuery(); { JsonResp.ResponseMsg = ""; }
 			}
-			catch (Exception ex) { JsonResp.ErrorMsg = ex.Message; }
+			catch (Exception ex) {
+				MyEventLog.AddException(string.Format("Exception:{0}\n\r idField:{1}\n\r Field:{2}\n\r Data:{3}\n\r DataObject:{4}\n\r Ext:{5}\n\r", ex.Message, idField, Field, DataTable), "updateRelations", 10);
+				JsonResp.ErrorMsg = ex.Message;
+			}
 			finally { con.Close(); }
 			return JsonResp;
 		}

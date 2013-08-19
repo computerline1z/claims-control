@@ -1,0 +1,20 @@
+﻿@*{{log this}}{{log this}}
+*@<div class="container">
+	<div class="left big"><h2 class="formTitle">Ataskaitos</h2></div>
+	<div class="right big w45pr" style="margin-top:40px;">
+		<label class='leftlabel'><span class='w50pr'>Pasirinkite ataskaitos tipą:</span><input id="reportType" type='text' 
+		data-ctrl='{"Source":"words_Reports","ListType":"List","iVal":"iD","iText":["name"],"Type":"List","Value":0}' class='w50pr ui-widget-content'/></label>
+	</div>
+</div>
+<hr/>
+<div class="container big">
+	{{#if report}}
+		<div class="row">
+			<h3 class="formSubTitle first col four" style="margin-top:8px;">{{report.title}}</h3>
+			<a class="col four tac"  style="margin-top:10px;" {{action changeVisibleCols}}>Pasirinkite ataskaitos stulpelius</a>
+			<div class="col four last" style="text-align:right;">Atidaryti su: <i class="img32-doc_pdf clickable" {{action openPdf}}></i><i class="img32-doc_xls  clickable" {{action openXls}}></i></div>
+		</div>
+	{{/if}}
+</div>
+<div id="reportsViewZone"></div>
+
