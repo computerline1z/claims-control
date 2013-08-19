@@ -821,20 +821,19 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 
 
 .ui-tabs .ui-tabs-nav li:hover, .ui-tabs .ui-tabs-nav li a:hover{
-//  background:whiteSmoke;
+  //  background:whiteSmoke;
   border-bottom: 1px solid @tabsBorder; //#ddd;
   padding-bottom:0px;
-//	color:#555555;
-   // width: 135px;
-   
-    // ĮDĖTA:
-    font-weight: bold;
-    //#gradient > .vertical-three-colors(#f9f6f7, #e9e7ea, 50%, #f9f6f7);
-    color: #000;
+  //	color:#555555;
+  // width: 135px;
+  // ĮDĖTA:
+  //font-weight: bold;
+  //#gradient > .vertical-three-colors(#f9f6f7, #e9e7ea, 50%, #f9f6f7);
+  color: #000;
 }
 
 
-.ui-tabs .ui-tabs-nav { margin: 0; padding: .2em .2em 0; border-bottom:1px solid @tabsBorder; /*#DDD;*/ /* ĮDĖTA: */ padding-left: 3%; }
+.ui-tabs .ui-tabs-nav { margin: 0; padding: .2em .2em 0; border-bottom:1px solid @tabsBorder; /*#DDD;*/ /* ĮDĖTA: */ padding-left: 3%; .border-radius(0) }
 .ui-tabs .ui-tabs-nav li {  text-decoration: none; list-style: none; float: left; position: relative; top: 1px; padding: 0px 0px 1px 0px; white-space: nowrap; background:none; border:0px; 
 
 }
@@ -872,7 +871,6 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 .ui-tabs .ui-tabs-nav li.ui-state-disabled a,
 .ui-tabs .ui-tabs-nav li.ui-state-processing a,
 .ui-tabs .ui-tabs-nav li.ui-tabs-active a {
-
   background: #ffffff;
   border: 1px solid #c1c1c1; //#ddd;
   border-bottom-color: #ffffff;
@@ -883,6 +881,11 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
     // ĮDĖTA:
     font-weight: bold;
     color: #000;
+
+  &:hover {
+    background: #fff;
+    border-bottom: 1px solid #fff;
+  }
 }
 
 
@@ -891,10 +894,24 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
   outline:none;
 }
 
-.ui-tabs .ui-tabs-nav li a { cursor: pointer; /*color:#0069D6;*/  background:none; font-weight:normal; margin-bottom:-1px;
-// ĮDĖTA:
-    //#gradient > .vertical-three-colors(#a59894, #a59894, 50%, #a59894);
+.ui-tabs .ui-tabs-nav li a {
+  cursor: pointer;
+  /*color:#0069D6;*/
+  background: #a59894;
+  border-color: darken(#a59894, 20%);
+  border-bottom-color: #c1c1c1;
+  font-weight:normal;
+  margin-bottom:-1px;
+  // ĮDĖTA:
+  //#gradient > .vertical-three-colors(#a59894, #a59894, 50%, #a59894);
 	color:#ffffff;
+
+  &:hover {
+    background: lighten(#c1c1c1, 20%);
+    border-color: #c1c1c1;
+  }
+
+
 } 
 .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; color:#89898a; background:none; font-weight:bold; margin-bottom:-1px;}
 /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */

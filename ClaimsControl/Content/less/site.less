@@ -179,6 +179,7 @@ div.newClaimContent {background-color: @systemYellow3; .clearfix();}
 
 .row .leftlabel button.drop-down.ui-button-icon-only {float:left;} //to keep in one line floats when row is used
 button.drop-down.ui-button-icon-only { 
+    padding: 0;
     margin:0 -2.2em!important;
     border-style: none!important; //solid solid solid none; iš inputo pasiima (kitaip kartais nepataiko ant inputo borderiu)
     background: url('images/DropDown-Arrow.png') no-repeat center !important;
@@ -269,7 +270,7 @@ ul.ulWhiteMenu li { margin-right: 5px; padding-right: 5px; border-bottom: 1px; }
 #tabAccidents, #tabClaims, #tabMap, #tabReports, #tabLists, #tabAdmin { overflow: hidden;width: 100%; }
 */
 /*-------------------------- Side Panel --------------------------*/
-#sidePanel {
+#sidePanel, #sidePanelCl {
     #font > .regular(@basefont, bold, @baseline, #3399cc);
    a { #font > .regular (@basefont, normal, @baseline, #EB5A44);
         text-decoration: underline;
@@ -278,7 +279,7 @@ ul.ulWhiteMenu li { margin-right: 5px; padding-right: 5px; border-bottom: 1px; }
         }
         &:selected {color: #65809d;}
     }
-    background:#FFEFED;
+    //background:#FFEFED;
 }
 .filtergroup { 
     width: 100%;
@@ -796,4 +797,14 @@ form input.searchField {
 		padding: 0;
 		margin: 0;
 	}
+}
+
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+/* OPTIMIZE INPUTS IN  UI DIALOG  */
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+
+.ui-dialog .input-around-text input {
+	height: 26px;
+	margin: 6px;
+	margin-top: 0;
 }
