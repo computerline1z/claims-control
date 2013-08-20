@@ -1,4 +1,4 @@
-﻿<div class="container pad14 clearfix">
+﻿<div class="container pad14 border-bot-lgray clearfix">
 
 	<div class="pull-left">
 		{{view App.SearchField controller="claimsController"}}
@@ -11,7 +11,7 @@
 </div><!-- container -->
 
 {{#if App.claimsController.content.length}}
-	<h2 class="formTitle">Paskutinės žalos:</h2>
+	<h2>Paskutinės žalos:</h2>
 	<div class="zebra-striped selectable tall">
 	{{#each "App.claimsController.content"}}
 		{{#if this.visible}}

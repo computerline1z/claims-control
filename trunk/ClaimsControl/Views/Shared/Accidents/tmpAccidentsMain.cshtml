@@ -6,7 +6,7 @@
 @*height:500px - be aukščio nusistato kiek reikia*@
 
 
-<div class="container pad14 clearfix">
+<div class="container pad14 border-bot-lgray clearfix">
 	<div class="pull-left">
 		{{view App.SearchField controller="accidentsController"}} @*context="accidents"*@
 	</div>
@@ -17,8 +17,7 @@
 {{log this}}
 {{log App.accidentsController.content.length}}
 {{#if App.accidentsController.content.length}}
-	<div class="accidentMain-header">
-		Paskutiniai įvykiai:
+	<h2>Paskutiniai įvykiai:</h2>
 	</div>
 	<div class="zebra-striped selectable tall" id="accidentsTable">
 	{{#each "App.accidentsController.content"}}@*{{#each person in people}}*@
