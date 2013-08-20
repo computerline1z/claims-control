@@ -69,11 +69,7 @@
 	.ui-corner-right { border-top-right-radius: 7px; border-bottom-right-radius: 7px; }
 }
  
-.header-nav {
-	//#gradient > .vertical(@systemGrey, darken(@systemGrey,20%));
-	 background-color: @systemGrey;
-	.box-shadow(0 2px 2px #999);
-}
+
 
 .header--sidebar {
 	box-shadow: 0 2px 3px #ddd;
@@ -111,26 +107,54 @@
 	background: #A59894;
 }
 
-#ulMainMenu { 
-	//padding: 0 3% 0 3%; 
-	position: relative;
-	list-style-type: none; 
-	//background-image: url('images/navi_bg.png'); 
-	//height: 37px; 
-	margin: 0 auto 4px 88px; 
-	
-    //li { padding-top:18px;float: left; border-right: 1px solid #3F3B3B; &:first-of-type { border-left: 1px solid #3F3B3B}
-    li { padding-top:18px;float: left;
-        a { padding-right: 15px; padding-left: 15px; display: inline; #font > .header-menu(12px, normal, 27px, #A59894);
-            &.selected { position: relative; /*font-size: 11pt; */text-decoration: none; padding-top: 6px; background-color: white; color: #505860; /*#676e75;*/  .border-radius(4px 4px 0 0 )}
-            &:hover {text-decoration: none;}
-            &.selected:after { content: ""; position: absolute; left: 0; right: 0; height: 22px; bottom: -22px; background: white; }
-        }
-    &:hover a.notactive { cursor: pointer; background-color: #3f3b3b;color:#ffffff; }
-    &:last-child, &:first-child { .border-image > .left }
-    }
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+/* TOP MENU */
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+
+.container--header {
+	clear: none;
+	max-width: none;
+	width: 980px;
+	margin: 0 auto;
 }
 
+.header-nav {
+	background-color: @systemGrey;
+	.box-shadow(0 2px 2px #999);
+	padding-top: 15px;
+	padding-bottom: 0;
+}
+
+#ulMainMenu { 
+	position: relative;
+	list-style-type: none;
+	margin: 0 auto 0 205px;
+
+    li {
+    	float: left;
+
+        a {
+        	display: block;
+        	padding: 5px 15px;
+        	text-decoration: none;
+			font-weight: bold;
+        	font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+			line-height: 20px;
+			color: #A59894;
+
+            &.selected {
+            	background: #fff;
+            	color: #505860;
+            	.border-radius(4px 4px 0 0 )
+            }
+
+            &.notactive:hover {
+            	color: #fff;
+            }
+        }
+    }
+}
+// TOP MENU end
 
 
 .container() {
@@ -146,12 +170,7 @@
 	
 	&.detached { margin-top: 16px; }
 	
-	a { border-bottom: 2px solid #d8e8f3; }
-}
-
-.container--header {
-	.container;
-    width: 826px;
+	/* a { border-bottom: 2px solid #d8e8f3; }*/
 }
 
 .container--well {

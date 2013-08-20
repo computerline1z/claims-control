@@ -166,50 +166,6 @@ button::-moz-focus-inner {
 }
 
 /* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
-/* TOP MENU (overwrite site_ua.less)  */
-/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
-
-.header-nav {
-	padding-top: 15px;
-	padding-bottom: 0;
-}
-
-#ulMainMenu li:first-of-type {
-	border-left: 0;
-}
-
-#ulMainMenu {
-	margin: 0 auto 0 205px;
-}
-
-#ulMainMenu li {
-	border-right: 0;
-	padding-top: 0;
-}
-
-#ulMainMenu li a, #ulMainMenu li a.selected {
-	display: block;
-	padding: 5px 15px;
-	text-decoration: none;
-	font-weight: bold;
-}
-
-#ulMainMenu li a.selected:after {
-	display: none;
-}
-
-.container--header {
-	clear: none;
-	max-width: none;
-	width: 980px;
-}
-
-#ulMainMenu li a {
-	font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-	line-height: 20px;
-}
-
-/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
 /* SIDE PANEL (overwrite site_ua.less)  */
 /* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
 
@@ -219,43 +175,50 @@ button::-moz-focus-inner {
 
 #tabAccidents .ui-button, .filtergroup.ui-buttonset .ui-button {
 	/* huge ie8 margin hack in ie_8_and_below.less */
+	position: relative;
 	background: #f5f4f3;
-	border: 1px solid #eae9e8;
+	border: 1px solid #e6e6e6;
 	color: #3f3b3b;
 	text-shadow: 0 1px 0 #fff;
 	padding: 1px 14px;
 	margin: 0;
 	margin-bottom: 6px;
+	overflow: hidden;
 	.box-shadow(none);
 	.border-radius(4px);
+	#gradient>.vertical(#f7f7f7, #ededed );
+	.box-shadow( 0 1px 0 0 rgba(0, 0, 0, 0.2) );
 
 	&:hover {
 		background: #EFDFDE;
-		border: 1px solid #F7B6AD;
-		color: darken(#f7b6ad, 20%)!important; // overwriting originals important
-		text-shadow: none;
+		border-color: #EFDFDE;
+		#gradient>.vertical( #f1e1df, #e6d6d4 );
 	}
-}
 
-#tabAccidents, .filtergroup.ui-buttonset  {
-
-	.ui-button.ui-state-active {
-		background-image: none;
+	&.ui-state-active {
+		top: 1px;
 		background: #eb5a44;
+		#gradient>.vertical( #eb5a44, #eb5a44 );
+		border-color: #da513c;
+		.box-shadow( 0 -1px 0 0 rgba(183, 63, 45, 1) );
 		color: #fff;
-		text-shadow: 0 -1px 0 darken(#eb5a44, 5%);
-		border: 1px solid #da513c;
-		border-bottom: 1px solid #eb5a44;
+		text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
 
 		&:hover {
-			background: lighten(#eb5a44, 5%);
-			border: 1px solid lighten(#da513c, 5%);
-			color: #fff!important;
+
+			&:before {
+				display: none;
+			}
 		}
 	}
 
-	.first, .first:hover, .ui-button.ui-state-active.first, .ui-button.ui-state-active.first:hover {
-		border-right: none;
+	.ui-button-text {
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		-khtml-user-select: none;
+		-moz-user-select: -moz-none;
+		-ms-user-select: none;
+		user-select: none;
 	}
 }
 
@@ -270,7 +233,6 @@ button::-moz-focus-inner {
 	.first {
 		margin-right: 1px;
 		.border-radius(4px 0 0 4px);
-		border-right: none;
 	}
 
 	.ui-button-text {
