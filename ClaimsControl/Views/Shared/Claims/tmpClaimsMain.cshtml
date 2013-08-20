@@ -1,9 +1,15 @@
-﻿<div class="container">
-	<div class="left big w45pr">
+﻿<div class="container pad14 clearfix">
+
+	<div class="pull-left">
 		{{view App.SearchField controller="claimsController"}}
 	</div>
-	<div class="right big"><a  class="medium" {{action "showNotDefinedEmails"  target="view"}}>Yra gautų el. laiškų kurie nepriskirti žaloms</a></div>
-</div>
+
+	<div class="pull-right">
+		<a class="medium" {{action "showNotDefinedEmails"  target="view"}}>Yra gautų el. laiškų kurie nepriskirti žaloms</a>
+	</div>
+
+</div><!-- container -->
+
 {{#if App.claimsController.content.length}}
 	<h2 class="formTitle">Paskutinės žalos:</h2>
 	<div class="zebra-striped selectable tall">
