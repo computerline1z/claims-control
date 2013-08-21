@@ -12,20 +12,7 @@
       var me;
 
       this._super();
-      me = this;
-      return oDATA.execWhenLoaded(["proc_Activities", "tblActivityTypes", "tblUsers"], function() {
-        var actTypes;
-
-        actTypes = oDATA.GET("tblActivityTypes").emData.map(function(t) {
-          t.typeID = t.iD;
-          delete t.iD;
-          return t;
-        });
-        me.set("activities", oDATA.GET("proc_Activities").emData).set("activityTypes", actTypes).set("users", oDATA.GET("tblUsers").emData);
-        return me.set("ativitiesNotFin", actTypes.filter(function(a) {
-          return !a.isFinances;
-        }));
-      });
+      return me = this;
     },
     stepsCont1: ['<a href="#">Parenkite ir siųskite</a><div>arba</div><a href="#">Užregistruokite</a>', '<a href="#">Patvirtinti, kad visa informacija yra pateikta</a>', '<a href="#">Patvirtinti #### Lt kaip galutinę žalos sumą</a>', '<a href="#">Patvirtinti #### Lt kaip galutinę išmokos sumą</a>', '<a href="#">Uždaryti bylą</a>'],
     stepsCont2: ['Draudikui pranešta ####', 'Visa informacija pateikta:</br>####</br><a href="#">Atšaukti</a>', 'Patvirtinta galutinė žalos suma: #### Lt</br><a href="#">Atšaukti</a>', 'Patvirtinta galutinė išmokos suma: #### Lt</br><a href="#">Atšaukti</a>', 'Byla uždaryta <a href="#"></br>Atidaryti</a>'],
@@ -395,6 +382,9 @@
     goToOtherView: function(e) {
       var p;
 
+      if (e.target.tagName.toUpperCase() !== 'A') {
+        $(e.target).closest('tr').addClass('selected').siblings().removeClass('selected');
+      }
       p = $.extend(e.context, {
         claim: this.claim
       });
@@ -563,26 +553,54 @@
       controller: App.tabClaimsRegulationController,
       templateName: 'tmpActionMain'
     }),
+    taskComplete: false,
+    actionViewContext: null,
+    fnTaskComplete: (function() {
+      var cnt, newVal, taskComplete;
+
+      taskComplete = this.get('taskComplete');
+      newVal = taskComplete ? 1 : 0;
+      cnt = this.actionViewContext;
+      this.activitiesTbl.findProperty('iD', cnt.iD).set('amount', newVal);
+      console.log('------------------------------------');
+      console.log('fnTaskComplete. newVal set: ' + newVal);
+      return console.log('------------------------------------');
+    }).observes("taskComplete"),
     actionView: Em.View.extend({
       isNew: true,
       deleteButton: false,
+      notEditable: true,
       init: function() {
-        var ctrl, prop;
+        var ctrl, prop, u;
 
         this._super();
+        ctrl = App.tabClaimsRegulationController;
         if (!this.tmp) {
           prop = {
             isNew: false
           };
-          ctrl = App.tabClaimsRegulationController;
           $.extend(this, prop, $.parseJSON(JSON.stringify(ctrl.activityTypes.findProperty("typeID", this.typeID))));
+          u = oDATA.GET("userData").emData[0];
+          this.set('thisUserID', u.userID);
+          if (u.userID === this.userID || ctrl.users.findProperty("iD", u.userID).isAdmin) {
+            this.set("notEditable", (this.isFinances ? false : true)).set("deleteButton", true);
+          }
+          if (this.name === 'activity_tasks') {
+            if (this.thisUserID !== this.userID && this.thisUserID !== this.toID) {
+              bla;
+            }
+            ctrl.taskComplete = (this.amount === 0 ? false : true);
+            console.log('init. taskComplete val: ' + ctrl.taskComplete);
+            console.log('init. cnt.amount: ' + this.amount);
+          }
         }
         if (!this.title) {
           this.title = this.typeTitle;
         }
-        return this.set("childView", Em.View.extend({
+        this.set("childView", Em.View.extend({
           templateName: this.tmp
         }));
+        return ctrl.set("actionViewContext", this);
       },
       didInsertElement: function() {
         var claim, divExt, frm, me, user;
@@ -617,12 +635,12 @@
             this.NewRec = 0;
             return this.id = iD;
           }).call(frm.data("ctrl"), this.iD);
-          this.set("deleteButton", true);
         }
         oCONTROLS.UpdatableForm({
-          frm: this.frm,
+          frm: this.frm
+        }, (this.notEditable ? false : {
           btnSaveToDisable: frm.find("button.btnSave")
-        });
+        }));
         if (!this.isNew) {
           return this.makeAttach(this, frm, claim);
         } else {

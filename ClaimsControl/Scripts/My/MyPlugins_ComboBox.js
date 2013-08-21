@@ -281,7 +281,6 @@
         }, input);
       }
       if (opt.ListType === "List") {
-        input.attr("readonly", true);
         return input.click(function() {
           if (input.autocomplete("widget").is(":visible")) {
             input.autocomplete("close");

@@ -662,7 +662,7 @@
     didInsertElement: function() {
       this._super();
       return Em.run.next(function() {
-         $("#sidePanel").closest("div.col2").stickyPanel();
+        $("#sidePanel").closest("div.col2").stickyPanel();
         $("#chkOpen").buttonset().on("click", function(e) {
           var chk, newVal;
 
@@ -686,7 +686,7 @@
     showAll: function() {
       var ctrl;
 
-      $("#chkOpen,#chkDocs").find("label").removeClass("ui-state-active").end().prev().removeAttr("checked");
+      $("#sidePanel").find("label.ui-state-active").removeClass("ui-state-active");
       $("#sidePanel").find("input:checkbox").removeAttr("checked").parent().next().next().find("span.ui-checkbox-icon").removeClass("ui-icon ui-icon-check").attr("aria-checked", "false");
       ctrl = App.accidentsController;
       ctrl.chkOpen = null;

@@ -413,9 +413,9 @@ App.SidePanelView = Em.View.extend(
 			)
 		)
 	showAll: ()->		
-		$("#chkOpen,#chkDocs").find("label").removeClass("ui-state-active").end().prev().removeAttr("checked")
+		$("#sidePanel").find("label.ui-state-active").removeClass("ui-state-active")
 		$("#sidePanel").find("input:checkbox").removeAttr("checked").parent().next().next().find("span.ui-checkbox-icon").removeClass("ui-icon ui-icon-check").attr("aria-checked","false")				
-		#App.accidentsController.filterwillChange()	
+
 		ctrl=App.accidentsController
 		ctrl.chkOpen=null; ctrl.chkDocs=null
 		ctrl.chkData=null; ctrl.chkClaim=null

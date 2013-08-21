@@ -198,7 +198,6 @@ _create: ->
 		, input
 	
 	if opt.ListType is "List"
-		input.attr "readonly", true
 		input.click ->
 			if input.autocomplete("widget").is(":visible")
 				input.autocomplete "close"
