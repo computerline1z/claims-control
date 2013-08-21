@@ -8,7 +8,11 @@
 		{{view App.DriverView}}
 	{{/each}}
 	</tbody></table>
-	<div class="right medium" data-ctrl='{"goTo":"allDrivers","source":"proc_Drivers","template":"tmp_Drivers","controller":"topNewController","emObject":"drivers","filterCols":["firstName","lastName","phone"]}'><a class="medium" {{action toListAll}} >Peržiūrėti pilną sąrašą</a><button class="btn" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button></div>
+	<div class="pull-right links-group pad14" data-ctrl='{"goTo":"allDrivers","source":"proc_Drivers","template":"tmp_Drivers","controller":"topNewController","emObject":"drivers","filterCols":["firstName","lastName","phone"]}'>
+		<a class="medium" {{action toListAll}} >Peržiūrėti pilną sąrašą</a>
+		<button class="btn" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button>
+	</div>
+
 </div>
 </div>
 
@@ -21,21 +25,30 @@
 		{{view App.VehicleView}}
 	{{/each}}
 	</tbody></table>
-	<div class="right medium" data-ctrl='{"goTo":"allVehicles","source":"proc_Vehicles","template":"tmp_Vehicles","controller":"topNewController","emObject":"vehicles","filterCols":["model","plate","type","make"]}'><a class="medium" {{action toListAll}} >Peržiūrėti pilną sąrašą</a><button class="btn" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button></div>
+
+	<div class="pull-right links-group pad14" data-ctrl='{"goTo":"allVehicles","source":"proc_Vehicles","template":"tmp_Vehicles","controller":"topNewController","emObject":"vehicles","filterCols":["model","plate","type","make"]}'>
+		<a class="medium" {{action toListAll}} >Peržiūrėti pilną sąrašą</a>
+		<button class="btn" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button>
+	</div>
 </div>
 </div>
 
 <div class="custombackgroundList">
-<h3  class="tableTitle">Draudimo sutartys</h3>
-<div class="container" id="topNewInsPolicies">
-	<table class="zebra-striped">
-	<thead><tr><th>Draudimo rūšis</th><th>Draudimo kompanija</th><th>Poliso numeris</th><th>Pabaigos data</th><th>Draudėjas</th></tr></thead><tbody>
-	{{#each "App.topNewController.insPolicies"}}
-	{{#if this.iD}}
-		{{view App.InsPolicyView}}
-	{{/if}}
-	{{/each}}
-	</tbody></table>
-	<div class="right medium" data-ctrl='{"goTo":"allInsPolicies","source":"proc_InsPolicies","template":"tmp_InsPolicies","controller":"topNewController","emObject":"insPolicies","filterCols":["claimType","policyNumber","insuredName","insurerName"]}'><a class="medium" {{action toListAll}} >Peržiūrėti pilną sąrašą</a><button class="btn underlineProperty" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button></div>
-</div>
+	<h3  class="tableTitle">Draudimo sutartys</h3>
+	<div class="container" id="topNewInsPolicies">
+		<table class="zebra-striped">
+		<thead><tr><th>Draudimo rūšis</th><th>Draudimo kompanija</th><th>Poliso numeris</th><th>Pabaigos data</th><th>Draudėjas</th></tr></thead><tbody>
+		{{#each "App.topNewController.insPolicies"}}
+		{{#if this.iD}}
+			{{view App.InsPolicyView}}
+		{{/if}}
+		{{/each}}
+		</tbody></table>
+
+		<div class="pull-right links-group pad14" data-ctrl='{"goTo":"allInsPolicies","source":"proc_InsPolicies","template":"tmp_InsPolicies","controller":"topNewController","emObject":"insPolicies","filterCols":["claimType","policyNumber","insuredName","insurerName"]}'>
+			<a class="medium" {{action toListAll}} >Peržiūrėti pilną sąrašą</a>
+			<button class="btn underlineProperty" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button>
+		</div>
+
+	</div>
 </div>

@@ -12,7 +12,7 @@
 *@				<span><i class="img32-doc_{%=file.extension%}"></i></span></td>			
 		{% } %}
         <td class="name size" style="width:30%;">
-			<span>{%=file.name%} - {%=o.formatFileSize(file.size)%}</span><br/>
+			<span>{%=file.name%} - {%=o.formatFileSize(file.size)%}</span>
 			 {% if (file.paramName==="docs[]") { %}
 				<div class="ExtendIt"><input type="text" placeholder="Pasirinkite.." name="category[]" data-ctrl='{"ListType":"List","Source":"tblDocTypes","iVal":"iD","iText":["name"]}'></div>
 		  {% } else { %}
@@ -21,9 +21,9 @@
 		
 		</td>
         <td style="width:60%;">
-			Aprašymas:<br/>
-			<div style="margin:15px auto">
-				<textarea rows="1" style="width:100%;font-size:10px;" name="description[]"></textarea>
+			<span>Aprašymas</span>
+			<div>
+				<textarea rows="1" name="description[]"></textarea>
 			</div>	
 		</td>
 	    {% if (file.error) { %}
