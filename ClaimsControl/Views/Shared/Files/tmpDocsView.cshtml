@@ -34,37 +34,55 @@
 	</li>
 	{{/each}}
 {{else}}
+
 	{{#each controller.docs}}
-	<li class="docs" {{bindAttr data-doc-id="docID" }}>
+	<li class="docs relative" {{bindAttr data-doc-id="docID" }}>
 		<div class="tr">
-		<div class="td w40px" style="padding:5px;">
-				{{#if hasThumb}}
-					<img {{bindAttr src="urlThumb"}} alt="thumb"/>
-				{{else}}
-					<i {{bindAttr class="fileIcon" }} ></i>
-				{{/if}}
-		</div>
-		{{#if this.editMode}}
-				<div class="td w25pr ExtendIt" style="margin:0;padding:5px;">
-						<input class="docType" type="text" {{bindAttr value="docType"}}/><br/>
-						<a {{bindAttr href="urlDoc"}} target="_blank" >{{fileName}}</a>		
-				</div><div class="td" style="margin:0 2%;padding:5px;">
-						<input class="description" type="text" {{bindAttr value="description"}} style="width:100%"/></br><p style="color:Gray">{{docDetails}}</p>
-				</div><div class="td" style="padding:5px;">
-						<a  {{action cancelSaveDoc this target="App.editDocsController"}}>Atšaukti</a>
-						<button {{action SaveEditedDoc this target="App.editDocsController"}} class="btn small">Išsaugoti</button>
+			<div class="td img">
+					{{#if hasThumb}}
+						<img {{bindAttr src="urlThumb"}} alt="thumb"/>
+					{{else}}
+						<i {{bindAttr class="fileIcon" }} ></i>
+					{{/if}}
+			</div>
+
+			{{#if this.editMode}}
+
+				<div class="td w50pr pad-l70 ExtendIt">
+					<input class="docType" type="text" {{bindAttr value="docType"}}/><br/>
+					<a {{bindAttr href="urlDoc"}} target="_blank" >{{fileName}}</a>
 				</div>
-		{{else}}
-				<div class="td w25pr" style="padding:5px;">
-						{{docType}}<br/>
-						<a {{bindAttr href="urlDoc"}} target="_blank" >{{fileName}}</a>		
-				</div><div class="td" style="padding:5px;">
-						{{description}}</br><p style="color:Gray">{{docDetails}}</p>
-				</div><div class="td w25pr" style="padding:5px;">
-						<i class="img32-mono_delete clickable right" {{action deleteDoc this target="App.editDocsController"}}></i>
-						<i class="img32-mono_edit clickable right" {{action editDoc this target="App.editDocsController"}}></i>
+
+				<div class="td w48pr pad-r100 margin-l2pr">
+					<input class="description" type="text" {{bindAttr value="description"}} style="width:100%"/>
+					</br>
+					<p>{{docDetails}}</p>
 				</div>
-		{{/if}}
-		</div>
-	</li>{{/each}}
+
+				<div class="td block-buttons absolute-right">
+					<button {{action SaveEditedDoc this target="App.editDocsController"}} class="btn small">Išsaugoti</button>
+					<a {{action cancelSaveDoc this target="App.editDocsController"}}>Atšaukti</a>
+				</div>
+
+			{{else}}
+
+				<div class="td w50pr pad-l70">
+					{{docType}}<br/>
+					<a {{bindAttr href="urlDoc"}} target="_blank" >{{fileName}}</a>
+				</div>
+
+				<div class="td w50pr pad-r70">
+					{{description}}</br><p>{{docDetails}}</p>
+				</div>
+
+				<div class="td w64px absolute-right">
+					<i class="img32-mono_delete clickable right" {{action deleteDoc this target="App.editDocsController"}}></i>
+					<i class="img32-mono_edit clickable right" {{action editDoc this target="App.editDocsController"}}></i>
+				</div>
+
+			{{/if}}
+		</div><!-- tr -->
+	</li>
+	{{/each}}
+
 {{/if}}
