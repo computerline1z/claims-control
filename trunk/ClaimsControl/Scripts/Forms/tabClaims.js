@@ -4,8 +4,22 @@
   var panelFilterIsActive, textFilterIsActive;
 
   App.claimsStart = function() {
-    return oDATA.execWhenLoaded(["proc_Claims"], function() {
+    oDATA.execWhenLoaded(["proc_Claims"], function() {
       return App.claimsController.set("content", oDATA.GET("proc_Claims").emData);
+    });
+    return oDATA.execWhenLoaded(["proc_Activities", "tblActivityTypes", "tblUsers"], function() {
+      var actTypes, me;
+
+      actTypes = oDATA.GET("tblActivityTypes").emData.map(function(t) {
+        t.typeID = t.iD;
+        delete t.iD;
+        return t;
+      });
+      me = App.tabClaimsRegulationController;
+      me.set("activities", oDATA.GET("proc_Activities").emData).set("activityTypes", actTypes).set("users", oDATA.GET("tblUsers").emData);
+      return me.set("ativitiesNotFin", actTypes.filter(function(a) {
+        return !a.isFinances;
+      }));
     });
   };
 
@@ -266,6 +280,7 @@
     showAll: function() {
       var ctrl;
 
+      $("#sidePanelCl").find("input:checkbox").removeAttr("checked").parent().next().next().find("span.ui-checkbox-icon").removeClass("ui-icon ui-icon-check").attr("aria-checked", "false");
       $("#sidePanelCl").find("label.ui-state-active").removeClass("ui-state-active");
       ctrl = App.claimsController;
       ctrl.chkCriteria = null;

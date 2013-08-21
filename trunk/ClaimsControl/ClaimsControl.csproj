@@ -183,6 +183,7 @@
     <None Include="Content\less\tables.less" />
     <None Include="Content\less\site.less" />
     <Content Include="Content\images\claimsLogo.png" />
+    <Content Include="Content\images\favicon1.ico" />
     <Content Include="Content\images\icon-plus.png" />
     <Content Include="Content\images\icon-success.png" />
     <Content Include="Content\images\X_orange.png" />
@@ -405,7 +406,7 @@
     <Content Include="Views\Shared\Reports\rep_driversRate.cshtml" />
     <Content Include="Views\Shared\Reports\rep_claimsList.cshtml" />
     <Content Include="Views\Shared\Reports\tmpReportCols.cshtml" />
-    <None Include="Views\Shared\Reports\rep_insurerCompensations1.cshtml" />
+    <None Include="Views\Shared\Reports\rep_insurerCompensations.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Uploads\" />

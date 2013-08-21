@@ -1,18 +1,21 @@
 
 `var w=window, App=w.App, Em=w.Em, oGLOBAL=w.oGLOBAL, oDATA=w.oDATA, oCONTROLS=w.oCONTROLS, MY=w.MY`
-# App.claimsStart=()->
-	# oDATA.execWhenLoaded(["proc_Claims"], ()->
-		# App.claimsController.set("content",oDATA.GET("proc_Claims").emData)	
+# App.claimsRegulationStart=()-> visa tai vyksta tabClaims.coffee - nes jis issaukiamas po paspaudimo
+	# oDATA.execWhenLoaded(["proc_Activities","tblActivityTypes","tblUsers"], ()->
+		# actTypes=oDATA.GET("tblActivityTypes").emData.map((t)->t.typeID=t.iD; delete t.iD; return t;)
+		# me=App.tabClaimsRegulationController
+		# me.set("activities",oDATA.GET("proc_Activities").emData).set("activityTypes",actTypes).set("users",oDATA.GET("tblUsers").emData)
+		# me.set("ativitiesNotFin",actTypes.filter((a)->not a.isFinances))
 	# )
 ACTIVITYVIEW={};DOCSVIEW={}
 App.tabClaimsRegulationController = Em.ArrayController.create(
 	init: -> 
 		@_super(); me=@
-		oDATA.execWhenLoaded(["proc_Activities","tblActivityTypes","tblUsers"], ()->
-			actTypes=oDATA.GET("tblActivityTypes").emData.map((t)->t.typeID=t.iD; delete t.iD; return t;)
-			me.set("activities",oDATA.GET("proc_Activities").emData).set("activityTypes",actTypes).set("users",oDATA.GET("tblUsers").emData)
-			me.set("ativitiesNotFin",actTypes.filter((a)->not a.isFinances))
-		)
+		# oDATA.execWhenLoaded(["proc_Activities","tblActivityTypes","tblUsers"], ()->
+			# actTypes=oDATA.GET("tblActivityTypes").emData.map((t)->t.typeID=t.iD; delete t.iD; return t;)
+			# me.set("activities",oDATA.GET("proc_Activities").emData).set("activityTypes",actTypes).set("users",oDATA.GET("tblUsers").emData)
+			# me.set("ativitiesNotFin",actTypes.filter((a)->not a.isFinances))
+		# )
 	stepsCont1: ['<a href="#">Parenkite ir siųskite</a><div>arba</div><a href="#">Užregistruokite</a>','<a href="#">Patvirtinti, kad visa informacija yra pateikta</a>','<a href="#">Patvirtinti #### Lt kaip galutinę žalos sumą</a>','<a href="#">Patvirtinti #### Lt kaip galutinę išmokos sumą</a>','<a href="#">Uždaryti bylą</a>']
 	stepsCont2: ['Draudikui pranešta ####','Visa informacija pateikta:</br>####</br><a href="#">Atšaukti</a>','Patvirtinta galutinė žalos suma: #### Lt</br><a href="#">Atšaukti</a>','Patvirtinta galutinė išmokos suma: #### Lt</br><a href="#">Atšaukti</a>','Byla uždaryta <a href="#"></br>Atidaryti</a>']
 	stepsConfirm: ['','<p>Įveskite paskutinio dokumento pateikimo datą:</p><input class="date" type="text" value="####"><button class="btn btn-small">Patvirtinti</button>','<p>Galutinė žalos dydžio suma - #### Lt.</p><button class="btn btn-small">Patvirtinti</button>','<p>Galutinė išmokos dydžio suma - #### Lt</p><button class="btn btn-small">Patvirtinti</button>','']
@@ -201,6 +204,8 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 	actViewZone:"#actionsEnterOfClaimReg"
 	frm:"#contentOfClaimReg", typeID:""
 	goToOtherView: (e) -> 
+		if e.target.tagName.toUpperCase()!='A' #ne linkas o lentele
+			$(e.target).closest('tr').addClass('selected').siblings().removeClass('selected')
 		p=$.extend(e.context,claim:@claim)
 		this.replaceActivityView(p)
 	replaceActivityView:(p)->
@@ -264,16 +269,49 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 		controller: App.tabClaimsRegulationController
 		templateName: 'tmpActionMain'
 	)		
+	taskComplete:false,actionViewContext:null
+	fnTaskComplete:(()->
+		taskComplete=@get('taskComplete'); newVal=if taskComplete then 1 else 0
+		cnt=@actionViewContext; #cnt.set('amount',newVal)
+		@activitiesTbl.findProperty('iD',cnt.iD).set('amount',newVal)
+		
+		# if not cnt.chkTrigger # pasikeite ne dėl konteksto pasikeitimo, o del tikro click'o
+			# cnt.amount=if taskComplete then 1 else 0
+		# else cnt.chkTrigger=false#Jei buvo trigeris, nuresetinam, nes dabar gali būt tikras clickas
+		#form=$('#dialogContent';DataToSave=oCONTROLS.ValidateForm(form); #pars=e.view._parentView.pars;
+		#formOpts=form.data('ctrl');Action if formOpts.NewRec then "Add" else "Edit"
+		# if DataToSave
+			# DataToSave={"id":@claim.iD,"Data":[groupID,docTypeID,desc],"Fields":["groupID","docTypeID","description"],"DataTable":"tblClaims"}
+			# SERVER.update2(Action:'Action',DataToSave:DataToSave,Ctrl:form,source:formOpts.Source)
+		console.log('------------------------------------')
+		console.log('fnTaskComplete. newVal set: '+newVal)
+		console.log('------------------------------------')
+		#console.log('fnTaskComplete. cnt.amount: '+cnt.amount)
+	).observes("taskComplete")	
 	actionView: Em.View.extend(
 		#cia savo kontrollerio nesimato, matosi tik pats view'as kaip view
-		isNew:true, deleteButton: false
+		isNew:true, deleteButton: false, notEditable: true	
 		init: -> 
-			@_super();
+			@_super(); ctrl=App.tabClaimsRegulationController
 			if not @tmp #edit record
-				prop={isNew:false}; ctrl=App.tabClaimsRegulationController
+				prop={isNew:false}; 
 				$.extend(@, prop, $.parseJSON(JSON.stringify(ctrl.activityTypes.findProperty("typeID", this.typeID))))
+				u=oDATA.GET("userData").emData[0];@set('thisUserID',u.userID)#kas per vartotojas?
+				if u.userID==@userID or ctrl.users.findProperty("iD",u.userID).isAdmin#Jei čia jo dokumentas arba jis adminas
+					@set("notEditable",(if @isFinances then false else true)).set("deleteButton",true)
+				if @name=='activity_tasks'
+					if @thisUserID!=@userID and @thisUserID!=@toID #then $(frm).find('input:checkbox').attr('disabled',true) #Jeigu sis vartotojas nera kurejas ir nera vykdytojas, disablinam taskComplete checkboxa
+						bla
+					#ctrl=App.tabClaimsRegulationController
+					#ctrl.actionViewContext.chkTrigger=true
+					#ctrl.set("taskComplete",(if @amount==0 then false else true))
+					ctrl.taskComplete=(if @amount==0 then false else true)
+					console.log('init. taskComplete val: '+ctrl.taskComplete)
+					console.log('init. cnt.amount: '+@amount)
+
 			if not @title then @title=@typeTitle
 			@set("childView", Em.View.extend(templateName: @tmp))
+			ctrl.set("actionViewContext",@)
 		didInsertElement: ()->
 			@_super(); frm=$(@frm); claim=@claim; me=@
 			if @isNew #New record
@@ -287,9 +325,7 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 				( (iD)-> 
 					@NewRec=0;@id=iD #@-> frm.data("ctrl")
 				).call frm.data("ctrl"), @iD
-				@.set("deleteButton",true)
-			oCONTROLS.UpdatableForm(frm:@frm,btnSaveToDisable:frm.find("button.btnSave"))
-
+			oCONTROLS.UpdatableForm(frm:@frm,(if @notEditable then false else btnSaveToDisable:frm.find("button.btnSave")))
 			if (not @isNew)# skriopke rodom tik redagavimui
 				@makeAttach(@,frm,claim)
 			else
