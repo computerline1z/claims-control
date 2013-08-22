@@ -125,7 +125,7 @@ oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 		var MapHeight = $('#AccidentForm').outerHeight(false) - $('#divMapHead').outerHeight(false);
 		$('#divMap').height(MapHeight).width('100%');
 		oGLOBAL.AccidentForm = $("#AccidentForm").data("ctrl"); //NewRec id Lat Lng
-		$("#divSearchMap").outerHeight($("#divMapHead").height());
+		//$("#divSearchMap").outerHeight($("#divMapHead").height());
 		//oGLOBAL.mapFn.loadGoogleMapScript(oGLOBAL.mapFn.loadGMap);
 		oGLOBAL.mapFn.loadGMap();
 		if (!oGLOBAL.AccidentForm .NewRec){oGLOBAL.mapFn.fnSetAddress($('#txtPlace').html())};

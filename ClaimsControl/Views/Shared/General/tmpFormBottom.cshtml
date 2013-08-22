@@ -1,13 +1,13 @@
 ﻿<div class="frmbottom container">
 {{#if deleteButton}}
-	<div class="left mini"><button class="btn btn-small btn-small-delete"><i class="img32-bin" title="Ištrinti" {{action "deleteForm" this}}></i></button></div>
+	<div class="pull-left"><button class="btn btn-small btn-small-delete"><i class="img32-bin" title="Ištrinti" {{action "deleteForm" this}}></i></button></div>
 {{/if}}
 {{#if notEditable}}
 	<div class="pull-right links-group">
 		<a title="Išeiti iš formos" style="margin:10px;" {{action "cancelForm"}}>Išeiti</a>
 	</div>
 {{else}}
-	<div class="right">
+	<div class="pull-right links-group">
 		<button title="Išsaugoti pakeitimus" class="btnSave btn" {{action "saveForm"}}>IŠSAUGOTI</button>
 		<a title="Atšaukti pakeitimus" {{action "cancelForm"}}>Atšaukti</a>
 	</div>
