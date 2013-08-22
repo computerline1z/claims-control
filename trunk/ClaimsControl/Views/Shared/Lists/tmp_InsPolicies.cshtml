@@ -9,8 +9,8 @@ data-ctrl='{"NewRec":1,"Source":"proc_InsPolicies","tblUpdate":"tblInsPolicies"}
 <!--    <div class='ExtendIt leftBlock' data-ctrl='{"Field":"TypeID","classes":{"span":"w30pr","input":"w70pr"}}'></div>
  -->   
    
-   <div id="tabs-policy" style="padding:1em 0;">
-		<div class="container" style="border-bottom:1px solid #e6e6e6; padding:8px">
+   <div id="tabs-policy" style="padding:14px;padding-bottom:0;">
+		<div class="container pad-b10 mar-b20 border-bot-gray">
 			<h5>Draudimo poliso duomenys</h5>
          <div class='left w45pr'>
             <div class='ExtendIt leftBlock' data-ctrl='{"Field":"ClaimTypeID","classes":{"span":"w30pr","input":"w70pr"},"labelType":"Left","List":{"excludeFromList":[0,6]}}'></div>
@@ -22,14 +22,22 @@ data-ctrl='{"NewRec":1,"Source":"proc_InsPolicies","tblUpdate":"tblInsPolicies"}
          </div>
 		</div>
 
-		<div class="container text" style="border-bottom:1px solid #e6e6e6; padding:8px">
+		<div class="container pad-b10 mar-b20 border-bot-gray text">
 			<h5>Žalų reguliavimo nustatymai</h5>
-			<span>Pateikti visus žalos dokumentus draudikui per</span><span class='ExtendIt leftBlock inputInLine w5em input-around-text' data-ctrl='{"Field":"Warn_InfoAfterAcc"}'></span><span>d. nuo įvykio datos.</span></br>
-			<span>Pradėti rodyti įspėjimą likus</span><span class='ExtendIt leftBlock inputInLine w5em input-around-text' data-ctrl='{"Field":"Warn_PaymentAfterPapers"}'></span><span>d. iki žalos dokumentų draudikui pateikimo termino pabaigos.</span></br>
-			<span>Draudimo išmoka turi būti sumokėta per</span><span class='ExtendIt leftBlock inputInLine w5em input-around-text' data-ctrl='{"Field":"Warn_SystemOfPayTerm"}'></span><span>d. nuo dokumentų pateikimo datos.</span></br>
+			<div class="pad-vertical-8px lheight26">
+				<span>Pateikti visus žalos dokumentus draudikui per</span><span class='ExtendIt leftBlock inputInLine short-child-input' data-ctrl='{"Field":"Warn_InfoAfterAcc"}'></span><span>d. nuo įvykio datos.</span>
+			</div>
+
+			<div class="pad-vertical-8px lheight26">
+				<span>Pradėti rodyti įspėjimą likus</span><span class='ExtendIt leftBlock inputInLine short-child-input' data-ctrl='{"Field":"Warn_PaymentAfterPapers"}'></span><span>d. iki žalos dokumentų draudikui pateikimo termino pabaigos.</span>
+			</div>
+
+			<div class="pad-vertical-8px lheight26">
+				<span>Draudimo išmoka turi būti sumokėta per</span><span class='ExtendIt leftBlock inputInLine short-child-input' data-ctrl='{"Field":"Warn_SystemOfPayTerm"}'></span><span>d. nuo dokumentų pateikimo datos.</span>
+			</div>
 		</div>
 
-		<div class="container" style="border-bottom:1px solid #e6e6e6; padding:8px">
+		<div class="container pad-b10 mar-b20 border-bot-gray">
 			<h5>Pranešimo draudimo kompanijai apie žalą nustatymai</h5>
 <!--          <center> </center>"classes":{"span":"w30pr","input":"w70pr"},
  -->     <div class='ExtendIt leftBlock' data-ctrl='{"Field":"MailsAddresses","labelType":"Top","textAreaRows":2,"classes":{"input":"row"}}'></div>

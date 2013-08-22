@@ -81,12 +81,17 @@ else {<h2 style="margin: 15px; display: inline-block">Įvykis Nr. @Model.Acciden
 			</div>
 		</div>
 
-			<div id='divSearchMap' class="box" style="@{if (Model.NewRec != 1) {<text>display:none;</text>}}background-color: #8598ad; padding:3%;position:absolute;z-index:10;width:100%;top:0">									 
-				<div style="color: #FFFFFF; font-size: smaller;">Surasti vietovardį arba koordinates:</div>
-				<input type='text' style="width: 68%;" id='inputChooseTown' placeholder="Įveskite gyvenvietę parodyti žemėlapyje.."------- class='text ui-widget-content defaultText defaultTextActive' />
-				<div class="right" style="width:30%;position:relative;"><a id="btnMapTown" >Rodyti</a>@{if (Model.NewRec == 0) {<a style="right: 0%;position:absolute;color:White;" id="cancelMap" >Atšaukti</a>}}</div>
+			<div id='divSearchMap' class="box" style="@{if (Model.NewRec != 1) {<text>display:none;</text>}}">									 
+				<h5>Surasti vietovardį arba koordinates:</h5>
+				<input type='text' style="width: 80%;" id='inputChooseTown' placeholder="Įveskite gyvenvietę parodyti žemėlapyje.." class='text ui-widget-content defaultText defaultTextActive' />
+				<div class="right" >
+					<a id="btnMapTown">Rodyti</a>@{if (Model.NewRec == 0) {<a id="cancelMap" >Atšaukti</a>}}
+				</div>
 			</div>
-			<div id='divMap' class="ui-corner-bottom;" style="position:absolute">map</div>
+
+			<div style="height:417px;overflow:hidden;">
+				<div id='divMap' class="ui-corner-bottom;">map</div>
+			</div>
 
 	@*---------------------------------------------------------------*@
 	</div>
