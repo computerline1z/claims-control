@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using System.Diagnostics;
 using System.Web;
 using System.Data;
+using System.Configuration;
 
 namespace CC.Classes {
 	public class HttpParameters {

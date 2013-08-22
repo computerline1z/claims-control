@@ -136,9 +136,6 @@
             return false;
           }
           if (ui.item) {
-            if (!$(event.target).parent().find("span.ui-menu-icon").length && opt.appendToList) {
-              $(event.target).parent().append(opt.appendToList);
-            }
             if (ui.item.id !== $(this).data("newval")) {
               $(this).data("newval", ui.item.id).val(ui.item.value);
               if (input.data("autocomplete").fnItemChanged) {
