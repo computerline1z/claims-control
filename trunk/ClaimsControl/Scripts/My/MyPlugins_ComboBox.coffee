@@ -76,8 +76,8 @@ _create: ->
 				#event.stopPropagation()#event.preventDefault()				
 				return false
 			if ui.item
-				if (!$(event.target).parent().find("span.ui-menu-icon").length&&opt.appendToList)#pridedu redagavimo controlsus jei nebuvo
-					$(event.target).parent().append(opt.appendToList)
+				#if (!$(event.target).parent().find("span.ui-menu-icon").length&&opt.appendToList)#pridedu redagavimo controlsus jei nebuvo
+				#	$(event.target).parent().append(opt.appendToList)
 				if ui.item.id isnt $(this).data("newval")
 					#$(this).data("newval", ui.item.id).val (if ($(this).data("ctrl").Type is "List") then ui.item.value else ui.item.label) #jeigu ne List tipo kisam viska priesingu atveju tik pirma lauka
 					$(this).data("newval", ui.item.id).val (ui.item.value)
