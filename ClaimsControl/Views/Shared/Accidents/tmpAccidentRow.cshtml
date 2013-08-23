@@ -6,14 +6,25 @@ checkOut this Field="Days" id="inputDays" labelType="Top"}}*@
 	<div><b>{{place}}</b></div>  
 	<div>{{accType}}</div>  
 </div>
-<div class="td w28pr">
-	<div><b>{{shortNote}}</b></div>  
-	<div>{{lossSum}} Lt</div>
-</div>
-<div class="td w15pr">
-	<div>Žalų skaičius: {{cNo_All}}</div> 
-	<div>Nesureguliuotos: {{cNo_NotF}} </div>
-</div>
 
-<div class="td w03pr"><a class="rowSearchSelector"  {{action editAccident this target="App.accidentsController"}}></a>
-</div>
+{{#if cNo_NotF}}
+	<div class="td w28pr">
+		<div><b>{{shortNote}}</b></div>  
+		<div class="text-system-red">{{lossSum}} Lt</div>
+	</div>
+	<div class="td w15pr">
+		<div>Žalų skaičius: {{cNo_All}}</div> 
+		<div class="text-system-red">Nesureguliuotos: {{cNo_NotF}} </div>
+	</div>
+{{else}}
+	<div class="td w28pr">
+		<div><b>{{shortNote}}</b></div>  
+		<div>{{lossSum}} Lt</div>
+	</div>
+	<div class="td w15pr">
+		<div>Žalų skaičius: {{cNo_All}}</div> 
+		<div>Nesureguliuotos: {{cNo_NotF}} </div>
+	</div>
+{{/if}}
+
+<div class="td w03pr"><a class="rowSearchSelector"  {{action editAccident this target="App.accidentsController"}}></a></div>

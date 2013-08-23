@@ -10,6 +10,7 @@ namespace CC.Classes.htmlHelpers {
 		public string js { get; set; }
 		public string css { get; set; }
 		public bool Debug { get; set; }
+		public bool Map { get; set; }
 	}
 	public static class Site {
 		public static Settings GetSettings() {
@@ -17,6 +18,7 @@ namespace CC.Classes.htmlHelpers {
 			st.Less = Convert.ToBoolean(ConfigurationManager.AppSettings["Less"]);
 			st.Version = ConfigurationManager.AppSettings["Version"];//1.021(a)
 			st.Debug = Convert.ToBoolean(ConfigurationManager.AppSettings["Debug"]);
+			st.Map = Convert.ToBoolean(ConfigurationManager.AppSettings["Map"]);
 			Match match = Regex.Match(st.Version, @"(\d+)\.(\d+)(.*)$");
 			string mainVerNo = match.Groups[1].Value;
 			string VerNo = match.Groups[2].Value;

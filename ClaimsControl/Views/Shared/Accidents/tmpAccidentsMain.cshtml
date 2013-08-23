@@ -18,14 +18,12 @@
 {{log App.accidentsController.content.length}}
 {{#if App.accidentsController.content.length}}
 	<h2>Paskutiniai įvykiai:</h2>
-	</div>
 	<div class="zebra-striped selectable tall" id="accidentsTable">
-	{{#each "App.accidentsController.content"}}@*{{#each person in people}}*@
-	@*{{log this}}*@
-	{{#if this.visible}}
-	<div {{action tbodyClick  this target="App.accidentsController"}} class="tr accident">
-		{{view App.AccidentView}}
-	</div>
+	{{#each "App.accidentsController.content"}}
+	{{#if visible}}
+		<div {{action tbodyClick  this target="App.accidentsController"}} class="tr accident">
+			{{view App.AccidentView}}
+		</div>
 	{{/if}}
 	{{/each}}
 	</div>
