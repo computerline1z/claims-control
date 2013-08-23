@@ -393,7 +393,8 @@ var oCONTROLS = {
 			// : 
 			// "<label class='leftlabel'><span>" + p.label.txt + ":</span>" + t + "</label>";
 			var Top=(p.label.type === "Top")?true:false;
-			return "<label class='"+((Top)?"toplabel":"leftlabel")+"'><span "+((p.classes.span)?"class='"+p.classes.span+"'":"")+">" + p.label.txt + ((Top)?"":":")+"</span>" + t + "</label>" 
+			//return "<label class='"+((Top)?"toplabel":"leftlabel")+"'><span "+((p.classes.span)?"class='"+p.classes.span+"'":"")+">" + p.label.txt + ((Top)?"":":")+"</span>" + t + "</label>" 
+			return "<label class='"+((Top)?"toplabel":"leftlabel")+"'><span "+((p.classes.span)?"class='"+p.classes.span+"'":"")+"><span>" + p.label.txt + ((Top)?"":":")+"</span></span>" + t + "</label>" 
 		}
 	},
 	//appendLabel: function(p, t) { if(typeof p.label==='undefined') { return t; } else { return (p.label.type==="Top")?"<label><div"+((p.label.classes)?" class='"+p.label.classes+"'":"")+">"+p.label.txt+"</div>"+t+"</label>":"<label"+((p.label.classes)?" class='"+p.label.classes+"'":"")+">"+p.label.txt+t+"</label>"; } },
