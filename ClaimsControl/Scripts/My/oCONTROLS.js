@@ -210,7 +210,7 @@ var oCONTROLS = {
 				});
 			}
 			if (btnSaveToDisable){
-				if (Type === 'Boolean' || Type === 'checkbox') {e.find("input:checkbox").on("change",fnEnableSave);}
+				if (Type === 'Boolean' || Type === 'checkbox') {e.find("input:checkbox").on("click",fnEnableSave);}
 				else if (col.List) {input.data("autocomplete").fnItemChanged=function(newId){fnEnableSave();}}
 				else if (input){					
 					if (input.hasClass("hasDatepicker")){
@@ -260,7 +260,8 @@ var oCONTROLS = {
 			var Type, FName = e.data("ctrl").Field, OldVal = (NewRec) ? '' : $.trim(e.data("ctrl").Value), val = '';
 			if (e.attr("type") === "checkbox") {
 				if (!NewRec) { OldVal = (!OldVal || OldVal === "False" || OldVal === "0") ? 0 : 1; } //leidžiam neupdatint checkbox'o tik jai ne naujas rekordas
-				val = (e.attr("checked")) ? 1 : 0; // Type="CheckBox";
+				val = (e.attr("checked")) ? 1 : 0;
+				if  (e.data("ctrl").ToggleValue) {val=(val)?0:1;OldVal=10;} //Jei yra toggle visada išsaugom - išsaugom įrašytą reikšmę nes ant clicko togglinam .UpdateField
 			} else {
 				if (typeof e.data("ctrl").Type === 'undefined') {
 					console.error("Nerastas elemento Tipas!");

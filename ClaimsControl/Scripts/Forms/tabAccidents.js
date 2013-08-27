@@ -145,7 +145,7 @@
     didInsertElement: function() {
       var IClaim, btnSaveToDisable, c, days, fnCheckIsInjured, frm, inpSum, inputs, perDay;
 
-      c = this.content[0];
+      c = App.claimEditController.claim;
       frm = c.newClaim ? "#divNewClaimCard" : '#divClaimCard_Content';
       btnSaveToDisable = c.newClaim ? $(frm).find("button.btnSave") : $(frm).next().find("button.btnSave");
       oCONTROLS.UpdatableForm({
@@ -188,7 +188,10 @@
           $(frm).find("button").prop("disabled", true);
           inputs.prop('title', 'Žala uždaryta');
         }
-        return inputs.prop("disabled", true);
+        inputs.prop("disabled", true);
+      }
+      if (c.noInsurance) {
+        return $("#NotInsuredClaim").trigger("click");
       }
     },
     init: function() {
@@ -213,9 +216,9 @@
           claimStatus: d.claimStatus,
           newClaim: false,
           typeID: TypeID,
-          deleteButton: true
+          deleteButton: true,
+          noInsurance: C2[2] === "0" ? true : false
         });
-        App.claimEditController.set("content", [Claim]);
       } else {
         TypeID = $("#divNewClaimCard").data("ctrl").ClaimTypeID;
         Claim = Em.Object.create({
@@ -230,16 +233,39 @@
           perDay: 500,
           lossAmount: (TypeID === 6 ? 2500 : 0),
           newClaim: true,
-          typeID: TypeID
+          typeID: TypeID,
+          noInsurance: false
         });
-        App.newClaimController.set("content", [Claim]);
       }
+      App.claimEditController.set("claim", Claim);
       return console.log("init Claim.Type - " + TypeID);
     },
     templateName: 'tmpClaimEdit'
   });
 
   App.claimEditController = Em.Controller.create({
+    fnToggle_noInsurance: function(e) {
+      var chk, noInsurance, t;
+
+      t = e.target;
+      chk = t.tagName.toUpperCase() === "INPUT" ? $(t) : $(t).find("input:checkbox");
+      noInsurance = this.claim.noInsurance;
+      if (!e.isTrigger) {
+        noInsurance = !noInsurance;
+        chk.toggleClass("UpdateField");
+        this.claim.set('noInsurance', noInsurance);
+      }
+      console.log(this.claim.get('noInsurance'));
+      chk.attr("checked", noInsurance);
+      $("#ClaimDetailsContent").find("div.js-toggle").toggle().end().find("button.btnSave").attr("disabled", false);
+      if (noInsurance) {
+        chk.addClass("UpdateField");
+      } else {
+        chk.removeClass("UpdateField");
+        $("#InsuredClaimList").data("newval", "");
+      }
+      return false;
+    },
     deleteForm: function(e) {
       var context, oData;
 
@@ -383,17 +409,14 @@
         me = this;
         return AddWr.slideUp(App.accidentsController.animationSpeedEnd, function() {
           if (tr.hasClass("selectedAccident")) {
-            return tr.removeClass("selectedAccident");
+            tr.removeClass("selectedAccident");
+            return AddWr.remove();
           } else {
             parent.find("div.selectedAccident").removeClass("selectedAccident");
             AddWr.remove();
             return me.addClaim(e, tr);
           }
         });
-      } else if (MY.tabAccidents.AcccidentdetailsView) {
-        MY.tabAccidents.AcccidentdetailsView.destroy();
-        MY.tabAccidents.AcccidentdetailsView = null;
-        return $('div.dividers').remove();
       } else {
         return this.addClaim(e, tr);
       }
@@ -605,8 +628,6 @@
     content: [],
     tableName: "?"
   });
-
-  App.newClaimController = Em.ResourceController.create();
 
   App.sidePanelController = Em.ResourceController.create({
     tableName: "?",

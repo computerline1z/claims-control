@@ -8,7 +8,7 @@ options:
 	selectFirst: false, Value: "", mapWithNoCommas: false, addNewIfNotExists: false
 _create: ->	
 	#surandam artimiausia inputa ant kurio desim listboxa
-	input = $(@element[0])
+	input = $(@element[0]).val("Pasirinkite iš sąrašo..")
 	console.error("Input not found for ComboBox!")	if input.length==0
 	opt = $.extend(true, @options, input.data("ctrl"))
 	opt.mapWithNoCommas=true if opt.Source=="proc_Drivers"

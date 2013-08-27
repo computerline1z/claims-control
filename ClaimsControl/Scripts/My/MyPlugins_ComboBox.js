@@ -15,7 +15,7 @@
     _create: function() {
       var data, fnEditItem, fnSetData, id, input, opt;
 
-      input = $(this.element[0]);
+      input = $(this.element[0]).val("Pasirinkite iš sąrašo..");
       if (input.length === 0) {
         console.error("Input not found for ComboBox!");
       }
