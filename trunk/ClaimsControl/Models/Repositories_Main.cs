@@ -682,7 +682,7 @@ namespace CC.Models {
 
 		public jsonArrays GetJSON_proc_InsPolicies(bool? OnlyTop) {
 			jsonArrays JSON = new jsonArrays();
-			JSON.Data = from p in dc.proc_InsPolicies(UserData.AccountID, OnlyTop)
+			JSON.Data = from p in dc.proc_InsPolicies(UserData.AccountID, OnlyTop) //where p.ID>0
 							select new object[] {
 				p.ID,//0
 				p.ClaimType,//1
