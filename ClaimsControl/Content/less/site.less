@@ -191,7 +191,7 @@ div.newClaimContent {background-color: @systemYellow3; .clearfix();}
 
 .row .leftlabel button.drop-down.ui-button-icon-only {float:left;} //to keep in one line floats when row is used
 button.drop-down.ui-button-icon-only { 
-    padding: 0;
+    padding: 0!important;
     margin:0 -2.2em!important;
     border-style: none!important; //solid solid solid none; iš inputo pasiima (kitaip kartais nepataiko ant inputo borderiu)
     box-shadow: none!important;
@@ -210,7 +210,7 @@ div.dialog-form-label { font-size: @basefont; /*color: #666666;*/ top: 2px; marg
     padding-left: 0px;
     margin-left: 0px;
     cursor: pointer;
-    /*ideta: */ font-size: @smallfont;
+    /*ideta: */ /*font-size: @smallfont;*/
     //.clearfix();
 
     input[type="checkbox"] {
@@ -354,8 +354,7 @@ label {
     }
     &.leftlabel {
 		> span {
-			font-size: @smallfont;
-			font-weight:bold;
+			font-size: 12px;
 			padding: 0; /* margin: 0; color: #666666;*/
 			cursor: pointer;
 			display: inline-block;
@@ -367,11 +366,10 @@ label {
         	font-size: @basefont;
         	vertical-align:top;
         	.border-radius(0);
-        	color:#000000;
         }
     }
 }
-.date{text-align: center;width:10% !important;min-width:6.5em;}
+.date{ min-width: 71px; }
 .time{text-align: center;width:7%  !important;min-width:4em; margin-left: 1em;}
 /*
 input[type=text].date {width:7em !important;}
@@ -563,9 +561,6 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 	font-weight: bold;
 	margin-right: 5px;
 }
-.fileinput-button span{
-	text-decoration: underline;
-}
 .cont{
 	border: 1px 1px 0 1px !important;
 	border-color:#ddd !important;
@@ -621,7 +616,6 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 }
 .custombackgroundList {
 	background:none repeat scroll 0 0 #FFFFFF;
-	margin:-4px 0 14px 0;
     .box-shadow(0px 1px 3px rgba(0, 0, 0, 0.30));
     border-left: 1px solid rgba(0,0,0,0.15);
     border-right: 1px solid rgba(0,0,0,0.15)
@@ -642,14 +636,8 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 .h3CustomProperty {
 	color:#333;
     margin-bottom: 11px !important;
-    font-family: 'myriad pro';
     font-size: 21px;
 }
- #btnDeleteAccident {
- border-radius:4px 4px 4px 4px;
- background-color: #A59894; 
- width:20px;height:25px;
- }
  .customButtonDisabled[disabled]{
  background-color:#EB5A44;
  color:#FFFFFF;
@@ -667,10 +655,24 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 .selectedAccident a.rowSearchSelector{
     background-image: url(/Content/less/images/details_white.png);
 }
-.btn.btn-small.btn-small-delete{
-	background-color:#A59894;
-	background-image:none;
-	padding: 5px 7px 1px 8px;
+
+.btn-delete {
+	position: relative;
+	background:#A59894;
+	padding: 6px 8px;
+	.border-radius(4px);
+
+	&:hover {
+		background: darken(#A59894, 10%);
+	}
+
+	&:before {
+		content: '';
+		display: block;
+		width: 13px;
+		height: 15px;
+		background: url(../images/icon-trash.png) no-repeat center center;
+	}
 }
  .curvedBorderGroove {
     border: 1px solid #EB5A44;
@@ -689,7 +691,7 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 	margin: auto;
 	position: relative;
 	padding: 25px 45px;
-	background-image: linear-gradient(#FFFFFF -1%, #ECF0F6 13%, #FFFFFF 50%);
+	/* background-image: linear-gradient(#FFFFFF -1%, #ECF0F6 13%, #FFFFFF 50%); */
 
 	a {
 		color: @link-color;
@@ -701,7 +703,7 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 
 	.line {
 		position: absolute;
-		top: 45px;
+		top: 50px;
 		height: 1px;
 		right: 0;
 		left: 0;
@@ -722,14 +724,14 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 	}
 
 	.step-box-header {
-		height: 35px+6px;
-		border: 3px solid @box-border-color;
-		border-radius: 3px;
-		color: @box-text-color;
+		height: 50px;
+		border: 3px solid #3f3b3b;
+		color: #3F3B3B;
 		overflow: hidden;//background-image: linear-gradient(#9DC017, #84A714);
-		background: @blue;
+		background: #fff;
 		z-index: 10;
 		position: relative;
+    .border-radius(6px);
 	} 
 
 	.num {
@@ -740,16 +742,24 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 		padding: 2px;
 		font-weight: bold;
 		padding: 7px;
-		line-height: 22px;
+		line-height: 30px;
+    border-right: 1px solid @grayLight;
 	}
 
 	.name {
 		float: left;
 		width: 9em;
 		font-size: 12px;
-		padding: 6px;
-		line-height: 12px;
+    padding-left: 6px;
+    padding-right: 6px;
+		line-height: 14px;
 		font-weight: bold;
+
+    span {
+      display: table-cell;
+      vertical-align: middle;
+      height: 44px;
+    }
 	}
 
 	.step-box-content {
@@ -762,10 +772,6 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 			text-align: center;
 			padding: 10px 0;				
 		}
-	}
-
-	.date {
-		font-weight: bold;
 	}
 
 	.step-box-addon {
@@ -782,6 +788,10 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 		button {
 			margin-left: 2em;
 		}
+
+    .btn {
+      vertical-align: top;
+    }
 
 		//css arrow
 		&:before {
@@ -803,20 +813,21 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 
 	.current {
 		.step-box-header {
-			background-image: linear-gradient(#E9EEF4, #F3F3FF);
-			color: @blue;
+			/*background-image: linear-gradient(#E9EEF4, #F3F3FF);*/
+			/*color: @blue;*/
 		} 
 		.step-box-content {
 			border: 0 none;
 			.inner {width: 100%;}//text-align: left;
 		}			
-		.num    { line-height: 18px; }
+		/*.num    { line-height: 18px; }*/
 	}
 	.completed {
 		.step-box-header {
-			background-image: linear-gradient(#3faf17, #3ede18);
+			/*background-image: linear-gradient(#3faf17, #3ede18);*/
+      background: @orange;
 			color: white;
-			.num {border-right: 1px solid #38b316;box-shadow: 0 0 1px #78dd5e;}
+			.num {border-right: 1px solid #b34534;/*box-shadow: 0 0 1px #78dd5e;*/}
 		}
 		.step-box-content {margin-top: 10px;min-height: 52px;border: 1px solid #c6c6c6;border-radius: 3px;}
 	}
@@ -1027,4 +1038,52 @@ form input.searchField {
       text-decoration: underline!important;
     }
   }
+}
+
+.date-time-select {
+
+	.time {
+		height: 26px;
+		position: absolute;
+		right: 0;
+		top:20px;
+	}
+
+	.date {
+		text-align: center;
+	}
+
+}
+
+.leftlabel {
+	>span {
+		display: inline-block;
+
+		>span {
+			display: table-cell;
+      padding-right: 4px;
+			height: 26px;
+			line-height: 13px;
+			vertical-align: middle;
+		}
+	}
+}
+
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+/* OTHER  */
+/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
+
+.ui-dialog.ui-corner-all {
+	border: none;
+	.border-radius(0);
+
+	.ui-dialog-titlebar {
+		border: none;
+		.border-radius(0);
+		margin-bottom: 10px;
+
+		&:after {
+			display: none;/* removes spacing under titlebar */
+		}
+	}
 }

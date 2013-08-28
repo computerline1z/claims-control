@@ -27,7 +27,9 @@
 
 	<div class='right w45pr'>
 		@*<label>{{view Em.Checkbox checkedBinding="noInsurance"}} Neapdrausta</label>*@
-		<label {{action fnToggle_noInsurance this target="App.claimEditController"}} id="NotInsuredClaim"><input type="checkbox" data-ctrl='{"Type":"Boolean","Value":"0","ToggleValue":true,"Field":"InsPolicyID"}' /> Neapdrausta</label>
+		<div class="ExtendIt leftBlock">
+			<label {{action fnToggle_noInsurance this target="App.claimEditController"}} id="NotInsuredClaim"><input type="checkbox" data-ctrl='{"Type":"Boolean","Value":"0","ToggleValue":true,"Field":"InsPolicyID"}' /> Neapdrausta</label>
+		</div>
 		{{#compare typeID "===" "1"}} 
 			{{updatableField isTotalLoss labelType="Top" classes="wrapper:'js-toggle leftBlock'"}}
 		{{/compare}}

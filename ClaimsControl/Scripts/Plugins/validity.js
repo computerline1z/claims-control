@@ -1073,8 +1073,11 @@
 		tooltipClass: "validity-tooltip",
 
 		start: function () {
-			$("." + $.validity.outputs.tooltip.tooltipClass)
-                .remove();
+			if( $("." + a.validity.outputs.tooltip.tooltipClass).prev().hasClass("validity-error-on-field") ){
+        		$("." + a.validity.outputs.tooltip.tooltipClass).prev().removeClass("validity-error-on-field");
+        	}
+        	
+            $("." + $.validity.outputs.tooltip.tooltipClass).remove();
 		},
 
 		end: function (results) {
@@ -1092,22 +1095,15 @@
 			pos.left += $obj.width() + 18;
 			pos.top += 8;
 
-			$(
-                "<div class=\"validity-tooltip\">" +
-                    msg +
-                    "<div class=\"validity-tooltip-outer\">" +
-                        "<div class=\"validity-tooltip-inner\"></div>" +
-                    "</div>" +
-                "</div>"
-            )
-                .click(function () {
-                	$obj.focus();
-                	$(this).fadeOut();
-                })
-                .css(pos)
-                .hide()
-                .appendTo("body")
-                .fadeIn();
+            $('<div class="validity-tooltip">' + msg + '<div class="validity-tooltip-outer"><div class="validity-tooltip-inner"></div></div></div>').click(function () {
+                $obj.focus();
+                $(this).fadeOut();
+                if( $obj.parent().hasClass("validity-error-on-field") ){
+                	$obj.parent().removeClass("validity-error-on-field");
+                }
+            })/*.css(f)*/.hide().insertAfter($obj.parent()).fadeIn();
+
+            $obj.parent().addClass("validity-error-on-field");
 		},
 
 		raiseAggregate: function ($obj, msg) {
