@@ -2,7 +2,7 @@
 {{#with claim}}
 	<h2>Žala nr. {{accident.no}}-{{no}}, {{claimType.name}}, 
 		{{#if insPolicy.insurerName}} {{insPolicy.insurerName}} {{else}} Neapdrausta {{/if}}
-	</h2><a  {{action goBack target="this"}} style="color:#5A6F85;">(atgal į Žalų sąrašą)</a>
+	</h2><a {{action goBack target="this"}} class="link-back">(atgal į Žalų sąrašą)</a>
 	<h4>{{vehicle.plate}}, {{accident.driver}}</h4>
 
 	<div class="claims" id="claimsSteps">
@@ -15,7 +15,7 @@
 		{{/compare}}
 				<div class="step-box-header">
 					<div class="num">{{stepNo}}.</div>
-					<div class="name">{{name}}</div>
+					<div class="name"><span>{{name}}</span></div>
 				</div>
 				<div class="step-box-content">
 					<div class="inner">{{{content}}}</div>
@@ -26,7 +26,7 @@
 {{/with}}
 </div>
 	<div id="actionsFormOfClaimReg" style="padding:0;">
-		<div class="content">
+		<div class="content" style="height:300px;overflow-y:scroll;">
 			<table class="zebra-striped"><thead><tr><th>&nbsp;</th><th>Data</th><th>Kas</th><th>Kam</th><th>Info</th><th>Priedai</th></tr></thead><tbody>
 				{{#each activitiesTbl}}	
 					<tr {{action goToOtherView this}} class="clickable"><td><i class="img18-{{unbound icon}}"></i></td><td>{{entryDate}}</td><td>{{fromOnlyTbl}}</td><td>{{to}}</td><td>{{infoOnlyTbl}}</td><td>{{docs}}</td></tr>

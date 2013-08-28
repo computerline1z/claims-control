@@ -7,7 +7,7 @@
  }
 @if (@Model.NewRec == 1) { <h2 style="margin: 15px; display: inline-block">Naujo įvykio registravimas</h2>}
 else {<h2 style="margin: 15px; display: inline-block">Įvykis Nr. @Model.Accident.No</h2>}
-<a id="btnReturnToAccidents" href="javascript:void(0);return false;">(atgal į įvykių sąrašą)</a>
+<a id="btnReturnToAccidents" class="link-back" href="javascript:void(0);return false;">(atgal į įvykių sąrašą)</a>
 <div id="accidentTab">
 <ul id='ulWhiteMenu' class='ulWhiteMenu'>
 	<li><a href="#AccidentForm">
@@ -28,33 +28,47 @@ else {<h2 style="margin: 15px; display: inline-block">Įvykis Nr. @Model.Acciden
     
 		@{if (Model.NewRec == 1) {
 			<div class="row">
-				<div class='ExtendIt col w48pr' data-ctrl='{"Field":"AccidentTypeID","id":"lstAccidentTypes","labelType":"Top"}'></div>
-				<div class='ExtendIt col box-w48pr-left' data-ctrl='{"Field":"DriverID","id":"lstDrivers","labelType":"Top","List":{"ListType": "None","Editable":{"EditThis": true}}}'></div>
-         </div>
+				<div class='ExtendIt col five' data-ctrl='{"Field":"AccidentTypeID","id":"lstAccidentTypes","labelType":"Top"}'></div>
+				<div class='ExtendIt col seven date-time-select' data-ctrl='{"Field":"Date","id":"Date","labelType":"Top", "Type":"DateTimeLess","Default":"Today", "classes":{"input":"w70prImportant"}, "Plugin":{"datepicker":{"minDate":"-3y","maxDate":"0"}}}'></div>
+         	</div>
+
 			<div class='ExtendIt row' data-ctrl='{"Field":"ShortNote","id":"ShortNote","labelType":"Top"}'></div>
-			<div class='ExtendIt row' data-ctrl='{"Field":"Date","id":"Date","labelType":"Top", "Type":"DateTimeLess","Default":"Today","Plugin":{"datepicker":{"minDate":"-3y","maxDate":"0"}}}'></div>
-			<div class='ExtendIt col w48pr' data-ctrl='{"Field":"IsNotOurFault","id":"IsNotOurFault","labelType":"Top"}'></div>
-			<div class='ExtendIt col box-w48pr-left' data-ctrl='{"Field":"IsOtherParticipants","id":"IsOtherParticipants","labelType":"Top"}'></div>
-			<br/>
+			
+			<div class="row">
+				<div class='ExtendIt col seven' data-ctrl='{"Field":"DriverID","id":"lstDrivers","labelType":"Top","List":{"ListType": "None","Editable":{"EditThis": true}}}'></div>
+			</div><!-- -->
+
+			<div class="row">
+				<div class='ExtendIt col five' data-ctrl='{"Field":"IsNotOurFault","id":"IsNotOurFault","labelType":"Top"}'></div>
+				<div class='ExtendIt col seven' data-ctrl='{"Field":"IsOtherParticipants","id":"IsOtherParticipants","labelType":"Top"}'></div>
+			</div>
+
 			<div class='ExtendIt' data-ctrl='{"Field":"LongNote","classes":{"input":"row"},"id":"LongNote","labelType":"Top"}'></div>
 			<br/>
 	 }
 	 else {
 			<div class="row">
-				<div class='ExtendIt col w48pr' data-ctrl='{"Value":@Model.Accident.AccidentTypeID, "Field":"AccidentTypeID","id":"lstAccidentTypes","labelType":"Top"}'></div>
-				<div class='ExtendIt col box-w48pr-left' data-ctrl='{"Value":@Model.Accident.DriverID, "Field":"DriverID","id":"lstDrivers","labelType":"Top", "List":{"ListType": "None","Editable":{"EditThis": true}}}'></div>
+				<div class='ExtendIt col five' data-ctrl='{"Value":@Model.Accident.AccidentTypeID, "Field":"AccidentTypeID","id":"lstAccidentTypes","labelType":"Top"}'></div>
+				<div class='ExtendIt col seven date-time-select' data-ctrl='{"Value":"@Model.Accident.Date", "Field":"Date","id":"Date","labelType":"Top","Type":"DateTimeLess", "classes":{"input":"w70prImportant"}, "Default":"Today","Plugin":{"datepicker":{"minDate":"-3y","maxDate":"0"}}}'></div>
 			</div>
+
 			<div class='ExtendIt row' data-ctrl='{"Value":"@Model.Accident.ShortNote", "Field":"ShortNote","id":"ShortNote","labelType":"Top"}'></div>
-			<div class='ExtendIt row' data-ctrl='{"Value":"@Model.Accident.Date", "Field":"Date","id":"Date","labelType":"Top","Type":"DateTimeLess","Default":"Today","Plugin":{"datepicker":{"minDate":"-3y","maxDate":"0"}}}'></div>
-			<div class='ExtendIt col w48pr' data-ctrl='{"Value":"@Model.Accident.IsNotOurFault", "Field":"IsNotOurFault","id":"IsNotOurFault","labelType":"Top"}'></div>
-			<div class='ExtendIt col box-w48pr-left' data-ctrl='{"Value":"@Model.Accident.IsOtherParticipants", "Field":"IsOtherParticipants","id":"IsOtherParticipants","labelType":"Top"}'></div>
-			<br/>
+			
+			<div class="row">
+				<div class='ExtendIt col seven' data-ctrl='{"Value":@Model.Accident.DriverID, "Field":"DriverID","id":"lstDrivers","labelType":"Top", "List":{"ListType": "None","Editable":{"EditThis": true}}}'></div>
+			</div><!-- row -->
+
+			<div class="row">
+				<div class='ExtendIt col five' data-ctrl='{"Value":"@Model.Accident.IsNotOurFault", "Field":"IsNotOurFault","id":"IsNotOurFault","labelType":"Top"}'></div>
+				<div class='ExtendIt col seven' data-ctrl='{"Value":"@Model.Accident.IsOtherParticipants", "Field":"IsOtherParticipants","id":"IsOtherParticipants","labelType":"Top"}'></div>
+			</div>
+
 			<div class='ExtendIt' data-ctrl='{"Value":"@Model.Accident.LongNote", "Field":"LongNote","classes":{"input":"row"},"id":"LongNote","labelType":"Top"}'></div>
 			<br/>
 	 }
 		}
 		<div class="container">
-			@{if (Model.NewRec != 1) {<div class="left mini"><button id="btnDeleteAccident" class="btn btn-small"><i class="img32-bin" title="Ištrinti žalą"></i></button></div>}}
+			@{if (Model.NewRec != 1) {<div class="left mini"><button id="btnDeleteAccident" class="btn-delete"></button></div>}}
 			<div class="right medium w48pr">
 				<button id="btnSaveAccident" class="btn btnSave">Išsaugoti</button>	
 				<a style="margin-left: 2%;" id="btnCancel" href="javascript:void(0);return false;">Atšaukti</a>

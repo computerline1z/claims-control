@@ -42,10 +42,14 @@
 .w35pr {width:35%;}
 .w38pr {width:38%;}
 .w395pr {width:39.5%;}
+.w40pr { width:40%; }
 .w45pr {width:45%;}
 .w50pr {width:50%;}
+.w60pr {width:60%;}
 .w48pr {width:48%;}
 .w70pr {width:70%;}
+.w70prImportant { width:70%!important; }
+.w75pr {width:75%;}
 .w80pr {width:80%;}
 .w90pr {width:90%;}
 .w95pr {width:95%;}
@@ -80,8 +84,8 @@ a, .btn, div, span {
         font-size: @basefont + 10px;
     }
 }
-.formTitle { .titleMargins(); font-family:'Myriad Pro'; letter-spacing:-1px; }
-.formSubTitle { .titleMargins(); font-family:'Myriad Pro'; letter-spacing:-1px;  color: @systemGrey;}
+.formTitle { .titleMargins(); /*font-family:'Myriad Pro';*/ letter-spacing:-1px; }
+.formSubTitle { .titleMargins(); /*font-family:'Myriad Pro';*/ letter-spacing:-1px;  color: @systemGrey;}
 .tableTitle { .titleMargins();  color: @systemGrey;}
 
 .leftBlock { padding: 10px 3px 0 0; vertical-align: top; } //Used with .ExtendIt  display: inline-block; 
@@ -95,15 +99,15 @@ a, .btn, div, span {
     background: url("./images/dropdown_arrow.png") no-repeat right #fff;    
     #font > .regular;
     
-select {
-    -webkit-appearance: none;
-       background: transparent;
-       width: 120%;
-       border: 1px solid #ccc;
-       height: 22px;
-       option { padding-bottom: 5px; }
-    }
- }
+	select {
+		-webkit-appearance: none;
+		background: transparent;
+		width: 120%;
+		border: 1px solid #ccc;
+		height: 22px;
+		option { padding-bottom: 5px; }
+	}
+}
 
 
 

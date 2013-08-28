@@ -23,7 +23,7 @@
 // Building a modern grid system, http://www.netmagazine.com/tutorials/building-modern-grid-system
 // Introducing the LESS CSS Grid, http://designshack.net/?p=12845
 @columns: 12; 	// any number will do 
-@gutter: .5%; 	// rendered as left margin (first item in a row will have zero margin)
+@gutter: 3%; 	// rendered as left margin (first item in a row will have zero margin)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // You should never need to modify the rest of this file 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -107,6 +107,10 @@
 		min-height: 1px;
 		position: relative;
 		margin: 0 0 0 @gutter;
+
+		&:first-child {
+			margin-left: 0;
+		}
 	}
 	.col.formSubTitle{margin: 0 0 0 @gutter;}//atkeisti formSubTitle marginus
 	

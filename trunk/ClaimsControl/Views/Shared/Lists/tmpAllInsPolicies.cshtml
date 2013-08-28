@@ -1,11 +1,11 @@
 ﻿<div class="container">
-	<div class="right medium w35pr">
+	<div class="pull-right pad14 w35pr">
 	<div id="container">{{view App.SearchField controller="listAllController"}}</div>
 	</div>
 </div>
 <h2 style="margin:0 20px;">Draudimo sutarčių sąrašas</h2><a {{action toTop}} >(atgal į Sąrašus)</a>
 <div class="container">
-	<div class="right medium w15pr" data-ctrl='{"source":"proc_InsPolicies","template":"tmp_InsPolicies","controller":"listAllController","emObject":"content"}'>
+	<div class="pull-right pad14 w15pr" data-ctrl='{"source":"proc_InsPolicies","template":"tmp_InsPolicies","controller":"listAllController","emObject":"content"}'>
 	<button class="btn" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button>
 	</div>
 </div>
@@ -20,7 +20,7 @@
 	{{/each}}
 </tbody></table>
 <div class="container">
-	<div class="right medium w15pr" data-ctrl='{"source":"proc_InsPolicies","template":"tmp_InsPolicies","controller":"listAllController","emObject":"content"}'>
+	<div class="pull-right pad14 w15pr" data-ctrl='{"source":"proc_InsPolicies","template":"tmp_InsPolicies","controller":"listAllController","emObject":"content"}'>
 	<button class="btn" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button>
 	</div>
 </div>

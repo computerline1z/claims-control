@@ -7,28 +7,35 @@ a{text-decoration:underline;}
 <h3 class="tableTitle">Bendrieji paskyros nustatymai</h3>
 {{#each App.accountController.content}}
 @*	Negaliu įrašyt iD nes pasikraunant jo dar nėra
-*@	<div id="AccountForm" class="inputForm container" data-ctrl='{"id":"","NewRec":0,"Source":"tblAccount","tblUpdate":"tblAccounts"}'>
-	<div class="border ui-corner-all admin-topsection">
-	<div class='left w47pr_mp'>
-			{{updatableField name labelType="Top" classes="wrapper:'leftBlock'"}}
-			<div style="margin-right: 8%; width: 45%;float:left;">
-				{{updatableField currencyID labelType="Top"  List="{\"Source\":\"tblCurrencies\"}" classes="wrapper:'leftBlock'"}}
+*@	<div id="AccountForm" class="inputForm container pad14" data-ctrl='{"id":"","NewRec":0,"Source":"tblAccount","tblUpdate":"tblAccounts"}'>
+		<div class="border ui-corner-all admin-topsection row pad14">
+
+			<div class='col six'>
+				{{updatableField name labelType="Top" classes="wrapper:'leftBlock'"}}
+				<div style="margin-right: 8%; width: 45%;float:left;">
+					{{updatableField currencyID labelType="Top"  List="{\"Source\":\"tblCurrencies\"}" classes="wrapper:'leftBlock'"}}
+				</div>
+				<div style="width: 45%;float:left;">
+					{{updatableField countryID labelType="Top" id="admin-top-salis" List="{\"Source\":\"tblCountries\"}" classes="wrapper:'leftBlock'"}}
+				</div>
 			</div>
-			<div style="width: 45%;float:left;">
-				{{updatableField countryID labelType="Top" id="admin-top-salis" List="{\"Source\":\"tblCountries\"}" classes="wrapper:'leftBlock'"}}
+
+			<div class='col six'>
+				<div style="width: 72%;float:left;">
+					{{updatableField email id="admin-top-email" labelType="Top" classes="wrapper:'leftBlock'"}}
+				</div><span style="position: absolute; margin-top: 33px;">@@claimscontrol.com</span>
+				<div style="width: 44%;float:left;">
+					{{updatableField timeZoneID labelType="Top" id="admin-top-timezone" List="{\"Source\":\"tblTimeZones\"}" classes="wrapper:'leftBlock'"}}
+				</div>
 			</div>
-		</div>
-		<div class='right w47pr_mp'>
-		<div style="width: 72%;float:left;">
-			{{updatableField email id="admin-top-email" labelType="Top" classes="wrapper:'leftBlock'"}}
-		</div><span style="position: absolute; margin-top: 30px;">@@claimscontrol.com</span>
-		<div style="width: 44%;float:left;">
-			{{updatableField timeZoneID labelType="Top" id="admin-top-timezone" List="{\"Source\":\"tblTimeZones\"}" classes="wrapper:'leftBlock'"}}
-		</div>
-		<button class="btn btnSave customButtonProperty" style="background-color:#EB5A44;color:#FFFFFF;" {{action SaveChanges target="App.accountController"}}>Išsaugoti</button>
+
+			<div class="pull-right pad14">
+				<button class="btn btnSave customButtonProperty" {{action SaveChanges target="App.accountController"}}>Išsaugoti</button>
+			</div>
+
 		</div>
 	</div>
-  </div>
+
 {{/each}}
 </div>
 <div class="custombackgroundListAdmin">
