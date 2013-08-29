@@ -16,7 +16,7 @@
 	{{#each "App.claimsController.content"}}
 		{{#if this.visible}}
 			{{#compare claimTypeID "!==" "6"}}
-				<div {{action claimRegulation this}} class="tr accident">
+				<div {{action viewClaims this}} class="tr accident">
 					{{view App.ClaimView}}
 				</div>
 			{{/compare}}

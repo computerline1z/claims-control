@@ -106,13 +106,13 @@ DocTreeViewOpt:
 	templateName: "tmpDocsNodes", tagName: "", opts: null,
 	didInsertElement: ->
 		#Apurav Code addition
-		unless initTreePadding
-		  $("#dynamicTree ul").each ->
-		    $(this).find("div.treeContent").animate
-		      paddingLeft: "+=5px"
-		    , 100
+		# unless initTreePadding
+		  # $("#dynamicTree ul").each ->
+		    # $(this).find("div.treeContent").animate
+		      # paddingLeft: "+=5px"
+		    # , 100
 
-		  initTreePadding = true
+		  # initTreePadding = true
 		$("li.treeItem").droppable
 			accept: "#gallery > li"
 			accept: "#"+@opts.docViewForTreeId+" li"

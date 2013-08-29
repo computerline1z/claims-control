@@ -5,7 +5,7 @@ App.claimsStart=()->
 		App.claimsController.set("content",oDATA.GET("proc_Claims").emData)	
 	)
 	oDATA.execWhenLoaded(["proc_Activities","tblActivityTypes","tblUsers"], ()-> # Cia deda duomenis i App.tabClaimsRegulationController, nes jei paspaus claimRegulation tai jo reiks
-		actTypes=oDATA.GET("tblActivityTypes").emData.map((t)->t.typeID=t.iD; delete t.iD; return t;)
+		actTypes=oDATA.GET("tblActivityTypes").emData.map((t)->t.typeID=t.iD; return t;) #delete t.iD; 
 		me=App.tabClaimsRegulationController
 		me.set("activities",oDATA.GET("proc_Activities").emData).set("activityTypes",actTypes).set("users",oDATA.GET("tblUsers").emData)
 		me.set("ativitiesNotFin",actTypes.filter((a)->not a.isFinances))
@@ -16,28 +16,35 @@ App.TabClaimsView = App.mainMenuView.extend(
 )
 App.ClaimView = Em.View.extend(
 	init: ->
-		@_super(); claim=@bindingContext
-		claim.set("accident",oDATA.GET("proc_Accidents").emData.findProperty("iD", claim.accidentID))
-		claim.set("claimType",oDATA.GET("tblClaimTypes").emData.findProperty("iD", claim.claimTypeID))
-		claim.set("vehicle",oDATA.GET("proc_Vehicles").emData.findProperty("iD", claim.vehicleID))
-		claim.set("insPolicy",oDATA.GET("proc_InsPolicies").emData.findProperty("iD", claim.insPolicyID))
-		
-		$.extend(claim, {insurerID:claim.insPolicy.insurerID, daysFrom:claim.accident.daysFrom, date:claim.accident.date}) #greičio padidinimui dedam tiesiai
+		@_super(); App.claimsController.setClaimContext(@bindingContext)
+		# claim=@bindingContext
+		# claim.set("accident",oDATA.GET("proc_Accidents").emData.findProperty("iD", claim.accidentID))
+		# claim.set("claimType",oDATA.GET("tblClaimTypes").emData.findProperty("iD", claim.claimTypeID))
+		# claim.set("vehicle",oDATA.GET("proc_Vehicles").emData.findProperty("iD", claim.vehicleID))
+		# claim.set("insPolicy",oDATA.GET("proc_InsPolicies").emData.findProperty("iD", claim.insPolicyID))
+		# $.extend(claim, {insurerID:claim.insPolicy.insurerID, daysFrom:claim.accident.daysFrom, date:claim.accident.date}) #greičio padidinimui dedam tiesiai
 	templateName: 'tmpClaimView' #<div class="tr accident" @Html.Raw("{{action tbodyClick this target=\"this\"}}")>
 	tagName: ""
 )
 App.claimsController = Em.ArrayController.create(
+	setClaimContext: (claim)->
+		claim.set("accident",oDATA.GET("proc_Accidents").emData.findProperty("iD", claim.accidentID))
+		claim.set("claimType",oDATA.GET("tblClaimTypes").emData.findProperty("iD", claim.claimTypeID))
+		claim.set("vehicle",oDATA.GET("proc_Vehicles").emData.findProperty("iD", claim.vehicleID))
+		claim.set("insPolicy",oDATA.GET("proc_InsPolicies").emData.findProperty("iD", claim.insPolicyID))
+		$.extend(claim, {insurerID:claim.insPolicy.insurerID, daysFrom:claim.accident.daysFrom, date:claim.accident.date}) #greičio padidinimui dedam tiesiai
+		false
 	addNewAccident: ->
 		this.openAccident(null)
-	openClaim: (e) -> #(AccNo) ->
-		console.log(e) #e.context.iD e.context.accident
-		$('#tabClaims').removeClass("colmask")
-		$('#divClaimsList').hide()
-		ctrlEdit=$('#divClaimEdit').show()
-		ctrlEdit.spinner({ position: 'center', img: 'spinnerBig.gif' })
-		#oGLOBAL.LoadAccident_Card(AccNo)
-		$("body").find("img.spinner").remove() # $("body").spinner('remove'); - neveikia
-		false
+	# openClaim: (e) -> #(AccNo) ->
+		# console.log(e) #e.context.iD e.context.accident
+		# $('#tabClaims').removeClass("colmask")
+		# $('#divClaimsList').hide()
+		# ctrlEdit=$('#divClaimEdit').show()
+		# ctrlEdit.spinner({ position: 'center', img: 'spinnerBig.gif' })
+		# #oGLOBAL.LoadAccident_Card(AccNo)
+		# $("body").find("img.spinner").remove() # $("body").spinner('remove'); - neveikia
+		# false
 	content: []
 	filterDidChange: ((thisObj, filterName)->	
 		console.log("filterDidChange")
