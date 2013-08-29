@@ -80,7 +80,7 @@
         }
         return s.pushObject(Em.Object.create(step));
       });
-      claim.steps = s;
+      claim.set('steps', s);
       return this;
     },
     fnStepForward: function(idx) {
@@ -720,12 +720,13 @@
       templateName: 'tmpActionWrapper',
       frm: "#contentOfClaimReg",
       uploadZone: "#uploadClaimDocs"
-    })
+    }),
+    goToList: function() {
+      return App.router.transitionTo('claimList');
+    }
   });
 
-  App.TabClaimsRegulationView = Ember.View.extend(App.HidePreviousWindow, {
-    previuosWindow: '#divClaimsList',
-    thisWindow: '#divClaimRegulation',
+  App.TabClaimsRegulationView = Ember.View.extend({
     init: function() {
       this._super();
       if (!$.isEmptyObject(ACTIVITYVIEW)) {

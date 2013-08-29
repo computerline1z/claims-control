@@ -21,7 +21,6 @@
       var ArrView = [],objView=[];
       var ArrClaims, ArrClaims2, i, iterator;
 
-      console.log("init selected accident");
       this._super();
       ArrClaims = this.get("claims_C").replace(new RegExp('{{(.*?)}}', 'gm'), '').split('#||');
       ArrClaims2 = this.get("claims_C2").split('#||');
@@ -131,6 +130,11 @@
       };
       oCONTROLS.Set_Updatable_HTML.mega_select_list(d);
       return false;
+    },
+    toClaimRegulation: function(e) {
+      return App.router.transitionTo('claimRegulation', {
+        claimNo: e.context.no
+      });
     },
     elementId: "AccDetailsContent",
     contentBinding: 'App.thisAccidentController.content',

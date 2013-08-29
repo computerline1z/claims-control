@@ -45,7 +45,7 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 			#item.content=s1[item.stepNo-1]
 			s.pushObject(Em.Object.create(step))
 		)	
-		claim.steps=s; @ #return this to process futher
+		claim.set('steps',s); @ #return this to process futher
 		# console.log('------------------logging claims---------------'); console.log(@claim)
 	fnStepForward: (idx)-> #
 		s=@claim.steps; stepVal=@stepVal; newStepNo=idx+1
@@ -371,12 +371,15 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 		frm:"#contentOfClaimReg"
 		uploadZone:"#uploadClaimDocs"
 	)
+	goToList: ->
+		#App.router.transitionTo('claimRegulation',{claimNo:'All'});
+		App.router.transitionTo('claimList');
 )	
 # App.actionViewController = Em.ObjectController.create()
-App.TabClaimsRegulationView = Ember.View.extend(App.HidePreviousWindow,
+App.TabClaimsRegulationView = Ember.View.extend(#App.HidePreviousWindow,
 	#viewName:"tabClaimsRegulation",
-	previuosWindow: '#divClaimsList'
-	thisWindow: '#divClaimRegulation'
+	#previuosWindow: '#divClaimsList'
+	#thisWindow: '#divClaimRegulation'
 	init: -> 
 		@_super();
 		if not $.isEmptyObject(ACTIVITYVIEW) #make sure nothing left there

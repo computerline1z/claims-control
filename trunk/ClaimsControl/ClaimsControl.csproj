@@ -182,7 +182,7 @@
     <None Include="Content\less\sprites.less" />
     <None Include="Content\less\tables.less" />
     <None Include="Content\less\site.less" />
-    <Content Include="ClaimsControl.dll" />
+    <Content Include="bin\ClaimsControl.dll" />
     <Content Include="Content\images\claimsLogo.png" />
     <Content Include="Content\images\favicon1.ico" />
     <Content Include="Content\images\icon-plus.png" />

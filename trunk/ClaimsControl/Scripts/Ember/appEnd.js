@@ -12,7 +12,13 @@ App.Router = Em.Router.extend({
 	root: Em.Route.extend({
 		// EVENTS
 		viewAccidents: Em.State.transitionTo('tabAccidents'),
-		viewClaims: Em.State.transitionTo('tabClaims'),
+		viewClaims: function(router,e) {
+			if (e.context){
+				if (!e.context.claimNo){e.context.claimNo=e.context.accident.no+"-"+e.context.no;}//Nr reikalingas routu atvaizdavimui
+				router.transitionTo('claimRegulation',e.context);
+			}
+			else{router.transitionTo('claimList');}
+		},
 		viewMap: Em.State.transitionTo('tabMap'),
 		viewReports: Ember.State.transitionTo('tabReports'),
 		viewLists: Ember.State.transitionTo('tabLists'),
@@ -26,22 +32,38 @@ App.Router = Em.Router.extend({
 				$("#divAccidentsList").find("div.col2").css("top","0");//Pataisyt šoninį stulpelį, kad būtų lygiai su viršum
 			}
 		}),
-		tabClaims: Em.Route.extend({
+		claimList: Em.Route.extend({
 			route: '/claims',
-			connectOutlets: function (router, context) {
-				MY.NavbarController.fnSetNewTab({newState:router.currentState.name, viewIx:1});
-				oDATA.fnLoad2({ url: "Main/tabClaims", callBack: function () {
+			connectOutlets:function (router, context){
+				MY.NavbarController.fnSetNewTab({newState:'tabClaims', viewIx:1,transparent:true,hide:"#divClaimRegulation",show:"#divClaimsList",needUrl:"Main/tabClaims",
+					callBack:function(){
 						App.claimsStart();
-						router.get('applicationController').connectOutlet('claimsOutlet', 'tabClaims');		
+						router.get('applicationController').connectOutlet('claimsOutlet', 'tabClaims');
 						router.get('applicationController').connectOutlet('claimsSidePanelOutlet', 'sidePanelForClaims');
 					}
 				});
-			},
-			claimRegulation: function (router, context){
-				MY.NavbarController.fnSetNewTab({newState:router.currentState.name, viewIx:1,transparent:true});
-				App.tabClaimsRegulationController.set('claim',context.context);// !!būtinai array
-				router.get('applicationController').connectOutlet('claimRegulationOutlet','tabClaimsRegulation'); 
-			},
+			}
+		}),
+		claimRegulation: Em.Route.extend({
+			route: '/claim/:claimNo',
+			connectOutlets:function (router, context){
+				MY.NavbarController.fnSetNewTab({newState:'tabClaims', viewIx:1,transparent:true,show:"#divClaimRegulation",hide:"#divClaimsList",needUrl:"Main/tabClaims",
+					callBack:function(){
+						App.claimsStart();
+						if (!context.accident){
+							var no=context.claimNo.split("-"),accNo=parseInt(no[0],10),clNo=parseInt(no[1],10);
+							var accident=oDATA.GET("proc_Accidents").emData.find(function(a){if (a.no===accNo){return true} return false;  });
+							var claim=oDATA.GET("proc_Claims").emData.find(function(c){if (c.no===clNo){if (c.accidentID===accident.iD) return true;} return false;});
+							if (!claim){router.transitionTo('tabAccidents'); return false;}
+							App.claimsController.setClaimContext(claim);
+							$.extend(context,claim);
+						}
+						App.tabClaimsRegulationController.set('claim',context);
+						router.get('applicationController').connectOutlet('claimRegulationOutlet','tabClaimsRegulation'); 
+					}
+				});
+			}
+		//})
 		}),
 		/*tabMap: Em.Route.extend({
 			route: '/map',

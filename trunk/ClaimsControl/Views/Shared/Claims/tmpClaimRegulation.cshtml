@@ -2,7 +2,7 @@
 {{#with claim}}
 	<h2>Žala nr. {{accident.no}}-{{no}}, {{claimType.name}}, 
 		{{#if insPolicy.insurerName}} {{insPolicy.insurerName}} {{else}} Neapdrausta {{/if}}
-	</h2><a {{action goBack target="this"}} class="link-back">(atgal į Žalų sąrašą)</a>
+	</h2><a  {{action goToList}} class="link-back">(atgal į Žalų sąrašą)</a>
 	<h4>{{vehicle.plate}}, {{accident.driver}}</h4>
 
 	<div class="claims" id="claimsSteps">

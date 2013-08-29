@@ -159,16 +159,6 @@
       tagName: "",
       opts: null,
       didInsertElement: function() {
-        var initTreePadding;
-
-        if (!initTreePadding) {
-          $("#dynamicTree ul").each(function() {
-            return $(this).find("div.treeContent").animate({
-              paddingLeft: "+=5px"
-            }, 100);
-          });
-          initTreePadding = true;
-        }
         return $("li.treeItem").droppable({
           accept: "#gallery > li",
           accept: "#" + this.opts.docViewForTreeId + " li",
@@ -248,9 +238,6 @@
           }
         }
         currentDocs = App[this.opts.TreeDocController].AllDocs.filter(fnFilter);
-        currentDocs.forEach(function(doc) {
-          return console.log("iD: " + doc.iD + ", docName: " + doc.docName + ", docTypeID:" + doc.docTypeID + ", groupID:" + doc.groupID);
-        });
         docsPath = oDATA.GET("userData").emData[0].docsPath;
         url = "Uploads/" + docsPath;
         users = oDATA.GET("tblUsers").emData;
@@ -294,8 +281,6 @@
           });
         });
         App[this.opts.TreeDocController].set("isPhoto", isPhoto);
-        console.log("showDocs:");
-        console.log(showDocs);
         App[this.opts.TreeDocController].set("docs", showDocs);
         return false;
       },

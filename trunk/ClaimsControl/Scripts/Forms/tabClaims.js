@@ -12,7 +12,6 @@
 
       actTypes = oDATA.GET("tblActivityTypes").emData.map(function(t) {
         t.typeID = t.iD;
-        delete t.iD;
         return t;
       });
       me = App.tabClaimsRegulationController;
@@ -29,41 +28,28 @@
 
   App.ClaimView = Em.View.extend({
     init: function() {
-      var claim;
-
       this._super();
-      claim = this.bindingContext;
-      claim.set("accident", oDATA.GET("proc_Accidents").emData.findProperty("iD", claim.accidentID));
-      claim.set("claimType", oDATA.GET("tblClaimTypes").emData.findProperty("iD", claim.claimTypeID));
-      claim.set("vehicle", oDATA.GET("proc_Vehicles").emData.findProperty("iD", claim.vehicleID));
-      claim.set("insPolicy", oDATA.GET("proc_InsPolicies").emData.findProperty("iD", claim.insPolicyID));
-      return $.extend(claim, {
-        insurerID: claim.insPolicy.insurerID,
-        daysFrom: claim.accident.daysFrom,
-        date: claim.accident.date
-      });
+      return App.claimsController.setClaimContext(this.bindingContext);
     },
     templateName: 'tmpClaimView',
     tagName: ""
   });
 
   App.claimsController = Em.ArrayController.create({
+    setClaimContext: function(claim) {
+      claim.set("accident", oDATA.GET("proc_Accidents").emData.findProperty("iD", claim.accidentID));
+      claim.set("claimType", oDATA.GET("tblClaimTypes").emData.findProperty("iD", claim.claimTypeID));
+      claim.set("vehicle", oDATA.GET("proc_Vehicles").emData.findProperty("iD", claim.vehicleID));
+      claim.set("insPolicy", oDATA.GET("proc_InsPolicies").emData.findProperty("iD", claim.insPolicyID));
+      $.extend(claim, {
+        insurerID: claim.insPolicy.insurerID,
+        daysFrom: claim.accident.daysFrom,
+        date: claim.accident.date
+      });
+      return false;
+    },
     addNewAccident: function() {
       return this.openAccident(null);
-    },
-    openClaim: function(e) {
-      var ctrlEdit;
-
-      console.log(e);
-      $('#tabClaims').removeClass("colmask");
-      $('#divClaimsList').hide();
-      ctrlEdit = $('#divClaimEdit').show();
-      ctrlEdit.spinner({
-        position: 'center',
-        img: 'spinnerBig.gif'
-      });
-      $("body").find("img.spinner").remove();
-      return false;
     },
     content: [],
     filterDidChange: (function(thisObj, filterName) {

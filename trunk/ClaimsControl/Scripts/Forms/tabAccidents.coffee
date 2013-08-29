@@ -34,7 +34,7 @@ App.SelectedAccidentView = Em.View.extend(
 	templateName: 'tmpAccident_Claims'
 	init: ->
 		`var ArrView = [],objView=[]`
-		console.log("init selected accident")
+		#console.log("init selected accident")
 		@_super();
 		ArrClaims = @get("claims_C").replace(new RegExp('{{(.*?)}}', 'gm'), '').split('#||'); #Iskertam nenaudojamus tarp{{ ir}}//?-kad nebutu greedy
 		ArrClaims2 = @get("claims_C2").split('#||');
@@ -100,6 +100,9 @@ App.SelectedAccidentView = Em.View.extend(
 			fnCancel: () -> fnCancelNewClaim()
 		oCONTROLS.Set_Updatable_HTML.mega_select_list(d)
 		false
+	toClaimRegulation: (e) ->
+		App.router.transitionTo('claimRegulation',{claimNo:e.context.no});
+		# Ember.State.transitionTo('claimRegulation',1);
 	elementId: "AccDetailsContent"
 	contentBinding: 'App.thisAccidentController.content'
 	destroyElement: () -> MY.tabAccidents.SelectedClaimView.remove() if (MY.tabAccidents.SelectedClaimView)
@@ -151,26 +154,6 @@ App.SelectedClaimView = Em.View.extend(
 		App.claimEditController.set("claim", Claim)
 
 		console.log("init Claim.Type - "+TypeID)
-		# if not d.newClaim
-			# C2 = d.Claims2; TypeID = oDATA.GET("tblClaimTypes").emData.findProperty("name",d.InsuranceType).iD
-			# #Claims2: 0-ClaimID, 1-VehicleID, 2-InsPolicyID, 3-InsuranceClaimAmount, 4-InsurerClaimID, 5-IsTotalLoss, 6-IsInjuredPersons, 7-Days, 8-PerDay
-			# Claim = Em.Object.create(
-				# iD: C2[0],vehicleID: C2[1],insPolicyID: C2[2],insuranceClaimAmount: C2[3],insurerClaimID: C2[4].slice(1).slice(0, -1)#Panaikinam pirmą ir paskutinį ' ('nr Pvz')
-				# isTotalLoss: C2[5],isInjuredPersons: parseInt(C2[6],10),days: C2[7],perDay: C2[8],lossAmount: d.LossAmount, claimStatus: d.claimStatus
-				# newClaim: false,typeID: TypeID, deleteButton:true, noInsurance:false
-			# )	
-			# App.claimEditController.set("content", [Claim]) #butinai masyvas view'e su each		
-			# #@set("noInsurance",false)
-		# else #newClaim
-			# TypeID = $("#divNewClaimCard").data("ctrl").ClaimTypeID
-			# Claim = Em.Object.create(
-				# iD: 0,vehicleID: "",insPolicyID: "",insuranceClaimAmount: 0,insurerClaimID: ""
-				# isTotalLoss: 0,isInjuredPersons: 0,days: 5,perDay: 500,lossAmount: (if TypeID==6 then 2500 else 0) #(->@get('days')*@get('perDay')).property('days','perDay')
-				# newClaim: true,typeID: TypeID, noInsurance:if d.insPolicyID==0 then true else false
-			# )
-			# App.newClaimController.set("content", [Claim]) #butinai masyvas view'e su each	
-			# #@set("noInsurance",(if d.insPolicyID==0 then true else false))
-		# console.log("init Claim.Type - "+TypeID)
 	templateName: 'tmpClaimEdit'
 )
 App.claimEditController = Em.Controller.create(#save, delete, cancel Claims events
@@ -289,6 +272,8 @@ App.accidentsController = Em.ResourceController.create(
 		thisAccidentPolicies=$.map(oDATA.GET("proc_InsPolicies").Data, (i)-> if (oGLOBAL.date.firstBigger(i[4],accidentDate)) then return [i] else return null)
 		proc_InsPolicies_forThisAccident=$.extend({},oDATA.GET("proc_InsPolicies"),{Data:thisAccidentPolicies})#not deep copy -overwrite
 		oDATA.SET("proc_InsPolicies_forThisAccident", proc_InsPolicies_forThisAccident)
+		# App.router.transitionTo('claims','bla');
+		# App.router.transitionTo('claimRegulation');
 	editAccident: (e) ->
 		this.openAccident(e.context.no)		
 	#	filteredRecords: -> ##valueBinding=\"App.accidentsController.filter\"

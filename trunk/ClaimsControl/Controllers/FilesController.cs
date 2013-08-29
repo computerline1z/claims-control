@@ -72,7 +72,7 @@ namespace CC.Controllers {
 			//public int? AccidentID { get; set; }
 			//string errorMessage; tblDocsInAccident _tblDocsInAccidents = null; tblDoc _tblDocs = null;
 			string errorMessage; tblDoc _tblDocs = null;
-			//try {
+			try {
 				var stream = Request.Files[0].InputStream;  // Request.InputStream;
 				if (model.FileSize != stream.Length)
 					throw new Exception(String.Format("Duomenų perdavimo klaida: laukiama {0} baitų, gauta - {1}.", model.FileSize, stream.Length));
@@ -102,8 +102,8 @@ namespace CC.Controllers {
 						//new { iD = _tblDocsInAccidents.ID, docID = _tblDocsInAccidents.DocID, accidentID = _tblDocsInAccidents.AccidentID }
 					});
 
-			//}
-			//catch (Exception ex) { return Json(new[] { new { success = false, error = ex.Message, name = model.FileName, size = model.FileSize } }); }
+			}
+			catch (Exception ex) { return Json(new[] { new { success = false, error = ex.Message+" ver2", name = model.FileName, size = model.FileSize } }); }
 		}
 
 		//[HttpPost]
