@@ -26,7 +26,7 @@
 {{/with}}
 </div>
 	<div id="actionsFormOfClaimReg" style="padding:0;">
-		<div class="content" style="height:300px;overflow-y:scroll;">
+		<div class="content" style="max-height:200px;overflow-y:scroll;">
 			<table class="zebra-striped"><thead><tr><th>&nbsp;</th><th>Data</th><th>Kas</th><th>Kam</th><th>Info</th><th>Priedai</th></tr></thead><tbody>
 				{{#each activitiesTbl}}	
 					<tr {{action goToOtherView this}} class="clickable"><td><i class="img18-{{unbound icon}}"></i></td><td>{{entryDate}}</td><td>{{fromOnlyTbl}}</td><td>{{to}}</td><td>{{infoOnlyTbl}}</td><td>{{docs}}</td></tr>
