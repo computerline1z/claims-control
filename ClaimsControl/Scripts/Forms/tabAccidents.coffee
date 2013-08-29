@@ -35,12 +35,13 @@ App.SelectedAccidentView = Em.View.extend(
 	init: ->
 		`var ArrView = [],objView=[]`
 		#console.log("init selected accident")
-		@_super();
+		@_super(); claimsTypeID=@claims_TypeID.split('#')
 		ArrClaims = @get("claims_C").replace(new RegExp('{{(.*?)}}', 'gm'), '').split('#||'); #Iskertam nenaudojamus tarp{{ ir}}//?-kad nebutu greedy
 		ArrClaims2 = @get("claims_C2").split('#||');
 		if (ArrClaims[0] != "")
 			iterator=ArrClaims.length-1; i=-1
 			while ((i++)<iterator)
+				clTypeID=claimsTypeID[i]
 				ArrView[i] = 
 					Claims: ArrClaims[i].split('#|'),
 					Claims2: ArrClaims2[i].split('#|')
@@ -48,7 +49,9 @@ App.SelectedAccidentView = Em.View.extend(
 				#Claims2: 0-ClaimID, 1-VehicleID, 2-InsPolicyID, 3-InsuranceClaimAmount, 4-InsurerClaimID, 5-IsTotalLoss, 6-IsInjuredPersons, 7-Days, 8-PerDay	
 				objView[i] = 
 					finished: (if(ArrClaims[i][0] == "5") then true else false), no: ArrView[i].Claims[1], type: ArrView[i].Claims[2]
-					autoNo: ArrView[i].Claims[3], insurer: ArrView[i].Claims[4], loss: ArrView[i].Claims[5], Claims2: ArrView[i].Claims2, claimStatus:ArrClaims[i][0]
+					autoNo: ArrView[i].Claims[3], insurer: ArrView[i].Claims[4], loss:ArrView[i].Claims[5] # tmpAccident_Claims.cshtml naudos totalLoss jei jo nėra, tada loss
+					totalLoss:(if (ArrView[i].Claims2[2]!="0" and ArrView[i].Claims2[6] and clTypeID=="2" and not isNaN(parseFloat(ArrView[i].Claims2[3]))) then +ArrView[i].Claims[5]+ +ArrView[i].Claims2[3] else 0) # if InsPolicyID!=0 and IsInjuredPersons and clTypeID==2 and InsuranceClaimAmount is number then lossAmount+InsuranceClaimAmount else lossAmount
+					Claims2: ArrView[i].Claims2, claimStatus:ArrClaims[i][0]
 					accidentID: @get("iD"), accidentDate: @date
 		App.thisAccidentController.set("content", objView) #butinai masyvas
 		App.thisAccidentController.set("accidentID", @get("iD")) #butinai masyvas		
@@ -114,7 +117,7 @@ App.SelectedClaimView = Em.View.extend(
 		btnSaveToDisable=if c.newClaim then $(frm).find("button.btnSave") else $(frm).next().find("button.btnSave")
 		oCONTROLS.UpdatableForm(frm:frm,btnSaveToDisable:btnSaveToDisable)
 		if c.typeID==2
-			IClaim=$("#InsuranceClaimAmount").parent().parent(); IClaim.find("span").html("Žalos suma asmeniui")
+			IClaim=$("#InsuranceClaimAmount").parent().parent(); IClaim.find("span").html("Žalos suma asmeniui");
 			$("#LossAmount").parent().find("span").html("Žalos suma turtui");
 			fnCheckIsInjured =() ->
 				if this.attr("checked") then IClaim.css("display","block").find("input").data("ctrl").Validity=IClaim.find("input").data("ctrl").Validity.replace("require().","")
@@ -166,9 +169,12 @@ App.claimEditController = Em.Controller.create(#save, delete, cancel Claims even
 			@claim.set('noInsurance', noInsurance)
 		console.log(@claim.get('noInsurance'))
 		chk.attr("checked", noInsurance)
-		$("#ClaimDetailsContent").find("div.js-toggle").toggle().end().find("button.btnSave").attr("disabled",false);
-		if noInsurance then chk.addClass("UpdateField")
-		else chk.removeClass("UpdateField"); $("#InsuredClaimList").data("newval","") #.data("ctrl").Value="";#Kad sita updatintu
+		content=$("#ClaimDetailsContent");eToggle=content.find("div.js-toggle")
+		content.find("button.btnSave").attr("disabled",false);
+		#$("#ClaimDetailsContent").find("div.js-toggle").toggle().end().find("button.btnSave").attr("disabled",false);
+		if noInsurance then chk.addClass("UpdateField"); eToggle.hide()
+		else chk.removeClass("UpdateField"); eToggle.show(); $("#InsuredClaimList").data("newval","") #.data("ctrl").Value="";#Kad sita updatintu
+		if $('#IsInjuredPersons').length then $('#IsInjuredPersons').prop("checked",false); $("#InsuranceClaimAmount").parent().parent().hide() #Jeigu yra IsInjuredPersons atslepiant varnele bus nuimta, o lauko nerodom
 		false
 	deleteForm: (e) ->
 		oData=oDATA.GET("proc_Claims"); context=e.view._parentView.templateData.view.rowContext;

@@ -19,15 +19,17 @@
     templateName: 'tmpAccident_Claims',
     init: function() {
       var ArrView = [],objView=[];
-      var ArrClaims, ArrClaims2, i, iterator;
+      var ArrClaims, ArrClaims2, clTypeID, claimsTypeID, i, iterator;
 
       this._super();
+      claimsTypeID = this.claims_TypeID.split('#');
       ArrClaims = this.get("claims_C").replace(new RegExp('{{(.*?)}}', 'gm'), '').split('#||');
       ArrClaims2 = this.get("claims_C2").split('#||');
       if (ArrClaims[0] !== "") {
         iterator = ArrClaims.length - 1;
         i = -1;
         while ((i++) < iterator) {
+          clTypeID = claimsTypeID[i];
           ArrView[i] = {
             Claims: ArrClaims[i].split('#|'),
             Claims2: ArrClaims2[i].split('#|')
@@ -39,6 +41,7 @@
             autoNo: ArrView[i].Claims[3],
             insurer: ArrView[i].Claims[4],
             loss: ArrView[i].Claims[5],
+            totalLoss: (ArrView[i].Claims2[2] !== "0" && ArrView[i].Claims2[6] && clTypeID === "2" && !isNaN(parseFloat(ArrView[i].Claims2[3])) ? +ArrView[i].Claims[5] + +ArrView[i].Claims2[3] : 0),
             Claims2: ArrView[i].Claims2,
             claimStatus: ArrClaims[i][0],
             accidentID: this.get("iD"),
@@ -249,7 +252,7 @@
 
   App.claimEditController = Em.Controller.create({
     fnToggle_noInsurance: function(e) {
-      var chk, noInsurance, t;
+      var chk, content, eToggle, noInsurance, t;
 
       t = e.target;
       chk = t.tagName.toUpperCase() === "INPUT" ? $(t) : $(t).find("input:checkbox");
@@ -261,12 +264,20 @@
       }
       console.log(this.claim.get('noInsurance'));
       chk.attr("checked", noInsurance);
-      $("#ClaimDetailsContent").find("div.js-toggle").toggle().end().find("button.btnSave").attr("disabled", false);
+      content = $("#ClaimDetailsContent");
+      eToggle = content.find("div.js-toggle");
+      content.find("button.btnSave").attr("disabled", false);
       if (noInsurance) {
         chk.addClass("UpdateField");
+        eToggle.hide();
       } else {
         chk.removeClass("UpdateField");
+        eToggle.show();
         $("#InsuredClaimList").data("newval", "");
+      }
+      if ($('#IsInjuredPersons').length) {
+        $('#IsInjuredPersons').prop("checked", false);
+        $("#InsuranceClaimAmount").parent().parent().hide();
       }
       return false;
     },
