@@ -552,13 +552,6 @@ namespace CC.Models
 			return ((ISingleResult<proc_FinancesResult>)(result.ReturnValue));
 		}
 		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.proc_Accidents")]
-		public ISingleResult<proc_AccidentsResult> proc_Accidents([global::System.Data.Linq.Mapping.ParameterAttribute(Name="AccountID", DbType="Int")] System.Nullable<int> accountID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="AccidentID", DbType="Int")] System.Nullable<int> accidentID)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), accountID, accidentID);
-			return ((ISingleResult<proc_AccidentsResult>)(result.ReturnValue));
-		}
-		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.fnWords", IsComposable=true)]
 		public IQueryable<fnWordsResult> fnWords([global::System.Data.Linq.Mapping.ParameterAttribute(Name="LanguageID", DbType="Int")] System.Nullable<int> languageID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Object", DbType="VarChar(50)")] string @object)
 		{
@@ -570,6 +563,13 @@ namespace CC.Models
 		{
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), accountID);
 			return ((ISingleResult<proc_ActivitiesResult>)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.proc_Accidents")]
+		public ISingleResult<proc_AccidentsResult> proc_Accidents([global::System.Data.Linq.Mapping.ParameterAttribute(Name="AccountID", DbType="Int")] System.Nullable<int> accountID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="AccidentID", DbType="Int")] System.Nullable<int> accidentID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="UserID", DbType="Int")] System.Nullable<int> userID)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), accountID, accidentID, userID);
+			return ((ISingleResult<proc_AccidentsResult>)(result.ReturnValue));
 		}
 	}
 	
@@ -12398,6 +12398,328 @@ namespace CC.Models
 		}
 	}
 	
+	public partial class fnWordsResult
+	{
+		
+		private string _KeyName;
+		
+		private string _Label;
+		
+		private string _Tip;
+		
+		public fnWordsResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_KeyName", DbType="VarChar(100)")]
+		public string KeyName
+		{
+			get
+			{
+				return this._KeyName;
+			}
+			set
+			{
+				if ((this._KeyName != value))
+				{
+					this._KeyName = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Label", DbType="NVarChar(MAX)")]
+		public string Label
+		{
+			get
+			{
+				return this._Label;
+			}
+			set
+			{
+				if ((this._Label != value))
+				{
+					this._Label = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Tip", DbType="NVarChar(MAX)")]
+		public string Tip
+		{
+			get
+			{
+				return this._Tip;
+			}
+			set
+			{
+				if ((this._Tip != value))
+				{
+					this._Tip = value;
+				}
+			}
+		}
+	}
+	
+	public partial class proc_ActivitiesResult
+	{
+		
+		private int _ID;
+		
+		private int _ClaimID;
+		
+		private int _TypeID;
+		
+		private string _FromText;
+		
+		private int _FromID;
+		
+		private string _ToText;
+		
+		private int _ToID;
+		
+		private string _Subject;
+		
+		private string _Body;
+		
+		private string _Date;
+		
+		private int _UserID;
+		
+		private string _EntryDate;
+		
+		private double _Amount;
+		
+		private string _Docs;
+		
+		public proc_ActivitiesResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="Int NOT NULL")]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this._ID = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClaimID", DbType="Int NOT NULL")]
+		public int ClaimID
+		{
+			get
+			{
+				return this._ClaimID;
+			}
+			set
+			{
+				if ((this._ClaimID != value))
+				{
+					this._ClaimID = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TypeID", DbType="Int NOT NULL")]
+		public int TypeID
+		{
+			get
+			{
+				return this._TypeID;
+			}
+			set
+			{
+				if ((this._TypeID != value))
+				{
+					this._TypeID = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FromText", DbType="NVarChar(500) NOT NULL", CanBeNull=false)]
+		public string FromText
+		{
+			get
+			{
+				return this._FromText;
+			}
+			set
+			{
+				if ((this._FromText != value))
+				{
+					this._FromText = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FromID", DbType="Int NOT NULL")]
+		public int FromID
+		{
+			get
+			{
+				return this._FromID;
+			}
+			set
+			{
+				if ((this._FromID != value))
+				{
+					this._FromID = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ToText", DbType="NVarChar(500) NOT NULL", CanBeNull=false)]
+		public string ToText
+		{
+			get
+			{
+				return this._ToText;
+			}
+			set
+			{
+				if ((this._ToText != value))
+				{
+					this._ToText = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ToID", DbType="Int NOT NULL")]
+		public int ToID
+		{
+			get
+			{
+				return this._ToID;
+			}
+			set
+			{
+				if ((this._ToID != value))
+				{
+					this._ToID = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Subject", DbType="NVarChar(200) NOT NULL", CanBeNull=false)]
+		public string Subject
+		{
+			get
+			{
+				return this._Subject;
+			}
+			set
+			{
+				if ((this._Subject != value))
+				{
+					this._Subject = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Body", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string Body
+		{
+			get
+			{
+				return this._Body;
+			}
+			set
+			{
+				if ((this._Body != value))
+				{
+					this._Body = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Date", DbType="VarChar(10)")]
+		public string Date
+		{
+			get
+			{
+				return this._Date;
+			}
+			set
+			{
+				if ((this._Date != value))
+				{
+					this._Date = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserID", DbType="Int NOT NULL")]
+		public int UserID
+		{
+			get
+			{
+				return this._UserID;
+			}
+			set
+			{
+				if ((this._UserID != value))
+				{
+					this._UserID = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EntryDate", DbType="VarChar(10)")]
+		public string EntryDate
+		{
+			get
+			{
+				return this._EntryDate;
+			}
+			set
+			{
+				if ((this._EntryDate != value))
+				{
+					this._EntryDate = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Amount", DbType="Float NOT NULL")]
+		public double Amount
+		{
+			get
+			{
+				return this._Amount;
+			}
+			set
+			{
+				if ((this._Amount != value))
+				{
+					this._Amount = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Docs", DbType="VarChar(12)")]
+		public string Docs
+		{
+			get
+			{
+				return this._Docs;
+			}
+			set
+			{
+				if ((this._Docs != value))
+				{
+					this._Docs = value;
+				}
+			}
+		}
+	}
+	
 	public partial class proc_AccidentsResult
 	{
 		
@@ -12761,328 +13083,6 @@ namespace CC.Models
 				if ((this._IsNotOurFault != value))
 				{
 					this._IsNotOurFault = value;
-				}
-			}
-		}
-	}
-	
-	public partial class fnWordsResult
-	{
-		
-		private string _KeyName;
-		
-		private string _Label;
-		
-		private string _Tip;
-		
-		public fnWordsResult()
-		{
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_KeyName", DbType="VarChar(100)")]
-		public string KeyName
-		{
-			get
-			{
-				return this._KeyName;
-			}
-			set
-			{
-				if ((this._KeyName != value))
-				{
-					this._KeyName = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Label", DbType="NVarChar(MAX)")]
-		public string Label
-		{
-			get
-			{
-				return this._Label;
-			}
-			set
-			{
-				if ((this._Label != value))
-				{
-					this._Label = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Tip", DbType="NVarChar(MAX)")]
-		public string Tip
-		{
-			get
-			{
-				return this._Tip;
-			}
-			set
-			{
-				if ((this._Tip != value))
-				{
-					this._Tip = value;
-				}
-			}
-		}
-	}
-	
-	public partial class proc_ActivitiesResult
-	{
-		
-		private int _ID;
-		
-		private int _ClaimID;
-		
-		private int _TypeID;
-		
-		private string _FromText;
-		
-		private int _FromID;
-		
-		private string _ToText;
-		
-		private int _ToID;
-		
-		private string _Subject;
-		
-		private string _Body;
-		
-		private string _Date;
-		
-		private int _UserID;
-		
-		private string _EntryDate;
-		
-		private double _Amount;
-		
-		private string _Docs;
-		
-		public proc_ActivitiesResult()
-		{
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="Int NOT NULL")]
-		public int ID
-		{
-			get
-			{
-				return this._ID;
-			}
-			set
-			{
-				if ((this._ID != value))
-				{
-					this._ID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClaimID", DbType="Int NOT NULL")]
-		public int ClaimID
-		{
-			get
-			{
-				return this._ClaimID;
-			}
-			set
-			{
-				if ((this._ClaimID != value))
-				{
-					this._ClaimID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TypeID", DbType="Int NOT NULL")]
-		public int TypeID
-		{
-			get
-			{
-				return this._TypeID;
-			}
-			set
-			{
-				if ((this._TypeID != value))
-				{
-					this._TypeID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FromText", DbType="NVarChar(500) NOT NULL", CanBeNull=false)]
-		public string FromText
-		{
-			get
-			{
-				return this._FromText;
-			}
-			set
-			{
-				if ((this._FromText != value))
-				{
-					this._FromText = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FromID", DbType="Int NOT NULL")]
-		public int FromID
-		{
-			get
-			{
-				return this._FromID;
-			}
-			set
-			{
-				if ((this._FromID != value))
-				{
-					this._FromID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ToText", DbType="NVarChar(500) NOT NULL", CanBeNull=false)]
-		public string ToText
-		{
-			get
-			{
-				return this._ToText;
-			}
-			set
-			{
-				if ((this._ToText != value))
-				{
-					this._ToText = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ToID", DbType="Int NOT NULL")]
-		public int ToID
-		{
-			get
-			{
-				return this._ToID;
-			}
-			set
-			{
-				if ((this._ToID != value))
-				{
-					this._ToID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Subject", DbType="NVarChar(200) NOT NULL", CanBeNull=false)]
-		public string Subject
-		{
-			get
-			{
-				return this._Subject;
-			}
-			set
-			{
-				if ((this._Subject != value))
-				{
-					this._Subject = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Body", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
-		public string Body
-		{
-			get
-			{
-				return this._Body;
-			}
-			set
-			{
-				if ((this._Body != value))
-				{
-					this._Body = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Date", DbType="VarChar(10)")]
-		public string Date
-		{
-			get
-			{
-				return this._Date;
-			}
-			set
-			{
-				if ((this._Date != value))
-				{
-					this._Date = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserID", DbType="Int NOT NULL")]
-		public int UserID
-		{
-			get
-			{
-				return this._UserID;
-			}
-			set
-			{
-				if ((this._UserID != value))
-				{
-					this._UserID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EntryDate", DbType="VarChar(10)")]
-		public string EntryDate
-		{
-			get
-			{
-				return this._EntryDate;
-			}
-			set
-			{
-				if ((this._EntryDate != value))
-				{
-					this._EntryDate = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Amount", DbType="Float NOT NULL")]
-		public double Amount
-		{
-			get
-			{
-				return this._Amount;
-			}
-			set
-			{
-				if ((this._Amount != value))
-				{
-					this._Amount = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Docs", DbType="VarChar(12)")]
-		public string Docs
-		{
-			get
-			{
-				return this._Docs;
-			}
-			set
-			{
-				if ((this._Docs != value))
-				{
-					this._Docs = value;
 				}
 			}
 		}
