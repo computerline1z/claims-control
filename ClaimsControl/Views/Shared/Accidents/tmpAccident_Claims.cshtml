@@ -1,5 +1,8 @@
 ﻿<table id="tblClaims">
 	{{#each view.content}}
+	{{log this}}
+	{{log view}}
+	{{log view.content}}
 	<tr {{bindAttr class="finished:claimOK"}} {{action tbodyClick this}})>@*Html.Raw("{{action tbodyClick this target=\"this\"}}"*@
 		{{#if finished}}
 			<td class="td"><i class="img32-check"></i></td>
@@ -10,7 +13,7 @@
 		<td>{{type}}</td>
 		<td>{{autoNo}}</td>
 		<td>{{insurer}}</td>
-		<td>{{currency loss}}</td>
+		{{#if totalLoss}}<td>{{currency totalLoss}}</td>{{else}}<td>{{currency loss}}</td>{{/if}}
 		<td><a {{action toClaimRegulation this}}>Reguliavimas</a></td>
 @*	<td><a {{action viewClaimRegulation this}}>Reguliavimas</a></td>    target="App.accidentsController"*@	
 	</tr>

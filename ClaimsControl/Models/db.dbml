@@ -607,32 +607,6 @@
       <Column Name="Docs" Type="System.String" DbType="VarChar(12)" CanBeNull="true" />
     </ElementType>
   </Function>
-  <Function Name="dbo.proc_Accidents" Method="proc_Accidents">
-    <Parameter Name="AccountID" Parameter="accountID" Type="System.Int32" DbType="Int" />
-    <Parameter Name="AccidentID" Parameter="accidentID" Type="System.Int32" DbType="Int" />
-    <ElementType Name="proc_AccidentsResult">
-      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="No" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Date" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
-      <Column Name="Place" Type="System.String" DbType="NVarChar(334) NOT NULL" CanBeNull="false" />
-      <Column Name="AccType" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
-      <Column Name="CNo_All" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="CNo_NotF" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="LossSum" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="AmountIsConfirmed" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
-      <Column Name="ShortNote" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
-      <Column Name="LongNote" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
-      <Column Name="Driver" Type="System.String" DbType="NVarChar(401) NOT NULL" CanBeNull="false" />
-      <Column Name="UserName" Type="System.String" DbType="NVarChar(101) NOT NULL" CanBeNull="false" />
-      <Column Name="Claims_C" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
-      <Column Name="Claims_C2" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
-      <Column Name="DaysFrom" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="DocNo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Claims_TypeID" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
-      <Column Name="DriverID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="IsNotOurFault" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-    </ElementType>
-  </Function>
   <Function Name="dbo.fnWords" Method="fnWords" IsComposable="true">
     <Parameter Name="LanguageID" Parameter="languageID" Type="System.Int32" DbType="Int" />
     <Parameter Name="Object" Parameter="object" Type="System.String" DbType="VarChar(50)" />
@@ -659,6 +633,33 @@
       <Column Name="EntryDate" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
       <Column Name="Amount" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
       <Column Name="Docs" Type="System.String" DbType="VarChar(12)" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.proc_Accidents" Method="proc_Accidents">
+    <Parameter Name="AccountID" Parameter="accountID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="AccidentID" Parameter="accidentID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="UserID" Parameter="userID" Type="System.Int32" DbType="Int" />
+    <ElementType Name="proc_AccidentsResult">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="No" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Date" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="Place" Type="System.String" DbType="NVarChar(334) NOT NULL" CanBeNull="false" />
+      <Column Name="AccType" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="CNo_All" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CNo_NotF" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="LossSum" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="AmountIsConfirmed" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="ShortNote" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="LongNote" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="Driver" Type="System.String" DbType="NVarChar(401) NOT NULL" CanBeNull="false" />
+      <Column Name="UserName" Type="System.String" DbType="NVarChar(101) NOT NULL" CanBeNull="false" />
+      <Column Name="Claims_C" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="Claims_C2" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="DaysFrom" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DocNo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Claims_TypeID" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="DriverID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IsNotOurFault" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
     </ElementType>
   </Function>
 </Database>
