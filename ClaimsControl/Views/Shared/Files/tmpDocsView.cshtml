@@ -2,6 +2,7 @@
 {{#if controller.isPhoto}}
 	{{#each controller.docs}}
 	<li class="ui-widget-content ui-corner-tr photo" {{bindAttr data-doc-id="docID" }}>
+
 		<div  class="photo-image">
 		{{#if hasThumb}}
 			<a data-gallery="gallery" {{bindAttr href="urlDoc" }}>
@@ -23,7 +24,7 @@
 					</div>
 				{{else}}
 					<div>{{description}}</div>
-					<a {{bindAttr href="urlDoc" }} target="_blank">{{fileName}}</a></br>
+					<a {{bindAttr href="urlDoc" }} class="word-break" target="_blank">{{fileName}}</a></br>
 					<p>{{userName}}&nbsp;{{fileDate}}</p>
 					<div class="w100px">
 						<i class="img32-mono_edit clickable" {{action editDoc this target="App.editDocsController"}}></i>

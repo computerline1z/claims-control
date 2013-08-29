@@ -205,7 +205,7 @@ textarea {
   font-size: 12px;
 }
 .col-right {
-  margin-right: 0.5% !important;
+  margin-right: 3% !important;
 }
 /**
  * 
@@ -289,67 +289,70 @@ textarea {
     float: left;
     min-height: 1px;
     position: relative;
-    margin: 0 0 0 0.5%;
+    margin: 0 0 0 3%;
+  }
+  .col:first-child {
+    margin-left: 0;
   }
   .col.formSubTitle {
-    margin: 0 0 0 0.5%;
+    margin: 0 0 0 3%;
   }
   /*Columns widths and left margins*/
   .one {
     width: 40px;
-    width: 7.875%;
+    width: 5.583333333333333%;
   }
   .two {
     width: 100px;
-    width: 16.25%;
+    width: 14.166666666666666%;
   }
   .three {
     width: 160px;
-    width: 24.625%;
+    width: 22.75%;
   }
   .four {
     width: 220px;
-    width: 33%;
+    width: 31.333333333333332%;
   }
   .five {
     width: 280px;
-    width: 41.375%;
+    width: 39.916666666666664%;
   }
   .six {
     width: 340px;
-    width: 49.75%;
+    width: 48.5%;
   }
   .seven {
     width: 400px;
-    width: 58.125%;
+    width: 57.08333333333333%;
   }
   .eight {
     width: 460px;
-    width: 66.5%;
+    width: 65.66666666666666%;
   }
   .nine {
     width: 520px;
-    width: 74.875%;
+    width: 74.25%;
   }
   .ten {
     width: 580px;
-    width: 83.25%;
+    width: 82.83333333333333%;
   }
   .eleven {
     width: 640px;
-    width: 91.625%;
+    width: 91.41666666666666%;
   }
   .six .two {
-    margin-left: 1.0050251256281406%;
-    width: 32.663316582914575%;
+    margin-left: 6.185567010309279%;
+    width: 29.209621993127143%;
   }
   .six .three {
-    margin-left: 1.0050251256281406%;
-    width: 49.497487437185924%;
+    margin-left: 6.185567010309279%;
+    width: 46.90721649484536%;
   }
   .six .four {
-    margin-left: 1.0050251256281406%;
-    width: 66.33165829145729%;
+    margin-left: 6.185567010309279%;
+    width: 64.60481099656357%;
   }
 }
 /*==============================================================================
@@ -842,8 +845,8 @@ table.zebra-striped tr th {
 }
 table.zebra-striped tr td {
   /*border-bottom: 4px solid @grayLighter;*/
-  border-bottom: 1px dashed #e6e6e6;
-  padding: 6px 20px 6px 16px;
+  /*border-bottom: 1px dashed @grayLighter;*/
+  padding: 7px 20px 7px 16px;
 }
 table.zebra-striped tr {
   background: white;
@@ -2120,7 +2123,8 @@ div.dialog-form-label {
   margin-left: 0px;
   cursor: pointer;
   /*ideta: */
-  font-size: 11px;
+  /*font-size: @smallfont;*/
+
 }
 .ExtendIt label input[type="checkbox"] {
   display: block;
@@ -2381,9 +2385,7 @@ label.leftlabel label.left textarea {
   border-radius: 0;
 }
 .date {
-  text-align: center;
-  width: 10% !important;
-  min-width: 6.5em;
+  min-width: 71px;
 }
 .time {
   text-align: center;
@@ -2467,7 +2469,7 @@ div.growlUI h2 {
   float: left;
   width: 30%;
   padding: 10px;
-  margin: 10px;
+  margin: 9px;
   border: 1px solid #dddddd;
   cursor: move;
   height: 250px;
@@ -2520,12 +2522,14 @@ div.growlUI h2 {
   border: 2px solid #eb5a44 !important;
 }
 .gallery li p {
-  font-size: 10px !important;
-  line-height: 12px !important;
+  font-size: 10px;
 }
 .gallery li a {
-  font-size: 10px !important;
-  line-height: 20px !important;
+  display: block;
+  /* to allow smaller line-height in breaked words */
+
+  font-size: 10px;
+  line-height: 12px;
 }
 .gallery li img {
   width: 100%;
@@ -2537,17 +2541,25 @@ div.growlUI h2 {
   list-style: none;
   margin-left: 0;
 }
+#dynamicTree > div > ul > li:first-of-type .treeContent {
+  margin-top: -1px;
+}
+#dynamicTree > div > ul > li:first-of-type .treeContent.selected {
+  margin-top: 0;
+}
 .expandImage,
 .spacerImage {
-  margin: 4px 2px 0 0;
-  height: 16px;
-  width: 16px;
+  height: 9px;
+  width: 9px;
+  margin-left: 9px;
+  margin-right: 3px;
 }
 .treeContent {
-  border-bottom: thin dotted black;
-  border-right: #999 solid thin;
+  border-bottom: thin dotted #bfbfbf;
   color: #FFFFFF;
   background-color: #A59894;
+  padding-top: 1px;
+  padding-bottom: 2px;
 }
 .treeContent:hover {
   cursor: pointer;
@@ -2555,15 +2567,14 @@ div.growlUI h2 {
   color: #ffffff !important;
 }
 .treeContent.selected {
-  border-right: white solid thin;
-  border-top: solid #999 thin;
-  border-bottom: solid #999 thin;
+  border-bottom: solid #807673 thin;
   position: relative;
   top: -1px;
   margin-bottom: -1px;
-  background-color: #ffffff;
-  color: #000000;
-  font-weight: bold;
+  background-color: #807673;
+  color: #e8e8e8;
+  padding-top: 2px;
+  padding-bottom: 2px;
 }
 .textHolder {
   height: 16px;
@@ -2574,8 +2585,8 @@ div.growlUI h2 {
   list-style: none;
   margin: 0;
 }
-.treeItemHover {
-  font-weight: bold;
+.treeItemHover .treeContent {
+  background: #CC9F91;
 }
 #docViewWrapper {
   width: 80%;
@@ -2698,7 +2709,6 @@ div.growlUI h2 {
 }
 .custombackgroundList {
   background: none repeat scroll 0 0 #FFFFFF;
-  margin: -4px 0 14px 0;
   -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
   -moz-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
@@ -3048,9 +3058,6 @@ form input.searchField {
 #tabs-policy .leftlabel span {
   font-weight: normal;
 }
-#divMapHead {
-  display: none;
-}
 #divSearchMap {
   background-color: #eb5a44;
   padding: 8px;
@@ -3089,8 +3096,12 @@ form input.searchField {
 }
 .date-time-select .time {
   height: 26px;
-  vertical-align: top;
-  float: right;
+  position: absolute;
+  right: 0;
+  top: 20px;
+}
+.date-time-select .date {
+  text-align: center;
 }
 .leftlabel > span {
   display: inline-block;
@@ -5685,6 +5696,13 @@ button.ui-button::-moz-focus-inner {
   background: none;
   border: 0px;
 }
+.ui-tabs .ui-tabs-nav li.add_driver {
+  float: right;
+  margin-top: 3px;
+}
+.ui-tabs .ui-tabs-nav li.add_driver:hover {
+  border-bottom: 0;
+}
 .ui-tabs-nav .ui-state-default {
   -webkit-box-shadow: 0px 0px 0px #ffffff;
   /* Saf3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
@@ -6358,6 +6376,9 @@ input[type="password"],
 }
 .w70pr {
   width: 70%;
+}
+.w70prImportant {
+  width: 70%!important;
 }
 .w75pr {
   width: 75%;
@@ -7731,7 +7752,7 @@ input,
 button,
 select,
 textarea {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: normal;
   line-height: 20px;
 }
@@ -7799,7 +7820,7 @@ input[type="tel"],
 input[type="color"],
 .uneditable-input {
   background-color: #ffffff;
-  border: 1px solid #cccccc;
+  border: 1px solid #a59894;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
@@ -8592,11 +8613,20 @@ legend + .control-group {
 .margin-l0 {
   margin-left: 0;
 }
+.no-margin {
+  margin: 0;
+}
+.no-margin-important {
+  margin: 0!important;
+}
 /* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\ */
 /* PADDINGS */
 /* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\ */
 .pad14 {
   padding: 14px;
+}
+.pad7 {
+  padding: 7px;
 }
 .pad-b0 {
   padding-bottom: 0;
@@ -8632,14 +8662,18 @@ legend + .control-group {
 .text-red {
   color: #f00;
 }
-.text-lbrown {
-  color: #a59894;
-}
-a.text-lbrown:hover {
-  color: #80716c;
-}
 .text-system-red {
   color: #eb5a44;
+}
+.word-break {
+  -ms-word-break: break-all;
+  word-break: break-all;
+  /* Non standard for webkit */
+
+  word-break: break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  hyphens: auto;
 }
 /* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
 /* FONT */
@@ -8662,6 +8696,9 @@ a.text-lbrown:hover {
 .border-bot-gray {
   border-bottom: 1px solid #c1c1c1;
 }
+.no-borders {
+  border: 0;
+}
 /* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
 /* VERTICAL ALIGN */
 /* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
@@ -8682,6 +8719,12 @@ a.text-lbrown:hover {
   -webkit-box-shadow: 0 0 3px #bfbfbf;
   -moz-box-shadow: 0 0 3px #bfbfbf;
   box-shadow: 0 0 3px #bfbfbf;
+}
+.link-back {
+  color: #a59894;
+}
+.link-back:hover {
+  color: #80716c;
 }
 .validation-summary-errors {
   /* created to style errors displayed in login page */
