@@ -1,7 +1,6 @@
 oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 	"use strict"; var UpdateServer, DefaultTime, fnChangeCheck, fnChange, LoadScript;
 	SERVER.send("{'AccidentNo':" + AccidentNo + "}", oGLOBAL.Start.fnSetNewData, { Ctrl: "divAccidentEdit", RenderNew: 1, fnCallBack: function () { LoadScript(); } }, "/Accident/GetAccident", "json");
-
 	LoadScript = function () {
 		$("#btnMapTown").button({ disabled: true }).click(function () { oGLOBAL.mapFn.GetMapFromTown(); return false; });
 		var frmOpts=$("#AccidentForm").data("ctrl");	//NewRec, Source, id, vehicles
@@ -127,24 +126,29 @@ oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 		oGLOBAL.AccidentForm = $("#AccidentForm").data("ctrl"); //NewRec id Lat Lng
 		//$("#divSearchMap").outerHeight($("#divMapHead").height());
 		//oGLOBAL.mapFn.loadGoogleMapScript(oGLOBAL.mapFn.loadGMap);
-		oGLOBAL.mapFn.loadGMap();
+		if (typeof google!=="undefined") {oGLOBAL.mapFn.loadGMap();}
 		if (!oGLOBAL.AccidentForm .NewRec){oGLOBAL.mapFn.fnSetAddress($('#txtPlace').html())};
 	};
 	return false;
 	//*****************************************************************************************************************************************
 };
-oGLOBAL.map = null; //Gmap
-oGLOBAL.geocoder = null;
-oGLOBAL.AccidentForm = {};
-oGLOBAL.infoWindow = new google.maps.InfoWindow();
-oGLOBAL.openInfoWindow = function(latlng,content) {
-        var iW=oGLOBAL.infoWindow; iW.close();
-	iW .setContent(content);
-	iW.setPosition(latlng);
-	iW.open(oGLOBAL.map);	
-};
-
+if (typeof google !== "undefined") {
+	oGLOBAL.map = null; //Gmap
+	oGLOBAL.geocoder = null;
+	oGLOBAL.AccidentForm = {};
+	oGLOBAL.infoWindow = new google.maps.InfoWindow();
+	oGLOBAL.openInfoWindow = function (latlng, content) {
+		var iW = oGLOBAL.infoWindow; iW.close();
+		iW.setContent(content);
+		iW.setPosition(latlng);
+		iW.open(oGLOBAL.map);
+	};
+}
 oGLOBAL.mapFn = {
+	fnToogleMapHead:function(p) {//p{hideSearchMap:true}
+		$("#divSearchMap").toggleClass('hidden',p.hideSearchMap);
+		$("#divMapHead").toggleClass('hidden',!p.hideSearchMap);
+	},
 	GetMapFromTown: function () {
 		"use strict"; var Town = $("#inputChooseTown").val(), coords=Town.match(new RegExp("([0-9]+\.[0-9]+)","g")),toGeocode;
 		if  (coords===null){toGeocode=Town;}		
@@ -183,7 +187,8 @@ oGLOBAL.mapFn = {
 		//if ($("#linkToGoogle").attr("href")!=="#"){$("#btnSaveAccident").removeAttr("disabled", "disabled");}//enablinam buttona jei neužsikrovimas
 		$("#linkToGoogle").attr("href","https://maps.google.com/maps?q="+p.Lat+","+p.Lng+"("+place+")")
 		$('#txtPlace').html(place);
-		$("#divSearchMap").css("display","none");
+		//$("#divSearchMap").css("display","none");
+		oGLOBAL.mapFn.fnToogleMapHead({hideSearchMap:true});
 	},
 	Mapclicked: function (event) {
 		"use strict"; var latlng=event.latLng;
@@ -284,13 +289,14 @@ oGLOBAL.mapFn = {
 				oGLOBAL.mapFn.fnSetAddress(oGLOBAL.map.SetAddress);
 				if ($('#ConfirmNewMapData').length) { $('#ConfirmNewMapData').remove(); }
 				oGLOBAL.openInfoWindow(latlng, oGLOBAL.map.SetAddress);
-				$("#divSearchMap").hide();
+				//$("#divSearchMap").hide();
+				oGLOBAL.mapFn.fnToogleMapHead({hideSearchMap:true});
 			});
 		} else {EditMap();}
 		$('#btnEditMap').click(function () {
-			var t = $(this); $("#divSearchMap").show().outerHeight($("#divMapHead").height());
+			//var t = $(this); $("#divSearchMap").show().outerHeight($("#divMapHead").height());
+			oGLOBAL.mapFn.fnToogleMapHead({hideSearchMap:false});
 			EditMap();
 		});
 	}
 };
-console.log("accidentCard loaded");
