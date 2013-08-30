@@ -108,6 +108,7 @@ JQ.Dialog = Ember.View.extend(JQ.Widget, {
 	elementId: 'openItemDialog',
 	uiType: 'dialog',
 	didInsertElement: function() {
+		if (this.title.length>50){this.title=this.title.slice(0,50)+"..";}//Jei titulas per ilgas sutrumpinam jį
 		this._super(); me=this;
 		if (this.cancelLink){// appending cancel a.link
 			dialog=this.$(); pane=dialog.next().find("div.ui-dialog-buttonset");
