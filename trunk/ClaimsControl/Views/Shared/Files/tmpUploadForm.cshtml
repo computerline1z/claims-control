@@ -3,18 +3,17 @@
    <noscript><input type="hidden" name="redirect" value="http://blueimp.github.com/jQuery-File-Upload/"></noscript>
    The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload*@
    <div class="row fileupload-buttonbar">
-   <center>
-	<div class="span7">
+	<div class="text-center">
 	{{#if showPhoto}}
 		<i class="img16-camera"></i>
-			<a class="fileinput-button mr50">
-				<span>Prisegti nuotraukas</span>
-				<input type="file" name="pictures[]" multiple>
+			<a class="fileinput-button mr50 font14 valign-middle">
+				Prisegti nuotraukas<!--
+				--><input type="file" name="pictures[]" multiple>
 			</a>
 	{{/if}}
 		<i class="img16-attach"></i>
-			<a  class="fileinput-button mr50">
-				<span>Prisegti dokumentus</span>
+			<a  class="fileinput-button mr50 font14 valign-middle">
+				Prisegti dokumentus
 				<input type="file" name="docs[]" multiple>
 			</a>
 	{{#if showFromAccident}}
@@ -22,7 +21,7 @@
 				<span>Įkelti iš įvykio kortelės</span>
 			</a>
 	{{/if}}
-     </div><br/>
+    </div>
 		@*The global progress information*@ 
      <div class="span5 fileupload-progress fade">
             @*The global progress bar*@
@@ -32,7 +31,7 @@
             @*The extended global progress information*@
             <div class="progress-extended">&nbsp;</div>
       </div>
-	  </center>
+
    </div>
    @*The loading indicator is shown during file processing*@
    <div class="fileupload-loading"></div>
