@@ -13,24 +13,26 @@
 		{{/if}}
 		</div>
 				
-				{{#if this.editMode}}
-					<div class="ExtendIt" style="margin:0">
-						<input class="description" type="text" {{bindAttr value="description"}} style="width:100%;margin-bottom:5px;"/>
-						<input class="docType" type="text" {{bindAttr value="docType"}}/>
-						<div style="margin-top:18px">
-							<a  {{action cancelSaveDoc this target="App.editDocsController"}}>Atšaukti</a>
-							<button {{action SaveEditedDoc this target="App.editDocsController"}} class="btn small">Išsaugoti</button>
-						</div>
-					</div>
-				{{else}}
-					<div>{{description}}</div>
-					<a {{bindAttr href="urlDoc" }} class="word-break" target="_blank">{{fileName}}</a></br>
-					<p>{{userName}}&nbsp;{{fileDate}}</p>
-					<div class="w100px">
-						<i class="img32-mono_edit clickable" {{action editDoc this target="App.editDocsController"}}></i>
-						<i class="img32-mono_delete clickable" {{action deleteDoc this target="App.editDocsController"}}></i>
-					</div>
-				{{/if}}
+		{{#if this.editMode}}
+			<div class="ExtendIt" style="margin:0">
+				<input class="description" type="text" {{bindAttr value="description"}} style="width:100%;margin-bottom:5px;height:26px;"/>
+				<input class="docType" type="text" style="height:26px;margin-bottom:5px;" {{bindAttr value="docType"}}/>
+				
+				<div class="clearfix pad-b5">
+					<button {{action SaveEditedDoc this target="App.editDocsController"}} class="btn small pull-left">Išsaugoti</button>
+					<a {{action cancelSaveDoc this target="App.editDocsController"}} class="margin-vert7 pull-right">Atšaukti</a>
+				</div>
+
+			</div>
+		{{else}}
+			<div class="text-dgray lheight16 pad-b4">{{description}}</div>
+			<a {{bindAttr href="urlDoc" }} class="word-break" target="_blank">{{fileName}}</a>
+			<p class="pad-bot0">{{userName}}&nbsp;{{fileDate}}</p>
+			<div class="w100px">
+				<i class="img32-mono_edit clickable" {{action editDoc this target="App.editDocsController"}}></i>
+				<i class="img32-mono_delete clickable" {{action deleteDoc this target="App.editDocsController"}}></i>
+			</div>
+		{{/if}}
 
 	</li>
 	{{/each}}
@@ -49,34 +51,38 @@
 
 			{{#if this.editMode}}
 
-				<div class="td w50pr pad-l70 ExtendIt">
-					<input class="docType" type="text" {{bindAttr value="docType"}}/><br/>
-					<a {{bindAttr href="urlDoc"}} target="_blank" >{{fileName}}</a>
-				</div>
+				<div class="clearfix">
 
-				<div class="td w48pr pad-r100 margin-l2pr">
-					<input class="description" type="text" {{bindAttr value="description"}} style="width:100%"/>
-					</br>
-					<p>{{docDetails}}</p>
-				</div>
+					<div class="td col five pad-l70 ExtendIt">
+						<input class="docType" type="text" style="height:26px;" {{bindAttr value="docType"}}/><br/>
+						<!-- <a {{bindAttr href="urlDoc"}} target="_blank" >{{fileName}}</a> -->
+					</div>
 
-				<div class="td block-buttons absolute-right">
-					<button {{action SaveEditedDoc this target="App.editDocsController"}} class="btn small">Išsaugoti</button>
-					<a {{action cancelSaveDoc this target="App.editDocsController"}}>Atšaukti</a>
+					<div class="td col seven pad-r100 margin-l2pr">
+						<input class="description" type="text" {{bindAttr value="description"}} style="width:100%;height:26px;"/>
+						<!-- <p>{{docDetails}}</p> -->
+					</div>
+
+					<div class="td block-buttons absolute-right">
+						<button {{action SaveEditedDoc this target="App.editDocsController"}} class="btn small">Išsaugoti</button>
+						<a {{action cancelSaveDoc this target="App.editDocsController"}}>Atšaukti</a>
+					</div>
+
 				</div>
 
 			{{else}}
 
-				<div class="td w50pr pad-l70">
-					{{docType}}<br/>
+				<div class="td col six first pad-l70">
+					{{docType}}
 					<a {{bindAttr href="urlDoc"}} target="_blank" >{{fileName}}</a>
 				</div>
 
-				<div class="td w50pr pad-r70">
-					{{description}}</br><p>{{docDetails}}</p>
+				<div class="td col six pad-r70">
+					{{description}}
+					<p>{{docDetails}}</p>
 				</div>
 
-				<div class="td w64px absolute-right">
+				<div class="td w64px absolute-right top14">
 					<i class="img32-mono_delete clickable right" {{action deleteDoc this target="App.editDocsController"}}></i>
 					<i class="img32-mono_edit clickable right" {{action editDoc this target="App.editDocsController"}}></i>
 				</div>

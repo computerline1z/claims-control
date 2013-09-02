@@ -192,7 +192,7 @@ div.newClaimContent {background-color: @systemYellow3; .clearfix();}
 .row .leftlabel button.drop-down.ui-button-icon-only {float:left;} //to keep in one line floats when row is used
 button.drop-down.ui-button-icon-only { 
     padding: 0!important;
-    margin:0 -2.2em!important;
+    margin:0 -27px!important;
     border-style: none!important; //solid solid solid none; iš inputo pasiima (kitaip kartais nepataiko ant inputo borderiu)
     box-shadow: none!important;
     background: url('images/DropDown-Arrow.png') no-repeat center !important;
@@ -370,7 +370,7 @@ label {
     }
 }
 .date{ min-width: 71px; }
-.time{text-align: center;width:7%  !important;min-width:4em; margin-left: 1em;}
+.time{text-align: center;width:7%;min-width:4em; margin-left: 1em;}
 /*
 input[type=text].date {width:7em !important;}
 input[type=text].time {width:4em !important;
@@ -424,13 +424,15 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 	float: left;
 	width: 30%;
 	padding: 10px;
+  padding-bottom: 5px;
 	margin: 9px;
 	border:1px solid #dddddd;
+  .border-radius(0);
 	cursor: move;
-	height: 250px;
+	/*height: 250px;*/
 }
 
-.gallery li.photo div.photo-image {width: 100%; height:120px; overflow:hidden; margin: auto auto 10px auto; }
+.gallery li.photo div.photo-image {width: 100%; height:120px; overflow:hidden; margin: 0 0 5px 0; }
 
 .gallery li.docs {
 	cursor: move;
@@ -459,15 +461,17 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 	.img {
 		width: 60px;
 		position: absolute;
-		top: 7px;
+		top: 14px;
 		left: 0;
 	}
 
 	.docs-selected {
 		position: relative;
 		padding: 5px;
+    min-height: 63px;
 
 		.img {
+      top: 7px;
 			left: 5px;
 		}
 
@@ -479,13 +483,14 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 }
 
 .docs-selected{border:2px solid #EB5A44 !important} 
-.gallery li p {font-size:10px }
+.gallery li p {font-size:10px;margin-bottom: 4px; }
 .gallery li a {
 	display: block;/* to allow smaller line-height in breaked words */
 	font-size:10px;
 	line-height: 12px;
+  word-wrap: break-word;
 }
-.gallery li img {width: 100%;}
+.gallery li img { /*width: 100%;*/ }
 	#dynamicTree {
     	background:#F9F9F9;
     }
@@ -540,6 +545,10 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 	.treeItem {
 		list-style: none;
 		margin:0;
+
+    ul .treeItem .treeContent {
+      padding-left: 20px;
+    }
 	}
 	.treeItemHover .treeContent {
 		background: #CC9F91;
@@ -577,7 +586,9 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 }
 
 .img16-attach {
-    background-position: 0 0;
+  width: 22px;
+  height: 19px;
+  background: url(images/icon-attach.png) no-repeat center center;
 }
 .filedocument-label{
 	float: left;
@@ -631,7 +642,9 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 	padding:1em 0px !important;
 }
 .img16-camera {
-    background-position: 0 -64px;
+  width: 22px;
+  height: 19px;
+  background: url(images/icon-camera.png) no-repeat center center;
 }
 #tabLists {	
 	margin-bottom:20px;
@@ -1066,6 +1079,7 @@ form input.searchField {
 		position: absolute;
 		right: 0;
 		top:20px;
+    width: 58px;
 	}
 
 	.date {
