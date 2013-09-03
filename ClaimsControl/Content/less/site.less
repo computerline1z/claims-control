@@ -396,8 +396,14 @@ div.frmbottom {
 /*veikia kaip floatu nuresetintojas*/
 .floatright { vertical-align: middle; float: right; }
 .floatleft { vertical-align: middle; float: left; }
---------------------------------------------------------------------------------------------------------------------
-#divMap { margin: auto; }
+/*--------------------------------------------------------------------------------------------------------------------*/
+#divMap {
+    margin: auto;
+
+    >div {
+        height: 106%!important;
+    }
+}
 div.growlUI { background: url(images/check48.png) no-repeat 10px 10px; }
 div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-align: left; }
 //#Form-Accident-Card .text { width: 400px; }
@@ -565,7 +571,12 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 .icon-custom-doc {background-image: url("../images/Sprite32-hover.png");background-position: 0 -32px;height: 32px;line-height: 32px;width: 32px;}
 .icon-custom-img {background-image: url("../images/Sprite32-hover.png");background-position: -32px -32px;height: 32px;line-height: 32px; width: 32px;}
 .icon-custom-pdf {background-image: url("../images/Sprite32-hover.png");background-position: -64px -32px;height: 32px;line-height: 32px; width: 32px;}
-.docType{height:25px;width:100%;border-bottom:1px solid #E0E0E0;}
+.docType{
+  /*height:25px;*/
+  width:100%;
+  border-bottom:1px solid #E0E0E0;
+  padding: 1px 0 2px 0;
+}
 .docType div{line-height:25px;}
 /*---------------------------------------------------------------------------*/
 
@@ -1041,9 +1052,9 @@ form input.searchField {
   -moz-border-radius: 4px 4px 0 0;
   border-radius: 4px 4px 0 0;
 
-  h5 {
+  h4 {
     color: #fff;
-    font-size: 12px;
+    padding-left: 0;
   }
 
   input {
@@ -1053,6 +1064,7 @@ form input.searchField {
   .ui-button {
     opacity: 1;
     background: transparent!important;
+    padding:4px 0!important;
     color: #fff!important;
     text-shadow: none!important;
     text-decoration: underline;
@@ -1072,6 +1084,11 @@ form input.searchField {
     &:hover {
       text-decoration: underline!important;
     }
+  }
+
+  #cancelMap {
+    color: #fff;
+    padding: 3px 0;
   }
 }
 

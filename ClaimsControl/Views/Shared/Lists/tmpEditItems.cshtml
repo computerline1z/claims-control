@@ -1,11 +1,19 @@
-﻿<fieldset class="ui-corner-all fieldSetBorder w70pr centerBlock" style="padding:0 20px;">
-	<legend>{{this.legend}}</legend>
+﻿<fieldset class="ui-corner-all fieldSetBorder w80pr centerBlock" style="padding:0 20px 10px;">
+	<legend class="pad-b0 pad-hor4">{{this.legend}}</legend>
 	{{log this}}
 	{{#each App.listAllController.listItems}}
-		{{#if this.edit}} 
-		<div class="docType container"><input {{bindAttr value="name" }} type="text"><button class="btn small" {{action saveItem this}}>Išsaugoti</button><a class="btn small" {{action cancelItem this}}>Atšaukti</a></div>
+		{{#if this.edit}}
+
+		<div class="clearfix docType pad-t10">
+			<input class="col seven" {{bindAttr value="name" }} type="text">
+			<div class="col last links-group">
+				<button class="btn" {{action saveItem this}}>Išsaugoti</button>
+				<a class="btn btn-link" {{action cancelItem this}}>Atšaukti</a>
+			</div>
+		</div>
+		
 		{{else}}
-			<div class="docType  container">
+			<div class="docType container">
 				{{#if name}}
 					<div style="float:left">{{name}}</div>	
 				{{else}}
@@ -19,9 +27,17 @@
 		{{/if}}
 	{{/each}}
 	{{#if this.addItem}} 
-		<div style="line-height:30px;"><input type="text"/><button class="btn small" {{action saveNewItem}}>Išsaugoti</button></div><div><button class="btn small" {{action cancelNewItem}}>Atšaukti</button></div>
+
+		<div class="clearfix pad-t10">
+			<input class="col seven" type="text"/>
+			<div class="col last links-group">
+				<button class="btn" {{action saveNewItem}}>Išsaugoti</button>
+				<button class="btn btn-link" {{action cancelNewItem}}>Atšaukti</button>
+			</div>
+		</div>
+
 	{{else}}
-		<a style="line-height:30px;" {{action addNewItem}} >{{this.addNewMsg}}</a>
+		<a class="btn btn-link" {{action addNewItem}} >{{this.addNewMsg}}</a>
 	{{/if}}
 </fieldset>
 </br>
