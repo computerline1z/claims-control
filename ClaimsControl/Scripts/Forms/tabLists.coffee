@@ -98,7 +98,7 @@ App.listAllController = Em.ResourceController.create(
 			cancelItem: (e)-> e.context.set("edit",false)
 			saveItem: (e)->
 				### reikia žiūrėt ###
-				item=e.context.name;input=$(e.target).prev();val=input.val();row=e.context;row.name=val
+				item=e.context.name;input=$(e.target).closest('.js').find('input');val=input.val();row=e.context;row.name=val
 				if item.length>0						
 					Msg={Title:@title,Success:@msg.GenName+" '"+item+"' pakeista(s).",Error: @msg.GenNameWhat + " '"+item+"' nepavyko pakeisti.."}	
 					@saveData({DataToSave:{"id":row.iD,"Data":[row.name],"Fields":["Name"],"DataTable":tblUpdate},Msg:Msg,row:row,Action:"Edit"})
@@ -113,7 +113,7 @@ App.listAllController = Em.ResourceController.create(
 			addNewItem: (e)-> @.set("addItem",true)
 			cancelNewItem: (e)-> @.set("addItem",false)				
 			saveNewItem: (e)-> 
-				input=$(e.target).prev();val=input.val()
+				input=$(e.target).closest('.js').find('input');val=input.val()
 				Msg=Title:@title,Success:@msg.GenName+" '"+val+"' pridėtas.",Error:@msg.GenNameWhat+" '"+val+"' nepavyko pridėti." 
 				@saveData({DataToSave:{"Data":[val],"Fields":["Name"],"DataTable":tblUpdate},Msg:Msg,row:[val],Action:"Add"})
 			closeDialog: (e)-> $("#"+@dialogID).dialog("close"); false

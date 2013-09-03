@@ -178,7 +178,7 @@
           var Msg, item, row, val;
 
           item = e.context.name;
-          input = $(e.target).prev();
+          input = $(e.target).closest('.js').find('input');
           val = input.val();
           row = e.context;
           row.name = val;
@@ -240,7 +240,7 @@
         saveNewItem: function(e) {
           var Msg, val;
 
-          input = $(e.target).prev();
+          input = $(e.target).closest('.js').find('input');
           val = input.val();
           Msg = {
             Title: this.title,

@@ -344,12 +344,12 @@ $.widget "ui.ComboBoxCategory", $.ui.ComboBox,
 				else if (catItem.ref==4 and categoryOpts.vehicles) then renderGroup(me,ul,categoryOpts.vehicles,docTypes,catItem.iD)
 				else if (catItem.ref==2 and categoryOpts.accident) then renderGroup(me,ul,[categoryOpts.accident],docTypes,catItem.iD)
 			)
-			if categoryOpts.editList
+			#if categoryOpts.editList
 				#$( "<li class='ui-autocomplete-category editCategories'><a >Redaguoti sąrašą</a></li>" ).appendTo(ul)
-				me._renderItemData(ul, {
-				id:(target)-> widget.options.editList(widget.options),
-				label:"Redaguoti sarašą",value:"Redaguoti sarašą"})
-				ul.find("li:last a").addClass("actionLink")
+			me._renderItemData(ul, {
+			id:(target)-> widget.options.editList(widget.options),
+			label:"Redaguoti sarašą",value:"Redaguoti sarašą"})
+			ul.find("li:last a").addClass("actionLink")
 				
 #####Gridai######
 $.widget "my.sortableGrid",

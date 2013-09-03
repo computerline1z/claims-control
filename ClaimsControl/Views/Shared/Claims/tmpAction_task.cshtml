@@ -1,19 +1,13 @@
-﻿{{log notEditable}}
-{{log notEditable}}
-{{log notEditable}}
-
-{{#if notEditable}}
+﻿{{#if notEditable}}
 	<h2 class="tableTitle marginLeft0">{{subject}}</h2>
 	<hr class="borderDotted boxForDialog"/>
 	<div class="row marginBottom0">
 		<span class="first col four"><span class="comment">Įvedė: </span>{{unbound userName}}, {{entryDate}}</span>
 		<span class="col four"><span class="comment">Kam: </span>{{unbound to}}</span>
 		<span class="col two"><span class="comment">Atlikti iki: </span>{{unbound date}}</span>
-		<label class="last col two" title="Pažymėti užduotį (ne)įvykdyta"><span class="pull-right">Atlikta {{view Em.Checkbox checkedBinding="App.tabClaimsRegulationController.taskComplete"}}</span></label>
-		@*	<label class="last col two" title="Pažymėti užduotį (ne)įvykdyta"><span class="pull-right">Atlikta<input type="checkbox" {{action fnTaskComplete target="App.tabClaimsRegulationController"}}/></span></label>
-	<hr class="borderDotted boxForDialog"/>
-	*@	
-	</div>
+		<label class="last col two" title="Pažymėti užduotį (ne)įvykdyta"><span class="pull-right">Atlikta {{view Em.Checkbox checkedBinding="App.tabClaimsRegulationController.taskComplete" disabledBinding="App.tabClaimsRegulationController.notActionOwner"}}</span></label>
+@*		<label class="last col two" title="Pažymėti užduotį (ne)įvykdyta"><span class="pull-right">Atlikta {{view Em.Checkbox checkedBinding="App.tabClaimsRegulationController.taskComplete"}}</span></label>
+*@	</div>
 	<div class="row marginBottom0">
 	{{unbound body}}
 	</div>

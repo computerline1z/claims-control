@@ -567,14 +567,32 @@
       templateName: 'tmpActionMain'
     }),
     taskComplete: false,
+    notActionOwner: true,
     actionViewContext: null,
-    fnTaskComplete: (function() {
-      var cnt, newVal, taskComplete;
+    fnTaskComplete: (function(e) {
+      var cnt, frm, frmOpt, me, newVal, taskComplete;
 
       taskComplete = this.get('taskComplete');
-      newVal = taskComplete ? 1 : 0;
+      newVal = (taskComplete ? 1 : 0);
+      me = this;
       cnt = this.actionViewContext;
-      this.activitiesTbl.findProperty('iD', cnt.iD).set('amount', newVal);
+      frm = $(this.frm);
+      frmOpt = frm.data("ctrl");
+      SERVER.update2({
+        Action: "Edit",
+        DataToSave: {
+          id: cnt.iD,
+          Data: [newVal],
+          Fields: ["Amount"],
+          DataTable: frmOpt.tblUpdate
+        },
+        "Ctrl": frm,
+        "source": frmOpt.Source,
+        CallBackAfter: function(Row) {
+          me.activitiesTbl.findProperty('iD', cnt.iD).set('amount', newVal);
+          return false;
+        }
+      });
       console.log('------------------------------------');
       console.log('fnTaskComplete. newVal set: ' + newVal);
       return console.log('------------------------------------');
@@ -596,15 +614,13 @@
             isNew: false
           }, $.parseJSON(JSON.stringify(ctrl.activityTypes.findProperty("typeID", this.typeID))));
           u = oDATA.GET("userData").emData[0];
-          this.set('thisUserID', u.userID);
           this.set("deleteButton", true);
           if (!this.isFinances) {
             this.set("notEditable", true);
             if (u.userID === this.userID || ctrl.users.findProperty("iD", u.userID).isAdmin) {
-              if (this.name === 'activity_tasks') {
-                this.set("editButton", true);
-              }
+              this.set("editButton", true);
             }
+            ctrl.set("notActionOwner", this.editButton || u.userID === this.toID ? false : true);
             ctrl.taskComplete = (this.amount === 0 ? false : true);
             console.log('init. taskComplete val: ' + ctrl.taskComplete);
             console.log('init. cnt.amount: ' + this.amount);
