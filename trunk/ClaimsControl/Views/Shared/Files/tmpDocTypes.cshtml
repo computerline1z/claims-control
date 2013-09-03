@@ -1,5 +1,5 @@
-﻿<fieldset class="ui-corner-all fieldSetBorder w70pr centerBlock" style="padding:0 20px;">
-	<legend>Įvykio dokumentų tipai</legend>
+﻿<fieldset class="ui-corner-all fieldSetBorder w80pr centerBlock" style="padding:0 20px 10px;">
+	<legend class="pad-b0 pad-hor4">Įvykio dokumentų tipai</legend>
 	{{log this}}
 	{{#each App.docsTypesController.docTypes_accident}}
 		{{#if this.edit}} 
@@ -22,8 +22,8 @@
 </fieldset>
 </br>
 
-<fieldset class="ui-corner-all fieldSetBorder w70pr centerBlock" style="padding:0 20px;">
-	<legend>Vairuotojų dokumentų tipai</legend>
+<fieldset class="ui-corner-all fieldSetBorder w80pr centerBlock" style="padding:0 20px 10px;">
+	<legend class="pad-b0 pad-hor4">Vairuotojų dokumentų tipai</legend>
 	{{#each App.docsTypesController.docTypes_driver}}
 		{{#if this.edit}} 
 		<div class="docType"><input {{bindAttr value="name" }} type="text"/><button class="btn small" {{action saveDocType this}}>Išsaugoti</button><button class="btn small" {{action cancelDocType this}}>Atšaukti</button></div>
@@ -45,8 +45,8 @@
 </fieldset>
 </br>
 
-<fieldset class="ui-corner-all fieldSetBorder w70pr centerBlock" style="padding:0 20px;">
-	<legend>Transporto priemonių dokumentų tipai</legend>
+<fieldset class="ui-corner-all fieldSetBorder w80pr centerBlock" style="padding:0 20px 10px;">
+	<legend class="pad-b0 pad-hor4">Transporto priemonių dokumentų tipai</legend>
 	{{#each App.docsTypesController.docTypes_vehicle}}
 		{{#if this.edit}} 
 		<div class="docType content"><input {{bindAttr value="name" }} type="text"/><button class="btn small" {{action saveDocType this}}>Išsaugoti</button><button class="btn small" {{action cancelDocType this}}>Atšaukti</button></div>
