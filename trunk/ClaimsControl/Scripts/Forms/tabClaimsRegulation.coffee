@@ -273,12 +273,14 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 		controller: App.tabClaimsRegulationController
 		templateName: 'tmpActionMain'
 	)		
-	taskComplete:false,actionViewContext:null
-	fnTaskComplete:(()->
-		taskComplete=@get('taskComplete'); newVal=if taskComplete then 1 else 0
-		cnt=@actionViewContext; #cnt.set('amount',newVal)
-		@activitiesTbl.findProperty('iD',cnt.iD).set('amount',newVal)
-		
+	taskComplete:false, notActionOwner: true, actionViewContext:null
+	fnTaskComplete:((e)->
+		taskComplete=@get('taskComplete'); newVal=(if taskComplete then 1 else 0); me=@; cnt=@actionViewContext; frm=$(@frm); frmOpt=frm.data("ctrl");
+		SERVER.update2(Action:"Edit", DataToSave:{ id:cnt.iD, Data:[newVal],Fields:["Amount"], DataTable: frmOpt.tblUpdate },"Ctrl":frm,"source":frmOpt.Source,CallBackAfter:(Row)->	
+			me.activitiesTbl.findProperty('iD',cnt.iD).set('amount',newVal) #taskComplete dedam čia nes jis laisvas, updatinam mapinta ir pagr. lentele
+			#me.activities.findProperty('iD', cnt.iD).set('amount',newVal)
+			false
+		)
 		# if not cnt.chkTrigger # pasikeite ne dėl konteksto pasikeitimo, o del tikro click'o
 			# cnt.amount=if taskComplete then 1 else 0
 		# else cnt.chkTrigger=false#Jei buvo trigeris, nuresetinam, nes dabar gali būt tikras clickas
@@ -300,12 +302,12 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 			@_super(); ctrl=App.tabClaimsRegulationController; ctrl.actionViewInstance=@
 			if not @tmp #edit record
 				$.extend(@, {isNew:false}, $.parseJSON(JSON.stringify(ctrl.activityTypes.findProperty("typeID", this.typeID))))
-				u=oDATA.GET("userData").emData[0];@set('thisUserID',u.userID)#kas per vartotojas?
+				u=oDATA.GET("userData").emData[0] #kas per vartotojas?
 				@set("deleteButton", true);
 				if not @isFinances
 					@set("notEditable", true)
-					if (u.userID==@userID or ctrl.users.findProperty("iD",u.userID).isAdmin) #Jei čia jo dokumentas arba jis adminas
-						if @name=='activity_tasks' then @set("editButton", true)
+					if (u.userID==@userID or ctrl.users.findProperty("iD",u.userID).isAdmin) then @set("editButton", true) #Jei čia jo dokumentas arba jis adminas
+					ctrl.set("notActionOwner", if @editButton or u.userID==@toID then false else true) #Pagal šitą lokinam arba ne užduoties įvykdymo buttona
 				# if @name=='activity_tasks'
 					# if @thisUserID!=@userID and @thisUserID!=@toID #then $(frm).find('input:checkbox').attr('disabled',true) #Jeigu sis vartotojas nera kurejas ir nera vykdytojas, disablinam taskComplete checkboxa
 					#ctrl=App.tabClaimsRegulationController

@@ -1,45 +1,45 @@
 ﻿<fieldset class="ui-corner-all fieldSetBorder w80pr centerBlock" style="padding:0 20px 10px;">
-	<legend class="pad-b0 pad-hor4">{{this.legend}}</legend>
-	{{log this}}
-	{{#each App.listAllController.listItems}}
-		{{#if this.edit}}
+ <legend class="pad-b0 pad-hor4">{{this.legend}}</legend>
+ {{#each App.listAllController.listItems}}
+  {{log this}}
 
-		<div class="clearfix docType pad-t10">
-			<input class="col seven" {{bindAttr value="name" }} type="text">
-			<div class="col last links-group">
-				<button class="btn" {{action saveItem this}}>Išsaugoti</button>
-				<a class="btn btn-link" {{action cancelItem this}}>Atšaukti</a>
-			</div>
-		</div>
-		
-		{{else}}
-			<div class="docType container">
-				{{#if name}}
-					<div style="float:left">{{name}}</div>	
-				{{else}}
-					<div style="float:left">{{insurerName}}</div>	
-				{{/if}}	
-				<div style="float:right">
-					<a  {{action editItem this}}><i class="img18-pencil"></i></a>
-					<a  {{action deleteItem this}}><i class="img18-delete"></i></a>
-				</div>
-			</div>
-		{{/if}}
-	{{/each}}
-	{{#if this.addItem}} 
+  {{#if this.edit}}
+ 	
+  <div class="clearfix docType pad-t10 js">
+   <input class="col seven" {{bindAttr value="name" }} type="text">
+   <div class="col last links-group">
+    <button class="btn" {{action saveItem this}}>Išsaugoti</button>
+    <a class="btn btn-link" {{action cancelItem this}}>Atšaukti</a>
+   </div>
+  </div>
+  
+  {{else}}
+   <div class="docType container">
+    {{#if name}}
+     <div style="float:left">{{name}}</div> 
+    {{else}}
+     <div style="float:left">{{insurerName}}</div> 
+    {{/if}} 
+    <div style="float:right">
+     <a  {{action editItem this}}><i class="img18-pencil"></i></a>
+     <a  {{action deleteItem this}}><i class="img18-delete"></i></a>
+    </div>
+   </div>
+  {{/if}}
+ {{/each}}
+ {{#if this.addItem}} 
 
-		<div class="clearfix pad-t10">
-			<input class="col seven" type="text"/>
-			<div class="col last links-group">
-				<button class="btn" {{action saveNewItem}}>Išsaugoti</button>
-				<button class="btn btn-link" {{action cancelNewItem}}>Atšaukti</button>
-			</div>
-		</div>
+  <div class="clearfix pad-t10 js">
+   <input class="col seven" type="text"/>
+   <div class="col last links-group">
+    <button class="btn" {{action saveNewItem}}>Išsaugoti</button>
+    <button class="btn btn-link" {{action cancelNewItem}}>Atšaukti</button>
+   </div>
+  </div>
 
-	{{else}}
-		<a class="btn btn-link" {{action addNewItem}} >{{this.addNewMsg}}</a>
-	{{/if}}
+ {{else}}
+  <a class="btn btn-link" {{action addNewItem}} >{{this.addNewMsg}}</a>
+ {{/if}}
 </fieldset>
 </br>
-
 <div style="text-align:center;margin:20px;"><button class="btn" {{action closeDialog}}>Uždaryti</button></div>

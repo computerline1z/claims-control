@@ -1,2 +1,11 @@
-﻿{{updatableField body labelType="None" classes="wrapper:row, input:'row'"}}
-{{view App.FormBottomView target="App.tabClaimsRegulationController"}}
+﻿{{#if notEditable}}
+	<div class="row">
+		<span class="first col four"><span class="comment">Įvedė: </span>{{unbound userName}}, {{entryDate}}</span>
+	</div>
+	<div class="row marginBottom0">
+		{{unbound body}}
+	</div>
+{{else}}
+	{{updatableField body labelType="None" classes="wrapper:row, input:'row'"}}
+	{{view App.FormBottomView target="App.tabClaimsRegulationController"}}
+{{/if}}

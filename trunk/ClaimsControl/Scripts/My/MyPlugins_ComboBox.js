@@ -309,7 +309,6 @@
       if (p.icon === "img18-plus") {
         this.button.removeClass("ui-button-icon-primary ui-icon").css("margin", "-2px 0 0 -8px");
       }
-      console.log("opa opa");
       if (p.Editable.EditThis) {
         w = input.prev().width() - 26 + 'px';
         return input.css("width", w);
@@ -526,16 +525,14 @@
             return renderGroup(me, ul, [categoryOpts.accident], docTypes, catItem.iD);
           }
         });
-        if (categoryOpts.editList) {
-          me._renderItemData(ul, {
-            id: function(target) {
-              return widget.options.editList(widget.options);
-            },
-            label: "Redaguoti sarašą",
-            value: "Redaguoti sarašą"
-          });
-          return ul.find("li:last a").addClass("actionLink");
-        }
+        me._renderItemData(ul, {
+          id: function(target) {
+            return widget.options.editList(widget.options);
+          },
+          label: "Redaguoti sarašą",
+          value: "Redaguoti sarašą"
+        });
+        return ul.find("li:last a").addClass("actionLink");
       };
     }
   });

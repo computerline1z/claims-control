@@ -1,9 +1,24 @@
-﻿<div class="row">	
-	{{updatableField fromText labelType="Left" classes="span:'col one', input:'col three'"}}
-	{{updatableField toText labelType="Left" classes="span:'col one marginLeft3pr', input:'col three'"}}
-	{{updatableField date labelType="Left" classes="span:'col one marginLeft3pr', input:'col three'"}}
-</div>	
+﻿{{#if notEditable}}
+	<h2 class="tableTitle marginLeft0">{{subject}}</h2>
+	<hr class="borderDotted boxForDialog"/>
+	<div class="row">
+		<span class="first col four"><span class="comment">Įvedė: </span>{{unbound userName}}, {{entryDate}}</span>
+		<span class="col four"><span class="comment">Kas: </span>{{unbound fromText}}</span>
+		<span class="col two"><span class="comment">Su kuo: </span>{{unbound toText}}</span>
+		<span class="col two"><span class="comment">Kada: </span>{{unbound date}}</span>
+	</div>
+	<div class="row marginBottom0">
+	{{unbound body}}
+	</div>
+	{{view App.FormBottomView target="App.tabClaimsRegulationController"}}
+{{else}}
+	<div class="row">	
+		{{updatableField fromText labelType="Left" classes="span:'col one', input:'col three'"}}
+		{{updatableField toText labelType="Left" classes="span:'col one marginLeft3pr', input:'col three'"}}
+		{{updatableField date labelType="Left" classes="span:'col one marginLeft3pr', input:'col three'"}}
+	</div>	
 
-{{updatableField subject labelType="Left" classes="wrapper:row, span:'col one', input:'col eleven'"}}
-{{updatableField body labelType="None" classes="wrapper:row, input:'row'"}}
-{{view App.FormBottomView target="App.tabClaimsRegulationController"}}
+	{{updatableField subject labelType="Left" classes="wrapper:row, span:'col one', input:'col eleven'"}}
+	{{updatableField body labelType="None" classes="wrapper:row, input:'row'"}}
+	{{view App.FormBottomView target="App.tabClaimsRegulationController"}}
+{{/if}}
