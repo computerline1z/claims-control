@@ -403,8 +403,10 @@ var oCONTROLS = {
 		return this.appendLabel(p, "<input type='hidden' " + this.basic(p) + ((p.Value) ? 'value="' + $.trim(p.Value).replace(/"/g, '&quot;') + '" ' : '') + "/>");
 	},
 	radio: function(p){	
-		retStr="<label style='margin-right:1em;'>"+p.sTitle+":</label>";
-		retStr+=p.Radio.map(function(rad,i){ return "<label style='margin-right:.5em;'><input type='radio' name='rd_"+p.Field+"' value='"+rad.value+"'"+((rad.checked)?" checked":"")+"/>"+rad.label+"</label>";}).join("");
+		if (p.classes.label) {classes=p.classes.label;}
+		var cl=(p.classes)?p.classes:"";
+		retStr="<label>"+p.sTitle+":</label>";//style='margin-right:1em;'
+		retStr+=p.Radio.map(function(rad,i){ return "<label "+((cl.label)?("class='"+cl.label+"'"):"")+"><input "+((cl.input)?("class='"+cl.input+"'"):"")+" type='radio' name='rd_"+p.Field+"' value='"+rad.value+"'"+((rad.checked)?" checked":"")+"/>"+rad.label+"</label>";}).join("");
 		return retStr;
 	},
 	a: function (p) {

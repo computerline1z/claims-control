@@ -165,7 +165,7 @@ div.dividers {
 	tr.claimOK>td {background-color: white; color:@gray;}
 	tr.claimOK:hover td { background-color: @grayLight; color:@white;}
 
-	tr.selectedClaim>td {background-color: #f5f4f3; color:#666 !important; cursor:default !important;}
+	tr.selectedClaim>td {background-color: #f5f4f3; color:#666 !important;}
 	tr.selectedClaim.title>td {border-bottom:none;font-weight:bold;}
 	#ClaimWraper {background-color: #ffffff !important; color:inherit !important; cursor:default !important; border-top:none;}//Content
 	//#ClaimsDetailsContent {background-color: @systemYellow !important; color:inherit !important; cursor:default !important;}
@@ -692,7 +692,7 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
     background-image: url(/Content/less/images/details_white.png);
 }
 
-.btn-delete {
+.btn-delete,.btn-edit {
 	position: relative;
 	background:#A59894;
 	padding: 6px 8px;
@@ -707,9 +707,12 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 		display: block;
 		width: 13px;
 		height: 15px;
-		background: url(../images/icon-trash.png) no-repeat center center;
+		//background: url(../images/icon-trash.png) no-repeat center center;
 	}
 }
+.btn-delete:before{background: url(../images/icon-trash.png) no-repeat center center;}
+.btn-edit:before{background: url(../images/icon-edit.png) no-repeat center center;}
+
  .curvedBorderGroove {
     border: 1px solid #EB5A44;
 	border-radius: 6px 6px 6px 6px;

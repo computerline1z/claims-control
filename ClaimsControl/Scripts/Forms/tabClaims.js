@@ -4,14 +4,24 @@
   var panelFilterIsActive, textFilterIsActive;
 
   App.claimsStart = function() {
+    var actTypes;
+
+    actTypes = App.tabClaimsRegulationController.activityTypes;
+    if (actTypes) {
+      if (actTypes.length) {
+        return;
+      }
+    }
     oDATA.execWhenLoaded(["proc_Claims"], function() {
       return App.claimsController.set("content", oDATA.GET("proc_Claims").emData);
     });
     return oDATA.execWhenLoaded(["proc_Activities", "tblActivityTypes", "tblUsers"], function() {
-      var actTypes, me;
+      var me;
 
       actTypes = oDATA.GET("tblActivityTypes").emData.map(function(t) {
         t.typeID = t.iD;
+        delete t.iD;
+        log2("typeID=" + t.typeID);
         return t;
       });
       me = App.tabClaimsRegulationController;

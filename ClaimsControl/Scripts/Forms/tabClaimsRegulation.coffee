@@ -217,6 +217,10 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 		else ACTIVITYVIEW=@mainView.create(controller:@)#claim:@mainController.claim
 		ACTIVITYVIEW.appendTo(@actViewZone)
 		Em.run.next(scroll,->$(window).scrollTop(@);)
+	editForm: (e)->
+		frm=$(e.target).closest(".inputForm")
+		@actionViewInstance.set("notEditable",false).set("editButton",false)
+		Em.run.next(@,()->	oCONTROLS.UpdatableForm(frm:frm, btnSaveToDisable:frm.find("button.btnSave")))
 	deleteForm: (e) ->
 		cnt=e.context; frm=$(@frm); frmOpt=frm.data("ctrl"); me=@
 		oCONTROLS.dialog.Confirm({title:("Veiksmas '"+cnt.title+"'"),msg:"Ištrinti šį veiksmą'?"},->
@@ -224,12 +228,12 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 				switch cnt.tmp
 					when "tmpAddDamageCA", "tmpAddDamageKASKO" then obj= "finDamageTbl"
 					when "tmpAddInsuranceBenefit" then obj= "finInsurerTbl"
-					when "tmpAddCompensation" then obj= "finOtherPartyTbl"
-					else obj= "activitiesTbl"
-				( (cnt)-> 
-					r=@findProperty("iD",cnt.iD)
-					@removeObject(r)
-				).call me[obj], cnt
+					when "tmpAddCompensation" then obj= "finOtherPartyTbl"					
+					#activitiesTbl:[],finDamageTbl:[],finInsurerTbl:[],finOtherPartyTbl:[]
+				( (obj,objActivitiesddd)-> 
+					if obj then r=obj.findProperty("iD",@iD); obj.removeObject(r); 
+					r2=objActivities.findProperty("iD",@iD); objActivities.removeObject(r2); 
+				).call cnt, me[obj], me["activitiesTbl"]
 				me.cancelForm()
 			)
 		)		
@@ -287,21 +291,23 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 		console.log('fnTaskComplete. newVal set: '+newVal)
 		console.log('------------------------------------')
 		#console.log('fnTaskComplete. cnt.amount: '+cnt.amount)
-	).observes("taskComplete")	
+	).observes("taskComplete")
+	actionViewInstance:{}
 	actionView: Em.View.extend(
 		#cia savo kontrollerio nesimato, matosi tik pats view'as kaip view
-		isNew:true, deleteButton: false, notEditable: true	
+		isNew:true, deleteButton: false, editButton:false, notEditable: false	
 		init: -> 
-			@_super(); ctrl=App.tabClaimsRegulationController
+			@_super(); ctrl=App.tabClaimsRegulationController; ctrl.actionViewInstance=@
 			if not @tmp #edit record
-				prop={isNew:false}; 
-				$.extend(@, prop, $.parseJSON(JSON.stringify(ctrl.activityTypes.findProperty("typeID", this.typeID))))
+				$.extend(@, {isNew:false}, $.parseJSON(JSON.stringify(ctrl.activityTypes.findProperty("typeID", this.typeID))))
 				u=oDATA.GET("userData").emData[0];@set('thisUserID',u.userID)#kas per vartotojas?
-				if u.userID==@userID or ctrl.users.findProperty("iD",u.userID).isAdmin#Jei čia jo dokumentas arba jis adminas
-					@set("notEditable",(if @isFinances then false else true)).set("deleteButton",true)
-				if @name=='activity_tasks'
-					if @thisUserID!=@userID and @thisUserID!=@toID #then $(frm).find('input:checkbox').attr('disabled',true) #Jeigu sis vartotojas nera kurejas ir nera vykdytojas, disablinam taskComplete checkboxa
-						bla
+				@set("deleteButton", true);
+				if not @isFinances
+					@set("notEditable", true)
+					if (u.userID==@userID or ctrl.users.findProperty("iD",u.userID).isAdmin) #Jei čia jo dokumentas arba jis adminas
+						if @name=='activity_tasks' then @set("editButton", true)
+				# if @name=='activity_tasks'
+					# if @thisUserID!=@userID and @thisUserID!=@toID #then $(frm).find('input:checkbox').attr('disabled',true) #Jeigu sis vartotojas nera kurejas ir nera vykdytojas, disablinam taskComplete checkboxa
 					#ctrl=App.tabClaimsRegulationController
 					#ctrl.actionViewContext.chkTrigger=true
 					#ctrl.set("taskComplete",(if @amount==0 then false else true))
@@ -318,8 +324,10 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 				switch @typeID
 					when 3,4,5 
 						divExt=frm.find("div.row").find("div.ExtendIt:first"); user=oDATA.GET("userData").emData[0]
+						###
 						if @typeID==3 then divExt.data("ctrl").Value=user.userID #Task
 						else Em.run.next({divExt:divExt,user:user}, ()-> @divExt.find("input").val(@user.userName))
+						###
 					else console.log("loaded view")			
 			else #Edit record
 				( (iD)-> 

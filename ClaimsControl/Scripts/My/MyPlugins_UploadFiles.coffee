@@ -6,7 +6,6 @@ options:
 	#fileupload opcijos. showPhoto,showFromAccident:false
 	uploadTemplateId:"tmp2templateUpload", downloadTemplateId:"tmp2templateDownload", formTemplate:"tmpUploadForm", docsController:"treeDocController" #gavus dokus reikia žinot kokį kontrolerį refrešint
 	url: "Files/Start",fileuploaddone: ->
-		console.log("opa")	
 	#kitos opcijos
 	categoryOpts:{} # editList:true#Kategorijos
 	#accident:{iD:16,title:"Įvykio dokumentai"}
@@ -62,6 +61,7 @@ _create: ->
 	Em.run.next(@,->
 		form=@.element.find("form").data("opts",@options)
 		form.fileupload(@options)
+		$(".fileupload-progress").addClass("hidden")
 	)
 	Em.run.next(@,->
 		form.bind('fileuploadadded', (e, data) -> 
@@ -84,6 +84,7 @@ _create: ->
 			if (ext=="xls" or ext=="doc" or ext=="pdf") then data.files[0].extension=ext else data.files[0].extension="unknown"
 			data.files[0].type2=data.files[0].type.split("/")[0]
 		).bind("fileuploadsubmit", (e, data) ->
+			$(".fileupload-progress").removeClass("hidden")
 			tr=data.context;f=data.files[0];opts=data.form.data("opts"); optsAccident=opts.categoryOpts.accident;catInput=tr.find("input[name='category[]']");GroupID			
 			#FileName, FileSize, DocTypeID, RefID, GroupID, Description
 			AccidentID=if optsAccident then optsAccident.iD else null
@@ -131,7 +132,7 @@ _create: ->
 				#---------------------------------------------------------------------------
 				data.context.remove()
 				if not data.form.find("table tbody tr").length
-					data.form.find(".submitButtons, table").addClass("hidden")
+					data.form.find(".submitButtons, table, .fileupload-progress").addClass("hidden")
 					docsContr=opts.docsController
 					if opts.updateRelationsTbl
 						oGLOBAL.helper.execWhen

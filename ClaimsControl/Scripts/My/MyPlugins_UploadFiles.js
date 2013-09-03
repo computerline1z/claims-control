@@ -12,9 +12,7 @@
       formTemplate: "tmpUploadForm",
       docsController: "treeDocController",
       url: "Files/Start",
-      fileuploaddone: function() {
-        return console.log("opa");
-      },
+      fileuploaddone: function() {},
       categoryOpts: {},
       ListType: "List",
       Source: "tblDocTypes",
@@ -103,7 +101,8 @@
       }).appendTo(this.element);
       Em.run.next(this, function() {
         form = this.element.find("form").data("opts", this.options);
-        return form.fileupload(this.options);
+        form.fileupload(this.options);
+        return $(".fileupload-progress").addClass("hidden");
       });
       return Em.run.next(this, function() {
         return form.bind('fileuploadadded', function(e, data) {
@@ -132,6 +131,7 @@
         }).bind("fileuploadsubmit", function(e, data) {
           var AccidentID, GroupID, RefID, catInput, f, opts, optsAccident, refGroupID, tr;
 
+          $(".fileupload-progress").removeClass("hidden");
           tr = data.context;
           f = data.files[0];
           opts = data.form.data("opts");
@@ -227,7 +227,7 @@
             }
             data.context.remove();
             if (!data.form.find("table tbody tr").length) {
-              data.form.find(".submitButtons, table").addClass("hidden");
+              data.form.find(".submitButtons, table, .fileupload-progress").addClass("hidden");
               docsContr = opts.docsController;
               if (opts.updateRelationsTbl) {
                 oGLOBAL.helper.execWhen({
