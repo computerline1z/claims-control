@@ -24,10 +24,10 @@ oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 		} );
 		//$("#LongNote").autoResize();
  		var fnRetunToAccidentInList=function (accNo,newAccident){
-			$("#btnReturnToAccidents").trigger("click"); //paspaudžiam, kad grįžtam į lista												
+			$("#btnReturnToAccidents").trigger("click"); //paspaudžiam, kad grįžtam į lista	
+			if (! $("#ClaimWraper").length){return false;}
 			Em.run.next({ accNo: accNo }, function () {
 				var trs=$("#accidentsTable").find("div.accident").removeClass("selectedAccident"); $("#accidentsTable").find("div.dividers").remove(); $("#AccDetailsWraper").remove();
-				var tr = trs.find("div.td:nth(0):contains(" + this.accNo+ ")").parent().addClass("selectedAccident"); 	
 				Em.run.next(function () {
 					//tr.trigger("click");tr[0].click();
 					console.log(tr);tr.trigger("click");tr.trigger("click");

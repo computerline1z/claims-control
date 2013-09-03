@@ -117,7 +117,7 @@ App.SearchField = Ember.View.extend({
 //App.FormBottomView = Em.View.extend(Em.MyEventAttacher,{ templateName: 'tmpFormBottom' });
 App.FormBottomView = Em.View.extend({ 
 	init: function() {
-		 var actions=['deleteForm','saveForm','cancelForm'],targetEventFnc=[],actionFnc=[];
+		 var actions=['deleteForm','saveForm','editForm','cancelForm'],targetEventFnc=[],actionFnc=[];
 		 var target = this.get('target'),	thisContext ,
 		 targetObj = Ember.getPath(target);
 		if (!targetObj){console.error("no target");}

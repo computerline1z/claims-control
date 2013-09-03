@@ -53,15 +53,19 @@
       return App.thisAccidentController.set("accidentID", this.get("iD"));
     },
     tbodyClick: function(e) {
-      var ClaimW, d, tr;
+      var ClaimW, clickOnSelected, d, tr;
 
       tr = $(e.target).closest("tr");
       ClaimW = $("#ClaimWraper");
+      clickOnSelected = tr.hasClass("selectedClaim") ? true : false;
       if (ClaimW.length > 0) {
         MY.tabAccidents.SelectedClaimView.remove();
         ClaimW.remove();
       }
       tr.parent().find("tr.selectedClaim").removeClass("selectedClaim title");
+      if (clickOnSelected) {
+        return false;
+      }
       d = e.context;
       MY.tabAccidents.SelectedClaimView = App.SelectedClaimView.create({
         rowContext: {

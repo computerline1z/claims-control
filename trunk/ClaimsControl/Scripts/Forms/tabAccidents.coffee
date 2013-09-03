@@ -62,10 +62,12 @@ App.SelectedAccidentView = Em.View.extend(
 		# proc_InsPolicies_forThisAccident=$.extend({},oDATA.GET("proc_InsPolicies"),{Data:thisAccidentPolicies})#not deep copy -overwrite
 		# oDATA.SET("proc_InsPolicies_forThisAccident", proc_InsPolicies_forThisAccident)
 		tr = $(e.target).closest("tr");ClaimW = $("#ClaimWraper")
+		clickOnSelected=if (tr.hasClass("selectedClaim")) then true else false
 		if (ClaimW.length > 0)
 			MY.tabAccidents.SelectedClaimView.remove()
 			ClaimW.remove();	
 		tr.parent().find("tr.selectedClaim").removeClass("selectedClaim title")
+		if clickOnSelected then return false #Ant pasirinkto naujo nededam
 		d = e.context;
 		MY.tabAccidents.SelectedClaimView = App.SelectedClaimView.create(
 			rowContext: { Claims2: d.Claims2, newClaim: false, LossAmount: d.loss, InsuranceType: d.type, accidentID: d.accidentID, accidentDate: d.accidentDate, claimStatus: d.claimStatus }

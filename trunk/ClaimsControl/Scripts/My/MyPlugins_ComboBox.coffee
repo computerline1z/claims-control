@@ -219,7 +219,6 @@ addButton: (p, input) ->
 		false
 	).removeClass("ui-corner-all").find("span").attr("class","")#.addClass("ui-button-icon" + ((if (p.NoCorners) then "" else " ui-corner-right"))).find("span.ui-icon")
 	@button.removeClass("ui-button-icon-primary ui-icon").css("margin", "-2px 0 0 -8px") if p.icon=="img18-plus"
-	console.log("opa opa")
 	if p.Editable.EditThis
 		w=input.prev().width()-26+'px'; input.css("width",w)	
 	#if ($.browser.mozilla) { this.button.attr() }

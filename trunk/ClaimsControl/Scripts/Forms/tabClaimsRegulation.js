@@ -413,6 +413,18 @@
         return $(window).scrollTop(this);
       });
     },
+    editForm: function(e) {
+      var frm;
+
+      frm = $(e.target).closest(".inputForm");
+      this.actionViewInstance.set("notEditable", false).set("editButton", false);
+      return Em.run.next(this, function() {
+        return oCONTROLS.UpdatableForm({
+          frm: frm,
+          btnSaveToDisable: frm.find("button.btnSave")
+        });
+      });
+    },
     deleteForm: function(e) {
       var cnt, frm, frmOpt, me;
 
@@ -445,16 +457,17 @@
                 break;
               case "tmpAddCompensation":
                 obj = "finOtherPartyTbl";
-                break;
-              default:
-                obj = "activitiesTbl";
             }
-            (function(cnt) {
-              var r;
+            (function(obj, objActivitiesddd) {
+              var r, r2;
 
-              r = this.findProperty("iD", cnt.iD);
-              return this.removeObject(r);
-            }).call(me[obj], cnt);
+              if (obj) {
+                r = obj.findProperty("iD", this.iD);
+                obj.removeObject(r);
+              }
+              r2 = objActivities.findProperty("iD", this.iD);
+              return objActivities.removeObject(r2);
+            }).call(cnt, me[obj], me["activitiesTbl"]);
             return me.cancelForm();
           }
         });
@@ -566,28 +579,31 @@
       console.log('fnTaskComplete. newVal set: ' + newVal);
       return console.log('------------------------------------');
     }).observes("taskComplete"),
+    actionViewInstance: {},
     actionView: Em.View.extend({
       isNew: true,
       deleteButton: false,
-      notEditable: true,
+      editButton: false,
+      notEditable: false,
       init: function() {
-        var ctrl, prop, u;
+        var ctrl, u;
 
         this._super();
         ctrl = App.tabClaimsRegulationController;
+        ctrl.actionViewInstance = this;
         if (!this.tmp) {
-          prop = {
+          $.extend(this, {
             isNew: false
-          };
-          $.extend(this, prop, $.parseJSON(JSON.stringify(ctrl.activityTypes.findProperty("typeID", this.typeID))));
+          }, $.parseJSON(JSON.stringify(ctrl.activityTypes.findProperty("typeID", this.typeID))));
           u = oDATA.GET("userData").emData[0];
           this.set('thisUserID', u.userID);
-          if (u.userID === this.userID || ctrl.users.findProperty("iD", u.userID).isAdmin) {
-            this.set("notEditable", (this.isFinances ? false : true)).set("deleteButton", true);
-          }
-          if (this.name === 'activity_tasks') {
-            if (this.thisUserID !== this.userID && this.thisUserID !== this.toID) {
-              bla;
+          this.set("deleteButton", true);
+          if (!this.isFinances) {
+            this.set("notEditable", true);
+            if (u.userID === this.userID || ctrl.users.findProperty("iD", u.userID).isAdmin) {
+              if (this.name === 'activity_tasks') {
+                this.set("editButton", true);
+              }
             }
             ctrl.taskComplete = (this.amount === 0 ? false : true);
             console.log('init. taskComplete val: ' + ctrl.taskComplete);
@@ -616,16 +632,11 @@
             case 5:
               divExt = frm.find("div.row").find("div.ExtendIt:first");
               user = oDATA.GET("userData").emData[0];
-              if (this.typeID === 3) {
-                divExt.data("ctrl").Value = user.userID;
-              } else {
-                Em.run.next({
-                  divExt: divExt,
-                  user: user
-                }, function() {
-                  return this.divExt.find("input").val(this.user.userName);
-                });
-              }
+              /*
+              						if @typeID==3 then divExt.data("ctrl").Value=user.userID #Task
+              						else Em.run.next({divExt:divExt,user:user}, ()-> @divExt.find("input").val(@user.userName))
+              */
+
               break;
             default:
               console.log("loaded view");
