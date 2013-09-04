@@ -21,7 +21,6 @@
       actTypes = oDATA.GET("tblActivityTypes").emData.map(function(t) {
         t.typeID = t.iD;
         delete t.iD;
-        log2("typeID=" + t.typeID);
         return t;
       });
       me = App.tabClaimsRegulationController;

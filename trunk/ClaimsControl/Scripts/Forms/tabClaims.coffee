@@ -7,7 +7,7 @@ App.claimsStart=()->
 		App.claimsController.set("content",oDATA.GET("proc_Claims").emData)	
 	)
 	oDATA.execWhenLoaded(["proc_Activities","tblActivityTypes","tblUsers"], ()-> # Cia deda duomenis i App.tabClaimsRegulationController, nes jei paspaus claimRegulation tai jo reiks
-		actTypes=oDATA.GET("tblActivityTypes").emData.map((t)->t.typeID=t.iD; delete t.iD; log2("typeID="+t.typeID); return t;) #delete t.iD; 
+		actTypes=oDATA.GET("tblActivityTypes").emData.map((t)->t.typeID=t.iD; delete t.iD; return t;) #delete t.iD; 
 		me=App.tabClaimsRegulationController
 		me.set("activities",oDATA.GET("proc_Activities").emData).set("activityTypes",actTypes).set("users",oDATA.GET("tblUsers").emData)
 		me.set("ativitiesNotFin",actTypes.filter((a)->not a.isFinances))
