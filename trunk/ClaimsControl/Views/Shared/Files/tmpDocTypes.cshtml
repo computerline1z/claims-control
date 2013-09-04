@@ -2,8 +2,17 @@
 	<legend class="pad-b0 pad-hor4">Įvykio dokumentų tipai</legend>
 	{{log this}}
 	{{#each App.docsTypesController.docTypes_accident}}
+
 		{{#if this.edit}} 
-		<div class="docType content"><input {{bindAttr value="name" }} type="text"><button class="btn small" {{action saveDocType this}}>Išsaugoti</button><button class="btn small" {{action cancelDocType this}}>Atšaukti</button></div>
+
+			<div class="content clearfix docType pad-t10 js">
+				<input {{bindAttr value="name" }} class="col seven" type="text">
+				<div class="col last links-group">
+					<button class="btn" {{action saveDocType this}}>Išsaugoti</button>
+					<button class="btn btn-link" {{action cancelDocType this}}>Atšaukti</button>
+				</div>
+			</div>
+		
 		{{else}}
 			<div class="docType">
 				<div style="float:left">{{name}}</div>		
@@ -13,6 +22,7 @@
 				</div>
 			</div>
 		{{/if}}
+
 	{{/each}}
 	{{#if this.addNewType2}} 
 		<div style="line-height:30px;"><input Placeholder="Įveskite naują tipą" type="text" data-category-id=2><button class="btn small" {{action saveNewDocType}}>Išsaugoti</button></div><div><button class="btn small" data-category-id=2 {{action cancelNewDocType}}>Atšaukti</button></div>
@@ -25,8 +35,16 @@
 <fieldset class="ui-corner-all fieldSetBorder w80pr centerBlock" style="padding:0 20px 10px;">
 	<legend class="pad-b0 pad-hor4">Vairuotojų dokumentų tipai</legend>
 	{{#each App.docsTypesController.docTypes_driver}}
-		{{#if this.edit}} 
-		<div class="docType"><input {{bindAttr value="name" }} type="text"/><button class="btn small" {{action saveDocType this}}>Išsaugoti</button><button class="btn small" {{action cancelDocType this}}>Atšaukti</button></div>
+		{{#if this.edit}}
+
+		<div class="content clearfix docType pad-t10 js">
+			<input {{bindAttr value="name" }} class="col seven" type="text"/>
+			<div class="col last links-group">
+				<button class="btn" {{action saveDocType this}}>Išsaugoti</button>
+				<button class="btn btn-link" {{action cancelDocType this}}>Atšaukti</button>
+			</div>
+		</div>
+		
 		{{else}}
 			<div class="docType content">
 				<div style="float:left">{{name}}</div>		
@@ -49,7 +67,15 @@
 	<legend class="pad-b0 pad-hor4">Transporto priemonių dokumentų tipai</legend>
 	{{#each App.docsTypesController.docTypes_vehicle}}
 		{{#if this.edit}} 
-		<div class="docType content"><input {{bindAttr value="name" }} type="text"/><button class="btn small" {{action saveDocType this}}>Išsaugoti</button><button class="btn small" {{action cancelDocType this}}>Atšaukti</button></div>
+
+		<div class="content clearfix docType pad-t10 js">
+			<input {{bindAttr value="name" }} class="col seven" type="text">
+			<div class="col last links-group">
+				<button class="btn" {{action saveDocType this}}>Išsaugoti</button>
+				<button class="btn btn-link" {{action cancelDocType this}}>Atšaukti</button>
+			</div>
+		</div>
+		
 		{{else}}
 			<div class="docType">
 				<div style="float:left">{{name}}</div>		
