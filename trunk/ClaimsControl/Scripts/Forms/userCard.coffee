@@ -11,8 +11,8 @@ App.TabUserCardView = Em.View.extend( #App.mainMenuView.extend(
 		# @_super(); SaveOk=""
 	didInsertElement: ->
 		@_super(); $("#userInfoTab").tabs(); frm=$("#InfoDataForm"); ctrl=App.userCardController;
-		if ctrl.content.length then frm.data("ctrl",{NewRec:0,id:ctrl.content[0].iD,Source:"tblUsers"}) else frm.data("ctrl",{NewRec:1,id:0,Source:"tblUsers"});
-		oCONTROLS.UpdatableForm(frm:frm,btnSaveToDisable:frm.next().find("button.btnSave")) 
+		if ctrl.userContent then frm.data("ctrl",{NewRec:0,id:ctrl.userContent.iD,Source:"tblUsers"}) else frm.data("ctrl",{NewRec:1,id:0,Source:"tblUsers"});
+		oCONTROLS.UpdatableForm(frm:frm,btnSaveToDisable:frm.parent().find("button.btnSave:first")) 
 		#if App.userCardController.SaveOk then me=$("#savePasswordNote"); me.html("Naujas slaptažodis išsaugotas"); setTimeout((->me.html("")),2000); App.userCardController.SaveOk=null
 		SaveOk=App.userCardController.SaveOk 
 		if SaveOk then $("#savePasswordNote").html(SaveOk).show().delay(2000).fadeOut(); App.userCardController.set("SaveOk",null)
@@ -32,7 +32,7 @@ App.TabUserCardView = Em.View.extend( #App.mainMenuView.extend(
 	sendUserPassword:(e,mailTmpl,email)->
 		ctrl=if e then $(e.target).parent() else null;
 		tmpl=if mailTmpl then mailTmpl else "ResetUserPsw"
-		email=if email then email else App.userCardController.content[0].email
+		email=if email then email else App.userCardController.userContent.email
 		SERVER.update3(pars:{email:email,mailTmpl:tmpl},ctrl:ctrl,CallBack:((resp)->
 			if (resp.ErrorMsg) then $("#savePasswordNote").html("Nepavyko išsiųsti, klaida: "+resp.ErrorMsg).show().delay(2000).fadeOut();
 			else $("#savePasswordNote").html(resp.ResponseMsg).show().delay(2000).fadeOut(); 
@@ -47,7 +47,7 @@ App.TabUserCardView = Em.View.extend( #App.mainMenuView.extend(
 		#Msg= Title: "Mano informacijos redagavimas", Success: "Duomenys pakeisti.", Error: "Nepavyko pakeisti duomenų."
 		Action=if frm.data("ctrl").NewRec then "Add" else "Edit"
 		if (DataToSave)
-			opt = Action: Action, DataToSave: DataToSave, row:App.userCardController.content[0],source:"tblUsers",Ctrl:frm,#Msg: Msg,
+			opt = Action: Action, DataToSave: DataToSave, row:App.userCardController.userContent,source:"tblUsers",Ctrl:frm,#Msg: Msg,
 			CallBackAfter:(Row,Action)->				
 				#name=Row.firstName+" "+Row.surname; if name!=oDATA.GET("userData").emData[0].userName then oDATA.GET("userData").emData[0].userName=name; $("#userLink").html(name)
 				if Action=="Add"
@@ -64,11 +64,12 @@ App.userCardController = Em.ArrayController.create(
 	setUser:(p)->
 		@.set("myInfo",(if p.myInfo then true else false)).set("passwordReset",false)
 		if p.myInfo then id=oDATA.GET("userData").emData[0].userID; p.User=oDATA.GET("tblUsers").emData.findProperty("iD",id) #Mano kortelė
-		if @content.length then @content.removeAt(0)
-		if p.User then @content.pushObject(p.User)
+		#if @userContent then @set("userContent",null)
+		#if p.User then @content.pushObject(p.User)
+		@set("userContent",(if p.User then p.User else null))
 	myInfo: true #Jei bus useris prieitas per Admin tai false
 	passwordReset:false
-	content:[]
+	userContent:null
 	addNewUser: (e)->
 		@.setUser(myInfo:false);@.set("deleteButton",false)
 		App.router.transitionTo('tabUserCard'); false
@@ -77,7 +78,7 @@ App.userCardController = Em.ArrayController.create(
 		App.router.transitionTo('tabUserCard'); false	
 	deleteForm:(e)->
 		frm=$("#InfoDataForm"); pars=frm.data("ctrl"); oData=oDATA.GET(pars.Source); Msg=oData.Config.Msg; 
-		row=App.userCardController.content[0]
+		row=App.userCardController.userContent
 		oCONTROLS.dialog.Confirm({title:"",msg:"Ištrinti "+Msg.GenNameWhat+" '"+row.MapArrToString(oData.Config.titleFields, true)+"'?"},->
 			SERVER.update2(Action:"Delete", DataToSave:{ id:row.iD, DataTable: oData.Config.tblUpdate },"Ctrl":$("#tabLists"),"source":pars.Source,"row":row,CallBackAfter:(Row)->
 				App.router.transitionTo('tabAdmin'); false
@@ -88,7 +89,7 @@ App.userCardController = Em.ArrayController.create(
 		#Msg= Title: "Mano informacijos redagavimas", Success: "Duomenys pakeisti.", Error: "Nepavyko pakeisti duomenų."
 		Action=if frm.data("ctrl").NewRec then "Add" else "Edit"
 		if (DataToSave)
-			opt = Action: Action, DataToSave: DataToSave, row:App.userCardController.content[0],source:"tblUsers",Ctrl:frm,
+			opt = Action: Action, DataToSave: DataToSave, row:App.userCardController.userContent,source:"tblUsers",Ctrl:frm,
 			CallBackAfter:(Row,Action)->				
 				if Action=="Add" then sendUserPassword(null,"NewUserPsw",Row.email)
 				else 

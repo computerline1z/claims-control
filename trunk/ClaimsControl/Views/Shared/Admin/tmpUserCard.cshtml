@@ -1,65 +1,69 @@
 ﻿{{log this}}
 <h2 style="margin: 15px; display: inline-block">
-	{{#if myInfo}}Mano informacija</h2>
+	{{#if myInfo}}
+		Mano informacija</h2>
 	{{else}}
-		{{#compare content.length "==" "0"}}
-			Naujas naudotojas
+		{{#if userContent}}
+			{{userContent.firstName}}&nbsp;{{userContent.surname}}	
 		{{else}}
-			{{#each content}}@*tik tas vienas realiai*@
-				{{firstName}}&nbsp;{{surname}}
-			{{/each}}
-		{{/compare}}</h2><a {{action goToAdminTab}} >(atgal į Administravimą)</a>
+			Naujas naudotojas
+		{{/if}}
+		</h2><a {{action goToAdminTab}} >(atgal į Administravimą)</a>
 	{{/if}}
-
 
 <div id="userInfoTab">
 	<ul class='ulWhiteMenu'>
 		<li><a href="#userInfoData"><span>Duomenys</span></a></li>		
 		<li><a href="#userInfoRights"><span>Teisės</span></a></li>	
 	</ul>
-
 	<div id="userInfoData">
-		<div id="InfoDataForm" class="inputForm whiteTab container" data-ctrl='{"NewRec":0,"Source":"tblUsers","id":0}'>
-		{{#if content}}
+	<div id="InfoDataForm" class="inputForm whiteTab container" data-ctrl='{"NewRec":0,"Source":"tblUsers","id":0}'>
+		{{#if userContent}}
+		@*-------------------------------------------------------------------------------------------------------------*@
+			{{#with userContent}}
 			<div class="row border ui-corner-all box_2pr">		
 				{{updatableField firstName classes="wrapper:'three col'" labelType="Top"}}
 				{{updatableField surname classes="wrapper:'three col'" labelType="Top"}}
 				{{updatableField languageID classes="wrapper:'three col'" labelType="Top"}}
-				</div>
+			</div>
 			</br></br>
 			
 			<h3 class="tableTitle">Kontaktiniai duomenys, kuriuos reikia nurodyti pranešimuose draudikui apie žalą</h3>
-				<div class="row border ui-corner-all box_2pr">
+			<div class="row border ui-corner-all box_2pr">
 				{{updatableField position classes="wrapper:'three col'" labelType="Top"}}
 				{{updatableField phone classes="wrapper:'three col'" labelType="Top"}}				
 				{{updatableField eMailForIns classes="wrapper:'three col'" labelType="Top"}}
 				{{updatableField mobPhone classes="wrapper:'three col'" labelType="Top"}}
-				</div>
+			</div>
 			</br></br>
-			
+			{{/with}}
 			<h3 class="tableTitle">Prisijungimo duomenys</h3>		
- 				<div class="row border ui-corner-all box_2pr">
-				{{updatableField email classes="wrapper:'col six'" id="systemEmail" labelType="Top"}}
-					<div class="col six">
-					{{#if myInfo}}
-						<a class="btn" style="line-height:15px;margin-top:22px" {{action changeMyPassword}} >Pakeisti slaptažodį</a>
+ 			<div class="row border ui-corner-all box_2pr">
+			{{updatableField userContent.email classes="wrapper:'col six'" id="systemEmail" labelType="Top"}}
+			@*-------------------------------------------------*@
+			<div class="col six">
+			{{#if myInfo}}
+					<a class="btn" style="line-height:15px;margin-top:22px" {{action changeMyPassword}} >Pakeisti slaptažodį</a>
+			</div>
+			{{else}}
+					{{#if passwordReset}}
+						<div class="well cont box-1pr-margin" style="display:inline-block">
+							<p>Slaptažodžio atstatymas vyksta išsiunčiant naudotojui el. laišką su patvirtinimo nuoroda.</p>
+							<button class="btn" style="float:left;margin:10px" {{action sendUserPassword}}>Siųsti</button>
+							<a style="float:left;line-height:40px;margin:10px" {{action cancelSendUserPassword}} >Atšaukti</a>
+						</div>
 					{{else}}
-						{{#if passwordReset}}
-							<div class="well cont box-1pr-margin" style="display:inline-block">
-								<p>Slaptažodžio atstatymas vyksta išsiunčiant naudotojui el. laišką su patvirtinimo nuoroda.</p>
-								<button class="btn" style="float:left;margin:10px" {{action sendUserPassword}}>Siųsti</button>
-								<a style="float:left;line-height:40px;margin:10px" {{action cancelSendUserPassword}} >Atšaukti</a>
-							</div>
-						{{else}}
-							<a class="btn" style="margin-top:8px;" {{action sendUserPasswordForm}} >Atstatyti slaptažodį</a>
-						{{/if}}		
-					</div>	
+						<a class="btn" style="margin-top:8px;" {{action sendUserPasswordForm}} >Atstatyti slaptažodį</a>
+					{{/if}}		
+			</div>
 					<div class="row">{{updatableField isActive classes="wrapper:'col six'" labelType="Left"}}</div>
 					<p id="savePasswordNote" style="color:#B94A48;display:inline-block"></p>
-				</div>				
-				{{/if}}	
+			{{/if}}		
+			@*-------------------------------------------------*@
+			</div>	
 			</br></br>
-		{{else}}						
+		{{else}}			
+		@*-------------------------------------------------------------------------------------------------------------*@
 			<div class="row border ui-corner-all box_2pr">		
 				<div class="ExtendIt three col" data-ctrl='{"Value":"","Field":"FirstName","labelType":"Top"}'></div>
 				<div class="ExtendIt three col" data-ctrl='{"Value":"","Field":"Surname","labelType":"Top"}'></div>
@@ -77,14 +81,15 @@
 			<br><h3 class="tableTitle">Prisijungimo duomenys</h3>
 			<div class="row border ui-corner-all box_2pr">
 				<div class="ExtendIt six col" data-ctrl='{"Value":"","Field":"Email","classes":"UpdateField","labelType":"Top"}'></div>
-				{{#compare content.length "==" "0"}}
+				{{#unless userContent}}
 					<span class="six col text-red">Išsaugojus, šiuo adresu bus išsiųstas laiškas su nuoroda slaptažodžio sukūrimui.</span>
-				{{/compare}}
+				{{/unless}}
 				<div class="row"><div class="ExtendIt six col" data-ctrl='{"Value":true,"Field":"IsActive","classes":"UpdateField","labelType":"Left"}'></div></div>
-			</div>		
+			</div>	
+		@*-------------------------------------------------------------------------------------------------------------*@
 		{{/if}}	
-		</div>
-		{{view App.FormBottomView target="App.userCardController"}}
+	</div>
+	{{view App.FormBottomView target="App.userCardController"}}
 	</div>
 	
 	<div id="userInfoRights">
