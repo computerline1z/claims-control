@@ -11,7 +11,7 @@
 @*				{%=file.type%}</br>{%=file.type2%}</br>{%=file.extension%}
 *@				<span><i class="img32-doc_{%=file.extension%}"></i></span></td>			
 		{% } %}
-        <td class="name size" style="width:30%;">
+        <td class="name size" >@*style="width:30%;"*@
 			<span>{%=file.name%} - {%=o.formatFileSize(file.size)%}</span>
 			 {% if (file.paramName==="docs[]") { %}
 				<div class="ExtendIt"><input type="text" placeholder="Pasirinkite.." name="category[]" data-ctrl='{"ListType":"List","Source":"tblDocTypes","iVal":"iD","iText":["name"]}'></div>
