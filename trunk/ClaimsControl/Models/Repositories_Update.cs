@@ -116,7 +116,7 @@ namespace CC.Models {
 				//con.Open(); cmd.ExecuteNonQuery(); { JsonResp.ResponseMsg = new { SuccessMsg = ((SuccessMsg.Value != null) ? Convert.ToString(SuccessMsg.Value) : ""), Ext = ((Extout.Value != null) ? Convert.ToString(Extout.Value) : "") }; }
 			}
 			catch (Exception ex) { 
-				MyEventLog.AddException(string.Format("Exception:{0}\n\r id:{1}\n\r DataObject:{4}\n\r Ext:{5}\n\r", ex.Message, id, DataObject, Ext), "Delete Update", 10);  
+				MyEventLog.AddException(string.Format("Exception:{0}\n\r id:{1}\n\r DataObject:{2}\n\r Ext:{3}\n\r", ex.Message, id, DataObject, Ext), "Delete Update", 10);  
 				JsonResp.ErrorMsg = ex.Message; }
 			finally { con.Close(); }
 			return JsonResp;
@@ -147,16 +147,13 @@ namespace CC.Models {
 				con.Open(); cmd.ExecuteNonQuery(); { JsonResp.ResponseMsg = ""; }
 			}
 			catch (Exception ex) {
-				MyEventLog.AddException(string.Format("Exception:{0}\n\r idField:{1}\n\r Field:{2}\n\r Data:{3}\n\r DataObject:{4}\n\r Ext:{5}\n\r", ex.Message, idField, Field, DataTable), "updateRelations", 10);
+				MyEventLog.AddException(string.Format("Exception:{0}\n\r idField:{1}\n\r Field:{2}\n\r Data:{3}\n\r DataObject:{4}\n\r", ex.Message, idField, Field, GetStringFromArrComma(Data), DataTable), "updateRelations", 10);
 				JsonResp.ErrorMsg = ex.Message;
 			}
 			finally { con.Close(); }
 			return JsonResp;
 		}
 	}
-
-
-
 
 
 	public static class ErrorHandler {

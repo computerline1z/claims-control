@@ -138,9 +138,6 @@ namespace CC.Models
     partial void InserttblWord(tblWord instance);
     partial void UpdatetblWord(tblWord instance);
     partial void DeletetblWord(tblWord instance);
-    partial void InserttblUser(tblUser instance);
-    partial void UpdatetblUser(tblUser instance);
-    partial void DeletetblUser(tblUser instance);
     partial void InserttblObjects_ID(tblObjects_ID instance);
     partial void UpdatetblObjects_ID(tblObjects_ID instance);
     partial void DeletetblObjects_ID(tblObjects_ID instance);
@@ -150,6 +147,9 @@ namespace CC.Models
     partial void InserttblActivity(tblActivity instance);
     partial void UpdatetblActivity(tblActivity instance);
     partial void DeletetblActivity(tblActivity instance);
+    partial void InserttblUser(tblUser instance);
+    partial void UpdatetblUser(tblUser instance);
+    partial void DeletetblUser(tblUser instance);
     #endregion
 		
 		public dbDataContext() : 
@@ -470,14 +470,6 @@ namespace CC.Models
 			}
 		}
 		
-		public System.Data.Linq.Table<tblUser> tblUsers
-		{
-			get
-			{
-				return this.GetTable<tblUser>();
-			}
-		}
-		
 		public System.Data.Linq.Table<tblObjects_ID> tblObjects_IDs
 		{
 			get
@@ -499,6 +491,14 @@ namespace CC.Models
 			get
 			{
 				return this.GetTable<tblActivity>();
+			}
+		}
+		
+		public System.Data.Linq.Table<tblUser> tblUsers
+		{
+			get
+			{
+				return this.GetTable<tblUser>();
 			}
 		}
 		
@@ -9669,803 +9669,6 @@ namespace CC.Models
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tblUsers")]
-	public partial class tblUser : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _ID;
-		
-		private string _FirstName;
-		
-		private string _Surname;
-		
-		private string _Email;
-		
-		private int _AccountID;
-		
-		private int _LanguageID;
-		
-		private int _RoleGroupID;
-		
-		private bool _IsAdmin;
-		
-		private bool _IsActive;
-		
-		private bool _IsApproved;
-		
-		private bool _IsLockedOut;
-		
-		private System.DateTime _CreatedDate;
-		
-		private System.DateTime _LastLockOutDate;
-		
-		private System.DateTime _LastLoginDate;
-		
-		private System.DateTime _LastPasswordChangedDate;
-		
-		private int _FailedPasswordAttemptCount;
-		
-		private string _Comment;
-		
-		private bool _IsDeleted;
-		
-		private string _Position;
-		
-		private string _Phone;
-		
-		private string _MobPhone;
-		
-		private string _EMailForIns;
-		
-		private System.Nullable<System.Guid> _tempUI;
-		
-		private EntitySet<tblUsersActivities_Update> _tblUsersActivities_Updates;
-		
-		private EntitySet<tblInsPolicy> _tblInsPolicies;
-		
-		private EntitySet<tblDoc> _tblDocs;
-		
-		private EntityRef<tblAccount> _tblAccount;
-		
-		private EntityRef<tblLanguage> _tblLanguage;
-		
-		private EntityRef<tblUsers_RolesGroup> _tblUsers_RolesGroup;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIDChanging(int value);
-    partial void OnIDChanged();
-    partial void OnFirstNameChanging(string value);
-    partial void OnFirstNameChanged();
-    partial void OnSurnameChanging(string value);
-    partial void OnSurnameChanged();
-    partial void OnEmailChanging(string value);
-    partial void OnEmailChanged();
-    partial void OnAccountIDChanging(int value);
-    partial void OnAccountIDChanged();
-    partial void OnLanguageIDChanging(int value);
-    partial void OnLanguageIDChanged();
-    partial void OnRoleGroupIDChanging(int value);
-    partial void OnRoleGroupIDChanged();
-    partial void OnIsAdminChanging(bool value);
-    partial void OnIsAdminChanged();
-    partial void OnIsActiveChanging(bool value);
-    partial void OnIsActiveChanged();
-    partial void OnIsApprovedChanging(bool value);
-    partial void OnIsApprovedChanged();
-    partial void OnIsLockedOutChanging(bool value);
-    partial void OnIsLockedOutChanged();
-    partial void OnCreatedDateChanging(System.DateTime value);
-    partial void OnCreatedDateChanged();
-    partial void OnLastLockOutDateChanging(System.DateTime value);
-    partial void OnLastLockOutDateChanged();
-    partial void OnLastLoginDateChanging(System.DateTime value);
-    partial void OnLastLoginDateChanged();
-    partial void OnLastPasswordChangedDateChanging(System.DateTime value);
-    partial void OnLastPasswordChangedDateChanged();
-    partial void OnFailedPasswordAttemptCountChanging(int value);
-    partial void OnFailedPasswordAttemptCountChanged();
-    partial void OnCommentChanging(string value);
-    partial void OnCommentChanged();
-    partial void OnIsDeletedChanging(bool value);
-    partial void OnIsDeletedChanged();
-    partial void OnPositionChanging(string value);
-    partial void OnPositionChanged();
-    partial void OnPhoneChanging(string value);
-    partial void OnPhoneChanged();
-    partial void OnMobPhoneChanging(string value);
-    partial void OnMobPhoneChanged();
-    partial void OnEMailForInsChanging(string value);
-    partial void OnEMailForInsChanged();
-    partial void OntempUIChanging(System.Nullable<System.Guid> value);
-    partial void OntempUIChanged();
-    #endregion
-		
-		public tblUser()
-		{
-			this._tblUsersActivities_Updates = new EntitySet<tblUsersActivities_Update>(new Action<tblUsersActivities_Update>(this.attach_tblUsersActivities_Updates), new Action<tblUsersActivities_Update>(this.detach_tblUsersActivities_Updates));
-			this._tblInsPolicies = new EntitySet<tblInsPolicy>(new Action<tblInsPolicy>(this.attach_tblInsPolicies), new Action<tblInsPolicy>(this.detach_tblInsPolicies));
-			this._tblDocs = new EntitySet<tblDoc>(new Action<tblDoc>(this.attach_tblDocs), new Action<tblDoc>(this.detach_tblDocs));
-			this._tblAccount = default(EntityRef<tblAccount>);
-			this._tblLanguage = default(EntityRef<tblLanguage>);
-			this._tblUsers_RolesGroup = default(EntityRef<tblUsers_RolesGroup>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int ID
-		{
-			get
-			{
-				return this._ID;
-			}
-			set
-			{
-				if ((this._ID != value))
-				{
-					this.OnIDChanging(value);
-					this.SendPropertyChanging();
-					this._ID = value;
-					this.SendPropertyChanged("ID");
-					this.OnIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FirstName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-		public string FirstName
-		{
-			get
-			{
-				return this._FirstName;
-			}
-			set
-			{
-				if ((this._FirstName != value))
-				{
-					this.OnFirstNameChanging(value);
-					this.SendPropertyChanging();
-					this._FirstName = value;
-					this.SendPropertyChanged("FirstName");
-					this.OnFirstNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Surname", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-		public string Surname
-		{
-			get
-			{
-				return this._Surname;
-			}
-			set
-			{
-				if ((this._Surname != value))
-				{
-					this.OnSurnameChanging(value);
-					this.SendPropertyChanging();
-					this._Surname = value;
-					this.SendPropertyChanged("Surname");
-					this.OnSurnameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Email", DbType="NVarChar(256) NOT NULL", CanBeNull=false)]
-		public string Email
-		{
-			get
-			{
-				return this._Email;
-			}
-			set
-			{
-				if ((this._Email != value))
-				{
-					this.OnEmailChanging(value);
-					this.SendPropertyChanging();
-					this._Email = value;
-					this.SendPropertyChanged("Email");
-					this.OnEmailChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AccountID", DbType="Int NOT NULL")]
-		public int AccountID
-		{
-			get
-			{
-				return this._AccountID;
-			}
-			set
-			{
-				if ((this._AccountID != value))
-				{
-					if (this._tblAccount.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnAccountIDChanging(value);
-					this.SendPropertyChanging();
-					this._AccountID = value;
-					this.SendPropertyChanged("AccountID");
-					this.OnAccountIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LanguageID", DbType="Int NOT NULL")]
-		public int LanguageID
-		{
-			get
-			{
-				return this._LanguageID;
-			}
-			set
-			{
-				if ((this._LanguageID != value))
-				{
-					if (this._tblLanguage.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnLanguageIDChanging(value);
-					this.SendPropertyChanging();
-					this._LanguageID = value;
-					this.SendPropertyChanged("LanguageID");
-					this.OnLanguageIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoleGroupID", DbType="Int NOT NULL")]
-		public int RoleGroupID
-		{
-			get
-			{
-				return this._RoleGroupID;
-			}
-			set
-			{
-				if ((this._RoleGroupID != value))
-				{
-					if (this._tblUsers_RolesGroup.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnRoleGroupIDChanging(value);
-					this.SendPropertyChanging();
-					this._RoleGroupID = value;
-					this.SendPropertyChanged("RoleGroupID");
-					this.OnRoleGroupIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsAdmin", DbType="Bit NOT NULL")]
-		public bool IsAdmin
-		{
-			get
-			{
-				return this._IsAdmin;
-			}
-			set
-			{
-				if ((this._IsAdmin != value))
-				{
-					this.OnIsAdminChanging(value);
-					this.SendPropertyChanging();
-					this._IsAdmin = value;
-					this.SendPropertyChanged("IsAdmin");
-					this.OnIsAdminChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsActive", DbType="Bit NOT NULL")]
-		public bool IsActive
-		{
-			get
-			{
-				return this._IsActive;
-			}
-			set
-			{
-				if ((this._IsActive != value))
-				{
-					this.OnIsActiveChanging(value);
-					this.SendPropertyChanging();
-					this._IsActive = value;
-					this.SendPropertyChanged("IsActive");
-					this.OnIsActiveChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsApproved", DbType="Bit NOT NULL")]
-		public bool IsApproved
-		{
-			get
-			{
-				return this._IsApproved;
-			}
-			set
-			{
-				if ((this._IsApproved != value))
-				{
-					this.OnIsApprovedChanging(value);
-					this.SendPropertyChanging();
-					this._IsApproved = value;
-					this.SendPropertyChanged("IsApproved");
-					this.OnIsApprovedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsLockedOut", DbType="Bit NOT NULL")]
-		public bool IsLockedOut
-		{
-			get
-			{
-				return this._IsLockedOut;
-			}
-			set
-			{
-				if ((this._IsLockedOut != value))
-				{
-					this.OnIsLockedOutChanging(value);
-					this.SendPropertyChanging();
-					this._IsLockedOut = value;
-					this.SendPropertyChanged("IsLockedOut");
-					this.OnIsLockedOutChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreatedDate", DbType="DateTime NOT NULL")]
-		public System.DateTime CreatedDate
-		{
-			get
-			{
-				return this._CreatedDate;
-			}
-			set
-			{
-				if ((this._CreatedDate != value))
-				{
-					this.OnCreatedDateChanging(value);
-					this.SendPropertyChanging();
-					this._CreatedDate = value;
-					this.SendPropertyChanged("CreatedDate");
-					this.OnCreatedDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LastLockOutDate", DbType="DateTime NOT NULL")]
-		public System.DateTime LastLockOutDate
-		{
-			get
-			{
-				return this._LastLockOutDate;
-			}
-			set
-			{
-				if ((this._LastLockOutDate != value))
-				{
-					this.OnLastLockOutDateChanging(value);
-					this.SendPropertyChanging();
-					this._LastLockOutDate = value;
-					this.SendPropertyChanged("LastLockOutDate");
-					this.OnLastLockOutDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LastLoginDate", DbType="DateTime NOT NULL")]
-		public System.DateTime LastLoginDate
-		{
-			get
-			{
-				return this._LastLoginDate;
-			}
-			set
-			{
-				if ((this._LastLoginDate != value))
-				{
-					this.OnLastLoginDateChanging(value);
-					this.SendPropertyChanging();
-					this._LastLoginDate = value;
-					this.SendPropertyChanged("LastLoginDate");
-					this.OnLastLoginDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LastPasswordChangedDate", DbType="DateTime NOT NULL")]
-		public System.DateTime LastPasswordChangedDate
-		{
-			get
-			{
-				return this._LastPasswordChangedDate;
-			}
-			set
-			{
-				if ((this._LastPasswordChangedDate != value))
-				{
-					this.OnLastPasswordChangedDateChanging(value);
-					this.SendPropertyChanging();
-					this._LastPasswordChangedDate = value;
-					this.SendPropertyChanged("LastPasswordChangedDate");
-					this.OnLastPasswordChangedDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FailedPasswordAttemptCount", DbType="Int NOT NULL")]
-		public int FailedPasswordAttemptCount
-		{
-			get
-			{
-				return this._FailedPasswordAttemptCount;
-			}
-			set
-			{
-				if ((this._FailedPasswordAttemptCount != value))
-				{
-					this.OnFailedPasswordAttemptCountChanging(value);
-					this.SendPropertyChanging();
-					this._FailedPasswordAttemptCount = value;
-					this.SendPropertyChanged("FailedPasswordAttemptCount");
-					this.OnFailedPasswordAttemptCountChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Comment", DbType="NVarChar(100)")]
-		public string Comment
-		{
-			get
-			{
-				return this._Comment;
-			}
-			set
-			{
-				if ((this._Comment != value))
-				{
-					this.OnCommentChanging(value);
-					this.SendPropertyChanging();
-					this._Comment = value;
-					this.SendPropertyChanged("Comment");
-					this.OnCommentChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsDeleted", DbType="Bit NOT NULL")]
-		public bool IsDeleted
-		{
-			get
-			{
-				return this._IsDeleted;
-			}
-			set
-			{
-				if ((this._IsDeleted != value))
-				{
-					this.OnIsDeletedChanging(value);
-					this.SendPropertyChanging();
-					this._IsDeleted = value;
-					this.SendPropertyChanged("IsDeleted");
-					this.OnIsDeletedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Position", DbType="NVarChar(250)")]
-		public string Position
-		{
-			get
-			{
-				return this._Position;
-			}
-			set
-			{
-				if ((this._Position != value))
-				{
-					this.OnPositionChanging(value);
-					this.SendPropertyChanging();
-					this._Position = value;
-					this.SendPropertyChanged("Position");
-					this.OnPositionChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Phone", DbType="VarChar(20)")]
-		public string Phone
-		{
-			get
-			{
-				return this._Phone;
-			}
-			set
-			{
-				if ((this._Phone != value))
-				{
-					this.OnPhoneChanging(value);
-					this.SendPropertyChanging();
-					this._Phone = value;
-					this.SendPropertyChanged("Phone");
-					this.OnPhoneChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MobPhone", DbType="VarChar(20)")]
-		public string MobPhone
-		{
-			get
-			{
-				return this._MobPhone;
-			}
-			set
-			{
-				if ((this._MobPhone != value))
-				{
-					this.OnMobPhoneChanging(value);
-					this.SendPropertyChanging();
-					this._MobPhone = value;
-					this.SendPropertyChanged("MobPhone");
-					this.OnMobPhoneChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EMailForIns", DbType="NVarChar(150)")]
-		public string EMailForIns
-		{
-			get
-			{
-				return this._EMailForIns;
-			}
-			set
-			{
-				if ((this._EMailForIns != value))
-				{
-					this.OnEMailForInsChanging(value);
-					this.SendPropertyChanging();
-					this._EMailForIns = value;
-					this.SendPropertyChanged("EMailForIns");
-					this.OnEMailForInsChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_tempUI", DbType="UniqueIdentifier")]
-		public System.Nullable<System.Guid> tempUI
-		{
-			get
-			{
-				return this._tempUI;
-			}
-			set
-			{
-				if ((this._tempUI != value))
-				{
-					this.OntempUIChanging(value);
-					this.SendPropertyChanging();
-					this._tempUI = value;
-					this.SendPropertyChanged("tempUI");
-					this.OntempUIChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblUser_tblUsersActivities_Update", Storage="_tblUsersActivities_Updates", ThisKey="ID", OtherKey="UserID")]
-		public EntitySet<tblUsersActivities_Update> tblUsersActivities_Updates
-		{
-			get
-			{
-				return this._tblUsersActivities_Updates;
-			}
-			set
-			{
-				this._tblUsersActivities_Updates.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblUser_tblInsPolicy", Storage="_tblInsPolicies", ThisKey="ID", OtherKey="InsuredContactID")]
-		public EntitySet<tblInsPolicy> tblInsPolicies
-		{
-			get
-			{
-				return this._tblInsPolicies;
-			}
-			set
-			{
-				this._tblInsPolicies.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblUser_tblDoc", Storage="_tblDocs", ThisKey="ID", OtherKey="UserID")]
-		public EntitySet<tblDoc> tblDocs
-		{
-			get
-			{
-				return this._tblDocs;
-			}
-			set
-			{
-				this._tblDocs.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblAccount_tblUser", Storage="_tblAccount", ThisKey="AccountID", OtherKey="ID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
-		public tblAccount tblAccount
-		{
-			get
-			{
-				return this._tblAccount.Entity;
-			}
-			set
-			{
-				tblAccount previousValue = this._tblAccount.Entity;
-				if (((previousValue != value) 
-							|| (this._tblAccount.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._tblAccount.Entity = null;
-						previousValue.tblUsers.Remove(this);
-					}
-					this._tblAccount.Entity = value;
-					if ((value != null))
-					{
-						value.tblUsers.Add(this);
-						this._AccountID = value.ID;
-					}
-					else
-					{
-						this._AccountID = default(int);
-					}
-					this.SendPropertyChanged("tblAccount");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblLanguage_tblUser", Storage="_tblLanguage", ThisKey="LanguageID", OtherKey="ID", IsForeignKey=true)]
-		public tblLanguage tblLanguage
-		{
-			get
-			{
-				return this._tblLanguage.Entity;
-			}
-			set
-			{
-				tblLanguage previousValue = this._tblLanguage.Entity;
-				if (((previousValue != value) 
-							|| (this._tblLanguage.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._tblLanguage.Entity = null;
-						previousValue.tblUsers.Remove(this);
-					}
-					this._tblLanguage.Entity = value;
-					if ((value != null))
-					{
-						value.tblUsers.Add(this);
-						this._LanguageID = value.ID;
-					}
-					else
-					{
-						this._LanguageID = default(int);
-					}
-					this.SendPropertyChanged("tblLanguage");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblUsers_RolesGroup_tblUser", Storage="_tblUsers_RolesGroup", ThisKey="RoleGroupID", OtherKey="ID", IsForeignKey=true)]
-		public tblUsers_RolesGroup tblUsers_RolesGroup
-		{
-			get
-			{
-				return this._tblUsers_RolesGroup.Entity;
-			}
-			set
-			{
-				tblUsers_RolesGroup previousValue = this._tblUsers_RolesGroup.Entity;
-				if (((previousValue != value) 
-							|| (this._tblUsers_RolesGroup.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._tblUsers_RolesGroup.Entity = null;
-						previousValue.tblUsers.Remove(this);
-					}
-					this._tblUsers_RolesGroup.Entity = value;
-					if ((value != null))
-					{
-						value.tblUsers.Add(this);
-						this._RoleGroupID = value.ID;
-					}
-					else
-					{
-						this._RoleGroupID = default(int);
-					}
-					this.SendPropertyChanged("tblUsers_RolesGroup");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_tblUsersActivities_Updates(tblUsersActivities_Update entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblUser = this;
-		}
-		
-		private void detach_tblUsersActivities_Updates(tblUsersActivities_Update entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblUser = null;
-		}
-		
-		private void attach_tblInsPolicies(tblInsPolicy entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblUser = this;
-		}
-		
-		private void detach_tblInsPolicies(tblInsPolicy entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblUser = null;
-		}
-		
-		private void attach_tblDocs(tblDoc entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblUser = this;
-		}
-		
-		private void detach_tblDocs(tblDoc entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblUser = null;
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tblObjects_ID")]
 	public partial class tblObjects_ID : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -11195,6 +10398,899 @@ namespace CC.Models
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tblUsers")]
+	public partial class tblUser : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _FirstName;
+		
+		private string _Surname;
+		
+		private string _Email;
+		
+		private int _AccountID;
+		
+		private int _LanguageID;
+		
+		private int _RoleGroupID;
+		
+		private bool _IsAdmin;
+		
+		private bool _IsActive;
+		
+		private bool _IsApproved;
+		
+		private bool _IsLockedOut;
+		
+		private System.DateTime _CreatedDate;
+		
+		private System.DateTime _LastLockOutDate;
+		
+		private System.DateTime _LastLoginDate;
+		
+		private System.DateTime _LastPasswordChangedDate;
+		
+		private int _FailedPasswordAttemptCount;
+		
+		private string _Comment;
+		
+		private bool _IsDeleted;
+		
+		private string _Position;
+		
+		private string _Phone;
+		
+		private string _MobPhone;
+		
+		private string _EMailForIns;
+		
+		private System.Nullable<System.Guid> _tempUI;
+		
+		private bool _warnOnNewClaim;
+		
+		private System.Nullable<byte> _warnOnTaskExpire;
+		
+		private System.Nullable<byte> _warnOnInfoSubmitExpire;
+		
+		private bool _warnOnPaymentExpire;
+		
+		private EntitySet<tblUsersActivities_Update> _tblUsersActivities_Updates;
+		
+		private EntitySet<tblInsPolicy> _tblInsPolicies;
+		
+		private EntitySet<tblDoc> _tblDocs;
+		
+		private EntityRef<tblAccount> _tblAccount;
+		
+		private EntityRef<tblLanguage> _tblLanguage;
+		
+		private EntityRef<tblUsers_RolesGroup> _tblUsers_RolesGroup;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnFirstNameChanging(string value);
+    partial void OnFirstNameChanged();
+    partial void OnSurnameChanging(string value);
+    partial void OnSurnameChanged();
+    partial void OnEmailChanging(string value);
+    partial void OnEmailChanged();
+    partial void OnAccountIDChanging(int value);
+    partial void OnAccountIDChanged();
+    partial void OnLanguageIDChanging(int value);
+    partial void OnLanguageIDChanged();
+    partial void OnRoleGroupIDChanging(int value);
+    partial void OnRoleGroupIDChanged();
+    partial void OnIsAdminChanging(bool value);
+    partial void OnIsAdminChanged();
+    partial void OnIsActiveChanging(bool value);
+    partial void OnIsActiveChanged();
+    partial void OnIsApprovedChanging(bool value);
+    partial void OnIsApprovedChanged();
+    partial void OnIsLockedOutChanging(bool value);
+    partial void OnIsLockedOutChanged();
+    partial void OnCreatedDateChanging(System.DateTime value);
+    partial void OnCreatedDateChanged();
+    partial void OnLastLockOutDateChanging(System.DateTime value);
+    partial void OnLastLockOutDateChanged();
+    partial void OnLastLoginDateChanging(System.DateTime value);
+    partial void OnLastLoginDateChanged();
+    partial void OnLastPasswordChangedDateChanging(System.DateTime value);
+    partial void OnLastPasswordChangedDateChanged();
+    partial void OnFailedPasswordAttemptCountChanging(int value);
+    partial void OnFailedPasswordAttemptCountChanged();
+    partial void OnCommentChanging(string value);
+    partial void OnCommentChanged();
+    partial void OnIsDeletedChanging(bool value);
+    partial void OnIsDeletedChanged();
+    partial void OnPositionChanging(string value);
+    partial void OnPositionChanged();
+    partial void OnPhoneChanging(string value);
+    partial void OnPhoneChanged();
+    partial void OnMobPhoneChanging(string value);
+    partial void OnMobPhoneChanged();
+    partial void OnEMailForInsChanging(string value);
+    partial void OnEMailForInsChanged();
+    partial void OntempUIChanging(System.Nullable<System.Guid> value);
+    partial void OntempUIChanged();
+    partial void OnwarnOnNewClaimChanging(bool value);
+    partial void OnwarnOnNewClaimChanged();
+    partial void OnwarnOnTaskExpireChanging(System.Nullable<byte> value);
+    partial void OnwarnOnTaskExpireChanged();
+    partial void OnwarnOnInfoSubmitExpireChanging(System.Nullable<byte> value);
+    partial void OnwarnOnInfoSubmitExpireChanged();
+    partial void OnwarnOnPaymentExpireChanging(bool value);
+    partial void OnwarnOnPaymentExpireChanged();
+    #endregion
+		
+		public tblUser()
+		{
+			this._tblUsersActivities_Updates = new EntitySet<tblUsersActivities_Update>(new Action<tblUsersActivities_Update>(this.attach_tblUsersActivities_Updates), new Action<tblUsersActivities_Update>(this.detach_tblUsersActivities_Updates));
+			this._tblInsPolicies = new EntitySet<tblInsPolicy>(new Action<tblInsPolicy>(this.attach_tblInsPolicies), new Action<tblInsPolicy>(this.detach_tblInsPolicies));
+			this._tblDocs = new EntitySet<tblDoc>(new Action<tblDoc>(this.attach_tblDocs), new Action<tblDoc>(this.detach_tblDocs));
+			this._tblAccount = default(EntityRef<tblAccount>);
+			this._tblLanguage = default(EntityRef<tblLanguage>);
+			this._tblUsers_RolesGroup = default(EntityRef<tblUsers_RolesGroup>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FirstName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string FirstName
+		{
+			get
+			{
+				return this._FirstName;
+			}
+			set
+			{
+				if ((this._FirstName != value))
+				{
+					this.OnFirstNameChanging(value);
+					this.SendPropertyChanging();
+					this._FirstName = value;
+					this.SendPropertyChanged("FirstName");
+					this.OnFirstNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Surname", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string Surname
+		{
+			get
+			{
+				return this._Surname;
+			}
+			set
+			{
+				if ((this._Surname != value))
+				{
+					this.OnSurnameChanging(value);
+					this.SendPropertyChanging();
+					this._Surname = value;
+					this.SendPropertyChanged("Surname");
+					this.OnSurnameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Email", DbType="NVarChar(256) NOT NULL", CanBeNull=false)]
+		public string Email
+		{
+			get
+			{
+				return this._Email;
+			}
+			set
+			{
+				if ((this._Email != value))
+				{
+					this.OnEmailChanging(value);
+					this.SendPropertyChanging();
+					this._Email = value;
+					this.SendPropertyChanged("Email");
+					this.OnEmailChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AccountID", DbType="Int NOT NULL")]
+		public int AccountID
+		{
+			get
+			{
+				return this._AccountID;
+			}
+			set
+			{
+				if ((this._AccountID != value))
+				{
+					if (this._tblAccount.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAccountIDChanging(value);
+					this.SendPropertyChanging();
+					this._AccountID = value;
+					this.SendPropertyChanged("AccountID");
+					this.OnAccountIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LanguageID", DbType="Int NOT NULL")]
+		public int LanguageID
+		{
+			get
+			{
+				return this._LanguageID;
+			}
+			set
+			{
+				if ((this._LanguageID != value))
+				{
+					if (this._tblLanguage.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnLanguageIDChanging(value);
+					this.SendPropertyChanging();
+					this._LanguageID = value;
+					this.SendPropertyChanged("LanguageID");
+					this.OnLanguageIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoleGroupID", DbType="Int NOT NULL")]
+		public int RoleGroupID
+		{
+			get
+			{
+				return this._RoleGroupID;
+			}
+			set
+			{
+				if ((this._RoleGroupID != value))
+				{
+					if (this._tblUsers_RolesGroup.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnRoleGroupIDChanging(value);
+					this.SendPropertyChanging();
+					this._RoleGroupID = value;
+					this.SendPropertyChanged("RoleGroupID");
+					this.OnRoleGroupIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsAdmin", DbType="Bit NOT NULL")]
+		public bool IsAdmin
+		{
+			get
+			{
+				return this._IsAdmin;
+			}
+			set
+			{
+				if ((this._IsAdmin != value))
+				{
+					this.OnIsAdminChanging(value);
+					this.SendPropertyChanging();
+					this._IsAdmin = value;
+					this.SendPropertyChanged("IsAdmin");
+					this.OnIsAdminChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsActive", DbType="Bit NOT NULL")]
+		public bool IsActive
+		{
+			get
+			{
+				return this._IsActive;
+			}
+			set
+			{
+				if ((this._IsActive != value))
+				{
+					this.OnIsActiveChanging(value);
+					this.SendPropertyChanging();
+					this._IsActive = value;
+					this.SendPropertyChanged("IsActive");
+					this.OnIsActiveChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsApproved", DbType="Bit NOT NULL")]
+		public bool IsApproved
+		{
+			get
+			{
+				return this._IsApproved;
+			}
+			set
+			{
+				if ((this._IsApproved != value))
+				{
+					this.OnIsApprovedChanging(value);
+					this.SendPropertyChanging();
+					this._IsApproved = value;
+					this.SendPropertyChanged("IsApproved");
+					this.OnIsApprovedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsLockedOut", DbType="Bit NOT NULL")]
+		public bool IsLockedOut
+		{
+			get
+			{
+				return this._IsLockedOut;
+			}
+			set
+			{
+				if ((this._IsLockedOut != value))
+				{
+					this.OnIsLockedOutChanging(value);
+					this.SendPropertyChanging();
+					this._IsLockedOut = value;
+					this.SendPropertyChanged("IsLockedOut");
+					this.OnIsLockedOutChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreatedDate", DbType="DateTime NOT NULL")]
+		public System.DateTime CreatedDate
+		{
+			get
+			{
+				return this._CreatedDate;
+			}
+			set
+			{
+				if ((this._CreatedDate != value))
+				{
+					this.OnCreatedDateChanging(value);
+					this.SendPropertyChanging();
+					this._CreatedDate = value;
+					this.SendPropertyChanged("CreatedDate");
+					this.OnCreatedDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LastLockOutDate", DbType="DateTime NOT NULL")]
+		public System.DateTime LastLockOutDate
+		{
+			get
+			{
+				return this._LastLockOutDate;
+			}
+			set
+			{
+				if ((this._LastLockOutDate != value))
+				{
+					this.OnLastLockOutDateChanging(value);
+					this.SendPropertyChanging();
+					this._LastLockOutDate = value;
+					this.SendPropertyChanged("LastLockOutDate");
+					this.OnLastLockOutDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LastLoginDate", DbType="DateTime NOT NULL")]
+		public System.DateTime LastLoginDate
+		{
+			get
+			{
+				return this._LastLoginDate;
+			}
+			set
+			{
+				if ((this._LastLoginDate != value))
+				{
+					this.OnLastLoginDateChanging(value);
+					this.SendPropertyChanging();
+					this._LastLoginDate = value;
+					this.SendPropertyChanged("LastLoginDate");
+					this.OnLastLoginDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LastPasswordChangedDate", DbType="DateTime NOT NULL")]
+		public System.DateTime LastPasswordChangedDate
+		{
+			get
+			{
+				return this._LastPasswordChangedDate;
+			}
+			set
+			{
+				if ((this._LastPasswordChangedDate != value))
+				{
+					this.OnLastPasswordChangedDateChanging(value);
+					this.SendPropertyChanging();
+					this._LastPasswordChangedDate = value;
+					this.SendPropertyChanged("LastPasswordChangedDate");
+					this.OnLastPasswordChangedDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FailedPasswordAttemptCount", DbType="Int NOT NULL")]
+		public int FailedPasswordAttemptCount
+		{
+			get
+			{
+				return this._FailedPasswordAttemptCount;
+			}
+			set
+			{
+				if ((this._FailedPasswordAttemptCount != value))
+				{
+					this.OnFailedPasswordAttemptCountChanging(value);
+					this.SendPropertyChanging();
+					this._FailedPasswordAttemptCount = value;
+					this.SendPropertyChanged("FailedPasswordAttemptCount");
+					this.OnFailedPasswordAttemptCountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Comment", DbType="NVarChar(100)")]
+		public string Comment
+		{
+			get
+			{
+				return this._Comment;
+			}
+			set
+			{
+				if ((this._Comment != value))
+				{
+					this.OnCommentChanging(value);
+					this.SendPropertyChanging();
+					this._Comment = value;
+					this.SendPropertyChanged("Comment");
+					this.OnCommentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsDeleted", DbType="Bit NOT NULL")]
+		public bool IsDeleted
+		{
+			get
+			{
+				return this._IsDeleted;
+			}
+			set
+			{
+				if ((this._IsDeleted != value))
+				{
+					this.OnIsDeletedChanging(value);
+					this.SendPropertyChanging();
+					this._IsDeleted = value;
+					this.SendPropertyChanged("IsDeleted");
+					this.OnIsDeletedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Position", DbType="NVarChar(250)")]
+		public string Position
+		{
+			get
+			{
+				return this._Position;
+			}
+			set
+			{
+				if ((this._Position != value))
+				{
+					this.OnPositionChanging(value);
+					this.SendPropertyChanging();
+					this._Position = value;
+					this.SendPropertyChanged("Position");
+					this.OnPositionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Phone", DbType="VarChar(20)")]
+		public string Phone
+		{
+			get
+			{
+				return this._Phone;
+			}
+			set
+			{
+				if ((this._Phone != value))
+				{
+					this.OnPhoneChanging(value);
+					this.SendPropertyChanging();
+					this._Phone = value;
+					this.SendPropertyChanged("Phone");
+					this.OnPhoneChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MobPhone", DbType="VarChar(20)")]
+		public string MobPhone
+		{
+			get
+			{
+				return this._MobPhone;
+			}
+			set
+			{
+				if ((this._MobPhone != value))
+				{
+					this.OnMobPhoneChanging(value);
+					this.SendPropertyChanging();
+					this._MobPhone = value;
+					this.SendPropertyChanged("MobPhone");
+					this.OnMobPhoneChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EMailForIns", DbType="NVarChar(150)")]
+		public string EMailForIns
+		{
+			get
+			{
+				return this._EMailForIns;
+			}
+			set
+			{
+				if ((this._EMailForIns != value))
+				{
+					this.OnEMailForInsChanging(value);
+					this.SendPropertyChanging();
+					this._EMailForIns = value;
+					this.SendPropertyChanged("EMailForIns");
+					this.OnEMailForInsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_tempUI", DbType="UniqueIdentifier")]
+		public System.Nullable<System.Guid> tempUI
+		{
+			get
+			{
+				return this._tempUI;
+			}
+			set
+			{
+				if ((this._tempUI != value))
+				{
+					this.OntempUIChanging(value);
+					this.SendPropertyChanging();
+					this._tempUI = value;
+					this.SendPropertyChanged("tempUI");
+					this.OntempUIChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_warnOnNewClaim", DbType="Bit NOT NULL")]
+		public bool warnOnNewClaim
+		{
+			get
+			{
+				return this._warnOnNewClaim;
+			}
+			set
+			{
+				if ((this._warnOnNewClaim != value))
+				{
+					this.OnwarnOnNewClaimChanging(value);
+					this.SendPropertyChanging();
+					this._warnOnNewClaim = value;
+					this.SendPropertyChanged("warnOnNewClaim");
+					this.OnwarnOnNewClaimChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_warnOnTaskExpire", DbType="TinyInt")]
+		public System.Nullable<byte> warnOnTaskExpire
+		{
+			get
+			{
+				return this._warnOnTaskExpire;
+			}
+			set
+			{
+				if ((this._warnOnTaskExpire != value))
+				{
+					this.OnwarnOnTaskExpireChanging(value);
+					this.SendPropertyChanging();
+					this._warnOnTaskExpire = value;
+					this.SendPropertyChanged("warnOnTaskExpire");
+					this.OnwarnOnTaskExpireChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_warnOnInfoSubmitExpire", DbType="TinyInt")]
+		public System.Nullable<byte> warnOnInfoSubmitExpire
+		{
+			get
+			{
+				return this._warnOnInfoSubmitExpire;
+			}
+			set
+			{
+				if ((this._warnOnInfoSubmitExpire != value))
+				{
+					this.OnwarnOnInfoSubmitExpireChanging(value);
+					this.SendPropertyChanging();
+					this._warnOnInfoSubmitExpire = value;
+					this.SendPropertyChanged("warnOnInfoSubmitExpire");
+					this.OnwarnOnInfoSubmitExpireChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_warnOnPaymentExpire", DbType="Bit NOT NULL")]
+		public bool warnOnPaymentExpire
+		{
+			get
+			{
+				return this._warnOnPaymentExpire;
+			}
+			set
+			{
+				if ((this._warnOnPaymentExpire != value))
+				{
+					this.OnwarnOnPaymentExpireChanging(value);
+					this.SendPropertyChanging();
+					this._warnOnPaymentExpire = value;
+					this.SendPropertyChanged("warnOnPaymentExpire");
+					this.OnwarnOnPaymentExpireChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblUser_tblUsersActivities_Update", Storage="_tblUsersActivities_Updates", ThisKey="ID", OtherKey="UserID")]
+		public EntitySet<tblUsersActivities_Update> tblUsersActivities_Updates
+		{
+			get
+			{
+				return this._tblUsersActivities_Updates;
+			}
+			set
+			{
+				this._tblUsersActivities_Updates.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblUser_tblInsPolicy", Storage="_tblInsPolicies", ThisKey="ID", OtherKey="InsuredContactID")]
+		public EntitySet<tblInsPolicy> tblInsPolicies
+		{
+			get
+			{
+				return this._tblInsPolicies;
+			}
+			set
+			{
+				this._tblInsPolicies.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblUser_tblDoc", Storage="_tblDocs", ThisKey="ID", OtherKey="UserID")]
+		public EntitySet<tblDoc> tblDocs
+		{
+			get
+			{
+				return this._tblDocs;
+			}
+			set
+			{
+				this._tblDocs.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblAccount_tblUser", Storage="_tblAccount", ThisKey="AccountID", OtherKey="ID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public tblAccount tblAccount
+		{
+			get
+			{
+				return this._tblAccount.Entity;
+			}
+			set
+			{
+				tblAccount previousValue = this._tblAccount.Entity;
+				if (((previousValue != value) 
+							|| (this._tblAccount.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._tblAccount.Entity = null;
+						previousValue.tblUsers.Remove(this);
+					}
+					this._tblAccount.Entity = value;
+					if ((value != null))
+					{
+						value.tblUsers.Add(this);
+						this._AccountID = value.ID;
+					}
+					else
+					{
+						this._AccountID = default(int);
+					}
+					this.SendPropertyChanged("tblAccount");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblLanguage_tblUser", Storage="_tblLanguage", ThisKey="LanguageID", OtherKey="ID", IsForeignKey=true)]
+		public tblLanguage tblLanguage
+		{
+			get
+			{
+				return this._tblLanguage.Entity;
+			}
+			set
+			{
+				tblLanguage previousValue = this._tblLanguage.Entity;
+				if (((previousValue != value) 
+							|| (this._tblLanguage.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._tblLanguage.Entity = null;
+						previousValue.tblUsers.Remove(this);
+					}
+					this._tblLanguage.Entity = value;
+					if ((value != null))
+					{
+						value.tblUsers.Add(this);
+						this._LanguageID = value.ID;
+					}
+					else
+					{
+						this._LanguageID = default(int);
+					}
+					this.SendPropertyChanged("tblLanguage");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblUsers_RolesGroup_tblUser", Storage="_tblUsers_RolesGroup", ThisKey="RoleGroupID", OtherKey="ID", IsForeignKey=true)]
+		public tblUsers_RolesGroup tblUsers_RolesGroup
+		{
+			get
+			{
+				return this._tblUsers_RolesGroup.Entity;
+			}
+			set
+			{
+				tblUsers_RolesGroup previousValue = this._tblUsers_RolesGroup.Entity;
+				if (((previousValue != value) 
+							|| (this._tblUsers_RolesGroup.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._tblUsers_RolesGroup.Entity = null;
+						previousValue.tblUsers.Remove(this);
+					}
+					this._tblUsers_RolesGroup.Entity = value;
+					if ((value != null))
+					{
+						value.tblUsers.Add(this);
+						this._RoleGroupID = value.ID;
+					}
+					else
+					{
+						this._RoleGroupID = default(int);
+					}
+					this.SendPropertyChanged("tblUsers_RolesGroup");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_tblUsersActivities_Updates(tblUsersActivities_Update entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblUser = this;
+		}
+		
+		private void detach_tblUsersActivities_Updates(tblUsersActivities_Update entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblUser = null;
+		}
+		
+		private void attach_tblInsPolicies(tblInsPolicy entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblUser = this;
+		}
+		
+		private void detach_tblInsPolicies(tblInsPolicy entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblUser = null;
+		}
+		
+		private void attach_tblDocs(tblDoc entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblUser = this;
+		}
+		
+		private void detach_tblDocs(tblDoc entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblUser = null;
 		}
 	}
 	
