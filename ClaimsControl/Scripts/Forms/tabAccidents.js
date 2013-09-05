@@ -202,7 +202,7 @@
         inputs.prop("disabled", true);
       }
       if (c.noInsurance) {
-        return $("#NotInsuredClaim").trigger("click");
+        return App.claimEditController.fnToggle_noInsurance();
       }
     },
     init: function() {
@@ -255,20 +255,21 @@
   });
 
   App.claimEditController = Em.Controller.create({
-    fnToggle_noInsurance: function(e) {
-      var chk, content, eToggle, noInsurance, t;
+    fnToggle_noInsurance: (function(e) {
+      var chk, content, eToggle, noInsurance;
 
-      t = e.target;
-      chk = t.tagName.toUpperCase() === "INPUT" ? $(t) : $(t).find("input:checkbox");
       noInsurance = this.claim.noInsurance;
-      if (!e.isTrigger) {
-        noInsurance = !noInsurance;
-        chk.toggleClass("UpdateField");
-        this.claim.set('noInsurance', noInsurance);
-      }
       console.log(this.claim.get('noInsurance'));
-      chk.attr("checked", noInsurance);
-      content = $("#ClaimDetailsContent");
+      chk = $("#NotInsuredClaim").find("input");
+      if (!chk.data("ctrl")) {
+        chk.data("ctrl", {
+          "Type": "Boolean",
+          "Value": "0",
+          "ToggleValue": true,
+          "Field": "InsPolicyID"
+        });
+      }
+      content = this.claim.iD ? $("#ClaimDetailsContent") : $("#newClaimDetailsContent");
       eToggle = content.find("div.js-toggle");
       content.find("button.btnSave").attr("disabled", false);
       if (noInsurance) {
@@ -284,7 +285,7 @@
         $("#InsuranceClaimAmount").parent().parent().hide();
       }
       return false;
-    },
+    }).observes("claim.noInsurance"),
     deleteForm: function(e) {
       var context, oData;
 

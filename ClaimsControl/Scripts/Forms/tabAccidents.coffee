@@ -138,7 +138,8 @@ App.SelectedClaimView = Em.View.extend(
 			else if c.claimStatus=="4" then inputs=inputs.filter((i)->i==1||$(@).attr("id")=="InsuranceClaimAmount").prop('title', 'Suma jau patvirtina')#lossAmount & insuranceClaimAmount
 			else if c.claimStatus=="5" then ($(frm).find("button").prop("disabled", true); inputs.prop('title', 'Žala uždaryta'))#laimStatus==5 disabled everything
 			inputs.prop("disabled", true)
-		if c.noInsurance then $("#NotInsuredClaim").trigger("click")
+		#if c.noInsurance then $("#NotInsuredClaim").trigger("click")
+		if c.noInsurance then App.claimEditController.fnToggle_noInsurance()
 	init: ->
 		@_super(); d = @get("rowContext"); 	
 		if not d.newClaim
@@ -162,22 +163,31 @@ App.SelectedClaimView = Em.View.extend(
 	templateName: 'tmpClaimEdit'
 )
 App.claimEditController = Em.Controller.create(#save, delete, cancel Claims events
-	fnToggle_noInsurance: (e)->
-		t=e.target; chk=if (t.tagName.toUpperCase()=="INPUT") then $(t) else $(t).find("input:checkbox")
+	fnToggle_noInsurance: ((e)->
+		# t=e.target; chk=if (t.tagName.toUpperCase()=="INPUT") then $(t) else $(t).find("input:checkbox")
 		noInsurance=@claim.noInsurance; 
-		if not e.isTrigger 
-			noInsurance=not noInsurance #Jei trigeris nereikia apvers, nes ten jau teisinga reiksme
-			chk.toggleClass("UpdateField")
-			@claim.set('noInsurance', noInsurance)
+		# if not e.isTrigger 
+			# noInsurance=not noInsurance #Jei trigeris nereikia apvers, nes ten jau teisinga reiksme
+			# chk.toggleClass("UpdateField")
+			# @claim.set('noInsurance', noInsurance)
 		console.log(@claim.get('noInsurance'))
-		chk.attr("checked", noInsurance)
-		content=$("#ClaimDetailsContent");eToggle=content.find("div.js-toggle")
+		
+		#chk.attr("checked", noInsurance) if t.tagName.toUpperCase()=="LABEL"
+		#chk.attr("checked", not noInsurance)#apverciam atvirksciai, nes jis paskui vel verciasi 
+		chk=$("#NotInsuredClaim").find("input")
+		if not chk.data("ctrl") then chk.data("ctrl", {"Type":"Boolean","Value":"0","ToggleValue":true,"Field":"InsPolicyID"})#Kad pagal šitą updatintusi
+		
+		content=if @claim.iD then $("#ClaimDetailsContent") else $("#newClaimDetailsContent")
+		eToggle=content.find("div.js-toggle")
 		content.find("button.btnSave").attr("disabled",false);
 		#$("#ClaimDetailsContent").find("div.js-toggle").toggle().end().find("button.btnSave").attr("disabled",false);
+		
 		if noInsurance then chk.addClass("UpdateField"); eToggle.hide()
 		else chk.removeClass("UpdateField"); eToggle.show(); $("#InsuredClaimList").data("newval","") #.data("ctrl").Value="";#Kad sita updatintu
 		if $('#IsInjuredPersons').length then $('#IsInjuredPersons').prop("checked",false); $("#InsuranceClaimAmount").parent().parent().hide() #Jeigu yra IsInjuredPersons atslepiant varnele bus nuimta, o lauko nerodom
 		false
+	).observes("claim.noInsurance")#		App.claimEditController.claim.noInsurance
+
 	deleteForm: (e) ->
 		oData=oDATA.GET("proc_Claims"); context=e.view._parentView.templateData.view.rowContext;
 		console.log("Žalos ID: "+context.Claims2[0])
