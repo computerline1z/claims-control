@@ -642,11 +642,12 @@ namespace CC.Models {
 				d.Position,
 				d.Phone,
 				d.MobPhone,
-				d.EMailForIns
+				d.EMailForIns,
+				d.warnOnNewClaim,
+				d.warnOnTaskExpire,
+				d.warnOnInfoSubmitExpire,
+				d.warnOnPaymentExpire
 				};
-
-			//	new { FName = "CountryID",List=new{Source="tblCountries",ListType="List", iVal="iD",iText=new object []{"name"}}},//3
-
 			object[] Cols ={
 				new { FName = "ID"},//0
 				new { FName = "FirstName",Type="String",Validity="require().nonHtml().maxLength(50)"},//2
@@ -658,7 +659,11 @@ namespace CC.Models {
 				new { FName = "Position",Type="String"},
 				new { FName = "Phone",Type="String"},
 				new { FName = "MobPhone",Type="String"},
-				new { FName = "EMailForIns",Type="Email",Validity="nonHtml().match(\"email\").maxLength(35)"}
+				new { FName = "EMailForIns",Type="Email",Validity="nonHtml().match(\"email\").maxLength(35)"},
+				new { FName = "warnOnNewClaim",Type="Integer"},
+				new { FName = "warnOnTaskExpire",Type="Integer"},
+				new { FName = "warnOnInfoSubmitExpire",Type="Integer"},
+				new { FName = "warnOnPaymentExpire",Type="Integer"}
 			}; JSON.Cols = Cols;
 			JSON.Config = new { tblUpdate = "tblUsers", titleFields = new object[] { "firstName", "surname" }, Msg = new { AddNew = "Naujo vartotojo sukūrimas", Edit = "Vartotojo redagavimas", Delete = "Ištrinti vartotoją", GenName = "Vartotojas", GenNameWhat = "Vartotoją", ListName = "Vartotojų sąrašas" } };
 			JSON.Grid = new {
@@ -673,7 +678,8 @@ namespace CC.Models {
 					new {sTitle="Pareigos"},
 					new {sTitle="Telefonas"},
 					new {sTitle="Mobilus"},
-					new {sTitle="El. paštas"},
+					new {sTitle="El. paštas"}
+					//nuo warnOnNewClaim titulu nededu, nes jie nereikalingi
 				},
 				//aaSorting = new object[] { new object[] { 1, "asc" } },//???
 			};

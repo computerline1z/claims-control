@@ -14,7 +14,7 @@
 <div id="userInfoTab">
 	<ul class='ulWhiteMenu'>
 		<li><a href="#userInfoData"><span>Duomenys</span></a></li>		
-		<li><a href="#userInfoRights"><span>Teisės</span></a></li>	
+		<li><a href="#userInfoRights"><span>Pranešimų nustatymai</span></a></li>	
 	</ul>
 	<div id="userInfoData">
 	<div id="InfoDataForm" class="inputForm whiteTab container" data-ctrl='{"NewRec":0,"Source":"tblUsers","id":0}'>
@@ -39,7 +39,7 @@
 			{{/with}}
 			<h3 class="tableTitle">Prisijungimo duomenys</h3>		
  			<div class="row border ui-corner-all box_2pr">
-			{{updatableField userContent.email classes="wrapper:'col six'" id="systemEmail" labelType="Top"}}
+			{{#with userContent}}{{updatableField email classes="wrapper:'col six'" id="systemEmail" labelType="Top"}}{{/with}}
 			@*-------------------------------------------------*@
 			<div class="col six">
 			{{#if myInfo}}
@@ -93,8 +93,16 @@
 	</div>
 	
 	<div id="userInfoRights">
-		<span>Vartotojų teisės</span>
-		<button class="btn btnSave customButtonDisabled" style="float:right;margin:40pxbackground-color:#EB5A44;color:#FFFFFF;" {{action saveUserRights}}>Išsaugoti</button></br>
-	</div>
+		<h3 class="tableTitle">Gauti pranešimus el. paštu</h3>
+		<table class="zebra-striped"><tbody>
+			<tr class="border"><td><label style="display:inline-block;"><input type="checkbox" name="warnOnNewClaim"/> kai įvedama nauja žala.</label></td></tr>		
+			<tr class="border"><td><label style="display:inline-block;"><input type="checkbox" name="warnOnTaskExpire"/> kai iki man priskirtos užduoties atlikimo termino liko</label><span class="leftBlock inputInLine short-child-input"><input type="text" value="1"/></span> d.</td></tr>		
+			<tr class="border"><td><label style="display:inline-block;"><input type="checkbox" name="warnOnInfoSubmitExpire"/> kai iki visos informacijos pateikimo draudikui termino liko</label><span class="leftBlock inputInLine short-child-input"><input type="text" value="1" /></span> d.</td></tr>		
+			<tr class="border"><td><label style="display:inline-block;"><input type="checkbox" name="warnOnPaymentExpire"/> kai yra pradelstas draudimo išmokos gavimo terminas.</label></td></tr>		
+		</tbody>
+		</table>
+
+@*		<button class="btn btnSave customButtonDisabled" style="float:right;margin:40pxbackground-color:#EB5A44;color:#FFFFFF;" {{action saveUserRights}}>Išsaugoti</button></br>
+*@	</div>
 
 </div>

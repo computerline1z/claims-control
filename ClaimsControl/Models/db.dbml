@@ -431,39 +431,6 @@
       <Association Name="tblObjects_ID_tblWord" Member="tblObjects_ID" ThisKey="ObjectID" OtherKey="ID" Type="tblObjects_ID" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.tblUsers" Member="tblUsers">
-    <Type Name="tblUser">
-      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="FirstName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="Surname" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="Email" Type="System.String" DbType="NVarChar(256) NOT NULL" CanBeNull="false" />
-      <Column Name="AccountID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="LanguageID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="RoleGroupID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="IsAdmin" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="IsActive" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="IsApproved" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="IsLockedOut" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="CreatedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="LastLockOutDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="LastLoginDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="LastPasswordChangedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="FailedPasswordAttemptCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Comment" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
-      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="Position" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
-      <Column Name="Phone" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
-      <Column Name="MobPhone" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
-      <Column Name="EMailForIns" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
-      <Column Name="tempUI" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
-      <Association Name="tblUser_tblUsersActivities_Update" Member="tblUsersActivities_Updates" ThisKey="ID" OtherKey="UserID" Type="tblUsersActivities_Update" />
-      <Association Name="tblUser_tblInsPolicy" Member="tblInsPolicies" ThisKey="ID" OtherKey="InsuredContactID" Type="tblInsPolicy" />
-      <Association Name="tblUser_tblDoc" Member="tblDocs" ThisKey="ID" OtherKey="UserID" Type="tblDoc" />
-      <Association Name="tblAccount_tblUser" Member="tblAccount" ThisKey="AccountID" OtherKey="ID" Type="tblAccount" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
-      <Association Name="tblLanguage_tblUser" Member="tblLanguage" ThisKey="LanguageID" OtherKey="ID" Type="tblLanguage" IsForeignKey="true" />
-      <Association Name="tblUsers_RolesGroup_tblUser" Member="tblUsers_RolesGroup" ThisKey="RoleGroupID" OtherKey="ID" Type="tblUsers_RolesGroup" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.tblObjects_ID" Member="tblObjects_IDs">
     <Type Name="tblObjects_ID">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -498,6 +465,43 @@
       <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Association Name="tblActivityType_tblActivity" Member="tblActivityType" ThisKey="TypeID" OtherKey="ID" Type="tblActivityType" IsForeignKey="true" />
       <Association Name="tblClaim_tblActivity" Member="tblClaim" ThisKey="ClaimID" OtherKey="ID" Type="tblClaim" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tblUsers" Member="tblUsers">
+    <Type Name="tblUser">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="FirstName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Surname" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Email" Type="System.String" DbType="NVarChar(256) NOT NULL" CanBeNull="false" />
+      <Column Name="AccountID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="LanguageID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RoleGroupID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IsAdmin" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsApproved" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsLockedOut" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="CreatedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="LastLockOutDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="LastLoginDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="LastPasswordChangedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="FailedPasswordAttemptCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Comment" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Position" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
+      <Column Name="Phone" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="MobPhone" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="EMailForIns" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="tempUI" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="warnOnNewClaim" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="warnOnTaskExpire" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="warnOnInfoSubmitExpire" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="warnOnPaymentExpire" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="tblUser_tblUsersActivities_Update" Member="tblUsersActivities_Updates" ThisKey="ID" OtherKey="UserID" Type="tblUsersActivities_Update" />
+      <Association Name="tblUser_tblInsPolicy" Member="tblInsPolicies" ThisKey="ID" OtherKey="InsuredContactID" Type="tblInsPolicy" />
+      <Association Name="tblUser_tblDoc" Member="tblDocs" ThisKey="ID" OtherKey="UserID" Type="tblDoc" />
+      <Association Name="tblAccount_tblUser" Member="tblAccount" ThisKey="AccountID" OtherKey="ID" Type="tblAccount" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="tblLanguage_tblUser" Member="tblLanguage" ThisKey="LanguageID" OtherKey="ID" Type="tblLanguage" IsForeignKey="true" />
+      <Association Name="tblUsers_RolesGroup_tblUser" Member="tblUsers_RolesGroup" ThisKey="RoleGroupID" OtherKey="ID" Type="tblUsers_RolesGroup" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="dbo.proc_Vehicles" Method="proc_Vehicles">
