@@ -401,7 +401,8 @@ var SERVER = {
 								var newVal = updData.DataToSave.Data[i2];
 								if  (col.Type) {
 									if (col.Type==="Decimal") {newVal=parseFloat(newVal,10);}
-									if (col.Type==="Integer"||col.Type==="Radio"||col.Type==="Boolean") {newVal=parseInt(newVal,10);}
+									var newVal2=newVal.toString().toLowerCase();
+									if ((col.Type==="Integer"||col.Type==="Radio"||col.Type==="Boolean") && !(newVal2==="false"||newVal2==="true")){newVal=parseInt(newVal,10);}//bit'a gaunam kaip toki, tai praleidziam
 								}else if (col.FName.slice(-2)==="ID"){newVal=parseInt(newVal,10);}
 								Row.set(fieldName, newVal); ok = true;
 								if (col.List) {//Jeigu List, updatinam ir teksto lauka

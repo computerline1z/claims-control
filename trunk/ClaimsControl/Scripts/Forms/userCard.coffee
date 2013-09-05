@@ -9,6 +9,7 @@ App.TabUserCardView = Em.View.extend( #App.mainMenuView.extend(
 # App.TabUserCardView = App.mainMenuView.extend(
 	# init:()->
 		# @_super(); SaveOk=""
+	userContent: null
 	didInsertElement: ->
 		@_super(); $("#userInfoTab").tabs(); frm=$("#InfoDataForm"); ctrl=App.userCardController;
 		if ctrl.userContent then frm.data("ctrl",{NewRec:0,id:ctrl.userContent.iD,Source:"tblUsers"}) else frm.data("ctrl",{NewRec:1,id:0,Source:"tblUsers"});
@@ -16,7 +17,42 @@ App.TabUserCardView = Em.View.extend( #App.mainMenuView.extend(
 		#if App.userCardController.SaveOk then me=$("#savePasswordNote"); me.html("Naujas slaptažodis išsaugotas"); setTimeout((->me.html("")),2000); App.userCardController.SaveOk=null
 		SaveOk=App.userCardController.SaveOk 
 		if SaveOk then $("#savePasswordNote").html(SaveOk).show().delay(2000).fadeOut(); App.userCardController.set("SaveOk",null)
-
+		$("#userInfoRights").on("click keypress","input", {me:@}, @warnChanged);
+		@set("userContent",App.userCardController.userContent)
+		@setWarnSettings()
+	warnTimer:null
+	warnChanged:(e)->
+		me=e.data.me
+		clearTimeout(me.warnTimer) if me.warnTimer
+		me.warnTimer=setTimeout($.proxy(me.updateWarnSettings,me),3000)
+	updateWarnSettings:()->
+		u=@userContent; DataToSave=id:u.iD,DataTable:"tblUsers",Fields:[],Data:[]
+		ctrl=$("#userInfoRights");
+		ctrl.find("input:checkbox").each(()->
+			data="";e=$(@);name=e.attr("name"); input=e.closest("tr").find("input:text");
+			if input.length and e.prop("checked") #Jeigu yra inputas ir paženklinta varnelė tai reikšmė iš inputo
+				data=parseInt(input.val(),10)
+			else data=e.prop("checked")
+			
+			if u[name]!=undefined 
+				console.log(u[name]!=data)
+				console.log(not (u[name]==null and data==false))
+				if u[name]!=data and not (u[name]==null and data==false) #šitokį praleidžiam nes tai tas pats
+					DataToSave.Fields.push(name); DataToSave.Data.push(data)
+			else console.error("wrong userInfoRights")
+		)
+		if DataToSave.Data.length
+			SERVER.update2(Action:'Edit',DataToSave:DataToSave,Ctrl:ctrl,source:"tblUsers",row:u)#,CallBackAfter:(Row)-> log2("updated"); console.log(Row)
+	setWarnSettings:()->
+		me=@; u=@userContent
+		$("#userInfoRights").find("input:checkbox").each(()->
+			e=$(@);name=e.attr("name"); input=e.closest("tr").find("input:text")
+			if u[name]!=undefined
+				if u[name]
+					e.prop("checked",true)
+					if input.length then input.val(u[name])
+			else console.error("wrong userInfoRights")
+		)
 	templateName: 'tmpUserCard'#, viewIx: -1
 	#controller: App.userCardController
 	controllerBinding: "App.userCardController"
