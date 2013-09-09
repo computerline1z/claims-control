@@ -8,7 +8,7 @@ options:
 	selectFirst: false, Value: "", mapWithNoCommas: false, addNewIfNotExists: false
 _create: ->	
 	#surandam artimiausia inputa ant kurio desim listboxa
-	input = $(@element[0]).val("Pasirinkite iš sąrašo..")
+	input = $(@element[0]).attr("placeholder","Pasirinkite iš sąrašo..")
 	console.error("Input not found for ComboBox!")	if input.length==0
 	opt = $.extend(true, @options, input.data("ctrl"))
 	opt.mapWithNoCommas=true if opt.Source=="proc_Drivers"
@@ -51,7 +51,11 @@ _create: ->
 			if input.data("newval") then opt.Value=input.data("newval")
 			fnSetData()
 			#input.after("<span title='redaguoti..' class='ui-icon ui-icon-pencil ui-menu-icon'>&nbsp;</span>") if opt.Editable.EditThis and input.data("newval") and opt.ListType=="None"	
-			input.after("<i title='redaguoti..' class='img18-pencil ui-menu-icon'></i>") if opt.Editable.EditThis and input.data("newval") and opt.ListType=="None"
+			
+			if opt.Editable.EditThis and input.data("newval") and opt.ListType=="None" and not input.siblings(".img18-pencil").length
+				console.log(input.siblings(".img18-pencil").length)
+				input.after("<i title='redaguoti..' class='img18-pencil ui-menu-icon'></i>") 
+				
 		source: (request, response) ->
 			response $.ui.autocomplete.filter(data, request.term)
 

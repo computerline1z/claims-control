@@ -62,7 +62,7 @@ var oCONTROLS = {
 		if (frmOpt.NewRec==="0"){frmOpt.NewRec=0;}
 		var data = (frmOpt.Source === 'NoData') ? "NoData" : oDATA.GET(frmOpt.Source);
 		var fnEnableSave=function(){	
-			btnSaveToDisable.removeAttr("disabled", "disabled");	
+			if (btnSaveToDisable) { btnSaveToDisable.removeAttr("disabled", "disabled");}
 		}
 		if  (!frmOpt.NewRec) {
 			if (p.btnSaveToDisable) { 
@@ -209,17 +209,18 @@ var oCONTROLS = {
 					input[name](value);
 				});
 			}
-			if (btnSaveToDisable){
+			//if (btnSaveToDisable){ visais atvejais praleidziu, jei nebus bus klaida arba warningas
 				if (Type === 'Boolean' || Type === 'checkbox') {e.find("input:checkbox").on("click",fnEnableSave);}
 				else if (col.List) {input.data("autocomplete").fnItemChanged=function(newId){fnEnableSave();}}
-				else if (input){					
-					if (input.hasClass("hasDatepicker")){
-						input.on("keyup",fnEnableSave).datepicker("option", "onSelect",fnEnableSave);
-						input.closest("div.ExtendIt").find("input.time").on("keyup",fnEnableSave);
+				else if (input){
+					var val=input.val();
+					if (input.hasClass("date")){ input.mask( "9999~99~99",{placeholder:"",isDate:true})}
+					if (input.hasClass("hasDatepicker")&&!input.data("datepicker")){
+						input.datepicker("option", "onSelect",fnEnableSave).closest("div.ExtendIt").find("input.time").on("keyup",fnEnableSave);
 					}
-					else{input.on("keyup",fnEnableSave);}
+					input.on("keyup",fnEnableSave).val(val);
 				}
-			}						
+			//}			
 			if (typeof input !== 'undefined') {
 				input.val($.trim(input.val()));
 				if (Type === 'Integer' || Type === 'Decimal' || Type === 'Date') {
@@ -230,8 +231,14 @@ var oCONTROLS = {
 				if (typeof col.Tip !== 'undefined') {input.attr("placeholder", col.Tip)} 
 			}
 		});
-		//log('<div>==========UpdatableForm========</div>');
-	//});
+		//Sudedam focusus formoje
+		Em.run.next({frm:p.frm},function(){
+			var frm=$(this.frm);
+			frm.parent().find("button").blur()//nuimu focusus nuo buttonu
+			if (frm.data("ctrl").NewRec) {//Uždedu ant pirmo tuscio inputo naujam
+				frm.find("input:text[value='']:first").focus(); 
+			}
+		});
 	},
 	ValidateForm: function (frm, DataToSaveAppend) { //Formos lauku validacija (pagal data-ctrl duomenis)
 		$("div.validity-modal-msg").remove(); //panaikinam validacijos msg jei buvo

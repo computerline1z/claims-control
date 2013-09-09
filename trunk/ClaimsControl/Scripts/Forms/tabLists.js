@@ -123,6 +123,8 @@
           title: 'Įšsaugojimas',
           msg: 'Užpildykite pažymėtus laukus..'
         });
+      } else {
+        return $("#openItemDialog").dialog("close");
       }
     },
     cancelForm: function(e) {

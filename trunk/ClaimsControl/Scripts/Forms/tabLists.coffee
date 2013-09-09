@@ -68,6 +68,7 @@ App.listAllController = Em.ResourceController.create(
 			})
 			SERVER.update2(pars); false
 		else if Alert then oCONTROLS.dialog.Alert( title:'Įšsaugojimas',msg:'Užpildykite pažymėtus laukus..')
+		else $("#openItemDialog").dialog("close")
 		#else $("#openItemDialog").dialog("close");
 	cancelForm:(e)-> $("#openItemDialog").dialog("close");false
 	editListItems:(input, e)-> #formTemplate: "tmpUploadForm", disabled: false, docsController: "TreeDocController", Source: "tblDocTypes"

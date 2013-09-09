@@ -533,8 +533,8 @@ oGLOBAL.date = {
 		var d = new Date();
 		this.checkFormat();
 		return d.getFullYear() + this.dateDelimiter +
-		 ((d.getMonth() < 9) ? '0' + (d.getMonth() + 1) : (d.getMonth() + 1)) + this.dateDelimiter +
-		 ((d.getDate() < 9) ? '0' + d.getDate() : d.getDate());
+		 ((d.getMonth() <= 9) ? '0' + (d.getMonth() + 1) : (d.getMonth() + 1)) + this.dateDelimiter +
+		 ((d.getDate() <= 9) ? '0' + d.getDate() : d.getDate());
 	},
 	getDate: function (stringDate) {
 		// accepts a date in the format 2011-01-01 (year, month, day)
