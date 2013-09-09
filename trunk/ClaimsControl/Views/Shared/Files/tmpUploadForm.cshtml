@@ -1,9 +1,9 @@
-﻿<form enctype="multipart/form-data">
+﻿<form enctype="multipart/form-data" class="no-margin">
    @*Redirect browsers with JavaScript disabled to the origin page action="//jquery-file-upload.appspot.com/" method="POST"
    <noscript><input type="hidden" name="redirect" value="http://blueimp.github.com/jQuery-File-Upload/"></noscript>
    The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload*@
-   <div class="row fileupload-buttonbar">
-	<div class="text-center">
+   <div class="fileupload-buttonbar">
+	<div class="text-center pad-vertical-8px">
 	{{#if showPhoto}}
 		<i class="img16-camera"></i>
 			<a class="fileinput-button mr50 font14 valign-middle">
@@ -18,7 +18,7 @@
 			</a>
 	{{#if showFromAccident}}
 			<a class="fileinput-button mr50" {{action addFromAccident this target="this"}}>
-				<span>Įkelti iš įvykio kortelės</span>
+				<span class="font14">Įkelti iš įvykio kortelės</span>
 			</a>
 	{{/if}}
     </div>

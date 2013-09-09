@@ -1,6 +1,6 @@
 ﻿<div class="fullListContainer">
 
-	<div class="clearfix">
+	<div class="clearfix pad-t27">
 		<div class="pull-left"><h2>Vairuotojų sąrašas</h2><a {{action toTop}} href="#" class="link-back">(atgal į Sąrašus)</a></div>
 
 		<div class="pull-right pad14">{{view App.SearchField controller="listAllController"}}</div>
@@ -17,24 +17,37 @@
 		</li>
 
 		<li class="add_driver" data-ctrl='{"source":"proc_Drivers","template":"tmp_Drivers","controller":"listAllController","emObject":"content"}'>
-			<button class="btn" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button>
+			<button class="btn margin-r7" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button>
 		</li>
 	</ul>
 
 	</div>
-	<div class="container"/>
-	<table class="zebra-striped">
-		<thead><tr><th>Vardas</th><th>Pavardė</th><th>Gimimo data</th><th>Mobilus telefonas</th><th>Dokumentai</th></tr></thead>
-		<tbody>
-		{{#each "App.listAllController.content"}}
-			{{#if this.visible}}
-				{{view App.DriverView}}
-			{{/if}}
-		{{/each}}
-	</tbody></table>
+
 	<div class="container">
-		<div class="pull-right pad14" data-ctrl='{"source":"proc_Drivers","template":"tmp_Drivers","controller":"listAllController","emObject":"content"}'>
-		<button class="btn" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button>
+		<table class="zebra-striped">
+			<thead>
+				<tr>
+					<th>Vardas</th>
+					<th>Pavardė</th>
+					<th>Gimimo data</th>
+					<th>Mobilus telefonas</th>
+					<th>Dokumentai</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				{{#each "App.listAllController.content"}}
+					{{#if this.visible}}
+						{{view App.DriverView}}
+					{{/if}}
+				{{/each}}
+			</tbody>
+		</table>
+
+		<div class="container">
+			<div class="pull-right pad14" data-ctrl='{"source":"proc_Drivers","template":"tmp_Drivers","controller":"listAllController","emObject":"content"}'>
+				<button class="btn margin-r7" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button>
+			</div>
 		</div>
+
 	</div>
-</div>

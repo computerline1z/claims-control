@@ -15,7 +15,7 @@ data-ctrl='{"NewRec":1,"Source":"proc_Drivers","tblUpdate":"tblDrivers"}'>
 			{{#if dateIsEdited}}
 				<div class="tr curvedBorderGroove pad7">
 					<div class="col nine"><input type="text" id="dialogEndDateInput" {{bindAttr value="endDate"}} style="width:100%;margin-bottom:0!important;" placeholder="Nebedirba nuo.."/></div>
-					<div class="col three"><a style="display:block;padding-top:2px;" {{action saveDate}}>Išsaugoti</a></div>
+					<div class="col three"><a style="display:block;padding-top:4px;" {{action saveDate}}>Išsaugoti</a></div>
 				</div>
 			{{else}}
 				{{#if endDate}}
@@ -33,4 +33,4 @@ data-ctrl='{"NewRec":1,"Source":"proc_Drivers","tblUpdate":"tblDrivers"}'>
       </div>
 </div> 
 {{view App.FormBottomView target="App.listAllController"}}
-<div class="uploadDocsContainer borderTop box_1pr" id="dialoguploadDocsContainer"></div>
+<div class="uploadDocsContainer borderTop pad-hor10" id="dialoguploadDocsContainer"></div>

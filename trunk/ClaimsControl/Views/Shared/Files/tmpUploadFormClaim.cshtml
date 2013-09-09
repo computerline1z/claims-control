@@ -1,16 +1,16 @@
-﻿<form enctype="multipart/form-data">
+﻿<form enctype="multipart/form-data" class="no-margin">
    @*<!-- Redirect browsers with JavaScript disabled to the origin page action="//jquery-file-upload.appspot.com/" method="POST" -->
    <noscript><input type="hidden" name="redirect" value="http://blueimp.github.com/jQuery-File-Upload/"></noscript>
    <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->*@
-   <div class="row fileupload-buttonbar">
-   <center>
+   <div class="fileupload-buttonbar">
+   <div class="text-center pad-vertical-8px">
 	{{#if showPhoto}}
       <div class="span7">
 	  <i class="img16-camera"></i>
 	    <a class="fileinput-button"  style="margin-right:56px;">
-			   <span>Prisegti nuotraukas</span>
-               <input type="file" name="pictures[]" multiple>
-            </a>
+			<span>Prisegti nuotraukas</span>
+        	<input type="file" name="pictures[]" multiple>
+        </a>
           
 	{{else}}
       <div class="span7">
@@ -30,7 +30,7 @@
             <!-- The extended global progress information -->
             <div class="progress-extended">&nbsp;</div>
       </div>
-	  </center>
+	  </div>
    </div>
    <!-- The loading indicator is shown during file processing -->
    <div class="fileupload-loading"></div>

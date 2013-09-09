@@ -1,4 +1,4 @@
-﻿<fieldset class="ui-corner-all fieldSetBorder w80pr centerBlock" style="padding:0 20px 10px;">
+﻿<fieldset class="ui-corner-all fieldSetBorder w90pr centerBlock" style="padding:0 20px 10px;">
  <legend class="pad-b0 pad-hor4">{{this.legend}}</legend>
  {{#each App.listAllController.listItems}}
   {{log this}}
@@ -29,13 +29,14 @@
  {{/each}}
  {{#if this.addItem}} 
 
-  <div class="clearfix pad-t10 js">
-   <input class="col seven" type="text"/>
-   <div class="col last links-group">
-	<button class="btn" {{action saveNewItem}}>Išsaugoti</button>
-	<button class="btn btn-link" {{action cancelNewItem}}>Atšaukti</button>
-   </div>
-  </div>
+	<div class="clearfix pad-t10 js">
+		<input class="col seven" type="text"/>
+
+		<div class="col last links-group">
+			<button class="btn" {{action saveNewItem}}>Išsaugoti</button>
+			<button class="btn btn-link" {{action cancelNewItem}}>Atšaukti</button>
+		</div>
+	</div>
 
  {{else}}
   <a class="btn btn-link" {{action addNewItem}} >{{this.addNewMsg}}</a>

@@ -1,30 +1,45 @@
-﻿<div class="container">
-	<div class="pull-right pad14 w35pr">
-	<div id="container">{{view App.SearchField controller="listAllController"}}</div>
+﻿<div class="fullListContainer">
+
+	<div class="clearfix pad-t27">
+
+		<div class="pull-left">
+			<h2>Transporto priemonių sąrašas</h2><a class="link-back" {{action toTop}} >(atgal į Sąrašus)</a>
+		</div>
+
+		<div class="pull-right pad14">
+			<div id="container">{{view App.SearchField controller="listAllController"}}</div>
+		</div>
+
 	</div>
-</div>
-<h2 style="margin:0 20px;">Transporto priemonių sąrašas</h2><a {{action toTop}} >(atgal į Sąrašus)</a>
-<div class="ui-tabs"><ul class='ulWhiteMenu ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header'>
-	<li class="ui-state-default ui-corner-top"><a  {{action filterWorking target="App.listAllController"}}>
-		<span>Naudojamos</span></a></li>
-	<li class="ui-state-default ui-corner-top"><a  {{action filterNotWorking target="App.listAllController"}}>
-		<span>Nebenaudojamos</span></a></li>
-</ul></div>
-<div class="container">
-	<div class="pull-right pad14 w15pr" data-ctrl='{"source":"proc_Vehicles","template":"tmp_Vehicles","controller":"listAllController","emObject":"content"}'>
-	<button class="btn" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button>
+
+	<div class="ui-tabs">
+		<ul class='ulWhiteMenu ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header'>
+			<li class="ui-state-default ui-corner-top"><a  {{action filterWorking target="App.listAllController"}}>
+				<span>Naudojamos</span></a>
+			</li>
+
+			<li class="ui-state-default ui-corner-top"><a  {{action filterNotWorking target="App.listAllController"}}>
+				<span>Nebenaudojamos</span></a>
+			</li>
+
+			<li class="add_driver" data-ctrl='{"source":"proc_Vehicles","template":"tmp_Vehicles","controller":"listAllController","emObject":"content"}'>
+				<button class="btn margin-r7" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button>
+			</li>
+		</ul>
 	</div>
-</div>
-<table class="zebra-striped">
-	<thead><tr><th>Valst. Nr.</th><th>Tipas</th><th>Markė</th><th>Modelis</th><th>Pagaminimo metai</th><th>Dokumentai</th></tr></thead><tbody>
-	{{#each "App.listAllController.content"}}
-		{{#if this.visible}}
-			{{view App.VehicleView}}
-		{{/if}}
-	{{/each}}
-</tbody></table>
-<div class="container">
-	<div class="pull-right pad14 w15pr" data-ctrl='{"source":"proc_Vehicles","template":"tmp_Vehicles","controller":"listAllController","emObject":"content"}'>
-	<button class="btn" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button>
+
+	<table class="zebra-striped">
+		<thead><tr><th>Valst. Nr.</th><th>Tipas</th><th>Markė</th><th>Modelis</th><th>Pagaminimo metai</th><th>Dokumentai</th></tr></thead><tbody>
+		{{#each "App.listAllController.content"}}
+			{{#if this.visible}}
+				{{view App.VehicleView}}
+			{{/if}}
+		{{/each}}
+	</tbody></table>
+	<div class="container">
+		<div class="pull-right pad14" data-ctrl='{"source":"proc_Vehicles","template":"tmp_Vehicles","controller":"listAllController","emObject":"content"}'>
+			<button class="btn margin-r7" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button>
+		</div>
 	</div>
-</div>
+
+</div><!-- fullListContainer -->
