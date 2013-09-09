@@ -1,10 +1,12 @@
---1.023--
-ALTER TABLE tblTempClaims ADD LossAmount2 float NOT NULL DEFAULT 0
+ALTER TABLE tblUsers ADD warnOnNewClaim bit NOT NULL DEFAULT(0)
+ALTER TABLE tblUsers ADD warnOnTaskExpire tinyint NULL
+ALTER TABLE tblUsers ADD warnOnInfoSubmitExpire tinyint NULL
+ALTER TABLE tblUsers ADD warnOnPaymentExpire bit NOT NULL DEFAULT(0)
 GO
-INSERT INTO tblWords(ObjectID,KeyName,Label,LanguageID)
-SELECT (SELECT ID FROM tblObjects_ID WHERE tblName='General'),'notInsured','Neapdrausta',1
-GO
-
+/*
+pridëti [proc_Accidents] ið ClaimsControl - ten buvo padaryti pakeitimai, dël 'Þalos asmeniui'
+*/
+/****** Object:  StoredProcedure [dbo].[proc_Accidents]    Script Date: 09/09/2013 18:11:47 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -58,9 +60,10 @@ END
 Declare @iRow int=1, @Count int=@@RowCount,@AID int,@AID_Prew int=0, @Claims nvarchar(max),@Claims2 nvarchar(max),@ClaimTypeID nvarchar(max), @ClaimsRow nvarchar(max)='', @ClaimsRow2 nvarchar(max)='',@ClaimTypeIDRow nvarchar(max)=''
 DELETE FROM tblTempConcString WHERE Spid=@@SPID
 ------------------------------------------------------------------------------------------------------------
+--SELECT * FROM tblTempClaims WHERE Spid=@Spid
 WHILE @iRow<=@Count BEGIN
 	SELECT @AID=AccidentID, @Claims=CAST(ClaimStatus AS VARCHAR(5)) +'#|'+No+'#|'+ClaimType+'#|'+VehiclePlate+'#|'+Insurer+'#|'+cast(LossAmount as varchar(25))+'{{'+Vehicle+' ' +InsPolicyNo +' '+UserName+'}}',
-	@Claims2=cast(isnull(ClaimID,0) as varchar(10))+'#|'+cast(isnull(VehicleID,0) as varchar(10))+'#|'+cast(InsPolicyID as varchar(10))+'#|'+replace(cast(isnull(InsuranceClaimAmount,0) as varchar(10)),',','.')+'#|'''+InsurerClaimID+'''#|'+cast(IsTotalLoss as varchar(10))+'#|'+cast(IsInjuredPersons as varchar(10))+'#|'+cast(Days as varchar(10))+'#|'+replace(cast(PerDay as varchar(10)),',','.'),
+	@Claims2=cast(isnull(ClaimID,0) as varchar(10))+'#|'+cast(isnull(VehicleID,0) as varchar(10))+'#|'+cast(InsPolicyID as varchar(10))+'#|'+replace(cast(CASE WHEN ClaimTypeID=2 AND IsInjuredPersons=0 THEN 0 ELSE isnull(InsuranceClaimAmount,0) END as varchar(10)),',','.')+'#|'''+InsurerClaimID+'''#|'+cast(IsTotalLoss as varchar(10))+'#|'+cast(IsInjuredPersons as varchar(10))+'#|'+cast(Days as varchar(10))+'#|'+replace(cast(PerDay as varchar(10)),',','.'),
 	@ClaimTypeID=ClaimTypeID
 	 FROM tblTempClaims WHERE Spid=@Spid AND RNo=@iRow
 		IF @AID<>@AID_Prew BEGIN--Nauja eilute
