@@ -13,19 +13,19 @@ data-ctrl='{"NewRec":1,"Source":"proc_Vehicles","tblUpdate":"tblVehicles"}'>
 
 		{{#if editItem}}
 			{{#if dateIsEdited}}
-				<div class="tr curvedBorderGroove">
-					<div class="td w70pr" style="padding:2%;"><input type="text" id="dialogEndDateInput" {{bindAttr value="endDate"}} style="width:100%;" placeholder="Nebenaudojama nuo.."/></div>
-					<div class="td w25pr" style="text-align:center;padding:2%;"><a {{action saveDate}}  class="inLine">Išsaugoti</a></div>
+				<div class="tr curvedBorderGroove pad7">
+					<div class="td w70pr"><input type="text" class="no-margin-important" id="dialogEndDateInput" {{bindAttr value="endDate"}} style="width:100%;" placeholder="Nebenaudojama nuo.."/></div>
+					<div class="td w25pr col last" style="text-align:center;"><a {{action saveDate}}  class="inLine no-padding no-margin lheight26">Išsaugoti</a></div>
 				</div>
 			{{else}}
 				{{#if endDate}}
-						<div style="background-color:#EB5A44; font-weight:bolder;" class="tr curvedBorderGroove">
-							<div class="td w70pr" style="padding:2%;color:White; font-weight:bolder;"><span class="inLine">Nebenaudojama nuo {{endDate}}</span></div>
-							<div class="td w25pr" style="text-align:center;padding:2%;"><a  {{action goToEditDate}} class="inLine" style="color:White; border:none;">Keisti</a></div>
+						<div style="background-color:#EB5A44; font-weight:bolder;" class="tr curvedBorderGroove pad7">
+							<div class="td w80pr" style="color:White; font-weight:bolder;"><span class="inLine">Nebenaudojama nuo {{endDate}}</span></div>
+							<div class="td col last" style="text-align:center;"><a  {{action goToEditDate}} class="inLine" style="color:White; border:none;">Keisti</a></div>
 						</div>
 				{{else}}
 						<div class="tr curvedBorderGroove">
-							<a  class="inLine" {{action goToEditDate}} style="margin:0;width:100%;text-align:center;">Pažymėkite, jei transporto priemonė nebenaudojama</a>
+							<a  class="inLine" {{action goToEditDate}} style="margin:0;width:100%;text-align:center;">Perkelti į nebenaudojamus</a>
 						</div>
 				{{/if}}
 			{{/if}}
@@ -36,4 +36,4 @@ data-ctrl='{"NewRec":1,"Source":"proc_Vehicles","tblUpdate":"tblVehicles"}'>
 @*<center style="margin: 2em 0;"><button id="btnSaveItem" class="btn btnSave">Išsaugoti</button><a style="margin-left: 2%;" id="aCancelItem" >Atšaukti</a></center>
 *@
 {{view App.FormBottomView target="App.listAllController"}}
-<div class="uploadDocsContainer borderTop box_1pr" id="dialoguploadDocsContainer"></div>
+<div class="uploadDocsContainer borderTop pad-hor10" id="dialoguploadDocsContainer"></div>

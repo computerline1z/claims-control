@@ -1,26 +1,35 @@
-﻿<div class="container">
-	<div class="pull-right pad14 w35pr">
-	<div id="container">{{view App.SearchField controller="listAllController"}}</div>
+﻿<div class="fullListContainer">
+
+	<div class="clearfix pad-t27">
+		<div class="pull-left">
+			<h2>Draudimo sutarčių sąrašas</h2><a class="link-back" {{action toTop}} >(atgal į Sąrašus)</a>
+		</div>
+
+		<div class="pull-right pad14">
+			<div id="container">{{view App.SearchField controller="listAllController"}}</div>
+		</div>
+
 	</div>
-</div>
-<h2 style="margin:0 20px;">Draudimo sutarčių sąrašas</h2><a {{action toTop}} >(atgal į Sąrašus)</a>
-<div class="container">
-	<div class="pull-right pad14 w15pr" data-ctrl='{"source":"proc_InsPolicies","template":"tmp_InsPolicies","controller":"listAllController","emObject":"content"}'>
-	<button class="btn" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button>
+
+	<div class="container">
+		<div class="pull-right pad14 pad-t0" data-ctrl='{"source":"proc_InsPolicies","template":"tmp_InsPolicies","controller":"listAllController","emObject":"content"}'>
+			<button class="btn" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button>
+		</div>
 	</div>
-</div>
-<table class="zebra-striped">
-	<thead><tr><th>Draudimo rūšis</th><th>Draudimo kompanija</th><th>Poliso numeris</th><th>Pabaigos data</th><th>Draudėjas</th></tr></thead><tbody>
-	{{#each "App.listAllController.content"}}
-		{{#if visible}}
-			{{#if iD}}
-				{{view App.InsPolicyView}}
-		{{/if}}
-		{{/if}}
-	{{/each}}
-</tbody></table>
-<div class="container">
-	<div class="pull-right pad14 w15pr" data-ctrl='{"source":"proc_InsPolicies","template":"tmp_InsPolicies","controller":"listAllController","emObject":"content"}'>
-	<button class="btn" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button>
+	<table class="zebra-striped">
+		<thead><tr><th>Draudimo rūšis</th><th>Draudimo kompanija</th><th>Poliso numeris</th><th>Pabaigos data</th><th>Draudėjas</th></tr></thead><tbody>
+		{{#each "App.listAllController.content"}}
+			{{#if visible}}
+				{{#if iD}}
+					{{view App.InsPolicyView}}
+			{{/if}}
+			{{/if}}
+		{{/each}}
+	</tbody></table>
+	<div class="container">
+		<div class="pull-right pad14" data-ctrl='{"source":"proc_InsPolicies","template":"tmp_InsPolicies","controller":"listAllController","emObject":"content"}'>
+		<button class="btn" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button>
+		</div>
 	</div>
+
 </div>

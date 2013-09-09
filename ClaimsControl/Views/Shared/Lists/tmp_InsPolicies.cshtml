@@ -1,9 +1,12 @@
 ﻿<div id="dialogContent" class="inputForm container centerBlock"
 data-ctrl='{"NewRec":1,"Source":"proc_InsPolicies","tblUpdate":"tblInsPolicies"}'>@*@((Model.NewRec == 1) ? "" : ",\"id\":" + Model.Vehicle.ID)*@
+
+   @* laikinai paslepta temporarilly hidden http://zalukontrole.lt/issues/view.php?id=187
    <ul class="Tabs">
       <li><a href="#tabs-policy">Polisas ir draudėjas</a></li>
       <li><a href="#tabs-docs">Pateikiami dokumentai</a></li>
    </ul>
+   *@
    
    
 <!--    <div class='ExtendIt leftBlock' data-ctrl='{"Field":"TypeID","classes":{"span":"w30pr","input":"w70pr"}}'></div>
@@ -24,20 +27,23 @@ data-ctrl='{"NewRec":1,"Source":"proc_InsPolicies","tblUpdate":"tblInsPolicies"}
 
 		<div class="container pad-b10 mar-b20 border-bot-gray text">
 			<h5>Žalų reguliavimo nustatymai</h5>
-			<div class="pad-vertical-8px lheight26">
+			<div class="pad-vertical-8px lheight26 relative absolute-errors">
 				<span>Pateikti visus žalos dokumentus draudikui per</span><span class='ExtendIt leftBlock inputInLine short-child-input' data-ctrl='{"Field":"Warn_InfoAfterAcc"}'></span><span>d. nuo įvykio datos.</span>
 			</div>
 
-			<div class="pad-vertical-8px lheight26">
+			<div class="pad-vertical-8px lheight26 relative absolute-errors">
 				<span>Pradėti rodyti įspėjimą likus</span><span class='ExtendIt leftBlock inputInLine short-child-input' data-ctrl='{"Field":"Warn_PaymentAfterPapers"}'></span><span>d. iki žalos dokumentų draudikui pateikimo termino pabaigos.</span>
 			</div>
 
-			<div class="pad-vertical-8px lheight26">
+			<div class="pad-vertical-8px lheight26 relative absolute-errors">
 				<span>Draudimo išmoka turi būti sumokėta per</span><span class='ExtendIt leftBlock inputInLine short-child-input' data-ctrl='{"Field":"Warn_SystemOfPayTerm"}'></span><span>d. nuo dokumentų pateikimo datos.</span>
 			</div>
 		</div>
 
-		<div class="container pad-b10 mar-b20 border-bot-gray">
+		@*
+         laikinai paslepta temporarilly hidden http://zalukontrole.lt/issues/view.php?id=187
+
+      <div class="container pad-b10 mar-b20 border-bot-gray">
 			<h5>Pranešimo draudimo kompanijai apie žalą nustatymai</h5>
 <!--          <center> </center>"classes":{"span":"w30pr","input":"w70pr"},
  -->     <div class='ExtendIt leftBlock' data-ctrl='{"Field":"MailsAddresses","labelType":"Top","textAreaRows":2,"classes":{"input":"row"}}'></div>
@@ -51,6 +57,8 @@ data-ctrl='{"NewRec":1,"Source":"proc_InsPolicies","tblUpdate":"tblInsPolicies"}
             <div class='ExtendIt leftBlock' data-ctrl='{"Field":"InsuredContactID","classes":{"span":"w30pr","input":"w70pr"},"labelType":"Left"}'></div>
          </div>
 		</div>
+      *@
+
    </div>
    <!------------------------------------------------------------------------------->
    <div id="tabs-docs"></div>

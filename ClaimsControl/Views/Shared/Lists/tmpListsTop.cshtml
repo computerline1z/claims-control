@@ -1,36 +1,36 @@
-﻿<div class="custombackgroundList">
-<h2>Naujausi įrašai sąrašuose</h2>
-<h3 class="tableTitle">Vairuotojai</h3>
-<div class="container" id="topNewDrivers">
-	<table class="zebra-striped">
-	<thead><tr><th>Vardas</th><th>Pavardė</th><th>Gimimo data</th><th>Mobilus telefonas</th><th>Dokumentai</th></tr></thead><tbody>
-	{{#each "App.topNewController.drivers"}}
-		{{view App.DriverView}}
-	{{/each}}
-	</tbody></table>
-	<div class="pull-right links-group pad14" data-ctrl='{"goTo":"allDrivers","source":"proc_Drivers","template":"tmp_Drivers","controller":"topNewController","emObject":"drivers","filterCols":["firstName","lastName","phone"]}'>
-		<a class="medium" {{action toListAll}} >Peržiūrėti pilną sąrašą</a>
-		<button class="btn" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button>
-	</div>
+﻿<div class="custombackgroundList pad-t27">
+	<h2>Naujausi įrašai sąrašuose</h2>
+	<h3 class="tableTitle">Vairuotojai</h3>
+	<div class="container" id="topNewDrivers">
+		<table class="zebra-striped">
+		<thead><tr><th>Vardas</th><th>Pavardė</th><th>Gimimo data</th><th>Mobilus telefonas</th><th>Dokumentai</th></tr></thead><tbody>
+		{{#each "App.topNewController.drivers"}}
+			{{view App.DriverView}}
+		{{/each}}
+		</tbody></table>
+		<div class="pull-right links-group pad14" data-ctrl='{"goTo":"allDrivers","source":"proc_Drivers","template":"tmp_Drivers","controller":"topNewController","emObject":"drivers","filterCols":["firstName","lastName","phone"]}'>
+			<a class="medium" {{action toListAll}} >Peržiūrėti pilną sąrašą</a>
+			<button class="btn" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button>
+		</div>
 
-</div>
+	</div>
 </div>
 
 <div class="custombackgroundList">
-<h3 class="tableTitle">Transporto priemonės</h3>
-<div class="container" id="topNewVehicles">
-	<table class="zebra-striped">
-	<thead><tr><th>Valst. Nr.</th><th>Tipas</th><th>Markė</th><th>Modelis</th><th>Pagaminimo metai</th><th>Dokumentai</th></tr></thead><tbody>
-	{{#each "App.topNewController.vehicles"}}
-		{{view App.VehicleView}}
-	{{/each}}
-	</tbody></table>
+	<h3 class="tableTitle">Transporto priemonės</h3>
+	<div class="container" id="topNewVehicles">
+		<table class="zebra-striped">
+		<thead><tr><th>Valst. Nr.</th><th>Tipas</th><th>Markė</th><th>Modelis</th><th>Pagaminimo metai</th><th>Dokumentai</th></tr></thead><tbody>
+		{{#each "App.topNewController.vehicles"}}
+			{{view App.VehicleView}}
+		{{/each}}
+		</tbody></table>
 
-	<div class="pull-right links-group pad14" data-ctrl='{"goTo":"allVehicles","source":"proc_Vehicles","template":"tmp_Vehicles","controller":"topNewController","emObject":"vehicles","filterCols":["model","plate","type","make"]}'>
-		<a class="medium" {{action toListAll}} >Peržiūrėti pilną sąrašą</a>
-		<button class="btn" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button>
+		<div class="pull-right links-group pad14" data-ctrl='{"goTo":"allVehicles","source":"proc_Vehicles","template":"tmp_Vehicles","controller":"topNewController","emObject":"vehicles","filterCols":["model","plate","type","make"]}'>
+			<a class="medium" {{action toListAll}} >Peržiūrėti pilną sąrašą</a>
+			<button class="btn" {{action addNew target="App.listAllController"}}><i class="img32-plus mr8"></i>Pridėti naują</button>
+		</div>
 	</div>
-</div>
 </div>
 
 <div class="custombackgroundList">
