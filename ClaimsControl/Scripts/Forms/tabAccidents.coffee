@@ -93,12 +93,15 @@ App.SelectedAccidentView = Em.View.extend(
 				if (MY.tabAccidents.NewClaimView) ##($("#newClaimDetailsContent").length > 0)
 					MY.tabAccidents.NewClaimView.remove()
 					$("#newClaimDetailsContent").remove();
+				
+				###  ###
 				MY.tabAccidents.NewClaimView = App.SelectedClaimView.create(
 					#rowContext: { Claims2: d.Claims2, newClaim: true, LossAmount: d.loss, InsuranceType: d.type, accidentID: d.accidentID }
 					rowContext: { newClaim: true, accidentID: App.thisAccidentController.get("accidentID") }
 					elementId: "newClaimDetailsContent", contentBinding: 'App.newClaimController.content'
 				)
 				MY.tabAccidents.NewClaimView.appendTo("#divNewClaimCard")
+				
 				Em.run.next(() -> $("#newClaimDetailsContent").slideDown() )
 				false
 				fnCancel: () -> fnCancelNewClaim()

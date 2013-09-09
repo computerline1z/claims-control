@@ -112,6 +112,9 @@
             MY.tabAccidents.NewClaimView.remove();
             $("#newClaimDetailsContent").remove();
           }
+          /*
+          */
+
           MY.tabAccidents.NewClaimView = App.SelectedClaimView.create({
             rowContext: {
               newClaim: true,

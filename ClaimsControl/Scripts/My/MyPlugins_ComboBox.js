@@ -15,7 +15,7 @@
     _create: function() {
       var data, fnEditItem, fnSetData, id, input, opt;
 
-      input = $(this.element[0]).val("Pasirinkite iš sąrašo..");
+      input = $(this.element[0]).attr("placeholder", "Pasirinkite iš sąrašo..");
       if (input.length === 0) {
         console.error("Input not found for ComboBox!");
       }
@@ -100,7 +100,8 @@
             opt.Value = input.data("newval");
           }
           fnSetData();
-          if (opt.Editable.EditThis && input.data("newval") && opt.ListType === "None") {
+          if (opt.Editable.EditThis && input.data("newval") && opt.ListType === "None" && !input.siblings(".img18-pencil").length) {
+            console.log(input.siblings(".img18-pencil").length);
             return input.after("<i title='redaguoti..' class='img18-pencil ui-menu-icon'></i>");
           }
         },
