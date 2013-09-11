@@ -11,25 +11,24 @@
  */
 
 .fileinput-button {
-  position: relative;
-  overflow: hidden;
+	display: inline-block;
+	position: relative;
+	overflow: hidden;
 }
 .fileinput-button input {
-  position: absolute;
-  top: 0;
-  //right: 0;
-  left: 0;
-  margin: 0;
-  opacity: 0;
-  filter: alpha(opacity=0);
-  //transform: translate(-300px, 0) scale(4);
-  //font-size: 23px;
-  //direction: ltr;
-  cursor: pointer;
-  //height: 50px !important;/*needed to show cursor*/
-  //line-height: 50px !important;/*needed to show cursor*/
-  width: 100%!important;
-  height: 100%!important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	cursor: pointer;
+	width: 9999%;
+	margin-left: -9899%;
+	height: 100%;
+	/*opacity:*/
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";/* IE 8 */
+	filter: alpha(opacity=0);/* IE 5-7 */
+	-moz-opacity: 0;/* Netscape */
+	-khtml-opacity: 0;/* Safari 1.x */
+	opacity: 0;/* Good browsers */
 }
 /*.fileupload-buttonbar {margin-bottom: -13px;}*/
 //.fileupload-buttonbar .btn,

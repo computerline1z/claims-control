@@ -6,18 +6,18 @@
 	<div class="text-center pad-vertical-8px">
 	{{#if showPhoto}}
 		<i class="img16-camera"></i>
-			<a class="fileinput-button mr50 font14 valign-middle">
+			<a class="fileinput-button mr50 font14 lheight16 valign-middle">
 				Prisegti nuotraukas<!--
 				--><input type="file" name="pictures[]" multiple>
 			</a>
 	{{/if}}
 		<i class="img16-attach"></i>
-			<a  class="fileinput-button mr50 font14 valign-middle">
+			<a  class="fileinput-button mr50 font14 lheight16 valign-middle">
 				Prisegti dokumentus
 				<input type="file" name="docs[]" multiple>
 			</a>
 	{{#if showFromAccident}}
-			<a class="fileinput-button mr50" {{action addFromAccident this target="this"}}>
+			<a class="fileinput-button lheight16 mr50" {{action addFromAccident this target="this"}}>
 				<span class="font14">Įkelti iš įvykio kortelės</span>
 			</a>
 	{{/if}}
