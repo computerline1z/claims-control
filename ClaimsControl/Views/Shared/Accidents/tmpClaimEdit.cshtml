@@ -9,12 +9,12 @@
 {{#compare typeID "===" "6"}} 
 	<div class='left w45pr'>
 		{{updatableField vehicleID labelType="Top" classes="wrapper:'leftBlock'" }}
-		{{updatableField days labelType="Top" classes="wrapper:'leftBlock days'" event="keyUp_shallChangeLossAmount"}}
-		{{updatableField perDay labelType="Top" classes="wrapper:'leftBlock perDay'" event="keyUp_shallChangeLossAmount"}}
+		{{updatableField lossAmount attr="DISABLED" classes="wrapper:'leftBlock perDay disabled inputSum', input:'not-editable' " labelType="Left" sTitle="Prastovos nuostolio suma"}}@*(Math.round((Claim.days*Claim.PerDay*100))/100)*@
 	</div>
 
 	<div class='right w45pr'>
-		{{updatableField lossAmount attr="DISABLED" classes="wrapper:'leftBlock perDay disabled inputSum'" labelType="Top" sTitle="Prastovos nuostolio suma"}}@*(Math.round((Claim.days*Claim.PerDay*100))/100)*@	
+		{{updatableField days labelType="Left" classes="wrapper:'leftBlock days'" event="keyUp_shallChangeLossAmount"}}
+		{{updatableField perDay labelType="Left" classes="wrapper:'leftBlock perDay'" event="keyUp_shallChangeLossAmount"}}
 	</div>
 {{else}}
 
