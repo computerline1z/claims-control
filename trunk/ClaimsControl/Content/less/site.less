@@ -442,50 +442,39 @@ div.growlUI h1, div.growlUI h2 { color: white; padding: 5px 5px 5px 75px; text-a
 
 .gallery li.docs {
 	cursor: move;
-	display:block;
+	display:table;
 	width:100%;
-	min-height:80px;
 	padding: 14px 0;
 	border-top: 1px dotted;
 
+	.tr {
+		display: table-row;
+		border: 1px solid orangered;
+	}
+
+	.td {
+		display: table-cell;
+		float: none;
+		border: 1px solid navy;
+	}
+
 	p {
-		color: gray;
-		padding-top: 7px;
+		margin-bottom: 0;
 	}
 
-	img {
-		display: block;
-		width: auto;
+	.img img, .img i {
+		vertical-align: middle;
+		max-height: 60px;
 		max-width: 60px;
-		max-height: 51px;
-	}
-
-	.img {
-		width: 60px;
-		position: absolute;
-		top: 14px;
-		left: 0;
 	}
 
 	.docs-selected {
 		position: relative;
 		padding: 5px;
-    	min-height: 63px;
-
-		.img {
-      top: 7px;
-			left: 5px;
-		}
-
-		.absolute-right {
-			top: 5px;
-			right: 5px;
-		}
 	}
 }
 
-.docs-selected{border:2px solid #EB5A44 !important} 
-.gallery li p {font-size:10px;margin-bottom: 4px; }
+.docs-selected{border:2px solid #EB5A44 !important}
 .gallery li a {
 	display: block;/* to allow smaller line-height in breaked words */
 	font-size:10px;
