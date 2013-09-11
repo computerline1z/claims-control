@@ -41,7 +41,7 @@
 	{{#each controller.docs}}
 	<li class="docs relative" {{bindAttr data-doc-id="docID" }}>
 		<div class="tr">
-			<div class="td img">
+			<div class="td img" style="width:60px;">
 					{{#if hasThumb}}
 						<img {{bindAttr src="urlThumb"}} alt="thumb"/>
 					{{else}}
@@ -53,7 +53,7 @@
 
 				<div class="clearfix">
 
-					<div class="td col five pad-l70 ExtendIt">
+					<div class="td col five ExtendIt">
 						<input class="docType" type="text" style="height:26px;" {{bindAttr value="docType"}}/><br/>
 						<!-- <a {{bindAttr href="urlDoc"}} target="_blank" >{{fileName}}</a> -->
 					</div>
@@ -72,19 +72,30 @@
 
 			{{else}}
 
-				<div class="td col six first pad-l70">
-					<p>{{docType}}</p>
-					<a class="pad-t4" {{bindAttr href="urlDoc"}} target="_blank" >{{fileName}}</a>
+				<div class="td">
+
+					<div class="tr">
+
+						<div class="td"><span class="text-dgray bold">{{docType}}</span></div>
+						<div class="td"><span class="text-dgray mheight20">{{description}}</span></div>
+
+					</div>
+
+					<div class="tr">
+
+						<div class="td"><a class="pad-t4" {{bindAttr href="urlDoc"}} target="_blank" >{{fileName}}</a></div>
+						<div class="td"><span class="font10">{{docDetails}}</span></div>
+
+					</div>
+
 				</div>
 
-				<div class="td col six pad-r70">
-					<p>{{description}}</p>
-					<p>{{docDetails}}</p>
+				<div class="td" style="width:32px;">
+					<i class="img32-mono_edit clickable" {{action editDoc this target="App.editDocsController"}}></i>
 				</div>
 
-				<div class="td w64px absolute-right top14">
-					<i class="img32-mono_delete clickable right" {{action deleteDoc this target="App.editDocsController"}}></i>
-					<i class="img32-mono_edit clickable right" {{action editDoc this target="App.editDocsController"}}></i>
+				<div class="td" style="width:32px;">
+					<i class="img32-mono_delete clickable" {{action deleteDoc this target="App.editDocsController"}}></i>
 				</div>
 
 			{{/if}}
