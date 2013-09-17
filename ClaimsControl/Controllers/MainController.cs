@@ -8,12 +8,10 @@ namespace ClaimsControl.Controllers {
 	public class MainController : ToStringController {
 
 		public ActionResult Start() {
-			ViewBag.Title = "Žalų valdymo sistema";
 			return View();
 		}
 
 		public ActionResult StartDebug() {
-			ViewBag.Title = "Žalų valdymo sistema";
 			return View();
 		}
 		[HttpPost]
@@ -89,6 +87,7 @@ namespace ClaimsControl.Controllers {
 				new {
 					ver = ver,
 					jsonObj = new {//šitam visada atnaujinu objektus
+						proc_Claims = acc.GetJSON_proc_Claims(), //per main kur pareina, kartais nespeja
 						proc_Activities = acc.GetJSON_proc_Activities(),
 						tblActivityTypes = acc.GetJSON_tblActivityTypes(),
 						tblDocsInActivity = acc.GetJSON_tblDocsInActivity()
@@ -110,7 +109,8 @@ namespace ClaimsControl.Controllers {
 						tmpAddInsuranceBenefit = RenderPartialViewToString("Claims/tmpAddInsuranceBenefit"),
 						tmpAddDamageCA = RenderPartialViewToString("Claims/tmpAddDamageCA"),
 						tmpAddDamageKASKO = RenderPartialViewToString("Claims/tmpAddDamageKASKO"),
-						tmpAccidentDocs = RenderPartialViewToString("Claims/tmpAccidentDocs")
+						tmpAccidentDocs = RenderPartialViewToString("Claims/tmpAccidentDocs"),
+						tmpAction_notifyInsurer = RenderPartialViewToString("Claims/tmpAction_notifyInsurer")
 					} : new {
 						tmpClaimsMain = "",
 						tmpClaimView = "",
@@ -128,7 +128,8 @@ namespace ClaimsControl.Controllers {
 						tmpAddInsuranceBenefit = "",
 						tmpAddDamageCA = "",
 						tmpAddDamageKASKO = "",
-						tmpAccidentDocs = ""
+						tmpAccidentDocs = "",
+						tmpAction_notifyInsurer = ""
 					}//,
 					//Script = new { File = "/Scripts/Forms/tabLists.js?ver="+ver, Pars = "" } listus siunčiu su visais nes jų reikia
 				}

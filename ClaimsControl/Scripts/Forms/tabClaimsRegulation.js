@@ -14,9 +14,9 @@
       this._super();
       return me = this;
     },
-    stepsCont1: ['<a href="#">Parenkite ir siųskite</a><div>arba</div><a href="#">Užregistruokite</a>', '<a href="#">Patvirtinti, kad visa informacija yra pateikta</a>', '<a href="#">Patvirtinti #### Lt kaip galutinę žalos sumą</a>', '<a href="#">Patvirtinti #### Lt kaip galutinę išmokos sumą</a>', '<a href="#">Uždaryti bylą</a>'],
+    stepsCont1: ['<a href="#">Užregistruokite</a>', '<a href="#">Patvirtinti, kad visa informacija yra pateikta</a>', '<a href="#">Patvirtinti #### Lt kaip galutinę žalos sumą</a>', '<a href="#">Patvirtinti #### Lt kaip galutinę išmokos sumą</a>', '<a href="#">Uždaryti bylą</a>'],
     stepsCont2: ['Draudikui pranešta ####', 'Visa informacija pateikta:</br>####</br><a href="#">Atšaukti</a>', 'Patvirtinta galutinė žalos suma: #### Lt</br><a href="#">Atšaukti</a>', 'Patvirtinta galutinė išmokos suma: #### Lt</br><a href="#">Atšaukti</a>', 'Byla uždaryta <a href="#"></br>Atidaryti</a>'],
-    stepsConfirm: ['', '<p>Įveskite paskutinio dokumento pateikimo datą:</p><input class="date" type="text" value="####"><button class="btn btn-small">Patvirtinti</button>', '<p>Galutinė žalos dydžio suma - #### Lt.</p><button class="btn btn-small">Patvirtinti</button>', '<p>Galutinė išmokos dydžio suma - #### Lt</p><button class="btn btn-small">Patvirtinti</button>', ''],
+    stepsConfirm: ['', '<p>Įveskite paskutinio dokumento pateikimo datą:</p><input class="date" type="text" value="####"><button class="btn btn-small">Patvirtinti</button><a class="box-1pr-left js-cancel-addon">Atšaukti</a>', '<p>Galutinė žalos dydžio suma - #### Lt.</p><button class="btn btn-small">Patvirtinti</button><a class="box-1pr-left js-cancel-addon">Atšaukti</a>', '<p>Galutinė išmokos dydžio suma - #### Lt</p><button class="btn btn-small">Patvirtinti</button><a class="box-1pr-left js-cancel-addon">Atšaukti</a>', ''],
     stepVal: [],
     stepsTemp: [
       {
@@ -36,22 +36,31 @@
         name: 'Bylos uždarymas'
       }
     ],
-    fnSetContent: function(isCurrent, idx) {
-      var content;
-
-      if (!this.claim.steps) {
-        return;
-      }
-      content = isCurrent ? this.stepsCont1 : this.stepsCont2;
-      return this.claim.steps[idx].set('content', content[idx].replace('####', this.stepVal[idx]));
-    },
     setSteps: function() {
-      var claim, fnGetContent, reached, s, s1, s2, sConfirm, sTemp, sVal, today;
+      var claim, fnGetContent, newSteps, reached, s, s1, s2, sConfirm, sTemp, sVal, today;
 
       claim = this.claim;
       today = oGLOBAL.date.getTodayString();
       this.set('stepVal', [today, today, claim.lossAmount, claim.insuranceClaimAmount, '']);
-      sTemp = this.stepsTemp;
+      /*	
+      		sTemp=@stepsTemp;
+      */
+
+      if (claim.insPolicyID === 0) {
+        newSteps = [];
+        this.stepsTemp.forEach(function(item, i) {
+          if (i === 2 || i === 4) {
+            newSteps[i] = item;
+            return newSteps[i].stepNo2 = (i === 2 ? 1 : 2);
+          }
+        });
+        sTemp = newSteps;
+        if (claim.claimStatus === 0) {
+          claim.claimStatus = 2;
+        }
+      } else {
+        sTemp = this.stepsTemp;
+      }
       s1 = this.stepsCont1;
       s2 = this.stepsCont2;
       sConfirm = this.stepsConfirm;
@@ -66,6 +75,9 @@
 
         step = $.extend({}, item);
         idx = item.stepNo - 1;
+        if (item.stepNo === 1) {
+          step.first = true;
+        }
         if (claim.claimStatus + 1 === step.stepNo) {
           step.step = 'current';
           reached = true;
@@ -78,91 +90,160 @@
             step.content = claim.claimStatus === step.stepNo ? fnGetContent(s2, idx) : fnGetContent(s2, idx).replace('<a href="#">Atšaukti</a>', '');
           }
         }
-        return s.pushObject(Em.Object.create(step));
+        s.pushObject(Em.Object.create(step));
+        return false;
       });
       claim.set('steps', s);
       return this;
     },
-    fnStepForward: function(idx) {
-      var dF, newHtml, newStepNo, s, stepVal;
+    fnUpdateStep: function(step, status, stepCont, contentType) {
+      var content, idx;
+
+      content = "";
+      if (step) {
+        idx = step.stepNo - 1;
+        if (stepCont) {
+          content = this[stepCont][idx].replace('####', this.stepVal[idx]);
+        }
+        if (contentType === "noCancel") {
+          content = content.replace('<a href="#">Atšaukti</a>', '');
+        }
+        if (status) {
+          step.set('step', status);
+        }
+        step.set('content', content);
+        return false;
+      }
+    },
+    fnGetSteps: function(stepNo) {
+      var currNo, currStep, max, min, nextStep, prevStep, s;
 
       s = this.claim.steps;
+      currStep = s.findProperty("stepNo", stepNo);
+      min = 100;
+      max = 0;
+      currNo = currStep.stepNo;
+      nextStep = null;
+      prevStep = null;
+      s.forEach(function(step) {
+        stepNo = step.stepNo;
+        if (stepNo > currNo && stepNo < min) {
+          nextStep = step;
+          min = step.stepNo;
+        }
+        if (stepNo < currNo && stepNo > max) {
+          prevStep = step;
+          return max = step.stepNo;
+        }
+      });
+      return {
+        currStep: currStep,
+        prevStep: prevStep,
+        nextStep: nextStep
+      };
+    },
+    fnStepForward: function(stepNo) {
+      var addField, dF, fn, idx, s, stepVal, updAccidents;
+
+      if (this.claim.claimStatus === 0) {
+        this.replaceActivityView(this.activityTypes.findProperty("name", "activity_notifyInsurer"));
+        return false;
+      }
       stepVal = this.stepVal;
-      newStepNo = idx + 1;
-      s[idx].set('step', 'completed');
-      s[idx].set('content', this.stepsCont2[idx].replace('####', stepVal[idx]));
-      if (s.length !== newStepNo) {
-        s[newStepNo].set('step', 'current');
-        s[idx + 1].set('content', this.stepsCont1[newStepNo].replace('####', stepVal[newStepNo]));
-      }
-      if (idx - 1 > 0) {
-        newHtml = this.stepsCont2[idx - 1].replace('####', stepVal[idx - 1]).replace('<a href="#">Atšaukti</a>', '');
-        s[idx - 1].set('content', newHtml);
-      }
+      s = this.fnGetSteps(stepNo);
+      idx = stepNo - 1;
+      fn = this.fnUpdateStep;
+      fn.call(this, s.currStep, 'completed', 'stepsCont2', 'cancel');
+      fn.call(this, s.nextStep, 'current', 'stepsCont1', 'cancel');
+      fn.call(this, s.prevStep, '', 'stepsCont2', 'noCancel');
       dF = {
-        Data: [newStepNo],
+        Data: [stepNo],
         Fields: ['claimStatus']
       };
-      if (newStepNo === 1) {
-        dF.Fields.push("DateNotification");
-        dF.Data.push(stepVal[idx]);
-      } else if (newStepNo === 2) {
-        dF.Fields.push("DateDocsSent");
-        dF.Data.push(stepVal[idx]);
-      } else if (newStepNo === 3) {
-        dF.Fields.push("LossAmount");
-        dF.Data.push(stepVal[idx]);
-      } else if (newStepNo === 4) {
-        dF.Fields.push("InsuranceClaimAmount");
+      addField = "";
+      updAccidents = false;
+      switch (stepNo) {
+        case 1:
+          addField = "DateNotification";
+          break;
+        case 2:
+          addField = "DateDocsSent";
+          break;
+        case 3:
+          addField = "LossAmount";
+          updAccidents = true;
+          break;
+        case 4:
+          addField = "InsuranceClaimAmount";
+          updAccidents = true;
+      }
+      if (addField) {
+        dF.Fields.push(addField);
         dF.Data.push(stepVal[idx]);
       }
-      return this.fnSaveData(dF);
+      return this.fnSaveData(dF, updAccidents);
     },
-    fnConfirm: function(stepBox, idx) {
+    fnConfirm: function(stepBox, stepNo) {
       var newHtml;
 
-      newHtml = '<div class="step-box-addon"><div class="inner">' + (this.stepsConfirm[idx].replace("####", this.stepVal[idx])) + '</div></div>';
+      if (stepBox.find("div.step-box-addon").length) {
+        return false;
+      }
+      newHtml = '<div class="step-box-addon"><div class="inner">' + (this.stepsConfirm[stepNo - 1].replace("####", this.stepVal[stepNo - 1])) + '</div></div>';
       return $(newHtml).appendTo(stepBox).hide().slideDown('slow', function() {
         return $(this).css('overflow', 'visible');
       });
     },
-    fnStepBack: function(idx) {
-      var dF, s;
+    fnStepBack: function(stepNo) {
+      var dF, fn, s;
 
-      s = this.claim.steps;
-      s[idx].set('step', 'current');
-      s[idx].set('content', this.stepsCont1[idx].replace('####', this.stepVal[idx]));
-      if (idx + 1 < 5) {
-        s[idx + 1].set('step', 'pending');
-        s[idx + 1].set('content', '');
-      }
-      if (idx - 1 > 0) {
-        s[idx - 1].set('content', this.stepsCont2[idx - 1].replace('####', this.stepVal[idx - 1]));
-      }
+      s = this.fnGetSteps(stepNo);
+      fn = this.fnUpdateStep;
+      fn.call(this, s.currStep, 'current', 'stepsCont1', 'cancel');
+      fn.call(this, s.nextStep, 'pending', '', 'cancel');
+      fn.call(this, s.prevStep, '', 'stepsCont2', 'cancel');
       dF = {
-        Data: [idx],
+        Data: [stepNo - 1],
         Fields: ['claimStatus']
       };
       return this.fnSaveData(dF);
     },
-    fnSaveData: function(dataAndFields) {
-      var DataToSave;
+    fnSaveData: function(dF, updAccidents) {
+      var CallBack, DataToSave;
 
+      updAccidents = updAccidents;
       DataToSave = $.extend({
         "id": this.claim.iD,
-        "DataTable": "tblClaims"
-      }, dataAndFields);
+        "DataTable": "tblClaims",
+        Ext: this.claim.accidentID
+      }, dF);
+      CallBack = null;
+      if (updAccidents) {
+        CallBack = {
+          Success: App.claimEditController.fnUpdateAccident
+        };
+      }
       SERVER.update2({
         Action: 'Edit',
         DataToSave: DataToSave,
+        CallBack: CallBack,
         Ctrl: $("#claimsSteps"),
         source: "proc_Claims",
         row: this.claim,
-        CallBackAfter: function(Row) {
-          return console.log(Row);
+        CallBackAfter: function(Row, Action, resp) {
+          console.log("updAccidents: " + updAccidents);
+          if (updAccidents) {
+            return App.claimEditController.fnUpdateAccident(resp);
+          }
         }
       });
-      return this.fnclaimStatusChanged();
+      /*	
+      		@fnclaimStatusChanged()
+      		opt= Action: "Edit", DataToSave: DataToSave, CallBack: {Success: App.claimEditController.fnUpdateAccident} 
+      		SERVER.update(opt)
+      */
+
+      return this.claimStatusBefore = this.claim.claimStatus;
     },
     target: (function() {
       return this;
@@ -220,11 +301,11 @@
 
         sum = this.fnSum(this.finDamageTbl);
         this.set('damageSum', sum);
+        this.stepVal[2] = sum;
         if (this.claim.claimStatus < 3) {
           this.claim.set("lossAmount", sum);
-          this.stepVal[2] = sum;
           if (this.claim.claimStatus === 2) {
-            return this.fnSetContent(true, 2);
+            return this.fnUpdateStep.call(this, this.claim.steps.findProperty("step", "current"), '', 'stepsCont1', 'cancel');
           }
         }
       });
@@ -235,11 +316,11 @@
 
         sum = this.fnSum(this.finInsurerTbl);
         this.set('insurerSum', sum);
+        this.stepVal[3] = sum;
         if (this.claim.claimStatus < 4) {
           this.claim.set("insuranceClaimAmount", sum);
-          this.stepVal[3] = sum;
           if (this.claim.claimStatus === 3) {
-            return this.fnSetContent(true, 3);
+            return this.fnUpdateStep.call(this, this.claim.steps.findProperty("step", "current"), '', 'stepsCont1', 'cancel');
           }
         }
       });
@@ -508,12 +589,16 @@
       }
       if (DataToSave) {
         CallBackAfter = function(Row) {
-          me.setActivitiesTables();
-          if (execOnSuccess) {
-            return execOnSuccess(Row, form);
-          } else {
-            return me.cancelForm();
+          if (Row.typeID === 14) {
+            me.claim.claimStatus = 1;
+            me.fnStepForward(2);
           }
+          if (execOnSuccess) {
+            execOnSuccess(Row, form);
+          } else {
+            me.cancelForm();
+          }
+          return me.setActivitiesTables();
         };
         return SERVER.update2({
           Action: Action,
@@ -761,20 +846,17 @@
         ACTIVITYVIEW.destroy();
       }
       this.controller.setActivitiesTables();
-      return Em.run.next(this, function() {
-        return this.controller.setSteps();
-      });
+      return this.controller.setSteps();
     },
     templateName: 'tmpClaimRegulation',
     didInsertElement: function() {
-      var ctrl, idx, me, stepBox;
+      var ctrl, me, stepBox;
 
       this._super();
       ctrl = this.controller;
       ctrl.cancelForm();
       ctrl.claimStatusBefore = ctrl.claim.claimStatus;
       me = this;
-      idx = 0;
       stepBox = {};
       this.$().find("#claimsSteps").on('click', 'a', function(e) {
         var classes, stepNo, steps;
@@ -782,21 +864,18 @@
         stepBox = $(this).closest("div.step-box");
         classes = stepBox.attr("class");
         stepNo = stepBox.data("stepno");
-        idx = stepNo - 1;
         steps = ctrl.claim.steps;
         if (classes.indexOf("completed") > 0) {
-          ctrl.fnStepBack(idx);
+          ctrl.fnStepBack(stepNo);
         } else if (classes.indexOf("current") > 0) {
-          if (stepNo === 1) {
-            ctrl.fnStepForward(idx);
-          } else if (stepNo === 5) {
-            ctrl.fnStepForward(idx);
+          if (stepNo === 1 || stepNo === 5) {
+            ctrl.fnStepForward(stepNo);
           } else {
-            ctrl.fnConfirm(stepBox, idx);
+            ctrl.fnConfirm(stepBox, stepNo);
             if (stepNo === 2) {
               Em.run.next(this, function() {
-                return stepBox.find("input.date").ValidateOnBlur({
-                  Allow: 'Date'
+                return stepBox.find("input.date").inputControl({
+                  type: 'Date'
                 }).datepicker();
               });
             }
@@ -804,13 +883,17 @@
         }
         return false;
       }).on('click', 'button', function(e) {
-        var stepVal;
+        var stepNo, stepVal;
 
-        if (idx === 1) {
+        stepNo = $(e.target).closest("div.step-box.current").data("stepno");
+        if (stepNo + 1 === 1) {
           stepVal = stepBox.find("input.date").val();
-          ctrl.stepVal[idx] = stepVal;
+          ctrl.stepVal[stepNo + 1] = stepVal;
         }
-        ctrl.fnStepForward(idx);
+        ctrl.fnStepForward(stepNo);
+        stepBox.find("div.step-box-addon").slideUp('slow').remove();
+        return false;
+      }).on('click', 'a.js-cancel-addon', function(e) {
         stepBox.find("div.step-box-addon").slideUp('slow').remove();
         return false;
       });

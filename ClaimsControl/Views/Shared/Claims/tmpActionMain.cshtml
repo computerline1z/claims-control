@@ -3,7 +3,9 @@
 			<h5 class="sidenav-header">Naujas veiksmas:</h5>
 			<ul class="items"}' >
 				{{#each ativitiesNotFin}}
+					{{#unless other}}
 					<li class="item"><i class="img28-{{unbound icon}}"></i><a {{action goToOtherView this}}>{{unbound title}}</a></li>
+					{{/unless}}
 				{{/each}}
 			</ul>
 	</div>
@@ -21,9 +23,7 @@
 		</tbody></table>
 	{{/if}}
 
-	{{#compare claim.insPolicyID "!==" "0"}} 
-@*		<div class="line"><div>Draudimo išmoka ({{claim.insPolicy.insurerName}}):</div><div class="box-1pr-left">{{insurerSum}} Lt</div><div class="right"><a {{action goToOtherView}} data-ctrl='{"tmp":"tmpAddInsuranceBenefit","title":"Draudimo išmoka ({{unbound claim.insPolicy.insurerName}})","finTypeID":5}' >Įvesti draudimo išmoką</a></div></div>
-*@		
+	{{#compare claim.insPolicyID "!==" "0"}} 		
 		<div class="line"><div>{{unbound view.addBenefit.title}}:</div><div class="box-1pr-left">{{insurerSum}} Lt</div><div class="right"><a {{action goToOtherView "view.addBenefit"}} >{{unbound view.addBenefit.txt}}</a></div></div>
 		{{#if finInsurerTbl.length}}
 			<table class="zebra-striped"><thead><tr><th>Suma</th><th>Data</th><th>Pastabos</th><th>Priedai</th></tr></thead><tbody>
@@ -34,13 +34,6 @@
 		{{/if}}
 	{{/compare}}
 
-@*	<div class="line"><div>
-		{{#compare claim.claimTypeID "===" "1"}}Kaltininko kompensacija:
-		{{else}}Kompensacija nukentėjusiam:{{/compare}}
-	</div><div class="box-1pr-left">{{compensationSum}} Lt</div><div class="right"><a  {{action goToOtherView}} 
-		{{#compare claim.claimTypeID "===" "1"}} data-ctrl='{"tmp":"tmpAddCompensation","title":"Kaltininko kompensacija","finTypeID":7}'>Įvesti kaltininko kompensaciją
-		{{else}}data-ctrl='{"tmp":"tmpAddCompensation","title":"Kompensacija nukentėjusiam","finTypeID":6}'>Įvesti kompensaciją nukentėjusiam{{/compare}}
-	</a></div></div>*@
 	<div class="line"><div>{{unbound view.addCompensation.title}}:</div><div class="box-1pr-left">{{compensationSum}} Lt</div><div class="right"><a  {{action goToOtherView "view.addCompensation"}} >{{unbound view.addCompensation.txt}}</a></div></div>
 		{{#if finOtherPartyTbl.length}}
 			<table class="zebra-striped"><thead><tr><th>Suma</th><th>Data</th><th>Pastabos</th><th>Priedai</th></tr></thead><tbody>

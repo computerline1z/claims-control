@@ -54,19 +54,12 @@ App.SelectedAccidentView = Em.View.extend(
 					Claims2: ArrView[i].Claims2, claimStatus:ArrClaims[i][0]
 					accidentID: @get("iD"), accidentDate: @date
 		App.thisAccidentController.set("content", objView) #butinai masyvas
-		App.thisAccidentController.set("accidentID", @get("iD")) #butinai masyvas		
+		App.thisAccidentController.set("accidentID", @get("iD")) #butinai masyvas	
 	tbodyClick: (e) -> #Reik daryti tik kai ant claimo, kitu atveju matyt išeinam
-		#fnFilterPolicies=(i)-> if (oGLOBAL.date.firstBigger(i[4],options.contexts[0].rowContext.accidentDate)) then return [i] else return null
-		# accidentDate=@date
-		# thisAccidentPolicies=$.map(oDATA.GET("proc_InsPolicies").Data, (i)-> if (oGLOBAL.date.firstBigger(i[4],accidentDate)) then return [i] else return null)
-		# proc_InsPolicies_forThisAccident=$.extend({},oDATA.GET("proc_InsPolicies"),{Data:thisAccidentPolicies})#not deep copy -overwrite
-		# oDATA.SET("proc_InsPolicies_forThisAccident", proc_InsPolicies_forThisAccident)
-		tr = $(e.target).closest("tr");ClaimW = $("#ClaimWraper")
+		tr = $(e.target).closest("tr"); 
 		clickOnSelected=if (tr.hasClass("selectedClaim")) then true else false
-		if (ClaimW.length > 0)
-			MY.tabAccidents.SelectedClaimView.remove()
-			ClaimW.remove();	
-		tr.parent().find("tr.selectedClaim").removeClass("selectedClaim title")
+		App.claimEditController.removeOpenClaimDetails()
+		#tr.parent().find("tr.selectedClaim").removeClass("selectedClaim title")
 		if clickOnSelected then return false #Ant pasirinkto naujo nededam
 		d = e.context;
 		MY.tabAccidents.SelectedClaimView = App.SelectedClaimView.create(
@@ -87,19 +80,18 @@ App.SelectedAccidentView = Em.View.extend(
 			oDATA: oDATA.GET("tblClaimTypes")
 			opt: { val: "iD", text: "name", FieldName: "ClaimTypeID", SelectText: "Pasirinkite žalos tipą:" }
 			fnAfterOptClick: (T) ->
+				App.claimEditController.removeOpenClaimDetails()
 				$('#divNewClaimCard').find('#divNewClaimCard_Content,div.frmbottom').remove();
 				#fnSetClaimCard(1, T)
 				#naujam Claimsui imamas redaguojamas viewsas SelectedClaimView ir kitas kontroleris newClaimController
 				if (MY.tabAccidents.NewClaimView) ##($("#newClaimDetailsContent").length > 0)
 					MY.tabAccidents.NewClaimView.remove()
 					$("#newClaimDetailsContent").remove();
-				
-				###  ###
 				MY.tabAccidents.NewClaimView = App.SelectedClaimView.create(
 					#rowContext: { Claims2: d.Claims2, newClaim: true, LossAmount: d.loss, InsuranceType: d.type, accidentID: d.accidentID }
 					rowContext: { newClaim: true, accidentID: App.thisAccidentController.get("accidentID") }
 					elementId: "newClaimDetailsContent", contentBinding: 'App.newClaimController.content'
-				)
+				)				
 				MY.tabAccidents.NewClaimView.appendTo("#divNewClaimCard")
 				
 				Em.run.next(() -> $("#newClaimDetailsContent").slideDown() )
@@ -133,8 +125,10 @@ App.SelectedClaimView = Em.View.extend(
 			$("#IsInjuredPersons").on("click",-> fnCheckIsInjured.call($("#IsInjuredPersons")))	
 		#$("#inputDays,#inputPerDay").on("keyup",-> $("#inputSum").val(($("#inputDays").val()*$("#inputPerDay").val()));)
 		if c.typeID==6
-			inpSum=$(frm).find('.inputSum input'); days=$(frm).find('.days input');perDay=$(frm).find('.perDay input')
-			$(frm).find('.days input,.perDay input').on("keyup",-> inpSum.val(days.val()*perDay.val());)
+			# inpSum=$(frm).find('.inputSum input'); days=$(frm).find('.days input');perDay=$(frm).find('.perDay input')
+			# $(frm).find('.days input,.perDay input').on("keyup",-> inpSum.val(days.val()*perDay.val());)
+			$("#claimEditDays,#claimEditPerDay").on("keyup",-> $("#LossAmount").val($("#claimEditDays").val()*$("#claimEditPerDay").val());)
+			
 		if c.claimStatus>2
 			inputs=$(frm).find("input")
 			if c.claimStatus=="3" then inputs=inputs.eq(1).prop('title', 'Suma jau patvirtina')#lossAmount placement important!!
@@ -166,6 +160,11 @@ App.SelectedClaimView = Em.View.extend(
 	templateName: 'tmpClaimEdit'
 )
 App.claimEditController = Em.Controller.create(#save, delete, cancel Claims events
+	removeOpenClaimDetails:() ->
+		ClaimW = $("#ClaimWraper").closest('tbody').find('.selectedClaim').removeClass('selectedClaim title').end().end()
+		if (ClaimW.length > 0)
+			MY.tabAccidents.SelectedClaimView.remove()
+			ClaimW.remove(); false
 	fnToggle_noInsurance: ((e)->
 		# t=e.target; chk=if (t.tagName.toUpperCase()=="INPUT") then $(t) else $(t).find("input:checkbox")
 		noInsurance=@claim.noInsurance; 
@@ -254,7 +253,7 @@ App.accidentsController = Em.ResourceController.create(
 		else alert "turi būti skaičius"
 	removeClaims: (AddWr,e,tr,parent) ->
 		#$("#divAccidentsList").find("div.validity-tooltip").remove()
-		$("div.validity-tooltip").remove()
+		#$("div.validity-tooltip").remove()
 		dividers=AddWr.parent().find("div.dividers"); dividers.slideUp(App.accidentsController.animationSpeedEnd, () -> dividers.remove())
 		if (AddWr.length > 0)
 			MY.tabAccidents.AcccidentdetailsView.remove(); me=@
@@ -269,7 +268,6 @@ App.accidentsController = Em.ResourceController.create(
 	addClaim:(e,tr)->
 		tr.addClass("selectedAccident")	if not tr.hasClass("selectedAccident")
 		MY.tabAccidents.AcccidentdetailsView = App.SelectedAccidentView.create(e.context)
-		#tr.after("<div id='AccDetailsWraper'></div><div class='dividers'></div>").prev().before("<div class='dividers'></div>")
 		tr.after("<div id='AccDetailsWraper'></div><div class='dividers'></div>") #.prev().before("<div class='dividers'></div>")
 		MY.tabAccidents.AcccidentdetailsView.appendTo("#AccDetailsWraper")
 		if e.isTrigger
@@ -316,6 +314,9 @@ App.accidentsController = Em.ResourceController.create(
 	# ).observesBefore('chkDocs','chkOpen','chkData','chkClaim','filterValue')	
 	filterDidChange: ((thisObj, filterName)->	
 		console.log("filterDidChange")
+		if MY.tabAccidents.AcccidentdetailsView
+			dtl=MY.tabAccidents; dtl.AcccidentdetailsView.remove(); dtl.AcccidentdetailsView=null
+			$('#AccDetailsWraper').next('div.dividers').remove().end().prev().removeClass('selectedAccident').end().remove()
 		filterValue=if filterName=="All" else thisObj[filterName]
 		if (filterName=="filterValue")
 			@textFilterIsActive=if(filterValue=="")then false else true

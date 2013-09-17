@@ -53,16 +53,11 @@
       return App.thisAccidentController.set("accidentID", this.get("iD"));
     },
     tbodyClick: function(e) {
-      var ClaimW, clickOnSelected, d, tr;
+      var clickOnSelected, d, tr;
 
       tr = $(e.target).closest("tr");
-      ClaimW = $("#ClaimWraper");
       clickOnSelected = tr.hasClass("selectedClaim") ? true : false;
-      if (ClaimW.length > 0) {
-        MY.tabAccidents.SelectedClaimView.remove();
-        ClaimW.remove();
-      }
-      tr.parent().find("tr.selectedClaim").removeClass("selectedClaim title");
+      App.claimEditController.removeOpenClaimDetails();
       if (clickOnSelected) {
         return false;
       }
@@ -107,14 +102,12 @@
           SelectText: "Pasirinkite žalos tipą:"
         },
         fnAfterOptClick: function(T) {
+          App.claimEditController.removeOpenClaimDetails();
           $('#divNewClaimCard').find('#divNewClaimCard_Content,div.frmbottom').remove();
           if (MY.tabAccidents.NewClaimView) {
             MY.tabAccidents.NewClaimView.remove();
             $("#newClaimDetailsContent").remove();
           }
-          /*
-          */
-
           MY.tabAccidents.NewClaimView = App.SelectedClaimView.create({
             rowContext: {
               newClaim: true,
@@ -157,7 +150,7 @@
 
   App.SelectedClaimView = Em.View.extend({
     didInsertElement: function() {
-      var IClaim, btnSaveToDisable, c, days, fnCheckIsInjured, frm, inpSum, inputs, perDay;
+      var IClaim, btnSaveToDisable, c, fnCheckIsInjured, frm, inputs;
 
       c = App.claimEditController.claim;
       frm = c.newClaim ? "#divNewClaimCard" : '#divClaimCard_Content';
@@ -183,11 +176,8 @@
         });
       }
       if (c.typeID === 6) {
-        inpSum = $(frm).find('.inputSum input');
-        days = $(frm).find('.days input');
-        perDay = $(frm).find('.perDay input');
-        $(frm).find('.days input,.perDay input').on("keyup", function() {
-          return inpSum.val(days.val() * perDay.val());
+        $("#claimEditDays,#claimEditPerDay").on("keyup", function() {
+          return $("#LossAmount").val($("#claimEditDays").val() * $("#claimEditPerDay").val());
         });
       }
       if (c.claimStatus > 2) {
@@ -258,6 +248,16 @@
   });
 
   App.claimEditController = Em.Controller.create({
+    removeOpenClaimDetails: function() {
+      var ClaimW;
+
+      ClaimW = $("#ClaimWraper").closest('tbody').find('.selectedClaim').removeClass('selectedClaim title').end().end();
+      if (ClaimW.length > 0) {
+        MY.tabAccidents.SelectedClaimView.remove();
+        ClaimW.remove();
+        return false;
+      }
+    },
     fnToggle_noInsurance: (function(e) {
       var chk, content, eToggle, noInsurance;
 
@@ -422,7 +422,6 @@
     removeClaims: function(AddWr, e, tr, parent) {
       var dividers, me;
 
-      $("div.validity-tooltip").remove();
       dividers = AddWr.parent().find("div.dividers");
       dividers.slideUp(App.accidentsController.animationSpeedEnd, function() {
         return dividers.remove();
@@ -515,9 +514,15 @@
       return false;
     },
     filterDidChange: (function(thisObj, filterName) {
-      var filterValue;
+      var dtl, filterValue;
 
       console.log("filterDidChange");
+      if (MY.tabAccidents.AcccidentdetailsView) {
+        dtl = MY.tabAccidents;
+        dtl.AcccidentdetailsView.remove();
+        dtl.AcccidentdetailsView = null;
+        $('#AccDetailsWraper').next('div.dividers').remove().end().prev().removeClass('selectedAccident').end().remove();
+      }
       filterValue = filterName === "All" ? void 0 : thisObj[filterName];
       if (filterName === "filterValue") {
         this.textFilterIsActive = filterValue === "" ? false : true;

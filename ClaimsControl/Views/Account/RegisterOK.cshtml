@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Registered";
     Layout = "Register_Layout.cshtml";
+	Settings st = Site.GetSettings();
 }
 <p>
     @{ Html.RenderAction("Header", "Account"); }
@@ -14,7 +15,7 @@
     <div class="shadow" style="border: 2px solid #e8e8e4; background-color: #FFFFFF;">
         <div class="content">
 
-            <h2>Žalų valdymo sistema</h2>
+            <h2>@st.Title</h2>
             <p>
                 Ačiū!
             </p><br />

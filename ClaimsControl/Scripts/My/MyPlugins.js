@@ -6,38 +6,23 @@
 */
 (function($) {
 	function getPasteEvent() {
-    var el = document.createElement('input'),
-        name = 'onpaste';
-    el.setAttribute(name, '');
-    return (typeof el[name] === 'function')?'paste':'input';             
-}
-
-var pasteEventName = getPasteEvent() + ".mask",
-	ua = navigator.userAgent,
-	iPhone = /iphone/i.test(ua),
-	android=/android/i.test(ua),
-	caretTimeoutId;
-
-$.mask = {
+		var el = document.createElement('input'), name = 'onpaste';
+		el.setAttribute(name, '');
+		return (typeof el[name] === 'function')?'paste':'input';             
+	}
+	var pasteEventName = getPasteEvent() + ".mask",ua = navigator.userAgent,iPhone = /iphone/i.test(ua),android=/android/i.test(ua),caretTimeoutId;
+	$.mask = {
 	//Predefined character definitions
-	definitions: {
-		'9':"[0-9]",
-		'a': "[A-Za-z]",
-		'*': "[A-Za-z0-9]",
-		'~': "[^0-9]"
-	},
-	dataName: "rawMaskFn",
-	placeholder: '_',
-};
+		definitions: {'9':"[0-9]", 'a': "[A-Za-z]", '*': ".",'#':"[A-Za-z0-9]", '~': "[^0-9]"},
+		dataName: "rawMaskFn",
+		placeholder: '',
+	};
 
 $.fn.extend({
 	//Helper Function for Caret positioning
 	caret: function(begin, end) {
 		var range;
-
-		if (this.length === 0 || this.is(":hidden")) {
-			return;
-		}
+		if (this.length === 0 || this.is(":hidden")) {return;}
 
 		if (typeof begin == 'number') {
 			end = (typeof end === 'number') ? end : begin;
@@ -68,27 +53,17 @@ $.fn.extend({
 		return this.trigger("unmask");
 	},
 	mask: function(mask, settings) {
-		var input,
-			defs,
-			tests,
-			partialPosition,
-			firstNonMaskPos,
-			len;
-
+		var input,defs,tests,partialPosition,firstNonMaskPos,len;
 		if (!mask && this.length > 0) {
-			input = $(this[0]);
-			return input.data($.mask.dataName)();
+			//input = $(this[0]);
+			//return input.data($.mask.dataName)();
+			//return false;
 		}
 		settings = $.extend({
 			placeholder: $.mask.placeholder, // Load default placeholder
 			completed: null
 		}, settings);
-
-
-		defs = $.mask.definitions;
-		tests = [];
-		partialPosition = len = mask.length;
-		firstNonMaskPos = null;
+		defs = $.mask.definitions;tests = [];partialPosition = len = mask.length;firstNonMaskPos = null;
 
 		$.each(mask.split(""), function(i, c) {
 			if (c == '?') {
@@ -124,13 +99,11 @@ $.fn.extend({
 				while (--pos >= 0 && !tests[pos]);
 				return pos;
 			}
-
 			function shiftL(begin,end) {
 				var i,j;
 				if (begin<0) {
 					return;
 				}
-
 				for (i = begin, j = seekNext(end); i < len; i++) {
 					if (tests[i]) {
 						if (j < len && tests[i].test(buffer[j])) {
@@ -162,46 +135,11 @@ $.fn.extend({
 					}
 				}
 			}
-			var fnDateAfter=function(){
-				var newVal=input.val().replace(/[^0-9\.]+/g,'.')
-				input.val(newVal);
-			}
-			var fnDateBefore=function(e,input,buffer,k){
-				var val=input.val(), notNumeric=(k<48 || (k>57 && k < 96) || k > 105);
-				if  (notNumeric&&val.length===2) {
-					var No=parseInt(val,10);
-					buffer.splice(0,2);/*panaikinam sena*/var old=val.split("");
-					if (val>30){
-						buffer.unshift("1","9",old[0],old[1],".");
-						input.val(19+input.val()+".");
-					}
-					else if (val<30){
-						buffer.unshift("2","0",old[0],old[1],".");
-						input.val(20+input.val()+".");
-					}
-					e.preventDefault();
-				}
-				if  (notNumeric&&val.length===6) {
-					buffer.splice(0,6);/*panaikinam sena*/
-					var old=val.split("");
-					console.log(old);
-					old.splice(5,1,"0",val[5],".");// darašom priekyj nulį   be val[5] - 0 . 5
-					//buffer.slice(0,6);
-					// console.log(old);
-					// console.log("buffer before");
-					// console.log(buffer);
-					//buffer.unshift(JSON.stringify(old).replace("[","").replace("]",""));
-					buffer.unshift(old[0],old[1],old[2],old[3],old[4],old[5],old[6],old[7]);//
-					input.val(old.join(""));
-					e.preventDefault();
-				}
-				// console.log("buffer after");
-				// console.log(buffer);
-			}
 			function keydownEvent(e) {
 				var k = e.which,pos,begin,end;				
 				//backspace, delete, and escape get special treatment
-				if (k === 8 || k === 46 || (iPhone && k === 127)) {
+				if (k===8){return true;}//mano
+				if (k === 46 || (iPhone && k === 127)) {
 					pos = input.caret();
 					begin = pos.begin;
 					end = pos.end;
@@ -219,10 +157,10 @@ $.fn.extend({
 					input.caret(0, checkVal());
 					e.preventDefault();
 				}else{
-					if (settings.isDate){fnDateBefore(e,input,buffer,k);}
+					if (settings.fnBefore){settings.fnBefore.call(this,e,input,buffer,k);}
 				}
+				console.log("fnBefore2");
 			}
-
 			function keypressEvent(e) {
 				var k = e.which,pos = input.caret(),p,c,next;
 
@@ -234,9 +172,14 @@ $.fn.extend({
 						shiftL(pos.begin, pos.end-1);
 					}
 
-					p = seekNext(pos.begin - 1);
-					if (p < len) {
-						c = String.fromCharCode(k);
+					p = seekNext(pos.begin - 1); c = String.fromCharCode(k);
+					//Vienas reiškia, kad testuojam tik pagal ta viena naujai irasoma verte, to kas jau ten yra netikrinam, nes buferis pas mus tuščias
+					if (len===1){
+						if (tests[0].test(c)) {
+							input.val(input.val()+c).caret(next);
+						}
+					}
+					else if (p < len) {
 						if (tests[p].test(c)) {
 							shiftR(p);
 
@@ -249,12 +192,13 @@ $.fn.extend({
 							}else{
 								input.caret(next);
 							}
-							if (settings.isDate){fnDateAfter();}
 							if (settings.completed) {//&& next >= len
 								settings.completed.call(input);
 							}
 						}
 					}
+					console.log("fnAfter2");
+					if (settings.fnAfter){settings.fnAfter.call(this,input);}
 					e.preventDefault();
 				}
 			}
@@ -268,18 +212,18 @@ $.fn.extend({
 				}
 			}
 
-			function writeBuffer() { input.val(buffer.join('')); }
+			function writeBuffer() { 
+				//debugger;
+				input.val(buffer.join(''));
+			}
 
 			function checkVal(allow) {
 				//try to place characters where they belong
-				var test = input.val(),lastMatch = -1,i,c,length=test.length;
-				if (settings.isDate&&length<10&&length>6){
-					var oldVal=test.split(".");
-					if (oldVal[1].length===1){oldVal[1]="0"+oldVal[1];}
-					if (oldVal[2].length===1){oldVal[2]="0"+oldVal[2];}
-					test=oldVal.join(".");
-					input.val(test);
-				}
+				//var test = input.val(),lastMatch = -1,i,c,length=test.length;
+				var test=input.val(),lastMatch = -1,i,c;
+				console.log("checkVal: "+test);
+				if (settings.fnOnBlur){test=settings.fnOnBlur.call(this,input,test);if (!test){return false;}}
+				console.log("checkVal2: "+test);
 				for (i = 0, pos = 0; i < len; i++) {
 					if (tests[i]) {
 						buffer[i] = settings.placeholder;
@@ -333,7 +277,7 @@ $.fn.extend({
 					pos = checkVal();
 					
 					caretTimeoutId = setTimeout(function(){
-						writeBuffer();
+						//writeBuffer(); jei mask netitinka vertes inpute iškirs
 						if (pos == mask.length) {
 							input.caret(0, pos);
 						} else {
@@ -361,155 +305,105 @@ $.fn.extend({
 	}
 });
 })(jQuery);
-/*
-(function($,len,createRange,duplicate){ //http://www.examplet.org/jquery/caret.php
-	$.fn.caret=function(options,opt2){
-		var start,end,t=this[0],browser=$.browser.msie;
-		if(typeof options==="object" && typeof options.start==="number" && typeof options.end==="number") {
-			start=options.start;
-			end=options.end;
-		} else if(typeof options==="number" && typeof opt2==="number"){
-			start=options;
-			end=opt2;
-		} else if(typeof options==="string"){
-			if((start=t.value.indexOf(options))>-1) end=start+options[len];
-			else start=null;
-		} else if(Object.prototype.toString.call(options)==="[object RegExp]"){
-			var re=options.exec(t.value);
-			if(re != null) {
-				start=re.index;
-				end=start+re[0][len];
-			}
-		}
-		if(typeof start!="undefined"){
-			if(browser){
-				var selRange = this[0].createTextRange();
-				selRange.collapse(true);
-				selRange.moveStart('character', start);
-				selRange.moveEnd('character', end-start);
-				selRange.select();
-			} else {
-				this[0].selectionStart=start;
-				this[0].selectionEnd=end;
-			}
-			this[0].focus();
-			return this
-		} else {
-			// Modification as suggested by Андрей Юткин
-           if(browser){
-                if (this[0].tagName.toLowerCase() != "textarea") {
-                    var val = this.val(),
-					selection=document.selection,
-                    range = selection[createRange]()[duplicate]();
-                    range.moveEnd("character", val[len]);
-                    var s = (range.text == "" ? val[len]:val.lastIndexOf(range.text));
-                    range = selection[createRange]()[duplicate]();
-                    range.moveStart("character", -val[len]);
-                    var e = range.text[len];
-                } else {
-                    var range = selection[createRange](),
-                    stored_range = range[duplicate]();
-                    stored_range.moveToElementText(this[0]);
-                    stored_range.setEndPsoint('EndToEnd', range);
-                    var s = stored_range.text[len] - range.text[len],
-                    e = s + range.text[len]
-                }
-			// End of Modification
-            } else {
-				var s=t.selectionStart,
-					e=t.selectionEnd;
-			}
-			var te=t.value.substring(s,e);
-			return {start:s,end:e,text:te,replace:function(st){
-				return t.value.substring(0,s)+st+t.value.substring(e,t.value[len])
-			}}
-		}
-	}
-})(jQuery,"length","createRange","duplicate");
-*/
 (function($){
 $.widget("ui.inputControl", {
-_init : function() {//type:date
+_init : function() {//type:Date,Integer,Decimal
 	var self = this;
-	$(this.element).on("keyUp change input",function(e) {
-		//var handler = self.options.delay;	
-		var a=e.charCode?e.charCode:e.keyCode?e.keyCode:0;
-		if (self.options.type==="date"){
-			console.log(String.fromCharCode(a));
-			console.log($(this).caret().replace(String.fromCharCode(a)));
-			//console.log($(this).caret().replace('hfgfghfh'));
-
-			console.log(String.fromCharCode(a));
+	/* self.options.delay; */
+	var  pattern={Date:'9999~99~99',Other:''};
+	var set = {
+			fnAfter_OnlyNoAndPoints:function(input){
+				console.log("fnAfter");
+				var newVal=input.val().replace(/[^0-9\.]+/g,'.')
+				input.val(newVal);
+			}, fnAfter_No:function(input){
+				var newVal=input.val().replace(/[^0-9\.]+/g,'')
+				input.val(newVal);
+				console.log("fnAfter2"+input.val());
+			}, fnAfter_Decimal:function(input){
+				var newVal=input.val().replace(/[^0-9\.]+/g,'.')
+				var rx=/^\d+\.?\d*/, newVal=rx.exec(newVal)[0];
+				input.val(newVal);
+			}, fnAfter_Time:function(input){
+				var newVal=input.val().replace(/[^0-9\.]+/g,':')
+				var match=newVal.match(/([01]?\d|2[0-3])(:)?([0-5]?\d?)/);//['visas','hh',':','mm']
+				if (match[2]&&match[1].length===1){match[0]="0"+match[0];}//Jei yra '1:' -> '01:'
+				input.val(match[0]);				
+			}, fnBefore_Date:function(e,input,buffer,k){//k=keyPressed
+				console.log("fnBefore");
+				var val=input.val(), notNumeric=(k<48 || (k>57 && k < 96) || k > 105);
+				if  (notNumeric&&val.length===2) {
+					var No=parseInt(val,10);
+					buffer.splice(0,2);/*panaikinam sena*/var old=val.split("");
+					if (val>30){
+						buffer.unshift("1","9",old[0],old[1],".");
+						input.val(19+input.val()+".");
+					}
+					else if (val<30){
+						buffer.unshift("2","0",old[0],old[1],".");
+						input.val(20+input.val()+".");
+					}
+					e.preventDefault();
+				}
+				if  (notNumeric&&val.length===6) {
+					buffer.splice(0,6);/*panaikinam sena*/
+					var old=val.split("");
+					console.log(old);
+					old.splice(5,1,"0",val[5],".");// darašom priekyj nulį   be val[5] - 0 . 5
+					// console.log(old);
+					// console.log("buffer before");
+					//buffer.unshift(JSON.stringify(old).replace("[","").replace("]",""));
+					buffer.unshift(old[0],old[1],old[2],old[3],old[4],old[5],old[6],old[7]);//
+					input.val(old.join(""));
+					e.preventDefault();
+				}
+				// console.log("buffer after");
+				// console.log(buffer);
+			},fnOnBlur_Date:function(input,test){
+				var length=test.length
+				if (length<10&&length>6){
+					console.log("fnOnBlur");
+					var oldVal=test.split(".");
+					if (oldVal[1].length===1){oldVal[1]="0"+oldVal[1];}
+					if (oldVal[2].length===1){oldVal[2]="0"+oldVal[2];}
+					test=oldVal.join(".");
+					input.val(test); 
+				}
+				return test;
+			},fnOnBlur_No:function(input,test){
+				var newVal=/^\d+\.?\d*/.exec(test);
+				if (!newVal){return false;}
+				newVal=newVal[0];
+				if (newVal.slice(-1)==='.'){newVal+="0";}//Jei gale taskas dadedu nuli
+				input.val(newVal);
+				return false;
+			},fnOnBlur_Time:function(input,test){
+				var newVal, match=input.val().match(/(2[0-3]|[01]?\d)?(:)?([0-5]?\d)/);//['visas' 0,'hh' 1,':' 2,'mm' 3]
+				if (match) {
+					newVal=match[0];
+					if (match[2]){//Jei yra ':'
+						if (match[3].length===1){newVal=newVal.replace(":",":0");}//'01:1' -> '01:01'
+					} else {
+						if(newVal.length===1){newVal="0"+newVal;}
+						newVal=newVal+":00";
+					}
+				} else { newVal="00:00";}		
+				input.val(newVal);				
+				return false;
+			}			
 		}
-	});
+	var t=self.options.type;
+	if (t==='Date'){$(this.element).mask(pattern.Date,{fnAfter:set.fnAfter_OnlyNoAndPoints,fnBefore:set.fnBefore_Date,fnOnBlur:set.fnOnBlur_Date});}
+	else if (t==='Integer'){$(this.element).mask('9',{fnAfter:set.fnAfter_No,fnOnBlur:set.fnOnBlur_No});} //jeigu len=1 tikrins tik pagal ta viena
+	else if (t==='Decimal'){$(this.element).mask('*',{fnAfter:set.fnAfter_Decimal,fnOnBlur:set.fnOnBlur_No});} 
+	else if (t==='Time'){$(this.element).mask('*',{fnAfter:set.fnAfter_Time,fnOnBlur:set.fnOnBlur_Time});} 
+	else console.error('Wrong type: '+t);
 },
 	options: {
 		delay: 500
 	}
 });
 })(jQuery);
-(function ($) {
-	$.fn.extend({
-		//pass the options variable to the function
-		ValidateOnBlur: function (options) {
-			//Set the default values, use comma to separate the settings, example:
-			var defaults = {
-				ValidArray: [],
-				Allow: 'Integer', //Decimal Date Time DateCtrl DateNotLessCtrl DateNotMoreCtrl  //Sutampa su nurodymais oDATA.SD.Cols[i].Type
-				Trim: true
-			}
-			var opt = $.extend(defaults, options);
-			//Jei turi but array, jo opcija ValidArray
-			//ValidateOnBlur({ Allow: 'Integer' })
-			//ValidateOnBlur({ Allow: 'Decimal' })
-			return this.each(function () {
-				var t = $(this);
-				t.blur(function () {
-					var inputVal = t.val();
-					var re = /^(\s*)([\W\w]*)(\b\s*$)/;
-					if (re.test(inputVal)) {
-						inputVal = inputVal.replace(re, '$2');
-					} //remove leading and trailing whitespace characters
-					if (opt.ValidArray.length) {
-						var idx = jQuery.inArray(inputVal, ValidArray); if (idx === -1) { t.val(""); return; }
-					}
-					else if (opt.Allow === 'Integer') {
-						re = /\D*(\d+)\D*/; if (re.test(inputVal)) inputVal = inputVal.replace(re, "$1"); else { t.val(""); return; }
-					}
-					else if (opt.Allow === 'Decimal') {
-						inputVal = inputVal.replace(',', '.'); //re=/.*?(([0-9]?\.)?[0-9]+).*/g;
-						re = /\D*(\d\d*\.\d+|\d+)\D*/;
-						if (re.test(inputVal))
-							inputVal = inputVal.replace(re, "$1");
-						else { t.val(""); return; }
-					}
-					else if (opt.Allow === 'Date' || opt.Allow === 'DateCtrl' || opt.Allow === 'DateNotLessCtrl' || opt.Allow === 'DateNotMoreCtrl') {
-						//inputVal = inputVal.replace('.', '-').replace('/', '-').replace('\\', '-');
-						inputVal = inputVal.replace('-', '.').replace('/', '.').replace('\\', '.');
-						//re = $.validity.patterns.date;
-						//if (re.test(inputVal))
-						//	inputVal = inputVal.replace(re, "$1");
-						//if ($.isNumeric(inputVal) && opt.Allow === 'DateNotMoreCtrl') { if ((parseInt(inputVal, 10)) >= ((new Date()).getFullYear())) { inputVal = ((new Date()).getFullYear()); } }
-						//if ($.isNumeric(inputVal) && opt.Allow === 'DateNotLessCtrl') { if ((parseInt(inputVal, 10)) <= ((new Date()).getFullYear())) { inputVal = ((new Date()).getFullYear()); } }
-						//else { t.val(""); return; }
-					}
-					else if (opt.Allow === 'Year' || opt.Allow === 'YearNotMore' || opt.Allow === 'YearNotLess') {
-						inputVal = inputVal.replace('.', '-').replace('/', '-').replace('\\', '-');
-						re = /\.*(19|20\d{2})\.*/;
-						if (re.test(inputVal)) inputVal = inputVal.replace(re, "$1");
-						if ($.isNumeric(inputVal) && opt.Allow === 'YearNotMore') { if ((parseInt(inputVal, 10)) >= ((new Date()).getFullYear())) { inputVal = ((new Date()).getFullYear()); } }
-						if ($.isNumeric(inputVal) && opt.Allow === 'YearNotLess') { if ((parseInt(inputVal, 10)) <= ((new Date()).getFullYear())) { inputVal = ((new Date()).getFullYear()); } }
-						else { t.val(""); return; }
-					}
-					// \.*(19|20\d{2})\.*
-					//\.*((19|20\d{2})[./-]([0]?[1-9]|[1][0-2])[./-]([0-2][1-9]|3[0-1]|\d))+\.*
-					t.val(inputVal);
-				});
-			});
-		}
-	});
-})(jQuery);
-
 /* Lithuanian (UTF-8) initialisation for the jQuery UI date picker plugin. */
 /* @author Arturas Paleicikas <arturas@avalon.lt> */
 jQuery(function ($) {
@@ -547,30 +441,6 @@ jQuery(function ($) {
 			var defaults = { cols: [], controller: null, sortedCol: 1 }
 			var opt = $.extend(defaults, options), table=this;
 			return table.each(function () {
-				// var span='<span class="ui-icon ui-icon-carat-2-n-s ui-tblHead-icon"></span>',newClass,n="ui-icon-carat-1-n",s="ui-icon-carat-1-s",ns="ui-icon-carat-2-n-s",base="ui-icon ui-tblHead-icon";
-				
-				// $(this).find('th').addClass("clickable").append(span)
-					// .end().on("click","th", function(e){
-						// //alert($(this).text()+" "+$(this).index());
-						// var t=$(this); thisSpan=t.find("span"); thisClass=thisSpan.attr("class");
-						// if (thisClass.indexOf(ns)>-1){newClass=n;}	//Nerūšiuota	
-						// else if (thisClass.indexOf(n)>-1){newClass=s;}//desc
-						// else if (thisClass.indexOf(s)>-1){newClass=n;}//asc
-						// else  throw new Error("noClass");
-						// thisSpan.attr("class",newClass+" "+base);
-						// t.siblings().find("span").attr("class",ns+" "+base);
-						
-						// var c=App[opt.controller];							
-						// if (newClass===n){c.set("sortAscending", true);}else{c.set("sortAscending", false);}
-						// c.set("sortProperties",[opt.cols[index]]);
-						// c.set("content",c.get("arrangedContent"));
-						// if (opt.refreshView&&!e.isTrigger) { opt.refreshView.call(c);}//kai su funkcija pats saves nepaleis, turinys turi but jau išrusiuotas pries tai (!e.isTrigger||e.isOk)
-					// });
-				// if (index===opt.sortedCol){$(this).trigger("click"); }
-				// $(this).on("click","th", function(e){
-					// alert($(this).text()+" "+$(this).index());
-				// });
-				
 				$(this).find('th').each(function(index){
 					if (opt.cols[index]){
 						$(this).addClass("clickable").on("click",function(e){
@@ -768,38 +638,6 @@ var methods = {
         }
     };
 })(jQuery);
-// (function($){
-	// $.fn.scrollelement = function(options) {
-		// var defaults = { 
-			// 'animate': true,
-			// 'duration': '10',
-			// 'easing': 'swing'
-			// //'complete': function(){},
-			// //'offset': 0,
-		// };
-		// var options = $.extend(defaults, options);
-		// if (!options.offset){options.offset=this.parent().offset().top;}
-		
-		// return this.each(function() {
-			// var element = $(this);
-			// //var offset = element.offset().top - options.offset;
-			// var toScroll = 0;
-			
-			// $(window).scroll(function(){ 
-				// var scroll = $(window).scrollTop()-options.offset;
-				// toScroll=(scroll>0)?scroll:0;
-				// // if( scroll > offset ){toScroll = offset+(scroll - offset);} 
-				// // else {toScroll = offset;}
-				// if( options.animate == true ){
-					// element.stop().animate({"margin-top": toScroll + "px"} ,100);//, options.easing, options.duration, options.complete
-				// } else {
-					// element.stop().offset({top:toScroll});
-				// }
-			// });
-			
-		// });
-	// }
-// })(jQuery);
 (function( $ ){
 	//plugin buttonset vertical
 	$.fn.buttonsetv = function() {

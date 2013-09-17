@@ -21,9 +21,10 @@ _create: ->
 			row: if (id) then oDATA.GET(opt.Source).emData.findProperty("iD",id) else 0
 			Action: (if (id) then "Edit" else "Add")
 			newVals: if newVals then {vals:newVals,cols:opt.iText} else null#?
-			input: if e then $(e.target) else null
-			CallBackAfter:(Row)->
-				dialogFrm.dialog("close");
+			# input: if e then $(e.target) else null
+			input: input
+			CallBackFromComboBox:(Row)->
+				#dialogFrm.dialog("close");
 		App.listAllController.openItem(pars)		
 		false
 	data = undefined
