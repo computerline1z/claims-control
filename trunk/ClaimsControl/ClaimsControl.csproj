@@ -371,6 +371,7 @@
     <Content Include="Scripts\Plugins scripts\MegaSelectList.js" />
     <Content Include="Scripts\Plugins scripts\TimePicker.js" />
     <Content Include="SQL\current.sql" />
+    <None Include="Views\Shared\Claims\tmpAction_notifyInsurer.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

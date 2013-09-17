@@ -453,7 +453,7 @@ var SERVER = {
 				}
 			}
 			Em.run.next(function () { $("img.spinner").remove(); });
-			if (p.CallBackAfter) { p.CallBackAfter(Row,updData.Action); }
+			if (p.CallBackAfter) { p.CallBackAfter(Row,updData.Action,resp); }
 		}
 		};
 		$.extend(p, { CallBack: CallBack });

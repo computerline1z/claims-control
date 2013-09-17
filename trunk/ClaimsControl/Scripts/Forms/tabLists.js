@@ -100,20 +100,23 @@
               if (App.topNewController[pars.emObject]) {
                 App.topNewController[pars.emObject].unshiftObject(row);
               }
-              if (pars.input) {
-                pars.input.data("newval", row.iD);
-                pars.input.autocomplete("option").fnRefresh();
-                pars.input.data("autocomplete").fnItemChanged(row.iD);
-              }
+            }
+            if (pars.input) {
+              pars.input.data("newval", row.iD);
+              pars.input.autocomplete("option").fnRefresh();
+              pars.input.data("autocomplete").fnItemChanged(row.iD);
             }
             if (row.iD) {
               $("#tabLists").find("div.ui-tabs").find("li.ui-tabs-selected a").trigger("click");
             }
             if (execOnSuccess) {
-              return execOnSuccess(row);
-            } else {
-              return $("#openItemDialog").dialog("close");
+              execOnSuccess(row);
             }
+            if (pars.CallBackFromComboBox) {
+              pars.CallBackFromComboBox(row);
+            }
+            $("#openItemDialog").dialog("close");
+            return false;
           }
         });
         SERVER.update2(pars);

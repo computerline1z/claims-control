@@ -38,10 +38,8 @@
             vals: newVals,
             cols: opt.iText
           } : null,
-          input: e ? $(e.target) : null,
-          CallBackAfter: function(Row) {
-            return dialogFrm.dialog("close");
-          }
+          input: input,
+          CallBackFromComboBox: function(Row) {}
         };
         App.listAllController.openItem(pars);
         return false;

@@ -4,8 +4,8 @@ Handlebars.registerHelper('highlight', function (prop, options) {
 });
 Handlebars.registerHelper('currency', function (prop, options) {
 	var value = Ember.getPath(this, prop)+'';
-	var i=value.length-3;
-	if (i>0){value=value.slice(0, i) + '.' + value.slice(i);}
+	//var i=value.length-3;
+	//if (i>0){value=value.slice(0, i) + '.' + value.slice(i);}
 	value+= ' '+App.accidentsController.currency;	
 	return new Handlebars.SafeString(value);
 });

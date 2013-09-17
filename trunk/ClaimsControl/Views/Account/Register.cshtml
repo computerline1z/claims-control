@@ -4,6 +4,7 @@
     ViewBag.Title = "Register";
     //ViewBag.Title = "Create account";
     Layout = "Register_Layout.cshtml";
+	Settings st = Site.GetSettings();
 }
 <p>
     @{ Html.RenderAction("Header", "Account"); }
@@ -19,7 +20,7 @@
                         <span style=" padding-right: 10px; line-height: 2em;">Pasirinkite kalbą: </span>
                         @Html.DropDownList("LanguageId", null, new { @style = "width: 120px; height: 1.5em;" })
                 </div>
-                <h2 style="padding: 0;">Žalų valdymo sistema</h2>
+                <h2 style="padding: 0;">@st.Title</h2>
                                                      
             <br />                
             <p style=" margin-bottom: 15px;">

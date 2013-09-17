@@ -11,6 +11,7 @@ namespace CC.Classes.htmlHelpers {
 		public string css { get; set; }
 		public bool Debug { get; set; }
 		public bool Map { get; set; }
+		public string Title { get; set; }
 	}
 	public static class Site {
 		public static Settings GetSettings() {
@@ -24,6 +25,7 @@ namespace CC.Classes.htmlHelpers {
 			string VerNo = match.Groups[2].Value;
 			st.css = "/Content/less/main" + VerNo + ".css";
 			st.js = "/Scripts/Final/combined" + VerNo + ".min.js";
+			st.Title = "ClaimsControl sistema";
 			return st;
 		}
 	}

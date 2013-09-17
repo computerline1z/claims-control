@@ -16,23 +16,40 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 			# me.set("activities",oDATA.GET("proc_Activities").emData).set("activityTypes",actTypes).set("users",oDATA.GET("tblUsers").emData)
 			# me.set("ativitiesNotFin",actTypes.filter((a)->not a.isFinances))
 		# )
-	stepsCont1: ['<a href="#">Parenkite ir siųskite</a><div>arba</div><a href="#">Užregistruokite</a>','<a href="#">Patvirtinti, kad visa informacija yra pateikta</a>','<a href="#">Patvirtinti #### Lt kaip galutinę žalos sumą</a>','<a href="#">Patvirtinti #### Lt kaip galutinę išmokos sumą</a>','<a href="#">Uždaryti bylą</a>']
+	#<a href="#">Parenkite ir siųskite</a><div>arba</div>
+	stepsCont1: ['<a href="#">Užregistruokite</a>','<a href="#">Patvirtinti, kad visa informacija yra pateikta</a>','<a href="#">Patvirtinti #### Lt kaip galutinę žalos sumą</a>','<a href="#">Patvirtinti #### Lt kaip galutinę išmokos sumą</a>','<a href="#">Uždaryti bylą</a>']
 	stepsCont2: ['Draudikui pranešta ####','Visa informacija pateikta:</br>####</br><a href="#">Atšaukti</a>','Patvirtinta galutinė žalos suma: #### Lt</br><a href="#">Atšaukti</a>','Patvirtinta galutinė išmokos suma: #### Lt</br><a href="#">Atšaukti</a>','Byla uždaryta <a href="#"></br>Atidaryti</a>']
-	stepsConfirm: ['','<p>Įveskite paskutinio dokumento pateikimo datą:</p><input class="date" type="text" value="####"><button class="btn btn-small">Patvirtinti</button>','<p>Galutinė žalos dydžio suma - #### Lt.</p><button class="btn btn-small">Patvirtinti</button>','<p>Galutinė išmokos dydžio suma - #### Lt</p><button class="btn btn-small">Patvirtinti</button>','']
+	stepsConfirm: ['','<p>Įveskite paskutinio dokumento pateikimo datą:</p><input class="date" type="text" value="####"><button class="btn btn-small">Patvirtinti</button><a class="box-1pr-left js-cancel-addon">Atšaukti</a>','<p>Galutinė žalos dydžio suma - #### Lt.</p><button class="btn btn-small">Patvirtinti</button><a class="box-1pr-left js-cancel-addon">Atšaukti</a>','<p>Galutinė išmokos dydžio suma - #### Lt</p><button class="btn btn-small">Patvirtinti</button><a class="box-1pr-left js-cancel-addon">Atšaukti</a>','']
 	stepVal:[]
 	stepsTemp: [{stepNo:1,name:'Pranešimas draudikui'},{stepNo:2,name:'Informacija draudikui'},{stepNo:3,name:'Žalos suma'},{stepNo:4,name:'Draudimo išmoka'},{stepNo:5,name:'Bylos uždarymas'}]
-	fnSetContent: (isCurrent,idx)->
-		if not @claim.steps then return; #if not initialized
-		content=if isCurrent then @stepsCont1 else @stepsCont2
-		@claim.steps[idx].set('content', content[idx].replace('####',@stepVal[idx]))
+	# fnSetContent: (isCurrent,claimStatus)->
+		# if not @claim.steps then return; #if not initialized
+		# step=@claim.steps.findProperty("stepNo",claimStatus+1)
+		# content=if isCurrent then 'stepsCont1' else 'stepsCont2'
+		# fn=@fnUpdateStep
+		# fn.call(@,step,'',content,'cancel'); false
 	setSteps: ->
 		claim=@claim; today=oGLOBAL.date.getTodayString(); @.set('stepVal',[today,today,claim.lossAmount,claim.insuranceClaimAmount,''])
-		sTemp=@stepsTemp;s1=@stepsCont1;s2=@stepsCont2; sConfirm=@stepsConfirm; s=[];sVal=@stepVal; 
-		reached=false#if claim.claimStatus then false else true		
-		#stepsEm=Em.Object.create(step:null,stepNo:null,name:null,content:'')
-		fnGetContent=(cnt,idx)->cnt[idx].replace("####",sVal[idx])
+		###	
+		sTemp=@stepsTemp;
+		###
+		if claim.insPolicyID==0 #Jei neapdrausta bus tik du stepai
+			newSteps=[];@stepsTemp.forEach((item,i)->
+				if i==2 or i==4 then newSteps[i]=item; newSteps[i].stepNo2=(if i==2 then 1 else 2)
+			); sTemp=newSteps		
+			if claim.claimStatus==0 then claim.claimStatus=2 #Neapdraustu pradedam nuo zalos sumos
+
+		else
+			sTemp=@stepsTemp
+			
+
+		
+		s1=@stepsCont1;s2=@stepsCont2; sConfirm=@stepsConfirm; s=[];sVal=@stepVal; 
+		reached=false; fnGetContent=(cnt,idx)->cnt[idx].replace("####",sVal[idx])
+		
 		sTemp.forEach((item)->  
 			step=$.extend({},item); idx=item.stepNo-1
+			if item.stepNo==1 then step.first=true
 			if claim.claimStatus+1==step.stepNo 
 				step.step='current'; reached=true;
 				step.content=fnGetContent(s1,idx)
@@ -42,42 +59,83 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 				else
 					step.step='completed';
 					step.content=if claim.claimStatus==step.stepNo then fnGetContent(s2,idx) else fnGetContent(s2,idx).replace('<a href="#">Atšaukti</a>','') #CONTENT: pending:"",current:stepsCont1,completed:stepsCont2
-			#item.content=s1[item.stepNo-1]
 			s.pushObject(Em.Object.create(step))
+			false
 		)	
 		claim.set('steps',s); @ #return this to process futher
 		# console.log('------------------logging claims---------------'); console.log(@claim)
-	fnStepForward: (idx)-> #
-		s=@claim.steps; stepVal=@stepVal; newStepNo=idx+1
-		s[idx].set('step','completed'); s[idx].set('content',@stepsCont2[idx].replace('####',stepVal[idx]))
-		if s.length!=newStepNo
-			s[newStepNo].set('step','current'); s[idx+1].set('content',@stepsCont1[newStepNo].replace('####',stepVal[newStepNo]))
-		if idx-1>0
-			newHtml=@stepsCont2[idx-1].replace('####',stepVal[idx-1]).replace('<a href="#">Atšaukti</a>','')
-			s[idx-1].set('content',newHtml)
-		dF=Data:[newStepNo],Fields:['claimStatus']
-		if newStepNo==1 then dF.Fields.push("DateNotification"); dF.Data.push(stepVal[idx])
-		else if newStepNo==2 then dF.Fields.push("DateDocsSent"); dF.Data.push(stepVal[idx])
-		else if newStepNo==3 then dF.Fields.push("LossAmount"); dF.Data.push(stepVal[idx])
-		else if newStepNo==4 then dF.Fields.push("InsuranceClaimAmount"); dF.Data.push(stepVal[idx])
-		@fnSaveData(dF)
-	fnConfirm: (stepBox,idx)->
-		newHtml='<div class="step-box-addon"><div class="inner">'+(@stepsConfirm[idx].replace("####",@stepVal[idx]))+'</div></div>'
+	fnUpdateStep:(step,status,stepCont,contentType)->
+		content=""; 
+		if step
+			idx=step.stepNo-1; 
+			if stepCont then content=@[stepCont][idx].replace('####',@stepVal[idx])
+			if contentType=="noCancel" then content=content.replace('<a href="#">Atšaukti</a>','')
+			if status then step.set('step',status)
+			step.set('content',content); false
+	fnGetSteps: (stepNo)->
+		s=@claim.steps; currStep=s.findProperty("stepNo",stepNo)
+		min=100;max=0; currNo=currStep.stepNo; nextStep=null ;prevStep=null
+		s.forEach((step)->
+			stepNo=step.stepNo;
+			if stepNo>currNo and stepNo<min then nextStep=step; min=step.stepNo
+			if stepNo<currNo and stepNo>max  then prevStep=step; max=step.stepNo
+		)
+		currStep:currStep,prevStep:prevStep,nextStep:nextStep
+	fnStepForward: (stepNo)-> #
+		if @claim.claimStatus==0 #Updatinus turesim pazymet
+			@replaceActivityView(@activityTypes.findProperty("name","activity_notifyInsurer"))
+			return false
+		stepVal=@stepVal; s=@fnGetSteps(stepNo); idx=stepNo-1
+		fn=@fnUpdateStep
+		fn.call(@,s.currStep,'completed','stepsCont2','cancel')
+		fn.call(@,s.nextStep,'current','stepsCont1','cancel')
+		fn.call(@,s.prevStep,'','stepsCont2','noCancel')
+		
+		# s.currStep.set('step','completed').set('content',@stepsCont2[stepNo-1].replace('####',stepVal[stepNo-1]))
+		# if s.nextStep then s.nextStep.set('step','current').set('content',@stepsCont1[idx+1].replace('####',stepVal[idx+1]))
+		# if s.prevStep then s.prevStep.set('content',@stepsCont2[idx-1].replace('####',stepVal[idx-1]).replace('<a href="#">Atšaukti</a>',''))
+		
+		dF=Data:[stepNo],Fields:['claimStatus']; addField="";updAccidents=false
+		switch stepNo
+			when 1 then addField="DateNotification"
+			when 2 then addField="DateDocsSent"
+			when 3 then addField="LossAmount";updAccidents=true
+			when 4 then addField="InsuranceClaimAmount";updAccidents=true
+		if addField then dF.Fields.push(addField); dF.Data.push(stepVal[idx])		
+		@fnSaveData(dF,updAccidents)
+	fnConfirm: (stepBox,stepNo)->
+		if stepBox.find("div.step-box-addon").length then return false
+		#this.replaceActivityView(p)
+		newHtml='<div class="step-box-addon"><div class="inner">'+(@stepsConfirm[stepNo-1].replace("####",@stepVal[stepNo-1]))+'</div></div>'
 		$(newHtml).appendTo(stepBox).hide().slideDown('slow',->$(@).css('overflow','visible'))
-	fnStepBack: (idx)-> 
-		s=@claim.steps
-		s[idx].set('step','current'); s[idx].set('content',@stepsCont1[idx].replace('####',@stepVal[idx]))
-		if idx+1<5
-			s[idx+1].set('step','pending'); s[idx+1].set('content','')
-		if idx-1>0
-			s[idx-1].set('content',@stepsCont2[idx-1].replace('####',@stepVal[idx-1]))
-		dF=Data:[idx],Fields:['claimStatus']
+	fnStepBack: (stepNo)-> 
+		s=@fnGetSteps(stepNo);
+		fn=@fnUpdateStep
+		fn.call(@,s.currStep,'current','stepsCont1','cancel')
+		fn.call(@,s.nextStep,'pending','','cancel')
+		fn.call(@,s.prevStep,'','stepsCont2','cancel')
+		
+		# idx=stepNo-1
+		# s.currStep.set('step','current').set('content',@stepsCont1[idx].replace('####',@stepVal[idx]))	
+		# if s.nextStep then s.nextStep.set('step','pending').set('content','')
+		# if s.prevStep then s.prevStep.set('content',@stepsCont2[idx-1].replace('####',@stepVal[idx-1]))
+		dF=Data:[stepNo-1],Fields:['claimStatus']
 		@fnSaveData(dF)
-	fnSaveData: (dataAndFields)->
-		DataToSave=$.extend({"id":@claim.iD,"DataTable":"tblClaims"},dataAndFields)
+	fnSaveData: (dF,updAccidents)->
+		updAccidents=updAccidents;
+		DataToSave=$.extend({"id":@claim.iD,"DataTable":"tblClaims", Ext:@claim.accidentID},dF); CallBack=null
 		#DataToSave={"id":@claim.iD,"Data":[groupID,docTypeID,desc],"Fields":["groupID","docTypeID","description"],"DataTable":"tblClaims"}
-		SERVER.update2(Action:'Edit',DataToSave:DataToSave,Ctrl:$("#claimsSteps"),source:"proc_Claims",row:@claim,CallBackAfter:(Row)-> console.log(Row))	
+		if updAccidents then CallBack={Success: App.claimEditController.fnUpdateAccident}
+		SERVER.update2(Action:'Edit',DataToSave:DataToSave,CallBack: CallBack,Ctrl:$("#claimsSteps"),source:"proc_Claims",row:@claim,CallBackAfter:(Row,Action,resp)->
+			console.log("updAccidents: "+updAccidents) 
+			if updAccidents then App.claimEditController.fnUpdateAccident(resp)
+		)	
+		###	
 		@fnclaimStatusChanged()
+		opt= Action: "Edit", DataToSave: DataToSave, CallBack: {Success: App.claimEditController.fnUpdateAccident} 
+		SERVER.update(opt)
+		###	
+		@claimStatusBefore=@claim.claimStatus
 	#--------------------------------activities & finances---------------------------------------------------------------------
 	target: (() -> @).property() #view actions with current controler targeted to controller
 	damageSum:0,insurerSum:0,compensationSum:0,activitiesTbl:[],finDamageTbl:[],finInsurerTbl:[],finOtherPartyTbl:[]
@@ -98,18 +156,22 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 	)#.observes('claim.claimStatus')	
 	finDamageChanged: (()->
 		Em.run.next(@,()-> 
+			#if not @claim.steps then return false 
 			sum=@fnSum(@finDamageTbl); @set('damageSum', sum);
+			@stepVal[2]=sum #
 			if @claim.claimStatus<3 #change sum for steps also
-				@claim.set("lossAmount",sum); @stepVal[2]=sum
-				if @claim.claimStatus==2 then @fnSetContent(true,2) #change sum indicated in step ui also
+				@claim.set("lossAmount",sum); 
+				if @claim.claimStatus==2 then @fnUpdateStep.call(@,@claim.steps.findProperty("step","current"),'','stepsCont1','cancel');#change sum indicated in step ui also if is current
 		)
 	).observes('finDamageTbl.@each')
 	finInsurerChanged: (()->
 		Em.run.next(@,()->
+			#if not @claim.steps then return false 
 			sum=@fnSum(@finInsurerTbl);	@set('insurerSum', sum);
+			@stepVal[3]=sum
 			if @claim.claimStatus<4 #change sum for steps also
-				@claim.set("insuranceClaimAmount",sum); @stepVal[3]=sum
-				if @claim.claimStatus==3 then @fnSetContent(true,3) #change sum indicated in step ui also			
+				@claim.set("insuranceClaimAmount",sum); 
+				if @claim.claimStatus==3 then @fnUpdateStep.call(@,@claim.steps.findProperty("step","current"),'','stepsCont1','cancel');#change sum indicated in step ui also if is current
 		)
 	).observes('finInsurerTbl.@each')
 	finOtherPartyChanged: (()->
@@ -250,9 +312,11 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 		if not DataToSave and e.isTrigger then oCONTROLS.dialog.Alert( title:'Veiksmo išsaugojimas',msg:'Užpildykite pažymėtus laukus..')
 		if DataToSave
 			CallBackAfter=(Row)->
-					me.setActivitiesTables() #galim ir fnMapActivitiesRecord(Row) nes grazina naują record'ą
+					if Row.typeID==14 then me.claim.claimStatus=1; me.fnStepForward(2) #Įvedė, kad pranešė draudikui
 					if execOnSuccess then execOnSuccess(Row,form) else me.cancelForm();
+					me.setActivitiesTables() #galim ir fnMapActivitiesRecord(Row) nes grazina naują record'ą
 			SERVER.update2(Action:Action,DataToSave:DataToSave,Ctrl:form,source:formOpts.Source,CallBackAfter:CallBackAfter)
+		#else me.cancelForm()
 	cancelForm: () ->
 		@replaceActivityView(); $("div.validity-tooltip").remove(); @
 	mainView: Em.View.extend(
@@ -395,31 +459,34 @@ App.TabClaimsRegulationView = Ember.View.extend(#App.HidePreviousWindow,
 		if not $.isEmptyObject(ACTIVITYVIEW) #make sure nothing left there
 			ACTIVITYVIEW.remove(); ACTIVITYVIEW.destroy()
 		@controller.setActivitiesTables()#.setFinancesTables(); #alert("setting table")
-		Em.run.next(@,->@controller.setSteps();)#have to set steps on the end as it uses numbers from setActivitiesTable().setFinancesTables()
+		#Em.run.next(@,->@controller.setSteps();)#have to set steps on the end as it uses numbers from setActivitiesTable().setFinancesTables()
+		@controller.setSteps()
 	templateName: 'tmpClaimRegulation'
 	didInsertElement: ()->
 		@_super(); ctrl=@controller; ctrl.cancelForm(); ctrl.claimStatusBefore=ctrl.claim.claimStatus #used for claimStatus control
 		#------------------step boxes-----------------------------------------------------------
-		me=@; idx=0; stepBox={}; 
+		me=@; stepBox={}; 
 		@.$().find("#claimsSteps").on('click','a',(e)->#Patvirtinimo iškvietimas arba atšaukimas
 			stepBox=$(@).closest("div.step-box"); classes=stepBox.attr("class"); stepNo=stepBox.data("stepno") #current completed pending
-			idx=stepNo-1; steps=ctrl.claim.steps
+			steps=ctrl.claim.steps
 			if classes.indexOf("completed")>0 #Atšaukimas
-				ctrl.fnStepBack(idx)
+				ctrl.fnStepBack(stepNo)
 			else if classes.indexOf("current")>0#Patvirtinimas
-				if stepNo==1 then ctrl.fnStepForward(idx); 
-				else if stepNo==5
-					ctrl.fnStepForward(idx);
+				if stepNo==1 or stepNo==5 then ctrl.fnStepForward(stepNo); 
 				else
 					# span=stepBox.find("span.value")
 					# input=if span.length then span.html() else oGLOBAL.date.getTodayString()
-					ctrl.fnConfirm(stepBox,idx)
-					if stepNo==2 then Em.run.next(@,->stepBox.find("input.date").ValidateOnBlur(Allow:'Date').datepicker();) #Informacija draudikui įdedam data
+					ctrl.fnConfirm(stepBox,stepNo)
+					if stepNo==2 then Em.run.next(@,->stepBox.find("input.date").inputControl(type:'Date').datepicker();) #Informacija draudikui įdedam data
 
 			false
 		).on('click','button',(e)->#Patvirtinimas
-			if idx==1 then stepVal=stepBox.find("input.date").val();ctrl.stepVal[idx]=stepVal
-			ctrl.fnStepForward(idx);
+			stepNo=$(e.target).closest("div.step-box.current").data("stepno");
+			if stepNo+1==1 then stepVal=stepBox.find("input.date").val();ctrl.stepVal[stepNo+1]=stepVal
+			ctrl.fnStepForward(stepNo);
+			stepBox.find("div.step-box-addon").slideUp('slow').remove()
+			false
+		).on('click','a.js-cancel-addon',(e)->#Atšaukimas
 			stepBox.find("div.step-box-addon").slideUp('slow').remove()
 			false
 		)

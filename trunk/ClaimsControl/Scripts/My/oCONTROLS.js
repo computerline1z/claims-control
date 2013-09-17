@@ -111,7 +111,7 @@ var oCONTROLS = {
 			var Type = (col.Type) ? col.Type : ((col.List) ? "List" : ""); // (col.List)?"List":col.Type;
 			if (Type === undefined) {alert("Nesusiparsino ctrl elemento objFunc.js-UpdatableForm (n�ra Type)");return true;}
 			var AddToClasses = "ui-widget-content " //ui-corner-all
-			AddToClasses += (e.hasClass("NotUpdateField")) ? " NotUpdateField" : " UpdateField";
+			if (!col.Radio) {AddToClasses += (e.hasClass("NotUpdateField")) ? " NotUpdateField" : " UpdateField";}//Radiobutonams nereikia UpdateField
 			if (Type === 'Integer' || Type === 'Decimal') {AddToClasses += " number";}
 			else if (Type === "List") {col.Type = "List";}
 			else if (Type) {if (Type.search("Date") !== -1) {AddToClasses += " date";}}    //classes+' text', textarea,
@@ -189,9 +189,10 @@ var oCONTROLS = {
 
 				eHTML += oCONTROLS.txt(col);
 				if (isTime) {
-					eHTML += oCONTROLS.txt({Value: TimeValue,title: "Laikas",classes: "ui-widget-content time"});
+					eHTML += oCONTROLS.txt({Value: TimeValue,title: "Laikas",classes: "ui-widget-content time",add:"onfocus='this.select()' onMouseUp='return false'"});
 				} // UpdateField nereikia, nes..
-				input = $(eHTML).prependTo(e).parent().find('input:first');
+				//input = $(eHTML).prependTo(e).parent().find('input:first').find('input.time').inputControl({ type:"Time"}).end();
+				input = $(eHTML).prependTo(e).parent().find('input.time').inputControl({ type:"Time"}).end().find('input:first');
 			}
 			if (col.List) {
 				if (input) {
@@ -214,7 +215,10 @@ var oCONTROLS = {
 				else if (col.List) {input.data("autocomplete").fnItemChanged=function(newId){fnEnableSave();}}
 				else if (input){
 					var val=input.val();
-					if (input.hasClass("date")){ input.mask( "9999~99~99",{placeholder:"",isDate:true})}
+					//if (input.hasClass("date")){ input.mask( "9999~99~99",{placeholder:"",isDate:true})}
+					
+					if (input.hasClass("date")){ input.inputControl({ type:'Date'});}
+					
 					if (input.hasClass("hasDatepicker")&&!input.data("datepicker")){
 						input.datepicker("option", "onSelect",fnEnableSave).closest("div.ExtendIt").find("input.time").on("keyup",fnEnableSave);
 					}
@@ -223,10 +227,9 @@ var oCONTROLS = {
 			//}			
 			if (typeof input !== 'undefined') {
 				input.val($.trim(input.val()));
-				if (Type === 'Integer' || Type === 'Decimal' || Type === 'Date') {
-					input.ValidateOnBlur({
-						Allow: Type
-					});
+				if (Type === 'Integer' || Type === 'Decimal' ) {//|| Type === 'Date'
+					input.inputControl({ type:Type});
+					//input.ValidateOnBlur({Allow: Type});
 				}
 				if (typeof col.Tip !== 'undefined') {input.attr("placeholder", col.Tip)} 
 			}
@@ -328,7 +331,7 @@ var oCONTROLS = {
 					}
 				}
 			}
-			if (OldVal != val || (val === 0 && OldVal === "")) {
+			if (OldVal != val || (val === 0 && OldVal === "")||NewRec) {
 				if (UpdateField) {
 					DataToSave[UpdateField] = val;
 				}
@@ -383,7 +386,7 @@ var oCONTROLS = {
 		var classes="";//naudojamas tik inputams (labeliams klases pareina per appendLabel
 		if (typeof p.classes ==="string") {classes=p.classes;}
 		else if ( p.classes.input){classes=p.classes.input;}
-		return ((p.attr) ? p.attr + " " : "") + ((p.id) ? "id='" + p.id + "' " : "") + ((p.style) ? 'style="' + p.style + '" ' : '') + ((p.notabstop) ? "tabindex='-1' " : "") + ((p.title) ? "title='" + p.title + "' " : "") + ((p.data_ctrl) ? "data-ctrl='" + p.data_ctrl + "' " : "") + ((classes) ? "class='" + classes + "' " : "");
+		return ((p.add) ? p.add + " " : "")+((p.attr) ? p.attr + " " : "") + ((p.id) ? "id='" + p.id + "' " : "") + ((p.style) ? 'style="' + p.style + '" ' : '') + ((p.notabstop) ? "tabindex='-1' " : "") + ((p.title) ? "title='" + p.title + "' " : "") + ((p.data_ctrl) ? "data-ctrl='" + p.data_ctrl + "' " : "") + ((classes) ? "class='" + classes + "' " : "");
 
 		//return ((p.attr)?p.attr:'')+((p.id)?'id="'+p.id+'" ':'')+((p.style)?"style='"+p.style+"' ":"")+((p.notabstop)?'tabindex="-1" ':'')+((p.title)?'title="'+p.title+'" ':'')+((p.data_ctrl)?'data-ctrl="'+p.data_ctrl+'" ':'')+((p.classes)?'class="'+p.classes+'" ':'');
 	},

@@ -149,7 +149,7 @@
           }
           if (opts.requireCategory) {
             if (typeof catInput.data("newval") !== "number") {
-              oGLOBAL.notify.withIcon("Ne visi dokumentai išsaugoti", "Dokumentas '" + data.files[0].name + "'  neturi priskirtos kategorijos..", "img32-warning", true);
+              data.context.find("input.ui-autocomplete-input").closest('.ExtendIt').addClass("validity-error-on-field").closest("td").append("<div class='validity-tooltip'>Priskirkite dokumentui kategoriją</div>");
               return false;
             }
           }

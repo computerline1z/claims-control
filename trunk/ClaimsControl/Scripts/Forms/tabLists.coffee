@@ -61,10 +61,12 @@ App.listAllController = Em.ResourceController.create(
 			$.extend(pars,{DataToSave:DataToSave,Ctrl:$("#tabLists"),CallBackAfter:(row)-> #t.p. 189 eilutė
 				if pars.Action=='Add'
 					App.listAllController.content.unshiftObject(row); if App.topNewController[pars.emObject] then App.topNewController[pars.emObject].unshiftObject(row)
-					if pars.input then pars.input.data("newval",row.iD); pars.input.autocomplete("option").fnRefresh(); pars.input.data("autocomplete").fnItemChanged(row.iD)
+				if pars.input then pars.input.data("newval",row.iD); pars.input.autocomplete("option").fnRefresh(); pars.input.data("autocomplete").fnItemChanged(row.iD)
 				if row.iD then $("#tabLists").find("div.ui-tabs").find("li.ui-tabs-selected a").trigger("click")#trigerinam, kad pagal tabus uzdėtų visible		
 				if execOnSuccess then execOnSuccess(row)
-				else $("#openItemDialog").dialog("close")				
+				if pars.CallBackFromComboBox then pars.CallBackFromComboBox(row)
+				$("#openItemDialog").dialog("close")	
+				false
 			})
 			SERVER.update2(pars); false
 		else if Alert then oCONTROLS.dialog.Alert( title:'Įšsaugojimas',msg:'Užpildykite pažymėtus laukus..')

@@ -1,6 +1,7 @@
 ﻿@{
 	string LogoutUrl = Url.Action("LogOff", "Account"),
 	LoginUrl = Url.Action("LogOn", "Account");
+	Settings st = Site.GetSettings();
 }
 
 @if (Request.IsAuthenticated){
@@ -13,7 +14,7 @@
 }
 else {
     
-	<span class="uppercase">Transporto žalų valdymo sistema</span>
+	<span class="uppercase">@st.Title</span>
 	<div class="pull-right">
 		<a id='spanLogAction' class="icons-gear" onclick="location='@LoginUrl'">Prisijungti</a>
 	</div>

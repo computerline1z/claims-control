@@ -94,7 +94,9 @@ _create: ->
 				GroupID=catInput.data("categoryID");GroupID=if GroupID then GroupID else 5 #Nepriskirto kodas 5
 			else GroupID=1#Nuotraukų grupė		
 			if opts.requireCategory
-				if (typeof catInput.data("newval")!="number") then oGLOBAL.notify.withIcon("Ne visi dokumentai išsaugoti", "Dokumentas '"+data.files[0].name+"'  neturi priskirtos kategorijos..", "img32-warning", true); return false
+				#if (typeof catInput.data("newval")!="number") then oGLOBAL.notify.withIcon("Ne visi dokumentai išsaugoti", "Dokumentas '"+data.files[0].name+"'  neturi priskirtos kategorijos..", "img32-warning", true); return false
+				if (typeof catInput.data("newval")!="number")
+					data.context.find("input.ui-autocomplete-input").closest('.ExtendIt').addClass("validity-error-on-field").closest("td").append("<div class='validity-tooltip'>Priskirkite dokumentui kategoriją</div>"); return false
 			data.formData=FileName:f.name, FileSize:f.size, DocTypeID:catInput.data("newval"), RefID:RefID,
 			GroupID:GroupID, Description:tr.find("textarea[name='description[]']").val(), AccidentID: AccidentID
 			
