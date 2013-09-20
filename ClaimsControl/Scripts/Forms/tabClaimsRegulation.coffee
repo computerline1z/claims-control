@@ -29,7 +29,11 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 		# fn=@fnUpdateStep
 		# fn.call(@,step,'',content,'cancel'); false
 	setSteps: ->
-		claim=@claim; today=oGLOBAL.date.getTodayString(); @.set('stepVal',[today,today,claim.lossAmount,claim.insuranceClaimAmount,''])
+		claim=@claim; today=oGLOBAL.date.getTodayString(); stepVal=[today,today,claim.lossAmount,claim.insuranceClaimAmount,'']
+		if claim.insPolicyID
+			if claim.claimStatus>0 then stepVal[0]=claim.dateNotification
+			if claim.claimStatus>1 then stepVal[1]=claim.dateDocsSent
+		@.set('stepVal',stepVal)
 		###	
 		sTemp=@stepsTemp;
 		###
@@ -86,6 +90,14 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 			@replaceActivityView(@activityTypes.findProperty("name","activity_notifyInsurer"))
 			return false
 		stepVal=@stepVal; s=@fnGetSteps(stepNo); idx=stepNo-1
+		dateInput=$("#claimsSteps").find(".step-box-addon").find("input.date")
+		if dateInput.length #Įsimenam kokią doku pristatymo data ivede. Pranesimo data issaugoma ant callbacko.
+			dateInput.parent().find("div.validity-tooltip").remove()
+			val=dateInput.val();dateFormat=App.userData.dateFormat;error=""
+			if not val then error="Netinkamas datos formatas. Pakeiskite į tokį "+dateFormat
+			else if moment().diff(val,"days")<0 then error="Data turi būt mažesnė už šiandieną - "+oGLOBAL.date.getTodayString()
+			if error then dateInput.css("border-color","#eb5a44").parent().append("<div class='validity-tooltip'>"+error+"</div>"); return false
+			stepVal[1]=val
 		fn=@fnUpdateStep
 		fn.call(@,s.currStep,'completed','stepsCont2','cancel')
 		fn.call(@,s.nextStep,'current','stepsCont1','cancel')
@@ -122,12 +134,14 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 		dF=Data:[stepNo-1],Fields:['claimStatus']
 		@fnSaveData(dF)
 	fnSaveData: (dF,updAccidents)->
-		updAccidents=updAccidents;
+		updAccidents=updAccidents
 		DataToSave=$.extend({"id":@claim.iD,"DataTable":"tblClaims", Ext:@claim.accidentID},dF); CallBack=null
 		#DataToSave={"id":@claim.iD,"Data":[groupID,docTypeID,desc],"Fields":["groupID","docTypeID","description"],"DataTable":"tblClaims"}
 		if updAccidents then CallBack={Success: App.claimEditController.fnUpdateAccident}
 		SERVER.update2(Action:'Edit',DataToSave:DataToSave,CallBack: CallBack,Ctrl:$("#claimsSteps"),source:"proc_Claims",row:@claim,CallBackAfter:(Row,Action,resp)->
-			console.log("updAccidents: "+updAccidents) 
+			#console.log("updAccidents: "+updAccidents) 
+			#me.stepVal[0]=Row.date.replace(":00","");
+			#if Ro
 			if updAccidents then App.claimEditController.fnUpdateAccident(resp)
 		)	
 		###	
@@ -177,20 +191,20 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 	finOtherPartyChanged: (()->
 		Em.run.next(@,()-> sum=0; @finOtherPartyTbl.forEach((item)->sum+=item.amount;);@set('compensationSum', sum.toRound());)
 	).observes('finOtherPartyTbl.@each')
-	# finDamageChanged: (()->
-		# alert("activitiesTblChanged")
-	# ).observes('activitiesTbl.@each')
 	setActivitiesTables: (newDocNo)-> #newDocNo:{ID:??,docNo:??}
 		@set("finDamageTbl",[]).set("finInsurerTbl",[]).set("finOtherPartyTbl",[])
 		claimID=@claim.iD; console.log("Showing all activities Claim iD: "+claimID)
-		activities=@activities# oDATA.GET("proc_Activities").emData
-		activityTypes=@activityTypes #oDATA.GET("tblActivityTypes").emData
+		activities=@activities
+		activityTypes=@activityTypes
 		if newDocNo then activities.findProperty("iD",newDocNo.iD).set("docs",("("+newDocNo.docNo+")"))
 		activities=activities.filter((item)->item.claimID==claimID);
-		me=@;activitiesTbl=[];#finIDs=[]; activityTypes.forEach((item) -> if item.isFinances then finIDs.push(item.iD))
+		me=@;activitiesTbl=[];clickActivityID=App.tabClaimsRegulationController.clickActivityID
 		activities.forEach((item) ->
 			type=activityTypes.findProperty("typeID",item.typeID)
-			activitiesTbl.push(me.fnMapActivitiesRecord(item,type))
+			rec=me.fnMapActivitiesRecord(item,type)
+			if clickActivityID 
+				if rec.iD==clickActivityID then rec.clickMe="js-clickMe"
+			activitiesTbl.push(rec)
 			if type.isFinances #item.typeID in finIDs 
 				switch type.tmp
 					when "tmpAddDamageCA","tmpAddDamageKASKO" then me.finDamageTbl.addObject(me.fnMapDamageRecord(item,type.typeTitle))
@@ -311,8 +325,8 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 		DataToSave=oCONTROLS.ValidateForm(form,addData)
 		if not DataToSave and e.isTrigger then oCONTROLS.dialog.Alert( title:'Veiksmo išsaugojimas',msg:'Užpildykite pažymėtus laukus..')
 		if DataToSave
-			CallBackAfter=(Row)->
-					if Row.typeID==14 then me.claim.claimStatus=1; me.fnStepForward(2) #Įvedė, kad pranešė draudikui
+			CallBackAfter=(Row,Action,resp,updData)->
+					if Row.typeID==14 then me.claim.claimStatus=1; me.stepVal[0]=Row.date.replace(":00",""); me.fnStepForward(1); #Įvedė, kad pranešė draudikui
 					if execOnSuccess then execOnSuccess(Row,form) else me.cancelForm();
 					me.setActivitiesTables() #galim ir fnMapActivitiesRecord(Row) nes grazina naują record'ą
 			SERVER.update2(Action:Action,DataToSave:DataToSave,Ctrl:form,source:formOpts.Source,CallBackAfter:CallBackAfter)
@@ -462,8 +476,12 @@ App.TabClaimsRegulationView = Ember.View.extend(#App.HidePreviousWindow,
 		#Em.run.next(@,->@controller.setSteps();)#have to set steps on the end as it uses numbers from setActivitiesTable().setFinancesTables()
 		@controller.setSteps()
 	templateName: 'tmpClaimRegulation'
-	didInsertElement: ()->
+	didInsertElement: ->
 		@_super(); ctrl=@controller; ctrl.cancelForm(); ctrl.claimStatusBefore=ctrl.claim.claimStatus #used for claimStatus control
+		Em.run.next(@,->
+			ctrl=App.tabClaimsRegulationController #Jei buvo clickinta ant veiksmo, paklickinam, kad jis ten atsistotų
+			if ctrl.clickActivityID then @.$().find("table tr.js-clickMe").trigger("click");ctrl.clickActivityID=null
+		);
 		#------------------step boxes-----------------------------------------------------------
 		me=@; stepBox={}; 
 		@.$().find("#claimsSteps").on('click','a',(e)->#Patvirtinimo iškvietimas arba atšaukimas
@@ -477,14 +495,13 @@ App.TabClaimsRegulationView = Ember.View.extend(#App.HidePreviousWindow,
 					# span=stepBox.find("span.value")
 					# input=if span.length then span.html() else oGLOBAL.date.getTodayString()
 					ctrl.fnConfirm(stepBox,stepNo)
-					if stepNo==2 then Em.run.next(@,->stepBox.find("input.date").inputControl(type:'Date').datepicker();) #Informacija draudikui įdedam data
+					if stepNo==2 then Em.run.next(@,->stepBox.find("input.date").inputControl(type:'Date').val(oGLOBAL.date.getTodayString()).datepicker(minDate:'-3y',maxDate:"0");) #Informacija draudikui įdedam data
 
 			false
 		).on('click','button',(e)->#Patvirtinimas
 			stepNo=$(e.target).closest("div.step-box.current").data("stepno");
 			if stepNo+1==1 then stepVal=stepBox.find("input.date").val();ctrl.stepVal[stepNo+1]=stepVal
-			ctrl.fnStepForward(stepNo);
-			stepBox.find("div.step-box-addon").slideUp('slow').remove()
+			if ctrl.fnStepForward(stepNo) then stepBox.find("div.step-box-addon").slideUp('slow').remove()
 			false
 		).on('click','a.js-cancel-addon',(e)->#Atšaukimas
 			stepBox.find("div.step-box-addon").slideUp('slow').remove()

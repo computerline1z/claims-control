@@ -14,6 +14,10 @@ App.Router = Em.Router.extend({
 		viewAccidents: Em.State.transitionTo('tabAccidents'),
 		viewClaims: function(router,e) {
 			if (e.context){
+				if (e.target.tagName.toUpperCase()==="A"){
+					var iD=$(e.target).data("id");
+					if (iD){console.log("ActivityID: "+ iD);App.tabClaimsRegulationController.clickActivityID=iD;}
+				}
 				if (!e.context.claimNo){e.context.claimNo=e.context.accident.no+"-"+e.context.no;}//Nr reikalingas routu atvaizdavimui
 				router.transitionTo('claimRegulation',e.context);
 			}
@@ -160,4 +164,14 @@ $(function() {
 				// function(data) {console.log(data);});
 		// },30000);
 	});
+	/*(function(){ //reload at 6 in the morning
+		var upTime=6, now=new Date(),minsLeft=(24-now.getHours()+upTime)*60-(60-now.getMinutes());
+		console.log("Mins left: "+minsLeft);
+		var milSecs=minsLeft*60000;
+		console.log("milSecs left: "+milSecs);
+		setTimeout(function(){
+			console.log("reloading");
+			location.reload();
+		}, milSecs);
+	}());*/
 });

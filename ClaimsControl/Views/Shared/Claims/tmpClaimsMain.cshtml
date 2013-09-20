@@ -4,9 +4,9 @@
 		{{view App.SearchField controller="claimsController"}}
 	</div>
 
-	<div class="pull-right">
+	@*<div class="pull-right">
 		<a class="medium" {{action "showNotDefinedEmails"  target="view"}}>Yra gautų el. laiškų kurie nepriskirti žaloms</a>
-	</div>
+	</div>*@
 
 </div><!-- container -->
 
@@ -16,7 +16,7 @@
 	{{#each "App.claimsController.content"}}
 		{{#if this.visible}}
 			{{#compare claimTypeID "!==" "6"}}
-				<div {{action viewClaims this}} class="tr accident">
+				<div {{action viewClaims this}} {{bindAttr class=":tr :accident warningClass"}}>
 					{{view App.ClaimView}}
 				</div>
 			{{/compare}}

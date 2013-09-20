@@ -1,16 +1,15 @@
-﻿<div class="content box-1pr-btm">
+﻿{{log claim}}
+<div class="content box-1pr-btm">
 {{#with claim as claimView}}
 {{#with claim}}
 	<h2>Žala nr. {{accident.no}}-{{no}}, {{claimType.name}}, 
-		{{#if insPolicy.insurerName}} {{insPolicy.insurerName}} {{else}} Neapdrausta {{/if}}
+		{{#if insPolicyID}} {{insPolicy.insurerName}} {{else}} Neapdrausta {{/if}}
 	</h2><a  {{action goToList}} class="link-back">(atgal į Žalų sąrašą)</a>
 	<h4>{{vehicle.plate}}, {{accident.driver}}</h4>
 
 	<div class="claims" id="claimsSteps">
 		<div class="line"></div>
 		{{#each steps}}
-		{{log this}}
-		{{log claimView}}
 			<div {{bindAttr class=":step-box first:first alert:alert step"}} {{bindAttr data-stepno="stepNo"}}>
 				<div class="step-box-header">
 					<div class="num">{{#if claimView.insPolicyID}}{{stepNo}}{{else}}{{stepNo2}}{{/if}}.</div>
@@ -20,9 +19,6 @@
 					<div class="inner">{{{content}}}</div>
 				</div>
 			</div>
-
-
-
 		{{/each}}
 	</div>
 {{/with}}
@@ -33,7 +29,7 @@
 			{{#if activitiesTbl}}
 			<table class="zebra-striped"><thead><tr><th>&nbsp;</th><th>Data</th><th>Kas</th><th>Kam</th><th>Info</th><th>Priedai</th></tr></thead><tbody>
 				{{#each activitiesTbl}}	
-					<tr {{action goToOtherView this}} class="clickable"><td><i class="img18-{{unbound icon}}"></i></td><td>{{entryDate}}</td><td>{{fromOnlyTbl}}</td><td>{{to}}</td><td>{{infoOnlyTbl}}</td><td>{{docs}}</td></tr>
+					<tr {{action goToOtherView this}} class="clickable {{unbound clickMe}}"><td><i class="img18-{{unbound icon}}"></i></td><td>{{entryDate}}</td><td>{{fromOnlyTbl}}</td><td>{{to}}</td><td>{{infoOnlyTbl}}</td><td>{{docs}}</td></tr>
 				{{/each}}
 			</tbody></table>
 			{{/if}}

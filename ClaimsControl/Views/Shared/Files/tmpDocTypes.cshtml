@@ -1,10 +1,10 @@
-﻿<fieldset class="ui-corner-all fieldSetBorder w90pr centerBlock" style="padding:0 20px 10px;">
+﻿{{#if catOpts.accident}}
+<fieldset class="ui-corner-all fieldSetBorder w90pr centerBlock" style="padding:0 20px 10px;">
 	<legend class="pad-b0 pad-hor4">Įvykio dokumentų tipai</legend>
 	{{log this}}
 	{{#each App.docsTypesController.docTypes_accident}}
 
 		{{#if this.edit}} 
-
 			<div class="clearfix docType pad-t10 js">
 				<input {{bindAttr value="name" }} class="col seven" type="text">
 				<div class="col last links-group">
@@ -12,7 +12,6 @@
 					<button class="btn btn-link" {{action cancelDocType this}}>Atšaukti</button>
 				</div>
 			</div>
-		
 		{{else}}
 			<div class="docType content">
 				<div style="float:left">{{name}}</div>		
@@ -22,7 +21,6 @@
 				</div>
 			</div>
 		{{/if}}
-
 	{{/each}}
 	{{#if this.addNewType2}}
 
@@ -34,15 +32,14 @@
 				<button class="btn small" data-category-id="2" {{action cancelNewDocType}}>Atšaukti</button>
 			</div>
 		</div>
-	
 	{{else}}
-
 		<a style="line-height:30px;" {{action addNewDocType}} data-category-id=2 >Pridėti dokumento tipą</a>
-
 	{{/if}}
 </fieldset>
 </br>
+{{/if}}
 
+{{#if catOpts.driver}}
 <fieldset class="ui-corner-all fieldSetBorder w90pr centerBlock" style="padding:0 20px 10px;">
 	<legend class="pad-b0 pad-hor4">Vairuotojų dokumentų tipai</legend>
 	{{#each App.docsTypesController.docTypes_driver}}
@@ -55,7 +52,6 @@
 				<button class="btn btn-link" {{action cancelDocType this}}>Atšaukti</button>
 			</div>
 		</div>
-		
 		{{else}}
 			<div class="docType content">
 				<div style="float:left">{{name}}</div>		
@@ -67,7 +63,6 @@
 		{{/if}}
 	{{/each}}
 	{{#if this.addNewType3}} 
-
 		<div class="clearfix pad-t10 js">
 			<input Placeholder="Įveskite naują tipą" type="text" data-category-id="3">
 
@@ -76,14 +71,14 @@
 				<button class="btn small" data-category-id="3" {{action cancelNewDocType}}>Atšaukti</button>
 			</div>
 		</div>
-	
 	{{else}}
 		<a style="line-height:30px;" {{action addNewDocType}} data-category-id=3 >Pridėti dokumento tipą</a>
 	{{/if}}
-
 </fieldset>
 </br>
+{{/if}}
 
+{{#if catOpts.vehicles}}
 <fieldset class="ui-corner-all fieldSetBorder w90pr centerBlock" style="padding:0 20px 10px;">
 	<legend class="pad-b0 pad-hor4">Transporto priemonių dokumentų tipai</legend>
 	{{#each App.docsTypesController.docTypes_vehicle}}
@@ -96,7 +91,6 @@
 				<button class="btn btn-link" {{action cancelDocType this}}>Atšaukti</button>
 			</div>
 		</div>
-		
 		{{else}}
 			<div class="docType content">
 				<div style="float:left">{{name}}</div>		
@@ -108,19 +102,17 @@
 		{{/if}}
 	{{/each}}
 	{{#if this.addNewType4}} 
-
 		<div class="clearfix pad-t10 js">
 			<input Placeholder="Įveskite naują tipą" type="text" data-category-id="4">
-
 			<div class="col last links-group">
 				<button class="btn small" {{action saveNewDocType}}>Išsaugoti</button>
 				<button class="btn small" data-category-id="4" {{action cancelNewDocType}}>Atšaukti</button>
 			</div>
 		</div>
-	
 	{{else}}
 		<a style="line-height:30px;" {{action addNewDocType}} data-category-id=4 >Pridėti dokumento tipą</a>
 	{{/if}}
 </fieldset>
 </br>
+{{/if}}
 <div style="text-align:center;margin:20px;"><button class="btn" {{action closeDialog}}>Uždaryti</button></div>

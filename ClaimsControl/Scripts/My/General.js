@@ -530,11 +530,12 @@ oGLOBAL.date = {
 	dateFormat: "yyyy.mm.dd",//$.datepicker.formatDate('yy.mm.dd', new Date())
 	dateDelimiter: ".",
 	getTodayString: function () {
-		var d = new Date();
-		this.checkFormat();
-		return d.getFullYear() + this.dateDelimiter +
-		 ((d.getMonth() <= 9) ? '0' + (d.getMonth() + 1) : (d.getMonth() + 1)) + this.dateDelimiter +
-		 ((d.getDate() <= 9) ? '0' + d.getDate() : d.getDate());
+		return moment().format(oDATA.GET("userData").emData[0].dateFormat);
+		// var d = new Date();
+		// this.checkFormat();
+		// return d.getFullYear() + this.dateDelimiter +
+		 // ((d.getMonth() <= 9) ? '0' + (d.getMonth() + 1) : (d.getMonth() + 1)) + this.dateDelimiter +
+		 // ((d.getDate() <= 9) ? '0' + d.getDate() : d.getDate());
 	},
 	getDate: function (stringDate) {
 		// accepts a date in the format 2011-01-01 (year, month, day)

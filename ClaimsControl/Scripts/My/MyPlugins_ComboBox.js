@@ -350,6 +350,7 @@
 
         dialogID = "dialog" + (+(new Date));
         return MY[dialogID] = JQ.Dialog.create({
+          catOpts: opts.categoryOpts,
           dialogID: dialogID,
           title: "Redaguoti sąrašą",
           title2: "Dokumentų tipai",

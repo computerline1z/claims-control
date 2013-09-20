@@ -92,7 +92,8 @@ namespace CC.Models {
             UserData.AccountID,//1
 				UserData.UserID,
 				UserData.UserName,
-				UserData.DocsPath
+				UserData.DocsPath,
+				"YYYY.MM.DD"
             }};
 			object[] Cols ={
             new { FName = "Account"},//0
@@ -100,6 +101,7 @@ namespace CC.Models {
             new { FName = "UserID"},//1
             new { FName = "UserName"},//1
 				new { FName = "DocsPath"},//1
+				new { FName = "DateFormat"},//1
             }; JSON.Cols = Cols;
 			//JSON.Config = new { Controler = "Main", tblUpdate = "tblDocsInAccidents" };
 			return JSON;
@@ -703,9 +705,9 @@ namespace CC.Models {
 				p.ClaimTypeID,//10
 				p.InsurerID,//11
 				p.MailsAddresses,
-				p.Warn_InfoAfterAcc,
-				p.Warn_PaymentAfterPapers,
-				p.Warn_SystemOfPayTerm
+				p.warn_DocsAfterAccTerm,
+				p.warn_DocsSupplyTermExpire,
+				p.warn_PaymentTerm
 			};
 			object[] Cols ={//NotEditable=true // Unique=true// LenMax/LenEqual/LenMin:10
 				//Date,DateLess,DateNoLess,Time,String
@@ -725,9 +727,9 @@ namespace CC.Models {
 				new { FName = "InsurerID",List=new{Source="tblInsurers",Editable=new{EditList=true},ListType="List", iVal="iD",iText=new object []{"name"}}},//11
 				new { FName = "MailsAddresses",Type="String", Tip="Įveskite draudiko ar kitus el. pašto adresus (atskirdami juos kableliu ar kabliataškiu)", LenMax=250,Validity="nonHtml().maxLength(250)"},//5
 
-				new { FName = "Warn_InfoAfterAcc",Type="Integer",Validity="require().match('integer').maxLength(4).greaterThanOrEqualTo(0)"},//6
-				new { FName = "Warn_PaymentAfterPapers",Type="Integer",Validity="require().match('integer').maxLength(4).greaterThanOrEqualTo(0)"},//7
-				new { FName = "Warn_SystemOfPayTerm",Type="Integer",Validity="require().match('integer').maxLength(4).greaterThanOrEqualTo(0)"},//8
+				new { FName = "warn_DocsAfterAccTerm",Type="Integer",Validity="require().match('integer').maxLength(4).greaterThanOrEqualTo(0)"},//6
+				new { FName = "warn_DocsSupplyTermExpire",Type="Integer",Validity="require().match('integer').maxLength(4).greaterThanOrEqualTo(0)"},//7
+				new { FName = "warn_PaymentTerm",Type="Integer",Validity="require().match('integer').maxLength(4).greaterThanOrEqualTo(0)"},//8
 								}; JSON.Cols = Cols;
 			JSON.Config = new { Controler = "InsPolicy", tblUpdate = "tblInsPolicies", titleFields = new object[] { "policyNumber", "insurerName" }, Msg = new { AddNew = "Naujos draudimo sutarties sukūrimas", Edit = "Draudimo sutarties redagavimas", Delete = "Ištrinti draudimo sutartį", GenName = "Draudimo sutartis", GenNameWhat = "draudimo polisą", ListName = "Draudimo sutarčių sąrašas" } };
 			JSON.Grid = new {

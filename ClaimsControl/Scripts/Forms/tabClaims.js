@@ -46,15 +46,93 @@
 
   App.claimsController = Em.ArrayController.create({
     setClaimContext: function(claim) {
+      var claimID;
+
+      claimID = claim.iD;
       claim.set("accident", oDATA.GET("proc_Accidents").emData.findProperty("iD", claim.accidentID));
       claim.set("claimType", oDATA.GET("tblClaimTypes").emData.findProperty("iD", claim.claimTypeID));
       claim.set("vehicle", oDATA.GET("proc_Vehicles").emData.findProperty("iD", claim.vehicleID));
       claim.set("insPolicy", oDATA.GET("proc_InsPolicies").emData.findProperty("iD", claim.insPolicyID));
+      claim.set("activities", oDATA.GET("proc_Activities").emData.filter(function(a) {
+        return a.claimID === claimID;
+      }));
       $.extend(claim, {
         insurerID: claim.insPolicy.insurerID,
         daysFrom: claim.accident.daysFrom,
         date: claim.accident.date
       });
+      this.getWarnings(claim);
+      return false;
+    },
+    getWarnings: function(claim) {
+      var X, ctrl, dateFormat, daysAfterDocs, fnGetUser, red, tasks, warnings;
+
+      warnings = {};
+      tasks = [];
+      dateFormat = App.userData.dateFormat;
+      red = false;
+      ctrl = App.tabClaimsRegulationController;
+      fnGetUser = ctrl.fnGetUser;
+      if (claim.insPolicyID) {
+        if (claim.claimStatus === 0) {
+          warnings = {
+            notifyOfClaim: true
+          };
+          red = true;
+        } else if (claim.claimStatus < 2) {
+          X = moment().diff(moment(claim.date, dateFormat), 'days');
+          if (X < 0) {
+            warnings = {
+              notifyOfDocs: {
+                expired: math.abs(X)
+              }
+            };
+            red = true;
+          } else if (X === 0) {
+            warnings = {
+              notifyOfDocs: {
+                today: true
+              }
+            };
+            red = true;
+          } else if (X - claim.insPolicy.warn_DocsSupplyTermExpire < 1) {
+            warnings = {
+              notifyOfDocs: {
+                leftDays: X
+              }
+            };
+            red = true;
+          }
+        } else {
+          daysAfterDocs = moment().diff(moment(claim.date, dateFormat), "days");
+          if (daysAfterDocs > claim.insPolicy.warn_PaymentTerm) {
+            warnings.noPayment = daysAfterDocs;
+          }
+        }
+      }
+      claim.activities.forEach(function(a) {
+        var obj;
+
+        if (a.typeID === 3) {
+          obj = {
+            date: a.date,
+            user: fnGetUser.call(ctrl, a.userID),
+            subject: a.subject,
+            iD: a.iD
+          };
+          if (moment().diff(moment(a.date, dateFormat), "days") > 0) {
+            red = true;
+            obj.red = true;
+          }
+          return tasks.addObject(obj);
+        }
+      });
+      if (tasks.length) {
+        warnings.tasks = tasks;
+      }
+      if (!$.isEmptyObject(warnings)) {
+        claim.set("warnings", warnings).set("warningClass", (red ? "red-border" : "yellow-border"));
+      }
       return false;
     },
     addNewAccident: function() {
