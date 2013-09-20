@@ -281,6 +281,7 @@ $.widget "ui.ComboBoxCategory", $.ui.ComboBox,
 			#console.log(opts)
 			dialogID="dialog"+(+new Date)#kad nesipjautų dialogai
 			MY[dialogID]=JQ.Dialog.create( #MY.dialog needed to destroyElement in ui-ember.js	
+				catOpts: opts.categoryOpts
 				dialogID: dialogID
 				title:"Redaguoti sąrašą"
 				title2: "Dokumentų tipai"				

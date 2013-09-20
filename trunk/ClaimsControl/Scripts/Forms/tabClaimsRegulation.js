@@ -37,11 +37,20 @@
       }
     ],
     setSteps: function() {
-      var claim, fnGetContent, newSteps, reached, s, s1, s2, sConfirm, sTemp, sVal, today;
+      var claim, fnGetContent, newSteps, reached, s, s1, s2, sConfirm, sTemp, sVal, stepVal, today;
 
       claim = this.claim;
       today = oGLOBAL.date.getTodayString();
-      this.set('stepVal', [today, today, claim.lossAmount, claim.insuranceClaimAmount, '']);
+      stepVal = [today, today, claim.lossAmount, claim.insuranceClaimAmount, ''];
+      if (claim.insPolicyID) {
+        if (claim.claimStatus > 0) {
+          stepVal[0] = claim.dateNotification;
+        }
+        if (claim.claimStatus > 1) {
+          stepVal[1] = claim.dateDocsSent;
+        }
+      }
+      this.set('stepVal', stepVal);
       /*	
       		sTemp=@stepsTemp;
       */
@@ -143,7 +152,7 @@
       };
     },
     fnStepForward: function(stepNo) {
-      var addField, dF, fn, idx, s, stepVal, updAccidents;
+      var addField, dF, dateFormat, dateInput, error, fn, idx, s, stepVal, updAccidents, val;
 
       if (this.claim.claimStatus === 0) {
         this.replaceActivityView(this.activityTypes.findProperty("name", "activity_notifyInsurer"));
@@ -152,6 +161,23 @@
       stepVal = this.stepVal;
       s = this.fnGetSteps(stepNo);
       idx = stepNo - 1;
+      dateInput = $("#claimsSteps").find(".step-box-addon").find("input.date");
+      if (dateInput.length) {
+        dateInput.parent().find("div.validity-tooltip").remove();
+        val = dateInput.val();
+        dateFormat = App.userData.dateFormat;
+        error = "";
+        if (!val) {
+          error = "Netinkamas datos formatas. Pakeiskite į tokį " + dateFormat;
+        } else if (moment().diff(val, "days") < 0) {
+          error = "Data turi būt mažesnė už šiandieną - " + oGLOBAL.date.getTodayString();
+        }
+        if (error) {
+          dateInput.css("border-color", "#eb5a44").parent().append("<div class='validity-tooltip'>" + error + "</div>");
+          return false;
+        }
+        stepVal[1] = val;
+      }
       fn = this.fnUpdateStep;
       fn.call(this, s.currStep, 'completed', 'stepsCont2', 'cancel');
       fn.call(this, s.nextStep, 'current', 'stepsCont1', 'cancel');
@@ -231,7 +257,6 @@
         source: "proc_Claims",
         row: this.claim,
         CallBackAfter: function(Row, Action, resp) {
-          console.log("updAccidents: " + updAccidents);
           if (updAccidents) {
             return App.claimEditController.fnUpdateAccident(resp);
           }
@@ -337,7 +362,7 @@
       });
     }).observes('finOtherPartyTbl.@each'),
     setActivitiesTables: function(newDocNo) {
-      var activities, activitiesTbl, activityTypes, claimID, me;
+      var activities, activitiesTbl, activityTypes, claimID, clickActivityID, me;
 
       this.set("finDamageTbl", []).set("finInsurerTbl", []).set("finOtherPartyTbl", []);
       claimID = this.claim.iD;
@@ -352,11 +377,18 @@
       });
       me = this;
       activitiesTbl = [];
+      clickActivityID = App.tabClaimsRegulationController.clickActivityID;
       activities.forEach(function(item) {
-        var type;
+        var rec, type;
 
         type = activityTypes.findProperty("typeID", item.typeID);
-        activitiesTbl.push(me.fnMapActivitiesRecord(item, type));
+        rec = me.fnMapActivitiesRecord(item, type);
+        if (clickActivityID) {
+          if (rec.iD === clickActivityID) {
+            rec.clickMe = "js-clickMe";
+          }
+        }
+        activitiesTbl.push(rec);
         if (type.isFinances) {
           switch (type.tmp) {
             case "tmpAddDamageCA":
@@ -588,10 +620,11 @@
         });
       }
       if (DataToSave) {
-        CallBackAfter = function(Row) {
+        CallBackAfter = function(Row, Action, resp, updData) {
           if (Row.typeID === 14) {
             me.claim.claimStatus = 1;
-            me.fnStepForward(2);
+            me.stepVal[0] = Row.date.replace(":00", "");
+            me.fnStepForward(1);
           }
           if (execOnSuccess) {
             execOnSuccess(Row, form);
@@ -856,6 +889,13 @@
       ctrl = this.controller;
       ctrl.cancelForm();
       ctrl.claimStatusBefore = ctrl.claim.claimStatus;
+      Em.run.next(this, function() {
+        ctrl = App.tabClaimsRegulationController;
+        if (ctrl.clickActivityID) {
+          this.$().find("table tr.js-clickMe").trigger("click");
+          return ctrl.clickActivityID = null;
+        }
+      });
       me = this;
       stepBox = {};
       this.$().find("#claimsSteps").on('click', 'a', function(e) {
@@ -876,7 +916,10 @@
               Em.run.next(this, function() {
                 return stepBox.find("input.date").inputControl({
                   type: 'Date'
-                }).datepicker();
+                }).val(oGLOBAL.date.getTodayString()).datepicker({
+                  minDate: '-3y',
+                  maxDate: "0"
+                });
               });
             }
           }
@@ -890,8 +933,9 @@
           stepVal = stepBox.find("input.date").val();
           ctrl.stepVal[stepNo + 1] = stepVal;
         }
-        ctrl.fnStepForward(stepNo);
-        stepBox.find("div.step-box-addon").slideUp('slow').remove();
+        if (ctrl.fnStepForward(stepNo)) {
+          stepBox.find("div.step-box-addon").slideUp('slow').remove();
+        }
         return false;
       }).on('click', 'a.js-cancel-addon', function(e) {
         stepBox.find("div.step-box-addon").slideUp('slow').remove();

@@ -202,6 +202,7 @@ var oDATA = Ember.Object.create({
 							objName=(p.name)?p.name: objName;//obj pavadinimas
 							setter.call(me, objName, value); 
 							emBuilder.call(me, { newData: value.Data, tblName:objName, toAppend: true }); //{oData, toAppend:{"sort":"asc/desc","col":"date"}}
+							if (objName==="userData"){App.userData=oDATA.GET("userData").emData[0];}//dėl patogumo
 						});
 					}
 					if (json.templates) {
@@ -453,7 +454,7 @@ var SERVER = {
 				}
 			}
 			Em.run.next(function () { $("img.spinner").remove(); });
-			if (p.CallBackAfter) { p.CallBackAfter(Row,updData.Action,resp); }
+			if (p.CallBackAfter) { p.CallBackAfter(Row,updData.Action,resp,updData); }
 		}
 		};
 		$.extend(p, { CallBack: CallBack });

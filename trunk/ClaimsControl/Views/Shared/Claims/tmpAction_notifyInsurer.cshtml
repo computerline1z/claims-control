@@ -1,14 +1,11 @@
 ﻿{{#if notEditable}}
 	<h2 class="tableTitle marginLeft0">{{subject}}</h2>
-	<hr class="borderDotted boxForDialog"/>
+	<hr class="borderBottomDotted boxForDialog"/>
 	<div class="row marginBottom0">
 		<span class="first"><span class="comment">Įvedė: </span>{{unbound userName}}, {{entryDate}}</span>
 	</div>
 	<div class="row marginBottom0">
-		<span><span class="comment">Data: </span>{{unbound date}}</span>
-	</div>
-	<div class="row marginBottom0">
-	{{unbound subject}}
+		<span><span class="comment">Pranešimo laikas: </span>{{unbound claim.dateNotification}}</span>
 	</div>
 	{{view App.FormBottomView target="App.tabClaimsRegulationController"}}
 {{else}}

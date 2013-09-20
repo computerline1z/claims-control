@@ -30,11 +30,35 @@ App.ClaimView = Em.View.extend(
 )
 App.claimsController = Em.ArrayController.create(
 	setClaimContext: (claim)->
+		claimID=claim.iD
 		claim.set("accident",oDATA.GET("proc_Accidents").emData.findProperty("iD", claim.accidentID))
 		claim.set("claimType",oDATA.GET("tblClaimTypes").emData.findProperty("iD", claim.claimTypeID))
 		claim.set("vehicle",oDATA.GET("proc_Vehicles").emData.findProperty("iD", claim.vehicleID))
 		claim.set("insPolicy",oDATA.GET("proc_InsPolicies").emData.findProperty("iD", claim.insPolicyID))
+		claim.set("activities",oDATA.GET("proc_Activities").emData.filter((a)->a.claimID==claimID))
 		$.extend(claim, {insurerID:claim.insPolicy.insurerID, daysFrom:claim.accident.daysFrom, date:claim.accident.date}) #greičio padidinimui dedam tiesiai
+		@getWarnings(claim); false
+	getWarnings: (claim)->
+		warnings={};tasks=[];dateFormat=App.userData.dateFormat; red=false ;
+		ctrl=App.tabClaimsRegulationController; fnGetUser=ctrl.fnGetUser
+		if claim.insPolicyID #claim.insPolicyID=0, kai neapdrausta
+			if claim.claimStatus==0 then warnings={notifyOfClaim:true}; red=true
+			else if claim.claimStatus<2
+				X=moment().diff(moment(claim.date,dateFormat),'days')#kiek dienu praėjo nuo įvykio
+				if X<0 then warnings=notifyOfDocs:{expired:math.abs(X)}; red=true#baigėsi laikas
+				else if X==0 then warnings=notifyOfDocs:{today:true}; red=true #šiandien baigiasi
+				else if X-claim.insPolicy.warn_DocsSupplyTermExpire<1 then warnings=notifyOfDocs:{leftDays:X}; red=true #liko mažiau nei nurodyta ir jau reikia perspėt
+			else #claim.claimStatus==2 ir daugiau
+				daysAfterDocs=moment().diff(moment(claim.date,dateFormat),"days")
+				if daysAfterDocs>claim.insPolicy.warn_PaymentTerm then warnings.noPayment=daysAfterDocs
+		claim.activities.forEach((a)->
+			if a.typeID==3
+				obj=date:a.date,user:fnGetUser.call(ctrl, a.userID),subject:a.subject,iD:a.iD
+				if moment().diff(moment(a.date,dateFormat),"days")>0 then red=true; obj.red=true
+				tasks.addObject(obj); 
+		)
+		if tasks.length then warnings.tasks=tasks
+		if not $.isEmptyObject(warnings) then claim.set("warnings",warnings).set("warningClass",(if red then "red-border" else "yellow-border"))
 		false
 	addNewAccident: ->
 		this.openAccident(null)
