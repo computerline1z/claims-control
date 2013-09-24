@@ -152,7 +152,7 @@
       };
     },
     fnStepForward: function(stepNo) {
-      var addField, dF, dateFormat, dateInput, error, fn, idx, s, stepVal, updAccidents, val;
+      var addField, dF, dateInput, fn, idx, s, stepVal, updAccidents;
 
       if (this.claim.claimStatus === 0) {
         this.replaceActivityView(this.activityTypes.findProperty("name", "activity_notifyInsurer"));
@@ -163,17 +163,7 @@
       idx = stepNo - 1;
       dateInput = $("#claimsSteps").find(".step-box-addon").find("input.date");
       if (dateInput.length) {
-        dateInput.parent().find("div.validity-tooltip").remove();
-        val = dateInput.val();
-        dateFormat = App.userData.dateFormat;
-        error = "";
-        if (!val) {
-          error = "Netinkamas datos formatas. Pakeiskite į tokį " + dateFormat;
-        } else if (moment().diff(val, "days") < 0) {
-          error = "Data turi būt mažesnė už šiandieną - " + oGLOBAL.date.getTodayString();
-        }
-        if (error) {
-          dateInput.css("border-color", "#eb5a44").parent().append("<div class='validity-tooltip'>" + error + "</div>");
+        if (dateInput.data("notValid")) {
           return false;
         }
         stepVal[1] = val;
@@ -571,7 +561,7 @@
               case "tmpAddCompensation":
                 obj = "finOtherPartyTbl";
             }
-            (function(obj, objActivitiesddd) {
+            (function(obj, objActivities) {
               var r, r2;
 
               if (obj) {
@@ -915,7 +905,8 @@
             if (stepNo === 2) {
               Em.run.next(this, function() {
                 return stepBox.find("input.date").inputControl({
-                  type: 'Date'
+                  type: 'Date',
+                  Validity: 'less'
                 }).val(oGLOBAL.date.getTodayString()).datepicker({
                   minDate: '-3y',
                   maxDate: "0"

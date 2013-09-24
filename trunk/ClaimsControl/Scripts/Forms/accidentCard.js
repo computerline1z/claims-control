@@ -252,7 +252,8 @@ oGLOBAL.mapFn = {
 	},
 	addAddressToMap: function (results, status) {//Naudojamas vietovardžių paieškai
 		if (status == google.maps.GeocoderStatus.OK) {
-			oGLOBAL.map.setCenter(results[0].geometry.location);
+			//oGLOBAL.map.setCenter(results[0].geometry.location);
+			oGLOBAL.map.fitBounds(results[0].geometry.viewport);
 			var marker = new google.maps.Marker({
 				map: oGLOBAL.map, position: results[0].geometry.location
 			});

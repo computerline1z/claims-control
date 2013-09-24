@@ -10,7 +10,7 @@
 	{{view App.FormBottomView target="App.tabClaimsRegulationController"}}
 {{else}}
 	<div class="row">	
-		<div class='ExtendIt col seven date-time-select' data-ctrl='{"Field":"Date","labelType":"Left","sTitle":"Pranešimo data","Type":"DateTimeLess","Default":"Today", "classes":{"input":"w70prImportant"}, "Plugin":{"datepicker":{"minDate":"-3y","maxDate":"0"}}}'></div>
+		<div class='ExtendIt col seven date-time-select' data-ctrl='{"Field":"Date","labelType":"Left","sTitle":"Pranešimo data","Type":"DateTimeLess","Default":"Today", "classes":{"input":"w70prImportant"},"Validity":"require().match(\"date\").lessThanOrEqualTo(new Date())", "Plugin":{"datepicker":{"minDate":"-3y","maxDate":"0"}}}'></div>
 	</div>	
 	<div class="row">	
 		{{updatableField subject sTitle="Komentaras" labelType="Left" classes="wrapper:row, span:'col three', input:'col nine'"}}

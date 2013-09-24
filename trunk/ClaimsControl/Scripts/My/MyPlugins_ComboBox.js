@@ -115,6 +115,7 @@
           }
           if (ui.item.id === -1) {
             App.listAllController.editListItems(input, event);
+            return false;
           } else if (ui.item.id === -2) {
             fnEditItem(0, null, event);
             return false;
@@ -277,6 +278,7 @@
         }, input);
       }
       if (opt.ListType === "List") {
+        input.attr("readonly", true);
         return input.click(function() {
           if (input.autocomplete("widget").is(":visible")) {
             input.autocomplete("close");
@@ -525,6 +527,9 @@
             return renderGroup(me, ul, [categoryOpts.accident], docTypes, catItem.iD);
           }
         });
+        if (categoryOpts.editList) {
+          $("<li class='ui-autocomplete-category editCategories'><a >Redaguoti sąrašą</a></li>").appendTo(ul);
+        }
         me._renderItemData(ul, {
           id: function(target) {
             return widget.options.editList(widget.options);

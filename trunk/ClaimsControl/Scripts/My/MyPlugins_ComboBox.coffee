@@ -62,9 +62,9 @@ _create: ->
 
 		select: (event, ui) ->
 			if typeof ui.item.id=="function" then ui.item.id(); return false#jei id yra funkcija executinam ir iseinam	
-			if ui.item.id==-1 #taip žymim redagavimą
-				App.listAllController.editListItems(input, event)
-			else if ui.item.id==-2 #taip žymim naujo pridėjimą
+			if ui.item.id==-1 #taip žymim redagavimą (pvz Redaguoti vilkikų sąrašą)
+				App.listAllController.editListItems(input, event); return false
+			else if ui.item.id==-2 #taip žymim naujo pridėjimą (dabar nėra naudojamas)
 				fnEditItem(0,null,event)
 				# Source=$(event.target).data("ctrl").Source				
 				# if Source=="tblVehicleMakes" then App.listAllController.addVehicleMake(input, event) #App.listAllController.set("addMakeMode",true) #modelio pridėjimas
@@ -203,6 +203,7 @@ _create: ->
 		, input
 	
 	if opt.ListType is "List"
+		input.attr "readonly", true
 		input.click ->
 			if input.autocomplete("widget").is(":visible")
 				input.autocomplete "close"
@@ -350,8 +351,8 @@ $.widget "ui.ComboBoxCategory", $.ui.ComboBox,
 				else if (catItem.ref==4 and categoryOpts.vehicles) then renderGroup(me,ul,categoryOpts.vehicles,docTypes,catItem.iD)
 				else if (catItem.ref==2 and categoryOpts.accident) then renderGroup(me,ul,[categoryOpts.accident],docTypes,catItem.iD)
 			)
-			#if categoryOpts.editList
-				#$( "<li class='ui-autocomplete-category editCategories'><a >Redaguoti sąrašą</a></li>" ).appendTo(ul)
+			if categoryOpts.editList #Naudojamas redaguoti pvz vehicle tipus
+				$( "<li class='ui-autocomplete-category editCategories'><a >Redaguoti sąrašą</a></li>" ).appendTo(ul)
 			me._renderItemData(ul, {
 			id:(target)-> widget.options.editList(widget.options),
 			label:"Redaguoti sarašą",value:"Redaguoti sarašą"})

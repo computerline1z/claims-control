@@ -16,27 +16,21 @@
 		</div>
 	</div>
 	<div class="lineTop filtergroup" id="chkYears"><h4>Rodyti įvykius, atitinkančius datą:</h4>
-	<input type="checkbox" name="chkYears" id="chk_12month"/><label for="chk_12month"> Paskutiniai 12 men</label>
-		{{#each "App.sidePanelController.years"}}
-		{{log this}}
+		<input type="checkbox" name="chkYears" id="chk_12month"/><label for="chk_12month"> Paskutiniai 12 men</label>
+		{{#each years}}
 		<input type="checkbox" name="checkbox" id={{unbound chkId}} /><label for={{unbound chkId}}>{{unbound year}} metai</label>
 		{{/each}}
 	</div>    
+
 	<div class="lineTop filtergroup" id="chkClaimsTypes"><h4>Rodyti įvykius, turinčius šio tipo žalas:</h4>
-		{{#each "App.sidePanelController.claimTypes"}}
+		{{#each claimTypes}}
+		{{log this}}
 		{{#if this.visible}}
 			<input type="checkbox" name="checkbox" id={{unbound chkId}} /><label for={{unbound chkId}}>{{unbound name}}</label>
 		{{/if}}
 		{{/each}}
 	</div>
-</div>	
-@*
-<div class="lineTop filtergroup" >
-	<span>Anima. greitis (end,start):</span>
-	<input type="text" value="400" style="display:inline-block;width:45%" data-action="end" {{action setAnimationSpeed on="change" target="App.accidentsController"}}/>
-	<input type="text" value="400" style="display:inline-block;width:45%" data-action="start" {{action setAnimationSpeed on="change" target="App.accidentsController"}}/>
 </div>
-*@
 
 
 

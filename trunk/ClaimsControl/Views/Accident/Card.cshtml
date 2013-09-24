@@ -78,7 +78,7 @@ else {<h2 style="margin: 15px; display: inline-block">Įvykis Nr. @Model.Acciden
 
 	<div class='right w47pr_m' style="position:relative">
 	@*---------------------------------------------------------------*@
-		<div id='divMapHead'>
+		<div id='divMapHead' @{if (Model.NewRec == 1) {<text>class="hidden"</text>}}>
 			<div class='box_3pr_p border radius-top4 clearfix'>
 				<div class='dialog-form-label'>Įvykio vieta:</div>
 				@{if (Model.NewRec == 1) {
@@ -103,7 +103,7 @@ else {<h2 style="margin: 15px; display: inline-block">Įvykis Nr. @Model.Acciden
 			</div>
 		</div>
 
-		<div id='divSearchMap' class="box hidden @{if (Model.NewRec != 1) {<text>hidden</text>}}">@*@{if (Model.NewRec != 1) {<text>display:none;</text>}}*@									 
+		<div id='divSearchMap' class="box">	@*	@{if (Model.NewRec != 1) {<text>hidden</text>}}		*@			 
 			<h4>Surasti vietovardį arba koordinates:</h4>
 			<div class="clearfix">
 				<input type='text' id='inputChooseTown' placeholder="Įveskite gyvenvietę parodyti žemėlapyje.." class='col eight text ui-widget-content defaultText defaultTextActive' />

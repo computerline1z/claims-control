@@ -41,7 +41,7 @@ var oDATA = Ember.Object.create({
 //		}, this); //second parameter becomes this in the callback function
 //		all_queued = true;
 //	},
-	execWhenLoaded: function (objNames, fnExec, timeoutId) {//jei objektu nera laukiam kol ateis
+	execWhenLoaded: function (objNames, fnExec, context, timeoutId) {//jei objektu nera laukiam kol ateis
 		var tId = (timeoutId) ? timeoutId : 0, me = this, notExists = false;
 		objNames.forEach(function (objName) {
 			//console.log("cheking obj " + objName);
@@ -58,7 +58,8 @@ var oDATA = Ember.Object.create({
 			}, 200); return false;
 		}
 		else if (tId !== 0) { clearTimeout(tId); }
-		fnExec();
+		//fnExec();
+		fnExec.call(context);
 	},
 	emBuilder: function (p) {//{newData:newData, tblName:tblName, toAppend:{"sort":"asc/desc","col":"date"}}
 		oData = oDATA.GET(p.tblName);
@@ -404,6 +405,7 @@ var SERVER = {
 									if (col.Type==="Decimal") {newVal=parseFloat(newVal,10);}
 									var newVal2=newVal.toString().toLowerCase();
 									if ((col.Type==="Integer"||col.Type==="Radio"||col.Type==="Boolean") && !(newVal2==="false"||newVal2==="true")){newVal=parseInt(newVal,10);}//bit'a gaunam kaip toki, tai praleidziam
+									if(typeof newVal==="number"){if(isNaN(newVal)){newVal="";}}//Viršutinės 2 eilutės gali tokį padaryt 
 								}else if (col.FName.slice(-2)==="ID"){newVal=parseInt(newVal,10);}
 								Row.set(fieldName, newVal); ok = true;
 								if (col.List) {//Jeigu List, updatinam ir teksto lauka
@@ -442,14 +444,15 @@ var SERVER = {
 					}				
 					if (Adding) { 
 							Row.set("visible", true); 
-							if  (p.source==="proc_Activities"||p.source==="proc_Finances") {oData.emData.unshiftObject(Row);}//Į pradžią
-							else {oData.emData.pushObject(Row); } 
+							oData.emData.unshiftObject(Row);//Į pradžią
+							//if  (p.source==="proc_Activities"||p.source==="proc_Finances") {oData.emData.unshiftObject(Row);}
+							//else {oData.emData.pushObject(Row); } 
 					}
 					else { oData.emData.findProperty("iD", Row.iD).updateTo(Row); }
 					var controller = updData.controller, emObject = (updData.emObject) ? updData.emObject : "content";
 					if (controller) {//Updatinam ir į pagrindinį kontrolerį tik insertinant (kiti updatinasi
-						if (Adding) { App[controller][emObject].pushObject(Row); }
-						//else{App[controller][emObject].findProperty("iD",Row.iD).updateTo(Row);}				
+						if (Adding) { App[controller][emObject].unshiftObject(Row); }
+						else{App[controller][emObject].findProperty("iD",Row.iD).updateTo(Row);}				
 					}
 				}
 			}
