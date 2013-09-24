@@ -1,16 +1,11 @@
 
 `var w=window, App=w.App, Em=w.Em, oGLOBAL=w.oGLOBAL, oDATA=w.oDATA, oCONTROLS=w.oCONTROLS, MY=w.MY`
+DOCSVIEW={}
 App.listsStart=()->
-	#App.topNewController.vehicles.clear();App.topNewController.drivers.clear();App.topNewController.insPolicies.clear()
-	#oDATA.execWhenLoaded(["proc_topDrivers","proc_topVehicles","proc_topInsPolicies"], ()->)
-	# App.topNewController.drivers.pushObjects(oDATA.GET("proc_topDrivers").emData)#.slice(0,3)	
-	# App.topNewController.vehicles.pushObjects(oDATA.GET("proc_topVehicles").emData)
-	# App.topNewController.insPolicies.pushObjects(oDATA.GET("proc_topInsPolicies").emData)	
 	ctrl=App.topNewController
 	ctrl.set('drivers',oDATA.GET("proc_topDrivers").emData)	
 	ctrl.set('vehicles',oDATA.GET("proc_topVehicles").emData)	
 	ctrl.set('insPolicies',oDATA.GET("proc_topInsPolicies").emData)	
-	
 	oDATA.execWhenLoaded(["proc_Vehicles","proc_Drivers","proc_InsPolicies"], ()->
 		ctrl=App.listAllController
 		ctrl.set("vehicles",oDATA.GET("proc_Vehicles").emData)
@@ -60,12 +55,13 @@ App.listAllController = Em.ResourceController.create(
 			# $("#dialoguploadDocsContainer").find("form").show().focus().fileupload('add');	
 			$.extend(pars,{DataToSave:DataToSave,Ctrl:$("#tabLists"),CallBackAfter:(row)-> #t.p. 189 eilutė
 				if pars.Action=='Add'
-					App.listAllController.content.unshiftObject(row); if App.topNewController[pars.emObject] then App.topNewController[pars.emObject].unshiftObject(row)
+					#App.listAllController.content.unshiftObject(row); 
+					#if App.topNewController[pars.emObject] then App.topNewController[pars.emObject].unshiftObject(row)
 				if pars.input then pars.input.data("newval",row.iD); pars.input.autocomplete("option").fnRefresh(); pars.input.data("autocomplete").fnItemChanged(row.iD)
 				if row.iD then $("#tabLists").find("div.ui-tabs").find("li.ui-tabs-selected a").trigger("click")#trigerinam, kad pagal tabus uzdėtų visible		
-				if execOnSuccess then execOnSuccess(row)
 				if pars.CallBackFromComboBox then pars.CallBackFromComboBox(row)
-				$("#openItemDialog").dialog("close")	
+				if execOnSuccess then execOnSuccess(row) #Neuždarom, nes dabar paruošiam prikabinimui
+				else $("#openItemDialog").dialog("close")	
 				false
 			})
 			SERVER.update2(pars); false
@@ -165,7 +161,8 @@ App.listAllController = Em.ResourceController.create(
 					#Atrenkam dokumentus kuriuos reiks parodyti
 					refID=pars.row.iD					
 					App.dialogDocController.setDocs(refID,groupID) #Jau uploadintų dokumentų kontroleris
-					this.removeOnCloseView=Em.View.create(
+					if not $.isEmptyObject(DOCSVIEW) then DOCSVIEW.remove(); DOCSVIEW.destroy() #make sure nothing left there
+					DOCSVIEW=Em.View.create(
 						opts: null #opcijos
 						templateName: "tmpDocsView"
 						tagName: "ul"

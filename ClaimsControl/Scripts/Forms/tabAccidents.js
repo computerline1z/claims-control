@@ -658,77 +658,104 @@
   });
 
   App.sidePanelController = Em.ResourceController.create({
-    tableName: "?",
-    chkHandler: function(lbl, option) {
-      var newVal;
+    chkHandlerToggle: function(id, option, controller) {
+      return $(id).buttonset().on("click", function(e) {
+        var chk, newVal;
 
-      lbl.parent().find("label").not(lbl).removeClass("ui-state-active");
-      newVal = lbl.hasClass("ui-state-active") ? lbl.attr("for").replace("chk_claimTypes", "").replace("chk_date", "") : null;
-      return App.accidentsController.set(option, newVal);
+        chk = $(e.target).closest("label").prev();
+        newVal = chk.next().hasClass("ui-state-active") ? chk.attr("id") : null;
+        $(this).find("label").not(chk.next()).removeClass("ui-state-active").end().prev().not(chk).removeAttr("checked");
+        App[controller].set(option, newVal);
+        return false;
+      });
+    },
+    chkHandler: function(id, option, controller) {
+      return $(id).buttonset().on("click", function(e) {
+        var lbl, newVal;
+
+        e.preventDefault();
+        lbl = $(e.target).closest("label");
+        lbl.parent().find("label").not(lbl).removeClass("ui-state-active");
+        newVal = lbl.hasClass("ui-state-active") ? lbl.attr("for").replace("chk_claimTypes", "").replace("chk_date", "").replace("chkInsurers_", "").replace("chkDate_", "").replace("chkClaimTypes_", "") : null;
+        App[controller].set(option, newVal);
+        return false;
+      });
     },
     init: function() {
       var _this = this;
 
       this._super();
       return oDATA.execWhenLoaded(["tblClaimTypes"], function() {
+        var claimTypes, insurers, policies;
+
         _this.set('years', oDATA.GET("proc_Years").emData.map(function(item) {
           item.chkId = "chk_date" + item.year;
+          item.chkId2 = "chkDate_" + item.year;
           return item;
         }));
-        _this.set('claimTypes', oDATA.GET("tblClaimTypes").emData.map(function(item) {
-          item.chkId = "chk_claimTypes" + item.iD;
-          return item;
-        }));
-        _this.claimTypes.findProperty("iD", 0).visible = false;
-        return Em.run.next(_this, function() {
-          var me;
-
-          me = this;
-          $("#chkYears").buttonsetv().on("click", function(e) {
-            var lbl;
-
-            e.preventDefault();
-            lbl = $(e.target).closest("label");
-            me.chkHandler(lbl, "chkData");
-            return false;
-          });
-          return $("#chkClaimsTypes").buttonsetv().on("click", function(e) {
-            var lbl;
-
-            lbl = $(e.target).closest("label");
-            me.chkHandler(lbl, "chkClaim");
-            return false;
-          });
+        claimTypes = [];
+        insurers = [];
+        policies = [];
+        oDATA.GET("proc_Claims").emData.forEach(function(claim) {
+          if (!claimTypes.contains(claim.claimTypeID)) {
+            claimTypes.push(claim.claimTypeID);
+          }
+          if (!policies.contains(claim.insPolicyID)) {
+            return policies.push(claim.insPolicyID);
+          }
         });
+        policies.forEach(function(policy) {
+          var insurer, insurerID;
+
+          insurer = oDATA.GET("proc_InsPolicies").emData.findProperty("iD", policy.iD);
+          insurerID = insurer ? insurer.insurerID : null;
+          if (insurerID && !insurers.contains(insurerID)) {
+            return insurers.push(insurerID);
+          }
+        });
+        claimTypes = oDATA.GET("tblClaimTypes").emData.filter(function(t) {
+          return claimTypes.contains(t.iD);
+        }).map(function(item) {
+          if (item.iD === 0) {
+            item.visible = false;
+          }
+          item.chkId = "chk_claimTypes" + item.iD;
+          item.chkId2 = "chkClaimTypes_" + item.iD;
+          return item;
+        });
+        _this.set('claimTypes', claimTypes);
+        console.log('insurers1');
+        console.log(claimTypes);
+        return _this.set('insurers', oDATA.GET("tblInsurers").emData.filter(function(i) {
+          return insurers.contains(i.iD);
+        }).map(function(item) {
+          item.chkId = "chkInsurers_" + item.iD;
+          return item;
+        }));
       });
     },
     years: [],
-    claimTypes: []
+    claimTypes: [],
+    insurers: [],
+    years: []
   });
 
   App.SidePanelView = Em.View.extend({
     templateName: "tmpSidePanel",
+    controller: App.sidePanelController,
     didInsertElement: function() {
       this._super();
-      return Em.run.next(function() {
-        $("#sidePanel").closest("div.col2").stickyPanel();
-        $("#chkOpen").buttonset().on("click", function(e) {
-          var chk, newVal;
+      return oDATA.execWhenLoaded(["tblClaimTypes"], function() {
+        return Em.run.next(function() {
+          var ctrl;
 
-          chk = $(e.target).closest("label").prev();
-          newVal = chk.next().hasClass("ui-state-active") ? chk.attr("id") : null;
-          $("#chkOpen").find("label").not(chk.next()).removeClass("ui-state-active").end().prev().not(chk).removeAttr("checked");
-          App.accidentsController.set("chkOpen", newVal);
-          return e.preventDefault();
-        });
-        return $("#chkDocs").buttonset().on("click", function(e) {
-          var chk, newVal;
-
-          chk = $(e.target).closest("label").prev();
-          newVal = chk.next().hasClass("ui-state-active") ? chk.attr("id") : null;
-          $("#chkDocs").find("label").not(chk.next()).removeClass("ui-state-active").end().prev().not(chk).removeAttr("checked");
-          App.accidentsController.set("chkDocs", newVal);
-          return e.preventDefault();
+          $("#sidePanel").closest("div.col2").stickyPanel().hide();
+          ctrl = App.sidePanelController;
+          ctrl.chkHandlerToggle("#chkOpen", "chkOpen", "accidentsController");
+          ctrl.chkHandlerToggle("#chkDocs", "chkDocs", "accidentsController");
+          ctrl.chkHandler("#chkYears", "chkData", "accidentsController");
+          ctrl.chkHandler("#chkClaimsTypes", "chkClaim", "accidentsController");
+          return $("#sidePanel").closest("div.col2").show();
         });
       });
     },
@@ -740,6 +767,38 @@
       ctrl = App.accidentsController;
       ctrl.chkOpen = null;
       ctrl.chkDocs = null;
+      ctrl.chkData = null;
+      ctrl.chkClaim = null;
+      return ctrl.filterDidChange(this, 'All');
+    }
+  });
+
+  App.SidePanelForClaimsView = Em.View.extend({
+    templateName: "tmpSidePanelForClaims",
+    controller: App.sidePanelController,
+    didInsertElement: function() {
+      this._super();
+      return oDATA.execWhenLoaded(["tblClaimTypes"], function() {
+        return Em.run.next(function() {
+          var ctrl;
+
+          $("#sidePanelCl").closest("div.col2").stickyPanel();
+          ctrl = App.sidePanelController;
+          ctrl.chkHandler("#chkCriteria", "chkCriteria", "claimsController");
+          ctrl.chkHandler("#chkInsurers", "chkInsurers", "claimsController");
+          ctrl.chkHandler("#chkYearsCl", "chkData", "claimsController");
+          return ctrl.chkHandler("#chkClaimsTypesCl", "chkClaim", "claimsController");
+        });
+      });
+    },
+    showAll: function() {
+      var ctrl;
+
+      $("#sidePanelCl").find("input:checkbox").removeAttr("checked").parent().next().next().find("span.ui-checkbox-icon").removeClass("ui-icon ui-icon-check").attr("aria-checked", "false");
+      $("#sidePanelCl").find("label.ui-state-active").removeClass("ui-state-active");
+      ctrl = App.claimsController;
+      ctrl.chkCriteria = null;
+      ctrl.chkInsurers = null;
       ctrl.chkData = null;
       ctrl.chkClaim = null;
       return ctrl.filterDidChange(this, 'All');

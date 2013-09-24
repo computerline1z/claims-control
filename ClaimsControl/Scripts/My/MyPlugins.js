@@ -143,8 +143,20 @@ $.fn.extend({
 			}
 			function keydownEvent(e) {
 				var k = e.which,pos,begin,end;				
-				//backspace, delete, and escape get special treatment
-				if (k===8){return true;}//mano
+				/*backspace, delete, and escape get special treatment
+				console.log("--------------------------------");
+				console.log("Buffer before: "+buffer);
+				console.log("k before: "+k);
+				console.log("val before: "+input.val());
+				console.log("--------------------------------");*/
+				var val=input.val(); if (val===''){clearBuffer(0,len);}
+				if (k===8){
+					val=input.val().slice(0,-1); 
+					buffer=val.split("").concat('','','','','','','','','','','','','','','')
+					console.log("Buffer changed: "+buffer);
+					return true;
+				}
+				//if (k===8){return true;}//mano
 				if (k === 46 || (iPhone && k === 127)) {
 					pos = input.caret();
 					begin = pos.begin;
@@ -228,7 +240,7 @@ $.fn.extend({
 				//var test = input.val(),lastMatch = -1,i,c,length=test.length;
 				var test=input.val(),lastMatch = -1,i,c;
 				console.log("checkVal: "+test);
-				if (settings.fnOnBlur){test=settings.fnOnBlur.call(this,input,test);if (!test){return false;}}
+				if (settings.fnOnBlur){test=settings.fnOnBlur.call(this,input,test,settings);if (!test){return false;}}
 				console.log("checkVal2: "+test);
 				for (i = 0, pos = 0; i < len; i++) {
 					if (tests[i]) {
@@ -365,15 +377,22 @@ _init : function() {//type:Date,Integer,Decimal
 				}
 				// console.log("buffer after");
 				// console.log(buffer);
-			},fnOnBlur_Date:function(input,test){
+			},fnOnBlur_Date:function(input,test,settings){
 				var length=test.length
 				if (length<10&&length>6){
-					console.log("fnOnBlur");
 					var oldVal=test.split(".");
 					if (oldVal[1].length===1){oldVal[1]="0"+oldVal[1];}
 					if (oldVal[2].length===1){oldVal[2]="0"+oldVal[2];}
 					test=oldVal.join(".");
 					input.val(test); 
+				}
+				if (settings.Validity){
+					input.css("border-color","").data("notValid",false).parent().find("div.validity-tooltip").remove();today=oGLOBAL.date.getTodayString()
+					var dateFormat=App.userData.dateFormat,error="",valSet=settings.Validity, diff=moment().diff(test,"hours");//days suapvalina
+					if (! moment(test,dateFormat).isValid()){error="Netinkamas datos formatas. Pakeiskite į tokį "+dateFormat;}
+					else if (valSet==="less"&&diff<0){error="Data negali būt didesnė už šiandieną - "+today;}
+					else if (valSet==="more"&&diff>24){error="Data negali būt mažesnė už šiandieną - "+today;}
+					if (error) {input.css("border-color","#eb5a44").data("notValid",true).parent().append("<div class='validity-tooltip'>"+error+"</div>");} //input.focus();}
 				}
 				return test;
 			},fnOnBlur_No:function(input,test){
@@ -399,7 +418,7 @@ _init : function() {//type:Date,Integer,Decimal
 			}			
 		}
 	var t=self.options.type;
-	if (t==='Date'){$(this.element).mask(pattern.Date,{fnAfter:set.fnAfter_OnlyNoAndPoints,fnBefore:set.fnBefore_Date,fnOnBlur:set.fnOnBlur_Date});}
+	if (t==='Date'){$(this.element).mask(pattern.Date,{fnAfter:set.fnAfter_OnlyNoAndPoints,fnBefore:set.fnBefore_Date,fnOnBlur:set.fnOnBlur_Date,Validity:self.options.Validity});}
 	else if (t==='Integer'){$(this.element).mask('9',{fnAfter:set.fnAfter_No,fnOnBlur:set.fnOnBlur_No});} //jeigu len=1 tikrins tik pagal ta viena
 	else if (t==='Decimal'){$(this.element).mask('*',{fnAfter:set.fnAfter_Decimal,fnOnBlur:set.fnOnBlur_No});} 
 	else if (t==='Time'){$(this.element).mask('*',{fnAfter:set.fnAfter_Time,fnOnBlur:set.fnOnBlur_Time});} 
@@ -647,13 +666,14 @@ var methods = {
 (function( $ ){
 	//plugin buttonset vertical
 	$.fn.buttonsetv = function() {
-		$(':radio, :checkbox', this).wrap('<div/>');// style="margin: 1px"
-		var ret=$(this).buttonset();
-		$('label:first', this).removeClass('ui-corner-left').addClass('ui-corner-top');
-		$('label:last', this).removeClass('ui-corner-right').addClass('ui-corner-bottom');
+		//$(':radio, :checkbox', this).wrap('<div/>');// style="margin: 1px"
+		return $(this).buttonset();
+		
+		//$('label:first', this).removeClass('ui-corner-left').addClass('ui-corner-top');
+		//$('label:last', this).removeClass('ui-corner-right').addClass('ui-corner-bottom');
+		
         // Tomas 2013.08.08 $('label:first', this).css('border-bottom', 'none');
         // Tomas 2013.08.08 $('label:last', this).css('border-bottom', 'solid 1px #ccc');
-		mw = 0; // max witdh
 		// $('label', this).each(function(index){
 			// w = $(this).width();
 			// if (w > mw) mw = w; 
@@ -661,7 +681,6 @@ var methods = {
 		// $('label', this).each(function(index){
 			// $(this).width(mw);
 		// })
-		return ret;
 	};
 })( jQuery );
 jQuery.loadScript = function (url, arg1, arg2) {

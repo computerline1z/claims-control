@@ -92,11 +92,12 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 		stepVal=@stepVal; s=@fnGetSteps(stepNo); idx=stepNo-1
 		dateInput=$("#claimsSteps").find(".step-box-addon").find("input.date")
 		if dateInput.length #Įsimenam kokią doku pristatymo data ivede. Pranesimo data issaugoma ant callbacko.
-			dateInput.parent().find("div.validity-tooltip").remove()
-			val=dateInput.val();dateFormat=App.userData.dateFormat;error=""
-			if not val then error="Netinkamas datos formatas. Pakeiskite į tokį "+dateFormat
-			else if moment().diff(val,"days")<0 then error="Data turi būt mažesnė už šiandieną - "+oGLOBAL.date.getTodayString()
-			if error then dateInput.css("border-color","#eb5a44").parent().append("<div class='validity-tooltip'>"+error+"</div>"); return false
+			# dateInput.parent().find("div.validity-tooltip").remove()
+			# val=dateInput.val();dateFormat=App.userData.dateFormat;error=""
+			# if not val then error="Netinkamas datos formatas. Pakeiskite į tokį "+dateFormat
+			# else if moment().diff(val,"days")<0 then error="Data turi būt mažesnė už šiandieną - "+oGLOBAL.date.getTodayString()
+			# if error then dateInput.css("border-color","#eb5a44").parent().append("<div class='validity-tooltip'>"+error+"</div>"); return false
+			if dateInput.data("notValid") then return false
 			stepVal[1]=val
 		fn=@fnUpdateStep
 		fn.call(@,s.currStep,'completed','stepsCont2','cancel')
@@ -139,9 +140,6 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 		#DataToSave={"id":@claim.iD,"Data":[groupID,docTypeID,desc],"Fields":["groupID","docTypeID","description"],"DataTable":"tblClaims"}
 		if updAccidents then CallBack={Success: App.claimEditController.fnUpdateAccident}
 		SERVER.update2(Action:'Edit',DataToSave:DataToSave,CallBack: CallBack,Ctrl:$("#claimsSteps"),source:"proc_Claims",row:@claim,CallBackAfter:(Row,Action,resp)->
-			#console.log("updAccidents: "+updAccidents) 
-			#me.stepVal[0]=Row.date.replace(":00","");
-			#if Ro
 			if updAccidents then App.claimEditController.fnUpdateAccident(resp)
 		)	
 		###	
@@ -306,7 +304,7 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 					when "tmpAddInsuranceBenefit" then obj= "finInsurerTbl"
 					when "tmpAddCompensation" then obj= "finOtherPartyTbl"					
 					#activitiesTbl:[],finDamageTbl:[],finInsurerTbl:[],finOtherPartyTbl:[]
-				( (obj,objActivitiesddd)-> 
+				( (obj,objActivities)-> 
 					if obj then r=obj.findProperty("iD",@iD); obj.removeObject(r); 
 					r2=objActivities.findProperty("iD",@iD); objActivities.removeObject(r2); 
 				).call cnt, me[obj], me["activitiesTbl"]
@@ -495,7 +493,7 @@ App.TabClaimsRegulationView = Ember.View.extend(#App.HidePreviousWindow,
 					# span=stepBox.find("span.value")
 					# input=if span.length then span.html() else oGLOBAL.date.getTodayString()
 					ctrl.fnConfirm(stepBox,stepNo)
-					if stepNo==2 then Em.run.next(@,->stepBox.find("input.date").inputControl(type:'Date').val(oGLOBAL.date.getTodayString()).datepicker(minDate:'-3y',maxDate:"0");) #Informacija draudikui įdedam data
+					if stepNo==2 then Em.run.next(@,->stepBox.find("input.date").inputControl(type:'Date',Validity:'less').val(oGLOBAL.date.getTodayString()).datepicker(minDate:'-3y',maxDate:"0");) #Informacija draudikui įdedam data
 
 			false
 		).on('click','button',(e)->#Patvirtinimas
