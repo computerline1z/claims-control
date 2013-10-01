@@ -942,9 +942,33 @@ namespace CC.Models {
 			};
 			return JSON;
 		}
-		public jsonArrays GetJSON_proc_Claims() {
+		public jsonArrays GetJSON_proc_Claim1(int ClaimID) {//Laukai turi sutapt su GetJSON_proc_Claims
 			jsonArrays JSON = new jsonArrays();
-			JSON.Data = from d in dc.proc_Claims(UserData.AccountID)
+			JSON.Data = from d in dc.proc_Claims(UserData.AccountID, ClaimID)
+							select new {
+				d.ID,//0
+				d.ClaimTypeID,//1
+				d.AccidentID,//2
+				d.InsPolicyID,//3
+				d.VehicleID,//4
+				d.No,//5
+				d.IsTotalLoss,//6
+				d.LossAmount,//7
+				d.InsuranceClaimAmount,//8
+				d.IsInjuredPersons,//9
+				d.InsurerClaimID,//10
+				d.ClaimStatus,//11
+				d.AmountIsConfirmed,//12
+				d.Days,//13
+				d.PerDay,//14
+				d.DateNotification,
+				d.DateDocsSent
+				};
+			return JSON;
+		}
+		public jsonArrays GetJSON_proc_Claims() { //Laukai turi sutapt su GetJSON_proc_Claim1
+			jsonArrays JSON = new jsonArrays();
+			JSON.Data = from d in dc.proc_Claims(UserData.AccountID,null)
 							select new object[] {
 				d.ID,//0
 				d.ClaimTypeID,//1

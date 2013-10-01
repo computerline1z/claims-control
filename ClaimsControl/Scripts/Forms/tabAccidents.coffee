@@ -7,7 +7,9 @@ App.tabAccidentsView = App.mainMenuView.extend(
 	# init: -> 
 		# @_super()
 		# console.log("accidentInit")
-	didInsertElement: -> 
+	# didInsertElement: -> 
+		# App.sidePanelController.refreshPanels("loadAcc");
+
 		# @_super()
 		# settings=categoryOpts:
 				# accident:{iD:24,title:"Įvykio dokumentai"}
@@ -226,7 +228,13 @@ App.claimEditController = Em.Controller.create(#save, delete, cancel Claims even
 				DataToSave.Fields.push("ClaimTypeID"); DataToSave.Data.push(e.view._context.typeID)
 				DataToSave.Fields.push("AccidentID"); DataToSave.Data.push(accidentID)
 			DataToSave["Ext"] = accidentID
-			opt = Action: Action, DataToSave: DataToSave, CallBack: {Success: @fnUpdateAccident}, Msg: Msg
+			fnAfterUpdate=(resp, updData)-> #Sinhronizuojam su "proc_Claims"
+				me=App.claimEditController; me2=App.sidePanelController
+				me.fnUpdateAccident.call(me,resp); me2.refreshPanels.call(me2, "refreshClaims"); 
+				id=resp.ResponseMsg.ID; if not id then id=updData.DataToSave.id;
+				SERVER.updateRecord("Main/claim",{id:id},"proc_Claims",updData.Action)
+				false
+			opt = Action: Action, DataToSave: DataToSave, CallBack: {Success: fnAfterUpdate}, Msg: Msg
 			SERVER.update(opt)
 	cancelForm: (e) ->
 		t=$(e.target); tr=t.closest("tr")
@@ -415,65 +423,107 @@ App.sidePanelController = Em.ResourceController.create(
 			$(@).find("label").not(chk.next()).removeClass("ui-state-active").end().prev().not(chk).removeAttr("checked")	
 			App[controller].set(option,newVal)
 			false
-		)
+		); return @
 	chkHandler: (id,option,controller)->
 		$(id).buttonset().on("click",(e)->
 			e.preventDefault(); lbl=$(e.target).closest("label");
 			lbl.parent().find("label").not(lbl).removeClass("ui-state-active")
-			newVal=if (lbl.hasClass("ui-state-active")) then lbl.attr("for").replace("chk_claimTypes","").replace("chk_date","").replace("chkInsurers_","").replace("chkDate_","").replace("chkClaimTypes_","") else null
+			newVal=if (lbl.hasClass("ui-state-active")) then lbl.attr("for").replace("chkClaimAcc_","").replace("chk_date","").replace("chkInsurers_","").replace("chkData_","").replace("chkClaim_","") else null
 			App[controller].set(option,newVal)
 			false
-		)
-	init: -> 
-		@_super();
-		oDATA.execWhenLoaded(["tblClaimTypes"],()=>
-			# id(chkId2) reikalingas kaip elemento id. Antras claim side panelyje naudojamas
-			@.set('years',oDATA.GET("proc_Years").emData.map((item)->item.chkId="chk_date"+item.year; item.chkId2="chkDate_"+item.year; return item))
-			claimTypes=[]; insurers=[]; policies=[]
-			oDATA.GET("proc_Claims").emData.forEach((claim)->
-				if not claimTypes.contains(claim.claimTypeID) then claimTypes.push(claim.claimTypeID)
+		); if controller=="claimsController" or option=="chkClaim" then App.sidePanelController.fnHighlight(option,controller)#option=="chkClaim" kad highlightintu filtro btn po refresh
+		return @
+	#init: -> @_super();
+	#refreshPanels paruošia duomenis paneliams tabAccidents ir tabClaims
+	#duomenys turi but atskiri kiekvienam, kad junginėjant nesipjautu, bet to perjungiant is claims i accidents jie refresinami ir ant nauju varneliu neuzdedamas pluginas buttonset
+	refreshPanels: (event)->#loadAcc arba loadCl arba refreshClaims refreshCriteria
+		event=event
+		# id(chkId2) reikalingas kaip elemento id. Antras claim side panelyje naudojamas
+		#Po užkrovimo: uzsikrauna is App.SidePanelView.didInsertElement ir App.SidePanelForClaimsView.didInsertElement
+		#Pridėjus naujų claimsu perpaisom tik claimsus
+		#Pridejus ivykiu, draudiku, pasikeitus statusui perpaisom tik "Rodyti tik žalose" -> App.sidePanelController.refreshPanels("claimsAdded");
+
+		claimTypes=[]; insurers=[]; policies=[]
+		if not @years.length #metus dedam be kuriuo atveju
+			@.set('years',oDATA.GET("proc_Years").emData.map((item)->item.chkId="chk_date"+item.year; item.chkId2="chkData_"+item.year; return item))
+		oDATA.GET("proc_Claims").emData.forEach((claim)->
+			if not claimTypes.contains(claim.claimTypeID) then claimTypes.push(claim.claimTypeID)
+			if event=="loadCl" or event=="refreshCriteria"
 				if not policies.contains(claim.insPolicyID) then policies.push(claim.insPolicyID)
-			)
-			policies.forEach((policy)->
-				insurer=oDATA.GET("proc_InsPolicies").emData.findProperty("iD",policy.iD)
-				insurerID=if insurer then insurer.insurerID else null
-				if insurerID and not insurers.contains(insurerID) then insurers.push(insurerID)
-			)
+				if not @isOpen then (if claim.claimStatus!=5 then @set('isOpen',true))
+				if not @isWithWarnings then (if claim.warnings then @set('isWithWarnings',true))
+				if not @isWithMyTasks then if claim.warnings then if claim.warnings.tasks
+					if claim.warnings.tasks.filter((t)->t.toID==App.userData.userID).length then @set('isWithMyTasks',true)
+				@set('isWith',(@isOpen or @isWithWarnings or @isWithMyTasks))
+				policies.forEach((pID)->
+					policy=oDATA.GET("proc_InsPolicies").emData.findProperty("iD",pID)
+					insurerID=if policy then policy.insurerID else null
+					if insurerID and not insurers.contains(insurerID) then insurers.push(insurerID)
+				)
+			if event=="loadCl"
+				insurers=oDATA.GET("tblInsurers").emData.filter((i)->insurers.contains(i.iD)).map((item)->item.chkId="chkInsurers_"+item.iD; return item)
+				@.set('insurers',insurers)
+			false
+		,@)
+		if event=="refreshClaims" or not @claimTypes.length #Jei nera nieko arba refreshinam claimTypes
 			claimTypes=oDATA.GET("tblClaimTypes").emData.filter((t)->claimTypes.contains(t.iD)).map((item)->
 				if item.iD==0 then item.visible=false
-				item.chkId="chk_claimTypes"+item.iD; item.chkId2="chkClaimTypes_"+item.iD; 
+				if item.iD==6 then item.notForClaims=true
+				item.chkId="chkClaimAcc_"+item.iD; item.chkId2="chkClaim_"+item.iD; 
 				return item;
 			)
 			@.set('claimTypes',claimTypes)
-			
-			console.log('insurers1')
-			console.log(claimTypes)
-
-			
-			@.set('insurers',oDATA.GET("tblInsurers").emData.filter((i)->insurers.contains(i.iD)).map((item)->item.chkId="chkInsurers_"+item.iD; return item))
-
+		if event=="refreshCriteria" then @attachBtnClaims(event);
+		if event=="refreshClaims" then @attachBtnClaims(event);@attachBtnAccidents(event)
+		return @
+	fnAfterAtach:(panel)->
+		panel=$(panel); if panel.hasClass('hidden') then panel.closest("div.col2").stickyPanel().end().removeClass('hidden')
+	#$("#sidePanelCl").closest("div.col2").stickyPanel()
+	attachBtnAccidents:(event)->
+		Em.run.next({me:@,event:event},()->
+			ctrl="accidentsController"
+			if @event=="refreshClaims" then @me.chkHandler("#chkClaimsTypes","chkClaim",ctrl)
+			else
+				@me.chkHandlerToggle("#chkOpen","chkOpen",ctrl)
+				.chkHandlerToggle("#chkDocs","chkDocs",ctrl)
+				.chkHandler("#chkYears","chkData",ctrl)
+				.chkHandler("#chkClaimsTypes","chkClaim",ctrl)
+				.fnAfterAtach("#sidePanel")
 		)
+	attachBtnClaims:(event)->
+		Em.run.next({me:@,event:event},()->
+			clCtrl="claimsController"
+			if @event=="refreshCriteria" then @me.chkHandler("#chkCriteria","chkCriteria",clCtrl)
+			else if @event=="refreshClaims" then @me.chkHandler("#chkClaimsTypesCl","chkClaim",clCtrl)
+			else
+				@me.chkHandler("#chkCriteria","chkCriteria",clCtrl)
+				.chkHandler("#chkInsurers","chkInsurers",clCtrl)
+				.chkHandler("#chkYearsCl","chkData",clCtrl)
+				.chkHandler("#chkClaimsTypesCl","chkClaim",clCtrl)
+				.fnAfterAtach("#sidePanelCl")
+		)
+	fnHighlight: (valName,ctrl)->
+		val=App[ctrl][valName]
+		if val
+			if ctrl=="accidentsController" then lbl=valName+"Acc_"+val
+			else if valName=="chkCriteria" then lbl=val
+			else lbl=valName+"_"+val
+			lbl=$("#"+lbl).next('label');
+			if not lbl.hasClass("ui-state-active") then lbl.addClass("ui-state-active")
+	
 	years:[], claimTypes:[],insurers:[], years:[]
 )
 App.SidePanelView = Em.View.extend(
 	templateName: "tmpSidePanel"
 	controller: App.sidePanelController
+	panel:"#sidePanel"
 	didInsertElement: ()->
-		@_super(); 	
-		oDATA.execWhenLoaded(["tblClaimTypes"],()->
-			Em.run.next(()->
-				$("#sidePanel").closest("div.col2").stickyPanel().hide();
-				ctrl=App.sidePanelController
-				ctrl.chkHandlerToggle("#chkOpen","chkOpen","accidentsController")
-				ctrl.chkHandlerToggle("#chkDocs","chkDocs","accidentsController")
-				ctrl.chkHandler("#chkYears","chkData","accidentsController")
-				ctrl.chkHandler("#chkClaimsTypes","chkClaim","accidentsController")
-				$("#sidePanel").closest("div.col2").show()
-			)
-		)
+		@_super(); oDATA.execWhenLoaded(["tblClaimTypes"], -> 
+			@controller.refreshPanels("loadAcc").attachBtnAccidents()
+		, @)	
 	showAll: ()->		
-		$("#sidePanel").find("label.ui-state-active").removeClass("ui-state-active")
-		$("#sidePanel").find("input:checkbox").removeAttr("checked").parent().next().next().find("span.ui-checkbox-icon").removeClass("ui-icon ui-icon-check").attr("aria-checked","false")				
+		$(@panel).find("label.ui-state-active").removeClass("ui-state-active")
+		$(@panel).find("input:checkbox").removeAttr("checked").parent().next().next().find("span.ui-checkbox-icon").removeClass("ui-icon ui-icon-check").attr("aria-checked","false")				
 		ctrl=App.accidentsController
 		ctrl.chkOpen=null; ctrl.chkDocs=null
 		ctrl.chkData=null; ctrl.chkClaim=null
@@ -482,21 +532,12 @@ App.SidePanelView = Em.View.extend(
 App.SidePanelForClaimsView = Em.View.extend(
 	templateName: "tmpSidePanelForClaims"
 	controller: App.sidePanelController
-	didInsertElement: ()->
-		@_super(); 	
-		oDATA.execWhenLoaded(["tblClaimTypes"],()->
-			Em.run.next(()->
-				$("#sidePanelCl").closest("div.col2").stickyPanel()
-				ctrl=App.sidePanelController
-				ctrl.chkHandler("#chkCriteria","chkCriteria","claimsController")
-				ctrl.chkHandler("#chkInsurers","chkInsurers","claimsController")
-				ctrl.chkHandler("#chkYearsCl","chkData","claimsController")
-				ctrl.chkHandler("#chkClaimsTypesCl","chkClaim","claimsController")
-			)
-		)
+	panel:"#sidePanelCl"
+	#didInsertElement: ()->
+		#@_super(); App.sidePanelController.refreshPanels("loadCl").attachBtnClaims() - vyksta App.TabClaimsView.didInsertElement
 	showAll: ()->		
-		$("#sidePanelCl").find("input:checkbox").removeAttr("checked").parent().next().next().find("span.ui-checkbox-icon").removeClass("ui-icon ui-icon-check").attr("aria-checked","false")
-		$("#sidePanelCl").find("label.ui-state-active").removeClass("ui-state-active")
+		$(@panel).find("input:checkbox").removeAttr("checked").parent().next().next().find("span.ui-checkbox-icon").removeClass("ui-icon ui-icon-check").attr("aria-checked","false")
+		$(@panel).find("label.ui-state-active").removeClass("ui-state-active")
 		ctrl=App.claimsController
 		ctrl.chkCriteria=null; ctrl.chkInsurers=null
 		ctrl.chkData=null; ctrl.chkClaim=null

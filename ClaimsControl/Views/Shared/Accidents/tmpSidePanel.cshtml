@@ -1,4 +1,4 @@
-﻿<div id="sidePanel">
+﻿<div id="sidePanel" class="hidden">
 	<a class="btn-reset-filters" {{action "showAll"  target="view"}}>
 		<img class="small-blue-icon" src="Content/less/images/icon_reset_filter.png" />
 		Nustatyti filtrą iš naujo
@@ -24,7 +24,6 @@
 
 	<div class="lineTop filtergroup" id="chkClaimsTypes"><h4>Rodyti įvykius, turinčius šio tipo žalas:</h4>
 		{{#each claimTypes}}
-		{{log this}}
 		{{#if this.visible}}
 			<input type="checkbox" name="checkbox" id={{unbound chkId}} /><label for={{unbound chkId}}>{{unbound name}}</label>
 		{{/if}}

@@ -5,12 +5,14 @@
 		<span class="first"><span class="comment">Įvedė: </span>{{unbound userName}}, {{entryDate}}</span>
 	</div>
 	<div class="row marginBottom0">
-		<span><span class="comment">Pranešimo laikas: </span>{{unbound claim.dateNotification}}</span>
+		<span><span class="comment">Pranešimo laikas: </span>{{unbound date}}</span>
 	</div>
 	{{view App.FormBottomView target="App.tabClaimsRegulationController"}}
 {{else}}
+{{log this}}
 	<div class="row">	
-		<div class='ExtendIt col seven date-time-select' data-ctrl='{"Field":"Date","labelType":"Left","sTitle":"Pranešimo data","Type":"DateTimeLess","Default":"Today", "classes":{"input":"w70prImportant"},"Validity":"require().match(\"date\").lessThanOrEqualTo(new Date())", "Plugin":{"datepicker":{"minDate":"-3y","maxDate":"0"}}}'></div>
+@*	<div class='ExtendIt col seven date-time-select' data-ctrl='{"Field":"Date","Value":"{{unbound date}}","labelType":"Left","sTitle":"Pranešimo data","Type":"DateTimeLess","Default":"Today","classes":{"input":"w70prImportant"},"Validity":"require().match(\"date\").lessThanOrEqualTo(new Date())","Plugin":{"datepicker":{"minDate":"-3y","maxDate":"0"},"inputControl":{"type":"Date","Validity":{"lessOf":{"date":"today"},"moreOf":{"date":"{{unbound App.tabClaimsRegulationController.claim.date}}","msg":"Data negali būt ankstesnė už įvykio datą. - "}}}}}'></div>
+*@	<div class='ExtendIt col seven date-time-select' data-ctrl='{"Field":"Date","Value":"{{unbound date}}","labelType":"Left","sTitle":"Pranešimo data","Type":"DateTimeLess","Default":"Today","classes":{"input":"w70prImportant"},"Validity":"require().match(\"date\").lessThanOrEqualTo(new Date()).greaterThanOrEqualTo(new Date(\"{{unbound App.tabClaimsRegulationController.claim.date}}\"),[\"Data turi būt didesnė arba lygi įvykio datai\"])","Plugin":{"datepicker":{"minDate":"-3y","maxDate":"0"}}}'></div>
 	</div>	
 	<div class="row">	
 		{{updatableField subject sTitle="Komentaras" labelType="Left" classes="wrapper:row, span:'col three', input:'col nine'"}}

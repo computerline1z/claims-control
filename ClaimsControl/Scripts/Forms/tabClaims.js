@@ -32,6 +32,11 @@
   };
 
   App.TabClaimsView = App.mainMenuView.extend({
+    didInsertElement: function() {
+      return oDATA.execWhenLoaded(["tblClaimTypes"], function() {
+        return App.sidePanelController.refreshPanels("loadCl").attachBtnClaims();
+      });
+    },
     templateName: 'tmpClaimsMain'
   });
 
@@ -71,6 +76,12 @@
       tasks = [];
       dateFormat = App.userData.dateFormat;
       red = false;
+      if (!claim.accident) {
+        this.setClaimContext(claim);
+      }
+      if (claim.warnings) {
+        claim.warnings = null;
+      }
       ctrl = App.tabClaimsRegulationController;
       fnGetUser = ctrl.fnGetUser;
       if (claim.insPolicyID) {
@@ -118,7 +129,8 @@
             date: a.date,
             user: fnGetUser.call(ctrl, a.userID),
             subject: a.subject,
-            iD: a.iD
+            iD: a.iD,
+            toID: a.toID
           };
           if (moment().diff(moment(a.date, dateFormat), "days") > 0) {
             red = true;
@@ -133,6 +145,8 @@
       if (!$.isEmptyObject(warnings)) {
         claim.set("warnings", warnings).set("warningClass", (red ? "red-border" : "yellow-border"));
       }
+      console.log("getWarnings. New Warning:");
+      console.log(claim.warnings);
       return false;
     },
     addNewAccident: function() {
@@ -143,6 +157,7 @@
       var filterValue;
 
       console.log("filterDidChange");
+      console.log(this.chkCriteria);
       filterValue = filterName === "All" ? void 0 : thisObj[filterName];
       if (filterName === "filterValue") {
         this.textFilterIsActive = filterValue === "" ? false : true;
@@ -199,20 +214,22 @@
 
       fn = "";
       if (this.chkCriteria) {
-        fn += "return true;";
+        if (this.chkCriteria === "chkOpenCl") {
+          fn += "if (row.claimStatus===5) return false;";
+        } else if (this.chkCriteria === "chkWithWarnings") {
+          fn += " if (!row.warnings) return false;";
+        } else if (this.chkCriteria === "chkWithMyTasks") {
+          fn += "			if(!row.warnings){				return false;			}else{				if(!row.warnings.tasks){return false;}				else{if(row.warnings.tasks.filter(function(t){return t.toID=" + App.userData.userID + "}).length===0) return false;}			};";
+        }
       }
       if (this.chkInsurers) {
-        fn += "console.log('chkInsurers result:'+row.insurerID+', '+(('+row.insurerID+'==='+this.chkInsurers+')?true:false));";
         fn += "if (row.insurerID!==" + this.chkInsurers + ") return false;";
       }
       if (this.chkData) {
-        fn += "console.log('chkData result:'+row.date+', dienų:'+row.daysFrom);";
         fn += "if (!row.date) return false;";
         fn += this.chkData === "12month" ? "if (row.daysFrom>365) return false;" : "if (row.date.indexOf(" + this.chkData + ")===-1) return false;";
       }
       if (this.chkClaim) {
-        fn += "console.log('claimTypeID:'+row.claimTypeID);";
-        fn += "console.log('chkClaim option:" + this.chkClaim + "');";
         fn += "if (row.claimTypeID!==" + this.chkClaim + ") return false;";
       }
       fn += "return true;";
