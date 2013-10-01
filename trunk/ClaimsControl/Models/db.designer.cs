@@ -531,13 +531,6 @@ namespace CC.Models
 			return ((ISingleResult<proc_DriversResult>)(result.ReturnValue));
 		}
 		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.proc_Claims")]
-		public ISingleResult<proc_ClaimsResult> proc_Claims([global::System.Data.Linq.Mapping.ParameterAttribute(Name="AccountID", DbType="Int")] System.Nullable<int> accountID)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), accountID);
-			return ((ISingleResult<proc_ClaimsResult>)(result.ReturnValue));
-		}
-		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.proc_Finances")]
 		public ISingleResult<proc_FinancesResult> proc_Finances([global::System.Data.Linq.Mapping.ParameterAttribute(Name="AccountID", DbType="Int")] System.Nullable<int> accountID)
 		{
@@ -570,6 +563,13 @@ namespace CC.Models
 		{
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), accountID, top);
 			return ((ISingleResult<proc_InsPoliciesResult>)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.proc_Claims")]
+		public ISingleResult<proc_ClaimsResult> proc_Claims([global::System.Data.Linq.Mapping.ParameterAttribute(Name="AccountID", DbType="Int")] System.Nullable<int> accountID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="ClaimID", DbType="Int")] System.Nullable<int> claimID)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), accountID, claimID);
+			return ((ISingleResult<proc_ClaimsResult>)(result.ReturnValue));
 		}
 	}
 	
@@ -11591,356 +11591,6 @@ namespace CC.Models
 		}
 	}
 	
-	public partial class proc_ClaimsResult
-	{
-		
-		private int _ID;
-		
-		private int _ClaimTypeID;
-		
-		private int _AccidentID;
-		
-		private int _InsPolicyID;
-		
-		private int _VehicleID;
-		
-		private int _No;
-		
-		private bool _IsTotalLoss;
-		
-		private double _LossAmount;
-		
-		private System.Nullable<double> _InsuranceClaimAmount;
-		
-		private System.Nullable<bool> _IsInjuredPersons;
-		
-		private System.Nullable<double> _InsuranceClaimAmount1;
-		
-		private System.Nullable<bool> _IsInjuredPersons1;
-		
-		private string _InsurerClaimID;
-		
-		private int _ClaimStatus;
-		
-		private bool _AmountIsConfirmed;
-		
-		private int _Days;
-		
-		private double _PerDay;
-		
-		private string _DateNotification;
-		
-		private string _DateDocsSent;
-		
-		public proc_ClaimsResult()
-		{
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="Int NOT NULL")]
-		public int ID
-		{
-			get
-			{
-				return this._ID;
-			}
-			set
-			{
-				if ((this._ID != value))
-				{
-					this._ID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClaimTypeID", DbType="Int NOT NULL")]
-		public int ClaimTypeID
-		{
-			get
-			{
-				return this._ClaimTypeID;
-			}
-			set
-			{
-				if ((this._ClaimTypeID != value))
-				{
-					this._ClaimTypeID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AccidentID", DbType="Int NOT NULL")]
-		public int AccidentID
-		{
-			get
-			{
-				return this._AccidentID;
-			}
-			set
-			{
-				if ((this._AccidentID != value))
-				{
-					this._AccidentID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InsPolicyID", DbType="Int NOT NULL")]
-		public int InsPolicyID
-		{
-			get
-			{
-				return this._InsPolicyID;
-			}
-			set
-			{
-				if ((this._InsPolicyID != value))
-				{
-					this._InsPolicyID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_VehicleID", DbType="Int NOT NULL")]
-		public int VehicleID
-		{
-			get
-			{
-				return this._VehicleID;
-			}
-			set
-			{
-				if ((this._VehicleID != value))
-				{
-					this._VehicleID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_No", DbType="Int NOT NULL")]
-		public int No
-		{
-			get
-			{
-				return this._No;
-			}
-			set
-			{
-				if ((this._No != value))
-				{
-					this._No = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsTotalLoss", DbType="Bit NOT NULL")]
-		public bool IsTotalLoss
-		{
-			get
-			{
-				return this._IsTotalLoss;
-			}
-			set
-			{
-				if ((this._IsTotalLoss != value))
-				{
-					this._IsTotalLoss = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LossAmount", DbType="Float NOT NULL")]
-		public double LossAmount
-		{
-			get
-			{
-				return this._LossAmount;
-			}
-			set
-			{
-				if ((this._LossAmount != value))
-				{
-					this._LossAmount = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InsuranceClaimAmount", DbType="Float")]
-		public System.Nullable<double> InsuranceClaimAmount
-		{
-			get
-			{
-				return this._InsuranceClaimAmount;
-			}
-			set
-			{
-				if ((this._InsuranceClaimAmount != value))
-				{
-					this._InsuranceClaimAmount = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsInjuredPersons", DbType="Bit")]
-		public System.Nullable<bool> IsInjuredPersons
-		{
-			get
-			{
-				return this._IsInjuredPersons;
-			}
-			set
-			{
-				if ((this._IsInjuredPersons != value))
-				{
-					this._IsInjuredPersons = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InsuranceClaimAmount1", DbType="Float")]
-		public System.Nullable<double> InsuranceClaimAmount1
-		{
-			get
-			{
-				return this._InsuranceClaimAmount1;
-			}
-			set
-			{
-				if ((this._InsuranceClaimAmount1 != value))
-				{
-					this._InsuranceClaimAmount1 = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsInjuredPersons1", DbType="Bit")]
-		public System.Nullable<bool> IsInjuredPersons1
-		{
-			get
-			{
-				return this._IsInjuredPersons1;
-			}
-			set
-			{
-				if ((this._IsInjuredPersons1 != value))
-				{
-					this._IsInjuredPersons1 = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InsurerClaimID", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-		public string InsurerClaimID
-		{
-			get
-			{
-				return this._InsurerClaimID;
-			}
-			set
-			{
-				if ((this._InsurerClaimID != value))
-				{
-					this._InsurerClaimID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClaimStatus", DbType="Int NOT NULL")]
-		public int ClaimStatus
-		{
-			get
-			{
-				return this._ClaimStatus;
-			}
-			set
-			{
-				if ((this._ClaimStatus != value))
-				{
-					this._ClaimStatus = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AmountIsConfirmed", DbType="Bit NOT NULL")]
-		public bool AmountIsConfirmed
-		{
-			get
-			{
-				return this._AmountIsConfirmed;
-			}
-			set
-			{
-				if ((this._AmountIsConfirmed != value))
-				{
-					this._AmountIsConfirmed = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Days", DbType="Int NOT NULL")]
-		public int Days
-		{
-			get
-			{
-				return this._Days;
-			}
-			set
-			{
-				if ((this._Days != value))
-				{
-					this._Days = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PerDay", DbType="Float NOT NULL")]
-		public double PerDay
-		{
-			get
-			{
-				return this._PerDay;
-			}
-			set
-			{
-				if ((this._PerDay != value))
-				{
-					this._PerDay = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateNotification", DbType="VarChar(10)")]
-		public string DateNotification
-		{
-			get
-			{
-				return this._DateNotification;
-			}
-			set
-			{
-				if ((this._DateNotification != value))
-				{
-					this._DateNotification = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateDocsSent", DbType="VarChar(10)")]
-		public string DateDocsSent
-		{
-			get
-			{
-				return this._DateDocsSent;
-			}
-			set
-			{
-				if ((this._DateDocsSent != value))
-				{
-					this._DateDocsSent = value;
-				}
-			}
-		}
-	}
-	
 	public partial class proc_FinancesResult
 	{
 		
@@ -13110,6 +12760,356 @@ namespace CC.Models
 				if ((this._warn_PaymentTerm != value))
 				{
 					this._warn_PaymentTerm = value;
+				}
+			}
+		}
+	}
+	
+	public partial class proc_ClaimsResult
+	{
+		
+		private int _ID;
+		
+		private int _ClaimTypeID;
+		
+		private int _AccidentID;
+		
+		private int _InsPolicyID;
+		
+		private int _VehicleID;
+		
+		private int _No;
+		
+		private bool _IsTotalLoss;
+		
+		private double _LossAmount;
+		
+		private System.Nullable<double> _InsuranceClaimAmount;
+		
+		private System.Nullable<bool> _IsInjuredPersons;
+		
+		private System.Nullable<double> _InsuranceClaimAmount1;
+		
+		private System.Nullable<bool> _IsInjuredPersons1;
+		
+		private string _InsurerClaimID;
+		
+		private int _ClaimStatus;
+		
+		private bool _AmountIsConfirmed;
+		
+		private int _Days;
+		
+		private double _PerDay;
+		
+		private string _DateNotification;
+		
+		private string _DateDocsSent;
+		
+		public proc_ClaimsResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="Int NOT NULL")]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this._ID = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClaimTypeID", DbType="Int NOT NULL")]
+		public int ClaimTypeID
+		{
+			get
+			{
+				return this._ClaimTypeID;
+			}
+			set
+			{
+				if ((this._ClaimTypeID != value))
+				{
+					this._ClaimTypeID = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AccidentID", DbType="Int NOT NULL")]
+		public int AccidentID
+		{
+			get
+			{
+				return this._AccidentID;
+			}
+			set
+			{
+				if ((this._AccidentID != value))
+				{
+					this._AccidentID = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InsPolicyID", DbType="Int NOT NULL")]
+		public int InsPolicyID
+		{
+			get
+			{
+				return this._InsPolicyID;
+			}
+			set
+			{
+				if ((this._InsPolicyID != value))
+				{
+					this._InsPolicyID = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_VehicleID", DbType="Int NOT NULL")]
+		public int VehicleID
+		{
+			get
+			{
+				return this._VehicleID;
+			}
+			set
+			{
+				if ((this._VehicleID != value))
+				{
+					this._VehicleID = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_No", DbType="Int NOT NULL")]
+		public int No
+		{
+			get
+			{
+				return this._No;
+			}
+			set
+			{
+				if ((this._No != value))
+				{
+					this._No = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsTotalLoss", DbType="Bit NOT NULL")]
+		public bool IsTotalLoss
+		{
+			get
+			{
+				return this._IsTotalLoss;
+			}
+			set
+			{
+				if ((this._IsTotalLoss != value))
+				{
+					this._IsTotalLoss = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LossAmount", DbType="Float NOT NULL")]
+		public double LossAmount
+		{
+			get
+			{
+				return this._LossAmount;
+			}
+			set
+			{
+				if ((this._LossAmount != value))
+				{
+					this._LossAmount = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InsuranceClaimAmount", DbType="Float")]
+		public System.Nullable<double> InsuranceClaimAmount
+		{
+			get
+			{
+				return this._InsuranceClaimAmount;
+			}
+			set
+			{
+				if ((this._InsuranceClaimAmount != value))
+				{
+					this._InsuranceClaimAmount = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsInjuredPersons", DbType="Bit")]
+		public System.Nullable<bool> IsInjuredPersons
+		{
+			get
+			{
+				return this._IsInjuredPersons;
+			}
+			set
+			{
+				if ((this._IsInjuredPersons != value))
+				{
+					this._IsInjuredPersons = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InsuranceClaimAmount1", DbType="Float")]
+		public System.Nullable<double> InsuranceClaimAmount1
+		{
+			get
+			{
+				return this._InsuranceClaimAmount1;
+			}
+			set
+			{
+				if ((this._InsuranceClaimAmount1 != value))
+				{
+					this._InsuranceClaimAmount1 = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsInjuredPersons1", DbType="Bit")]
+		public System.Nullable<bool> IsInjuredPersons1
+		{
+			get
+			{
+				return this._IsInjuredPersons1;
+			}
+			set
+			{
+				if ((this._IsInjuredPersons1 != value))
+				{
+					this._IsInjuredPersons1 = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InsurerClaimID", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string InsurerClaimID
+		{
+			get
+			{
+				return this._InsurerClaimID;
+			}
+			set
+			{
+				if ((this._InsurerClaimID != value))
+				{
+					this._InsurerClaimID = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClaimStatus", DbType="Int NOT NULL")]
+		public int ClaimStatus
+		{
+			get
+			{
+				return this._ClaimStatus;
+			}
+			set
+			{
+				if ((this._ClaimStatus != value))
+				{
+					this._ClaimStatus = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AmountIsConfirmed", DbType="Bit NOT NULL")]
+		public bool AmountIsConfirmed
+		{
+			get
+			{
+				return this._AmountIsConfirmed;
+			}
+			set
+			{
+				if ((this._AmountIsConfirmed != value))
+				{
+					this._AmountIsConfirmed = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Days", DbType="Int NOT NULL")]
+		public int Days
+		{
+			get
+			{
+				return this._Days;
+			}
+			set
+			{
+				if ((this._Days != value))
+				{
+					this._Days = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PerDay", DbType="Float NOT NULL")]
+		public double PerDay
+		{
+			get
+			{
+				return this._PerDay;
+			}
+			set
+			{
+				if ((this._PerDay != value))
+				{
+					this._PerDay = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateNotification", DbType="VarChar(10)")]
+		public string DateNotification
+		{
+			get
+			{
+				return this._DateNotification;
+			}
+			set
+			{
+				if ((this._DateNotification != value))
+				{
+					this._DateNotification = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateDocsSent", DbType="VarChar(10)")]
+		public string DateDocsSent
+		{
+			get
+			{
+				return this._DateDocsSent;
+			}
+			set
+			{
+				if ((this._DateDocsSent != value))
+				{
+					this._DateDocsSent = value;
 				}
 			}
 		}

@@ -14,6 +14,11 @@ App.claimsStart=()->
 	)
 
 App.TabClaimsView = App.mainMenuView.extend(
+	didInsertElement: ()->
+		#App.sidePanelController.refreshPanels("loadCl");#sudeda, kokius filtrus rodyt
+		oDATA.execWhenLoaded(["tblClaimTypes"],()->	
+			App.sidePanelController.refreshPanels("loadCl").attachBtnClaims()
+		)
 	templateName: 'tmpClaimsMain'#, viewIx: 5
 )
 App.ClaimView = Em.View.extend(
@@ -39,7 +44,9 @@ App.claimsController = Em.ArrayController.create(
 		$.extend(claim, {insurerID:claim.insPolicy.insurerID, daysFrom:claim.accident.daysFrom, date:claim.accident.date}) #greičio padidinimui dedam tiesiai
 		@getWarnings(claim); false
 	getWarnings: (claim)->
-		warnings={};tasks=[];dateFormat=App.userData.dateFormat; red=false ;
+		warnings={};tasks=[];dateFormat=App.userData.dateFormat; red=false
+		if not claim.accident then @setClaimContext(claim)
+		if claim.warnings then claim.warnings=null# Jei buvo varningu nuresetinam
 		ctrl=App.tabClaimsRegulationController; fnGetUser=ctrl.fnGetUser
 		if claim.insPolicyID #claim.insPolicyID=0, kai neapdrausta
 			if claim.claimStatus==0 then warnings={notifyOfClaim:true}; red=true
@@ -53,12 +60,15 @@ App.claimsController = Em.ArrayController.create(
 				if daysAfterDocs>claim.insPolicy.warn_PaymentTerm then warnings.noPayment=daysAfterDocs
 		claim.activities.forEach((a)->
 			if a.typeID==3
-				obj=date:a.date,user:fnGetUser.call(ctrl, a.userID),subject:a.subject,iD:a.iD
+				obj=date:a.date,user:fnGetUser.call(ctrl, a.userID),subject:a.subject,iD:a.iD,toID:a.toID
 				if moment().diff(moment(a.date,dateFormat),"days")>0 then red=true; obj.red=true
 				tasks.addObject(obj); 
 		)
 		if tasks.length then warnings.tasks=tasks
 		if not $.isEmptyObject(warnings) then claim.set("warnings",warnings).set("warningClass",(if red then "red-border" else "yellow-border"))
+		console.log("getWarnings. New Warning:")
+		console.log(claim.warnings)
+		
 		false
 	addNewAccident: ->
 		this.openAccident(null)
@@ -74,6 +84,7 @@ App.claimsController = Em.ArrayController.create(
 	content: []
 	filterDidChange: ((thisObj, filterName)->	
 		console.log("filterDidChange")
+		console.log(@chkCriteria)
 		filterValue=if filterName=="All" else thisObj[filterName]
 		if (filterName=="filterValue")
 			@textFilterIsActive=if(filterValue=="")then false else true
@@ -107,18 +118,26 @@ App.claimsController = Em.ArrayController.create(
 		if @chkCriteria 
 			#fn+="console.log('chkDocs result:'+row.docNo);"
 			#fn+="if(@chkDocs=="chkWithDocs") then "if (row.docNo===0) return false;" else "if (row.docNo>0) return false;"	
-			fn+="return true;"
+			if @chkCriteria=="chkOpenCl" then fn+="if (row.claimStatus===5) return false;" 
+			else if @chkCriteria=="chkWithWarnings" then fn+=" if (!row.warnings) return false;"
+			else if @chkCriteria=="chkWithMyTasks" then fn+="
+			if(!row.warnings){
+				return false;
+			}else{
+				if(!row.warnings.tasks){return false;}
+				else{if(row.warnings.tasks.filter(function(t){return t.toID="+App.userData.userID+"}).length===0) return false;}
+			};"
 		if @chkInsurers 
-			fn+="console.log('chkInsurers result:'+row.insurerID+', '+(('+row.insurerID+'==='+this.chkInsurers+')?true:false));"
+			#fn+="console.log('chkInsurers result:'+row.insurerID+', '+(('+row.insurerID+'==='+this.chkInsurers+')?true:false));"
 			fn+="if (row.insurerID!=="+@chkInsurers+") return false;"			
 		if @chkData 
-			fn+="console.log('chkData result:'+row.date+', dienų:'+row.daysFrom);"
+			#fn+="console.log('chkData result:'+row.date+', dienų:'+row.daysFrom);"
 			#fn += "console.log(row);";
 			fn += "if (!row.date) return false;";#jei be dates tai nereikalingas šitam saraše ClaimType
 			fn+=if(@chkData=="12month") then "if (row.daysFrom>365) return false;" else "if (row.date.indexOf("+@chkData+")===-1) return false;"
 		if @chkClaim 
-			fn+="console.log('claimTypeID:'+row.claimTypeID);"
-			fn+="console.log('chkClaim option:"+@chkClaim+"');"
+			#fn+="console.log('claimTypeID:'+row.claimTypeID);"
+			#fn+="console.log('chkClaim option:"+@chkClaim+"');"
 			fn+="if (row.claimTypeID!=="+@chkClaim+") return false;"
 		fn+="return true;"	
 		new Function("row",fn)

@@ -141,6 +141,9 @@ String.prototype.firstSmall=function (){
 String.prototype.firstBig=function (){
 	return this.slice(0, 1).toUpperCase() +this.slice(1);
 }
+String.prototype.replaceAt=function (ch,index){
+	return this.substr(0, index) + ch + this.substr(index);
+}
 Array.prototype.filterByTbl = function (p) {//filterTbl,joinField,filterField,filterValue --Em objektų masyvams
 	fTbl=[];me=this;
 	if (!me.length) return fTbl;

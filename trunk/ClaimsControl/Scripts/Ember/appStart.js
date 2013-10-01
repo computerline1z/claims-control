@@ -24,7 +24,6 @@ App.NavbarController = Em.Controller.extend({
 			$('#ulMainMenu a.selected').removeClass("selected").addClass("notactive");
 			if (controller.get("currentOutlet")==="tabEmpty") $("tabEmpty").empty();
 			$("body").find("div.validity-tooltip").remove(); //validičio tooltipus removinam
-			//$('#' + controller.get("currentOutlet")).empty();
 		} else { controller.set("currentOutlet", "tabAccidents"); }
 		if (!oDATA.GET("userData")){
 			oDATA.fnLoadMain();
@@ -61,9 +60,9 @@ MY.NavbarController=App.NavbarController.create();
 
 App.NavbarView = Em.View.extend({templateName: 'tmpNavbar'});
 App.mainMenuView = Em.View.extend({
-	didInsertElement: function () {
-		if (typeof (this.get("viewIx")) !== "number") return false;
-		$('#ulMainMenu a.selected').removeClass("selected").addClass("notactive");
-		$('#ulMainMenu a:eq(' + this.get("viewIx") + ')').removeClass("notactive").addClass("selected ui-corner-top");
-	}
+	// didInsertElement: function () {
+		// if (typeof (this.get("viewIx")) !== "number") return false;
+		// $('#ulMainMenu a.selected').removeClass("selected").addClass("notactive");
+		// $('#ulMainMenu a:eq(' + this.get("viewIx") + ')').removeClass("notactive").addClass("selected ui-corner-top");
+	// }
 });

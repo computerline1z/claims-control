@@ -105,7 +105,7 @@
       claim.set('steps', s);
       return this;
     },
-    fnUpdateStep: function(step, status, stepCont, contentType) {
+    fnUpdateStep: function(step, status, stepCont, cancel) {
       var content, idx;
 
       content = "";
@@ -114,7 +114,7 @@
         if (stepCont) {
           content = this[stepCont][idx].replace('####', this.stepVal[idx]);
         }
-        if (contentType === "noCancel") {
+        if (cancel === "noCancel") {
           content = content.replace('<a href="#">Atšaukti</a>', '');
         }
         if (status) {
@@ -125,8 +125,13 @@
       }
     },
     fnGetSteps: function(stepNo) {
-      var currNo, currStep, max, min, nextStep, prevStep, s;
+      var currNo, currStep, first, max, min, nextStep, prevStep, s;
 
+      first = false;
+      if (stepNo === 0) {
+        stepNo = 1;
+        first = true;
+      }
       s = this.claim.steps;
       currStep = s.findProperty("stepNo", stepNo);
       min = 100;
@@ -147,35 +152,26 @@
       });
       return {
         currStep: currStep,
-        prevStep: prevStep,
-        nextStep: nextStep
+        nextStep: nextStep,
+        prevStep: first ? null : prevStep
       };
     },
-    fnStepForward: function(stepNo) {
-      var addField, dF, dateInput, fn, idx, s, stepVal, updAccidents;
+    fnStepForward: function(stepNo, actionNeeded) {
+      var addField, dF, dateInput, s, updAccidents;
 
-      if (this.claim.claimStatus === 0) {
+      if (this.claim.claimStatus === 0 && actionNeeded) {
         this.replaceActivityView(this.activityTypes.findProperty("name", "activity_notifyInsurer"));
         return false;
       }
-      stepVal = this.stepVal;
       s = this.fnGetSteps(stepNo);
-      idx = stepNo - 1;
       dateInput = $("#claimsSteps").find(".step-box-addon").find("input.date");
       if (dateInput.length) {
         if (dateInput.data("notValid")) {
           return false;
         }
-        stepVal[1] = val;
+        this.stepVal[1] = dateInput.val();
       }
-      fn = this.fnUpdateStep;
-      fn.call(this, s.currStep, 'completed', 'stepsCont2', 'cancel');
-      fn.call(this, s.nextStep, 'current', 'stepsCont1', 'cancel');
-      fn.call(this, s.prevStep, '', 'stepsCont2', 'noCancel');
-      dF = {
-        Data: [stepNo],
-        Fields: ['claimStatus']
-      };
+      dF = null;
       addField = "";
       updAccidents = false;
       switch (stepNo) {
@@ -194,10 +190,17 @@
           updAccidents = true;
       }
       if (addField) {
-        dF.Fields.push(addField);
-        dF.Data.push(stepVal[idx]);
+        dF = {
+          Data: [this.stepVal[stepNo - 1]],
+          Fields: [addField]
+        };
       }
-      return this.fnSaveData(dF, updAccidents);
+      return this.fnSaveData({
+        stepNo: stepNo,
+        forward: true,
+        updAccidents: updAccidents,
+        dF: dF
+      });
     },
     fnConfirm: function(stepBox, stepNo) {
       var newHtml;
@@ -211,23 +214,37 @@
       });
     },
     fnStepBack: function(stepNo) {
-      var dF, fn, s;
-
-      s = this.fnGetSteps(stepNo);
-      fn = this.fnUpdateStep;
-      fn.call(this, s.currStep, 'current', 'stepsCont1', 'cancel');
-      fn.call(this, s.nextStep, 'pending', '', 'cancel');
-      fn.call(this, s.prevStep, '', 'stepsCont2', 'cancel');
-      dF = {
-        Data: [stepNo - 1],
-        Fields: ['claimStatus']
-      };
-      return this.fnSaveData(dF);
+      return this.fnSaveData({
+        stepNo: stepNo
+      });
     },
-    fnSaveData: function(dF, updAccidents) {
-      var CallBack, DataToSave;
+    fnSaveData: function(p) {
+      var CallBack, DataToSave, current, dF, fn, newStepNo, next, previous, s, updAccidents;
 
-      updAccidents = updAccidents;
+      updAccidents = p.updAccidents;
+      dF = p.dF ? p.dF : {
+        Data: [],
+        Fields: []
+      };
+      if (p.stepNo || p.stepNo === 0) {
+        newStepNo = p.forward ? p.stepNo : p.stepNo - 1;
+        this.claim.set('claimStatus', newStepNo);
+        dF.Data.push(newStepNo);
+        dF.Fields.push('claimStatus');
+        s = this.fnGetSteps(p.stepNo);
+        fn = this.fnUpdateStep;
+        current = [s.currStep, 'current', 'stepsCont1', 'cancel'];
+        next = [s.nextStep, 'pending', '', 'cancel'];
+        previous = [s.prevStep, '', 'stepsCont2', 'cancel'];
+        if (p.forward) {
+          current.splice(1, 2, 'completed', 'stepsCont2');
+          next.splice(1, 2, 'current', 'stepsCont1');
+          previous[3] = 'noCancel';
+        }
+        fn.apply(this, current);
+        fn.apply(this, next);
+        fn.apply(this, previous);
+      }
       DataToSave = $.extend({
         "id": this.claim.iD,
         "DataTable": "tblClaims",
@@ -243,7 +260,6 @@
         Action: 'Edit',
         DataToSave: DataToSave,
         CallBack: CallBack,
-        Ctrl: $("#claimsSteps"),
         source: "proc_Claims",
         row: this.claim,
         CallBackAfter: function(Row, Action, resp) {
@@ -253,12 +269,14 @@
         }
       });
       /*	
-      		@fnclaimStatusChanged()
       		opt= Action: "Edit", DataToSave: DataToSave, CallBack: {Success: App.claimEditController.fnUpdateAccident} 
       		SERVER.update(opt)
+      		@fnclaimStatusChanged()
       */
 
-      return this.claimStatusBefore = this.claim.claimStatus;
+      App.claimsController.getWarnings(this.claim);
+      this.claimStatusBefore = this.claim.claimStatus;
+      return this;
     },
     target: (function() {
       return this;
@@ -393,7 +411,8 @@
           }
         }
       });
-      return me.set("activitiesTbl", activitiesTbl);
+      me.set("activitiesTbl", activitiesTbl);
+      return me;
     },
     users: null,
     fnGetUser: function(userID) {
@@ -462,13 +481,13 @@
         claimID: acts.claimID,
         typeID: acts.typeID,
         body: acts.body,
-        date: acts.date,
+        date: acts.date.slice(0, 16),
         entryDate: acts.entryDate,
         from: from,
-        fromOnlyTbl: type.isFinances ? (type.typeTitle ? type.typeTitle : type.title) : from,
+        fromOnlyTbl: type.isFinances ? (type.typeTitle ? type.typeTitle : type.title) : (acts.typeID === 14 ? this.fnGetUser(acts.userID) : from),
         subject: subject,
         amount: acts.amount,
-        infoOnlyTbl: type.isFinances ? (subject ? subject + ", " : '') + acts.amount + " Lt" : (subject.length > 25 ? subject.slice(0, 25) + " [...]" : subject),
+        infoOnlyTbl: type.isFinances ? (subject ? subject + ", " : '') + acts.amount + " Lt" : acts.typeID === 14 ? 'Pranešimas draudikui' : (subject.length > 25 ? subject.slice(0, 25) + " [...]" : subject),
         userID: acts.userID,
         userName: this.fnGetUser(acts.userID),
         icon: type.icon ? type.icon : '',
@@ -560,6 +579,12 @@
                 break;
               case "tmpAddCompensation":
                 obj = "finOtherPartyTbl";
+                break;
+              case "tmpAction_notifyInsurer":
+                me.fnSaveData({
+                  stepNo: 1,
+                  forward: false
+                });
             }
             (function(obj, objActivities) {
               var r, r2;
@@ -612,16 +637,23 @@
       if (DataToSave) {
         CallBackAfter = function(Row, Action, resp, updData) {
           if (Row.typeID === 14) {
-            me.claim.claimStatus = 1;
-            me.stepVal[0] = Row.date.replace(":00", "");
-            me.fnStepForward(1);
+            me.stepVal[0] = Row.date.slice(0, 10);
+            me.claim.set('dateNotification', me.stepVal[0]);
+            if (Action === "Add") {
+              me.fnStepForward(1);
+            } else {
+              me.fnSaveData({
+                dF: {
+                  Data: [Row.date],
+                  Fields: ['DateNotification']
+                }
+              }).fnUpdateStep(me.claim.steps[0], 'completed', 'stepsCont2');
+            }
+            if (execOnSuccess) {
+              execOnSuccess(Row, form);
+            }
           }
-          if (execOnSuccess) {
-            execOnSuccess(Row, form);
-          } else {
-            me.cancelForm();
-          }
-          return me.setActivitiesTables();
+          return me.setActivitiesTables().cancelForm();
         };
         return SERVER.update2({
           Action: Action,
@@ -722,7 +754,9 @@
             isNew: false
           }, $.parseJSON(JSON.stringify(ctrl.activityTypes.findProperty("typeID", this.typeID))));
           u = oDATA.GET("userData").emData[0];
-          this.set("deleteButton", true);
+          if (!(this.typeID === 14 && ctrl.claim.claimStatus > 1)) {
+            this.set("deleteButton", true);
+          }
           if (!this.isFinances) {
             this.set("notEditable", true);
             if (u.userID === this.userID || ctrl.users.findProperty("iD", u.userID).isAdmin) {
@@ -898,16 +932,26 @@
         if (classes.indexOf("completed") > 0) {
           ctrl.fnStepBack(stepNo);
         } else if (classes.indexOf("current") > 0) {
-          if (stepNo === 1 || stepNo === 5) {
+          if (stepNo === 1) {
+            ctrl.fnStepForward(stepNo, true);
+          } else if (stepNo === 5) {
             ctrl.fnStepForward(stepNo);
           } else {
             ctrl.fnConfirm(stepBox, stepNo);
             if (stepNo === 2) {
               Em.run.next(this, function() {
-                return stepBox.find("input.date").inputControl({
+                return stepBox.find("input.date").val(oGLOBAL.date.getTodayString()).inputControl({
                   type: 'Date',
-                  Validity: 'less'
-                }).val(oGLOBAL.date.getTodayString()).datepicker({
+                  Validity: {
+                    lessOf: {
+                      date: 'today'
+                    },
+                    moreOf: {
+                      date: ctrl.stepVal[0],
+                      msg: 'Data negali būt ankstesnė už pranešimo datą - '
+                    }
+                  }
+                }).datepicker({
                   minDate: '-3y',
                   maxDate: "0"
                 });

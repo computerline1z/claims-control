@@ -237,5 +237,15 @@ namespace ClaimsControl.Controllers {
 				}
 			);
 		}
+		[HttpPost]
+		public JsonResult claim(int id) {
+			Repositories_Main acc = new Repositories_Main();
+			return Json(
+				new {
+					data = acc.GetJSON_proc_Claim1(id)
+				}
+			);
+		}
+
 	}
 }

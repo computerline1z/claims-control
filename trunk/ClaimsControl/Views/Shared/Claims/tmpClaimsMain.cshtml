@@ -13,7 +13,7 @@
 {{#if App.claimsController.content.length}}
 	<h2>Paskutinės žalos:</h2>
 	<div class="zebra-striped selectable tall">
-	{{#each "App.claimsController.content"}}
+	{{#each App.claimsController.content}}
 		{{#if this.visible}}
 			{{#compare claimTypeID "!==" "6"}}
 				<div {{action viewClaims this}} {{bindAttr class=":tr :accident warningClass"}}>

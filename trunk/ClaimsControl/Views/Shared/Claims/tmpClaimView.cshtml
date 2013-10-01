@@ -1,10 +1,4 @@
-﻿@*{{lossAmount}} - claim.lossAmount
-{{log this}}
-{{log view}}
-
-App.claimsController.content
-*@
-	<div class="td w05pr">{{#compare claimStatus "===" "5"}}<i class="img32-check"></i>{{else}}&nbsp;{{/compare}}</div>
+﻿	<div class="td w05pr">{{#compare claimStatus "===" "5"}}<i class="img32-check"></i>{{else}}&nbsp;{{/compare}}</div>
 		<div class="td w12pr"><b>{{unbound accident.date}}</b><br/>{{unbound accident.no}}-{{unbound no}}</div>
 	{{#with accident}}
 		<div class="td w48pr"><b>{{unbound place}}</b><br/>{{unbound shortNote}}</div>
@@ -16,23 +10,24 @@ App.claimsController.content
 	{{else}}
 		{{unbound insPolicy.insurerName}}<br/>{{unbound insurerClaimID}}
 	{{/compare}}</div>
-
+@**@{{log no}}{{log accident.no}}
+{{log warnings}}
 {{#if warnings}}{{#with warnings}}
-<div class="w100pr borderTopDotted" style="padding-left:17%;clear:both;">
-{{#if notifyOfClaim}}
-	<i class="img18-warning" style="margin-left:-18px;"></i><span class="text-system-red">Praneškite draudikui apie žalą</span>
-{{else}}
-	{{#if notifyOfDocs}}
-		{{#if notifyOfDocs.expired}}<i class="img18-warning" style="margin-left:-18px;"></i><span class="text-system-red">Dokumentų pateikimo draudikui terminas pradelstas {{notifyOfDocs.expired}} d.</span>{{/if}}
-		{{#if notifyOfDocs.today}}<i class="img18-warning" style="margin-left:-18px;"></i><span class="text-system-red">Dokumentų pateikimo draudikui terminas baigiasi šiandien</span>{{/if}}
-		{{#if notifyOfDocs.leftDays}}<i class="img18-warning-yellow" style="margin-left:-18px;"></i><span>Iki dokumentų pateikimo draudikui termino liko {{notifyOfDocs.leftDays}} d.</span>{{/if}}
+	<div class="w100pr borderTopDotted" style="padding-left:17%;clear:both;">
+	{{#if notifyOfClaim}}
+		<i class="img18-warning" style="margin-left:-18px;"></i><span class="text-system-red">Praneškite draudikui apie žalą</span>
+	{{else}}
+		{{#if notifyOfDocs}}
+			{{#if notifyOfDocs.expired}}<i class="img18-warning" style="margin-left:-18px;"></i><span class="text-system-red">Dokumentų pateikimo draudikui terminas pradelstas {{notifyOfDocs.expired}} d.</span>{{/if}}
+			{{#if notifyOfDocs.today}}<i class="img18-warning" style="margin-left:-18px;"></i><span class="text-system-red">Dokumentų pateikimo draudikui terminas baigiasi šiandien</span>{{/if}}
+			{{#if notifyOfDocs.leftDays}}<i class="img18-warning-yellow" style="margin-left:-18px;"></i><span>Iki dokumentų pateikimo draudikui termino liko {{notifyOfDocs.leftDays}} d.</span>{{/if}}
+		{{/if}}
+		{{#if noPayment}}
+			<i class="img18-warning-yellow" style="margin-left:-18px;"></i><span class="text-system-red">Draudimo išmoka turėjo būt gauta prieš {{noPayment}} d.</span>
+		{{/if}}
 	{{/if}}
-	{{#if noPayment}}
-		<i class="img18-warning-yellow" style="margin-left:-18px;"></i><span class="text-system-red">Draudimo išmoka turėjo būt gauta prieš {{noPayment}} d.</span>
-	{{/if}}
-{{/if}}
-{{#if tasks}}{{#each tasks}}
-		</br><span {{bindAttr class="red:red:other"}}>{{date}}</span><b>{{user}}:</b><a {{bindAttr data-id="iD"}}>{{subject}}</a>
-{{/each}}{{/if}}
-</div>
+	{{#if tasks}}{{#each tasks}}
+			</br><span {{bindAttr class="red:red:other"}}>{{date}}</span><b>{{user}}:</b><a {{bindAttr data-id="iD"}}>{{subject}}</a>
+	{{/each}}{{/if}}
+	</div>
 {{/with}}{{/if}}

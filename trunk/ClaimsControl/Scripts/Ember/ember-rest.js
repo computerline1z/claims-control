@@ -54,7 +54,7 @@ var oDATA = Ember.Object.create({
 		}, me); //second parameter becomes this in the callback function
 		if (notExists) {
 			tId = setTimeout(function () {
-				oDATA.execWhenLoaded(objNames, fnExec, tId)
+				oDATA.execWhenLoaded(objNames, fnExec, context,  tId)
 			}, 200); return false;
 		}
 		else if (tId !== 0) { clearTimeout(tId); }
@@ -489,13 +489,13 @@ var SERVER = {
 		if (!dataType){dataType='json';}
 		if  (typeof  JSONarg!=="string"){JSONarg=JSON.stringify(JSONarg);}
 		if (updData.Ctrl) { $(updData.Ctrl).spinner({ position: 'center', img: 'spinnerBig.gif' }); }
-		else if (updData.Ctrl!==""){$("div.content:first").spinner({ position: 'center', img: 'spinnerBig.gif' });}
+		//else if (updData.Ctrl!==""){$("div.content:first").spinner({ position: 'center', img: 'spinnerBig.gif' });}
 
 		if (!dataType) {dataType = 'json';}
 		oGLOBAL.notify.msg("", "Siunčiami duomenys..");
 		$.ajax({
 			type: "POST",
-			contentType: "charset=utf-8",
+			//contentType: "charset=utf-8",
 			url: url,
 			beforeSend: function (xhr) {
 				xhr.setRequestHeader("Content-type", "application/json; charset=utf-8");
@@ -552,24 +552,32 @@ var SERVER = {
 
 		oGLOBAL.notify.withIcon(DefMsg.Title, Msg, Sign, notExpires);
 		return false;
+	},
+	updateRecord: function (url,JSONarg, objName,Action,CallBack) {
+	/*Skirta updatinti naujus arba redaguotus recordus. Normaliai updatinasi per update2, bet claimsuose negaunam to recordo*/
+		$.ajax({
+			type: "POST",url: url,data: JSONarg,dataType: 'json',
+			error: function (msg) {
+				debugger;
+				console.warn(msg);
+			},
+			success: function (d) {
+				var obj=oDATA.GET(objName), cols=obj.Cols, row=Em.Object.create({});
+				cols.forEach(function(col,i){
+					row[col.FName.firstSmall()]=d.data.Data[0][col.FName];
+				})
+				row.visible=true;
+				if (objName==="proc_Claims"){//nauja claima updatinam jei jau sugeneruota lentele
+					var ctrl=App.claimsController;
+					if (ctrl.content.length){ctrl.setClaimContext(row);}
+				}
+				if (Action=="Add"){
+					obj.emData.unshiftObject(row);
+				}else{
+					obj.emData.findProperty("iD",row.iD).updateTo(row);
+				}
+				if (CallBack){CallBack();}
+			}
+		});
 	}
 };
-
-//App.peopleController = Ember.ArrayController.create({
-//    findByName: function(name) {
-//        var found = this.findProperty('name', name);
-//        //console.log('found model %@'.fmt(found.id));
-//        return found;
-//    },
-//    findByProperty: function(Property,Value) {
-//        var found = this.findProperty(Property, Value);
-//        return found;
-//    }       
-//});
-
-
-//        var f=App.peopleController.findByName('John');    
-//        console.log('found model %@'.fmt(f.id));
-//        
-//        f=App.peopleController.findByProperty('name','John');     
-//        console.log('found model %@'.fmt(f.id));ā€‹

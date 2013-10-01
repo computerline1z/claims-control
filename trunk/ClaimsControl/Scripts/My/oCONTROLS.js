@@ -204,22 +204,21 @@ var oCONTROLS = {
 					.ComboBox();
 				}
 			}
-
-			if (col.Plugin) {
-				$.each(col.Plugin, function (name, value) {
+			var plugins=(col.Plugin)?col.Plugin:false;
+			if (plugins) {
+				$.each(plugins, function (name, value) {
 					input[name](value);
 				});
 			}
+			
 			//if (btnSaveToDisable){ visais atvejais praleidziu, jei nebus bus klaida arba warningas
 				if (Type === 'Boolean' || Type === 'checkbox') {e.find("input:checkbox").on("click",fnEnableSave);}
 				else if (col.List) {input.data("autocomplete").fnItemChanged=function(newId){fnEnableSave();}}
 				else if (input){
 					var val=input.val();
-					//if (input.hasClass("date")){ input.mask( "9999~99~99",{placeholder:"",isDate:true})}
-					
-					if (input.hasClass("date")){ input.inputControl({ type:'Date'});}
-					
-					if (input.hasClass("hasDatepicker")&&!input.data("datepicker")){
+					//inputControl dedam tik jei jis jau nebuvo uzdetas is šablono
+					if (input.hasClass("date")&&!plugins.inputControl){ input.inputControl({ type:'Date'});}
+					if (input.hasClass("hasDatepicker")&&!plugins.datepicker){//&&!input.data("datepicker"))
 						input.datepicker("option", "onSelect",fnEnableSave).closest("div.ExtendIt").find("input.time").on("keyup",fnEnableSave);
 					}
 					input.on("keyup",fnEnableSave).val(val);
@@ -227,11 +226,10 @@ var oCONTROLS = {
 			//}			
 			if (typeof input !== 'undefined') {
 				input.val($.trim(input.val()));
-				if (Type === 'Integer' || Type === 'Decimal' ) {//|| Type === 'Date'
+				if ((Type === 'Integer' || Type === 'Decimal' )&&!plugins.inputControl) {//|| Type === 'Date'
 					input.inputControl({ type:Type});
-					//input.ValidateOnBlur({Allow: Type});
 				}
-				if (typeof col.Tip !== 'undefined') {input.attr("placeholder", col.Tip)} 
+				if (typeof col.Tip !== 'undefined') {input.attr("placeholder", col.Tip);} 
 			}
 		});
 		//Sudedam focusus formoje
