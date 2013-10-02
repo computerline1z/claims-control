@@ -208,56 +208,46 @@ $(function() {
 	);
 
 	$("#carousel-custom-main .controls button").click(function(){
+
 		var button = $(this),
-			main_carousel = button.parent().parent(),
-			number_of_all_child_slides = main_carousel.children(".carousel-inner").find(".item.active .item").length
+			main_carousel = $("#carousel-custom-main"),
+			number_of_all_child_slides = main_carousel.find(".item.active .item").length,
+			carousel_custom_secondary = main_carousel.find(".item.active .carousel-custom-secondary"),
+			prev_count = false,
+			next_count = false
 		;
 
-		function if_child_slides_more_than_one(){
-
-			if( number_of_all_child_slides > 1 ){
+		(function(){
+			// don't do anything if there are no slides in child slideshow
+			if( number_of_all_child_slides < 1 ){
+				console.log("!err: number of all slides < 1");
 				return true;
 			}
-			else {
-				return false;
-			}
-		}
 
-		function child_slides_count_from_active(){
-
-			var active_slide = main_carousel.children(".carousel-inner").find(".item.active .item.active");
+			var active_slide = main_carousel.find(".item.active .item.active"),
+				active_slide_index = active_slide.index()
+			;
 
 			if( active_slide.length < 1 ){
 				// if there is no active slide, exit
+				console.log("!err: no active slide");
 				return;
 			}
 
-			var active_slide_index = active_slide.index(),
-				active_left = active_slide_index,
-				active_right =number_of_all_child_slides - active_slide_index -1
-			;
+			prev_count = active_slide_index;
+			next_count = number_of_all_child_slides - active_slide_index -1;
 
-			return {left: active_left, right: active_right};
-		}
 
-		function get_next_prev_count(){
-			if ( if_child_slides_more_than_one() ){
-				return child_slides_count_from_active();
-			}
-		}
+		})();	
 
-		if( button.hasClass("button-next") ){
-			var next_prev_count = get_next_prev_count();
-			if( next_prev_count["right"] > 0 ){
-				main_carousel.carousel("next");
-			}
+		
+		if( button.hasClass("button-next") && next_count > 0 ){
+			carousel_custom_secondary.carousel("next");
 		}
-		else if( button.hasClass("button-prev") ){
-			var next_prev_count = get_next_prev_count();
-			if( next_prev_count["left"] > 0 ){
-				main_carousel.carousel("prev");
-			}
+		else if( button.hasClass("button-prev") && prev_count > 0 ){
+			carousel_custom_secondary.carousel("prev");
 		}
+		
 	});
 
 	// On load
