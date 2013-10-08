@@ -205,13 +205,12 @@ span.dialog-form-label { margin: 10px; font-size: @basefont; /*color: #666666;*/
 div.dialog-form-label { font-size: @basefont; /*color: #666666;*/ top: 2px; margin-bottom: 2px; }
 
 /*label { font-size: @basefont; color: 666; cursor: pointer; }*/
+ .js-tip{cursor:help;}
  .ExtendIt label  {
     //display: block;
     padding-left: 0px;
     margin-left: 0px;
-    cursor: pointer;
-    /*ideta: */ /*font-size: @smallfont;*/
-    //.clearfix();
+    //cursor: pointer;
 
     input[type="checkbox"] {
       display: block;
@@ -332,7 +331,7 @@ div.WasBefore a { margin-left: 1em; }
 div.IsNow { line-height: 2.5em; text-align: center; }
 div.IsNow a { text-decoration: underline !important; margin-left: 1em; }
 /*-----------------------------------------------------------------------------------------------*/
-div.inputform div.ExtendIt { margin: 10px 3px 10px 0px; display: inline-block; vertical-align: top; }
+//div.js-frm div.ExtendIt { margin: 10px 3px 10px 0px; display: inline-block; vertical-align: top; }
 
 span.dialog-form-label { margin: 10px; font-size: @smallfont; /*color: #666666;*/ display: inline-block; }
 div.dialog-form-label { font-size: @smallfont; /*color: #666666;*/ top: 2px; margin-bottom: 2px; }
@@ -342,7 +341,7 @@ label {
     input[type=text] { height: @inputHeight; }
     &.toplabel {
 		> span:first-child { padding-bottom: 10px;}
-        > span { display: block; font-size: 12px; cursor: pointer;}/*color: #666666;*/ 
+        > span { display: block;}/* font-size: 12px; cursor: pointer; color: #666666;*/ 
 		&.ui-icon { left:-4px;top:3px; width: 18px; height: 18px; background: url('images/Sprite16.png') no-repeat center; background-position: -47px -32px; }
         input[type=text], [type=textarea]{
 			width: 100%;
@@ -1188,3 +1187,7 @@ form input.searchField {
 		color: #3F3B3B;
 	}
 }
+#js-tip-id {position:absolute;opacity:0.8;background:#a59894;color:white;border-radius:6px;z-index:1000;padding:10px;display:none;}
+#js-tip-id:after {content:'';position:absolute;left:50%;margin-left:-8px;border-right:8px solid transparent;border-left:8px solid transparent;}
+#js-tip-id.js-tip-top:after {border-top:8px solid #a59894;top:100%;}
+#js-tip-id.js-tip-bottom:after {border-bottom:8px solid #a59894;bottom:100%;}

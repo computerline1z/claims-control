@@ -1,4 +1,12 @@
-﻿namespace CC.Models {
+﻿using System.Web.Mvc;
+namespace CC.Models {
+	public class JsonStringResult : ContentResult {
+		public JsonStringResult(string json) {
+			Content = json;
+			ContentType = "application/json";
+		}
+	}
+
    public class jsonArrays {
       private object[] _Cols;
       private object _Config = 0;

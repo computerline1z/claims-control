@@ -134,9 +134,10 @@
       return false;
     },
     toClaimRegulation: function(e) {
-      return App.router.transitionTo('claimRegulation', {
+      App.router.transitionTo('claimRegulation', {
         claimNo: e.context.no
       });
+      return false;
     },
     elementId: "AccDetailsContent",
     contentBinding: 'App.thisAccidentController.content',
@@ -329,23 +330,22 @@
       });
     },
     fnUpdateAccident: function(resp) {
-      var newRow, tr;
+      var newRow;
 
       newRow = resp.ResponseMsg.Ext.replace(/#\|#\|/g, ":::").split("|#|");
       newRow[13] = newRow[13].replace(/:::/g, "#|#|");
-      App.accidentsController.get("setNewVal").call(App.accidentsController, {
+      return App.accidentsController.get("setNewVal").call(App.accidentsController, {
         newVal: newRow,
         toAppend: false,
         fieldsToInt: [0, 1, 5, 6, 7, 8]
       })[0];
-      tr = $("#accidentsTable").find("div.selectedAccident");
-      return tr.trigger("click").trigger("click");
     },
     saveForm: function(e) {
-      var Action, DataToSave, Msg, accidentID, fnAfterUpdate, frm, newClaim, opt;
+      var Action, DataToSave, Msg, accidentID, fnAfterUpdate, frm, newClaim, opt, tr;
 
       newClaim = e.view._context.newClaim;
       accidentID = e.view._parentView.templateData.view.rowContext.accidentID;
+      tr = $("#accidentsTable").find("div.selectedAccident");
       if (newClaim) {
         frm = $('#divNewClaimCard');
         Action = 'Add';
@@ -386,17 +386,26 @@
           SERVER.updateRecord("Main/claim", {
             id: id
           }, "proc_Claims", updData.Action);
+          this.tr.trigger('click');
+          Em.run.later(this, (function() {
+            this.tr.trigger("click");
+            console.log("trigger click");
+            return console.log(this.tr);
+          }), 500);
           return false;
         };
         opt = {
           Action: Action,
           DataToSave: DataToSave,
           CallBack: {
-            Success: fnAfterUpdate
+            Success: $.proxy(fnAfterUpdate, {
+              tr: tr
+            })
           },
           Msg: Msg
         };
-        return SERVER.update(opt);
+        SERVER.update(opt);
+        return false;
       }
     },
     cancelForm: function(e) {
@@ -437,6 +446,7 @@
     removeClaims: function(AddWr, e, tr, parent) {
       var dividers, me;
 
+      console.log("removeClaims");
       dividers = AddWr.parent().find("div.dividers");
       dividers.slideUp(App.accidentsController.animationSpeedEnd, function() {
         return dividers.remove();
@@ -479,6 +489,7 @@
       var AddWr, parent, tr;
 
       tr = $(e.target).closest("div.tr");
+      console.log("tbodyClick");
       this.setfilteredPolicies(e.context.date);
       AddWr = $("#AccDetailsWraper");
       parent = tr.parent();

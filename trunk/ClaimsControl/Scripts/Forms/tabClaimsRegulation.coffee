@@ -301,7 +301,7 @@ App.tabClaimsRegulationController = Em.ArrayController.create(
 		ACTIVITYVIEW.appendTo(@actViewZone)
 		Em.run.next(scroll,->$(window).scrollTop(@);)
 	editForm: (e)->
-		frm=$(e.target).closest(".inputForm")
+		frm=$(e.target).closest(".js-frm")
 		@actionViewInstance.set("notEditable",false).set("editButton",false)
 		Em.run.next(@,()->	oCONTROLS.UpdatableForm(frm:frm, btnSaveToDisable:frm.find("button.btnSave")))
 	deleteForm: (e) ->

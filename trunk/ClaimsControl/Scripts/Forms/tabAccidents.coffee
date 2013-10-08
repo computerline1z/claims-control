@@ -104,6 +104,7 @@ App.SelectedAccidentView = Em.View.extend(
 		false
 	toClaimRegulation: (e) ->
 		App.router.transitionTo('claimRegulation',{claimNo:e.context.no});
+		false
 		# Ember.State.transitionTo('claimRegulation',1);
 	elementId: "AccDetailsContent"
 	contentBinding: 'App.thisAccidentController.content'
@@ -212,10 +213,10 @@ App.claimEditController = Em.Controller.create(#save, delete, cancel Claims even
 	fnUpdateAccident: (resp)-> #also used when updating claimStatus from claim regulation
 		newRow = resp.ResponseMsg.Ext.replace(/#\|#\|/g,":::").split("|#|"); newRow[13]=newRow[13].replace(/:::/g,"#|#|") #atkeičiam atgal
 		App.accidentsController.get("setNewVal").call(App.accidentsController, {newVal:newRow,toAppend:false,fieldsToInt:[0, 1, 5, 6, 7, 8]})[0] #kuriuos reikia paverst integeriais
-		tr = $("#accidentsTable").find("div.selectedAccident") #.empty()
-		tr.trigger("click").trigger("click")	
+		#tr = $("#accidentsTable").find("div.selectedAccident") #.empty()
+		#tr.trigger("click").trigger("click")	
 	saveForm: (e) ->
-		newClaim=e.view._context.newClaim; accidentID=e.view._parentView.templateData.view.rowContext.accidentID
+		newClaim=e.view._context.newClaim; accidentID=e.view._parentView.templateData.view.rowContext.accidentID; tr=$("#accidentsTable").find("div.selectedAccident")
 		if newClaim
 			frm=$('#divNewClaimCard'); Action='Add'
 			Msg= Title: "Naujos žalos sukūrimas", Success: "Nauja žala sukurta.", Error: "Nepavyko išsaugot naujos žalos."
@@ -233,9 +234,12 @@ App.claimEditController = Em.Controller.create(#save, delete, cancel Claims even
 				me.fnUpdateAccident.call(me,resp); me2.refreshPanels.call(me2, "refreshClaims"); 
 				id=resp.ResponseMsg.ID; if not id then id=updData.DataToSave.id;
 				SERVER.updateRecord("Main/claim",{id:id},"proc_Claims",updData.Action)
+				@tr.trigger('click')
+				Em.run.later(@,(->@tr.trigger("click");console.log("trigger click");console.log(@tr)),500)
 				false
-			opt = Action: Action, DataToSave: DataToSave, CallBack: {Success: fnAfterUpdate}, Msg: Msg
+			opt = Action: Action, DataToSave: DataToSave, CallBack: {Success: $.proxy(fnAfterUpdate,tr:tr)}, Msg: Msg
 			SERVER.update(opt)
+			false
 	cancelForm: (e) ->
 		t=$(e.target); tr=t.closest("tr")
 		if (tr.find("td.selectedClaim").length)#Redaguojama žala
@@ -260,6 +264,7 @@ App.accidentsController = Em.ResourceController.create(
 		if $.isNumeric(n) then @.set(onSpeed,n)
 		else alert "turi būti skaičius"
 	removeClaims: (AddWr,e,tr,parent) ->
+		console.log("removeClaims")
 		#$("#divAccidentsList").find("div.validity-tooltip").remove()
 		#$("div.validity-tooltip").remove()
 		dividers=AddWr.parent().find("div.dividers"); dividers.slideUp(App.accidentsController.animationSpeedEnd, () -> dividers.remove())
@@ -283,7 +288,7 @@ App.accidentsController = Em.ResourceController.create(
 		else
 			Em.run.next(-> $("#AccDetailsContent, div.dividers").slideDown(App.accidentsController.animationSpeedStart))	
 	tbodyClick: (e) ->
-		tr = $(e.target).closest("div.tr")
+		tr = $(e.target).closest("div.tr"); console.log("tbodyClick")
 		@setfilteredPolicies(e.context.date)#Filtruojam polisus		
 		AddWr = $("#AccDetailsWraper"); parent=tr.parent()		
 		if tr.hasClass("selectedAccident") and not e.isTrigger

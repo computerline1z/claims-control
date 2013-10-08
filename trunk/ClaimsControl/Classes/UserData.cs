@@ -62,6 +62,14 @@ namespace CC.Classes {
 			}
 			return LanguageID;
 		}
+		public static string GetUserLanguageShort() {
+			string ShortName;
+			using (dbDataContext db = new dbDataContext(conString)) {
+				ShortName = (from aa in db.tblLanguages where aa.ID == UserData.User.LanguageID select aa.ShortName).Single();
+			}
+			return ShortName;
+		}
+
 		public static string GetStringDate(DateTime date) {
 			return date.ToShortDateString();
 		}
