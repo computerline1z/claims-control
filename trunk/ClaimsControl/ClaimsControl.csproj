@@ -182,6 +182,7 @@
     <None Include="Content\less\sprites.less" />
     <None Include="Content\less\tables.less" />
     <None Include="Content\less\site.less" />
+    <Content Include="App_Data\Resource\resLTf.js" />
     <Content Include="bin\ClaimsControl.dll" />
     <Content Include="Content\images\claimsLogo.png" />
     <Content Include="Content\images\favicon1.ico" />
@@ -391,7 +392,6 @@
     <None Include="Views\Shared\Reports\rep_insurerCompensations.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\Resource\" />
     <Folder Include="App_Data\Uploads\" />
     <Folder Include="App_Readme\" />
     <Folder Include="Library\" />
