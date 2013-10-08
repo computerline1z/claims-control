@@ -430,12 +430,12 @@ oGLOBAL.Start = {
 		}
 		for (var p in jsResp) {
 			if (p === "Render") {
-				//#region   sukisam view'us i atitinkamus kontrolus ir patobulinam propercius tiems kur turi div.inputForm
+				//#region   sukisam view'us i atitinkamus kontrolus ir patobulinam propercius tiems kur turi div.js-frm
 				var Render = jsResp[p];
 				for (var pR in Render) {
 					if (!Render[pR]) { continue; }
 					//var ctrl=(pR.search("cls")===0)?pR.replace("."):"#"+pR; cia jeigu naudot klase
-					$('#' + pR).html(Render[pR]); var inputForm = $('#' + pR + ' div.inputForm');
+					$('#' + pR).html(Render[pR]); var inputForm = $('#' + pR + ' div.js-frm');
 					for (var i = 0; i < inputForm.length; i++) {
 						var btnSaveToDisable;
 						if ($(inputForm)[i].id === "AccidentForm") { btnSaveToDisable = $("#btnSaveAccident"); }

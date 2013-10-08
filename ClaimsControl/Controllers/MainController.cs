@@ -145,6 +145,7 @@ namespace ClaimsControl.Controllers {
 			return Json(
 				new {
 					ver = ver,
+					system = new {resObj=(System.IO.File.ReadAllText(HttpContext.Server.MapPath("~/App_Data/Resource/res" + UserData.GetUserLanguageShort() + "f.js")))},//JsonStringResult
 					jsonObj = new {
 						//proc_Accidents = acc.GetJSON_proc_Accidents(),
 						tblAccidents = acc.GetJSON_tblAccidents(),

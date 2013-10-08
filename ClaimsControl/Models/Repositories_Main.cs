@@ -197,33 +197,6 @@ namespace CC.Models {
 			};
 			return JSON;
 		}
-		//public jsonArrays GetJSON_tblDocGroup() {
-		//   jsonArrays JSON = new jsonArrays();
-		//   //JSON.Data = from c in dc.proc_Clients(LoginData.LoginID, null)
-		//   //join a in dc.tblAccidents on d.AccidentID equals a.ID
-		//   //
-		//   JSON.Data = from d in dc.tblDocGroups
-		//               join t in dc.tblDocTypes on d.ID equals t.DocGroupID
-		//               where d.IsDeleted == false && t.AccountID == UserData.AccountID
-		//               select new object[] {
-		//   d.ID,//0
-		//   d.Name//1
-		//   };
-		//   object[] Cols ={
-		//      new { FName = "ID"},//0
-		//      new { FName = "Name",Type="string", LenMax=100,Validity="require().nonHtml().maxLength(100)"}//1
-		//   }; JSON.Cols = Cols;
-		//   JSON.Config = new {
-		//      Controler = "Lists", tblUpdate = "tblDocGroup"
-		//   };
-		//   JSON.Grid = new {
-		//      aoColumns = new object[]{
-		//      new {bVisible=false,bSearchable=false},//0//ID////DefaultUpdate=0
-		//      new {sTitle="Vardas"}//1//Name//
-		//      }
-		//   };
-		//   return JSON;
-		//}
 		public jsonArrays GetJSON_tblDocGroup() {
 			jsonArrays JSON = new jsonArrays();
 			//var tblDocTypes = (from d in dc.tblDocTypes where d.IsDeleted == false && d.AccountID == UserData.AccountID select d.DocGroupID).ToArray();
@@ -370,13 +343,13 @@ namespace CC.Models {
 			object[] Cols ={//NotEditable=true // Unique=true// LenMax/LenEqual/LenMin:10
 				//Date,DateLess,DateNoLess,Time,String
 				new { FName = "ID"},//0
-				new { FName = "AccidentTypeID", Tip="Pasirinkite iš sąrašo..",List=new{Source="tblAccidentsTypes",iVal="iD",iText=new object[]{"name"},ListType="List"}},//1
-				new { FName = "DriverID",Tip="Pradėkite vesti..", List=new{Source="proc_Drivers",iVal="iD",iText=new object[]{"firstName","lastName"},Editable=new{EditThis=true},ListType="Combo"}},//3
+				new { FName = "AccidentTypeID", List=new{Source="tblAccidentsTypes",iVal="iD",iText=new object[]{"name"},ListType="List"}},//1
+				new { FName = "DriverID", List=new{Source="proc_Drivers",iVal="iD",iText=new object[]{"firstName","lastName"},Editable=new{EditThis=true},ListType="Combo"}},//3
 				new { FName = "No",Type="Integer",Validity="require().match('integer')"},//4
 				new { FName = "Date",Type="Date", Default="Today",Validity="require().match('date').lessThanOrEqualTo(new Date())"},//5
 				new { FName = "IsNotOurFault",Type="Boolean"},//6
 				new { FName = "IsOtherParticipants",Type="Boolean"},//7
-				new { FName = "ShortNote", Tip="Vienu sakiniu..",Type="String", LenMax=100,Validity="require().nonHtml().maxLength(100)"},//8
+				new { FName = "ShortNote", Type="String", LenMax=100,Validity="require().nonHtml().maxLength(100)"},//8
 				new { FName = "LongNote",Type="String", LenMax=800,Validity="nonHtml().maxLength(800)"},//9
 				new { FName = "LocationCountry",Type="String", LenMax=100,Validity="require().nonHtml().maxLength(100)"},//10
 				new { FName = "LocationAddress",Type="String", LenMax=400,Validity="require().nonHtml().maxLength(400)"},//11
@@ -507,7 +480,7 @@ namespace CC.Models {
 				new { FName = "ID"},//0
 				new { FName = "FirstName",Type="String", LenMax=100,IsUnique=new object[]{1,2},Validity="require().nonHtml().maxLength(100)"},//1
 				new { FName = "LastName",Type="String", LenMax=100,Validity="require().nonHtml().maxLength(100)"},//2
-				new { FName = "DateBorn",Type="Date", Default="", Validity="require().match('date').lessThanOrEqualTo(new Date())", Tip="yyyy.mm.dd"},//3  "Plugin":{"datepicker":{"minDate":"-3y","maxDate":"0"}} , Plugin = new {datepicker = new {maxDate=0}}
+				new { FName = "DateBorn",Type="Date", Default="", Validity="require().match('date').lessThanOrEqualTo(new Date())"},//3  "Plugin":{"datepicker":{"minDate":"-3y","maxDate":"0"}} , Plugin = new {datepicker = new {maxDate=0}}
 				new { FName = "Phone",Type="Integer", LenMax=20,Validity="nonHtml().maxLength(20)"},//5
 				new { FName = "Docs",Type="String", NotEditable=1},//6
 				new { FName = "EndDate",Type="DateLess", Default="",Validity="match('date').lessThanOrEqualTo(new Date())", Plugin = new {datepicker = new {minDate="-25y", maxDate=0}}},//7
@@ -725,7 +698,7 @@ namespace CC.Models {
 				new { FName = "InsuredContactID",List=new{Source="tblUsers",ListType="List", iVal="iD",iText=new object []{"firstName","surname"},mapWithNoCommas=1}},//9
 				new { FName = "ClaimTypeID",List=new{Source="tblClaimTypes",ListType="List", iVal="iD",iText=new object []{"name"}}},//10
 				new { FName = "InsurerID",List=new{Source="tblInsurers",Editable=new{EditList=true},ListType="List", iVal="iD",iText=new object []{"name"}}},//11
-				new { FName = "MailsAddresses",Type="String", Tip="Įveskite draudiko ar kitus el. pašto adresus (atskirdami juos kableliu ar kabliataškiu)", LenMax=250,Validity="nonHtml().maxLength(250)"},//5
+				new { FName = "MailsAddresses",Type="String",LenMax=250,Validity="nonHtml().maxLength(250)"},//5
 
 				new { FName = "warn_DocsAfterAccTerm",Type="Integer",Validity="require().match('integer').maxLength(4).greaterThanOrEqualTo(0)"},//6
 				new { FName = "warn_DocsSupplyTermExpire",Type="Integer",Validity="require().match('integer').maxLength(4).greaterThanOrEqualTo(0)"},//7
@@ -748,7 +721,7 @@ namespace CC.Models {
 					new {bVisible=false,sTitle="Kontaktinis asmuo"},//9//InsuredContactID////UserID
 					new {bVisible=false,sTitle="Draudimo rūšis"},//10//ClaimTypeID////DefaultUpdate=0
 					new {bVisible=false,sTitle="Draudimo kompanija"},//11//InsurerID////
-					new {bVisible=false,sTitle="Pranešimą apie žalą siųsti į:"},//11//InsurerID////
+					new {bVisible=false,sTitle="Pranešimą apie žalą siųsti į:"},//12//InsurerID////
 
 					new {sTitle=""},
 					new {sTitle=""},
@@ -788,14 +761,14 @@ namespace CC.Models {
 			object[] Cols ={//NotEditable=true // Unique=true// LenMax/LenEqual/LenMin:10
 				//Date,DateLess,DateNoLess,Time,String
 				new { FName = "ID"},//0
-				new { FName = "AccidentTypeID",Tip="Pasirinkite iš sąrašo.."},//1
+				new { FName = "AccidentTypeID",Tip="Pasirinkite iš sąrašo11.."},//1
 				new { FName = "AccountID"},//2
-				new { FName = "DriverID",Tip="Pradėkite vesti.."},//3
+				new { FName = "DriverID",Tip="Pradėkite vesti11.."},//3
 				new { FName = "No",Type="Integer",Validity="require().match('integer').maxLength(13).greaterThanOrEqualTo(0)"},//4
 				new { FName = "Date",Type="Date", Default="Today",Validity="require().match('date').lessThanOrEqualTo(new Date())"},//5
 				new { FName = "IsNotOurFault",Type="Boolean",Validity="require()"},//6
 				new { FName = "IsOtherParticipants",Type="Boolean",Validity="require()"},//7
-				new { FName = "ShortNote",Tip="Vienu sakiniu..",Type="String", LenMax=50,Validity="require().nonHtml().maxLength(50)"},//8
+				new { FName = "ShortNote",Tip="Vienu sakiniu11..",Type="String", LenMax=50,Validity="require().nonHtml().maxLength(50)"},//8
 				new { FName = "LongNote",Type="String", LenMax=400,Validity="nonHtml().maxLength(400)"},//9
 				new { FName = "LocationCountry",Type="String", LenMax=50,Validity="require().nonHtml().maxLength(50)"},//10
 				new { FName = "LocationAddress",Type="String", LenMax=200,Validity="require().nonHtml().maxLength(200)"},//11
@@ -991,10 +964,10 @@ namespace CC.Models {
 
 			object[] Cols ={
 				new { FName = "ID"},//0
-				new { FName = "ClaimTypeID",Tip="Pasirinkite žalos tipą..", List=new{Source="tblClaimTypes",iVal="iD",iText=new object[]{"name"},ListType="List"}},//1
+				new { FName = "ClaimTypeID", List=new{Source="tblClaimTypes",iVal="iD",iText=new object[]{"name"},ListType="List"}},//1
 				new { FName = "AccidentID"},//2
-				new { FName = "InsPolicyID",Tip="Pasirinkite iš sąrašo..", List=new{Source="proc_InsPolicies",iVal="iD",iText=new object[]{"claimType","insurerName"},Editable = new{EditThis=true,AddNew=true},ListType="List"}},//Editable=new{EditList=true}3 ,Append=new{id=0,value="Neapdrausta"}
-				new { FName = "VehicleID",Tip="Valst.Nr.", List=new{Source="proc_Vehicles",iVal="iD",iText=new object[]{"plate","type","make","model"},ListType="None"}},//4
+				new { FName = "InsPolicyID", List=new{Source="proc_InsPolicies",iVal="iD",iText=new object[]{"claimType","insurerName"},Editable = new{EditThis=true,AddNew=true},ListType="List"}},//Editable=new{EditList=true}3 ,Append=new{id=0,value="Neapdrausta"}
+				new { FName = "VehicleID", List=new{Source="proc_Vehicles",iVal="iD",iText=new object[]{"plate","type","make","model"},ListType="None"}},//4
 				new { FName = "No",Type="Integer", LenMax=10,Validity="require().match('integer').maxLength(13).greaterThanOrEqualTo(0)"},//5
 				new { FName = "IsTotalLoss",Type="Boolean"},//6
 				new { FName = "LossAmount",Type="Decimal", LenMax=15,Validity="require().match('number').greaterThanOrEqualTo(0)"},//7

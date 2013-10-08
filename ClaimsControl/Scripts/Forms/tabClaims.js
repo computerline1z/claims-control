@@ -115,9 +115,11 @@
             red = true;
           }
         } else {
-          daysAfterDocs = moment().diff(moment(claim.date, dateFormat), "days");
-          if (daysAfterDocs > claim.insPolicy.warn_PaymentTerm) {
-            warnings.noPayment = daysAfterDocs;
+          if (claim.dateNotification) {
+            daysAfterDocs = moment().diff(moment(claim.dateNotification, dateFormat), "days");
+            if (daysAfterDocs > claim.insPolicy.warn_PaymentTerm && claim.claimStatus < 4) {
+              warnings.noPayment = daysAfterDocs;
+            }
           }
         }
       }
@@ -127,7 +129,7 @@
         if (a.typeID === 3) {
           obj = {
             date: a.date,
-            user: fnGetUser.call(ctrl, a.userID),
+            user: fnGetUser.call(ctrl, a.toID),
             subject: a.subject,
             iD: a.iD,
             toID: a.toID

@@ -342,34 +342,14 @@
     <Content Include="Scripts\Forms\userCard.js" />
     <Content Include="Scripts\Main\Copy of jquery-1.8.0.combined2.min.js" />
     <Content Include="Scripts\Main\jquery-1.8.0.combined2.min.js" />
-    <Content Include="Scripts\My\clsEditableForm.js" />
     <Content Include="Scripts\My\General.js" />
     <Content Include="Scripts\My\MyPlugins_Tree.js" />
     <Content Include="Scripts\My\MyPlugins_UploadFiles.js" />
     <Content Include="Scripts\My\oCONTROLS.js" />
-    <Content Include="Scripts\My\ui-checkbox.js" />
     <Content Include="Scripts\My\MyPlugins_Checkbox.js" />
     <Content Include="Scripts\My\MyPlugins_ComboBox.js" />
     <Content Include="Scripts\My\ui-ember.js" />
     <Content Include="Scripts\My\Views.js" />
-    <Content Include="Scripts\Plugins scripts\JSPlugins\jquery-ui-1.8.10.custom.min.js" />
-    <Content Include="Scripts\Plugins scripts\JSPlugins\jquery.dataTables.js" />
-    <Content Include="Scripts\Plugins scripts\JSPlugins\jquery.dataTables.min.1.7.4.js" />
-    <Content Include="Scripts\Plugins scripts\JSPlugins\jquery.dataTables.min.js" />
-    <Content Include="Scripts\Plugins scripts\JSPlugins\jquery.jEditable.js" />
-    <Content Include="Scripts\Plugins scripts\JSPlugins\jquery.jEditable.min.js" />
-    <Content Include="Scripts\Plugins scripts\JSPlugins\jquery.rich-array-min.js" />
-    <Content Include="Scripts\Plugins scripts\JSPlugins\jquery.rich-array.js" />
-    <Content Include="Scripts\Plugins scripts\JSPlugins\jquery.validity.js" />
-    <Content Include="Scripts\Plugins scripts\JSPlugins\jquery.validity.min.js" />
-    <Content Include="Scripts\Plugins scripts\JSPlugins\swfupload.js" />
-    <Content Include="Scripts\Plugins scripts\JSPlugins\swfupload.swf" />
-    <Content Include="Scripts\Plugins scripts\dateFormat.js" />
-    <Content Include="Scripts\Plugins scripts\jquery.metadata.js" />
-    <Content Include="Scripts\Plugins scripts\JScript1.js" />
-    <Content Include="Scripts\Plugins scripts\jsonUpdate.js" />
-    <Content Include="Scripts\Plugins scripts\MegaSelectList.js" />
-    <Content Include="Scripts\Plugins scripts\TimePicker.js" />
     <Content Include="SQL\current.sql" />
     <None Include="Views\Shared\Claims\tmpAction_notifyInsurer.cshtml" />
     <Content Include="Web.config">
@@ -411,6 +391,7 @@
     <None Include="Views\Shared\Reports\rep_insurerCompensations.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Data\Resource\" />
     <Folder Include="App_Data\Uploads\" />
     <Folder Include="App_Readme\" />
     <Folder Include="Library\" />
@@ -495,7 +476,6 @@
     <Content Include="Views\Shared\Accidents\tmpAccident_Claims.cshtml" />
     <None Include="Scripts\Forms\tabAdmin.coffee" />
     <None Include="Scripts\Forms\tabLists.coffee" />
-    <None Include="Scripts\My\clsEditableForm.coffee" />
     <None Include="Scripts\My\MyPlugins_Tree.coffee" />
     <None Include="Scripts\My\MyPlugins_UploadFiles.coffee" />
     <None Include="Scripts\My\MyPlugins_ComboBox.coffee" />

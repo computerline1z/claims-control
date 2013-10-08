@@ -2,14 +2,14 @@
 @*{{#each view.content}} *@
 {{log this}}
 {{#unless newClaim}}
-	<div id='divClaimCard_Content' class="container centerBlock w90pr" data-ctrl='{"id":"{{unbound iD}}","NewRec":"0","Source":"proc_Claims","TypeID":"{{unbound typeID}}"}'>
+	<div id='divClaimCard_Content' class="js-frm container centerBlock w90pr" data-ctrl='{"id":"{{unbound iD}}","NewRec":"0","Source":"proc_Claims","TypeID":"{{unbound typeID}}"}'>
 {{else}}
 	<div id='divNewClaimCard_Content' class="container centerBlock w90pr">@*data-ctrl yra motininej divNewClaimCard*@
 {{/unless}}
 {{#compare typeID "===" "6"}} 
 	<div class='left w45pr'>
 		{{updatableField vehicleID labelType="Top" classes="wrapper:'leftBlock'" }}
-		{{updatableField lossAmount attr="DISABLED" id="LossAmount" classes="wrapper:'leftBlock disabled', input:'not-editable' " labelType="Left" sTitle="Prastovos nuostolio suma"}}@*(Math.round((Claim.days*Claim.PerDay*100))/100)*@
+		{{updatableField lossAmount attr="DISABLED" id="LossAmount" classes="wrapper:'leftBlock disabled', input:'not-editable' " labelType="Left" colLabels="LossAmount_forIdleTime"}}@*(Math.round((Claim.days*Claim.PerDay*100))/100)*@
 	</div>
 
 	<div class='right w45pr'>

@@ -56,11 +56,12 @@ App.claimsController = Em.ArrayController.create(
 				else if X==0 then warnings=notifyOfDocs:{today:true}; red=true #šiandien baigiasi
 				else if X-claim.insPolicy.warn_DocsSupplyTermExpire<1 then warnings=notifyOfDocs:{leftDays:X}; red=true #liko mažiau nei nurodyta ir jau reikia perspėt
 			else #claim.claimStatus==2 ir daugiau
-				daysAfterDocs=moment().diff(moment(claim.date,dateFormat),"days")
-				if daysAfterDocs>claim.insPolicy.warn_PaymentTerm then warnings.noPayment=daysAfterDocs
+				if claim.dateNotification
+					daysAfterDocs=moment().diff(moment(claim.dateNotification,dateFormat),"days")
+					if daysAfterDocs>claim.insPolicy.warn_PaymentTerm and claim.claimStatus<4 then warnings.noPayment=daysAfterDocs
 		claim.activities.forEach((a)->
 			if a.typeID==3
-				obj=date:a.date,user:fnGetUser.call(ctrl, a.userID),subject:a.subject,iD:a.iD,toID:a.toID
+				obj=date:a.date,user:fnGetUser.call(ctrl, a.toID),subject:a.subject,iD:a.iD,toID:a.toID
 				if moment().diff(moment(a.date,dateFormat),"days")>0 then red=true; obj.red=true
 				tasks.addObject(obj); 
 		)

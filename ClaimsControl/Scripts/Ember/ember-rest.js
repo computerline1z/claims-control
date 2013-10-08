@@ -197,6 +197,9 @@ var oDATA = Ember.Object.create({
 			$.ajax({
 				url: p.url, dataType: 'json', type: 'POST', data: dataPars,
 				success: function (json) {
+					if (json.system){
+						if (json.system.resObj){App.Lang=JSON.parse(json.system.resObj);}
+					}
 					if (json.jsonObj) {
 						$.each(json.jsonObj, function (objName, value) {
 							//console.log("New jsonObj:" + objName); setter.call(me, objName, value);
@@ -492,7 +495,7 @@ var SERVER = {
 		//else if (updData.Ctrl!==""){$("div.content:first").spinner({ position: 'center', img: 'spinnerBig.gif' });}
 
 		if (!dataType) {dataType = 'json';}
-		oGLOBAL.notify.msg("", "Siunčiami duomenys..");
+		//oGLOBAL.notify.msg("", "Siunčiami duomenys..");
 		$.ajax({
 			type: "POST",
 			//contentType: "charset=utf-8",
@@ -531,26 +534,23 @@ var SERVER = {
 				Edit: "Nepavyko pakeisti duomenų.",
 				Delete: "Nepavyko ištrinti duomenų."
 			},
-			Success: {
-				Add: "Duomenys sėkmingai pridėti.",
+			Success: {}
+			/*,	Add: "Duomenys sėkmingai pridėti.",
 				Edit: "Duomenys sėkmingai pakeisti.",
 				Delete: "Duomenys ištrinti."
-			}
+			}*/
 		};
 		var Msg, Sign, Type, notExpires;
 		if (resp.ErrorMsg) { Type = "Error", Sign = "img32-warning", notExpires = true; }
 		else { Type = "Success", Sign = "img32-check", notExpires = false; }
 
-		//Msg = updData.Msg[Type] || DefMsg[Type][updData.Action];
 		Msg = (updData.Msg)?updData.Msg[Type]:DefMsg[Type][updData.Action];
 		if (!Msg) Msg="";//Jei kitas duomenų tipas
 		if (Type === "Error") { Msg += " Klaida:\n" + resp.ErrorMsg; }
 		if (updData.CallBack) {
 			if (typeof updData.CallBack[Type] === 'function') { updData.CallBack[Type](resp, updData); }
 		}
-		//$.growlUI(DefMsg.Title, Msg);
-
-		oGLOBAL.notify.withIcon(DefMsg.Title, Msg, Sign, notExpires);
+		if (resp.ErrorMsg) { oGLOBAL.notify.withIcon(DefMsg.Title, Msg, Sign, notExpires);}
 		return false;
 	},
 	updateRecord: function (url,JSONarg, objName,Action,CallBack) {

@@ -1,10 +1,10 @@
 ﻿</br>
 <div class="row">	
-	{{updatableField typeID labelType="Left" classes="wrapper:'col eight first clearfix child-labels-left' " sTitle="Pretenzijos tipas" Radio="[{'label':'Žala turtui','value':'9','checked':1},{'label':'Žala asmeniui','value':'10'}]"}}
+	{{updatableField typeID labelType="Left" classes="wrapper:'col eight first clearfix child-labels-left' " Radio="[{'label':'Žala turtui','value':'9','checked':1},{'label':'Žala asmeniui','value':'10'}]"}}
 </div>	
 <div class="row">	
-{{updatableField subject labelType="Top" classes="wrapper:'col nine first'" sTitle="Pretenziją pateikė"}}
-{{updatableField amount labelType="Top" classes="wrapper:'col three last'" sTitle="Pretenzijos suma be PVM"}}
+{{updatableField subject labelType="Top" classes="wrapper:'col nine first'" colLabels="subject_forDamage"}}
+{{updatableField amount labelType="Top" classes="wrapper:'col three last'"  colLabels="amount_forDamage"}}
 </div>
-{{updatableField body labelType="Top" classes="input:'row'" sTitle="Pastabos"}}
+{{updatableField body labelType="Top" classes="input:'row'"}}
 {{view App.FormBottomView target="App.tabClaimsRegulationController"}}

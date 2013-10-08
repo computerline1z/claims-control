@@ -112,13 +112,13 @@ oGLOBAL.LoadAccident_Card = function (AccidentNo) {
 		});
 
 		//$('#Date').datetimepicker({ numberOfMonths: 2 });
-		$("#inputChooseTown").bind("keypress", function () { if ($(this).val().length > 1) { $("#btnMapTown").button("enable"); } else { $("#btnMapTown").button("disable"); } });
-		//var eNr=oGLOBAL.GetPar(); eNr=(eNr>0)?("Įvykis Nr:"+eNr):"Naujas įvykis";
-		//$(".ui-tabs-nav li:last").after("<span class='RightSpanInTab'>"+eNr+"</span>");
-		//#divlogindisplay
-		//#ulMainMenu	
-		/////var tabHeight = $(document).height() - $('#divlogindisplay').outerHeight(true) - $('#ulMainMenu').outerHeight(true);
-		/////$('#divAccidentEdit').height(tabHeight);
+		$("#inputChooseTown").on("keypress", function (e) {
+			if ($(this).val().length > 1) {
+				$("#btnMapTown").button("enable");
+				var keyCode=e.which || e.keyCode ;
+				if (keyCode === 13) {$('#btnMapTown').trigger('click');}
+			} else { $("#btnMapTown").button("disable"); } 
+		});
 		var Dif = $('#divAccidentEdit').height() - $('h2').outerHeight(true) - $('#ulWhiteMenu').outerHeight(true) - $('#AccidentForm').outerHeight(true);
 		if (Dif > 0) { $('div.HalfDivleft1').height($('div.HalfDivleft1').height() + Dif); }
 		var MapHeight = $('#AccidentForm').outerHeight(false) - $('#divMapHead').outerHeight(false);

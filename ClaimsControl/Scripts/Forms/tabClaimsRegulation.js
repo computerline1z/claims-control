@@ -538,7 +538,7 @@
     editForm: function(e) {
       var frm;
 
-      frm = $(e.target).closest(".inputForm");
+      frm = $(e.target).closest(".js-frm");
       this.actionViewInstance.set("notEditable", false).set("editButton", false);
       return Em.run.next(this, function() {
         return oCONTROLS.UpdatableForm({

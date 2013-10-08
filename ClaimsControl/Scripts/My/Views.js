@@ -32,12 +32,13 @@ Handlebars.registerHelper('updatableField', function (prop, options) {
 	var st =  (h.style)? ("style='"+h.style+"'") : "";
 	var id = h.id; id = (id) ? ",\"id\":\"" + id+"\"" : "";
 	var lblT = h.labelType; lblT = (lblT) ? ",\"labelType\":\"" + lblT+"\"": "";
-	var sTitle = h.sTitle; sTitle = (sTitle) ? ",\"sTitle\":\"" + sTitle  +"\"": "";
+	//var sTitle = h.sTitle; sTitle = (sTitle) ? ",\"sTitle\":\"" + sTitle  +"\"": "";
+	var colLabels = h.colLabels; colLabels = (colLabels) ? ",\"colLabels\":\"" + colLabels  +"\"": "";
 	var attr = h.attr; attr = (attr) ? ",\"attr\":\"" + attr +"\"": "";
 	var List = h.List; List = (List) ? ",\"List\":" + List  : ""; //List yra objektas ir jam kabuciu nereikia
 	var Editable = h.Editable; Editable = (Editable) ? ",\"Editable\":" + Editable  : ""; //Editable yra objektas ir jam kabuciu nereikia
 
-	var retString = " class='ExtendIt"+((classes)?" "+classes:"")+"' "+st+" data-ctrl='{\"Value\":\"" + v + "\",\"Field\":\"" + f.firstBig()+"\"" + classesObject+ id + lblT+sTitle + attr+List+Editable+radio;
+	var retString = " class='ExtendIt"+((classes)?" "+classes:"")+"' "+st+" data-ctrl='{\"Value\":\"" + v + "\",\"Field\":\"" + f.firstBig()+"\"" + classesObject+ id + lblT+colLabels + attr+List+Editable+radio;
 	//if (retString.charAt(retString.length - 1) === ",") {retString = retString.slice(0, -1); } //iškertam paskutini kalbeli jei yra
 	if (h.tag) {retString="<"+h.tag+ retString + "}'></"+h.tag+">";} else  {retString="<div"+ retString + "}'></div>";}
 	return new Handlebars.SafeString(retString );

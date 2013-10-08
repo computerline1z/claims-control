@@ -153,6 +153,25 @@ $(function() {
 		App.router.transitionTo('tabMyCard')
 		return false;
 	});
+	$("body").hoverIntent({
+		over: function(e){
+			var t=$(this),ext=t.closest(".ExtendIt");data=ext.data("ctrl"),field=(data.colLabels)?data.colLabels:data.Field;
+			var txt=App.Lang.tables[t.closest(".js-frm").data("ctrl").Source].Cols[field].tip;
+			var offset=ext.offset();
+			
+			var div=$('<div id="js-tip-id" style="left:'+offset.left+'px;top:'+offset.top+'px;width:'+ext.width()+'px;">'+txt+'</div>').appendTo('body');
+			if ( offset.top-div.height()-20> $(window).scrollTop()){//Telpa - dedam viršuj
+				div.addClass("js-tip-top").offset({top:(div.offset().top-div.height()-20)});
+			}else{//Netelpa - dedam apačioj
+				div.addClass("js-tip-bottom").offset({top:(div.offset().top+ext.height()+div.height())});
+			}
+			div.fadeIn("slow");
+		},
+		out: function(e){
+			$('#js-tip-id').fadeOut("slow").remove();
+		},
+		selector: 'label.js-tip'
+	});
 	Em.run.next(function(){
 		$("#tabAccidents,#tabClaims,#tabReports,#tabLists,#tabAdmin").on('focus', 'input:text,textarea', function(e){
 			$(e.target).addClass("activeField");
