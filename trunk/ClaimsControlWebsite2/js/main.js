@@ -109,13 +109,14 @@ function fix_sticky_menu(){
 	var menu = $('.js-keep-on-top'),
 		bg1 = $('.js-top-menu-one'),
 		bg2 = $('.js-top-menu-two'),
-		body = $('body'),
+		body = $('bodyz'),
 		menu_height = menu.height() + 70
 	;
 
 	if( $(window).scrollTop() > top_menu_offset && viewport >= grid_float_breakpoint ){
 		if( !menu.hasClass("js-sticked") ){
 			menu.addClass("js-sticked");
+			menu.parent().css("padding-bottom", menu_height);
 		}
 
 		if( bg1.hasClass("active") === false ){
@@ -133,11 +134,12 @@ function fix_sticky_menu(){
 			;
 		}
 
-		body.css("padding-top", menu_height );
+		//body.css("padding-top", menu_height );
 	}
 	else {
 		if( menu.hasClass("js-sticked") ){
 			menu.removeClass("js-sticked");
+			menu.parent().css("padding-bottom", "");
 		}
 
 		if( bg1.hasClass("active") ){
@@ -148,8 +150,139 @@ function fix_sticky_menu(){
 		}
 
 
-		body.css("padding-top", "" );
+		//body.css("padding-top", "" );
 	}
+}
+
+function fix_sliding_stripe(){
+
+	var minus_right = 0;
+
+	if(viewport<screen_sm){
+		minus_right = 45;
+	}
+
+	$(".css-js-sliding-background").css(
+		{
+			"width": 306,
+			"height": header_height,
+			"left": side
+		}
+	);
+
+	$(".css-js-sliding-background>.inside_stripe").css(
+		{
+			"height": header_height,
+			"width": 642,
+			"right": -336 - minus_right
+		}
+	);
+}
+
+function update_sliding_stripe(){
+
+	var minus_right = 0,
+		plus_left = 0
+	;
+
+	if(viewport<screen_sm ){
+		minus_right = 45;
+	}
+	if( $(".css-js-sliding-background").hasClass("bg-blueGrayLight") ){
+		plus_left = slider_holder_width
+	}
+
+	$(".css-js-sliding-background").css(
+		{
+			"height": header_height,
+			"left": side + plus_left
+		}
+	);
+
+	$(".css-js-sliding-background>.inside_stripe").css(
+		{
+			"height": header_height,
+			"right": -336 - minus_right
+		}
+	);
+}
+
+function enable_sliding_stripe(target_hover){
+
+	if(target_hover.length < 1){
+		return;
+	}
+
+	var sliding_speed = 100,
+		distance_to_right_side = undefined,
+		hover = target_hover.children(".img-box-hover"),
+		hover_width = viewport - target_hover.offset().left - 17
+	;
+
+	$(target_hover).hover(function(e)
+
+		{
+
+			/*
+			hover.css(
+				{
+					"width": hover_width,
+					"height": target_hover.height()
+				}
+			);
+			*/
+			
+
+			if( stripe_slide_animation_in_progress ){
+				return;
+			}
+			stripe_slide_animation_in_progress = true;
+			stripe_slide_in = true;
+
+			$(".css-js-sliding-background").hoverFlow(e.type, { left: "+="+slider_holder_width }, sliding_speed, function(){
+				
+				distance_to_right_side = viewport - 17 - $(".inside_stripe").offset().left - $(".inside_stripe").width() + slider_holder_width;
+				distance_to_right_side = Math.floor(distance_to_right_side);
+				$(this).addClass("bg-blueGrayLight z-index2");
+				window.setTimeout(function(){
+					$(".css-js-sliding-background .content").fadeIn(sliding_speed);
+				}, 50);
+				
+				$(".css-js-sliding-background").hoverFlow(e.type, { width: "+="+distance_to_right_side }, sliding_speed);
+				
+			});
+		}/*,
+		function(e)
+		{
+			if(stripe_slide_in!=true){
+				return;
+			}
+
+			$(".css-js-sliding-background").hoverFlow(e.type, { width: "-="+distance_to_right_side }, sliding_speed, function(){
+				
+				$(".css-js-sliding-background .content").css("display", "none");
+				$(this).removeClass("bg-blueGrayLight z-index2");
+
+				$(".css-js-sliding-background").hoverFlow(e.type, { left: "-="+slider_holder_width }, sliding_speed, function(){
+					stripe_slide_animation_in_progress = false;
+				});
+
+			});
+
+			hover.css(
+				{
+					"width": "",
+					"height": ""
+				}
+			);
+			stripe_slide_in = false;
+		}*/
+		
+	);
+
+	$(".js-click-to-truckviser").click(function(){
+		$(".navbar-nav").children("li").eq(2).children("a").click();
+	});
 }
 
 /* DOCUMENT READY */
@@ -163,10 +296,18 @@ $(function() {
 
 	fix_stripe();
 
+	fix_sticky_menu();
+
 	// Show page to the user
 	$("body").removeClass("invisible");
 
+	// SLIDING STRIPE
+
+	fix_sliding_stripe();
+
 	// Do some more stuff
+
+	enable_sliding_stripe($(".tablet-driver-blue .img-box"));
 	
 	$(".tablet-driver-red").hover(function(e) {
 
@@ -525,14 +666,16 @@ $(function() {
 
 	}
 
-	$(".cc-carousel").cc_slides({
-		slide_speed: 500,
-		button_next_class : "cc_slides_next",
-		button_prev_class: "cc_slides_prev",
-		active_slide_class: "cc_active_slide",
-		pause_play_class: "cc_slides_pause_play",
-		autoplay: 3000
-	});
+	if( $(".cc-carousel").length > 0 ){
+		$(".cc-carousel").cc_slides({
+			slide_speed: 500,
+			button_next_class : "cc_slides_next",
+			button_prev_class: "cc_slides_prev",
+			active_slide_class: "cc_active_slide",
+			pause_play_class: "cc_slides_pause_play",
+			autoplay: 3000
+		});
+	}
 
 	// skip to title
 	$(".navbar-nav .skip-to-title").click(function(event){
@@ -543,6 +686,10 @@ $(function() {
 		;
 
 		$("html, body").animate({scrollTop: this_href_top - top_menu_height}, 0);
+	});
+
+	$(".js-click-link-to-truckviser").click(function(){
+		window.location = "truckviser.html";
 	});
 
 
@@ -563,6 +710,8 @@ $(function() {
 		fix_stripe();
 
 		fix_sticky_menu();
+
+		update_sliding_stripe()
 
 	});
 
@@ -590,5 +739,8 @@ $(function() {
 	// slider
 	slideshow_position = 0,
 	slideshow_animation_in_progress = false,
-	autoslide_playing = false
+	stripe_slide_animation_in_progress = false,
+	stripe_slide_in = false,
+	autoslide_playing = false,
+	slider_holder_width = 314
 ;
