@@ -281,7 +281,7 @@ function enable_sliding_stripe(target_hover){
 	);
 
 	$(".js-click-to-truckviser").click(function(){
-		$(".navbar-nav").children("li").eq(2).children("a").click();
+		$(".navbar-nav").children("li").eq(1).children("a").click();
 	});
 }
 
@@ -685,7 +685,7 @@ $(function() {
 			this_href_top = $(this_href).offset().top
 		;
 
-		$("html, body").animate({scrollTop: this_href_top - top_menu_height}, 0);
+		$("html, body").animate({scrollTop: this_href_top - top_menu_height -52 }, 500);
 	});
 
 	$(".js-click-link-to-truckviser").click(function(){
