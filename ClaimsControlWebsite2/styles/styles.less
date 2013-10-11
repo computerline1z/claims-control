@@ -36,6 +36,9 @@
 @blueDark:         #131e2d;
 @orange:           #eb5a44;
 @cyan:             #00d3d3;
+@brown:            #5b5757;
+@brownDark:        #3f3b3b;
+@brownLight:       #cac3c0;
 
 // Brand colors
 // -------------------------
@@ -236,6 +239,10 @@ h5 {
 				color: @blueDark;
 				.border-bottom-radius(0);
 			}
+		}
+
+		> .dropdown.active {
+			margin-right: 17px;
 		}
 
 		> .dropdown.active > a:hover .caret,
@@ -595,6 +602,10 @@ h5 {
 	overflow: hidden;
 }
 
+.no-text-transform {
+	text-transform: none;
+}
+
 .wrap-overflow {
 	position: relative;
 	overflow: hidden;
@@ -683,6 +694,18 @@ h5 {
 	background: @blueGrayLight;
 }
 
+.bg-brown {
+	background: @brown;
+}
+
+.bg-brownLight {
+	background: @brownLight;
+}
+
+.bg-brownDark {
+	background: @brownDark;
+}
+
 .bg-blueGray {
 	background: @blueGray;
 }
@@ -728,6 +751,27 @@ h5 {
 	&,
 	a&:hover {
 		color: @blueDark;
+	}
+}
+
+.text-brown {
+	&,
+	a&:hover {
+		color: @brown;
+	}
+}
+
+.text-brownLight {
+	&,
+	a&:hover {
+		color: @brownLight;
+	}
+}
+
+.text-brownDark {
+	&,
+	a&:hover {
+		color: @brownDark;
 	}
 }
 
@@ -823,6 +867,40 @@ h5 {
 	}
 }
 
+.brown-spikes {
+	position: relative;
+	margin-top: -10px;
+
+	&:before {
+		content: '';
+		display: block;
+		width: 100%;
+		height: 10px;
+		background: url(img/brown-spikes.png) repeat-x;
+		position: absolute;
+		top: -10px;
+		left: 0;
+
+	}
+}
+
+.brownDark-spikes {
+	position: relative;
+	margin-top: -10px;
+
+	&:before {
+		content: '';
+		display: block;
+		width: 100%;
+		height: 10px;
+		background: url(img/brownDark-spikes.png) repeat-x;
+		position: absolute;
+		top: -10px;
+		left: 0;
+
+	}
+}
+
 .white-spikes {
 	position: relative;
 	margin-top: -10px;
@@ -866,6 +944,22 @@ h5 {
 		width: 100%;
 		height: 10px;
 		background: url(img/blueDark-spikes.png) repeat-x;
+		position: absolute;
+		top: 0;
+		left: 0;
+
+	}
+}
+
+.brownDark-spikes-down {
+	position: relative;
+
+	&:before {
+		content: '';
+		display: block;
+		width: 100%;
+		height: 10px;
+		background: url(img/brownDark-spikes-down.png) repeat-x;
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -1420,4 +1514,61 @@ h5 {
 
 .pointer {
 	cursor: pointer;
+}
+
+.brown-input {
+	background: @brown;
+	border-color: @brown;
+}
+
+/* jQuery Countdown styles 1.6.3. */
+.hasCountdown {
+	border: 1px solid #ccc;
+	background-color: #eee;
+}
+.countdown_rtl {
+	direction: rtl;
+}
+.countdown_holding span {
+	color: #888;
+}
+.countdown_row {
+	clear: both;
+	width: 100%;
+	padding: 0px 2px;
+	text-align: center;
+}
+.countdown_show1 .countdown_section {
+	width: 98%;
+}
+.countdown_show2 .countdown_section {
+	width: 48%;
+}
+.countdown_show3 .countdown_section {
+	width: 32.5%;
+}
+.countdown_show4 .countdown_section {
+	width: 24.5%;
+}
+.countdown_show5 .countdown_section {
+	width: 19.5%;
+}
+.countdown_show6 .countdown_section {
+	width: 16.25%;
+}
+.countdown_show7 .countdown_section {
+	width: 14%;
+}
+.countdown_section {
+	display: block;
+	float: left;
+	font-size: 75%;
+	text-align: center;
+}
+.countdown_amount {
+	font-size: 200%;
+}
+.countdown_descr {
+	display: block;
+	width: 100%;
 }
