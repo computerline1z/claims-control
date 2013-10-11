@@ -160,6 +160,11 @@ h3 {
 /* RESET  */
 /* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
 
+.wrapper {
+	position: relative;
+	overflow: hidden;
+}
+
 ::selection {
 	background: @orange; /* Safari */
 	color: @white;
@@ -314,12 +319,16 @@ h5 {
 .bg-cyan-blue {
 	background: url(img/01photodune-4525105-truck-l2.jpg) 0 -152px no-repeat;
 
-	@media (min-width: @grid-float-breakpoint) {
+	@media (min-width: @screen-lg) {
 		-webkit-background-size: cover;
 		-moz-background-size: cover;
 		-o-background-size: cover;
 		background-size: cover;
 	}
+}
+
+.bg-transparent {
+	background: transparent!important;
 }
 
 .background-red-stripe {
@@ -339,7 +348,7 @@ h5 {
 }
 
 .logo {
-	display: block;
+	display: inline-block;
 	padding: 24px;
 	.box-sizing(content-box);
 
@@ -580,6 +589,15 @@ h5 {
 .no-list-style {
 	list-style: none;
 	padding-left: 0;
+}
+
+.no-overflow {
+	overflow: hidden;
+}
+
+.wrap-overflow {
+	position: relative;
+	overflow: hidden;
 }
 
 /* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
@@ -1043,10 +1061,13 @@ h5 {
 
 .bg-cyan-blue .js-top-menu-one.active {
 	background: url(img/01photodune-4525105-truck-l2.jpg) center -252px no-repeat;
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
-	background-size: cover;
+
+	@media (min-width: @screen-lg) {
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+	}
 }
 
 .js-top-menu-two.active {
@@ -1059,7 +1080,7 @@ h5 {
 
 // dev
 
-.tablet-driver-red {
+.tablet-driver-red, .tablet-driver-blue {
 	position: relative;
 	width: 100%;
 	//background: url(img/tablet-driver.png) 85px 0 no-repeat;
@@ -1069,27 +1090,25 @@ h5 {
 		padding-top: 39px;
 	}
 
-	img {
-		position: absolute;
-		top: 0;
-		left: 60px;
+	.img-box {
+		margin-left: 60px;
+	}
+
+	@media (max-width: @screen-lg) {
+		padding-right: 0;
 	}
 
 	@media (max-width: @screen-md) {
-		img {
-			left: 0;
+		.img-box {
+			margin-left: 0;
 		}
 	}
+}
 
-	@media (max-width: @screen-xs) {
-		padding-right: 0;
-		img {
-			position: static;
-		}
-		h2 {
-			padding-top: 0;
-		}
-	}
+.tablet-driver-blue {
+	padding-right: 0;
+
+	img { position: relative; }
 }
 
 .blue-box-in-header {
@@ -1165,14 +1184,23 @@ h5 {
 	background: url(img/icon-play-red.png) no-repeat;
 }
 
+.icon-play-down {
+	display: block;
+	width: 50px;
+	height: 50px;
+	background: url(img/icon-play-down.png) no-repeat;
+}
+
 .js-red-stripe-visual {
 	display: block;
 	position: absolute;
 	top: 0;
 	.js-stripe-contents {
-		margin-top: 190px;
-		margin-left: 30%;
-		margin-right: 50%;
+		margin-top: 140px;
+		padding-top: 50px;
+		padding-left: 30%;
+		padding-right: 50%;
+		padding-bottom: 23px;
 	}
 }
 
@@ -1186,6 +1214,10 @@ h5 {
 
 .z-index3 {
 	z-index: 3;
+}
+
+.z-index4 {
+	z-index: 4;
 }
 
 .z-index-0-sm {
@@ -1289,10 +1321,19 @@ h5 {
 	}
 }
 
+.cc-carousel-holder {
+	display: block;
+	margin: 0 auto;
+	width: 714px;
+	padding: 42px 43px;
+	height: 496px;
+	background: url(img/slider-frame.png) no-repeat;
+}
+
 .cc-carousel {
 	position: relative;
 	width: 100%;
-	max-height: 200px;
+	max-height: 411px;
 	overflow: hidden;
 	.clearfix();
 
@@ -1329,4 +1370,54 @@ h5 {
 		background: red;
 		margin: 0 10px;
 	}
+}
+
+.pad-r85-large-screens {
+	padding-right: 85px;
+
+	@media (max-width: @screen-xs) {
+		padding-right: 0;
+	}
+}
+
+.css-js-sliding-background {
+	position: absolute;
+	top: 0;
+	overflow: visible!important;
+	padding: 1px;
+
+	@media (max-width: @screen-sm) {
+		display: none;
+	}
+
+	.inside_stripe {
+		display: block;
+		background: url(img/stripe-gray.png) no-repeat;
+		position: absolute;
+		top: 0;
+		right: 0;
+	}
+
+	.content {
+		display: none;
+		padding-left: 20%;
+		padding-right: 10%;
+		margin-top: 139px;
+		padding-top: 53px;
+
+		h4 {
+			font-size: 40px;
+		}
+	}
+}
+
+.huge-arial {
+	font-size:320%;
+	font-family:arial;
+	font-weight:bold;
+	letter-spacing:0.1em;
+}
+
+.pointer {
+	cursor: pointer;
 }
