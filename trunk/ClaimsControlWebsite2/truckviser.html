@@ -135,9 +135,11 @@
 											<a href="#kaina-ir-paslaugos" class="skip-to-title">Kaina</a>
 										</li>
 
+										<!--
 										<li>
 											<a href="#rekomenduojama-iranga" class="skip-to-title">Įranga</a>
 										</li>
+										-->
 
 										<li>
 											<a href="#susisiekime" class="skip-to-title">Susisiekime</a>
@@ -486,6 +488,7 @@
 
 		</div><!-- bg-blueGrayLightest -->
 
+		<!--
 		<div class="bg-white white-spikes">
 
 			<div class="container pad-t30 pad-b100">
@@ -497,24 +500,24 @@
 				</p>
 
 
-			</div><!-- container -->
+			</div> container
 
-		</div><!-- bg-white -->
+		</div> bg-white -->
 
 		<div class="bg-blueDark text-blueGrayLight blueDarkSpikes-top">
 
 			<div class="container pad-t30 pad-b100">
 
+				<h2 id="susisiekime" class="text-blueGrayLight">Pradėkime bendradarbiavimą susitikimu!</h2>
+
 				<div class="row">
 
 					<div class="col-sm-5">
 
-						<h2 id="susisiekime" class="text-blueGrayLight">Susisiekime</h2>
-
-						<p class="pad-b10 text-blueGrayLightest">Pradėkime bendradarbiavimą susitikimu!
-						<br>Užpildykite žemiau esančią formą ir mes su Jumis susisieksime.</p>
-
 						<form role="form">
+
+							<p class="heading-font font-large pad-t10 text-orange contact-errors"></p>
+
 							<div class="form-group">
 								<input type="text" id="form-name" class="form-control" placeholder="Jūsų vardas">
 							</div>
@@ -539,7 +542,7 @@
 
 					<div class="col-sm-6 col-md-offset-1">
 
-						<ul class="no-list-style heading-font font-super-large pad-t100">
+						<ul class="no-list-style heading-font font-super-large pad-t20">
 							<li class="lheight1">T: +370 5 2727400</li>
 							<li class="lheight1">M: +370 611 50123</li>
 							<li class="lheight1">E: <span class="text-orange">info@claimscontrol.com</span></li>
@@ -568,7 +571,7 @@
 				<div class="row">
 
 					<div class="col-sm-6">
-						©ClaimsControl
+						<span class="arial">©</span>ClaimsControl
 					</div>
 
 					<div class="col-sm-6 clearfix">
@@ -594,6 +597,13 @@
 			var form_button_pressed = false;
 
 			$("#contact-submit").click(function(event){
+
+				console.log("clicked");
+
+				function isEmail(email){
+					return /^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*$/.test( email );
+				}
+
 				event.preventDefault();
 
 				if(form_button_pressed){
@@ -605,10 +615,30 @@
 
 				var form_name = $("#form-name").val(),
 					form_email = $("#form-email").val(),
-					form_message = $("#form-message").val()
+					form_message = $("#form-message").val(),
+					errors = ""
 				;
 
-				$.post("save_data.php", { "name": form_name, "email": form_email, "message": form_message}, function(data){
+				if( form_email.length < 1 ){
+					errors += "Įveskite savo el.pašto adresą arba telefoną<br />";
+				}
+				if( form_name.length < 1 ){
+					errors += "Įveskite vardą<br />";
+				}
+				if( form_message.length < 1 ){
+					errors += "Įveskite žinutę<br />";
+				}
+
+				if( errors.length > 0 ){
+					$(".contact-errors").html(errors);
+					form_button_pressed = false;
+					return;
+				}
+				else {
+					$(".contact-errors").html("");
+				}
+
+				$.post("data/contact_email.php", { "senderName": form_name, "senderContacts": form_email, "senderMessage": form_message}, function(data){
 					if( data === "success"){
 						$("#form-status").html("Žinutė išsiųsta, netrukus susisieksime");
 						$("#contact-submit").attr("disabled", "disabled");

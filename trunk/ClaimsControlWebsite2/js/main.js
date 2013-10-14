@@ -700,11 +700,29 @@ $(function() {
 		event.preventDefault();
 
 		var this_href = $(this).attr("href"),
-			this_href_top = $(this_href).offset().top
+			this_href_top = $(this_href).offset().top,
+			extra = 52
 		;
 
-		$("html, body").animate({scrollTop: this_href_top - top_menu_height -52 }, 500);
+		if( $(this).attr("href") === "#isitikinkite-patys" ){
+			extra +=36;
+		}
+
+		$("html, body").animate({scrollTop: this_href_top - top_menu_height - extra }, 500);
 	});
+
+	// put selected_item on clicked
+	var selected_class_name = "selected_item";
+	$(".navbar-nav>li").click(function(){
+		if( $(this).hasClass(selected_class_name) || $(this).hasClass("dropdown") ){
+			return;
+		}
+		else {
+			$(".navbar-nav>li."+selected_class_name).removeClass(selected_class_name);
+			$(this).addClass(selected_class_name);
+		}
+	});
+
 
 	$(".js-click-link-to-truckviser").click(function(){
 		window.location = "truckviser.html";
