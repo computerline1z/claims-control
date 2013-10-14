@@ -22,4 +22,6 @@ $headers = 'From: ' . $mailFrom . "\r\n" .
 
 mail($sendTo, $subject, $message, $headers);
 
+echo "success";
+
 ?>
