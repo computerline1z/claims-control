@@ -1252,6 +1252,13 @@ h5 {
 	}
 }
 
+.dashed-box {
+	background: transparent;
+	border: 2px dashed @blueGrayLight;
+	.border-radius(@border-radius-super-large);
+	padding: 50px 90px 100px 90px;
+}
+
 .block {
 	display: block;
 }
@@ -1328,14 +1335,15 @@ h5 {
 
 .slider-header {
 	padding-bottom: 40px;
+	text-align: center;
 
 	li {
-		display: block;
+		display: inline-block;
 		cursor: pointer;
 		text-align: center;
-		float: left;
-		width: 100/5%;
 		color: @blueGrayLight;
+		padding-left: 14px;
+		padding-right: 14px;
 
 		&:hover, &.active {
 			color: @orange;
@@ -1417,11 +1425,45 @@ h5 {
 
 .cc-carousel-holder {
 	display: block;
+	position: relative;
 	margin: 0 auto;
 	width: 714px;
 	padding: 42px 43px;
 	height: 496px;
 	background: url(img/slider-frame.png) no-repeat;
+
+	.cc-carousel-controls {
+		position: absolute;
+		top: 50%;
+		margin-top: -56px;
+		right: 10px;
+
+		button {
+			display: block;
+			width: 27px;
+			height: 27px;
+			background: red;
+			border: none;
+			margin-bottom: 16px;
+			outline: none;
+		}
+
+		.cc_slides_prev {
+			background: url(img/icon-prev-small.png);
+		}
+
+		.cc_slides_next {
+			background: url(img/icon-next-small.png);
+		}
+
+		.cc_slides_pause_play {
+			background: url(img/icon-pause-small.png);
+
+			&.paused {
+				background: url(img/icon-play-small.png);
+			}
+		}
+	}
 }
 
 .cc-carousel {
@@ -1522,15 +1564,12 @@ h5 {
 }
 
 /* jQuery Countdown styles 1.6.3. */
-.hasCountdown {
-	border: 1px solid #ccc;
-	background-color: #eee;
-}
+
 .countdown_rtl {
 	direction: rtl;
 }
 .countdown_holding span {
-	color: #888;
+	color: @blueGrayLightest;
 }
 .countdown_row {
 	clear: both;
@@ -1548,7 +1587,7 @@ h5 {
 	width: 32.5%;
 }
 .countdown_show4 .countdown_section {
-	width: 24.5%;
+	width: 23.5%;
 }
 .countdown_show5 .countdown_section {
 	width: 19.5%;
@@ -1561,9 +1600,26 @@ h5 {
 }
 .countdown_section {
 	display: block;
+	position: relative;
 	float: left;
 	font-size: 75%;
 	text-align: center;
+	background: @blueDark;
+	margin-left: 0.3%;
+	margin-right: 0.3%;
+	color: @blueGrayLightest;
+
+	&:last-child {
+		background: @orange;
+	}
+
+	.boxlabel {
+		width: 100%;
+		position: absolute;
+		left: 0;
+		bottom: -30px;
+		text-transform: uppercase;
+	}
 }
 .countdown_amount {
 	font-size: 200%;
