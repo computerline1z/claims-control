@@ -104,6 +104,11 @@ function update_global_variables(){
 	;
 }
 
+function update_scroll_variables(){
+	window_scroll_top = $(window).scrollTop();
+	scroll_to_cookie(window_scroll_top);
+}
+
 function fix_sticky_menu(){
 
 	var menu = $('.js-keep-on-top'),
@@ -299,6 +304,30 @@ function enable_sliding_stripe(target_hover){
 	});
 }
 
+function scroll_to_cookie(positionTop){
+	$.cookie( location.pathname.substring(1), positionTop);
+}
+
+function drop_to_cooked_location(){
+
+	if( $.cookie("dropscroll") === undefined ){
+		return;
+	}
+
+	var this_location = location.pathname.substring(1);
+
+	if( $.cookie(this_location) === undefined ){
+		return;
+	}
+
+	$("html, body").scrollTop( $.cookie(this_location) );
+
+	fix_sticky_menu();
+
+	$.removeCookie('dropscroll');
+
+}
+
 /* DOCUMENT READY */
 $(function() {
 
@@ -322,6 +351,8 @@ $(function() {
 	// Do some more stuff
 
 	enable_sliding_stripe($(".tablet-driver-blue .img-box"));
+
+	drop_to_cooked_location();
 	
 	$(".tablet-driver-red").hover(function(e) {
 
@@ -728,6 +759,14 @@ $(function() {
 		window.location = "truckviser.html";
 	});
 
+	$(".js-btn-back").click(function(){
+		history.go(-1);
+	});
+
+	bajb_backdetect.OnBack = function(){
+		$.cookie('dropscroll', 'true');
+	}
+
 
 	// On load
 
@@ -751,7 +790,10 @@ $(function() {
 
 	});
 
-	$(window).scroll(fix_sticky_menu);
+	$(window).scroll(function(){
+		update_scroll_variables();
+		fix_sticky_menu();
+	});
 
 });
 
@@ -772,6 +814,7 @@ $(function() {
 	screen_md =  992,
 	screen_lg = 1200,
 	grid_float_breakpoint = screen_sm,
+	window_scroll_top = $(window).scrollTop(),
 	// slider
 	slideshow_position = 0,
 	slideshow_animation_in_progress = false,
