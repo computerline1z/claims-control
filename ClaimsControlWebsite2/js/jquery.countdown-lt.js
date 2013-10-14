@@ -3,8 +3,8 @@
  * Written by Moacir P. de Sá Pereira (moacir{at}gmail.com) (2009) */
 (function($) {
 	$.countdown.regional['lt'] = {
-		labels: ['Metų', 'Mėnesių', 'Savaičių', 'Dienų', 'Valandų', 'Minučių', 'Sekundžių'],
-		labels1: ['Metai', 'Mėnuo', 'Savaitė', 'Diena', 'Valanda', 'Minutė', 'Sekundė'],
+		labels: ['Metai', 'Mėnesių', 'Savaičių', 'Dienos', 'Valandos', 'Minutės', ''],
+		labels1: ['Metai', 'Mėnuo', 'Savaitė', 'Dienos', 'Valandos', 'Minutės', ''],
 		compactLabels: ['m', 'm', 's', 'd'],
 		whichLabels: null,
 		digits: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],

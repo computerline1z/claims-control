@@ -219,18 +219,31 @@ function enable_sliding_stripe(target_hover){
 		hover_width = viewport - target_hover.offset().left - 17
 	;
 
+	distance_to_right_side = viewport - 17 - $(".inside_stripe").offset().left - $(".inside_stripe").width() + slider_holder_width;
+	distance_to_right_side = Math.floor(distance_to_right_side);
+
+	$(".css-js-sliding-background").css(
+		{
+			left: "+="+slider_holder_width,
+			width: distance_to_right_side
+		}
+	).addClass("bg-blueGrayLight z-index2");
+
+	$(".css-js-sliding-background .content").css("display", "block");
+
+	/*
 	$(target_hover).hover(function(e)
 
 		{
 
-			/*
-			hover.css(
-				{
-					"width": hover_width,
-					"height": target_hover.height()
-				}
-			);
-			*/
+			//
+			//hover.css(
+			//	{
+			//		"width": hover_width,
+			//		"height": target_hover.height()
+			//	}
+			//);
+			//
 			
 
 			if( stripe_slide_animation_in_progress ){
@@ -251,34 +264,35 @@ function enable_sliding_stripe(target_hover){
 				$(".css-js-sliding-background").hoverFlow(e.type, { width: "+="+distance_to_right_side }, sliding_speed);
 				
 			});
-		}/*,
-		function(e)
-		{
-			if(stripe_slide_in!=true){
-				return;
-			}
-
-			$(".css-js-sliding-background").hoverFlow(e.type, { width: "-="+distance_to_right_side }, sliding_speed, function(){
-				
-				$(".css-js-sliding-background .content").css("display", "none");
-				$(this).removeClass("bg-blueGrayLight z-index2");
-
-				$(".css-js-sliding-background").hoverFlow(e.type, { left: "-="+slider_holder_width }, sliding_speed, function(){
-					stripe_slide_animation_in_progress = false;
-				});
-
-			});
-
-			hover.css(
-				{
-					"width": "",
-					"height": ""
-				}
-			);
-			stripe_slide_in = false;
-		}*/
+		}//,
+		//function(e)
+		//{
+		//	if(stripe_slide_in!=true){
+		//		return;
+		//	}
+		//
+		//	$(".css-js-sliding-background").hoverFlow(e.type, { width: "-="+distance_to_right_side }, sliding_speed, function(){
+		//		
+		//		$(".css-js-sliding-background .content").css("display", "none");
+		//		$(this).removeClass("bg-blueGrayLight z-index2");
+		//
+		//		$(".css-js-sliding-background").hoverFlow(e.type, { left: "-="+slider_holder_width }, sliding_speed, function(){
+		//			stripe_slide_animation_in_progress = false;
+		//		});
+		//
+		//	});
+		//
+		//	hover.css(
+		//		{
+		//			"width": "",
+		//			"height": ""
+		//		}
+		//	);
+		//	stripe_slide_in = false;
+		//}
 		
 	);
+	*/
 
 	$(".js-click-to-truckviser").click(function(){
 		$(".navbar-nav").children("li").eq(1).children("a").click();
@@ -350,6 +364,10 @@ $(function() {
 	);
 
 	$.fn.cc_slides = function(options){
+
+		$(".cc_slides_pause_play").click(function(){
+			$(this).toggleClass("paused");
+		});
 
 		function setup_user_settings(){
 

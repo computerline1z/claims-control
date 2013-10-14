@@ -30,14 +30,7 @@
 
 					<div class="background-red-stripe js-red-stripe-visual z-index1 z-index-0-sm"></div>
 
-					<div class="background-red-stripe js-red-stripe js-red-stripe-visual">
-						<div class="js-stripe-contents js-click-link-to-truckviser pointer" style="opacity: 0;position:relative;z-index:1;">
-							<h2 class="text-white">Viskas viename įrenginyje</h2>
-							<div class="clearfix">
-								<a href="" class="right mar-t32 icon-play mar-b40-md"></a>
-							</div>
-						</div>
-					</div>
+					<div class="background-red-stripe js-red-stripe-visual"></div>
 
 					<a class="logo relative z-index2" href="index.html"><img src="styles/img/logo.png" alt="logo" /></a>
 
@@ -61,18 +54,9 @@
 
 						<div class="col-sm-6 pad-t40">
 
-							<div class="blue-box-in-header flipbox z-index1">
-								<div class="inner text-orange">
-									<div class="corner"></div>
-									<div class="relative z-index1">
-										<hgroup class="block pad-1">
-											<div class="countdown"></div>
-											<h2 class="text-orange pad-t40">Žalų valdymo sistema</h2>
-											<h5 class="no-bold uppercase lheight1_2 font-15 text-orange">9 Priežastys sužinoti daugiau</h5>
-										</hgroup>
-										<a href="" class="mar-t50 icon-play-red"></a>
-									</div><!-- z-index2 -->	
-								</div><!-- inner -->
+							<div class="blue-box-in-header dashed-box z-index1">
+								<h1 class="text-white no-text-transform pad-b20">Iki sistemos atidarymo liko:</h1>
+								<div class="countdown clearfix"></div>
 							</div><!-- blue-box-header -->
 
 						</div>
@@ -158,7 +142,21 @@
 
 			<div class="container pad-t30 pad-b100 child-row-pad75">
 
-				<h2 class="pad-b70 text-orange" id="verta-zinoti">Verta žinoti</h2>
+				<h2 class="text-orange" id="verta-zinoti">Verta žinoti</h2>
+
+				<div class="row">
+
+					<div class="col-sm-3 text-center">
+					</div>
+
+					<div class="col-sm-9">
+
+						<p class="h1">„Šviesos kaina yra mažesnė, nei tamsos kaštai“<p>
+						<p>Arthur C. Nielsen</p>
+						
+					</div>
+
+				</div><!-- row -->
 
 				<div class="row">
 
@@ -352,9 +350,9 @@
 
 				<div class="row">
 
-					<div class="col-md-4">
+					<div class="col-md-5">
 
-						<h2 class="text-white">Būkite pirmi</h2>
+						<h2 class="text-white" id="naujienu-prenumerata">Būkite pirmi</h2>
 
 						<p>Gaukite naujausią informaciją apie Žalų 
 						valdymo sistemą el. paštu:</p>
@@ -378,7 +376,7 @@
 
 					</div><!-- col-md-8 -->
 
-					<div class="col-md-7 col-md-offset-1">
+					<div class="col-md-6 col-md-offset-1">
 						<h2 id="kontaktai-ir-rekvizitai" class="text-blueGrayLight">Kontaktai</h2>
 
 						<ul class="no-list-style pad-b10">
@@ -434,6 +432,11 @@
 			var form_button_pressed = false;
 
 			$("#newsletter-submit").click(function(event){
+
+				function isEmail(email){
+					return /^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*$/.test( email );
+				}
+
 				event.preventDefault();
 
 				if(form_button_pressed){
@@ -445,6 +448,12 @@
 
 				var form_email = $("#form-email").val();
 
+				if( isEmail(form_email) === false ){
+					$("#form-status").html('<span class="text-orange">Įveskite teisingą el.pašto adresą</span>');
+					return;
+				}
+
+
 				$.post("data/save_emails.php", { "email": form_email }, function(data){
 					if( data === "success"){
 						$("#form-status").html("Jūsų el.paštas įtrauktas į naujienlaiškių gavėjų sąrašą");
@@ -455,9 +464,9 @@
 
 		</script>
 
-		<script src="js/jquery.countdown.min.js"></script>
+		<script src="js/jquery.countdown.js"></script>
 		<script src="js/jquery.countdown-lt.js"></script>
-		<script type="text/javascript">$("countdown").countdown({since: new Date(2010, 12-1, 25)});</script>
+		<script type="text/javascript">$(".countdown").countdown({until: new Date(2013, 10-1, 24) });</script>
 
 		<!-- bootstrap js -->
 		<script src="bootstrap/js/affix.js"></script>

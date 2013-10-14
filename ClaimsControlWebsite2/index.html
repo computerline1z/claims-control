@@ -42,9 +42,6 @@
 					<div class="background-red-stripe js-red-stripe js-red-stripe-visual">
 						<div class="js-stripe-contents js-click-link-to-truckviser pointer" style="opacity: 0;position:relative;z-index:1;">
 							<h2 class="text-white">Neribotų galimybių pradžia</h2>
-							<div class="clearfix">
-								<a href="" class="right mar-t32 icon-play mar-b40-md"></a>
-							</div>
 						</div>
 					</div>
 
@@ -76,11 +73,8 @@
 								<div class="inner text-orange">
 									<div class="corner"></div>
 									<div class="relative z-index1">
-										<hgroup class="block pad-1">
-											<h2 class="text-orange pad-t40">Žalų valdymo sistema</h2>
-											<h5 class="no-bold uppercase lheight1_2 font-15 text-orange">9 Priežastys sužinoti daugiau</h5>
-										</hgroup>
-										<a href="zalu-valdymo-sistema.html" class="mar-t50 icon-play-red"></a>
+										<h1 class="text-orange pad-t40">Žalų reguliavimo programa<br /><span class="text-white">iki pristatymo liko:</span></h1>
+										<div class="countdown clearfix pad-b20"></div>
 									</div><!-- z-index2 -->	
 								</div><!-- inner -->
 							</div><!-- blue-box-header -->
@@ -181,9 +175,9 @@
 
 				<ul class="row no-list-style subscription-block">
 
-					<li class="col-md-4"><a href="naujiena.html"><i class="icon-51-folder"></i>Visos naujienos</a></li>
-					<li class="col-md-4"><a href="#"><i class="icon-51-rss"></i>RSS prenumerata</a></li>
-					<li class="col-md-4"><a href="#"><i class="icon-51-letter"></i>Naujienų prenumerata</a></li>
+					<li class="col-md-3 col-md-offset-3"><a href="naujiena.html"><i class="icon-51-folder"></i>Visos naujienos</a></li>
+					<!-- <li class="col-md-4"><a href="#"><i class="icon-51-rss"></i>RSS prenumerata</a></li> -->
+					<li class="col-md-3"><a href="zalu-valdymo-sistema.html#naujienu-prenumerata"><i class="icon-51-letter"></i>Naujienų prenumerata</a></li>
 
 				</ul>
 
@@ -227,8 +221,7 @@
 									<li>Konstitucijos pr. 23B-504,</li>
 									<li>01234 Vilnius</li>
 									<li>T: +370 5 2727400</li>
-									<li class="text-orange">E: info@claimscontrol.com</li>
-
+									<li class="text-orange">E:info@claimscontrol.com</li>
 								</ul>
 							</div>
 						</div>
@@ -302,6 +295,10 @@
 
 		<!-- custom js -->
 		<script src="js/main.js"></script>
+
+		<script src="js/jquery.countdown.js"></script>
+		<script src="js/jquery.countdown-lt.js"></script>
+		<script type="text/javascript">$(".countdown").countdown({until: new Date(2013, 10-1, 24) });</script>
 
 		<!-- bootstrap js -->
 		<script src="bootstrap/js/affix.js"></script>
