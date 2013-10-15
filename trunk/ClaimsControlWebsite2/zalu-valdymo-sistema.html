@@ -54,10 +54,15 @@
 
 						<div class="col-sm-6 pad-t40">
 
-							<div class="blue-box-in-header dashed-box z-index1">
-								<h1 class="text-white no-text-transform pad-b20">Iki sistemos atidarymo liko:</h1>
-								<div class="countdown clearfix"></div>
-							</div><!-- blue-box-header -->
+							<div class="flipbox-container relative z-index2">
+								<div id="flippyBox">
+									<div class="blue-box-in-header dashed-box z-index1">
+										<h1 class="text-white no-text-transform pad-b20">Iki sistemos atidarymo liko:</h1>
+										<div class="countdown clearfix"></div>
+									</div><!-- blue-box-header -->
+								</div>
+
+							</div>
 
 						</div>
 
@@ -424,10 +429,95 @@
 
 		</div><!-- bg-red-blue [footer] -->
 
+		<div class="unslider">
+		    <ul>
+		        <li><img src="images/slide1.png" alt="slide1"/></li>
+		        <li><img src="images/slide2.png" alt="slide2"/></li>
+		        <li><img src="images/slide3.png" alt="slide3"/></li>
+		    </ul>
+		</div>
+
 		<script src="http://code.jquery.com/jquery.js"></script><!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 
 		<script src="js/jquery.cookie.js"></script>
 		<script src="js/backfix.min.js"></script>
+		<script src="js/jquery.flippy.js"></script>
+		<script src="js/unslider.min.js"></script>
+		<script type="text/javascript">
+
+			var in_count = 0,
+				out_count = 1,
+				flip_in_progress = false,
+				queue_flipback = false,
+				isFliped = false
+			;
+
+			$(".flipbox-container").mouseenter(function(){
+				if( in_count > 0 ){
+					return;
+				}
+				in_count++;
+				out_count--;
+
+				if(flip_in_progress){
+					return;
+				}
+				
+				$("#flippyBox").flippy({
+					verso: $(".unslider").clone(),
+					direction:"LEFT",
+					duration:"500",
+					onStart: function(){
+						flip_in_progress = true;
+					},
+					onFinish: function(){
+						flip_in_progress = false;
+						if( queue_flipback === true ){
+							$("#myFlippyBox").flippyReverse();
+						}
+						isFliped = true;
+						$('.unslider').unslider({
+							delay: 2000
+						});
+					},
+					onReverseStart: function(){
+						flip_in_progress = true;
+					},
+					onReverseFinish: function(){
+						flip_in_progress = false;
+						if( queue_flipback ){
+							queue_flipback = false;
+							flip_in_progress = false;
+						}
+						isFliped = false;
+					}
+
+				});
+				
+			});
+
+			$(".flipbox-container").mouseleave(function(){
+				if( out_count > 0 ){
+					return;
+				}
+				out_count++;
+				in_count--;
+
+				
+				if( flip_in_progress ){
+					queue_flipback = true;
+					return;
+				}
+
+				if( isFliped === false ){
+					return;
+				}
+
+				$("#flippyBox").flippyReverse();
+				
+			});
+
+		</script>
 
 		<!-- custom js -->
 		<script src="js/main.js"></script>

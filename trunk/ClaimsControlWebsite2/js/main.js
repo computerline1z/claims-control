@@ -353,6 +353,17 @@ $(function() {
 	enable_sliding_stripe($(".tablet-driver-blue .img-box"));
 
 	drop_to_cooked_location();
+
+	if( $('.unslider').length > 0 ){
+		flipbox_height = $(".flipbox-container").height();
+		$(".flipbox-container").height(flipbox_height);
+
+		$('.unslider').unslider({
+			delay: 500
+		});
+	}
+
+
 	
 	$(".tablet-driver-red").hover(function(e) {
 

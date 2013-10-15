@@ -4,7 +4,7 @@ if( strlen($_POST['senderName']) < 1 ){
 	exit();
 }
 
-$sendTo      = 't.kikutis@gmail.com';
+$sendTo      = 'info@claimscontrol.com';
 $mailFrom = 'ClaimsControl';
 $subject = 'Žinutė iš susisiekimo formos';
 
