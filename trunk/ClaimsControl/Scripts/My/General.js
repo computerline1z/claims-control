@@ -24,7 +24,9 @@
 			var pos = $this.offset();
 			w = $this.outerWidth();
 			h = $this.outerHeight();
-
+			//Aukštį darom, kad matytūsi
+			if (h>$(window).height()){h=$(window).height();}
+			
 			// calculate vertical centering
 			if (h > opts.height) shim = Math.round((h - opts.height) / 2);
 			else if (h < opts.height) shim = 0 - Math.round((opts.height - h) / 2);
@@ -76,7 +78,7 @@ if (!window.console) console = {};
 console.log = console.log || function () { };
 console.warn = console.warn || function () { };
 console.error = console.error || function () { };
-console.info = console.info || function () { };
+console.info = console.info || function () { };/*
 jQuery.fn.log = function (msg) {
 	msg = msg || "log";
 	console.log("%s: %o", msg, this);
@@ -85,7 +87,7 @@ jQuery.fn.log = function (msg) {
 		console.log("%d: %s.%s %s", n, this.tagName, this.className, id)
 	})
 	return this;
-};
+};*/
 //Naudojimas
 //App.NumberField=Ember.TextField.extend({
 //    valueBinding: Ember.Binding.from("App.person.age").transform(onlyNumber), <-------------

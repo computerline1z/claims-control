@@ -86,7 +86,7 @@
 
       nTr = $(e.target).closest('div.tr');
       $(e.target).closest('div.rightFooterBig').hide();
-      nTr.append("<div id='divNewClaimCard' data-ctrl='{\"id\":\"0\",\"NewRec\":\"1\",\"Source\":\"proc_Claims\",\"ClaimTypeID\":\"0\"}'></div>");
+      nTr.append("<div id='divNewClaimCard' class='js-frm' data-ctrl='{\"id\":\"0\",\"NewRec\":\"1\",\"Source\":\"proc_Claims\",\"ClaimTypeID\":\"0\"}'></div>");
       fnCancelNewClaim = function() {
         $("#divNewClaimCard").remove();
         return $("#AccDetailsContent").find('div.rightFooterBig').show();

@@ -10,6 +10,7 @@ using System.IO;
 using System.Drawing;
 using System.Configuration;
 using Ninject;
+using MyHelper;
 
 namespace CC.Services.Implementation {
 	public class FileManager : IFileManager {

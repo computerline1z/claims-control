@@ -91,6 +91,9 @@
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>Library\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
     </Reference>
@@ -174,6 +177,12 @@
     <Content Include="App_Data\MailTmpl\LT\ChangedMail.htm" />
     <Content Include="App_Data\MailTmpl\LT\NewUserPsw.htm" />
     <Content Include="App_Data\MailTmpl\LT\ResetUserPsw.htm" />
+    <Content Include="App_Data\MailTmpl\LT\warnNewClaim.cshtml" />
+    <Content Include="App_Data\MailTmpl\LT\warnNewTask.cshtml" />
+    <Content Include="App_Data\MailTmpl\LT\warnNotifyInsurer.cshtml" />
+    <Content Include="App_Data\MailTmpl\LT\warnTaskTerm.cshtml" />
+    <Content Include="App_Data\MailTmpl\LT\warnPaymentTerm.cshtml" />
+    <Content Include="App_Data\MailTmpl\LT\warnDocsTerm.cshtml" />
     <None Include="Content\less\grid-system-mixins.less" />
     <None Include="Content\less\grid-system.less" />
     <None Include="Content\less\notify.less" />
@@ -552,6 +561,12 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MyHelper\MyHelper.csproj">
+      <Project>{CD52DC56-8BC2-4660-B46D-18325A19B8D8}</Project>
+      <Name>MyHelper</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

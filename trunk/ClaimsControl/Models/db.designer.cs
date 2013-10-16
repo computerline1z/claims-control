@@ -117,9 +117,6 @@ namespace CC.Models
     partial void InserttblUserMsg(tblUserMsg instance);
     partial void UpdatetblUserMsg(tblUserMsg instance);
     partial void DeletetblUserMsg(tblUserMsg instance);
-    partial void InserttblClaim(tblClaim instance);
-    partial void UpdatetblClaim(tblClaim instance);
-    partial void DeletetblClaim(tblClaim instance);
     partial void InserttblClaimCompensation(tblClaimCompensation instance);
     partial void UpdatetblClaimCompensation(tblClaimCompensation instance);
     partial void DeletetblClaimCompensation(tblClaimCompensation instance);
@@ -141,15 +138,18 @@ namespace CC.Models
     partial void InserttblActivityType(tblActivityType instance);
     partial void UpdatetblActivityType(tblActivityType instance);
     partial void DeletetblActivityType(tblActivityType instance);
-    partial void InserttblActivity(tblActivity instance);
-    partial void UpdatetblActivity(tblActivity instance);
-    partial void DeletetblActivity(tblActivity instance);
     partial void InserttblUser(tblUser instance);
     partial void UpdatetblUser(tblUser instance);
     partial void DeletetblUser(tblUser instance);
     partial void InserttblInsPolicy(tblInsPolicy instance);
     partial void UpdatetblInsPolicy(tblInsPolicy instance);
     partial void DeletetblInsPolicy(tblInsPolicy instance);
+    partial void InserttblActivity(tblActivity instance);
+    partial void UpdatetblActivity(tblActivity instance);
+    partial void DeletetblActivity(tblActivity instance);
+    partial void InserttblClaim(tblClaim instance);
+    partial void UpdatetblClaim(tblClaim instance);
+    partial void DeletetblClaim(tblClaim instance);
     #endregion
 		
 		public dbDataContext() : 
@@ -414,14 +414,6 @@ namespace CC.Models
 			}
 		}
 		
-		public System.Data.Linq.Table<tblClaim> tblClaims
-		{
-			get
-			{
-				return this.GetTable<tblClaim>();
-			}
-		}
-		
 		public System.Data.Linq.Table<tblClaimCompensation> tblClaimCompensations
 		{
 			get
@@ -478,14 +470,6 @@ namespace CC.Models
 			}
 		}
 		
-		public System.Data.Linq.Table<tblActivity> tblActivities
-		{
-			get
-			{
-				return this.GetTable<tblActivity>();
-			}
-		}
-		
 		public System.Data.Linq.Table<tblUser> tblUsers
 		{
 			get
@@ -499,6 +483,22 @@ namespace CC.Models
 			get
 			{
 				return this.GetTable<tblInsPolicy>();
+			}
+		}
+		
+		public System.Data.Linq.Table<tblActivity> tblActivities
+		{
+			get
+			{
+				return this.GetTable<tblActivity>();
+			}
+		}
+		
+		public System.Data.Linq.Table<tblClaim> tblClaims
+		{
+			get
+			{
+				return this.GetTable<tblClaim>();
 			}
 		}
 		
@@ -2689,9 +2689,9 @@ namespace CC.Models
 		
 		private string _Name;
 		
-		private EntitySet<tblClaim> _tblClaims;
-		
 		private EntitySet<tblInsPolicy> _tblInsPolicies;
+		
+		private EntitySet<tblClaim> _tblClaims;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -2705,8 +2705,8 @@ namespace CC.Models
 		
 		public tblClaimType()
 		{
-			this._tblClaims = new EntitySet<tblClaim>(new Action<tblClaim>(this.attach_tblClaims), new Action<tblClaim>(this.detach_tblClaims));
 			this._tblInsPolicies = new EntitySet<tblInsPolicy>(new Action<tblInsPolicy>(this.attach_tblInsPolicies), new Action<tblInsPolicy>(this.detach_tblInsPolicies));
+			this._tblClaims = new EntitySet<tblClaim>(new Action<tblClaim>(this.attach_tblClaims), new Action<tblClaim>(this.detach_tblClaims));
 			OnCreated();
 		}
 		
@@ -2750,19 +2750,6 @@ namespace CC.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblClaimType_tblClaim", Storage="_tblClaims", ThisKey="ID", OtherKey="ClaimTypeID")]
-		public EntitySet<tblClaim> tblClaims
-		{
-			get
-			{
-				return this._tblClaims;
-			}
-			set
-			{
-				this._tblClaims.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblClaimType_tblInsPolicy", Storage="_tblInsPolicies", ThisKey="ID", OtherKey="ClaimTypeID")]
 		public EntitySet<tblInsPolicy> tblInsPolicies
 		{
@@ -2773,6 +2760,19 @@ namespace CC.Models
 			set
 			{
 				this._tblInsPolicies.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblClaimType_tblClaim", Storage="_tblClaims", ThisKey="ID", OtherKey="ClaimTypeID")]
+		public EntitySet<tblClaim> tblClaims
+		{
+			get
+			{
+				return this._tblClaims;
+			}
+			set
+			{
+				this._tblClaims.Assign(value);
 			}
 		}
 		
@@ -2796,18 +2796,6 @@ namespace CC.Models
 			}
 		}
 		
-		private void attach_tblClaims(tblClaim entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblClaimType = this;
-		}
-		
-		private void detach_tblClaims(tblClaim entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblClaimType = null;
-		}
-		
 		private void attach_tblInsPolicies(tblInsPolicy entity)
 		{
 			this.SendPropertyChanging();
@@ -2815,6 +2803,18 @@ namespace CC.Models
 		}
 		
 		private void detach_tblInsPolicies(tblInsPolicy entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblClaimType = null;
+		}
+		
+		private void attach_tblClaims(tblClaim entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblClaimType = this;
+		}
+		
+		private void detach_tblClaims(tblClaim entity)
 		{
 			this.SendPropertyChanging();
 			entity.tblClaimType = null;
@@ -6919,724 +6919,6 @@ namespace CC.Models
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tblClaims")]
-	public partial class tblClaim : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _ID;
-		
-		private int _ClaimTypeID;
-		
-		private int _AccidentID;
-		
-		private System.Nullable<int> _InsPolicyID;
-		
-		private int _VehicleID;
-		
-		private int _No;
-		
-		private System.Nullable<bool> _IsTotalLoss;
-		
-		private double _LossAmount;
-		
-		private System.Nullable<double> _InsuranceClaimAmount;
-		
-		private System.Nullable<bool> _IsInjuredPersons;
-		
-		private string _InsurerClaimID;
-		
-		private int _ClaimStatus;
-		
-		private bool _AmountIsConfirmed;
-		
-		private System.Nullable<int> _Days;
-		
-		private System.Nullable<double> _PerDay;
-		
-		private bool _IsDeleted;
-		
-		private System.Nullable<System.DateTime> _DateNotification;
-		
-		private System.Nullable<System.DateTime> _DateDocsSent;
-		
-		private EntitySet<tblClaimCompensation> _tblClaimCompensations;
-		
-		private EntitySet<tblClaimDamage> _tblClaimDamages;
-		
-		private EntitySet<tblActivity> _tblActivities;
-		
-		private EntityRef<tblAccident> _tblAccident;
-		
-		private EntityRef<tblClaimType> _tblClaimType;
-		
-		private EntityRef<tblVehicle> _tblVehicle;
-		
-		private EntityRef<tblInsPolicy> _tblInsPolicy;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIDChanging(int value);
-    partial void OnIDChanged();
-    partial void OnClaimTypeIDChanging(int value);
-    partial void OnClaimTypeIDChanged();
-    partial void OnAccidentIDChanging(int value);
-    partial void OnAccidentIDChanged();
-    partial void OnInsPolicyIDChanging(System.Nullable<int> value);
-    partial void OnInsPolicyIDChanged();
-    partial void OnVehicleIDChanging(int value);
-    partial void OnVehicleIDChanged();
-    partial void OnNoChanging(int value);
-    partial void OnNoChanged();
-    partial void OnIsTotalLossChanging(System.Nullable<bool> value);
-    partial void OnIsTotalLossChanged();
-    partial void OnLossAmountChanging(double value);
-    partial void OnLossAmountChanged();
-    partial void OnInsuranceClaimAmountChanging(System.Nullable<double> value);
-    partial void OnInsuranceClaimAmountChanged();
-    partial void OnIsInjuredPersonsChanging(System.Nullable<bool> value);
-    partial void OnIsInjuredPersonsChanged();
-    partial void OnInsurerClaimIDChanging(string value);
-    partial void OnInsurerClaimIDChanged();
-    partial void OnClaimStatusChanging(int value);
-    partial void OnClaimStatusChanged();
-    partial void OnAmountIsConfirmedChanging(bool value);
-    partial void OnAmountIsConfirmedChanged();
-    partial void OnDaysChanging(System.Nullable<int> value);
-    partial void OnDaysChanged();
-    partial void OnPerDayChanging(System.Nullable<double> value);
-    partial void OnPerDayChanged();
-    partial void OnIsDeletedChanging(bool value);
-    partial void OnIsDeletedChanged();
-    partial void OnDateNotificationChanging(System.Nullable<System.DateTime> value);
-    partial void OnDateNotificationChanged();
-    partial void OnDateDocsSentChanging(System.Nullable<System.DateTime> value);
-    partial void OnDateDocsSentChanged();
-    #endregion
-		
-		public tblClaim()
-		{
-			this._tblClaimCompensations = new EntitySet<tblClaimCompensation>(new Action<tblClaimCompensation>(this.attach_tblClaimCompensations), new Action<tblClaimCompensation>(this.detach_tblClaimCompensations));
-			this._tblClaimDamages = new EntitySet<tblClaimDamage>(new Action<tblClaimDamage>(this.attach_tblClaimDamages), new Action<tblClaimDamage>(this.detach_tblClaimDamages));
-			this._tblActivities = new EntitySet<tblActivity>(new Action<tblActivity>(this.attach_tblActivities), new Action<tblActivity>(this.detach_tblActivities));
-			this._tblAccident = default(EntityRef<tblAccident>);
-			this._tblClaimType = default(EntityRef<tblClaimType>);
-			this._tblVehicle = default(EntityRef<tblVehicle>);
-			this._tblInsPolicy = default(EntityRef<tblInsPolicy>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int ID
-		{
-			get
-			{
-				return this._ID;
-			}
-			set
-			{
-				if ((this._ID != value))
-				{
-					this.OnIDChanging(value);
-					this.SendPropertyChanging();
-					this._ID = value;
-					this.SendPropertyChanged("ID");
-					this.OnIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClaimTypeID", DbType="Int NOT NULL")]
-		public int ClaimTypeID
-		{
-			get
-			{
-				return this._ClaimTypeID;
-			}
-			set
-			{
-				if ((this._ClaimTypeID != value))
-				{
-					if (this._tblClaimType.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnClaimTypeIDChanging(value);
-					this.SendPropertyChanging();
-					this._ClaimTypeID = value;
-					this.SendPropertyChanged("ClaimTypeID");
-					this.OnClaimTypeIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AccidentID", DbType="Int NOT NULL")]
-		public int AccidentID
-		{
-			get
-			{
-				return this._AccidentID;
-			}
-			set
-			{
-				if ((this._AccidentID != value))
-				{
-					if (this._tblAccident.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnAccidentIDChanging(value);
-					this.SendPropertyChanging();
-					this._AccidentID = value;
-					this.SendPropertyChanged("AccidentID");
-					this.OnAccidentIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InsPolicyID", DbType="Int")]
-		public System.Nullable<int> InsPolicyID
-		{
-			get
-			{
-				return this._InsPolicyID;
-			}
-			set
-			{
-				if ((this._InsPolicyID != value))
-				{
-					if (this._tblInsPolicy.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnInsPolicyIDChanging(value);
-					this.SendPropertyChanging();
-					this._InsPolicyID = value;
-					this.SendPropertyChanged("InsPolicyID");
-					this.OnInsPolicyIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_VehicleID", DbType="Int NOT NULL")]
-		public int VehicleID
-		{
-			get
-			{
-				return this._VehicleID;
-			}
-			set
-			{
-				if ((this._VehicleID != value))
-				{
-					if (this._tblVehicle.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnVehicleIDChanging(value);
-					this.SendPropertyChanging();
-					this._VehicleID = value;
-					this.SendPropertyChanged("VehicleID");
-					this.OnVehicleIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_No", DbType="Int NOT NULL")]
-		public int No
-		{
-			get
-			{
-				return this._No;
-			}
-			set
-			{
-				if ((this._No != value))
-				{
-					this.OnNoChanging(value);
-					this.SendPropertyChanging();
-					this._No = value;
-					this.SendPropertyChanged("No");
-					this.OnNoChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsTotalLoss", DbType="Bit")]
-		public System.Nullable<bool> IsTotalLoss
-		{
-			get
-			{
-				return this._IsTotalLoss;
-			}
-			set
-			{
-				if ((this._IsTotalLoss != value))
-				{
-					this.OnIsTotalLossChanging(value);
-					this.SendPropertyChanging();
-					this._IsTotalLoss = value;
-					this.SendPropertyChanged("IsTotalLoss");
-					this.OnIsTotalLossChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LossAmount", DbType="Float NOT NULL")]
-		public double LossAmount
-		{
-			get
-			{
-				return this._LossAmount;
-			}
-			set
-			{
-				if ((this._LossAmount != value))
-				{
-					this.OnLossAmountChanging(value);
-					this.SendPropertyChanging();
-					this._LossAmount = value;
-					this.SendPropertyChanged("LossAmount");
-					this.OnLossAmountChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InsuranceClaimAmount", DbType="Float")]
-		public System.Nullable<double> InsuranceClaimAmount
-		{
-			get
-			{
-				return this._InsuranceClaimAmount;
-			}
-			set
-			{
-				if ((this._InsuranceClaimAmount != value))
-				{
-					this.OnInsuranceClaimAmountChanging(value);
-					this.SendPropertyChanging();
-					this._InsuranceClaimAmount = value;
-					this.SendPropertyChanged("InsuranceClaimAmount");
-					this.OnInsuranceClaimAmountChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsInjuredPersons", DbType="Bit")]
-		public System.Nullable<bool> IsInjuredPersons
-		{
-			get
-			{
-				return this._IsInjuredPersons;
-			}
-			set
-			{
-				if ((this._IsInjuredPersons != value))
-				{
-					this.OnIsInjuredPersonsChanging(value);
-					this.SendPropertyChanging();
-					this._IsInjuredPersons = value;
-					this.SendPropertyChanged("IsInjuredPersons");
-					this.OnIsInjuredPersonsChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InsurerClaimID", DbType="NVarChar(50)")]
-		public string InsurerClaimID
-		{
-			get
-			{
-				return this._InsurerClaimID;
-			}
-			set
-			{
-				if ((this._InsurerClaimID != value))
-				{
-					this.OnInsurerClaimIDChanging(value);
-					this.SendPropertyChanging();
-					this._InsurerClaimID = value;
-					this.SendPropertyChanged("InsurerClaimID");
-					this.OnInsurerClaimIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClaimStatus", DbType="Int NOT NULL")]
-		public int ClaimStatus
-		{
-			get
-			{
-				return this._ClaimStatus;
-			}
-			set
-			{
-				if ((this._ClaimStatus != value))
-				{
-					this.OnClaimStatusChanging(value);
-					this.SendPropertyChanging();
-					this._ClaimStatus = value;
-					this.SendPropertyChanged("ClaimStatus");
-					this.OnClaimStatusChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AmountIsConfirmed", DbType="Bit NOT NULL")]
-		public bool AmountIsConfirmed
-		{
-			get
-			{
-				return this._AmountIsConfirmed;
-			}
-			set
-			{
-				if ((this._AmountIsConfirmed != value))
-				{
-					this.OnAmountIsConfirmedChanging(value);
-					this.SendPropertyChanging();
-					this._AmountIsConfirmed = value;
-					this.SendPropertyChanged("AmountIsConfirmed");
-					this.OnAmountIsConfirmedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Days", DbType="Int")]
-		public System.Nullable<int> Days
-		{
-			get
-			{
-				return this._Days;
-			}
-			set
-			{
-				if ((this._Days != value))
-				{
-					this.OnDaysChanging(value);
-					this.SendPropertyChanging();
-					this._Days = value;
-					this.SendPropertyChanged("Days");
-					this.OnDaysChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PerDay", DbType="Float")]
-		public System.Nullable<double> PerDay
-		{
-			get
-			{
-				return this._PerDay;
-			}
-			set
-			{
-				if ((this._PerDay != value))
-				{
-					this.OnPerDayChanging(value);
-					this.SendPropertyChanging();
-					this._PerDay = value;
-					this.SendPropertyChanged("PerDay");
-					this.OnPerDayChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsDeleted", DbType="Bit NOT NULL")]
-		public bool IsDeleted
-		{
-			get
-			{
-				return this._IsDeleted;
-			}
-			set
-			{
-				if ((this._IsDeleted != value))
-				{
-					this.OnIsDeletedChanging(value);
-					this.SendPropertyChanging();
-					this._IsDeleted = value;
-					this.SendPropertyChanged("IsDeleted");
-					this.OnIsDeletedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateNotification", DbType="Date")]
-		public System.Nullable<System.DateTime> DateNotification
-		{
-			get
-			{
-				return this._DateNotification;
-			}
-			set
-			{
-				if ((this._DateNotification != value))
-				{
-					this.OnDateNotificationChanging(value);
-					this.SendPropertyChanging();
-					this._DateNotification = value;
-					this.SendPropertyChanged("DateNotification");
-					this.OnDateNotificationChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateDocsSent", DbType="Date")]
-		public System.Nullable<System.DateTime> DateDocsSent
-		{
-			get
-			{
-				return this._DateDocsSent;
-			}
-			set
-			{
-				if ((this._DateDocsSent != value))
-				{
-					this.OnDateDocsSentChanging(value);
-					this.SendPropertyChanging();
-					this._DateDocsSent = value;
-					this.SendPropertyChanged("DateDocsSent");
-					this.OnDateDocsSentChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblClaim_tblClaimCompensation", Storage="_tblClaimCompensations", ThisKey="ID", OtherKey="ClaimID")]
-		public EntitySet<tblClaimCompensation> tblClaimCompensations
-		{
-			get
-			{
-				return this._tblClaimCompensations;
-			}
-			set
-			{
-				this._tblClaimCompensations.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblClaim_tblClaimDamage", Storage="_tblClaimDamages", ThisKey="ID", OtherKey="ClaimID")]
-		public EntitySet<tblClaimDamage> tblClaimDamages
-		{
-			get
-			{
-				return this._tblClaimDamages;
-			}
-			set
-			{
-				this._tblClaimDamages.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblClaim_tblActivity", Storage="_tblActivities", ThisKey="ID", OtherKey="ClaimID")]
-		public EntitySet<tblActivity> tblActivities
-		{
-			get
-			{
-				return this._tblActivities;
-			}
-			set
-			{
-				this._tblActivities.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblAccident_tblClaim", Storage="_tblAccident", ThisKey="AccidentID", OtherKey="ID", IsForeignKey=true)]
-		public tblAccident tblAccident
-		{
-			get
-			{
-				return this._tblAccident.Entity;
-			}
-			set
-			{
-				tblAccident previousValue = this._tblAccident.Entity;
-				if (((previousValue != value) 
-							|| (this._tblAccident.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._tblAccident.Entity = null;
-						previousValue.tblClaims.Remove(this);
-					}
-					this._tblAccident.Entity = value;
-					if ((value != null))
-					{
-						value.tblClaims.Add(this);
-						this._AccidentID = value.ID;
-					}
-					else
-					{
-						this._AccidentID = default(int);
-					}
-					this.SendPropertyChanged("tblAccident");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblClaimType_tblClaim", Storage="_tblClaimType", ThisKey="ClaimTypeID", OtherKey="ID", IsForeignKey=true)]
-		public tblClaimType tblClaimType
-		{
-			get
-			{
-				return this._tblClaimType.Entity;
-			}
-			set
-			{
-				tblClaimType previousValue = this._tblClaimType.Entity;
-				if (((previousValue != value) 
-							|| (this._tblClaimType.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._tblClaimType.Entity = null;
-						previousValue.tblClaims.Remove(this);
-					}
-					this._tblClaimType.Entity = value;
-					if ((value != null))
-					{
-						value.tblClaims.Add(this);
-						this._ClaimTypeID = value.ID;
-					}
-					else
-					{
-						this._ClaimTypeID = default(int);
-					}
-					this.SendPropertyChanged("tblClaimType");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblVehicle_tblClaim", Storage="_tblVehicle", ThisKey="VehicleID", OtherKey="ID", IsForeignKey=true)]
-		public tblVehicle tblVehicle
-		{
-			get
-			{
-				return this._tblVehicle.Entity;
-			}
-			set
-			{
-				tblVehicle previousValue = this._tblVehicle.Entity;
-				if (((previousValue != value) 
-							|| (this._tblVehicle.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._tblVehicle.Entity = null;
-						previousValue.tblClaims.Remove(this);
-					}
-					this._tblVehicle.Entity = value;
-					if ((value != null))
-					{
-						value.tblClaims.Add(this);
-						this._VehicleID = value.ID;
-					}
-					else
-					{
-						this._VehicleID = default(int);
-					}
-					this.SendPropertyChanged("tblVehicle");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblInsPolicy_tblClaim", Storage="_tblInsPolicy", ThisKey="InsPolicyID", OtherKey="ID", IsForeignKey=true)]
-		public tblInsPolicy tblInsPolicy
-		{
-			get
-			{
-				return this._tblInsPolicy.Entity;
-			}
-			set
-			{
-				tblInsPolicy previousValue = this._tblInsPolicy.Entity;
-				if (((previousValue != value) 
-							|| (this._tblInsPolicy.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._tblInsPolicy.Entity = null;
-						previousValue.tblClaims.Remove(this);
-					}
-					this._tblInsPolicy.Entity = value;
-					if ((value != null))
-					{
-						value.tblClaims.Add(this);
-						this._InsPolicyID = value.ID;
-					}
-					else
-					{
-						this._InsPolicyID = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("tblInsPolicy");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_tblClaimCompensations(tblClaimCompensation entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblClaim = this;
-		}
-		
-		private void detach_tblClaimCompensations(tblClaimCompensation entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblClaim = null;
-		}
-		
-		private void attach_tblClaimDamages(tblClaimDamage entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblClaim = this;
-		}
-		
-		private void detach_tblClaimDamages(tblClaimDamage entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblClaim = null;
-		}
-		
-		private void attach_tblActivities(tblActivity entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblClaim = this;
-		}
-		
-		private void detach_tblActivities(tblActivity entity)
-		{
-			this.SendPropertyChanging();
-			entity.tblClaim = null;
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tblClaimCompensation")]
 	public partial class tblClaimCompensation : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -7654,8 +6936,6 @@ namespace CC.Models
 		private string _Note;
 		
 		private bool _IsDeleted;
-		
-		private EntityRef<tblClaim> _tblClaim;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -7677,7 +6957,6 @@ namespace CC.Models
 		
 		public tblClaimCompensation()
 		{
-			this._tblClaim = default(EntityRef<tblClaim>);
 			OnCreated();
 		}
 		
@@ -7712,10 +6991,6 @@ namespace CC.Models
 			{
 				if ((this._ClaimID != value))
 				{
-					if (this._tblClaim.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
 					this.OnClaimIDChanging(value);
 					this.SendPropertyChanging();
 					this._ClaimID = value;
@@ -7805,40 +7080,6 @@ namespace CC.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblClaim_tblClaimCompensation", Storage="_tblClaim", ThisKey="ClaimID", OtherKey="ID", IsForeignKey=true)]
-		public tblClaim tblClaim
-		{
-			get
-			{
-				return this._tblClaim.Entity;
-			}
-			set
-			{
-				tblClaim previousValue = this._tblClaim.Entity;
-				if (((previousValue != value) 
-							|| (this._tblClaim.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._tblClaim.Entity = null;
-						previousValue.tblClaimCompensations.Remove(this);
-					}
-					this._tblClaim.Entity = value;
-					if ((value != null))
-					{
-						value.tblClaimCompensations.Add(this);
-						this._ClaimID = value.ID;
-					}
-					else
-					{
-						this._ClaimID = default(int);
-					}
-					this.SendPropertyChanged("tblClaim");
-				}
-			}
-		}
-		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -7880,8 +7121,6 @@ namespace CC.Models
 		
 		private bool _IsDeleted;
 		
-		private EntityRef<tblClaim> _tblClaim;
-		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -7904,7 +7143,6 @@ namespace CC.Models
 		
 		public tblClaimDamage()
 		{
-			this._tblClaim = default(EntityRef<tblClaim>);
 			OnCreated();
 		}
 		
@@ -7939,10 +7177,6 @@ namespace CC.Models
 			{
 				if ((this._ClaimID != value))
 				{
-					if (this._tblClaim.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
 					this.OnClaimIDChanging(value);
 					this.SendPropertyChanging();
 					this._ClaimID = value;
@@ -8048,40 +7282,6 @@ namespace CC.Models
 					this._IsDeleted = value;
 					this.SendPropertyChanged("IsDeleted");
 					this.OnIsDeletedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblClaim_tblClaimDamage", Storage="_tblClaim", ThisKey="ClaimID", OtherKey="ID", IsForeignKey=true)]
-		public tblClaim tblClaim
-		{
-			get
-			{
-				return this._tblClaim.Entity;
-			}
-			set
-			{
-				tblClaim previousValue = this._tblClaim.Entity;
-				if (((previousValue != value) 
-							|| (this._tblClaim.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._tblClaim.Entity = null;
-						previousValue.tblClaimDamages.Remove(this);
-					}
-					this._tblClaim.Entity = value;
-					if ((value != null))
-					{
-						value.tblClaimDamages.Add(this);
-						this._ClaimID = value.ID;
-					}
-					else
-					{
-						this._ClaimID = default(int);
-					}
-					this.SendPropertyChanged("tblClaim");
 				}
 			}
 		}
@@ -9368,390 +8568,6 @@ namespace CC.Models
 		{
 			this.SendPropertyChanging();
 			entity.tblActivityType = null;
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tblActivities")]
-	public partial class tblActivity : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _ID;
-		
-		private int _ClaimID;
-		
-		private int _TypeID;
-		
-		private string _FromText;
-		
-		private System.Nullable<int> _FromID;
-		
-		private string _ToText;
-		
-		private System.Nullable<int> _ToID;
-		
-		private string _Subject;
-		
-		private string _Body;
-		
-		private System.Nullable<System.DateTime> _Date;
-		
-		private bool _IsDeleted;
-		
-		private EntityRef<tblActivityType> _tblActivityType;
-		
-		private EntityRef<tblClaim> _tblClaim;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIDChanging(int value);
-    partial void OnIDChanged();
-    partial void OnClaimIDChanging(int value);
-    partial void OnClaimIDChanged();
-    partial void OnTypeIDChanging(int value);
-    partial void OnTypeIDChanged();
-    partial void OnFromTextChanging(string value);
-    partial void OnFromTextChanged();
-    partial void OnFromIDChanging(System.Nullable<int> value);
-    partial void OnFromIDChanged();
-    partial void OnToTextChanging(string value);
-    partial void OnToTextChanged();
-    partial void OnToIDChanging(System.Nullable<int> value);
-    partial void OnToIDChanged();
-    partial void OnSubjectChanging(string value);
-    partial void OnSubjectChanged();
-    partial void OnBodyChanging(string value);
-    partial void OnBodyChanged();
-    partial void OnDateChanging(System.Nullable<System.DateTime> value);
-    partial void OnDateChanged();
-    partial void OnIsDeletedChanging(bool value);
-    partial void OnIsDeletedChanged();
-    #endregion
-		
-		public tblActivity()
-		{
-			this._tblActivityType = default(EntityRef<tblActivityType>);
-			this._tblClaim = default(EntityRef<tblClaim>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int ID
-		{
-			get
-			{
-				return this._ID;
-			}
-			set
-			{
-				if ((this._ID != value))
-				{
-					this.OnIDChanging(value);
-					this.SendPropertyChanging();
-					this._ID = value;
-					this.SendPropertyChanged("ID");
-					this.OnIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClaimID", DbType="Int NOT NULL")]
-		public int ClaimID
-		{
-			get
-			{
-				return this._ClaimID;
-			}
-			set
-			{
-				if ((this._ClaimID != value))
-				{
-					if (this._tblClaim.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnClaimIDChanging(value);
-					this.SendPropertyChanging();
-					this._ClaimID = value;
-					this.SendPropertyChanged("ClaimID");
-					this.OnClaimIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TypeID", DbType="Int NOT NULL")]
-		public int TypeID
-		{
-			get
-			{
-				return this._TypeID;
-			}
-			set
-			{
-				if ((this._TypeID != value))
-				{
-					if (this._tblActivityType.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnTypeIDChanging(value);
-					this.SendPropertyChanging();
-					this._TypeID = value;
-					this.SendPropertyChanged("TypeID");
-					this.OnTypeIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FromText", DbType="NVarChar(500)")]
-		public string FromText
-		{
-			get
-			{
-				return this._FromText;
-			}
-			set
-			{
-				if ((this._FromText != value))
-				{
-					this.OnFromTextChanging(value);
-					this.SendPropertyChanging();
-					this._FromText = value;
-					this.SendPropertyChanged("FromText");
-					this.OnFromTextChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FromID", DbType="Int")]
-		public System.Nullable<int> FromID
-		{
-			get
-			{
-				return this._FromID;
-			}
-			set
-			{
-				if ((this._FromID != value))
-				{
-					this.OnFromIDChanging(value);
-					this.SendPropertyChanging();
-					this._FromID = value;
-					this.SendPropertyChanged("FromID");
-					this.OnFromIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ToText", DbType="NVarChar(500)")]
-		public string ToText
-		{
-			get
-			{
-				return this._ToText;
-			}
-			set
-			{
-				if ((this._ToText != value))
-				{
-					this.OnToTextChanging(value);
-					this.SendPropertyChanging();
-					this._ToText = value;
-					this.SendPropertyChanged("ToText");
-					this.OnToTextChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ToID", DbType="Int")]
-		public System.Nullable<int> ToID
-		{
-			get
-			{
-				return this._ToID;
-			}
-			set
-			{
-				if ((this._ToID != value))
-				{
-					this.OnToIDChanging(value);
-					this.SendPropertyChanging();
-					this._ToID = value;
-					this.SendPropertyChanged("ToID");
-					this.OnToIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Subject", DbType="NVarChar(200)")]
-		public string Subject
-		{
-			get
-			{
-				return this._Subject;
-			}
-			set
-			{
-				if ((this._Subject != value))
-				{
-					this.OnSubjectChanging(value);
-					this.SendPropertyChanging();
-					this._Subject = value;
-					this.SendPropertyChanged("Subject");
-					this.OnSubjectChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Body", DbType="NVarChar(MAX)")]
-		public string Body
-		{
-			get
-			{
-				return this._Body;
-			}
-			set
-			{
-				if ((this._Body != value))
-				{
-					this.OnBodyChanging(value);
-					this.SendPropertyChanging();
-					this._Body = value;
-					this.SendPropertyChanged("Body");
-					this.OnBodyChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Date", DbType="Date")]
-		public System.Nullable<System.DateTime> Date
-		{
-			get
-			{
-				return this._Date;
-			}
-			set
-			{
-				if ((this._Date != value))
-				{
-					this.OnDateChanging(value);
-					this.SendPropertyChanging();
-					this._Date = value;
-					this.SendPropertyChanged("Date");
-					this.OnDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsDeleted", DbType="Bit NOT NULL")]
-		public bool IsDeleted
-		{
-			get
-			{
-				return this._IsDeleted;
-			}
-			set
-			{
-				if ((this._IsDeleted != value))
-				{
-					this.OnIsDeletedChanging(value);
-					this.SendPropertyChanging();
-					this._IsDeleted = value;
-					this.SendPropertyChanged("IsDeleted");
-					this.OnIsDeletedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblActivityType_tblActivity", Storage="_tblActivityType", ThisKey="TypeID", OtherKey="ID", IsForeignKey=true)]
-		public tblActivityType tblActivityType
-		{
-			get
-			{
-				return this._tblActivityType.Entity;
-			}
-			set
-			{
-				tblActivityType previousValue = this._tblActivityType.Entity;
-				if (((previousValue != value) 
-							|| (this._tblActivityType.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._tblActivityType.Entity = null;
-						previousValue.tblActivities.Remove(this);
-					}
-					this._tblActivityType.Entity = value;
-					if ((value != null))
-					{
-						value.tblActivities.Add(this);
-						this._TypeID = value.ID;
-					}
-					else
-					{
-						this._TypeID = default(int);
-					}
-					this.SendPropertyChanged("tblActivityType");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblClaim_tblActivity", Storage="_tblClaim", ThisKey="ClaimID", OtherKey="ID", IsForeignKey=true)]
-		public tblClaim tblClaim
-		{
-			get
-			{
-				return this._tblClaim.Entity;
-			}
-			set
-			{
-				tblClaim previousValue = this._tblClaim.Entity;
-				if (((previousValue != value) 
-							|| (this._tblClaim.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._tblClaim.Entity = null;
-						previousValue.tblActivities.Remove(this);
-					}
-					this._tblClaim.Entity = value;
-					if ((value != null))
-					{
-						value.tblActivities.Add(this);
-						this._ClaimID = value.ID;
-					}
-					else
-					{
-						this._ClaimID = default(int);
-					}
-					this.SendPropertyChanged("tblClaim");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
 		}
 	}
 	
@@ -11222,6 +10038,1172 @@ namespace CC.Models
 		{
 			this.SendPropertyChanging();
 			entity.tblInsPolicy = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tblActivities")]
+	public partial class tblActivity : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private int _ClaimID;
+		
+		private int _TypeID;
+		
+		private string _FromText;
+		
+		private int _FromID;
+		
+		private string _ToText;
+		
+		private int _ToID;
+		
+		private string _Subject;
+		
+		private string _Body;
+		
+		private System.Nullable<System.DateTime> _Date;
+		
+		private bool _IsDeleted;
+		
+		private double _Amount;
+		
+		private byte _warnSent;
+		
+		private EntityRef<tblActivityType> _tblActivityType;
+		
+		private EntityRef<tblClaim> _tblClaim;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnClaimIDChanging(int value);
+    partial void OnClaimIDChanged();
+    partial void OnTypeIDChanging(int value);
+    partial void OnTypeIDChanged();
+    partial void OnFromTextChanging(string value);
+    partial void OnFromTextChanged();
+    partial void OnFromIDChanging(int value);
+    partial void OnFromIDChanged();
+    partial void OnToTextChanging(string value);
+    partial void OnToTextChanged();
+    partial void OnToIDChanging(int value);
+    partial void OnToIDChanged();
+    partial void OnSubjectChanging(string value);
+    partial void OnSubjectChanged();
+    partial void OnBodyChanging(string value);
+    partial void OnBodyChanged();
+    partial void OnDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnDateChanged();
+    partial void OnIsDeletedChanging(bool value);
+    partial void OnIsDeletedChanged();
+    partial void OnAmountChanging(double value);
+    partial void OnAmountChanged();
+    partial void OnwarnSentChanging(byte value);
+    partial void OnwarnSentChanged();
+    #endregion
+		
+		public tblActivity()
+		{
+			this._tblActivityType = default(EntityRef<tblActivityType>);
+			this._tblClaim = default(EntityRef<tblClaim>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClaimID", DbType="Int NOT NULL")]
+		public int ClaimID
+		{
+			get
+			{
+				return this._ClaimID;
+			}
+			set
+			{
+				if ((this._ClaimID != value))
+				{
+					if (this._tblClaim.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnClaimIDChanging(value);
+					this.SendPropertyChanging();
+					this._ClaimID = value;
+					this.SendPropertyChanged("ClaimID");
+					this.OnClaimIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TypeID", DbType="Int NOT NULL")]
+		public int TypeID
+		{
+			get
+			{
+				return this._TypeID;
+			}
+			set
+			{
+				if ((this._TypeID != value))
+				{
+					if (this._tblActivityType.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnTypeIDChanging(value);
+					this.SendPropertyChanging();
+					this._TypeID = value;
+					this.SendPropertyChanged("TypeID");
+					this.OnTypeIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FromText", DbType="NVarChar(500)")]
+		public string FromText
+		{
+			get
+			{
+				return this._FromText;
+			}
+			set
+			{
+				if ((this._FromText != value))
+				{
+					this.OnFromTextChanging(value);
+					this.SendPropertyChanging();
+					this._FromText = value;
+					this.SendPropertyChanged("FromText");
+					this.OnFromTextChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FromID", DbType="Int NOT NULL")]
+		public int FromID
+		{
+			get
+			{
+				return this._FromID;
+			}
+			set
+			{
+				if ((this._FromID != value))
+				{
+					this.OnFromIDChanging(value);
+					this.SendPropertyChanging();
+					this._FromID = value;
+					this.SendPropertyChanged("FromID");
+					this.OnFromIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ToText", DbType="NVarChar(500)")]
+		public string ToText
+		{
+			get
+			{
+				return this._ToText;
+			}
+			set
+			{
+				if ((this._ToText != value))
+				{
+					this.OnToTextChanging(value);
+					this.SendPropertyChanging();
+					this._ToText = value;
+					this.SendPropertyChanged("ToText");
+					this.OnToTextChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ToID", DbType="Int NOT NULL")]
+		public int ToID
+		{
+			get
+			{
+				return this._ToID;
+			}
+			set
+			{
+				if ((this._ToID != value))
+				{
+					this.OnToIDChanging(value);
+					this.SendPropertyChanging();
+					this._ToID = value;
+					this.SendPropertyChanged("ToID");
+					this.OnToIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Subject", DbType="NVarChar(200)")]
+		public string Subject
+		{
+			get
+			{
+				return this._Subject;
+			}
+			set
+			{
+				if ((this._Subject != value))
+				{
+					this.OnSubjectChanging(value);
+					this.SendPropertyChanging();
+					this._Subject = value;
+					this.SendPropertyChanged("Subject");
+					this.OnSubjectChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Body", DbType="NVarChar(MAX)")]
+		public string Body
+		{
+			get
+			{
+				return this._Body;
+			}
+			set
+			{
+				if ((this._Body != value))
+				{
+					this.OnBodyChanging(value);
+					this.SendPropertyChanging();
+					this._Body = value;
+					this.SendPropertyChanged("Body");
+					this.OnBodyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Date", DbType="SmallDateTime")]
+		public System.Nullable<System.DateTime> Date
+		{
+			get
+			{
+				return this._Date;
+			}
+			set
+			{
+				if ((this._Date != value))
+				{
+					this.OnDateChanging(value);
+					this.SendPropertyChanging();
+					this._Date = value;
+					this.SendPropertyChanged("Date");
+					this.OnDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsDeleted", DbType="Bit NOT NULL")]
+		public bool IsDeleted
+		{
+			get
+			{
+				return this._IsDeleted;
+			}
+			set
+			{
+				if ((this._IsDeleted != value))
+				{
+					this.OnIsDeletedChanging(value);
+					this.SendPropertyChanging();
+					this._IsDeleted = value;
+					this.SendPropertyChanged("IsDeleted");
+					this.OnIsDeletedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Amount", DbType="Float NOT NULL")]
+		public double Amount
+		{
+			get
+			{
+				return this._Amount;
+			}
+			set
+			{
+				if ((this._Amount != value))
+				{
+					this.OnAmountChanging(value);
+					this.SendPropertyChanging();
+					this._Amount = value;
+					this.SendPropertyChanged("Amount");
+					this.OnAmountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_warnSent", DbType="TinyInt NOT NULL")]
+		public byte warnSent
+		{
+			get
+			{
+				return this._warnSent;
+			}
+			set
+			{
+				if ((this._warnSent != value))
+				{
+					this.OnwarnSentChanging(value);
+					this.SendPropertyChanging();
+					this._warnSent = value;
+					this.SendPropertyChanged("warnSent");
+					this.OnwarnSentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblActivityType_tblActivity", Storage="_tblActivityType", ThisKey="TypeID", OtherKey="ID", IsForeignKey=true)]
+		public tblActivityType tblActivityType
+		{
+			get
+			{
+				return this._tblActivityType.Entity;
+			}
+			set
+			{
+				tblActivityType previousValue = this._tblActivityType.Entity;
+				if (((previousValue != value) 
+							|| (this._tblActivityType.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._tblActivityType.Entity = null;
+						previousValue.tblActivities.Remove(this);
+					}
+					this._tblActivityType.Entity = value;
+					if ((value != null))
+					{
+						value.tblActivities.Add(this);
+						this._TypeID = value.ID;
+					}
+					else
+					{
+						this._TypeID = default(int);
+					}
+					this.SendPropertyChanged("tblActivityType");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblClaim_tblActivity", Storage="_tblClaim", ThisKey="ClaimID", OtherKey="ID", IsForeignKey=true)]
+		public tblClaim tblClaim
+		{
+			get
+			{
+				return this._tblClaim.Entity;
+			}
+			set
+			{
+				tblClaim previousValue = this._tblClaim.Entity;
+				if (((previousValue != value) 
+							|| (this._tblClaim.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._tblClaim.Entity = null;
+						previousValue.tblActivities.Remove(this);
+					}
+					this._tblClaim.Entity = value;
+					if ((value != null))
+					{
+						value.tblActivities.Add(this);
+						this._ClaimID = value.ID;
+					}
+					else
+					{
+						this._ClaimID = default(int);
+					}
+					this.SendPropertyChanged("tblClaim");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tblClaims")]
+	public partial class tblClaim : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private int _ClaimTypeID;
+		
+		private int _AccidentID;
+		
+		private System.Nullable<int> _InsPolicyID;
+		
+		private int _VehicleID;
+		
+		private int _No;
+		
+		private System.Nullable<bool> _IsTotalLoss;
+		
+		private double _LossAmount;
+		
+		private System.Nullable<double> _InsuranceClaimAmount;
+		
+		private System.Nullable<bool> _IsInjuredPersons;
+		
+		private string _InsurerClaimID;
+		
+		private int _ClaimStatus;
+		
+		private bool _AmountIsConfirmed;
+		
+		private System.Nullable<int> _Days;
+		
+		private System.Nullable<double> _PerDay;
+		
+		private bool _IsDeleted;
+		
+		private System.Nullable<System.DateTime> _DateNotification;
+		
+		private System.Nullable<System.DateTime> _DateDocsSent;
+		
+		private byte _warnSentOfNotify;
+		
+		private byte _warnSentOfDocs;
+		
+		private byte _warnSentOfPayment;
+		
+		private EntitySet<tblActivity> _tblActivities;
+		
+		private EntityRef<tblAccident> _tblAccident;
+		
+		private EntityRef<tblClaimType> _tblClaimType;
+		
+		private EntityRef<tblInsPolicy> _tblInsPolicy;
+		
+		private EntityRef<tblVehicle> _tblVehicle;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnClaimTypeIDChanging(int value);
+    partial void OnClaimTypeIDChanged();
+    partial void OnAccidentIDChanging(int value);
+    partial void OnAccidentIDChanged();
+    partial void OnInsPolicyIDChanging(System.Nullable<int> value);
+    partial void OnInsPolicyIDChanged();
+    partial void OnVehicleIDChanging(int value);
+    partial void OnVehicleIDChanged();
+    partial void OnNoChanging(int value);
+    partial void OnNoChanged();
+    partial void OnIsTotalLossChanging(System.Nullable<bool> value);
+    partial void OnIsTotalLossChanged();
+    partial void OnLossAmountChanging(double value);
+    partial void OnLossAmountChanged();
+    partial void OnInsuranceClaimAmountChanging(System.Nullable<double> value);
+    partial void OnInsuranceClaimAmountChanged();
+    partial void OnIsInjuredPersonsChanging(System.Nullable<bool> value);
+    partial void OnIsInjuredPersonsChanged();
+    partial void OnInsurerClaimIDChanging(string value);
+    partial void OnInsurerClaimIDChanged();
+    partial void OnClaimStatusChanging(int value);
+    partial void OnClaimStatusChanged();
+    partial void OnAmountIsConfirmedChanging(bool value);
+    partial void OnAmountIsConfirmedChanged();
+    partial void OnDaysChanging(System.Nullable<int> value);
+    partial void OnDaysChanged();
+    partial void OnPerDayChanging(System.Nullable<double> value);
+    partial void OnPerDayChanged();
+    partial void OnIsDeletedChanging(bool value);
+    partial void OnIsDeletedChanged();
+    partial void OnDateNotificationChanging(System.Nullable<System.DateTime> value);
+    partial void OnDateNotificationChanged();
+    partial void OnDateDocsSentChanging(System.Nullable<System.DateTime> value);
+    partial void OnDateDocsSentChanged();
+    partial void OnwarnSentOfNotifyChanging(byte value);
+    partial void OnwarnSentOfNotifyChanged();
+    partial void OnwarnSentOfDocsChanging(byte value);
+    partial void OnwarnSentOfDocsChanged();
+    partial void OnwarnSentOfPaymentChanging(byte value);
+    partial void OnwarnSentOfPaymentChanged();
+    #endregion
+		
+		public tblClaim()
+		{
+			this._tblActivities = new EntitySet<tblActivity>(new Action<tblActivity>(this.attach_tblActivities), new Action<tblActivity>(this.detach_tblActivities));
+			this._tblAccident = default(EntityRef<tblAccident>);
+			this._tblClaimType = default(EntityRef<tblClaimType>);
+			this._tblInsPolicy = default(EntityRef<tblInsPolicy>);
+			this._tblVehicle = default(EntityRef<tblVehicle>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClaimTypeID", DbType="Int NOT NULL")]
+		public int ClaimTypeID
+		{
+			get
+			{
+				return this._ClaimTypeID;
+			}
+			set
+			{
+				if ((this._ClaimTypeID != value))
+				{
+					if (this._tblClaimType.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnClaimTypeIDChanging(value);
+					this.SendPropertyChanging();
+					this._ClaimTypeID = value;
+					this.SendPropertyChanged("ClaimTypeID");
+					this.OnClaimTypeIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AccidentID", DbType="Int NOT NULL")]
+		public int AccidentID
+		{
+			get
+			{
+				return this._AccidentID;
+			}
+			set
+			{
+				if ((this._AccidentID != value))
+				{
+					if (this._tblAccident.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAccidentIDChanging(value);
+					this.SendPropertyChanging();
+					this._AccidentID = value;
+					this.SendPropertyChanged("AccidentID");
+					this.OnAccidentIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InsPolicyID", DbType="Int")]
+		public System.Nullable<int> InsPolicyID
+		{
+			get
+			{
+				return this._InsPolicyID;
+			}
+			set
+			{
+				if ((this._InsPolicyID != value))
+				{
+					if (this._tblInsPolicy.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnInsPolicyIDChanging(value);
+					this.SendPropertyChanging();
+					this._InsPolicyID = value;
+					this.SendPropertyChanged("InsPolicyID");
+					this.OnInsPolicyIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_VehicleID", DbType="Int NOT NULL")]
+		public int VehicleID
+		{
+			get
+			{
+				return this._VehicleID;
+			}
+			set
+			{
+				if ((this._VehicleID != value))
+				{
+					if (this._tblVehicle.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnVehicleIDChanging(value);
+					this.SendPropertyChanging();
+					this._VehicleID = value;
+					this.SendPropertyChanged("VehicleID");
+					this.OnVehicleIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_No", DbType="Int NOT NULL")]
+		public int No
+		{
+			get
+			{
+				return this._No;
+			}
+			set
+			{
+				if ((this._No != value))
+				{
+					this.OnNoChanging(value);
+					this.SendPropertyChanging();
+					this._No = value;
+					this.SendPropertyChanged("No");
+					this.OnNoChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsTotalLoss", DbType="Bit")]
+		public System.Nullable<bool> IsTotalLoss
+		{
+			get
+			{
+				return this._IsTotalLoss;
+			}
+			set
+			{
+				if ((this._IsTotalLoss != value))
+				{
+					this.OnIsTotalLossChanging(value);
+					this.SendPropertyChanging();
+					this._IsTotalLoss = value;
+					this.SendPropertyChanged("IsTotalLoss");
+					this.OnIsTotalLossChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LossAmount", DbType="Float NOT NULL")]
+		public double LossAmount
+		{
+			get
+			{
+				return this._LossAmount;
+			}
+			set
+			{
+				if ((this._LossAmount != value))
+				{
+					this.OnLossAmountChanging(value);
+					this.SendPropertyChanging();
+					this._LossAmount = value;
+					this.SendPropertyChanged("LossAmount");
+					this.OnLossAmountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InsuranceClaimAmount", DbType="Float")]
+		public System.Nullable<double> InsuranceClaimAmount
+		{
+			get
+			{
+				return this._InsuranceClaimAmount;
+			}
+			set
+			{
+				if ((this._InsuranceClaimAmount != value))
+				{
+					this.OnInsuranceClaimAmountChanging(value);
+					this.SendPropertyChanging();
+					this._InsuranceClaimAmount = value;
+					this.SendPropertyChanged("InsuranceClaimAmount");
+					this.OnInsuranceClaimAmountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsInjuredPersons", DbType="Bit")]
+		public System.Nullable<bool> IsInjuredPersons
+		{
+			get
+			{
+				return this._IsInjuredPersons;
+			}
+			set
+			{
+				if ((this._IsInjuredPersons != value))
+				{
+					this.OnIsInjuredPersonsChanging(value);
+					this.SendPropertyChanging();
+					this._IsInjuredPersons = value;
+					this.SendPropertyChanged("IsInjuredPersons");
+					this.OnIsInjuredPersonsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InsurerClaimID", DbType="NVarChar(50)")]
+		public string InsurerClaimID
+		{
+			get
+			{
+				return this._InsurerClaimID;
+			}
+			set
+			{
+				if ((this._InsurerClaimID != value))
+				{
+					this.OnInsurerClaimIDChanging(value);
+					this.SendPropertyChanging();
+					this._InsurerClaimID = value;
+					this.SendPropertyChanged("InsurerClaimID");
+					this.OnInsurerClaimIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClaimStatus", DbType="Int NOT NULL")]
+		public int ClaimStatus
+		{
+			get
+			{
+				return this._ClaimStatus;
+			}
+			set
+			{
+				if ((this._ClaimStatus != value))
+				{
+					this.OnClaimStatusChanging(value);
+					this.SendPropertyChanging();
+					this._ClaimStatus = value;
+					this.SendPropertyChanged("ClaimStatus");
+					this.OnClaimStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AmountIsConfirmed", DbType="Bit NOT NULL")]
+		public bool AmountIsConfirmed
+		{
+			get
+			{
+				return this._AmountIsConfirmed;
+			}
+			set
+			{
+				if ((this._AmountIsConfirmed != value))
+				{
+					this.OnAmountIsConfirmedChanging(value);
+					this.SendPropertyChanging();
+					this._AmountIsConfirmed = value;
+					this.SendPropertyChanged("AmountIsConfirmed");
+					this.OnAmountIsConfirmedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Days", DbType="Int")]
+		public System.Nullable<int> Days
+		{
+			get
+			{
+				return this._Days;
+			}
+			set
+			{
+				if ((this._Days != value))
+				{
+					this.OnDaysChanging(value);
+					this.SendPropertyChanging();
+					this._Days = value;
+					this.SendPropertyChanged("Days");
+					this.OnDaysChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PerDay", DbType="Float")]
+		public System.Nullable<double> PerDay
+		{
+			get
+			{
+				return this._PerDay;
+			}
+			set
+			{
+				if ((this._PerDay != value))
+				{
+					this.OnPerDayChanging(value);
+					this.SendPropertyChanging();
+					this._PerDay = value;
+					this.SendPropertyChanged("PerDay");
+					this.OnPerDayChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsDeleted", DbType="Bit NOT NULL")]
+		public bool IsDeleted
+		{
+			get
+			{
+				return this._IsDeleted;
+			}
+			set
+			{
+				if ((this._IsDeleted != value))
+				{
+					this.OnIsDeletedChanging(value);
+					this.SendPropertyChanging();
+					this._IsDeleted = value;
+					this.SendPropertyChanged("IsDeleted");
+					this.OnIsDeletedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateNotification", DbType="SmallDateTime")]
+		public System.Nullable<System.DateTime> DateNotification
+		{
+			get
+			{
+				return this._DateNotification;
+			}
+			set
+			{
+				if ((this._DateNotification != value))
+				{
+					this.OnDateNotificationChanging(value);
+					this.SendPropertyChanging();
+					this._DateNotification = value;
+					this.SendPropertyChanged("DateNotification");
+					this.OnDateNotificationChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateDocsSent", DbType="Date")]
+		public System.Nullable<System.DateTime> DateDocsSent
+		{
+			get
+			{
+				return this._DateDocsSent;
+			}
+			set
+			{
+				if ((this._DateDocsSent != value))
+				{
+					this.OnDateDocsSentChanging(value);
+					this.SendPropertyChanging();
+					this._DateDocsSent = value;
+					this.SendPropertyChanged("DateDocsSent");
+					this.OnDateDocsSentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_warnSentOfNotify", DbType="TinyInt NOT NULL")]
+		public byte warnSentOfNotify
+		{
+			get
+			{
+				return this._warnSentOfNotify;
+			}
+			set
+			{
+				if ((this._warnSentOfNotify != value))
+				{
+					this.OnwarnSentOfNotifyChanging(value);
+					this.SendPropertyChanging();
+					this._warnSentOfNotify = value;
+					this.SendPropertyChanged("warnSentOfNotify");
+					this.OnwarnSentOfNotifyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_warnSentOfDocs", DbType="TinyInt NOT NULL")]
+		public byte warnSentOfDocs
+		{
+			get
+			{
+				return this._warnSentOfDocs;
+			}
+			set
+			{
+				if ((this._warnSentOfDocs != value))
+				{
+					this.OnwarnSentOfDocsChanging(value);
+					this.SendPropertyChanging();
+					this._warnSentOfDocs = value;
+					this.SendPropertyChanged("warnSentOfDocs");
+					this.OnwarnSentOfDocsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_warnSentOfPayment", DbType="TinyInt NOT NULL")]
+		public byte warnSentOfPayment
+		{
+			get
+			{
+				return this._warnSentOfPayment;
+			}
+			set
+			{
+				if ((this._warnSentOfPayment != value))
+				{
+					this.OnwarnSentOfPaymentChanging(value);
+					this.SendPropertyChanging();
+					this._warnSentOfPayment = value;
+					this.SendPropertyChanged("warnSentOfPayment");
+					this.OnwarnSentOfPaymentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblClaim_tblActivity", Storage="_tblActivities", ThisKey="ID", OtherKey="ClaimID")]
+		public EntitySet<tblActivity> tblActivities
+		{
+			get
+			{
+				return this._tblActivities;
+			}
+			set
+			{
+				this._tblActivities.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblAccident_tblClaim", Storage="_tblAccident", ThisKey="AccidentID", OtherKey="ID", IsForeignKey=true)]
+		public tblAccident tblAccident
+		{
+			get
+			{
+				return this._tblAccident.Entity;
+			}
+			set
+			{
+				tblAccident previousValue = this._tblAccident.Entity;
+				if (((previousValue != value) 
+							|| (this._tblAccident.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._tblAccident.Entity = null;
+						previousValue.tblClaims.Remove(this);
+					}
+					this._tblAccident.Entity = value;
+					if ((value != null))
+					{
+						value.tblClaims.Add(this);
+						this._AccidentID = value.ID;
+					}
+					else
+					{
+						this._AccidentID = default(int);
+					}
+					this.SendPropertyChanged("tblAccident");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblClaimType_tblClaim", Storage="_tblClaimType", ThisKey="ClaimTypeID", OtherKey="ID", IsForeignKey=true)]
+		public tblClaimType tblClaimType
+		{
+			get
+			{
+				return this._tblClaimType.Entity;
+			}
+			set
+			{
+				tblClaimType previousValue = this._tblClaimType.Entity;
+				if (((previousValue != value) 
+							|| (this._tblClaimType.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._tblClaimType.Entity = null;
+						previousValue.tblClaims.Remove(this);
+					}
+					this._tblClaimType.Entity = value;
+					if ((value != null))
+					{
+						value.tblClaims.Add(this);
+						this._ClaimTypeID = value.ID;
+					}
+					else
+					{
+						this._ClaimTypeID = default(int);
+					}
+					this.SendPropertyChanged("tblClaimType");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblInsPolicy_tblClaim", Storage="_tblInsPolicy", ThisKey="InsPolicyID", OtherKey="ID", IsForeignKey=true)]
+		public tblInsPolicy tblInsPolicy
+		{
+			get
+			{
+				return this._tblInsPolicy.Entity;
+			}
+			set
+			{
+				tblInsPolicy previousValue = this._tblInsPolicy.Entity;
+				if (((previousValue != value) 
+							|| (this._tblInsPolicy.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._tblInsPolicy.Entity = null;
+						previousValue.tblClaims.Remove(this);
+					}
+					this._tblInsPolicy.Entity = value;
+					if ((value != null))
+					{
+						value.tblClaims.Add(this);
+						this._InsPolicyID = value.ID;
+					}
+					else
+					{
+						this._InsPolicyID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("tblInsPolicy");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tblVehicle_tblClaim", Storage="_tblVehicle", ThisKey="VehicleID", OtherKey="ID", IsForeignKey=true)]
+		public tblVehicle tblVehicle
+		{
+			get
+			{
+				return this._tblVehicle.Entity;
+			}
+			set
+			{
+				tblVehicle previousValue = this._tblVehicle.Entity;
+				if (((previousValue != value) 
+							|| (this._tblVehicle.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._tblVehicle.Entity = null;
+						previousValue.tblClaims.Remove(this);
+					}
+					this._tblVehicle.Entity = value;
+					if ((value != null))
+					{
+						value.tblClaims.Add(this);
+						this._VehicleID = value.ID;
+					}
+					else
+					{
+						this._VehicleID = default(int);
+					}
+					this.SendPropertyChanged("tblVehicle");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_tblActivities(tblActivity entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblClaim = this;
+		}
+		
+		private void detach_tblActivities(tblActivity entity)
+		{
+			this.SendPropertyChanging();
+			entity.tblClaim = null;
 		}
 	}
 	

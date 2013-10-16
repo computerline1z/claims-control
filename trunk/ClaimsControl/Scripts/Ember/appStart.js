@@ -40,12 +40,12 @@ App.NavbarController = Em.Controller.extend({
 				if (this.show){$(this.show).show();}
 			})				
 		}			
-		$('#' + controller.get("currentOutlet")).addClass("hidden"); //Paslepiam aktyvų taba .empty()
+		$('#' + controller.get("currentOutlet")).addClass("hidden");$('body').spinner();//Paslepiam aktyvų taba .empty()
 
 		if  (!p.newOutlet){p.newOutlet=p.newState;}//else{$('#' + controller.get("currentOutlet")).empty();}						
 		if  (controller.currentState||p.newOutlet===p.newState){
 			controller.set("currentState", p.newState).set("currentOutlet", p.newOutlet);
-			//console.log("fnSetNewTab1:"+p.newOutlet+";"+p.viewIx);
+			if (p.newState==="tabAccidents"||p.newState==="tabReports"||p.newState==="tabMyCard"||p.newState==="changePass"){$('img.spinner').remove();} 
 			fnUnhideOutlet(p);return true;//p.newOutlet,p.viewIx,p.transparent
 		} else {//jei nėra currentState ko gero buvo refresh, tai nukeliam į pradinį psl jei to reikia
 			p.newOutlet=(p.newOutlet==="tabEmpty")?"tabAccidents":p.newOutlet;// galim visada mest i tabAccidents";

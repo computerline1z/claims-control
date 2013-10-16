@@ -156,7 +156,12 @@ $(function() {
 	$("body").hoverIntent({
 		over: function(e){
 			var t=$(this),ext=t.closest(".ExtendIt");data=ext.data("ctrl"),field=(data.colLabels)?data.colLabels:data.Field;
+			var frm=t.closest(".js-frm"),frmOpt=(frm.data("ctrl"))?frm.data("ctrl"):{};
+			if (!frm.length||!frmOpt.Source){
+				console.error("wrong source:");console.log(frm);
+			}
 			var txt=App.Lang.tables[t.closest(".js-frm").data("ctrl").Source].Cols[field].tip;
+			if (!txt){console.error("no txt:");console.log(frm);}
 			var offset=ext.offset();
 			
 			var div=$('<div id="js-tip-id" style="left:'+offset.left+'px;top:'+offset.top+'px;width:'+ext.width()+'px;">'+txt+'</div>').appendTo('body');

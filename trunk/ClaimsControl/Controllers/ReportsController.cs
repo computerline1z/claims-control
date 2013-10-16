@@ -7,6 +7,7 @@ using System.Web.Caching;
 using System;
 using System.Web;
 using ClosedXML.Excel;
+using MyHelper;
 
 namespace ClaimsControl.Controllers {
 

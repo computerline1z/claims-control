@@ -5,6 +5,7 @@ using System.Web;
 using CC.Models;
 using System.IO;
 using System.Web.Security;
+using MyHelper;
 
 namespace CC.Classes {
 

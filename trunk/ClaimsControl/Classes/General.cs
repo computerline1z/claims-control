@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Web;
 using System.Data;
 using System.Configuration;
+using System.Reflection;
 
 namespace CC.Classes {
 	public class HttpParameters {
@@ -21,7 +22,7 @@ namespace CC.Classes {
 			return HttpUtility.ParseQueryString(myUri).Get(name);
 		}
 	}
-
+	/*
 	public class MyEventLog {
 		private static void CreateSource(string src, EventLog ELog) {
 			try {
@@ -49,7 +50,7 @@ namespace CC.Classes {
 			EL.WriteEntry(Message, EventLogEntryType.Warning, eventID);
 		}
 	}
-
+	*/
 	public abstract class ToStringController : Controller {
 
 		protected string RenderPartialViewToString() {
