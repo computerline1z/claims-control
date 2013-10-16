@@ -54,8 +54,8 @@
 					<div class="clearfix pad-b60">
 
 						<div class="col-sm-6 pad-t40">
-							<div class="tablet-driver-red js-click-link-to-truckviser pointer pad-1 relative z-index2">
-								<div class="img-box">
+							<div class="tablet-driver-red pad-1 relative z-index2">
+								<div class="img-box js-click-link-to-truckviser pointer" style="margin-bottom:-2px;">
 									<img src="styles/img/tablet-driver.png" alt="tablet driver" />
 									
 									<div class="relative z-index2" style="position:absolute;top:0;left:0px;">
@@ -70,19 +70,32 @@
 
 						<div class="col-sm-6 pad-t40">
 
-							<div class="blue-box-in-header flipbox z-index1">
+							<div class="blue-box-in-header relative js-hover-to-slide  z-index1">
 								<div class="inner text-orange">
 									<div class="corner"></div>
 									<div class="relative">
 										<h1 class="text-orange pad-t40">Žalų reguliavimo programa<br /><span class="text-white">iki pristatymo liko:</span></h1>
 										<div class="countdown clearfix pad-b20"></div>
-									</div><!-- z-index2 -->	
+									</div><!-- z-index2 -->
 								</div><!-- inner -->
+
+								
+									<div class="slider css-js-hover-slider">
+										<ul class="slides">
+											<li class="slide"><img src="images/slide1.png"></li>
+											<li class="slide"><img src="images/slide2.png"></li>
+											<li class="slide"><img src="images/slide3.png"></li>
+										</ul>
+									</div>
+				
+							
 							</div><!-- blue-box-header -->
 
 						</div>
 
 					</div>
+
+					
 
 
 					<div class="content-box relative pad-v35 js-nav-wrap js-keep-on-top z-index3">
@@ -179,15 +192,39 @@
 
 				<ul class="row no-list-style subscription-block">
 
-					<li class="col-md-3 col-md-offset-3"><a href="naujiena.html"><i class="icon-51-folder"></i>Visos naujienos</a></li>
+					<li class="col-lg-3 col-md-4 col-lg-offset-3 col-md-offset-2"><a href="naujiena.html"><i class="icon-51-folder"></i>Visos naujienos</a></li>
 					<!-- <li class="col-md-4"><a href="#"><i class="icon-51-rss"></i>RSS prenumerata</a></li> -->
-					<li class="col-md-3"><a href="zalu-valdymo-sistema.html#naujienu-prenumerata"><i class="icon-51-letter"></i>Naujienų prenumerata</a></li>
+					<li class="col-lg-3 col-md-4"><a href="" id="js-subscribe-news"><i class="icon-51-letter"></i>Naujienų prenumerata</a></li>
 
 				</ul>
 
 			</div><!-- container -->
 
 		</div><!-- bg-blueGray -->
+
+
+		<div class="bg-blueGrayLight border-top-white" id="subscribe-news" style="display:none;">
+
+			<div class="container">
+
+				<form role="form" class="row pad-t30">
+
+					<div class="form-group col-sm-8">
+						<input type="email" id="form-email-news" class="form-control" placeholder="El. paštas">
+					</div>
+
+					<div class="col-sm-4">
+						<button type="submit" id="sub-news-submit" class="btn btn-default btn-lg wid100pr">Prenumeruoti</button>
+					</div>
+					
+				</form>
+
+				<p class="heading-font font-large lheight1 pad-t10 pad-b10" id="form-status"></p>
+			
+			</div><!-- container -->
+
+		</div><!-- bg-blueGray -->
+
 
 		<div class="bg-blueGray text-blueGrayLightest">
 
@@ -303,9 +340,48 @@
 
 		<script src="js/jquery.cookie.js"></script>
 		<script src="js/backfix.min.js"></script>
+		<script src="js/jquery.glide.min.js"></script>
 		<!-- custom js -->
 		<script src="js/hoverflow.js"></script><!-- provides queueless animation -->
 		<script src="js/main.js"></script>
+
+		<script type="text/javascript">
+
+			var form_button_pressed = false;
+
+			$("#sub-news-submit").click(function(event){
+
+				function isEmail(email){
+					return /^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*$/.test( email );
+				}
+
+				event.preventDefault();
+
+				if(form_button_pressed){
+					return;
+				}
+				else {
+					form_button_pressed = true;
+				}
+
+				var form_email = $("#form-email-news").val();
+
+				if( isEmail(form_email) === false ){
+					$("#form-status").html('<span class="text-orange">Įveskite teisingą el.pašto adresą</span>');
+					form_button_pressed = false;
+					return;
+				}
+
+
+				$.post("data/save_emails_news.php", { "email": form_email }, function(data){
+					if( data === "success"){
+						$("#form-status").html("Jūsų el.paštas įtrauktas į naujienų gavėjų sąrašą");
+						$("#sub-news-submit").attr("disabled", "disabled");
+					}
+				} );
+			});
+
+		</script>
 
 		<script src="js/jquery.countdown.js"></script>
 		<script src="js/jquery.countdown-lt.js"></script>

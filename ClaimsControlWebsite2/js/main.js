@@ -11,7 +11,8 @@ function fix_stripe(){
 		{ // fix stripe
 			"left": side,
 			"height": header_height,
-			"width": stripe_width
+			"width": stripe_width,
+			"display": "none"
 		}
 	);
 }
@@ -120,7 +121,7 @@ function update_sliding_stripe(){
 	if(viewport<screen_sm ){
 		minus_right = 45;
 	}
-	if( $(".css-js-sliding-background").hasClass("bg-blueGrayLight") ){
+	if( $(".css-js-sliding-background").hasClass("background_on") ){
 		plus_left = slider_holder_width
 	}
 
@@ -159,7 +160,7 @@ function enable_sliding_stripe(target_hover){
 			left: "+="+slider_holder_width,
 			width: distance_to_right_side
 		}
-	).addClass("bg-blueGrayLight z-index2");
+	).addClass("background_on z-index2");
 
 	$(".css-js-sliding-background .content").css("display", "block");
 
@@ -300,6 +301,8 @@ $(function() {
 				return;
 			}
 
+			$(".js-red-stripe-visual").show();
+
 			$(".js-red-stripe").css("z-index", 1)
 				.hoverFlow(e.type, {
 					left: "+=327",
@@ -331,6 +334,8 @@ $(function() {
 			$(".js-stripe-contents").hoverFlow(e.type, { opacity: 0}, 'fast');
 
 			$(this).css("width", "");
+
+			$(".js-red-stripe-visual").hide();
 		}
 	);
 
@@ -699,9 +704,32 @@ $(function() {
 		window.location = "truckviser.html";
 	});
 
-	$(".js-btn-back").click(function(){
-		history.go(-1);
+	$("#js-subscribe-news").click(function(event){
+		event.preventDefault();
+		$("#subscribe-news").toggle({duration: 200});
 	});
+
+    glide = $('.slider').glide(
+    	{
+        	autoplay: 2000,
+        	arrows: false,
+        	nav: true
+		}
+    )
+    	.data('api_glide')
+    ;
+    glide.pause();
+
+    $(".js-hover-to-slide").mouseenter(function(e){
+    	$(".css-js-hover-slider").css({top:0,opacity:0}).hoverFlow( e.type, {opacity:1}, 400, function(){
+    		glide.play();
+    	});
+    });
+
+    $(".js-hover-to-slide").mouseleave(function(e){
+    	glide.pause();
+    	$(".css-js-hover-slider").hoverFlow(e.type, {opacity:0}, 400);
+    });
 
 	bajb_backdetect.OnBack = function(){
 		$.cookie('dropscroll', 'true');
