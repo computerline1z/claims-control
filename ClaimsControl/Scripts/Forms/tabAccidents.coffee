@@ -75,7 +75,7 @@ App.SelectedAccidentView = Em.View.extend(
 	newClaim: (e) ->
 		nTr = $(e.target).closest('div.tr'); $(e.target).closest('div.rightFooterBig').hide();
 		#Naudojam šito rekvizitus, nes divNewClaimCard_Content dar nėra
-		nTr.append("<div id='divNewClaimCard' data-ctrl='{\"id\":\"0\",\"NewRec\":\"1\",\"Source\":\"proc_Claims\",\"ClaimTypeID\":\"0\"}'></div>")
+		nTr.append("<div id='divNewClaimCard' class='js-frm' data-ctrl='{\"id\":\"0\",\"NewRec\":\"1\",\"Source\":\"proc_Claims\",\"ClaimTypeID\":\"0\"}'></div>")
 		fnCancelNewClaim=()->$("#divNewClaimCard").remove(); $("#AccDetailsContent").find('div.rightFooterBig').show()
 		d =	
 			ctrl: $('#divNewClaimCard')

@@ -111,8 +111,8 @@
     <Type Name="tblClaimType">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="VarChar(45) NOT NULL" CanBeNull="false" />
-      <Association Name="tblClaimType_tblClaim" Member="tblClaims" ThisKey="ID" OtherKey="ClaimTypeID" Type="tblClaim" />
       <Association Name="tblClaimType_tblInsPolicy" Member="tblInsPolicies" ThisKey="ID" OtherKey="ClaimTypeID" Type="tblInsPolicy" />
+      <Association Name="tblClaimType_tblClaim" Member="tblClaims" ThisKey="ID" OtherKey="ClaimTypeID" Type="tblClaim" />
     </Type>
   </Table>
   <Table Name="dbo.tblInsurers" Member="tblInsurers">
@@ -312,35 +312,6 @@
       <Association Name="tblLanguage_tblUserMsg" Member="tblLanguage" ThisKey="LanguageID" OtherKey="ID" Type="tblLanguage" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.tblClaims" Member="tblClaims">
-    <Type Name="tblClaim">
-      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="ClaimTypeID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="AccidentID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="InsPolicyID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="VehicleID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="No" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="IsTotalLoss" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="LossAmount" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="InsuranceClaimAmount" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="IsInjuredPersons" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="InsurerClaimID" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="ClaimStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="AmountIsConfirmed" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="Days" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="PerDay" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="DateNotification" Type="System.DateTime" DbType="Date" CanBeNull="true" />
-      <Column Name="DateDocsSent" Type="System.DateTime" DbType="Date" CanBeNull="true" />
-      <Association Name="tblClaim_tblClaimCompensation" Member="tblClaimCompensations" ThisKey="ID" OtherKey="ClaimID" Type="tblClaimCompensation" />
-      <Association Name="tblClaim_tblClaimDamage" Member="tblClaimDamages" ThisKey="ID" OtherKey="ClaimID" Type="tblClaimDamage" />
-      <Association Name="tblClaim_tblActivity" Member="tblActivities" ThisKey="ID" OtherKey="ClaimID" Type="tblActivity" />
-      <Association Name="tblAccident_tblClaim" Member="tblAccident" ThisKey="AccidentID" OtherKey="ID" Type="tblAccident" IsForeignKey="true" />
-      <Association Name="tblClaimType_tblClaim" Member="tblClaimType" ThisKey="ClaimTypeID" OtherKey="ID" Type="tblClaimType" IsForeignKey="true" />
-      <Association Name="tblVehicle_tblClaim" Member="tblVehicle" ThisKey="VehicleID" OtherKey="ID" Type="tblVehicle" IsForeignKey="true" />
-      <Association Name="tblInsPolicy_tblClaim" Member="tblInsPolicy" ThisKey="InsPolicyID" OtherKey="ID" Type="tblInsPolicy" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.tblClaimCompensation" Member="tblClaimCompensations">
     <Type Name="tblClaimCompensation">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -349,7 +320,6 @@
       <Column Name="Amount" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
       <Column Name="Note" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
       <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Association Name="tblClaim_tblClaimCompensation" Member="tblClaim" ThisKey="ClaimID" OtherKey="ID" Type="tblClaim" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.tblClaimDamage" Member="tblClaimDamages">
@@ -361,7 +331,6 @@
       <Column Name="Note" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Association Name="tblClaim_tblClaimDamage" Member="tblClaim" ThisKey="ClaimID" OtherKey="ID" Type="tblClaim" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.tblDocsInActivity" Member="tblDocsInActivities">
@@ -424,23 +393,6 @@
       <Association Name="tblActivityType_tblActivity" Member="tblActivities" ThisKey="ID" OtherKey="TypeID" Type="tblActivity" />
     </Type>
   </Table>
-  <Table Name="dbo.tblActivities" Member="tblActivities">
-    <Type Name="tblActivity">
-      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="ClaimID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="TypeID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="FromText" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
-      <Column Name="FromID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="ToText" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
-      <Column Name="ToID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Subject" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
-      <Column Name="Body" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="Date" Type="System.DateTime" DbType="Date" CanBeNull="true" />
-      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Association Name="tblActivityType_tblActivity" Member="tblActivityType" ThisKey="TypeID" OtherKey="ID" Type="tblActivityType" IsForeignKey="true" />
-      <Association Name="tblClaim_tblActivity" Member="tblClaim" ThisKey="ClaimID" OtherKey="ID" Type="tblClaim" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.tblUsers" Member="tblUsers">
     <Type Name="tblUser">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -500,6 +452,55 @@
       <Association Name="tblClaimType_tblInsPolicy" Member="tblClaimType" ThisKey="ClaimTypeID" OtherKey="ID" Type="tblClaimType" IsForeignKey="true" />
       <Association Name="tblUser_tblInsPolicy" Member="tblUser" ThisKey="InsuredContactID" OtherKey="ID" Type="tblUser" IsForeignKey="true" />
       <Association Name="tblInsurer_tblInsPolicy" Member="tblInsurer" ThisKey="InsurerID" OtherKey="ID" Type="tblInsurer" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tblActivities" Member="tblActivities">
+    <Type Name="tblActivity">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ClaimID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TypeID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FromText" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="FromID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ToText" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="ToID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Subject" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="Body" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Date" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Amount" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="warnSent" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Association Name="tblActivityType_tblActivity" Member="tblActivityType" ThisKey="TypeID" OtherKey="ID" Type="tblActivityType" IsForeignKey="true" />
+      <Association Name="tblClaim_tblActivity" Member="tblClaim" ThisKey="ClaimID" OtherKey="ID" Type="tblClaim" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tblClaims" Member="tblClaims">
+    <Type Name="tblClaim">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ClaimTypeID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AccidentID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="InsPolicyID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="VehicleID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="No" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IsTotalLoss" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="LossAmount" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="InsuranceClaimAmount" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="IsInjuredPersons" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="InsurerClaimID" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="ClaimStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AmountIsConfirmed" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Days" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PerDay" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="DateNotification" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="DateDocsSent" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="warnSentOfNotify" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="warnSentOfDocs" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="warnSentOfPayment" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Association Name="tblClaim_tblActivity" Member="tblActivities" ThisKey="ID" OtherKey="ClaimID" Type="tblActivity" />
+      <Association Name="tblAccident_tblClaim" Member="tblAccident" ThisKey="AccidentID" OtherKey="ID" Type="tblAccident" IsForeignKey="true" />
+      <Association Name="tblClaimType_tblClaim" Member="tblClaimType" ThisKey="ClaimTypeID" OtherKey="ID" Type="tblClaimType" IsForeignKey="true" />
+      <Association Name="tblInsPolicy_tblClaim" Member="tblInsPolicy" ThisKey="InsPolicyID" OtherKey="ID" Type="tblInsPolicy" IsForeignKey="true" />
+      <Association Name="tblVehicle_tblClaim" Member="tblVehicle" ThisKey="VehicleID" OtherKey="ID" Type="tblVehicle" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="dbo.proc_Vehicles" Method="proc_Vehicles">

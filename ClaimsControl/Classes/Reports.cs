@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System;
 using System.Text;
 using CC.SQLHelper;
+using MyHelper;
 
 namespace CC.Classes {
 	/// <summary>

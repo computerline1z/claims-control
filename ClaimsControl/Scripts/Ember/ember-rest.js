@@ -181,7 +181,7 @@ var oDATA = Ember.Object.create({
 			//console.warn("fnLoad2 started '" + p.url + "'. " + msg + ". Time,ms:" + (new Date().getTime() - start)); 
 			if (p.callBack) p.callBack();
 		}
-		if (p.ctrl) { $(p.ctrl).spinner({ position: 'center', img: 'spinnerBig.gif' }); }
+		if (p.ctrl) { $(p.ctrl).spinner(); } else {$('body').spinner();}
 		var wasLoaded=(p.name)?("ver_"+p.name):p.url;	//ar reikia antra kart kviest		
 		if (this.executed[wasLoaded]&&!p.runAllways) {//jei jau buvo klikinta, nieko siųst nereikia(nebent reikia)
 			finished(start, "Second click no need to load.");

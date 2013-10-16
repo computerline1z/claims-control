@@ -4,6 +4,7 @@ using System.Net.Mail;
 using System.Web;
 using CC.Classes;
 using System.Web.Security;
+using MyHelper;
 
 //using msOutlook =  Microsoft.Office.Interop.Outlook;
 

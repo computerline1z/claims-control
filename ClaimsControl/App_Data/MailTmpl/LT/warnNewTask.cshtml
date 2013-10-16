@@ -1,0 +1,13 @@
+﻿{{subject='Jums paskirta nauja užduotis'}}
+Sveiki,
+<br /><br />
+@Model.UserName žaloje nr.: @Model.ClaimNo Jums paskyrė užduotį:<br />
+<br />
+<b></b>Atlikti iki:</b> @(Model.Term != null ? Model.Term : "nenurodyta")<br />
+<b>Tema:</b> @Model.Subject<br />
+<b>Tekstas:</b><br />
+ @Model.Body<br />
+<br />
+Nuoširdžiai Jūsų<br />
+ClaimsControl komanda<br />
+(c) 2013 "Claims control" Ltd

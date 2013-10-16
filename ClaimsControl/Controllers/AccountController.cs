@@ -12,6 +12,7 @@ using CC.Services.Ninject;
 using CC.Services.Interfaces;
 using CC.Classes;
 using Ninject;
+using MyHelper;
 
 namespace ClaimsControl.Controllers {
 
@@ -158,7 +159,6 @@ namespace ClaimsControl.Controllers {
 		[Authorize]
 		public ActionResult LogOff() {
 			FormsService.SignOut();
-
 			return RedirectToAction("LogOn", "Account");
 		}
 
