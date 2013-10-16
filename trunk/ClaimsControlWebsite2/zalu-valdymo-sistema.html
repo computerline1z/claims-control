@@ -445,11 +445,12 @@
 		<script src="js/unslider.min.js"></script>
 		<script type="text/javascript">
 
+			/*
 			var in_count = 0,
 				out_count = 1,
 				flip_in_progress = false,
 				queue_flipback = false,
-				isFliped = false
+				dont_flip_back = false
 			;
 
 			$(".flipbox-container").mouseenter(function(){
@@ -460,6 +461,7 @@
 				out_count--;
 
 				if(flip_in_progress){
+					dont_flip_back = true;
 					return;
 				}
 				
@@ -472,24 +474,20 @@
 					},
 					onFinish: function(){
 						flip_in_progress = false;
-						if( queue_flipback === true ){
-							$("#myFlippyBox").flippyReverse();
+
+						if( queue_flipback ){
+							$("#flippyBox").flippyReverse();
 						}
-						isFliped = true;
-						$('.unslider').unslider({
-							delay: 2000
-						});
 					},
 					onReverseStart: function(){
 						flip_in_progress = true;
 					},
 					onReverseFinish: function(){
 						flip_in_progress = false;
+
 						if( queue_flipback ){
 							queue_flipback = false;
-							flip_in_progress = false;
 						}
-						isFliped = false;
 					}
 
 				});
@@ -509,7 +507,8 @@
 					return;
 				}
 
-				if( isFliped === false ){
+				if( dont_flip_back ){
+					dont_flip_back = false;
 					return;
 				}
 
@@ -517,9 +516,12 @@
 				
 			});
 
+			*/
+
 		</script>
 
 		<!-- custom js -->
+		<script src="js/hoverflow.js"></script><!-- provides queueless animation -->
 		<script src="js/main.js"></script>
 
 		<script type="text/javascript">
