@@ -677,11 +677,11 @@ $(function() {
 
 		var this_href = $(this).attr("href"),
 			this_href_top = $(this_href).offset().top,
-			extra = 52
+			extra = 47
 		;
 
 		if( $(this).attr("href") === "#isitikinkite-patys" ){
-			extra +=36;
+			extra +=26;
 		}
 
 		$("html, body").animate({scrollTop: this_href_top - top_menu_height - extra }, 500);
@@ -709,16 +709,18 @@ $(function() {
 		$("#subscribe-news").toggle({duration: 200});
 	});
 
-    glide = $('.slider').glide(
-    	{
-        	autoplay: 2000,
-        	arrows: false,
-        	nav: true
-		}
-    )
-    	.data('api_glide')
-    ;
-    glide.pause();
+    if( $(".slider").length > 0 ){
+    	glide = $('.slider').glide(
+	    	{
+	        	autoplay: 2000,
+	        	arrows: false,
+	        	nav: false
+			}
+	    )
+	    	.data('api_glide')
+	    ;
+	    glide.pause();
+    }
 
     $(".js-hover-to-slide").mouseenter(function(e){
     	$(".css-js-hover-slider").css({top:0,opacity:0}).hoverFlow( e.type, {opacity:1}, 400, function(){
