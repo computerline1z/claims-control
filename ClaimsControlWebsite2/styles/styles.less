@@ -86,7 +86,8 @@
 @font-family-sans-serif:  Arial, "Helvetica Neue", Helvetica, sans-serif;
 @headings-font-family:    "politicaregular";
 @font-size-base:          14px;
-@line-height-base:        1.3;
+@line-height-base:        1.7;
+@headings-line-height:    1.05;
 @font-size-large:         ceil(@font-size-base * 1.5); // ~18px
 @font-size-super-large:   ceil(@font-size-base * 2.9); // ~18px
 
@@ -110,6 +111,13 @@
 @input-color-placeholder:        @input-color;
 
 @input-height-base:              (@line-height-computed + (@padding-base-vertical * 2) + 15);
+
+// Container sizes
+// --------------------------------------------------
+
+// Large screen / wide desktop
+@container-lg-desktop:        ((940px + @grid-gutter-width));
+@grid-gutter-width:         20px;
 
 .form-control {
 	padding-top: 13px;
@@ -250,6 +258,13 @@ h5 {
 			border-top-color: @navbar-default-link-color;
 			border-bottom-color: @navbar-default-link-color;
 		}
+
+		> .dropdown > a {
+			&:hover,
+			&:focus {
+				color: @blueDark;
+			}
+		}
 	}
 
 	.navbar-toggle {
@@ -297,9 +312,24 @@ h5 {
 /* DROPDOWNS  */
 /* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
 
+.drop-top.open {
+	.dropdown-toggle {
+		border-top-left-radius: 0!important;
+		border-top-right-radius: 0!important;
+		border-bottom-right-radius: 4px!important;
+		border-bottom-left-radius: 4px!important;
+	}
+
+	.dropdown-menu {
+		border-top-left-radius: 4px!important;
+		border-bottom-left-radius: 0!important;
+	}
+}
+
 // The dropdown menu (ul)
 .dropdown-menu {
 	font-size: @font-size-large;
+	box-shadow: none;
 
 	> li > a {
 		color: @white;
@@ -356,11 +386,11 @@ h5 {
 
 .logo {
 	display: inline-block;
-	padding: 24px;
+	padding: 25px 0 23px 0;
 	.box-sizing(content-box);
 
-	@media (min-width: @grid-float-breakpoint) {
-		padding-left: 70px;
+	img {
+		display: block;
 	}
 }
 
@@ -394,6 +424,15 @@ h5 {
 		border-color: @blueGrayLightest;
 		color: darken(@white, 15%) ;
 	}
+}
+
+.btn-default:hover,
+.btn-default:focus,
+.btn-default:active,
+.btn-default.active,
+.open .dropdown-toggle.btn-default {
+	background: @btn-default-bg;
+	color: @blueDark;
 }
 
 /* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\  */
@@ -455,8 +494,16 @@ h5 {
 	padding-bottom: 20px;
 }
 
+.pad-b23 {
+	padding-bottom: 23px;
+}
+
 .pad-b25 {
 	padding-bottom: 25px;
+}
+
+.pad-b27 {
+	padding-bottom: 27px;
 }
 
 .pad-b32 {
@@ -465,6 +512,10 @@ h5 {
 
 .pad-b40 {
 	padding-bottom: 40px;
+}
+
+.pad-b58 {
+	padding-bottom: 58px;
 }
 
 .pad-b60 {
@@ -533,6 +584,10 @@ h5 {
 
 .mar-t32 {
 	margin-top: 32px;
+}
+
+.mar-b26 {
+	margin-bottom: 26px;
 }
 
 .mar-b40-md {
@@ -1164,6 +1219,22 @@ h5 {
 }
 
 .js-top-menu-one.active {
+	border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+
+	&:before {
+		content: '';
+		display: block;
+		width: 100%;
+		height: 10px;
+		background: rgba( 0, 0, 0, 0.1 );
+		position: absolute;
+		left: 0;
+		bottom: -11px;
+	}
+}
+
+/*
+.js-top-menu-one.active {
 	background: url(img/02photodune-4525105-truck-l3.jpg) center -252px no-repeat;
 
 	@media (min-width: @screen-lg) {
@@ -1194,24 +1265,22 @@ h5 {
 	background: url(img/stripe-gray.png) no-repeat;
 }
 
+*/
+
 // dev
 
 .tablet-driver-red, .tablet-driver-blue {
 	position: relative;
 	width: 100%;
 	//background: url(img/tablet-driver.png) 85px 0 no-repeat;
-	padding-right: 85px;
 
 	h2 {
-		padding-top: 39px;
+		padding-top: 41px;
+		margin-bottom: 23px;
 	}
 
 	.img-box {
-		margin-left: 60px;
-	}
-
-	@media (max-width: @screen-lg) {
-		padding-right: 0;
+		margin-left: 58px;
 	}
 
 	@media (max-width: @screen-md) {
@@ -1638,14 +1707,17 @@ h5 {
 
 	.boxlabel {
 		width: 100%;
+		font-size: 14px;
+		color: #fff;
 		position: absolute;
 		left: 0;
-		bottom: -30px;
+		bottom: -22px;
 		text-transform: uppercase;
 	}
 }
 .countdown_amount {
-	font-size: 200%;
+	font-size: 255%;
+	line-height: 154%;
 }
 .countdown_descr {
 	display: block;
@@ -1694,6 +1766,10 @@ h5 {
 	    -ms-transition: all 500ms cubic-bezier(0.165, 0.840, 0.440, 1.000); 
 	     -o-transition: all 500ms cubic-bezier(0.165, 0.840, 0.440, 1.000); 
 	        transition: all 500ms cubic-bezier(0.165, 0.840, 0.440, 1.000);
+
+	img {
+		border-radius: 8px;
+	}
 }
 
 .slide {
@@ -1755,4 +1831,36 @@ h5 {
 	position: absolute;
 	top: -9999px;
 	left: 0;
+}
+
+/* fixes for large screen only */
+
+
+@media (min-width: @screen-lg) {
+
+	.img-box img {
+		max-width: none;
+	}
+
+	.blue-box-in-header {
+		width: 104.3%;
+		margin-left: -10px;
+	}
+
+	.navbar-nav {
+
+		> li > a {
+			padding-top: 5px;
+			padding-bottom: 2px;
+		}
+
+		>.dropdown.active>a {
+			padding-left: 10px;
+			padding-right: 10px;
+			.caret {
+				display: none;
+			}
+		}
+	}
+
 }

@@ -9,10 +9,9 @@ function fix_nav_wrap_width(){
 function fix_stripe(){
 	$(".js-red-stripe-visual").css(
 		{ // fix stripe
-			"left": side,
+			"left": side - 61,
 			"height": header_height,
-			"width": stripe_width,
-			"display": "none"
+			"width": stripe_width
 		}
 	);
 }
@@ -297,25 +296,25 @@ $(function() {
 	
 	$(".tablet-driver-red").hover(function(e) {
 
+		var speed = 400;
+
 			if( viewport < screen_md ){
 				return;
 			}
-
-			$(".js-red-stripe-visual").show();
 
 			$(".js-red-stripe").css("z-index", 1)
 				.hoverFlow(e.type, {
 					left: "+=327",
 					"z-index": 2
-				},'fast'
+				}, speed
 			);
 
 			$(".js-stripe-contents").hoverFlow(e.type, {
 					opacity: 1
-				},'fast'
+				}, speed
 			);
 
-			$(this).css("width", header_width - 327 + 15);
+			$(".tablet-driver-red").css("width", header_width - 327 + 15);
 
 			animation_started = true;
 
@@ -323,19 +322,19 @@ $(function() {
 
 		function(e) {
 
+			var speed =300;
+
 			if( viewport < screen_md || animation_started != true  ){
 				return;
 			}
 
-			$(".js-red-stripe").hoverFlow(e.type, { left: "-=327"}, 'fast', function(){
+			$(".js-red-stripe").hoverFlow(e.type, { left: "-=327"}, speed, function(){
 				$(".js-red-stripe").css("z-index", 0);
 			});
 
-			$(".js-stripe-contents").hoverFlow(e.type, { opacity: 0}, 'fast');
+			$(".js-stripe-contents").hoverFlow(e.type, { opacity: 0}, speed);
 
-			$(this).css("width", "");
-
-			$(".js-red-stripe-visual").hide();
+			$(".tablet-driver-red").css("width", "");
 		}
 	);
 
@@ -731,6 +730,38 @@ $(function() {
     $(".js-hover-to-slide").mouseleave(function(e){
     	glide.pause();
     	$(".css-js-hover-slider").hoverFlow(e.type, {opacity:0}, 400);
+    });
+
+    $(".dropdown").click(function(){
+
+    	var dropdown = $(this),
+    		dropdown_menu = dropdown.children(".dropdown-menu"),
+    		dropdown_menu_height = dropdown_menu.height() + 10,
+    		dropdown_top = dropdown.offset().top - window_scroll_top
+    		bottom_available = $(window).height() -65 - dropdown_top
+    	;
+
+    	if( dropdown.hasClass("open") ){
+    		return;
+    	}
+
+    	
+    	
+    	if( bottom_available < 200 ){
+
+    		if( dropdown.hasClass("drop-top") === false ){
+    			dropdown.addClass("drop-top");
+
+    			dropdown_menu.css("top", -dropdown_menu_height);
+    		}
+    	}
+    
+		else if( dropdown.hasClass("drop-top") ){
+			dropdown.removeClass("drop-top");
+			dropdown_menu.css("top", "");
+		}
+		
+    	
     });
 
 	bajb_backdetect.OnBack = function(){
