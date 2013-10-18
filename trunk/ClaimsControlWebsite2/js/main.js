@@ -708,6 +708,18 @@ $(function() {
 		$("#subscribe-news").toggle({duration: 200});
 	});
 
+	// enable top menu hover on large screens
+
+	if( viewport >= screen_lg ){
+		$(".navbar-nav>.dropdown").mouseenter(function(){
+			$(this).children("a").click();
+		});
+
+		$(".navbar-nav>.dropdown").mouseleave(function(){
+			$(this).children("a").click();
+		});
+	}
+
     if( $(".slider").length > 0 ){
     	glide = $('.slider').glide(
 	    	{
@@ -813,7 +825,7 @@ $(function() {
 	screen_xs =  480,
 	screen_sm =  768,
 	screen_md =  992,
-	screen_lg = 1200,
+	screen_lg = 960,
 	grid_float_breakpoint = screen_sm,
 	window_scroll_top = $(window).scrollTop(),
 	// slider

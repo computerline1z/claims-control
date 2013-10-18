@@ -6041,8 +6041,7 @@ h5 {
   border-top-color: #131e2d;
   border-bottom-color: #131e2d;
 }
-.navbar-default .navbar-nav > .dropdown > a:hover,
-.navbar-default .navbar-nav > .dropdown > a:focus {
+.navbar-default .navbar-nav > .dropdown > a:hover {
   color: #131e2d;
 }
 .navbar-default .navbar-toggle:hover .icon-bar,
