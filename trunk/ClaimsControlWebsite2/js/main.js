@@ -670,7 +670,7 @@ $(function() {
 			button_prev_class: "cc_slides_prev",
 			active_slide_class: "cc_active_slide",
 			pause_play_class: "cc_slides_pause_play",
-			autoplay: 3000
+			autoplay: 10000
 		});
 	}
 
@@ -680,7 +680,7 @@ $(function() {
 
 			var this_href = $(this).attr("href"),
 				this_href_top = $(this_href).offset().top,
-				extra = 62
+				extra = 46
 			;
 
 			if( $(this).attr("href") === "#isitikinkite-patys" ){
@@ -708,19 +708,28 @@ $(function() {
 		window.location = "truckviser.html";
 	});
 
-	$("#js-subscribe-news").click(function(event){
-		event.preventDefault();
-		$("#subscribe-news").toggle({duration: 0});
-		$(".subscription-block").children("li").eq(2).toggleClass("active");
-		$(".subscription-block").children("li").eq(2).children("a").toggleClass("hover");
-	});
-	$("#close-news-subscribing").click(function(event){
-		event.preventDefault();
-		$("#subscribe-news").hide();
-		$(".subscription-block").children("li").eq(2).toggleClass("active");
-		$(".subscription-block").children("li").eq(2).children("a").toggleClass("hover");
-		$("#form-status").html("");
-	});
+	// SUBSCRIBE NEWS
+
+		function hide_news_subscription(){
+			$("#subscribe-news").hide();
+			$(".subscription-block").children("li").eq(2).toggleClass("active");
+			$(".subscription-block").children("li").eq(2).children("a").toggleClass("hover");
+			$("#form-status").html("");
+		}
+
+		$("#js-subscribe-news").click(function(event){
+			event.preventDefault();
+			$("#subscribe-news").toggle({duration: 0});
+			$(".subscription-block").children("li").eq(2).toggleClass("active");
+			$(".subscription-block").children("li").eq(2).children("a").toggleClass("hover");
+		});
+
+		$("#close-news-subscribing").click(function(event){
+			event.preventDefault();
+			hide_news_subscription();
+		});
+
+	//
 
 	// ENABLE TOP MENU DROPDOWN ON HOVER (LARGE SCREENS ONLY)
 		if( viewport >= screen_lg ){

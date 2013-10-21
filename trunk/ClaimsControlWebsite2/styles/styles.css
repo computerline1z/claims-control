@@ -6274,6 +6274,9 @@ fieldset[disabled] .bg-blueGrayLight .btn {
 .pad-b40 {
   padding-bottom: 40px;
 }
+.pad-b54 {
+  padding-bottom: 54px;
+}
 .pad-b56 {
   padding-bottom: 56px;
 }
@@ -7161,7 +7164,7 @@ li.active .icon-securetruck-small {
   padding: 42px;
   padding-bottom: 50px;
   height: 496px;
-  background: url(img/tablet-frame-smaller.png) no-repeat;
+  background: url(img/tablet-frame-med.png) no-repeat;
 }
 .cc-carousel-holder .cc-carousel-controls {
   position: absolute;
@@ -7401,15 +7404,10 @@ li.active .icon-securetruck-small {
   -o-transition: all 500ms cubic-bezier(0.165, 0.84, 0.44, 1);
   transition: all 500ms cubic-bezier(0.165, 0.84, 0.44, 1);
 }
-.slides img {
-  border-radius: 8px;
-}
 .slide {
   height: 100%;
   float: left;
   clear: none;
-  border-radius: 8px;
-  overflow: hidden;
 }
 .slider-arrow {
   position: absolute;
@@ -7436,11 +7434,13 @@ li.active .icon-securetruck-small {
   clear: none;
   display: block;
   margin: 0 5px;
-  border: 1px solid #131e2d;
+  background: #6c798a;
+  border: 1px solid #6c798a;
   border-radius: 360px;
 }
 .slider-nav__item--current {
   background: #131e2d;
+  border-color: #131e2d;
 }
 #flippyBox {
   height: 100%;
@@ -7501,4 +7501,17 @@ li.active .icon-securetruck-small {
 }
 .news-container > p:first-of-type {
   padding-top: 0;
+}
+body {
+  position: relative;
+}
+.blackout {
+  display: none;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
 }
