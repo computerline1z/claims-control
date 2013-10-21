@@ -31,6 +31,8 @@
 
 	<body>
 
+		<div class="blackout"></div>
+
 		<div class="bg-red-blue js-bg-red-blue">
 		
 			<div class="container js-container">
@@ -379,7 +381,15 @@
 					if( data === "success"){
 						$("#form-status").html("Jūsų el.paštas įtrauktas į naujienų gavėjų sąrašą");
 						$("#sub-news-submit").attr("disabled", "disabled");
+
+						setTimeout(function(){
+							$("#subscribe-news").hide();
+							$(".subscription-block").children("li").eq(2).toggleClass("active");
+							$(".subscription-block").children("li").eq(2).children("a").toggleClass("hover");
+							$("#form-status").html("");
+						},2000);
 					}
+
 				} );
 			});
 
@@ -387,7 +397,7 @@
 
 		<script src="js/jquery.countdown.js"></script>
 		<script src="js/jquery.countdown-lt.js"></script>
-		<script type="text/javascript">$(".countdown").countdown({until: new Date(2013, 10-1, 24) });</script>
+		<script type="text/javascript">$(".countdown").countdown({until: new Date(2014, 2-1, 01) });</script>
 
 
 		<!-- bootstrap js -->
