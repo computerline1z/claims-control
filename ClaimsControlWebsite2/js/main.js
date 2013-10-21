@@ -314,6 +314,8 @@ $(function() {
 				}, speed
 			);
 
+			$(".js-play-fadetoggle").fadeOut(speed/1.5);
+
 			$(".tablet-driver-red").css("width", header_width - 327 + 15);
 
 			animation_started = true;
@@ -333,6 +335,8 @@ $(function() {
 			});
 
 			$(".js-stripe-contents").hoverFlow(e.type, { opacity: 0}, speed);
+
+			$(".js-play-fadetoggle").fadeIn(speed/1.5);
 
 			$(".tablet-driver-red").css("width", "");
 		}
@@ -670,21 +674,22 @@ $(function() {
 		});
 	}
 
-	// skip to title
-	$(".navbar-nav .skip-to-title").click(function(event){
-		event.preventDefault();
+	// SKIP TO TITLE
+		$(".navbar-nav .skip-to-title").click(function(event){
+			event.preventDefault();
 
-		var this_href = $(this).attr("href"),
-			this_href_top = $(this_href).offset().top,
-			extra = 47
-		;
+			var this_href = $(this).attr("href"),
+				this_href_top = $(this_href).offset().top,
+				extra = 62
+			;
 
-		if( $(this).attr("href") === "#isitikinkite-patys" ){
-			extra +=26;
-		}
+			if( $(this).attr("href") === "#isitikinkite-patys" ){
+				extra +=26;
+			}
 
-		$("html, body").animate({scrollTop: this_href_top - top_menu_height - extra }, 500);
-	});
+			$("html, body").animate({scrollTop: this_href_top - top_menu_height - extra }, 500);
+		});
+	//
 
 	// put selected_item on clicked
 	var selected_class_name = "selected_item";
@@ -705,23 +710,38 @@ $(function() {
 
 	$("#js-subscribe-news").click(function(event){
 		event.preventDefault();
-		$("#subscribe-news").toggle({duration: 200});
+		$("#subscribe-news").toggle({duration: 0});
+		$(".subscription-block").children("li").eq(2).toggleClass("active");
+		$(".subscription-block").children("li").eq(2).children("a").toggleClass("hover");
+	});
+	$("#close-news-subscribing").click(function(event){
+		event.preventDefault();
+		$("#subscribe-news").hide();
+		$(".subscription-block").children("li").eq(2).toggleClass("active");
+		$(".subscription-block").children("li").eq(2).children("a").toggleClass("hover");
+		$("#form-status").html("");
 	});
 
-	// enable top menu hover on large screens
+	// ENABLE TOP MENU DROPDOWN ON HOVER (LARGE SCREENS ONLY)
+		if( viewport >= screen_lg ){
+			$(".navbar-nav>.dropdown").mouseenter(function(){
+				if( $(this).hasClass("open") ){
+					return;
+				}
+				$(this).children("a").click();
+			});
 
-	if( viewport >= screen_lg ){
-		$(".navbar-nav>.dropdown").mouseenter(function(){
-			$(this).children("a").click();
-		});
+			$(".navbar-nav>.dropdown").mouseleave(function(){
+				if( $(this).hasClass("open") === false ){
+					return;
+				}
+				$(this).children("a").click();
+			});
+		}
+	//
 
-		$(".navbar-nav>.dropdown").mouseleave(function(){
-			$(this).children("a").click();
-		});
-	}
-
-    if( $(".slider").length > 0 ){
-    	glide = $('.slider').glide(
+    if( $(".slider-without-nav").length > 0 ){
+    	glide = $(".slider-without-nav").glide(
 	    	{
 	        	autoplay: 2000,
 	        	arrows: false,
@@ -732,6 +752,21 @@ $(function() {
 	    ;
 	    glide.pause();
     }
+
+    if( $(".slider-with-nav").length > 0 ){
+    	glide = $(".slider-with-nav").glide(
+	    	{
+	        	autoplay: 2000,
+	        	arrows: false,
+	        	nav: true
+			}
+	    )
+	    	.data('api_glide')
+	    ;
+	    glide.pause();
+    }
+
+    // SLIDE SCREENS ON HOVER INSTEAD OF FLIP
 
     $(".js-hover-to-slide").mouseenter(function(e){
     	$(".css-js-hover-slider").css({top:0,opacity:0}).hoverFlow( e.type, {opacity:1}, 400, function(){
