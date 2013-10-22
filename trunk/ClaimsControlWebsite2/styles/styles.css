@@ -5925,6 +5925,42 @@ td.visible-print {
   padding-top: 13px;
   padding-bottom: 13px;
 }
+.form-control:-moz-placeholder {
+  color: #f3f6f7;
+}
+.form-control::-moz-placeholder {
+  color: #f3f6f7;
+}
+.form-control:-ms-input-placeholder {
+  color: #f3f6f7;
+}
+.form-control::-webkit-input-placeholder {
+  color: #f3f6f7;
+}
+.form-control:focus:-moz-placeholder {
+  color: #c0c6cd;
+}
+.form-control:focus::-moz-placeholder {
+  color: #c0c6cd;
+}
+.form-control:focus:-ms-input-placeholder {
+  color: #c0c6cd;
+}
+.form-control:focus::-webkit-input-placeholder {
+  color: #c0c6cd;
+}
+:-moz-placeholder {
+  opacity: 0.5;
+}
+::-moz-placeholder {
+  opacity: 0.5;
+}
+:-ms-input-placeholder {
+  opacity: 0.5;
+}
+::-webkit-input-placeholder {
+  opacity: 0.5;
+}
 .form-group {
   margin-bottom: 10px;
 }
