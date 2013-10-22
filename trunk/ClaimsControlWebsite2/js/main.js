@@ -684,7 +684,7 @@ $(function() {
 			;
 
 			if( $(this).attr("href") === "#isitikinkite-patys" ){
-				extra +=26;
+				extra +=33;
 			}
 
 			$("html, body").animate({scrollTop: this_href_top - top_menu_height - extra }, 500);
