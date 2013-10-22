@@ -25,7 +25,7 @@ function update_global_variables(){
 		side = $(".js-nav-wrap").position()["left"],
 		header_height = $(".js-bg-red-blue").height(),
 		header_width = $(".js-bg-red-blue .container").width(),
-		stripe_width = header_width - 327 + 15,
+		stripe_width = header_width - 327 + 18,
 		top_menu_offset = $(".js-keep-on-top").offset()["top"],
 		top_menu_height = $(".js-keep-on-top").height()+70
 	;
@@ -680,14 +680,18 @@ $(function() {
 
 			var this_href = $(this).attr("href"),
 				this_href_top = $(this_href).offset().top,
-				extra = 46
+				extra = 72
 			;
 
-			/*
-			if( $(this).attr("href") === "#isitikinkite-patys" ){
-				extra +=0;
+			
+			if( $(this).hasClass("js-has-zigzag") ){
+				extra +=-26;
 			}
-			*/
+
+			if( $(this).hasClass("js-first-item") ){
+				extra +=-10;
+			}
+			
 
 			$("html, body").animate({scrollTop: this_href_top - top_menu_height - extra }, 500);
 		});
@@ -868,7 +872,7 @@ $(function() {
 	side = $(".js-nav-wrap").position()["left"],
 	header_height = $(".js-bg-red-blue").height(),
 	header_width = $(".js-bg-red-blue .container").width(),
-	stripe_width = header_width - 327 + 15,
+	stripe_width = header_width - 327 + 18,
 	top_menu_offset = $(".js-keep-on-top").offset()["top"],
 	top_menu_height = $(".js-keep-on-top").height()+70,
 	animation_started = false,

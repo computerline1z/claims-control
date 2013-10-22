@@ -122,7 +122,20 @@
 .form-control {
 	padding-top: 13px;
 	padding-bottom: 13px;
+
+	.placeholder(@blueGrayLightest);
+
+	&:focus {
+		.placeholder(@blueGrayLight);
+	}
 }
+
+
+&:-moz-placeholder            { opacity: 0.5; } // Firefox 4-18
+&::-moz-placeholder           { opacity: 0.5; } // Firefox 19+
+&:-ms-input-placeholder       { opacity: 0.5; } // Internet Explorer 10+
+&::-webkit-input-placeholder  { opacity: 0.5; } // Safari and Chrome
+
 
 // Form groups
 //
