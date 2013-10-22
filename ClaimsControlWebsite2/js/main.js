@@ -683,9 +683,11 @@ $(function() {
 				extra = 46
 			;
 
+			/*
 			if( $(this).attr("href") === "#isitikinkite-patys" ){
-				extra +=33;
+				extra +=0;
 			}
+			*/
 
 			$("html, body").animate({scrollTop: this_href_top - top_menu_height - extra }, 500);
 		});
@@ -706,6 +708,10 @@ $(function() {
 
 	$(".js-click-link-to-truckviser").click(function(){
 		window.location = "truckviser.html";
+	});
+
+	$(".js-click-link-to-claims-control-system-landing").click(function(){
+		window.location = "zalu-valdymo-sistema.html";
 	});
 
 	// SUBSCRIBE NEWS
