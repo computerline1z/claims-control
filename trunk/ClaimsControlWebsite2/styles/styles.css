@@ -6244,6 +6244,9 @@ fieldset[disabled] .bg-blueGrayLight .btn {
 .pad-r20 {
   padding-right: 20px;
 }
+.pad-b7 {
+  padding-bottom: 7px;
+}
 .pad-b10 {
   padding-bottom: 10px;
 }
@@ -7169,29 +7172,29 @@ li.active .icon-securetruck-small {
 .cc-carousel-holder .cc-carousel-controls {
   position: absolute;
   top: 50%;
-  margin-top: -102px;
-  right: 14px;
+  margin-top: -85px;
+  right: 20px;
 }
 .cc-carousel-holder .cc-carousel-controls button {
   display: block;
-  width: 51px;
-  height: 51px;
+  width: 39px;
+  height: 40px;
   background: red;
   border: none;
   margin-bottom: 25px;
   outline: none;
 }
 .cc-carousel-holder .cc-carousel-controls .cc_slides_prev {
-  background: url(img/arrow-round-left-big.png);
+  background: url(img/arrow-round-left-mid.png);
 }
 .cc-carousel-holder .cc-carousel-controls .cc_slides_next {
-  background: url(img/arrow-round-right-big.png);
+  background: url(img/arrow-round-right-mid.png);
 }
 .cc-carousel-holder .cc-carousel-controls .cc_slides_pause_play {
-  background: url(img/icon-pause-big.png);
+  background: url(img/icon-pause-mid.png);
 }
 .cc-carousel-holder .cc-carousel-controls .cc_slides_pause_play.paused {
-  background: url(img/icon-play-big.png);
+  background: url(img/icon-play-mid.png);
 }
 .cc-carousel {
   position: relative;
