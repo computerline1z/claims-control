@@ -255,17 +255,43 @@ function drop_to_cooked_location(){
 
 }
 
-function toggleBlackout(){
+function toggleBlackout(obj){
 	// requires var blackout_status bool
 
-	var blackout_speed = 100;
+	// var obj = { z-index, menu }
+
+	var blackout_speed = 0;
 
 	if( blackout_status === false ){
+
+		if( obj["menu"] != undefined && $(".js-menu-wrap").length > 0 ){
+			$(".js-menu-wrap").html('<div class="blackout"></div>');
+		}
+
+		if( obj["subscribe-news"] != undefined ){
+			$("#subscribe-news").css("z-index", obj["z-index"]+1 );
+			$("#js-subscribe-news").parent().css( "z-index", obj["z-index"]+1  ).addClass("seperator-fix");
+		}
+
+
+		$(".blackout").css({"z-index": obj["z-index"] });
 		$(".blackout").fadeIn(blackout_speed);
 		blackout_status = true;
 	}
 	else {
-		$(".blackout").fadeOut(blackout_speed);
+		$(".blackout").fadeOut(blackout_speed, function(){
+
+			if( $(".js-menu-wrap").length > 0 ){
+				$(".js-menu-wrap").html("");
+			}
+
+			if( $("#subscribe-news").length > 0 && $("#js-subscribe-news").parent().length > 0 ){
+				$("#subscribe-news").css("z-index", "");
+				$("#js-subscribe-news").parent().css("z-index", "").removeClass("seperator-fix");
+			}
+
+		});
+			
 		blackout_status = false;
 	}
 }
@@ -735,25 +761,31 @@ $(function() {
 
 	// SUBSCRIBE NEWS
 
-		function hide_news_subscription(){
-			$("#subscribe-news").hide();
-			$(".subscription-block").children("li").eq(2).toggleClass("active");
-			$(".subscription-block").children("li").eq(2).children("a").toggleClass("hover");
-			$("#form-status").html("");
-			toggleBlackout();
-		}
-
 		$("#js-subscribe-news").click(function(event){
 			event.preventDefault();
 			$("#subscribe-news").toggle({duration: 0});
 			$(".subscription-block").children("li").eq(2).toggleClass("active");
 			$(".subscription-block").children("li").eq(2).children("a").toggleClass("hover");
-			toggleBlackout();
+			toggleBlackout(
+					{
+						"z-index": 4,
+						"subscribe-news": true
+					}
+				);
 		});
 
 		$("#close-news-subscribing").click(function(event){
 			event.preventDefault();
-			hide_news_subscription();
+			$("#subscribe-news").hide();
+			$(".subscription-block").children("li").eq(2).toggleClass("active");
+			$(".subscription-block").children("li").eq(2).children("a").toggleClass("hover");
+			$("#form-status").html("");
+			toggleBlackout(
+					{
+						"z-index": 4,
+						"subscribe-news": true
+					}
+				);
 		});
 
 	//
@@ -765,7 +797,12 @@ $(function() {
 					return;
 				}
 				$(this).children("a").click();
-				toggleBlackout();
+				toggleBlackout(
+					{
+						"z-index": 3,
+						"menu": true
+					}
+				);
 			});
 
 			$(".navbar-nav>.dropdown").mouseleave(function(){
@@ -773,7 +810,12 @@ $(function() {
 					return;
 				}
 				$(this).children("a").click();
-				toggleBlackout();
+				toggleBlackout(
+					{
+						"z-index": 3,
+						"menu": true
+					}
+				);
 			});
 		}
 	//
