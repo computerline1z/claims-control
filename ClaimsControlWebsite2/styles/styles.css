@@ -6787,6 +6787,9 @@ a.text-cyan:hover {
     display: none;
   }
 }
+.subscription-block li.seperator-fix:before {
+  background: #797b7b;
+}
 .subscription-block a {
   display: inline-block;
   vertical-align: middle;
@@ -7108,6 +7111,9 @@ li.active .icon-securetruck-small {
 }
 .z-index4 {
   z-index: 4;
+}
+.z-index5 {
+  z-index: 5;
 }
 @media (max-width: 992px) {
   .z-index-0-sm {
@@ -7552,5 +7558,4 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 3;
 }
