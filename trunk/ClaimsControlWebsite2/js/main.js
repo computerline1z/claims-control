@@ -711,7 +711,7 @@ $(function() {
 			button_prev_class: "cc_slides_prev",
 			active_slide_class: "cc_active_slide",
 			pause_play_class: "cc_slides_pause_play",
-			autoplay: 10000
+			autoplay: 6500
 		});
 	}
 

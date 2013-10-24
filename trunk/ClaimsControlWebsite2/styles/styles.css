@@ -6444,6 +6444,9 @@ fieldset[disabled] .bg-blueGrayLight .btn {
 .left0 {
   left: 0;
 }
+.right0 {
+  right: 0;
+}
 .content-box {
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
@@ -7579,4 +7582,11 @@ body {
 }
 .footer-main .partner-link img {
   display: block;
+}
+@media (min-width: 992px) {
+  .btn-contract {
+    position: absolute;
+    bottom: 29px;
+    right: 0;
+  }
 }
