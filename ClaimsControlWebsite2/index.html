@@ -396,10 +396,21 @@
 
 						setTimeout(function(){
 							$("#subscribe-news").hide();
+							$("#sub-news-submit").attr("disabled", false);
+							form_button_pressed = false;
+
+							// remove blackout
+								toggleBlackout(
+									{
+										"z-index": 4,
+										"subscribe-news": true
+									}
+								);
+							//
 							$(".subscription-block").children("li").eq(2).toggleClass("active");
 							$(".subscription-block").children("li").eq(2).children("a").toggleClass("hover");
 							$("#form-status").html("");
-						},2000);
+						},4000);
 					}
 
 				} );
