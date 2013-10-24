@@ -820,19 +820,6 @@ $(function() {
 		}
 	//
 
-    if( $(".slider-without-nav").length > 0 ){
-    	glide = $(".slider-without-nav").glide(
-	    	{
-	        	autoplay: 2000,
-	        	arrows: false,
-	        	nav: false
-			}
-	    )
-	    	.data('api_glide')
-	    ;
-	    glide.pause();
-    }
-
     if( $(".slider-with-nav").length > 0 ){
     	glide = $(".slider-with-nav").glide(
 	    	{
@@ -848,6 +835,8 @@ $(function() {
 
     // SLIDE SCREENS ON HOVER INSTEAD OF FLIP
 
+    
+    /*
     $(".js-hover-to-slide").mouseenter(function(e){
     	$(".css-js-hover-slider").css({top:0,opacity:0}).hoverFlow( e.type, {opacity:1}, 400, function(){
     		glide.play();
@@ -858,6 +847,160 @@ $(function() {
     	glide.pause();
     	$(".css-js-hover-slider").hoverFlow(e.type, {opacity:0}, 400);
     });
+	*/
+
+	function reset_glide_position(){
+		glide.jump(1);
+		glide.pause();
+	}
+
+	if( $(".slider-without-nav").length > 0 ){
+
+		glide = $(".slider-without-nav").glide(
+	    	{
+	        	autoplay: false,
+	        	arrows: false,
+	        	nav: false,
+	        	animationTime: 1000
+			}
+	    )
+	    	.data('api_glide')
+	    ;
+
+	    function midWayFunction(){
+			clock = $(".countdown").detach();
+			reset_glide_position();
+		}
+
+		function midWayReverseFunction(){
+			$(".countdown").remove();
+			$(".blue-box-in-header .relative").append(clock);
+			if( slider_speed != undefined ){
+				clearInterval(my_sliding_interval);
+			}
+			detached_slider = $(".slider-without-nav").detach();
+		}
+
+		function flipCompleteFunction(){
+			glide.play();
+			glide.next();
+			my_sliding_interval = setInterval(function(){
+				glide.next();
+			},slider_speed);
+		}
+
+		var clock, my_sliding_interval;
+		var detached_slider = $(".slider-without-nav").detach();
+		var slider_speed = 4000;
+		var verso_html = detached_slider;
+
+
+	}
+
+	if( $(".flipbox-container").length > 0 ){
+		var flip_in_progress = false,
+			reverse_in_progress = false,
+			reverse_in_queue = false,
+			flipbox_fliped = false,
+			mouse_inside = false,
+			mouse_outside = false,
+			reverse_in_progress_on_mouseenter = false,
+			revMidwayFound = false
+		;
+
+		if( verso_html === undefined ){
+			verso_html = "";
+		}
+
+		$(".flipbox-container").mouseenter(function(){
+
+			if( mouse_inside ){
+				return;
+			}
+			mouse_inside = true;
+			console.log("in");
+
+			if( reverse_in_progress ){
+				reverse_in_progress_on_mouseenter = true;
+			}
+
+			reverse_in_queue = false;
+
+			if( flipbox_fliped || flip_in_progress ){
+				return;
+			}
+
+			$(".flipbox").flippy({
+				color_target: "",
+				duration: "800",
+				verso: verso_html,
+				onStart: function(){
+					flip_in_progress = true;
+				},
+				onMidway: function(){
+					midWayFunction();
+				},
+				onFinish: function(){
+					flip_in_progress = false;
+					flipbox_fliped = true;
+
+					if( reverse_in_queue ){
+						$(".flipbox").flippyReverse();
+						return;	
+					}
+
+					flipCompleteFunction();
+				},
+				onReverseStart: function(){
+					reverse_in_progress = true;
+				},
+				onReverseAnimation: function(){
+					
+					if( revMidwayFound === false ){
+						if( $(".blue-box-in-header").length > 0 ){
+							revMidwayFound = true;
+							midWayReverseFunction();
+						}
+					}
+
+				},
+				onReverseFinish: function(){
+					reverse_in_progress = false;
+					flipbox_fliped = false;
+					reverse_in_queue = false;
+					revMidwayFound = false;
+				}
+			});
+
+		});
+
+		$(".flipbox-container").mouseleave(function(){
+
+			mouse_inside = false;
+			console.log("out");
+
+			if(flip_in_progress){
+				reverse_in_queue = true;
+				return;
+			}
+
+			if( reverse_in_progress ){
+				return;
+			}
+
+			if( reverse_in_progress_on_mouseenter ){
+				reverse_in_progress_on_mouseenter = false;
+				return;
+			}
+
+			//console.log("flip in progress", flip_in_progress);
+
+			$(".flipbox").flippyReverse();
+
+		});
+	}
+
+    //
 
     $(".dropdown").click(function(){
 
@@ -951,4 +1094,5 @@ $(function() {
 	autoslide_playing = false,
 	slider_holder_width = 314,
 	blackout_status = false
-;
+	;
+//
