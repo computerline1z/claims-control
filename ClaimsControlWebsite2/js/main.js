@@ -838,34 +838,49 @@ $(function() {
 		}
 	//
 
-    if( $(".slider-with-nav").length > 0 ){
+
+    // SLIDE SCREENS ON HOVER INSTEAD OF FLIP
+
+    if( $(".js-hover-to-slide").length > 0 ){
+
     	glide = $(".slider-with-nav").glide(
 	    	{
-	        	autoplay: 2000,
+	        	autoplay: 4000,
 	        	arrows: false,
-	        	nav: true
+	        	nav: true,
+	        	animationTime: 500
 			}
 	    )
 	    	.data('api_glide')
 	    ;
 	    glide.pause();
+
+	    var slider = $(".slider-with-nav").detach();
+	    slider.css({
+	    	position: "absolute",
+	    	left: 0,
+	    	top: 0,
+	    	display: "none",
+	    	"z-index": 2
+	    });
+
+	    $(".js-hover-to-slide").append(slider);
+
+    	$(".js-hover-to-slide").mouseenter(function(e){
+    		glide.jump(1);
+    		glide.pause();
+			$(".slider-with-nav").fadeIn(500, function(){
+				glide.play();
+			});
+
+		});
+
+		$(".js-hover-to-slide").mouseleave(function(e){
+			$(".slider-with-nav").fadeOut(500);
+		});
+
     }
-
-    // SLIDE SCREENS ON HOVER INSTEAD OF FLIP
-
-    
-    /*
-    $(".js-hover-to-slide").mouseenter(function(e){
-    	$(".css-js-hover-slider").css({top:0,opacity:0}).hoverFlow( e.type, {opacity:1}, 400, function(){
-    		glide.play();
-    	});
-    });
-
-    $(".js-hover-to-slide").mouseleave(function(e){
-    	glide.pause();
-    	$(".css-js-hover-slider").hoverFlow(e.type, {opacity:0}, 400);
-    });
-	*/
+	
 
 	function reset_glide_position(){
 		glide.jump(1);
