@@ -563,8 +563,6 @@
 
 						<form role="form">
 
-							<p class="heading-font font-large text-orange contact-errors"></p>
-
 							<div class="form-group">
 								<input type="text" id="form-name" class="form-control" placeholder="Jūsų vardas">
 							</div>
@@ -582,7 +580,7 @@
 									<button type="submit" id="contact-submit" class="btn btn-default btn-lg wid100pr">Siųsti</button>
 								</div>
 							</div>
-							<p class="heading-font font-large lheight1 pad-t10" id="form-status"></p>
+							<p class="heading-font font-large text-orange contact-errors" id="form-status"></p>
 						</form>
 
 					</div><!-- col-sm-5 -->
@@ -668,11 +666,11 @@
 					errors = ""
 				;
 
-				if( form_email.length < 1 ){
-					errors += "Įveskite savo el.pašto adresą arba telefoną<br />";
-				}
 				if( form_name.length < 1 ){
 					errors += "Įveskite vardą<br />";
+				}
+				if( form_email.length < 1 ){
+					errors += "Įveskite savo telefono nr. arba el.pašto adresą<br />";
 				}
 				if( form_message.length < 1 ){
 					errors += "Įveskite žinutę<br />";
@@ -680,6 +678,9 @@
 
 				if( errors.length > 0 ){
 					$(".contact-errors").html(errors);
+
+					scroll_to_object_if_not_visible(window_scroll_top, $(".contact-errors") );
+
 					form_button_pressed = false;
 					return;
 				}
@@ -690,6 +691,7 @@
 				$.post("data/contact_email.php", { "senderName": form_name, "senderContacts": form_email, "senderMessage": form_message}, function(data){
 					if( data === "success"){
 						$("#form-status").html("Žinutė išsiųsta, netrukus susisieksime");
+						scroll_to_object_if_not_visible(window_scroll_top, $("#form-status") );
 						$("#contact-submit").attr("disabled", "disabled");
 					}
 				} );
