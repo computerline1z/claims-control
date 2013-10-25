@@ -296,6 +296,22 @@ function toggleBlackout(obj){
 	}
 }
 
+function scroll_to_object_if_not_visible(window_scroll_top, object){
+
+	if( object.length < 1 ){
+		return;
+	}
+
+	var scroll_top_visibility = window_scroll_top + $(window).height(),
+		item_scroll_bottom = object.offset().top + object.height(),
+		diff = item_scroll_bottom - scroll_top_visibility
+	;
+
+	if( scroll_top_visibility < item_scroll_bottom ){
+		$("html, body").animate({scrollTop: window_scroll_top + diff }, 500);
+	}
+}
+
 /* DOCUMENT READY */
 $(function() {
 
@@ -385,9 +401,11 @@ $(function() {
 
 	$.fn.cc_slides = function(options){
 
-		$(".cc_slides_pause_play").click(function(){
-			$(this).toggleClass("paused");
-		});
+		// Pause / Play on click
+			$(".cc_slides_pause_play").click(function(){
+				$(this).toggleClass("paused");
+			});
+		//
 
 		function setup_user_settings(){
 
@@ -882,11 +900,14 @@ $(function() {
 		}
 
 		function flipCompleteFunction(){
-			glide.play();
-			glide.next();
-			my_sliding_interval = setInterval(function(){
+			setTimeout(function(){
+				glide.play();
 				glide.next();
-			},slider_speed);
+				my_sliding_interval = setInterval(function(){
+					glide.next();
+				},slider_speed);
+			},2000);
+			
 		}
 
 		var clock, my_sliding_interval;
@@ -932,8 +953,9 @@ $(function() {
 
 			$(".flipbox").flippy({
 				color_target: "",
-				duration: "800",
+				duration: "500",
 				verso: verso_html,
+				direction: "LEFT",
 				onStart: function(){
 					flip_in_progress = true;
 				},
