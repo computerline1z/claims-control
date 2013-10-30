@@ -6289,6 +6289,9 @@ fieldset[disabled] .bg-blueGrayLight .btn {
 .pad-b10 {
   padding-bottom: 10px;
 }
+.pad-b19 {
+  padding-bottom: 19px;
+}
 .pad-b20 {
   padding-bottom: 20px;
 }
@@ -6603,6 +6606,12 @@ a.text-blueGrayLight:hover {
 .text-blueGray,
 a.text-blueGray:hover {
   color: #6c798a;
+}
+.text-blueGray-hover-orange {
+  color: #6c798a;
+}
+a.text-blueGray-hover-orange:hover {
+  color: #eb5a44;
 }
 .text-blueDark,
 a.text-blueDark:hover {
@@ -7567,11 +7576,11 @@ li.active .icon-securetruck-small {
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
 }
-.news-container > p {
-  padding-top: 11px;
+.news-container article {
+  padding-bottom: 21px;
 }
-.news-container > p:first-of-type {
-  padding-top: 0;
+.news-container h2 {
+  margin-bottom: 16px;
 }
 body {
   position: relative;
