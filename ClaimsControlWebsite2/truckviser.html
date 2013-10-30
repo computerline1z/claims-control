@@ -292,7 +292,14 @@
 				<div class="row">
 
 					<div class="col-sm-3 text-center">
-						<img src="images/truck-blueGrayLight.png" alt="truck" />
+						<div class="js-animate-icons css-animate-icons" id="anim1">
+							<div class="primary relative">
+								<img src="../images/anim/truck_blueGrayLight.png" alt="truck" />
+								<div class="absolute secondary top--15 right2" style="background:transparent!important;">
+									<img src="../images/anim/tablet_white.png" alt="tablet" />
+								</div>
+							</div><!-- primary -->
+						</div><!-- js-animate-icons css-animate-icons -->
 					</div>
 
 					<div class="col-sm-9">
@@ -440,6 +447,10 @@
 
 				</ol>
 
+				<!--
+
+				nereikalingas
+
 				<div class="cc-carousel-holder">
 
 					<div class="cc-carousel-controls">
@@ -466,6 +477,40 @@
 
 					</div>
 
+				</div>
+
+				-->
+
+				<div class="cc-carousel-holder">
+
+					<div class="cc-carousel-controls">
+						<button class="cc_slides_next"></button>
+						<button class="cc_slides_pause_play"></button>
+						<button class="cc_slides_prev"></button>
+					</div>
+
+					<ul class="bxslider bx-slider-a">
+						<li class="cc_slide_active"><img src="images/slides/a_Vairuotojo_darbalaukis.jpg" alt="vairuotojo darbalaukis" /></li>
+						<li><img src="images/slides/b_Vairavimo_rezimas.jpg" alt="vairavimo rezimas" /></li>
+						<li><img src="images/slides/e_Vaizdo_instrukcijos.jpg" alt="vaizdo instrukcijos" /></li>
+						<li>
+							<ul class="bxslider bx-slider-b1">
+								<li><img src="images/slides/c_Dokumentu_perdavimas.jpg" alt="dokumentų perdavimas" /></li>
+								<li><img src="images/slides/d_Dokumentu_perdavimas.jpg" alt="dokumentų perdavimas 2" /></li>
+							</ul>
+						</li>
+						<li>
+							<ul class="bxslider bx-slider-b2">
+								<li><img src="images/slides/programu-adminstravimas.png" alt="programu administravimas" /></li>
+								<li><img src="images/slides/darbalaukio-administravimas.png" alt="darbalaukio administravimas" /></li>
+								<li><img src="images/slides/mobiliu-duomenu-valdymas.png" alt="mobiliuju duomenu valdymas" /></li>
+								<li><img src="images/slides/telefono-skambuciu-valdymas.png" alt="telefono skambučių valdymas" /></li>
+								<li><img src="images/slides/irenginio-vietos-nustatymas.png" alt="įrenginio vietos nustatymas" /></li>
+								<li><img src="images/slides/naudojimo-ataskaitos.png" alt="naudojimo ataskaitos" /></li>
+							</ul>
+						</li>
+						
+					</ul>
 				</div>
 
 
@@ -701,6 +746,8 @@
 
 		<script src="js/jquery.cookie.js"></script>
 		<script src="js/backfix.min.js"></script>
+		<script src="js/jquery.bxslider.min.js"></script>
+		<script src="js/jquery.flippy.min.js"></script>
 
 		<!-- custom js -->
 		<script src="js/hoverflow.js"></script><!-- provides queueless animation -->
