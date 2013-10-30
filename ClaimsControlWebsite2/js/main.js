@@ -312,8 +312,31 @@ function scroll_to_object_if_not_visible(window_scroll_top, object){
 	}
 }
 
+function dropToId(url){
+	if( url.indexOf("#") < 0 ){
+		return;
+	}
+	if( url.indexOf("#b") > -1 ){
+		return;
+	}
+	
+	var pound_sign_position = url.indexOf("#");
+	var id = url.substring(pound_sign_position, url.length);
+	var id_top_offset = $(id).offset().top - 119;
+
+	console.log( id_top_offset );
+
+	setTimeout(function(){
+		$("html, body").scrollTop(id_top_offset);
+	},1);
+
+}
+
 /* DOCUMENT READY */
 $(function() {
+
+	// DROP TO #id if one exists
+	dropToId(document.URL);
 
 	$("body").addClass("invisible");
 
