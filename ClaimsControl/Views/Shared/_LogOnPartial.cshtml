@@ -6,7 +6,7 @@
 
 @if (Request.IsAuthenticated){
 
-	<span class="uppercase">@CC.Classes.UserData.Account</span>
+	<span class="uppercase" id='accountName'>@CC.Classes.UserData.Account</span>
 	<div class="links-group pull-right">
 		<a id="userLink" class="icons-gear">@CC.Classes.UserData.UserName</a>
 		<a href='#' class="icons-x" onclick="location='@LogoutUrl'">Atsijungti</a>

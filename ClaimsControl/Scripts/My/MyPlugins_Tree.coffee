@@ -1,7 +1,5 @@
-#`var w=window, App=w.App, Em=w.Em, oGLOBAL=w.oGLOBAL, oDATA=w.oDATA, oCONTROLS=w.oCONTROLS, MY=w.MY`
-`var w=window,$ = w.jQuery, App=w.App, Em=w.Em, initTreePadding = false`
+`var w=window,$ = w.jQuery, App=w.App, Em=w.Em, initTreePadding = false;`
 
-#`var $ = window.jQuery, App=w.App, Em=w.Em, oGLOBAL=w.oGLOBAL, oDATA=w.oDATA, oCONTROLS=w.oCONTROLS, MY=w.MY`
 App.create_docsTypesController=(categoryOpts)->(
 	App.docsTypesController = Em.ResourceController.create(	
 		#docsTypesControllerOpt:

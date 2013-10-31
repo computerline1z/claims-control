@@ -8,7 +8,7 @@ options:
 	selectFirst: false, Value: "", mapWithNoCommas: false, addNewIfNotExists: false
 _create: ->	
 	#surandam artimiausia inputa ant kurio desim listboxa
-	input = $(@element[0]).attr("placeholder","Pasirinkite iš sąrašo..")
+	input = $(@element[0]).attr("placeholder","Pasirinkite iš sąrašo..").val("")
 	console.error("Input not found for ComboBox!")	if input.length==0
 	opt = $.extend(true, @options, input.data("ctrl"))
 	opt.mapWithNoCommas=true if opt.Source=="proc_Drivers"
@@ -31,7 +31,7 @@ _create: ->
 	
 	#if(opt.Type==="List") { //Jei Type==List mapinam pagal opt.iText kitu atveju pagal Field
 	fnSetData=() -> #Gali būt naudojamas Refreshinant per fnRefresh
-		OptVal = parseInt(opt.Value, 10)
+		OptVal = if opt.Value>0 then parseInt(opt.Value, 10) else "" #"0">0==false,"1">0==true
 		if opt.data then data = opt.data() else
 			fn=(a) -> 
 				if opt.excludeFromList then if opt.excludeFromList.ValueInMe(a.iD) then return null #ko nepridedam į sąrašus

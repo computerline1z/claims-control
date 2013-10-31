@@ -1,64 +1,20 @@
 
-`var w=window, App=w.App, Em=w.Em, oGLOBAL=w.oGLOBAL, oDATA=w.oDATA, oCONTROLS=w.oCONTROLS, MY=w.MY`
+`var w=window, App=w.App, Em=w.Em, oGLOBAL=w.oGLOBAL, oDATA=w.oDATA, oCONTROLS=w.oCONTROLS, MY=w.MY;`
 App.tabAccidentsView = App.mainMenuView.extend(
 	content: null
 	viewIx: 0
 	templateName: 'tmpAccidentsMain'
-	# init: -> 
-		# @_super()
-		# console.log("accidentInit")
-	# didInsertElement: -> 
-		# App.sidePanelController.refreshPanels("loadAcc");
-
-		# @_super()
-		# settings=categoryOpts:
-				# accident:{iD:24,title:"Įvykio dokumentai"}
-				# driver:{iD:87,title:"Vairuotojo Albinas Palubinskas dokumentai"},
-				# vehicles:[{iD:14,title:"TP BBB, Volvo __ dokumentai"},{iD:7,title:"BRU643, Volvo, FH12"}]
-		# oDATA.execWhenLoaded(["tmpUploadForm","tmpDocsTree"], ()-> 
-			# $('#uploadDocsToAccident2').UploadFiles(settings)
-			# $('#uploadDocsToAccident2').next().Tree(categoryOpts:settings.categoryOpts)
-		# )	
-	#contentObserver: (->
-	#	@rerender()
-	#	alert("App.tabAccidentsssssView has changed!")
-	#	).observes("App.tabAccidentsController.content")
 )
 App.AccidentView = Em.View.extend(
-	#@addObserver('content.lossSum', ->
-	#	alert("New lossSum: " + @getPath('App.AccidentView.lossSum'))
-	#	@rerender();
-	#)	
 	templateName: 'tmpAccidentRow' #<div class="tr accident" @Html.Raw("{{action tbodyClick this target=\"this\"}}")>
 	tagName: ""
 )
 App.SelectedAccidentView = Em.View.extend(
 	templateName: 'tmpAccident_Claims'
 	init: ->
-		`var ArrView = [],objView=[]`
-		#console.log("init selected accident")
-		@_super(); claimsTypeID=@claims_TypeID.split('#')
-		ArrClaims = @get("claims_C").replace(new RegExp('{{(.*?)}}', 'gm'), '').split('#||'); #Iskertam nenaudojamus tarp{{ ir}}//?-kad nebutu greedy
-		ArrClaims2 = @get("claims_C2").split('#||');
-		if (ArrClaims[0] != "")
-			iterator=ArrClaims.length-1; i=-1
-			while ((i++)<iterator)
-				clTypeID=claimsTypeID[i]
-				ArrView[i] = 
-					Claims: ArrClaims[i].split('#|'),
-					Claims2: ArrClaims2[i].split('#|')
-				#Claims: 0-ClaimStatus,1-No,2-ClaimType(text),3-Vehicle,4-Insurer(text),5-lossAmount
-				#Claims2: 0-ClaimID, 1-VehicleID, 2-InsPolicyID, 3-InsuranceClaimAmount, 4-InsurerClaimID, 5-IsTotalLoss, 6-IsInjuredPersons, 7-Days, 8-PerDay	
-				objView[i] = 
-					finished: (if(ArrClaims[i][0] == "5") then true else false), no: ArrView[i].Claims[1], type: ArrView[i].Claims[2]
-					autoNo: ArrView[i].Claims[3], insurer: ArrView[i].Claims[4], loss:ArrView[i].Claims[5] # tmpAccident_Claims.cshtml naudos totalLoss jei jo nėra, tada loss
-					totalLoss:(if (ArrView[i].Claims2[2]!="0" and ArrView[i].Claims2[6] and clTypeID=="2" and not isNaN(parseFloat(ArrView[i].Claims2[3]))) then +ArrView[i].Claims[5]+ +ArrView[i].Claims2[3] else 0) # if InsPolicyID!=0 and IsInjuredPersons and clTypeID==2 and InsuranceClaimAmount is number then lossAmount+InsuranceClaimAmount else lossAmount
-					Claims2: ArrView[i].Claims2, claimStatus:ArrClaims[i][0]
-					accidentID: @get("iD"), accidentDate: @date
-		App.thisAccidentController.set("content", objView) #butinai masyvas
-		App.thisAccidentController.set("accidentID", @get("iD")) #butinai masyvas	
+		@_super(); App.thisAccidentController.setContent(@)
 	tbodyClick: (e) -> #Reik daryti tik kai ant claimo, kitu atveju matyt išeinam
-		tr = $(e.target).closest("tr"); 
+		tr = $(e.target).closest("tr");
 		clickOnSelected=if (tr.hasClass("selectedClaim")) then true else false
 		App.claimEditController.removeOpenClaimDetails()
 		#tr.parent().find("tr.selectedClaim").removeClass("selectedClaim title")
@@ -66,7 +22,7 @@ App.SelectedAccidentView = Em.View.extend(
 		d = e.context;
 		MY.tabAccidents.SelectedClaimView = App.SelectedClaimView.create(
 			rowContext: { Claims2: d.Claims2, newClaim: false, LossAmount: d.loss, InsuranceType: d.type, accidentID: d.accidentID, accidentDate: d.accidentDate, claimStatus: d.claimStatus }
-			elementId: "ClaimDetailsContent", contentBinding: 'App.claimEditController.content'
+			elementId: "ClaimDetailsContent", contentBinding: 'App.claimEditController.oldClaim'
 		)
 		tr.addClass("selectedClaim title").after("<tr><td id='ClaimWraper' colspan='7' class='selectedClaim content'></td></tr>");
 		MY.tabAccidents.SelectedClaimView.appendTo("#ClaimWraper");
@@ -82,17 +38,16 @@ App.SelectedAccidentView = Em.View.extend(
 			oDATA: oDATA.GET("tblClaimTypes")
 			opt: { val: "iD", text: "name", FieldName: "ClaimTypeID", SelectText: "Pasirinkite žalos tipą:" }
 			fnAfterOptClick: (T) ->
-				App.claimEditController.removeOpenClaimDetails()
+				#App.claimEditController.removeOpenClaimDetails()
 				$('#divNewClaimCard').find('#divNewClaimCard_Content,div.frmbottom').remove();
 				#fnSetClaimCard(1, T)
-				#naujam Claimsui imamas redaguojamas viewsas SelectedClaimView ir kitas kontroleris newClaimController
 				if (MY.tabAccidents.NewClaimView) ##($("#newClaimDetailsContent").length > 0)
 					MY.tabAccidents.NewClaimView.remove()
 					$("#newClaimDetailsContent").remove();
 				MY.tabAccidents.NewClaimView = App.SelectedClaimView.create(
 					#rowContext: { Claims2: d.Claims2, newClaim: true, LossAmount: d.loss, InsuranceType: d.type, accidentID: d.accidentID }
 					rowContext: { newClaim: true, accidentID: App.thisAccidentController.get("accidentID") }
-					elementId: "newClaimDetailsContent", contentBinding: 'App.newClaimController.content'
+					elementId: "newClaimDetailsContent", contentBinding: 'App.claimEditController.newClaim'
 				)				
 				MY.tabAccidents.NewClaimView.appendTo("#divNewClaimCard")
 				
@@ -112,34 +67,57 @@ App.SelectedAccidentView = Em.View.extend(
 )
 App.SelectedClaimView = Em.View.extend(
 	didInsertElement: ->
-		c=App.claimEditController.claim
+		c=@rowContext;typeID=@content.typeID;thisCtrl=@$();
 		frm=if c.newClaim then "#divNewClaimCard" else '#divClaimCard_Content' # Negalim naudot '#divNewClaimCard_Content', nes divNewClaimCard yra data-ctrl, nes ten mes dedam žalos tipą kai dar nėra divNewClaimCard_Content
 		btnSaveToDisable=if c.newClaim then $(frm).find("button.btnSave") else $(frm).next().find("button.btnSave")
 		oCONTROLS.UpdatableForm(frm:frm,btnSaveToDisable:btnSaveToDisable)
-		if c.typeID==2
-			IClaim=$("#InsuranceClaimAmount").parent().parent(); IClaim.find("span").html("Žalos suma asmeniui");
-			$("#LossAmount").parent().find("span").html("Žalos suma turtui");
+		if typeID==2
+			IClaim=thisCtrl.find(".js-InsuranceClaimAmount").parent().parent(); IClaim.find("span").html("Žalos suma asmeniui");
+			thisCtrl.find('.js-lossAmount').parent().find("span").html("Žalos suma turtui");
 			fnCheckIsInjured =() ->
 				if this.attr("checked") then IClaim.css("display","block").find("input").data("ctrl").Validity=IClaim.find("input").data("ctrl").Validity.replace("require().","")
 				else IClaim.css("display","none").find("input").val("").data("ctrl").Validity="require()."+IClaim.find("input").data("ctrl").Validity				
 				# IClaim.css("display", (if this.attr("checked") then "block" else "none"))
 				# $($0).data("ctrl").Validity=$($0).data("ctrl").Validity.replace("require()","")
-			fnCheckIsInjured.call($("#IsInjuredPersons"))
-			$("#IsInjuredPersons").on("click",-> fnCheckIsInjured.call($("#IsInjuredPersons")))	
+			isInjured=thisCtrl.find('.js-IsInjuredPersons'); fnCheckIsInjured.call(isInjured)
+			isInjured.on("click",-> fnCheckIsInjured.call(isInjured))#.click();	
 		#$("#inputDays,#inputPerDay").on("keyup",-> $("#inputSum").val(($("#inputDays").val()*$("#inputPerDay").val()));)
-		if c.typeID==6
+		if typeID==6
 			# inpSum=$(frm).find('.inputSum input'); days=$(frm).find('.days input');perDay=$(frm).find('.perDay input')
 			# $(frm).find('.days input,.perDay input').on("keyup",-> inpSum.val(days.val()*perDay.val());)
-			$("#claimEditDays,#claimEditPerDay").on("keyup",-> $("#LossAmount").val($("#claimEditDays").val()*$("#claimEditPerDay").val());)
+			# $("#claimEditDays,#claimEditPerDay").on("keyup",$.proxy(->
+			thisCtrl.find(".js-claimEditDays, .js-claimEditPerDay").on("keyup",$.proxy(->
+				@.find('.js-lossAmount').setVal(@.find(".js-claimEditDays").getVal()*@.find(".js-claimEditPerDay").getVal());
+				#$("#LossAmount").val($("#claimEditDays").val()*$("#claimEditPerDay").val());
+			,thisCtrl)
+			)
 			
 		if c.claimStatus>2
 			inputs=$(frm).find("input")
-			if c.claimStatus=="3" then inputs=inputs.eq(1).prop('title', 'Suma jau patvirtina')#lossAmount placement important!!
-			else if c.claimStatus=="4" then inputs=inputs.filter((i)->i==1||$(@).attr("id")=="InsuranceClaimAmount").prop('title', 'Suma jau patvirtina')#lossAmount & insuranceClaimAmount
-			else if c.claimStatus=="5" then ($(frm).find("button").prop("disabled", true); inputs.prop('title', 'Žala uždaryta'))#laimStatus==5 disabled everything
+			$(frm).find("input").filter(".js-lossAmount, .js-claimEditDays")
+			$(frm).find("input").filter(".js-lossAmount, .js-claimEditDays")
+			if c.claimStatus=="3" then inputs=inputs.filter(".js-lossAmount").prop('title', 'Suma jau patvirtina')
+			else if c.claimStatus=="4" then inputs=inputs.filter(".js-lossAmount, .insuranceClaimAmount").prop('title', 'Suma jau patvirtina')
+			else if c.claimStatus=="5"
+				$(frm).parent().find("button").prop("disabled", true); inputs.prop('title', 'Žala uždaryta')#claimStatus==5 disabled everything
 			inputs.prop("disabled", true)
-		#if c.noInsurance then $("#NotInsuredClaim").trigger("click")
-		if c.noInsurance then App.claimEditController.fnToggle_noInsurance()
+		fnToggle_noInsurance=(content,isClicked)->#this == current form 
+			noInsurance=content.noInsurance; 
+			chk=$(".js-NotInsuredClaim").find("input")
+			if not chk.data("ctrl") then chk.data("ctrl", {"Type":"Boolean","Value":"0","ToggleValue":true,"Field":"InsPolicyID"})#Kad pagal šitą updatintusi
+			if isClicked then @.find("button.btnSave").attr("disabled",false);
+			
+			eToggle=@find("div.js-toggle")		
+			if noInsurance then chk.addClass("UpdateField"); eToggle.hide()
+			else chk.removeClass("UpdateField"); eToggle.show(); @find("js-InsuredClaimList").data("newval","") #.data("ctrl").Value="";#Kad sita updatintu
+			isInjured=@find('.js-IsInjuredPersons');
+			if isInjured.length
+				claimAmount=@find('.js-InsuranceClaimAmount').closest('.ExtendIt')
+				if isInjured.prop("checked") then claimAmount.show() else claimAmount.hide()#Jeigu yra IsInjuredPersons atslepiant varnele bus nuimta, o lauko nerodom
+			false
+		cnt=@content;frm=$("#"+this.elementId)
+		cnt.addObserver('noInsurance',-> fnToggle_noInsurance.call(frm,cnt,true))
+		fnToggle_noInsurance.call(frm,cnt,false)
 	init: ->
 		@_super(); d = @get("rowContext"); 	
 		if not d.newClaim
@@ -150,6 +128,7 @@ App.SelectedClaimView = Em.View.extend(
 				isTotalLoss: C2[5],isInjuredPersons: parseInt(C2[6],10),days: C2[7],perDay: C2[8],lossAmount: d.LossAmount, claimStatus: d.claimStatus
 				newClaim: false,typeID: TypeID, deleteButton:true, noInsurance: if C2[2]=="0" then true else false #insPolicyID
 			)	
+			App.claimEditController.set("oldClaim", Claim)
 		else #newClaim
 			TypeID = $("#divNewClaimCard").data("ctrl").ClaimTypeID
 			Claim = Em.Object.create(
@@ -157,8 +136,8 @@ App.SelectedClaimView = Em.View.extend(
 				isTotalLoss: 0,isInjuredPersons: 0,days: 5,perDay: 500,lossAmount: (if TypeID==6 then 2500 else 0) #(->@get('days')*@get('perDay')).property('days','perDay')
 				newClaim: true,typeID: TypeID, noInsurance: false
 			)
-		App.claimEditController.set("claim", Claim)
-
+			App.claimEditController.set("newClaim", Claim)
+		
 		console.log("init Claim.Type - "+TypeID)
 	templateName: 'tmpClaimEdit'
 )
@@ -168,30 +147,6 @@ App.claimEditController = Em.Controller.create(#save, delete, cancel Claims even
 		if (ClaimW.length > 0)
 			MY.tabAccidents.SelectedClaimView.remove()
 			ClaimW.remove(); false
-	fnToggle_noInsurance: ((e)->
-		# t=e.target; chk=if (t.tagName.toUpperCase()=="INPUT") then $(t) else $(t).find("input:checkbox")
-		noInsurance=@claim.noInsurance; 
-		# if not e.isTrigger 
-			# noInsurance=not noInsurance #Jei trigeris nereikia apvers, nes ten jau teisinga reiksme
-			# chk.toggleClass("UpdateField")
-			# @claim.set('noInsurance', noInsurance)
-		console.log(@claim.get('noInsurance'))
-		
-		#chk.attr("checked", noInsurance) if t.tagName.toUpperCase()=="LABEL"
-		#chk.attr("checked", not noInsurance)#apverciam atvirksciai, nes jis paskui vel verciasi 
-		chk=$("#NotInsuredClaim").find("input")
-		if not chk.data("ctrl") then chk.data("ctrl", {"Type":"Boolean","Value":"0","ToggleValue":true,"Field":"InsPolicyID"})#Kad pagal šitą updatintusi
-		
-		content=if @claim.iD then $("#ClaimDetailsContent") else $("#newClaimDetailsContent")
-		eToggle=content.find("div.js-toggle")
-		content.find("button.btnSave").attr("disabled",false);
-		#$("#ClaimDetailsContent").find("div.js-toggle").toggle().end().find("button.btnSave").attr("disabled",false);
-		
-		if noInsurance then chk.addClass("UpdateField"); eToggle.hide()
-		else chk.removeClass("UpdateField"); eToggle.show(); $("#InsuredClaimList").data("newval","") #.data("ctrl").Value="";#Kad sita updatintu
-		if $('#IsInjuredPersons').length then $('#IsInjuredPersons').prop("checked",false); $("#InsuranceClaimAmount").parent().parent().hide() #Jeigu yra IsInjuredPersons atslepiant varnele bus nuimta, o lauko nerodom
-		false
-	).observes("claim.noInsurance")#		App.claimEditController.claim.noInsurance
 
 	deleteForm: (e) ->
 		oData=oDATA.GET("proc_Claims"); context=e.view._parentView.templateData.view.rowContext;
@@ -216,7 +171,8 @@ App.claimEditController = Em.Controller.create(#save, delete, cancel Claims even
 		#tr = $("#accidentsTable").find("div.selectedAccident") #.empty()
 		#tr.trigger("click").trigger("click")	
 	saveForm: (e) ->
-		newClaim=e.view._context.newClaim; accidentID=e.view._parentView.templateData.view.rowContext.accidentID; tr=$("#accidentsTable").find("div.selectedAccident")
+		@goToLastClick()
+		newClaim=e.view._context.newClaim; accidentID=e.view._parentView.templateData.view.rowContext.accidentID; tr=$("#accidentsTable").find("div.selectedAccident"); clickedCtrl=$(e.target)
 		if newClaim
 			frm=$('#divNewClaimCard'); Action='Add'
 			Msg= Title: "Naujos žalos sukūrimas", Success: "Nauja žala sukurta.", Error: "Nepavyko išsaugot naujos žalos."
@@ -231,16 +187,19 @@ App.claimEditController = Em.Controller.create(#save, delete, cancel Claims even
 			DataToSave["Ext"] = accidentID
 			fnAfterUpdate=(resp, updData)-> #Sinhronizuojam su "proc_Claims"
 				me=App.claimEditController; me2=App.sidePanelController
-				me.fnUpdateAccident.call(me,resp); me2.refreshPanels.call(me2, "refreshClaims"); 
+				rowArr=me.fnUpdateAccident.call(me,resp);
+				me2.refreshPanels.call(me2, "refreshClaims"); 
 				id=resp.ResponseMsg.ID; if not id then id=updData.DataToSave.id;
 				SERVER.updateRecord("Main/claim",{id:id},"proc_Claims",updData.Action)
-				@tr.trigger('click')
-				Em.run.later(@,(->@tr.trigger("click");console.log("trigger click");console.log(@tr)),500)
+				App.thisAccidentController.setContent_afterEdit(accidentID:rowArr[0],claimID:id,Action:updData.Action,cancelCtrl:clickedCtrl.next())
+				#@tr.trigger('click')
+				#Em.run.later(@,(->@tr.trigger("click");console.log("trigger click");console.log(@tr)),500)
 				false
 			opt = Action: Action, DataToSave: DataToSave, CallBack: {Success: $.proxy(fnAfterUpdate,tr:tr)}, Msg: Msg
 			SERVER.update(opt)
 			false
 	cancelForm: (e) ->
+		@goToLastClick()
 		t=$(e.target); tr=t.closest("tr")
 		if (tr.find("td.selectedClaim").length)#Redaguojama žala
 			MY.tabAccidents.SelectedClaimView.remove()
@@ -249,6 +208,13 @@ App.claimEditController = Em.Controller.create(#save, delete, cancel Claims even
 			if MY.tabAccidents.NewClaimView then MY.tabAccidents.NewClaimView.remove()
 			$("#divNewClaimCard").remove()
 			$("#AccDetailsContent").find('div.rightFooterBig').show()
+	goToLastClick: () ->
+		if @scroolBack
+			Em.run.next(@scroolBack,()->
+				@tr[0].scrollIntoView();@tr.trigger("click")
+				if @div then @div[0].remove()
+				App.claimEditController.scroolBack=null; return false
+			)
 )
 #***************************************Controler**************************************************************
 App.accidentsController = Em.ResourceController.create(
@@ -288,7 +254,20 @@ App.accidentsController = Em.ResourceController.create(
 		else
 			Em.run.next(-> $("#AccDetailsContent, div.dividers").slideDown(App.accidentsController.animationSpeedStart))	
 	tbodyClick: (e) ->
-		tr = $(e.target).closest("div.tr"); console.log("tbodyClick")
+		tr = $(e.target).closest("div.tr");
+		#---------------------------------	
+		button=$("#accidentsTable").find("button.btnSave")
+		if button.length then if not button.prop("disabled") #Kazka redaguoja pasiulom pirma išsaugot arba atšaukt
+			offset=button.parent().offset();button.parent()[0].scrollIntoView()
+			div = $("<div class='js-tip js-tip-warning' style='left:" + offset.left + "px;top:" + offset.top + "px;width:250px;margin-left:-50px;'>"+App.Lang.forms.accidents.scroll_warn+"</div>").appendTo("body")
+			if offset.top - div.height() - 20 > $(window).scrollTop() #Telpa - dedam viršuj
+				div.addClass("js-tip-top").offset top: (div.offset().top - div.height() - 20)
+			else #Netelpa - dedam apacioj
+				div.addClass("js-tip-bottom").offset top: (div.offset().top + ext.height() + div.height())
+			div.fadeIn("slow").click(->@remove();)
+			App.claimEditController.scroolBack=tr:tr,div:div
+			return false
+		#---------------------------------	
 		@setfilteredPolicies(e.context.date)#Filtruojam polisus		
 		AddWr = $("#AccDetailsWraper"); parent=tr.parent()		
 		if tr.hasClass("selectedAccident") and not e.isTrigger
@@ -410,16 +389,43 @@ App.accidentsController = Em.ResourceController.create(
 App.thisAccidentController = Em.ResourceController.create(
 	content: [],
 	tableName: "?"
-	#    setContent: function (ArrView) {
-	#        @set("content", ArrView)
-	#    }
+	getContent:(context)->
+		console.log("getContent CONTEXT:")
+		console.log(context)
+	
+		`var ArrView = [],objView=[],claimsTypeID=context.claims_TypeID.split('#')`
+		ArrClaims = context.claims_C.replace(new RegExp('{{(.*?)}}', 'gm'), '').split('#||'); #Iskertam nenaudojamus tarp{{ ir}}//?-kad nebutu greedy
+		ArrClaims2 = context.claims_C2.split('#||');
+		if (ArrClaims[0] != "")
+			iterator=ArrClaims.length-1; i=-1
+			while ((i++)<iterator)
+				clTypeID=claimsTypeID[i]
+				ArrView[i] = 
+					Claims: ArrClaims[i].split('#|'),
+					Claims2: ArrClaims2[i].split('#|')
+				#Claims: 0-ClaimStatus,1-No,2-ClaimType(text),3-Vehicle,4-Insurer(text),5-lossAmount
+				#Claims2: 0-ClaimID, 1-VehicleID, 2-InsPolicyID, 3-InsuranceClaimAmount, 4-InsurerClaimID, 5-IsTotalLoss, 6-IsInjuredPersons, 7-Days, 8-PerDay	
+				objView[i] = Em.Object.create(
+					finished: (if(ArrClaims[i][0] == "5") then true else false), no: ArrView[i].Claims[1], type: ArrView[i].Claims[2]
+					autoNo: ArrView[i].Claims[3], insurer: ArrView[i].Claims[4], loss:ArrView[i].Claims[5] # tmpAccident_Claims.cshtml naudos totalLoss jei jo nėra, tada loss
+					totalLoss:(if (ArrView[i].Claims2[2]!="0" and ArrView[i].Claims2[6] and clTypeID=="2" and not isNaN(parseFloat(ArrView[i].Claims2[3]))) then +ArrView[i].Claims[5]+ +ArrView[i].Claims2[3] else 0) # if InsPolicyID!=0 and IsInjuredPersons and clTypeID==2 and InsuranceClaimAmount is number then lossAmount+InsuranceClaimAmount else lossAmount
+					Claims2: ArrView[i].Claims2, claimStatus:ArrClaims[i][0], claimID: parseInt(ArrView[i].Claims2[0],10)
+					accidentID: context.iD, accidentDate: context.date
+				)
+		objView:objView,accidentID:context.iD
+	setContent:(context)->
+		obj=@getContent(context)
+		@set("content", obj.objView).set("accidentID", obj.accidentID)
+	setContent_afterEdit:(p)->#accidentID:,claimID:,Action:,cancelCtrl:
+		accident=App.accidentsController.content.findProperty('iD',p.accidentID);#Surandam ivykio irasa
+		objView=@getContent(accident).objView; #Gaunam visus ivykio claims'us
+		if p.Action=="Add"
+			@content.pushObject(objView[objView.length-1])#Pridedant visada bus paskutinis
+		else
+			newClaim=objView.findProperty("claimID",p.claimID)
+			@content.findProperty("claimID",p.claimID).updateTo(newClaim)
+		p.cancelCtrl.trigger('click'); false
 )
-# App.newClaimController = Em.ResourceController.create(
-	# # tableName: "?"
-	# #    setContent: function (ArrView) {
-	# #    	@set("content", ArrView)
-	# #    }
-# )
 App.sidePanelController = Em.ResourceController.create(
 	chkHandlerToggle: (id,option,controller)->		
 		$(id).buttonset().on("click",(e)->

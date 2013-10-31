@@ -1,5 +1,5 @@
 
-`var w=window, App=w.App, Em=w.Em, oGLOBAL=w.oGLOBAL, oDATA=w.oDATA, oCONTROLS=w.oCONTROLS, MY=w.MY`
+`var w=window, App=w.App, Em=w.Em, oGLOBAL=w.oGLOBAL, oDATA=w.oDATA, oCONTROLS=w.oCONTROLS, MY=w.MY;`
 App.reportsStart=()->
 	arrObj=["tblInsurers","proc_InsPolicies","proc_Vehicles","tblClaimTypes","proc_Accidents"]
 	arrNames=["insurers","policies","vehicles","claimTypes","accidents"]

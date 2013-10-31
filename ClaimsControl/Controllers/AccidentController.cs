@@ -2,7 +2,6 @@
 using CC.Classes;
 using CC.Models;
 using System;
-using CCService;
 
 namespace CC.Controllers {
 
@@ -38,8 +37,8 @@ namespace CC.Controllers {
 
       [HttpPost]
       public JsonResult AccidentsList(string ver) {
-			warnings w = new warnings();
-			w.sendWarnigns();
+			//warnings w = new warnings();
+			//w.sendWarnigns();
 
          Repositories_Main acc = new Repositories_Main();
 			return Json(

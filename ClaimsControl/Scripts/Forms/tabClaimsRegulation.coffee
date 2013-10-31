@@ -1,5 +1,5 @@
 
-`var w=window, App=w.App, Em=w.Em, oGLOBAL=w.oGLOBAL, oDATA=w.oDATA, oCONTROLS=w.oCONTROLS, MY=w.MY`
+`var w=window, App=w.App, Em=w.Em, oGLOBAL=w.oGLOBAL, oDATA=w.oDATA, oCONTROLS=w.oCONTROLS, MY=w.MY;`
 # App.claimsRegulationStart=()-> visa tai vyksta tabClaims.coffee - nes jis issaukiamas po paspaudimo
 	# oDATA.execWhenLoaded(["proc_Activities","tblActivityTypes","tblUsers"], ()->
 		# actTypes=oDATA.GET("tblActivityTypes").emData.map((t)->t.typeID=t.iD; delete t.iD; return t;)

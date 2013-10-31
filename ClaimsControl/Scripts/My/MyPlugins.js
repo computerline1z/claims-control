@@ -11,6 +11,13 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  */
+ $.fn.getVal=function() {
+	return this.val().replace(App.userData.currency,'').trim();
+ };
+ $.fn.setVal=function(val) {
+	this.val(val+' '+App.userData.currency);
+ };
+
 ﻿(function($,len,createRange,duplicate){
 	$.fn.caret=function(options,opt2){
 		var start,end,t=this[0],browser=$.browser.msie;
@@ -80,116 +87,147 @@
 })(jQuery,"length","createRange","duplicate");
 (function($){
 $.widget("ui.inputControl", {
-_init : function() {//type:Date,Integer,Decimal
-	var self = this;
-	var fnHandlers = {
-	fnDecimal:function(p){
-		if  (p.text.slice(-3).slice(0,1)==='.'){p.e.preventDefault();return;}
-		if (isNaN(p.str)){
-			if(p.text.indexOf('.')<0){
-				p.text=p.text.replaceAt(".",p.pos);
-				p.input.val(p.text).caret(p.pos+1);
-			}
-			p.e.preventDefault();
-		}
-	},fnDecimalBlur:function(p){
-	},fnInteger:function(p){
-		if (isNaN(p.str)){p.e.preventDefault();}
-	},fnIntegerBlur:function(p){
-	},fnTime:function(p){//{input:input,text:text,len:len,key:key,str:str,pos:pos,opts:opts,e:e}
-		if (isNaN(p.str)){
-			var pos=p.pos,text=p.text;
-			if (pos===p.len&&(pos===2||pos===1)){
-				if (pos===1){text='0'+text;pos++;} 
-				text=text.replaceAt(":",pos);
-				p.input.val(text).caret(pos+1);
-			}
-			p.e.preventDefault();
-		}else{
-			//Numeri praleidziam jei pozicija iki 4
-			if (p.pos>4){p.e.preventDefault();}
-		}				
-	},fnNoBlur:function(p){
-		var  newVal=/^\d+\.?\d*/.exec(p.text);
-		//if (!newVal){return false;}
-		newVal=newVal[0];
-		if (newVal.slice(-1)==='.'){newVal+="0";}//Jei gale taskas dadedu nuli
-		p.input.val(newVal);
-	},fnTimeBlur:function(p){
-		var newVal, match=p.input.val().match(/(2[0-3]|[01]?\d)?(:)?([0-5]?\d)/);//['visas' 0,'hh' 1,':' 2,'mm' 3]
-		if (match) {
-			newVal=match[0];
-			if (match[2]){//Jei yra ':'
-				if (match[3].length===1){newVal=newVal.replace(":",":0");}//'01:1' -> '01:01'
-			} else {
-				if(newVal.length===1){newVal="0"+newVal;}
-				newVal=newVal+":00";
-			}
-		} else { newVal="00:00";}		
-		p.input.val(newVal);				
-	},fnDate:function(p){
-		if (isNaN(p.str)){
-			//Keiciam i taska
-			var text=p.text,pos=p.pos,len=p.len,no=parseInt(text,10);
-			console.log("position: "+pos);
-			if (pos===len&&$.inArray(pos,[2,6,4,7])>-1){//jei paskutinis ir tam tikrose pozicijos keiciam i taska
-				if (pos===2){
-					if (no<30){text='20'+text;}else{text='19'+text;}
-					pos=4;
-				} else if  (pos===6){
-					text=text.replace('.','.0'); pos++;						
-				}
-				text=text.replaceAt(".",pos);
-				p.input.val(text).caret(pos+1);
-			}
-			p.e.preventDefault();
-		}else{
-			//Numeri praleidziam jei pozicija iki 9
-			if (p.pos>9){p.e.preventDefault();}
-		}
-	},fnDateBlur:function(p){//{input:input,text:text,len:len,key:key,str:str,pos:pos,opts:opts,e:e}
-			var valSet=p.opts.Validity;
-			if (p.len===9){p.text=p.text.slice(0,8)+'0'+p.text.slice(-1);p.input.val(p.text);}//Paskutini 2011.01.1 -> 2011.01.01
-			var fncheckDate=function(){
-				var dateFormat=App.userData.dateFormat,inputDate=moment(p.text,dateFormat),error="Netinkamas datos formatas. Pakeiskite į tokį "+dateFormat;
-				p.input.css("border-color","").data("notValid",false).parent().find("div.validity-tooltip").remove();
-				if (inputDate){if (inputDate.isValid()){error=""; }}
-				if (!error){
-					var tMsg="Data negali būt didesnė už šiandieną - ";
-					var fnGetDate=function(date){
-						return  (date.toLocaleLowerCase()==="today")?moment():moment(date,dateFormat)
+	_init : function() {//type:Date,Integer,Decimal
+		var self = this;
+		var fnHandlers = {
+			fnDecimal:function(p){
+				if  (p.text.slice(-3).slice(0,1)==='.'){p.e.preventDefault();return;}
+				if (isNaN(p.str)){
+					if(p.text.indexOf('.')<0){
+						p.text=p.text.replaceAt(".",p.pos);
+						p.input.val(p.text).caret(p.pos+1);
 					}
-					if (valSet.lessOf){
-						var s=valSet.lessOf, date=fnGetDate(s.date);
-						if  (date.diff(inputDate,"hours")<0){error=((s.msg)?s.msg:tMsg)+date.format(dateFormat);}
-					}
-					if (valSet.moreOf&&!error){
-						var s=valSet.moreOf, date=fnGetDate(s.date);
-						if  (date.diff(inputDate,"hours")>23){error=((s.msg)?s.msg:tMsg.replace("didesnė","mažesnė"))+date.format(dateFormat);}
-						console.log("moreOf dif: "+date.diff(inputDate,"hours"));
-					}	
+					p.e.preventDefault();
 				}
-				if (error) {p.input.css("border-color","#eb5a44").data("notValid",true).parent().append("<div class='validity-tooltip'>"+error+"</div>");} //input.focus();}
-			}
-			//jei redaguoja inputa ir spaudzia ok, tada veiks pirmas, jei iš datepickerio, tada antras
-			if (valSet){ fncheckDate(); Em.run.later(this,function(){fncheckDate();},300);}//Validity: lessOf:{date:date,msg:msg}, moreOf:{date:date,msg:msg}
-		}			
-	}
-	var fnMain=function(e){
-		var blur=((e.type==='blur')?'Blur':''), input=$(e.target),text=input.val(),len=text.length,key=e.charCode,str=String.fromCharCode(e.keyCode),pos=input.caret().start,opts=this.opts,e=e;
-		if (!blur){//if keypress
-			var sel=input.caret();//console.log("sel.start:"+sel.start+", sel.end:"+sel.end);
-			if (sel.start!==sel.end){//Išmetam kas buvo užselektinta  //console.log(text.slice(0,sel.start));console.log(text.slice(sel.end));
-				text=text.slice(0,sel.start)+text.slice(sel.end);
-				pos=sel.start;
+			},fnDecimalBlur:function(p){
+			},fnInteger:function(p){
+				if (isNaN(p.str)){p.e.preventDefault();}
+			},fnIntegerBlur:function(p){
+			},fnTime:function(p){//{input:input,text:text,len:len,key:key,str:str,pos:pos,opts:opts,e:e}
+				if (isNaN(p.str)){
+					var pos=p.pos,text=p.text;
+					if (pos===p.len&&(pos===2||pos===1)){
+						if (pos===1){text='0'+text;pos++;} 
+						text=text.replaceAt(":",pos);
+						p.input.val(text).caret(pos+1);
+					}
+					p.e.preventDefault();
+				}else{
+					//Numeri praleidziam jei pozicija iki 4
+					if (p.pos>4){p.e.preventDefault();}
+				}				
+			},fnNoBlur:function(p){
+				var  newVal=/^\d+\.?\d*/.exec(p.text);
+				//if (!newVal){return false;}
+				newVal=newVal[0];
+				if (newVal.slice(-1)==='.'){newVal+="0";}//Jei gale taskas dadedu nuli
+				p.input.val(newVal);
+			},fnTimeBlur:function(p){
+				var newVal, match=p.input.val().match(/(2[0-3]|[01]?\d)?(:)?([0-5]?\d)/);//['visas' 0,'hh' 1,':' 2,'mm' 3]
+				if (match) {
+					newVal=match[0];
+					if (match[2]){//Jei yra ':'
+						if (match[3].length===1){newVal=newVal.replace(":",":0");}//'01:1' -> '01:01'
+					} else {
+						if(newVal.length===1){newVal="0"+newVal;}
+						newVal=newVal+":00";
+					}
+				} else { newVal="00:00";}		
+				p.input.val(newVal);				
+			},fnDate:function(p){
+				if (isNaN(p.str)){
+					//Keiciam i taska
+					var text=p.text,pos=p.pos,len=p.len,no=parseInt(text,10);
+					console.log("position: "+pos);
+					if (pos===len&&$.inArray(pos,[2,6,4,7])>-1){//jei paskutinis ir tam tikrose pozicijos keiciam i taska
+						if (pos===2){
+							if (no<30){text='20'+text;}else{text='19'+text;}
+							pos=4;
+						} else if  (pos===6){
+							text=text.replace('.','.0'); pos++;						
+						}
+						text=text.replaceAt(".",pos);
+						p.input.val(text).caret(pos+1);
+					}
+					p.e.preventDefault();
+				}else{
+					//Numeri praleidziam jei pozicija iki 9
+					if (p.pos>9){p.e.preventDefault();}
+				}
+			},fnDateBlur:function(p){//{input:input,text:text,len:len,key:key,str:str,pos:pos,opts:opts,e:e}
+					var valSet=p.opts.Validity;
+					//if (p.len===9){p.text=p.text.slice(0,8)+'0'+p.text.slice(-1);p.input.val(p.text);}//Paskutini 2011.01.1 -> 2011.01.01
+					var parts=p.text.split('.');//,today=oGLOBAL.date.getTodayString();todayParts=today.split('.'),add='';
+					if (parts.length===3){
+						[1,2].forEach(function(i) {
+							if  (parts[i].length===1){parts[i]='0'+parts[i];}
+						});
+						if  (parts[0].length===2){parts[0]=((parts[0]>30)?'20':'19')+parts[0];}
+						p.input.val(parts.join('.'));
+					}
+					var fncheckDate=function(){
+						var dateFormat=App.userData.dateFormat,inputDate=moment(p.text,dateFormat),error="Netinkamas datos formatas. Pakeiskite į tokį "+dateFormat;
+						p.input.css("border-color","").data("notValid",false).parent().find("div.validity-tooltip").remove();
+						if (inputDate){if (inputDate.isValid()){error=""; }}
+						if (!error){
+							var tMsg="Data negali būt didesnė už šiandieną - ";
+							var fnGetDate=function(date){
+								return  (date.toLocaleLowerCase()==="today")?moment():moment(date,dateFormat)
+							}
+							if (valSet.lessOf){
+								var s=valSet.lessOf, date=fnGetDate(s.date);
+								if  (date.diff(inputDate,"hours")<0){error=((s.msg)?s.msg:tMsg)+date.format(dateFormat);}
+							}
+							if (valSet.moreOf&&!error){
+								var s=valSet.moreOf, date=fnGetDate(s.date);
+								if  (date.diff(inputDate,"hours")>23){error=((s.msg)?s.msg:tMsg.replace("didesnė","mažesnė"))+date.format(dateFormat);}
+								console.log("moreOf dif: "+date.diff(inputDate,"hours"));
+							}	
+						}
+						if (error) {p.input.css("border-color","#eb5a44").data("notValid",true).parent().append("<div class='validity-tooltip'>"+error+"</div>");} //input.focus();}
+					}
+					//jei redaguoja inputa ir spaudzia ok, tada veiks pirmas, jei iš datepickerio, tada antras
+					if (valSet){ Em.run.later(this,function(){fncheckDate();},300);}//Validity: lessOf:{date:date,msg:msg}, moreOf:{date:date,msg:msg}
+			},fnMoney: function(p) {
+				this.fnDecimal(p);
+				console.log("fnMoney");
+				console.log(p);
+			},fnMoneyBlur: function(p) {
+				this.fnNoBlur(p);
+				p.input.val(p.text+' '+p.opts.currency)
+				console.log("fnMoneyBlur");
+				console.log(p);
 			}
 		}
-		var fnExec='fn'+this.opts.type+blur;
-		this.fnHandlers[fnExec]({input:input,text:text,len:len,key:key,str:str,pos:pos,opts:opts,e:e});
-	}
-	var context={opts:this.options,fnHandlers:fnHandlers},proxy=$.proxy(fnMain, context);
-	$(this.element).on('keypress',proxy).on('blur',proxy);
-},
+		var fnMain=function(e){
+			if (e.type==='change'){
+				alert($(e.target).val());
+			}else if (e.type==='focus'){
+				if (this.opts.currency){
+					var t=$(e.target);t.val(t.val().replace(' '+this.opts.currency,''));
+					return false;
+				}
+			}else{
+				var blur=((e.type==='blur')?'Blur':''), input=$(e.target),text=input.val(),len=text.length,key=e.charCode,str=String.fromCharCode(e.keyCode),pos=input.caret().start,opts=this.opts,e=e;
+				if(e.type==="blur"&&!input.val()){return false;}
+				if (e.type==='keypress'){//if keypress
+					var sel=input.caret();//console.log("sel.start:"+sel.start+", sel.end:"+sel.end);
+					if (sel.start!==sel.end){//Išmetam kas buvo užselektinta  //console.log(text.slice(0,sel.start));console.log(text.slice(sel.end));
+						text=text.slice(0,sel.start)+text.slice(sel.end);
+						pos=sel.start;
+					}
+				}
+				var fnExec='fn'+this.opts.type+blur;
+				this.fnHandlers[fnExec]({input:input,text:text,len:len,key:key,str:str,pos:pos,opts:opts,e:e});
+			}
+		}
+		var context={opts:this.options,fnHandlers:fnHandlers},proxy=$.proxy(fnMain, context),e=this.element;
+		if (this.options.type==="Money"){
+			if (e.val().length){ e.val(e.val()+" "+App.userData.currency);}
+			context.opts.currency=App.userData.currency;  e.on('focus',proxy);
+		}
+		e.on('keypress',proxy).on('blur',proxy).on('change',proxy);
+	},
 	options: {delay: 500}
 });
 })(jQuery);

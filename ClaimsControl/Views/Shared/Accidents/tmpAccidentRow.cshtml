@@ -9,7 +9,7 @@
 {{#if cNo_NotF}}
 	<div class="td w28pr">
 		<div><b>{{shortNote}}</b></div>  
-		<div class="text-system-red">{{lossSum}} Lt</div>
+		<div class="text-system-red">{{lossSum}} {{unbound App.userData.currency}}</div>
 	</div>
 	<div class="td w15pr">
 		<div>Žalų skaičius: {{cNo_All}}</div> 
@@ -18,7 +18,7 @@
 {{else}}
 	<div class="td w28pr">
 		<div><b>{{shortNote}}</b></div>  
-		<div>{{lossSum}} Lt</div>
+		<div>{{lossSum}} {{unbound App.userData.currency}}</div>
 	</div>
 	<div class="td w15pr">
 		<div>Žalų skaičius: {{cNo_All}}</div> 

@@ -126,7 +126,7 @@
       claim.activities.forEach(function(a) {
         var obj;
 
-        if (a.typeID === 3) {
+        if (a.typeID === 3 && a.amount === 0) {
           obj = {
             date: a.date,
             user: fnGetUser.call(ctrl, a.toID),

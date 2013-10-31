@@ -196,13 +196,6 @@
       <Column Name="OrderNo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
-  <Table Name="dbo.tblCurrencies" Member="tblCurrencies">
-    <Type Name="tblCurrency">
-      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Name" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
-      <Association Name="tblCurrency_tblAccount" Member="tblAccounts" ThisKey="ID" OtherKey="CurrencyID" Type="tblAccount" />
-    </Type>
-  </Table>
   <Table Name="dbo.tblTimeZones" Member="tblTimeZones">
     <Type Name="tblTimeZone">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -262,8 +255,8 @@
       <Association Name="tblAccount_tblDriver" Member="tblDrivers" ThisKey="ID" OtherKey="AccountID" Type="tblDriver" />
       <Association Name="tblAccount_tblUser" Member="tblUsers" ThisKey="ID" OtherKey="AccountID" Type="tblUser" />
       <Association Name="tblCountry_tblAccount" Member="tblCountry" ThisKey="CountryID" OtherKey="ID" Type="tblCountry" IsForeignKey="true" />
-      <Association Name="tblCurrency_tblAccount" Member="tblCurrency" ThisKey="CurrencyID" OtherKey="ID" Type="tblCurrency" IsForeignKey="true" />
       <Association Name="tblTimeZone_tblAccount" Member="tblTimeZone" ThisKey="TimeZoneID" OtherKey="ID" Type="tblTimeZone" IsForeignKey="true" />
+      <Association Name="tblCurrency_tblAccount" Member="tblCurrency" ThisKey="CurrencyID" OtherKey="ID" Type="tblCurrency" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.tblLanguage" Member="tblLanguages">
@@ -501,6 +494,14 @@
       <Association Name="tblClaimType_tblClaim" Member="tblClaimType" ThisKey="ClaimTypeID" OtherKey="ID" Type="tblClaimType" IsForeignKey="true" />
       <Association Name="tblInsPolicy_tblClaim" Member="tblInsPolicy" ThisKey="InsPolicyID" OtherKey="ID" Type="tblInsPolicy" IsForeignKey="true" />
       <Association Name="tblVehicle_tblClaim" Member="tblVehicle" ThisKey="VehicleID" OtherKey="ID" Type="tblVehicle" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tblCurrencies" Member="tblCurrencies">
+    <Type Name="tblCurrency">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="ShortName" Type="System.String" DbType="VarChar(3) NOT NULL" CanBeNull="false" />
+      <Association Name="tblCurrency_tblAccount" Member="tblAccounts" ThisKey="ID" OtherKey="CurrencyID" Type="tblAccount" />
     </Type>
   </Table>
   <Function Name="dbo.proc_Vehicles" Method="proc_Vehicles">
