@@ -1,0 +1,562 @@
+@import "normalize.less";
+@import "gridpak.less";
+
+// LESS MIXINS --------------------------------------
+
+	// OPACITY
+	.opacity(@opacity) {
+		opacity: @opacity;
+		// IE8 filter
+		@opacity-ie: (@opacity * 100);
+		filter: ~"alpha(opacity=@{opacity-ie})";
+	}
+
+	.clearfix(){
+
+		&:before,
+		&:after {
+		    content:"";
+		    display:table;
+		}
+
+		&:after {
+		    clear:both;
+		}
+	}
+//
+
+// COLORS -------------------------------------------
+	@white:            #fff;
+	@blueGray:         #6c798a;
+	@blueGrayLight:    #c0c6cd;
+	@blueGrayLightest: #f3f6f7;
+	@blueDark:         #131e2d;
+	@blueDarkLight:    #2e3845;
+	@blueDarkLighter: #424b57;
+	@orange:           #eb5a44;
+	@cyan:             #00d3d3;
+	@brown:            #5b5757;
+	@brownDark:        #3f3b3b;
+	@brownLight:       #cac3c0;
+//
+
+// SCAFFOLDING --------------------------------------
+	body {
+		font: 12px Arial, Helvetica, sans-serif;
+		line-height: 1.2;
+		color: @blueDarkLighter;
+	}
+
+	h1, h2, h3, h4, h5, h6 {
+		&, & a {
+			font-weight: normal;
+		}
+	}
+
+	h3 {
+		margin-top: -2px;
+		margin-bottom: 23px;
+		font-size: 20px;
+	}
+
+	p {
+		margin-top: 19px;
+		margin-bottom: 0;
+
+		&:first-of-type {
+			margin-top: 0;
+		}
+	}
+
+	a {
+		color: @blueGray;
+		text-decoration: none;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+
+	dl {
+		font-size: 13px;
+		margin: 0;
+		.clearfix();
+
+		dt, dd {
+			float: left;
+			padding-bottom: 5px;
+		}
+
+		dt {
+			clear: left;
+			width: 76px;
+		}
+
+		dd {
+			margin-left: 10px;
+		}
+	}
+
+	.dl-lightblue-white {
+		dt {
+			.text-white;
+			.opacity30;
+		}
+
+		dd {
+			.text-white;
+		}
+	}
+//
+
+// GLOBAL OBJECTS -----------------------------------
+
+	// CLEARFIX CLASS + CLEARFIX FOR GRID ROWS
+	.clearfix:before,
+	.clearfix:after,
+	.row:before,
+	.row:after {
+	    content:"";
+	    display:table;
+	}
+	.clearfix:after,
+	.row:after {
+	    clear:both;
+	}
+//
+
+// BACKGROUNDS ACCORDING TO COLOR SET ---------------
+	.bg-white {
+		background: @white;
+	}
+
+	.bg-blueGray {
+		background: @blueGray;
+	}
+
+	.bg-blueGrayLight {
+		background: @blueGrayLight;
+	}
+
+	.bg-blueGrayLightest {
+		background: @blueGrayLightest;
+	}
+
+	.bg-blueDark {
+		background: @blueDark;
+	}
+
+	.bg-blueDarkLight {
+		background: @blueDarkLight;
+	}
+
+	.bg-blueDarkLighter {
+		background: @blueDarkLighter;
+	}
+
+	.bg-orange {
+		background: @orange;
+	}
+
+	.bg-cyan {
+		background: @cyan;
+	}
+
+	.bg-brown {
+		background: @brown;
+	}
+
+	.brownDark {
+		background: @brownDark;
+	}
+
+	.bg-brownLight {
+		background: @brownLight;
+	}
+//
+
+// TEXT COLORS ACCORDING TO COLOR SET ---------------
+	.text-white {
+		&,
+		a&:hover {
+			color: @white;
+		}
+	}
+
+	.text-blueGray {
+		&,
+		a&:hover {
+			color: @blueGray;
+		}
+	}
+
+	.text-blueGrayLight {
+		&,
+		a&:hover {
+			color: @blueGrayLight;
+		}
+	}
+
+	.text-blueGrayLightest {
+		&,
+		a&:hover {
+			color: @blueGrayLightest;
+		}
+	}
+
+	.text-blueDark {
+		&,
+		a&:hover {
+			color: @blueDark;
+		}
+	}
+
+	.text-blueDarkLight {
+		&,
+		a&:hover {
+			color: @blueDarkLight;
+		}
+	}
+
+	.text-blueDarkLighter {
+		&,
+		a&:hover {
+			color: @blueDarkLighter;
+		}
+	}
+
+	.text-orange {
+		&,
+		a&:hover {
+			color: @orange;
+		}
+	}
+
+	.text-cyan {
+		&,
+		a&:hover {
+			color: @cyan;
+		}
+	}
+
+	.text-brown {
+		&,
+		a&:hover {
+			color: @brown;
+		}
+	}
+
+	.text-brownDark {
+		&,
+		a&:hover {
+			color: @brownDark;
+		}
+	}
+
+	.text-brownLight {
+		&,
+		a&:hover {
+			color: @brownLight;
+		}
+	}
+//
+
+// LAYOUT -------------------------------------------
+	.wrapper {
+		//width: 1024px;
+		margin: 0 auto;
+	}
+
+	// MODIFIED 4 AND 8 COLUMNS
+	.c-4-8 {
+		width: 33.3%; // or 341px
+		padding-right: 0;
+		float: left;
+		padding-bottom: 29px;
+
+		div {
+			padding-left: 87px + 30px;
+
+			&:first-child {
+				float: left;
+				width: 87px;
+				margin-right: -100%;
+				padding-left: 0 + 30px;
+			}
+		}
+
+		h4 {
+			&, & a {
+				color: @orange;
+				margin-top: -3px;
+				margin-bottom: 5px;
+				font-size: 15px;
+			}
+		}
+
+		p {
+			line-height: 1.25;
+		}
+	}
+
+	// FIXED LEFT AND FLUID CONTENT COLUMNS
+
+	.left_column {
+		float: left;
+		width: 341px;
+		margin-right: -100%;
+	}
+
+	.content_column {
+		float: left;
+		margin-left: 341px;
+
+		h3 {
+			margin-bottom: 18px;
+		}
+	}
+
+//
+
+// PADDINGS -----------------------------------------
+
+	.pad30 {
+		padding: 30px;
+	}
+
+	.pad-t3 {
+		padding-top: 3px;
+	}
+
+	.pad-t13 {
+		padding-top: 13px;
+	}
+
+	.pad-t14 {
+		padding-top: 14px;
+	}
+
+	.pad-t15 {
+		padding-top: 15px;
+	}
+
+	.pad-t33 {
+		padding-top: 33px;
+	}
+
+	.pad-t60 {
+		padding-top: 60px;
+	}
+
+	.pad-r30 {
+		padding-right: 30px;
+	}
+
+	.pad-b2 {
+		padding-bottom: 2px;
+	}
+
+	.pad-b19 {
+		padding-bottom: 19px;
+	}
+
+	.pad-b27 {
+		padding-bottom: 27px;
+	}
+
+	.pad-b30 {
+		padding-bottom: 30px;
+	}
+
+	.pad-b42 {
+		padding-bottom: 42px;
+	}
+
+	.pad-b60 {
+		padding-bottom: 60px;
+	}
+
+	.pad-b108 {
+		padding-bottom: 108px;
+	}
+
+	.pad-l12 {
+		padding-left: 12px;
+	}
+
+	.pad-l15 {
+		padding-left: 15px;
+	}
+
+	.pad-b0 {
+		padding-bottom: 0;
+	}
+
+	.pad-l0 {
+		padding-left: 0;
+	}
+//
+
+// MARGINS ------------------------------------------
+	.margin0 {
+		margin: 0;
+	}
+
+	.mar-b0 {
+		margin-bottom: 0;
+	}
+//
+
+// WIDTHS -------------------------------------------
+	.width31pr {
+		width: 31%;
+	}
+	.width69pr {
+		width: 69%;
+	}
+
+	.width-auto {
+		width: auto;
+	}
+//
+
+// FLOATS -------------------------------------------
+	.left {
+		float: left;
+	}
+	.right {
+		float: right;
+	}
+	.no-float {
+		float: none;
+	}
+//
+
+// FONT ---------------------------------------------
+
+	.font13 {
+		font-size: 13px;
+	}
+
+	.font15 {
+		font-size: 15px;
+	}
+
+	.font16 {
+		font-size: 16px;
+	}
+//
+
+
+// BORDERS ---------------------------------------------
+
+	.border-top-after-35transparent {
+		position: relative;
+
+		&:after {
+			content: "";
+			display: block;
+			width: 100%;
+			height: 1px;
+			background: @white;
+			opacity: 0.35;
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+	}
+//
+
+// LISTS --------------------------------------------
+
+	ul {
+		li {
+
+			padding-top: 3px;
+
+			&:first-child {
+				padding-top: 0;
+			}
+
+			&, & a {
+				color: rgba(255, 255, 255, 0.3);
+				&.css-js-active {
+					color: @white;
+				}
+			}
+		}
+	}
+
+	.no-list-style {
+		list-style: none;
+		padding-left: 0;
+	}
+
+	.horizontal-list {
+		padding-left: 14px;
+		.clearfix();
+
+		li {
+			display: block;
+			position: relative;
+			float: left;
+			padding: 0;
+			padding-left: 19px;
+
+			&:before {
+				content: "/";
+				.text-white;
+				.opacity30;
+				position: absolute;
+				top: 0;
+				left: 7px;
+			}
+
+
+
+			&:first-child {
+				padding-left: 0;
+
+				&:before {
+					content: "";
+					display: none;
+				}
+			}
+		}
+	}
+//
+
+// DISPLAY ------------------------------------------
+	.block {
+		display: block;
+	}
+	.inline-block {
+		display: inline-block;
+	}
+//
+
+// OVERFLOW -----------------------------------------
+	.no-overflow {
+		overflow: hidden;
+	}
+//
+
+// ALIGNS
+	.valign-top {
+		vertical-align: top;
+	}
+
+	.valign-middle {
+		vertical-align: middle;
+	}
+
+	.text-center {
+		text-align: center;
+	}
+//
+
+// OPACITY
+	.opacity30 {
+		.opacity(0.3);
+	}
+//
