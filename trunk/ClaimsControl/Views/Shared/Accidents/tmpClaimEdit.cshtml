@@ -1,42 +1,39 @@
-﻿{{#with App.claimEditController.claim}} 
+﻿{{#with content}} 
 {{#unless newClaim}}
 	<div id='divClaimCard_Content' class="js-frm container centerBlock w90pr" data-ctrl='{"id":"{{unbound iD}}","NewRec":"0","Source":"proc_Claims","TypeID":"{{unbound typeID}}"}'>
 {{else}}
 	<div id='divNewClaimCard_Content' class="container centerBlock w90pr">@*data-ctrl yra motininej divNewClaimCard*@
 {{/unless}}
-{{#compare typeID "===" "6"}} 
-	<div class='left w45pr'>
-		{{updatableField vehicleID labelType="Top" classes="wrapper:'leftBlock'" }}
-		{{updatableField lossAmount attr="DISABLED" id="LossAmount" classes="wrapper:'leftBlock disabled', input:'not-editable' " labelType="Left" colLabels="LossAmount_forIdleTime"}}@*(Math.round((Claim.days*Claim.PerDay*100))/100)*@
-	</div>
+		{{#compare typeID "===" "6"}} 
+			<div class='left w45pr'>
+				{{updatableField vehicleID labelType="Top" classes="wrapper:'leftBlock'" }}
+				{{updatableField lossAmount attr="DISABLED" id="LossAmount" classes="wrapper:'leftBlock disabled', input:'not-editable js-lossAmount' " labelType="Left" colLabels="LossAmount_forIdleTime"}}@*(Math.round((Claim.days*Claim.PerDay*100))/100)*@
+			</div>
 
-	<div class='right w45pr'>
-		{{updatableField days labelType="Left" id="claimEditDays" classes="wrapper:'leftBlock'"}}
-		{{updatableField perDay labelType="Left" id="claimEditPerDay" classes="wrapper:'leftBlock'"}}
-	</div>
-{{else}}
-
-	<div class='left w45pr'>
-		{{updatableField vehicleID labelType="Top" classes="wrapper:leftBlock'" Editable="{\"EditThis\":true}" }}
-		{{updatableField lossAmount  id="LossAmount" labelType="Top" classes="wrapper:'leftBlock'" }}
-		{{updatableField insPolicyID id="InsuredClaimList" labelType="Top" classes="wrapper:'js-toggle leftBlock'" List="{\"Source\":\"proc_InsPolicies_forThisAccident\",\"tblUpdate\":\"tblInsPolicies\",\"excludeFromList\":[0]}"}}
-	</div>
-
-
-	<div class='right w45pr'>
-		<div class="ExtendIt leftBlock checkbox-label-top">
-			<label id="NotInsuredClaim">{{view Em.Checkbox checkedBinding="App.claimEditController.claim.noInsurance"}} Neapdrausta</label>
-		</div>
-		{{#compare typeID "===" "1"}} 
-			{{updatableField isTotalLoss labelType="Top" classes="wrapper:'js-toggle leftBlock'"}}
+			<div class='right w45pr'>
+				{{updatableField days labelType="Left" classes="wrapper:'leftBlock',input:'js-claimEditDays'"}}
+				{{updatableField perDay labelType="Left" classes="wrapper:'leftBlock',input:'js-claimEditPerDay'"}}
+			</div>
+		{{else}}
+			<div class='left w45pr'>
+				{{updatableField vehicleID labelType="Top" classes="wrapper:leftBlock'" Editable="{\"EditThis\":true}" }}
+				{{updatableField lossAmount labelType="Top" classes="wrapper:'leftBlock', input:'js-lossAmount'" }}
+				{{updatableField insPolicyID labelType="Top" classes="wrapper:'js-toggle leftBlock', input:'js-InsuredClaimList'" List="{\"Source\":\"proc_InsPolicies_forThisAccident\",\"tblUpdate\":\"tblInsPolicies\",\"excludeFromList\":[0]}"}}
+			</div>
+			<div class='right w45pr'>
+				<div class="ExtendIt leftBlock checkbox-label-top">	
+			<label class="js-NotInsuredClaim">{{view Em.Checkbox checkedBinding="noInsurance"}}Neapdrausta</label>
+				</div>
+				{{#compare typeID "===" "1"}} 
+					{{updatableField isTotalLoss labelType="Top" classes="wrapper:'js-toggle leftBlock'"}}
+				{{/compare}}
+				{{#compare typeID "===" "2"}} 
+					{{updatableField isInjuredPersons labelType="Top" classes="wrapper:'js-toggle leftBlock checkbox-label-top', input:',input:'js-IsInjuredPersons'"}}
+				{{/compare}}
+				{{updatableField insuranceClaimAmount labelType="Top" classes="wrapper:'js-toggle leftBlock',input:'js-InsuranceClaimAmount'"}}
+				{{updatableField insurerClaimID labelType="Top" classes="wrapper:'js-toggle leftBlock'"}}
+			</div>
 		{{/compare}}
-		{{#compare typeID "===" "2"}} 
-			{{updatableField isInjuredPersons id="IsInjuredPersons" labelType="Top" classes="wrapper:'js-toggle leftBlock checkbox-label-top'"}}
-		{{/compare}}
-		{{updatableField insuranceClaimAmount id="InsuranceClaimAmount" labelType="Top" classes="wrapper:'js-toggle leftBlock'"}}
-		{{updatableField insurerClaimID labelType="Top" classes="wrapper:'js-toggle leftBlock'"}}
 	</div>
-{{/compare}}
-</div>
 {{view App.FormBottomView target="App.claimEditController"}}
 {{/with}}

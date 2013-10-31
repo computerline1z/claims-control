@@ -97,7 +97,8 @@ namespace CC.Models {
 				UserData.UserID,
 				UserData.UserName,
 				UserData.DocsPath,
-				"YYYY.MM.DD"
+				"YYYY.MM.DD",
+				(from a in dc.tblAccounts where a.ID==UserData.AccountID select a.tblCurrency.ShortName).FirstOrDefault()
             }};
 			object[] Cols ={
             new { FName = "Account"},//0
@@ -105,28 +106,12 @@ namespace CC.Models {
             new { FName = "UserID"},//1
             new { FName = "UserName"},//1
 				new { FName = "DocsPath"},//1
-				new { FName = "DateFormat"},//1
+				new { FName = "DateFormat"},
+				new { FName = "Currency"}
             }; JSON.Cols = Cols;
 			//JSON.Config = new { Controler = "Main", tblUpdate = "tblDocsInAccidents" };
 			return JSON;
 		}
-		//public jsonArrays GetJSON_tblDocsInAccidents() {
-		//   jsonArrays JSON = new jsonArrays();
-		//   JSON.Data = from d in dc.tblDocsInAccidents join  a in dc.tblAccidents on d.AccidentID equals a.ID
-		//               where a.IsDeleted == false && a.AccountID == UserData.AccountID
-		//               select new object[] {
-		//      d.ID,//0
-		//      d.DocID,//1
-		//      d.AccidentID,//2
-		//      };
-		//   object[] Cols ={
-		//      new { FName = "ID"},//0
-		//      new { FName = "DocID"},//1
-		//      new { FName = "AccidentID"}//2
-		//      }; JSON.Cols = Cols;
-		//   JSON.Config = new { Controler = "Main", tblUpdate = "tblDocsInAccidents" };
-		//   return JSON;
-		//}
 		public jsonArrays GetJSON_tblDocs() {
 			jsonArrays JSON = new jsonArrays();
 			JSON.Data = from d in dc.tblDocs
@@ -974,14 +959,14 @@ namespace CC.Models {
 				new { FName = "VehicleID", List=new{Source="proc_Vehicles",iVal="iD",iText=new object[]{"plate","type","make","model"},ListType="None"}},//4
 				new { FName = "No",Type="Integer", LenMax=10,Validity="require().match('integer').maxLength(13).greaterThanOrEqualTo(0)"},//5
 				new { FName = "IsTotalLoss",Type="Boolean"},//6
-				new { FName = "LossAmount",Type="Decimal", LenMax=15,Validity="require().match('number').greaterThanOrEqualTo(0)"},//7
-				new { FName = "InsuranceClaimAmount",Type="Decimal", LenMax=15,Validity="require().match('number').greaterThanOrEqualTo(0)"},//8
+				new { FName = "LossAmount",Type="Money", LenMax=15,Validity="require().match('number').greaterThanOrEqualTo(0)"},//7
+				new { FName = "InsuranceClaimAmount",Type="Money", LenMax=15,Validity="require().match('number').greaterThanOrEqualTo(0)"},//8
 				new { FName = "IsInjuredPersons",Type="Boolean"},//9
 				new { FName = "InsurerClaimID",Type="String", LenMax=50,Validity="maxLength(50)"},//10
 				new { FName = "ClaimStatus",Type="Integer", LenEqual=2,Validity="require().match('integer').maxLength(2).greaterThanOrEqualTo(0)"},//11
 				new { FName = "AmountIsConfirmed",Type="Boolean"},//12
 				new { FName = "Days",Type="Integer", LenMax=10,Validity="require().match('integer').maxLength(10).greaterThanOrEqualTo(0)"},//13
-				new { FName = "PerDay",Type="Decimal", LenEqual=10,Validity="require().match('number').greaterThanOrEqualTo(0)"},//14
+				new { FName = "PerDay",Type="Money", LenEqual=10,Validity="require().match('number').greaterThanOrEqualTo(0)"},//14
 				new { FName = "DateNotification",Type="Date", Validity="match('date')"},
 				new { FName = "DateDocsSent",Type="Date", Validity="match('date')"}
 				}; JSON.Cols = Cols;
@@ -1050,7 +1035,7 @@ namespace CC.Models {
 				new { FName = "Date",Default="Today",Type="Date", Validity="require().match('date')",Plugin = new {datepicker = new {minDate=0, maxDate="2y"}}},//9
 				new { FName = "UserID", Default="UserId"},//10
 				new { FName = "EntryDate", Default="Today"},//11
-				new { FName = "Amount",Type="Decimal", LenMax=15,Validity="require().match('number').greaterThanOrEqualTo(0)"},//12
+				new { FName = "Amount",Type="Money", LenMax=15,Validity="require().match('number').greaterThanOrEqualTo(0)"},//12
 				new { FName = "Docs"}//13
 				}; JSON.Cols = Cols;
 			JSON.Config = new {
@@ -1072,53 +1057,6 @@ namespace CC.Models {
 			//   new {sTitle=""},//11 EntryDate
 			//   new {sTitle="Suma"},//11 Amount
 			//   new {sTitle="Priedai"}//11 Docs
-			//   }
-			//};
-			return JSON;
-		}
-
-		public jsonArrays GetJSON_proc_Finances() {
-			jsonArrays JSON = new jsonArrays();
-			JSON.Data = from a in dc.proc_Finances(UserData.AccountID)
-							select new object[] {
-				a.ID,//0
-				a.ClaimID,//1
-				a.Amount,//2
-				a.Date,//3
-				a.Purpose,//4
-				a.Note,//5
-				a.FinancesTypeID,//6
-				a.UserID,//7
-				a.EntryDate,//8
-				a.Docs
-				};
-			object[] Cols ={
-				new { FName = "ID"},//0
-				new { FName = "ClaimID"},//1
-				new { FName = "Amount",Type="Decimal", LenMax=15,Validity="require().match('number').greaterThanOrEqualTo(0)"},//2
-				new { FName = "Date",Default="Today",Type="DateLess", Validity="require().match('date')",Plugin = new {datepicker = new {minDate="-2y", maxDate="0"}}},//3
-				new { FName = "Purpose",Type="String", Validity="require()"},//4
-				new { FName = "Note",Type="Textarea"},//5
-				new { FName = "FinancesTypeID",Type="Radio"},//6
-				new { FName = "UserID", Default="UserId"},//7
-				new { FName = "EntryDate", Default="Today"},//8
-				new { FName = "Docs"}//9
-				}; JSON.Cols = Cols;
-			JSON.Config = new {
-				tblUpdate = "tblFinances"//, Msg = new { AddNew = "Naujos veiklos pridėjimas", Edit = "Veiklos redagavimas", Delete = "Ištrinti veiklą", GenName = "Veikla" }
-			};
-			//JSON.Grid = new {
-			//   aoColumns = new object[]{
-			//   new {bVisible=false},//0
-			//   new {bVisible=false},//1 ClaimID
-			//   new {sTitle="Turto vertė be PVM"},//2 Amount
-			//   new {sTitle=""},//3 Date
-			//   new {sTitle=""},//4 Purpose
-			//   new {sTitle=""},//5 Note
-			//   new {sTitle=""},//6 TypeID
-			//   new {sTitle=""},//7 UserID
-			//   new {sTitle=""},//8 EntryDate
-			//   new {sTitle=""}//9 Docs
 			//   }
 			//};
 			return JSON;
@@ -1191,29 +1129,6 @@ namespace CC.Models {
 			};
 			return JSON;
 		}
-
-		//public jsonArrays GetJSON_tblDocsInFin() {
-		//   jsonArrays JSON = new jsonArrays();
-		//   JSON.Data = from dInf in dc.tblDocsInFins join f in dc.tblFinances on dInf.ActivityID equals f.ID
-		//               join d in dc.tblDocs on dInf.DocID equals d.ID
-		//               join u in dc.tblUsers on d.UserID equals u.ID
-		//               where f.IsDeleted == false && d.IsDeleted == false && u.AccountID == UserData.AccountID
-		//               select new object[] {
-		//         dInf.ID,//0
-		//         dInf.ActivityID,//1
-		//         dInf.DocID//2
-		//      };
-		//   object[] Cols ={
-		//      new { FName = "ID"},//0
-		//      new { FName = "ActivityID"},//1
-		//      new { FName = "DocID"}//2
-		//      }; JSON.Cols = Cols;
-		//   JSON.Config = new {
-		//      tblUpdate = "tblDocsInActivity"
-		//   };
-		//   return JSON;
-		//}
-
 		public jsonArrays GetJSON_wReports() {
 			jsonArrays JSON = new jsonArrays();
 			//int objectID = (from r in dc.tblObjects_IDs where r.tblName == "Reports" select r.ID).Single();

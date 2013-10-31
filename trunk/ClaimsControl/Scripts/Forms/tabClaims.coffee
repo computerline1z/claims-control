@@ -1,5 +1,5 @@
 
-`var w=window, App=w.App, Em=w.Em, oGLOBAL=w.oGLOBAL, oDATA=w.oDATA, oCONTROLS=w.oCONTROLS, MY=w.MY`
+`var w=window, App=w.App, Em=w.Em, oGLOBAL=w.oGLOBAL, oDATA=w.oDATA, oCONTROLS=w.oCONTROLS, MY=w.MY;`
 App.claimsStart=()->
 	actTypes=App.tabClaimsRegulationController.activityTypes
 	if actTypes then (if actTypes.length then return)
@@ -60,7 +60,7 @@ App.claimsController = Em.ArrayController.create(
 					daysAfterDocs=moment().diff(moment(claim.dateNotification,dateFormat),"days")
 					if daysAfterDocs>claim.insPolicy.warn_PaymentTerm and claim.claimStatus<4 then warnings.noPayment=daysAfterDocs
 		claim.activities.forEach((a)->
-			if a.typeID==3
+			if a.typeID==3&&a.amount==0#amount==1 - task completed
 				obj=date:a.date,user:fnGetUser.call(ctrl, a.toID),subject:a.subject,iD:a.iD,toID:a.toID
 				if moment().diff(moment(a.date,dateFormat),"days")>0 then red=true; obj.red=true
 				tasks.addObject(obj); 

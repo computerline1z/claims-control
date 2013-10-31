@@ -13,32 +13,32 @@
 
 <div class="content left col1-right">
 
-	<div class="line"><div>{{unbound view.addDamage.title}}:</div><div class="box-1pr-left w35pr">{{damageSum}} Lt</div>
+	<div class="line"><div>{{unbound view.addDamage.title}}:</div><div class="box-1pr-left w35pr">{{damageSum}} {{unbound App.userData.currency}}</div>
 	<div class="right"><a {{action goToOtherView "view.addDamage"}} href="#">{{unbound view.addDamage.txt}}</a></div></div>
 	{{#if finDamageTbl.length}}
 		<table class="zebra-striped"><thead><tr><th>Suma</th><th>Dokumento tipas</th><th>Paskirtis</th><th>Priedai</th></tr></thead><tbody>
 			{{#each finDamageTbl}}	
-				<tr class="clickable" {{action goToOtherView this}}><td>{{amount}} Lt</td><td>{{docType}}</td><td>{{subject}}</td><td>{{docs}}</td></tr>
+				<tr class="clickable" {{action goToOtherView this}}><td>{{amount}} {{unbound App.userData.currency}}</td><td>{{docType}}</td><td>{{subject}}</td><td>{{docs}}</td></tr>
 			{{/each}}
 		</tbody></table>
 	{{/if}}
 
 	{{#compare claim.insPolicyID "!==" "0"}} 		
-		<div class="line"><div>{{unbound view.addBenefit.title}}:</div><div class="box-1pr-left">{{insurerSum}} Lt</div><div class="right"><a {{action goToOtherView "view.addBenefit"}} >{{unbound view.addBenefit.txt}}</a></div></div>
+		<div class="line"><div>{{unbound view.addBenefit.title}}:</div><div class="box-1pr-left">{{insurerSum}} {{unbound App.userData.currency}}</div><div class="right"><a {{action goToOtherView "view.addBenefit"}} >{{unbound view.addBenefit.txt}}</a></div></div>
 		{{#if finInsurerTbl.length}}
 			<table class="zebra-striped"><thead><tr><th>Suma</th><th>Data</th><th>Pastabos</th><th>Priedai</th></tr></thead><tbody>
 				{{#each finInsurerTbl}}	
-					<tr class="clickable" {{action goToOtherView this}}><td>{{amount}} Lt</td><td>{{date}}</td><td>{{body}}</td><td>{{docs}}</td></tr>
+					<tr class="clickable" {{action goToOtherView this}}><td>{{amount}} {{unbound App.userData.currency}}</td><td>{{date}}</td><td>{{body}}</td><td>{{docs}}</td></tr>
 				{{/each}}
 			</tbody></table>
 		{{/if}}
 	{{/compare}}
 
-	<div class="line"><div>{{unbound view.addCompensation.title}}:</div><div class="box-1pr-left">{{compensationSum}} Lt</div><div class="right"><a  {{action goToOtherView "view.addCompensation"}} >{{unbound view.addCompensation.txt}}</a></div></div>
+	<div class="line"><div>{{unbound view.addCompensation.title}}:</div><div class="box-1pr-left">{{compensationSum}} {{unbound App.userData.currency}}</div><div class="right"><a  {{action goToOtherView "view.addCompensation"}} >{{unbound view.addCompensation.txt}}</a></div></div>
 		{{#if finOtherPartyTbl.length}}
 			<table class="zebra-striped"><thead><tr><th>Suma</th><th>Data</th><th>Pastabos</th><th>Priedai</th></tr></thead><tbody>
 				{{#each finOtherPartyTbl}}	
-					<tr class="clickable" {{action goToOtherView this}}><td>{{amount}} Lt</td><td>{{date}}</td><td>{{body}}</td><td>{{docs}}</td></tr>
+					<tr class="clickable" {{action goToOtherView this}}><td>{{amount}} {{unbound App.userData.currency}}</td><td>{{date}}</td><td>{{body}}</td><td>{{docs}}</td></tr>
 				{{/each}}
 			</tbody></table>
 		{{/if}}
