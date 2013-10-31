@@ -66,6 +66,10 @@ namespace MyHelper {
 			return OK;
 		}
 
+
+
+
+
 		public static bool SendMailMessage(string to, string bcc, string cc, string subject, string body) {
 			bool ok = false;
 			var mMailMessage = new MailMessage() {

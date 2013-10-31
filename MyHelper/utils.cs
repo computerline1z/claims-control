@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Web;
 using System.Data;
 using System.Configuration;
+using System.Threading.Tasks;
 
 namespace MyHelper {
 	//class utils {
@@ -37,7 +38,7 @@ namespace MyHelper {
 			try {
 				EventLog EL = new EventLog(); CreateSource(src, EL);
 				EL.WriteEntry(Message, EventLogEntryType.Error, eventID, 1);
-				email.SendMailMessage("saulius.bruklys@gmail.com", null, null, "Exception:" + src, Message);
+				sendMail("saulius.bruklys@gmail.com","Exception:" + src, Message);
 			}
 			catch { }
 		}
@@ -45,9 +46,12 @@ namespace MyHelper {
 			try {
 				EventLog EL = new EventLog(); CreateSource(src, EL);
 				EL.WriteEntry(Message, EventLogEntryType.Warning, eventID, 1);
-				email.SendMailMessage("saulius.bruklys@gmail.com", null, null, "Warning:" + src, Message);
+				sendMail("saulius.bruklys@gmail.com", "Warning:" + src, Message);
 			}
 			catch { }
+		}
+		public static void sendMail(string to,string subject, string body){
+			new Task(() => { email.SendMailMessage(to, null, null, subject, body); }).Start();
 		}
 	}
 
