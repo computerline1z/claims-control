@@ -6441,6 +6441,30 @@ fieldset[disabled] .bg-blueGrayLight .btn {
 .wid100pr {
   width: 100%;
 }
+.wid70 {
+  width: 70px;
+}
+.wid110 {
+  width: 110px;
+}
+.wid88 {
+  width: 88px;
+}
+.wid96 {
+  width: 96px;
+}
+.hei62 {
+  height: 62px;
+}
+.hei70 {
+  height: 70px;
+}
+.hei90 {
+  height: 90px;
+}
+.hei97 {
+  height: 97px;
+}
 .relative {
   position: relative;
 }
@@ -6450,17 +6474,44 @@ fieldset[disabled] .bg-blueGrayLight .btn {
 .top--15 {
   top: -15px;
 }
+.top--30 {
+  top: -30px;
+}
 .right2 {
   right: 2px;
 }
+.right20 {
+  right: 20px;
+}
 .top0 {
   top: 0;
+}
+.top10 {
+  top: 10px;
+}
+.top16 {
+  top: 16px;
+}
+.top25 {
+  top: 25px;
+}
+.top78 {
+  top: 78px;
 }
 .bot0 {
   bottom: 0;
 }
 .left0 {
   left: 0;
+}
+.left8 {
+  left: 8px;
+}
+.left35 {
+  left: 35px;
+}
+.left41 {
+  left: 41px;
 }
 .right0 {
   right: 0;
@@ -7796,6 +7847,11 @@ body {
 .css-animate-icons {
   display: inline-block;
   position: relative;
+  padding: 10px;
+  margin-top: -10px;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
 }
 .css-animate-icons > .secondary {
   position: absolute;

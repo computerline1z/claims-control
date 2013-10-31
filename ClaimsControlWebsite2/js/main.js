@@ -947,8 +947,20 @@ $(function() {
 		$.cookie('dropscroll', 'true');
 	}
 
-	if( $("#anim1").length > 0 ){
-		animate_icon.mirror( $("#anim1>.primary"), $("#anim1>.primary>.secondary") );
+
+	// ANIMATE ICONS
+
+	if( $("#anim5").length > 0 ){
+
+		animate_icon.mirror( $("#anim5>.primary"), $("#anim5>.secondary") );
+
+		// assume the rest icons are there
+		animate_icon.primary_top_5( $("#anim6>.primary"), $("#anim6>.secondary") );
+
+		animate_icon.to_each_other( $("#anim7>.primary"), $("#anim7>.secondary") );
+
+		animate_icon.to_each_other( $("#anim8>.primary"), $("#anim8>.secondary") );
+
 	}
 
 
@@ -1010,91 +1022,119 @@ $(function() {
 	;
 
 	var animate_icon = {
+
 		mirror: function(primary, secondary){
+
 			var flip_in_progress = false,
-			reverse_in_progress = false,
-			reverse_in_queue = false,
-			flipbox_fliped = false,
-			mouse_inside = false,
-			mouse_outside = false,
-			reverse_in_progress_on_mouseenter = false,
-			revMidwayFound = false,
-			verso_html = '<img src="../images/anim/tablet_white_mirror.png" alt="tablet" />'
-		;
+				reverse_in_progress = false,
+				reverse_in_queue = false,
+				flipbox_fliped = false,
+				mouse_inside = false,
+				mouse_outside = false,
+				reverse_in_progress_on_mouseenter = false,
+				revMidwayFound = false,
+				verso_html = '<img src="../images/anim/tablet_white_mirror.png" alt="tablet" />'
+			;
 
-		if( verso_html === undefined ){
-			verso_html = "";
-		}
-
-		primary.mouseenter(function(){
-
-			if( mouse_inside ){
-				return;
-			}
-			mouse_inside = true;
-			console.log("in");
-
-			if( reverse_in_progress ){
-				reverse_in_progress_on_mouseenter = true;
+			if( verso_html === undefined ){
+				verso_html = "";
 			}
 
-			reverse_in_queue = false;
+			primary.parent().mouseenter(function(){
 
-			if( flipbox_fliped || flip_in_progress ){
-				return;
-			}
-
-			secondary.flippy({
-				color_target: "",
-				duration: "500",
-				verso: verso_html,
-				direction: "LEFT",
-				onStart: function(){
-					flip_in_progress = true;
-				},
-				onFinish: function(){
-					flip_in_progress = false;
-					flipbox_fliped = true;
-
-					if( reverse_in_queue ){
-						secondary.flippyReverse();
-						return;	
-					}
-				},
-				onReverseStart: function(){
-					reverse_in_progress = true;
-				},
-				onReverseFinish: function(){
-					reverse_in_progress = false;
-					flipbox_fliped = false;
-					reverse_in_queue = false;
+				if( mouse_inside ){
+					return;
 				}
+				mouse_inside = true;
+				console.log("in");
+
+				if( reverse_in_progress ){
+					reverse_in_progress_on_mouseenter = true;
+				}
+
+				reverse_in_queue = false;
+
+				if( flipbox_fliped || flip_in_progress ){
+					return;
+				}
+
+				secondary.flippy({
+					color_target: "",
+					duration: "500",
+					verso: verso_html,
+					direction: "LEFT",
+					onStart: function(){
+						flip_in_progress = true;
+					},
+					onFinish: function(){
+						flip_in_progress = false;
+						flipbox_fliped = true;
+
+						if( reverse_in_queue ){
+							secondary.flippyReverse();
+							return;	
+						}
+					},
+					onReverseStart: function(){
+						reverse_in_progress = true;
+					},
+					onReverseFinish: function(){
+						reverse_in_progress = false;
+						flipbox_fliped = false;
+						reverse_in_queue = false;
+					}
+				});
+
 			});
 
-		});
+			primary.parent().mouseleave(function(){
 
-		primary.mouseleave(function(){
+				mouse_inside = false;
+				console.log("out");
 
-			mouse_inside = false;
-			console.log("out");
+				if(flip_in_progress){
+					reverse_in_queue = true;
+					return;
+				}
 
-			if(flip_in_progress){
-				reverse_in_queue = true;
-				return;
-			}
+				if( reverse_in_progress ){
+					return;
+				}
 
-			if( reverse_in_progress ){
-				return;
-			}
+				if( reverse_in_progress_on_mouseenter ){
+					reverse_in_progress_on_mouseenter = false;
+					return;
+				}
 
-			if( reverse_in_progress_on_mouseenter ){
-				reverse_in_progress_on_mouseenter = false;
-				return;
-			}
+				secondary.flippyReverse();
 
-			secondary.flippyReverse();
+			});
+		},
 
-		});
+		primary_top_5: function(primary, secondary){
+
+			primary.parent().hover(
+				function(e) {
+					primary.hoverFlow(e.type, { top: "-=5" }, 'fast');
+				},
+				function(e) {
+					primary.hoverFlow(e.type, { top: "+=5" }, 'fast');
+				}
+			);
+		},
+
+		to_each_other: function(primary, secondary){
+			primary.parent().hover(
+				function(e) {
+					primary.hoverFlow(e.type, { left: "+=5" }, 'fast');
+					secondary.hoverFlow(e.type, { left: "-=5" }, 'fast');
+				},
+				function(e) {
+					primary.hoverFlow(e.type, { left: "-=5" }, 'fast');
+					secondary.hoverFlow(e.type, { left: "+=5" }, 'fast');
+				}
+			);
 		}
+
 	};
 //
