@@ -63,6 +63,10 @@ function set_min_element_height_as_window_height(element){
 		$(window).resize(function() {
 			set_min_element_height_as_window_height( $(".js-left-column") );
 		});
+
+		$("#js-bind-demo1").click(function(){
+			window.location.href = "demo1.html";
+		});
 	    
 	});
 //
