@@ -6644,6 +6644,7 @@ fieldset[disabled] .bg-blueGrayLight .btn {
   background: #ffffff;
 }
 .bg-white-tr75 {
+  background: url(img/white75.png);
   background: rgba(255, 255, 255, 0.75);
 }
 .text-blueGrayLightest,
@@ -7093,6 +7094,7 @@ li.active .icon-securetruck-small {
 .blue-box-in-header .inner {
   position: relative;
   width: 100%;
+  background: url(img/ie-bg1.png);
   background-image: -webkit-gradient(radial, center center, 0, center center, 460, from(#6c798a), to(#131e2d));
   background-image: -webkit-radial-gradient(circle, #6c798a, #131e2d);
   background-image: -moz-radial-gradient(circle, #6c798a, #131e2d);

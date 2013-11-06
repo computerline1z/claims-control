@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+
+<!--[if lt IE 7 ]> <html class="ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html class=""> <!--<![endif]-->
+
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+  <meta content="noindex" name="robots">
+
+  <title>Browser no longer supported</title>
+	<style>
+		body {
+		margin: 50px;
+		font: 13px arial,sans-serif;
+		}
+
+		a {
+		color:#0152A6;
+		cursor:pointer;
+		outline:medium none;
+		text-decoration:none;
+		}
+
+		a img {
+		border: 0;
+		}
+
+		.oz_footer {
+		font-size: 13px;
+		text-align: center;
+		margin-top: 40px;
+		}
+
+		h1 {
+		font-size: 17px;
+		}
+	</style>
+
+</head>
+
+<body>
+
+  <h1>Your Browser is no longer supported.</h1>
+
+  <p>Please upgrade your browser.</p>
+
+  <table cellpadding="5" width="650px">
+    <tr>
+      <td align="center" valign="center" width="120px">
+        <a href="http://www.google.com/chrome/?hl=en_US"><img height=
+        "128px" src="images/chrome-128.png" width=
+        "128px"></a>
+      </td>
+
+      <td align="center" valign="center" width="120px">
+        <a href=
+        "http://www.google.com/chromeframe?hl=en_US"><img height=
+        "120px" src=
+        "images/chrome_frame.png" width=
+        "120px"></a>
+      </td>
+
+      <td align="center" valign="center" width="120px">
+        <a href="http://www.mozilla.com/firefox/"><img height="118px"
+        src="images/firefox.gif" width=
+        "120px"></a>
+      </td>
+
+      <td align="center" valign="center" width="120px">
+        <a href="http://www.opera.com/"><img height="118px"
+        src="images/Opera.png" width=
+        "120px"></a>
+      </td>
+
+      <td align="center" valign="center" width="120px">
+        <a href="http://www.apple.com/safari/download/"><img height=
+        "120px" src="images/safari.png"
+        width="120px"></a>
+      </td>
+    </tr>
+
+    <tr>
+      <td align="center" valign="top">
+        <a href="http://www.google.com/chrome/?hl=en_US">Download
+        Google Chrome</a>
+      </td>
+
+      <td align="center" valign="top">
+        <a href="http://www.google.com/chromeframe?hl=en_US">Get Google
+        Chrome Frame for Internet Explorer</a>
+      </td>
+
+      <td align="center" valign="top">
+        <a href="http://www.mozilla.com/firefox/">Download Firefox</a>
+      </td>
+
+      <td align="center" valign="top">
+        <a href="http://opera.com">Download
+        Opera</a>
+      </td>
+
+      <td align="center" valign="top">
+        <a href="http://www.apple.com/safari/download/">Download
+        Safari</a>
+      </td>
+    </tr>
+  </table>
+
+  <script src="http://code.jquery.com/jquery.js"></script><!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+
+  <script type="text/javascript">
+
+    function ie(string){
+
+      if( string.length < 1 ){
+        return false;
+      }
+
+      var string_number = string.substring(2,3),
+        number = parseFloat( string_number )
+      ;
+
+      return number;
+
+    }
+
+    // Shorthand for $( document ).ready()
+    $(function() {
+
+      if( ie($("html").attr("class")) > 9 || ie($("html").attr("class")) === false ){
+         window.location.replace("index.html");
+      }
+
+    });
+
+  </script>
+
+</body>
+</html>
