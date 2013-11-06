@@ -332,8 +332,28 @@ function dropToId(url){
 
 }
 
+function ie(string){
+
+	if( string.length < 1 ){
+		return false;
+	}
+
+	var string_number = string.substring(2,3),
+		number = parseFloat( string_number )
+	;
+
+	return number;
+
+}
+
 /* DOCUMENT READY */
 $(function() {
+
+	// IF BROWSER NOT SUPPORTED DROP TO NOT SUPPORTED PAGE
+	if( ie($("html").attr("class")) < 8 && ie($("html").attr("class")) != false ){
+		window.location.replace("narsykle_nepalaikoma.html");
+		return;
+	}
 
 	// DROP TO #id if one exists
 	dropToId(document.URL);
@@ -390,7 +410,8 @@ $(function() {
 			);
 
 			$(".js-stripe-contents").hoverFlow(e.type, {
-					opacity: 1
+					opacity: 1,
+					filter: "alpha(opacity=100)"
 				}, speed
 			);
 
@@ -414,7 +435,11 @@ $(function() {
 				$(".js-red-stripe").css("z-index", 0);
 			});
 
-			$(".js-stripe-contents").hoverFlow(e.type, { opacity: 0}, speed);
+			$(".js-stripe-contents").hoverFlow(e.type, {
+				opacity: 0,
+				filter: "alpha(opacity=0)"
+				}, speed
+			);
 
 			$(".js-play-fadetoggle").fadeIn(speed/1.5);
 
@@ -822,6 +847,10 @@ $(function() {
 
 		$(".flipbox-container").mouseenter(function(){
 
+			if( ie($("html").attr("class")) < 9 ){
+				return;
+			}
+
 			if( mouse_inside ){
 				return;
 			}
@@ -884,6 +913,12 @@ $(function() {
 		});
 
 		$(".flipbox-container").mouseleave(function(){
+
+			if( ie($("html").attr("class")) < 9 ){
+				return;
+			}
+
+			clearInterval(my_sliding_interval);
 
 			mouse_inside = false;
 			console.log("out");
@@ -997,7 +1032,7 @@ $(function() {
 
 //	Global variables
 
-	viewport = $(window).width()+17,
+	var viewport = $(window).width()+17,
 	side = $(".js-nav-wrap").position()["left"],
 	header_height = $(".js-bg-red-blue").height(),
 	header_width = $(".js-bg-red-blue .container").width(),
