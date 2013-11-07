@@ -847,7 +847,7 @@ $(function() {
 
 		$(".flipbox-container").mouseenter(function(){
 
-			if( ie($("html").attr("class")) < 9 ){
+			if( ie($("html").attr("class")) < 9 && ie($("html").attr("class")) != false ){
 				return;
 			}
 
@@ -914,7 +914,7 @@ $(function() {
 
 		$(".flipbox-container").mouseleave(function(){
 
-			if( ie($("html").attr("class")) < 9 ){
+			if( ie($("html").attr("class")) < 9 && ie($("html").attr("class")) != false ){
 				return;
 			}
 
