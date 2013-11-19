@@ -7858,3 +7858,11 @@ body {
 .css-animate-icons > .secondary {
   position: absolute;
 }
+.social-in-top-menu {
+  display: block!important;
+  position: absolute!important;
+  top: -10px;
+}
+.social-in-top-menu a {
+  padding: 0!important;
+}
