@@ -38,7 +38,7 @@ namespace MyHelper {
 
 		public static bool sendFromTemplate(string fileName, string language, object model, string[] emails) {
 			bool OK = false; string filePath = ConfigurationManager.AppSettings.Get("pathToMailTmpl");//servisui imam iš jo settingu
-			if (filePath==null){filePath=AppDomain.CurrentDomain.BaseDirectory + "App_Data\\MailTmpl";}
+			if (filePath==null){filePath=AppDomain.CurrentDomain.BaseDirectory + "Resource\\MailTmpl";}
 			filePath += "\\"+language + "\\" + fileName + ".cshtml";
 			if (File.Exists(filePath)) {
 				try {
