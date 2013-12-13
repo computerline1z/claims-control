@@ -7,8 +7,9 @@ using MyHelper;
 
 namespace MyHelper {
 	public class sql {
-		static string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["ClaimsControlConnectionString"].ConnectionString;
-		public static void UpdateByStr(string sql) {
+		static string connectionString;
+		public static void UpdateByStr(string sql,string conString) {
+            connectionString=conString;
 			using (SqlConnection conn = new SqlConnection(connectionString)) {
 				using (SqlCommand comm = new SqlCommand()) {
 					comm.Connection = conn;
