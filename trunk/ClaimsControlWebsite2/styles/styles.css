@@ -7866,10 +7866,13 @@ body {
 .social-in-top-menu a {
   padding: 0!important;
 }
+.paragraph-button-center {
+  padding-bottom: 20px;
+}
 .paragraph-button-center .paragraph-to-align,
 .paragraph-button-center .wrap-button {
   display: inline-block;
-  vertical-align: middle;
+  vertical-align: bottom;
 }
 .paragraph-button-center .paragraph-to-align {
   width: 69%;
