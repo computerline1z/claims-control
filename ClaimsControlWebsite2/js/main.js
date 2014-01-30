@@ -738,20 +738,22 @@ $(function() {
 
     // SLIDE SCREENS ON HOVER INSTEAD OF FLIP
 
+    
     if( $(".js-hover-to-slide").length > 0 ){
 
     	glide = $(".slider-with-nav").glide(
 	    	{
-	        	autoplay: 4000,
+	        	autoplay: 2000,
 	        	arrows: false,
 	        	nav: true,
 	        	animationTime: 500
 			}
-	    )
-	    	.data('api_glide')
-	    ;
+	    );
+
+	    /*
 	    glide.pause();
 
+	    
 	    var slider = $(".slider-with-nav").detach();
 	    slider.css({
 	    	position: "absolute",
@@ -775,6 +777,7 @@ $(function() {
 		$(".js-hover-to-slide").mouseleave(function(e){
 			$(".slider-with-nav").fadeOut(500);
 		});
+		*/
 
     }
 	
