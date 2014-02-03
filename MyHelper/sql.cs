@@ -7,10 +7,9 @@ using MyHelper;
 
 namespace MyHelper {
 	public class sql {
-		static string connectionString;
 		public static void UpdateByStr(string sql,string conString) {
-            connectionString=conString;
-			using (SqlConnection conn = new SqlConnection(connectionString)) {
+            using (SqlConnection conn = new SqlConnection(conString))
+            {
 				using (SqlCommand comm = new SqlCommand()) {
 					comm.Connection = conn;
 					comm.CommandText = sql;
@@ -27,26 +26,54 @@ namespace MyHelper {
 				}
 			}
 		}
-		/*public void UpdateByStr(string sql) {
-			string updateCommand = "UPDATE RoomsTable SET [Date Checked]=@checkedDate WHERE ID = @id"; // '9/27/2012'
-			using (SqlConnection conn = new SqlConnection(connectionString)) {
-				using (SqlCommand comm = new SqlCommand()) {
+        public static int InsertAndGetID(string sql, string conString)
+        {
+           int ID = 0;
+            using (SqlConnection conn = new SqlConnection(conString))
+            {
+                using (SqlCommand comm = new SqlCommand())
+                {
+                    comm.Connection = conn;
+                    comm.CommandText = sql + " SELECT SCOPE_IDENTITY()";
+                    comm.CommandType = CommandType.Text;
+                    try
+                    {
+                        conn.Open();
+                        ID = (int)(decimal)comm.ExecuteScalar();
+                    }
+                    catch (SqlException ex)
+                    {
+                        MyEventLog.AddException(ex.Message, "sql.UpdateByStr", 1200);
+                        //throw ex;
+                    }
+                }
+            }
+            return ID;
+        }
+        public static string GetStr(string sql, string conString)
+        {
+            string ret = "";
+            using (SqlConnection conn = new SqlConnection(conString))
+            {
+                using (SqlCommand comm = new SqlCommand())
+                {
+                    comm.Connection = conn;
+                    comm.CommandText = sql;
+                    comm.CommandType = CommandType.Text;
+                    try
+                    {
+                        conn.Open();
+                        ret = (string)comm.ExecuteScalar();
+                    }
+                    catch (SqlException ex)
+                    {
+                        MyEventLog.AddException(ex.Message, "sql.GetStr", 1200);
+                        //throw ex;
+                    }
+                }
+            }
+            return ret;
+        }
 
-					comm.Connection = conn;
-					comm.CommandText = updateCommand;
-					comm.CommandType = CommandType.Text;
-					comm.Parameters.AddWithValue("@checkedDate", "df");
-					comm.Parameters.AddWithValue("@id", "fgd");
-					try {
-						conn.Open();
-						comm.ExecuteNonQuery();
-					}
-					catch (SqlException ex) {
-						MyEventLog.AddException(ex.Message, "sql.UpdateByStr", 1200);
-					}
-
-				}
-			}
-		}*/
 	}
 }

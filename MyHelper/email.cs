@@ -9,6 +9,7 @@ using System.Reflection;
 using Newtonsoft.Json;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 //Razor templates - https://github.com/volkovku/RazorTemplates
 
@@ -41,11 +42,12 @@ namespace MyHelper
     public static class email
     {
 
-        public static bool sendFromTemplate(string fileName, string language, object model, string[] emails, string tmplFolder = null)
+        public static bool sendFromTemplate(string fileName, object model, string[] emails, string tmplFolder = null)
         {
             bool OK = false; string filePath;//servisui imam iš jo settingu
             if (tmplFolder == null) { filePath = AppDomain.CurrentDomain.BaseDirectory + "Resource\\MailTmpl"; } else { filePath = tmplFolder; }
-            filePath += "\\" + language + "\\" + fileName + ".cshtml";
+            string shorLang = (Thread.CurrentThread.CurrentUICulture.Name.Length > 2) ? "LT" : Thread.CurrentThread.CurrentUICulture.Name.ToUpper();
+            filePath += "\\" + shorLang + "\\" + fileName + ".cshtml";//  string Lang = Thread.CurrentThread.Name turi but LT pas mus!!!
             if (File.Exists(filePath))
             {
                 try
