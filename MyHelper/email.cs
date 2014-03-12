@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using RazorTemplates.Core;
-using System.Configuration;
 using System.IO;
 using System.Reflection;
-using Newtonsoft.Json;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Linq;
 
 //Razor templates - https://github.com/volkovku/RazorTemplates
 
@@ -79,23 +76,32 @@ namespace MyHelper
             return OK;
         }
 
-
-
-
-
         public static bool SendMailMessage(string to, string bcc, string cc, string subject, string body)
         {
             bool ok = false;
+            if (body.Contains("81.7.123.25:82")) { body = body.Replace("81.7.123.25:82", "ccs2.claimscontrol.com"); }
+            else if (body.Contains("81.7.123.25:86")) { body = body.Replace("81.7.123.25:86", "ccs.claimscontrol.com"); }
+            else if (body.Contains("127.0.0.1")) { body = body.Replace("127.0.0.1", "localhost"); }
+
             var mMailMessage = new MailMessage()
             {
                 Subject = subject,
-                Body = body,
-                IsBodyHtml = true,
+                Body = Regex.Replace(body, @"<(.|\n)*?>", string.Empty),
+                IsBodyHtml = false,//true,
                 Priority = MailPriority.Normal,
-                //From= new MailAddress("zalukontrole@gmail.com", "ClaimsControl")
+                From = new MailAddress("no-reply@claimscontrol.com", "ClaimsControl"),
+                BodyEncoding = Encoding.UTF8,
+                SubjectEncoding = Encoding.UTF8
             };
 
+            //AlternateView plainView = AlternateView.CreateAlternateViewFromString(Regex.Replace(body, @"<(.|\n)*?>", string.Empty), null, "text/plain");
 
+            body = "<!DOCTYPE html><HTML><HEAD><META http-equiv=Content-Type content=\"text/html; charset=utf-8\"></HEAD><BODY>"
+                + body + "</BODY></HTML>";
+            AlternateView htmlView = AlternateView.CreateAlternateViewFromString(body, null, "text/html");
+            mMailMessage.AlternateViews.Add(htmlView);
+
+            #region MyRegion
             mMailMessage.To.Add(new MailAddress(to));
             if (!String.IsNullOrEmpty(bcc))
                 mMailMessage.Bcc.Add(new MailAddress(bcc));
@@ -103,32 +109,13 @@ namespace MyHelper
                 mMailMessage.CC.Add(new MailAddress(cc));
 
             var mSmtpClient = new SmtpClient();
-            mSmtpClient.EnableSsl = true;
-            //SmtpClient SmtpServer = new SmtpClient("mail.claimscontrol.com",465);
-            ////SmtpServer.Port = 465;
-            //SmtpServer.EnableSsl = true;
-            //SmtpServer.Timeout = 30000;
-            //SmtpServer.UseDefaultCredentials = false;
-            //SmtpServer.Credentials = new System.Net.NetworkCredential("support@claimscontrol.com", "uD8qfbVJ");
-
-
-            //SmtpServer.Timeout = 1; fdgd
-            //SmtpServer.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
-            //mSmtpClient.Send(mMailMessage);
-
             string msg = "Subject:" + subject + Environment.NewLine;
             msg += "body:" + body + Environment.NewLine;
             msg += "to:" + to + Environment.NewLine;
             msg += "Host:" + mSmtpClient.Host.ToString() + Environment.NewLine;
             msg += "Port:" + mSmtpClient.Port.ToString() + Environment.NewLine;
-            //MyEventLog.AddEvent(msg, "Start sending email", 70);
-
-            try
-            {
-                mSmtpClient.Send(mMailMessage);
-                MyEventLog.AddEvent(msg, "Sending email OK", 70);
-                ok = true;
-            }
+            #endregion
+            try { mSmtpClient.Send(mMailMessage); }
             catch (Exception e)
             {
                 MyEventLog.AddException(e.Message + Environment.NewLine + msg, "SendMail ", 70);
