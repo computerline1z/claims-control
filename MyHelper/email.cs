@@ -54,15 +54,13 @@ namespace MyHelper
                     string subject = Regex.Match(tmpl, @"{{.*}}").Value.Replace("{{subject='", "").Replace("'}}", "");
                     tmpl = rgx.Replace(tmpl, "");
                     var template = Template.Compile(tmpl);
-                    MyEventLog.AddEvent(Logger.getProps(model), "sendFromTemplate.object." + fileName, 1100);
+                    //MyEventLog.AddEvent(Logger.getProps(model), "sendFromTemplate.object." + fileName, 1100);
                     string body = template.Render(model);
-                    MyEventLog.AddEvent(body, "body for mail OK", 1100);
                     OK = true;
                     foreach (string email in emails)
                     {
                         if (!SendMailMessage(email, null, null, subject, body)) { OK = false; }
                     }
-                    MyEventLog.AddEvent(body, "send mail OK", 1100);
                 }
                 catch (Exception ex)
                 {
