@@ -722,9 +722,13 @@ $(function() {
 
 			$(".navbar-nav>.dropdown").mouseleave(function(){
 				if( $(this).hasClass("open") === false ){
+					if(blackout_status === true){
+						toggleBlackout();
+					}
 					return;
 				}
 				$(this).children("a").click();
+
 				toggleBlackout(
 					{
 						"z-index": 3,
@@ -1001,14 +1005,6 @@ $(function() {
 
 	}
 
-
-	// On load
-
-	/*$(window).load(function(){
-		
-	});*/
-
-
 	// Don't forget responsiveness and update stuff as screen size changes
 	$(window).resize(function(){
 	
@@ -1031,6 +1027,13 @@ $(function() {
 
 });
 
+
+// DOCUMENT LOAD
+
+$(window).load(function(){
+	update_global_variables();
+	fix_stripe();
+});
 
 
 //	Global variables
